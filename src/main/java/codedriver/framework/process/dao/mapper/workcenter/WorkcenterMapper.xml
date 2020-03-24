@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="codedriver.framework.process.workcenter.dao.mapper.WorkcenterMapper">
+<mapper namespace="codedriver.framework.process.dao.mapper.workcenter.WorkcenterMapper">
 	
-	<resultMap id="workcenterMap" type="codedriver.module.process.workcenter.dto.WorkcenterVo">
+	<resultMap id="workcenterMap" type="codedriver.framework.process.workcenter.dto.WorkcenterVo">
 		<id column="uuid" property="uuid" />
 		<result column="name" property="name" />
 		<result column="owner" property="owner" />
 		<result column="type" property="type" />
 		<result column="sort" property="sort" />
 		<result column="condition_config" property="conditionConfig" />
-		<collection property="workcenterRoleList" ofType="codedriver.module.process.workcenter.dto.WorkcenterRoleVo">
+		<collection property="workcenterRoleList" ofType="codedriver.framework.process.workcenter.dto.WorkcenterRoleVo">
 			<result column="role_name" property="roleName" />
 			<result column="user_id" property="userId" />
 		</collection>
 	</resultMap>
 	
-	<select id="getWorkcenter"  parameterType="codedriver.module.process.workcenter.dto.WorkcenterVo" resultMap="workcenterMap">
+	<select id="getWorkcenter"  parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo" resultMap="workcenterMap">
 		(SELECT 
 		  pw.`uuid`,
 		  pw.`name`,
@@ -115,7 +115,7 @@
 		  `process_workcenter` pw 
 	</select>
 	
-	<select id="getWorkcenterThead" parameterType="codedriver.module.process.workcenter.dto.WorkcenterTheadVo" resultType="codedriver.module.process.workcenter.dto.WorkcenterTheadVo">
+	<select id="getWorkcenterThead" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterTheadVo" resultType="codedriver.framework.process.workcenter.dto.WorkcenterTheadVo">
 		SELECT 
 		  `workcenter_uuid` as workcenterUuid,
 		  `name`,
@@ -151,7 +151,7 @@
 		WHERE `workcenter_uuid` = #{workcenterUuid} ;
 	</delete>
 
-	<delete id="deleteWorkcenterThead" parameterType="codedriver.module.process.workcenter.dto.WorkcenterTheadVo">
+	<delete id="deleteWorkcenterThead" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterTheadVo">
 		DELETE 
 		FROM
 		  `process_workcenter_thead`
@@ -163,7 +163,7 @@
 		</where>
 	</delete>
 
-	<insert id="insertWorkcenter" parameterType="codedriver.module.process.workcenter.dto.WorkcenterVo">
+	<insert id="insertWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
 		INSERT INTO `process_workcenter` (
 		  `uuid`,
 		  `name`,
@@ -181,7 +181,7 @@
 		  ) ;
 	</insert>
 	
-	<insert id="insertWorkcenterRole" parameterType="codedriver.module.process.workcenter.dto.WorkcenterRoleVo">
+	<insert id="insertWorkcenterRole" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterRoleVo">
 		INSERT INTO `process_workcenter_role` (
 		  `workcenter_uuid`,
 		  `role_name`,
@@ -195,7 +195,7 @@
 		  ) ;
 	</insert>
 	
-	<insert id="insertWorkcenterThead" parameterType="codedriver.module.process.workcenter.dto.WorkcenterTheadVo">
+	<insert id="insertWorkcenterThead" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterTheadVo">
 			INSERT INTO `process_workcenter_thead` (
 			  `workcenter_uuid`,
 			  `name`,
@@ -223,7 +223,7 @@
 		(#{uuid}, #{userId}) ;
 	</insert>
 	
-	<update id="updateWorkcenter" parameterType="codedriver.module.process.workcenter.dto.WorkcenterVo">
+	<update id="updateWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
 		UPDATE 
 		  `process_workcenter` 
 		SET

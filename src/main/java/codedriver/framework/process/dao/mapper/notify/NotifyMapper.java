@@ -1,4 +1,4 @@
-package codedriver.framework.process.notify.dao.mapper;
+package codedriver.framework.process.dao.mapper.notify;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package codedriver.framework.process.workcenter.dao.mapper;
+package codedriver.framework.process.dao.mapper.workcenter;
 
 import java.util.List;
 import java.util.Map;
