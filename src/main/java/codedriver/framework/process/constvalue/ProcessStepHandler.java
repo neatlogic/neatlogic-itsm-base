@@ -5,7 +5,8 @@ public enum ProcessStepHandler {
 	OMNIPOTENT("omnipotent", "process", "通用节点"),
 	END("end", "end", "结束"),
 	CONDITION("condition", "converge", "条件"),
-	DISTRIBUTARY("distributary", "converge", "分流");
+	DISTRIBUTARY("distributary", "converge", "分流"),
+	OCTOPUS("octopus","process","自动化");
 
 	private String handler;
 	private String name;

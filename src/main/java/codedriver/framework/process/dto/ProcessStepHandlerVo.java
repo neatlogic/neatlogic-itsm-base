@@ -1,10 +1,12 @@
 package codedriver.framework.process.dto;
 
+import com.alibaba.fastjson.JSONObject;
+
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
-	
+
 	@EntityField(name = "类型", type = ApiParamType.STRING)
 	private String type;
 	@EntityField(name = "处理器", type = ApiParamType.STRING)
@@ -21,6 +23,8 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	private Integer sort;
 	@EntityField(name = "配置信息", type = ApiParamType.STRING)
 	private String config;
+	@EntityField(name = "前端配置信息", type = ApiParamType.JSONOBJECT)
+	private JSONObject chartConfig;
 
 	public String getConfig() {
 		return config;
@@ -89,6 +93,14 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 
 	public void setModuleId(String moduleId) {
 		this.moduleId = moduleId;
+	}
+
+	public JSONObject getChartConfig() {
+		return chartConfig;
+	}
+
+	public void setChartConfig(JSONObject chartConfig) {
+		this.chartConfig = chartConfig;
 	}
 
 }
