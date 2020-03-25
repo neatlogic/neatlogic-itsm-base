@@ -279,13 +279,10 @@ public interface IProcessStepHandler {
 	/**
 	 * 
 	* @Description: 子任务状态发生变化后，对子任务处理人的在 processtask_step_worker表和processtask_step_user表的数据做对应的变化
-	* @param processTaskId
-	* @param processTaskStepId
-	* @param userId
-	* @param userName 
+	* @param currentProcessTaskStepVo
 	* @return void
 	 */
-	public void updateProcessTaskStepUserAndWorkerForSubtask(Long processTaskId, Long processTaskStepId, String userId, String userName);
+	public void updateProcessTaskStepUserAndWorker(ProcessTaskStepVo currentProcessTaskStepVo);
 	
 	/**
 	 * 
