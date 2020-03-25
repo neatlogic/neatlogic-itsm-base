@@ -26,7 +26,16 @@ public interface IProcessStepHandler {
 	 * @return String
 	 */
 	public String getHandler();
-	
+
+	/**
+	 * @Author: chenqiwei
+	 * @Time:Mar 25, 2020
+	 * @Description: 前端canvas配置
+	 * @param @return
+	 * @return JSONObject
+	 */
+	public JSONObject getChartConfig();
+
 	/**
 	 * @Author: chenqiwei
 	 * @Time:Jan 20, 2020
@@ -44,8 +53,6 @@ public interface IProcessStepHandler {
 	 * @return String
 	 */
 	public ProcessStepMode getMode();
-
-	public String getIcon();
 
 	public String getName();
 
@@ -227,9 +234,9 @@ public interface IProcessStepHandler {
 	 * @return List<ProcessTaskStepVo>
 	 */
 	public List<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo);
-	
+
 	/**
-	 * @Author: 
+	 * @Author:
 	 * @Time:
 	 * @Description: 保存工单草稿，将会创建一个工单，工单状态为草稿状态
 	 * @param @return
@@ -237,7 +244,7 @@ public interface IProcessStepHandler {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public int saveDraft(ProcessTaskStepVo currentProcessTaskStepVo);
-	
+
 	/**
 	 * @Author: chenqiwei
 	 * @Time:Aug 7, 2019
