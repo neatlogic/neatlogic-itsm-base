@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
-import codedriver.framework.process.constvalue.ProcessWorkcenterConditionType;
+import codedriver.framework.process.constvalue.ProcessWorkcenterColumnType;
 import codedriver.framework.process.workcenter.column.core.IWorkcenterColumn;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -43,7 +43,7 @@ public class WorkcenterTheadVo {
 		this.name = column.getName();
 		this.userId = UserContext.get().getUserId();
 		this.displayName = column.getDisplayName();
-		this.type = ProcessWorkcenterConditionType.COMMON.getValue();
+		this.type = ProcessWorkcenterColumnType.COMMON.getValue();
 	}
 	
 	public WorkcenterTheadVo(String _workcenterUuid,String _userId) {

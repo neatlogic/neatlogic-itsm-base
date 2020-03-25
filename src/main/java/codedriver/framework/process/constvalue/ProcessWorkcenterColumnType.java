@@ -1,11 +1,11 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessWorkcenterConditionType {
+public enum ProcessWorkcenterColumnType {
 	COMMON("common", "工单固有属性"), FORM("form", "表单属性");
 	private String value;
 	private String name;
 
-	private ProcessWorkcenterConditionType(String _value, String _name) {
+	private ProcessWorkcenterColumnType(String _value, String _name) {
 		this.value = _value;
 		this.name = _name;
 	}
@@ -19,7 +19,7 @@ public enum ProcessWorkcenterConditionType {
 	}
 
 	public static String getValue(String _value) {
-		for (ProcessWorkcenterConditionType s : ProcessWorkcenterConditionType.values()) {
+		for (ProcessWorkcenterColumnType s : ProcessWorkcenterColumnType.values()) {
 			if (s.getValue().equals(_value)) {
 				return s.getValue();
 			}
@@ -28,7 +28,7 @@ public enum ProcessWorkcenterConditionType {
 	}
 
 	public static String getName(String _value) {
-		for (ProcessWorkcenterConditionType s : ProcessWorkcenterConditionType.values()) {
+		for (ProcessWorkcenterColumnType s : ProcessWorkcenterColumnType.values()) {
 			if (s.getValue().equals(_value)) {
 				return s.getName();
 			}
