@@ -451,6 +451,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskStepUserVo.setUserId(UserContext.get().getUserId());
 			processTaskStepUserVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 			processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
+			processTaskStepUserVo.setUserType(UserType.MAJOR.getValue());
 			processTaskMapper.updateProcessTaskStepUserStatus(processTaskStepUserVo);
 
 			/** 更新工单步骤状态为 “进行中” **/
@@ -1102,6 +1103,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 更新处理人状态 **/
 			ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getId(), UserContext.get().getUserId());
 			processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
+			processTaskMajorUser.setUserType(UserType.MAJOR.getValue());
 			processTaskMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
 			/** 清空worker表 **/
 			processTaskMapper.deleteProcessTaskStepWorker(currentProcessTaskStepVo.getId(), null);
