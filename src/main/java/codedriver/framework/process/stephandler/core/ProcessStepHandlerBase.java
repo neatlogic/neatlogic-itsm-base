@@ -1273,193 +1273,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			runableActionList.add(thread);
 		}
 	}
-	
-	@Override
-	public final int createSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) {
-		/** 锁定当前流程 **/
-		processTaskMapper.getProcessTaskLockById(processTaskStepSubtaskVo.getProcessTaskId());
-		//插入子任务
-		processTaskStepSubtaskVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
-		processTaskMapper.insertProcessTaskStepSubtask(processTaskStepSubtaskVo);
-		
-		updateProcessTaskStepUserAndWorkerForSubtask(
-			processTaskStepSubtaskVo.getProcessTaskId(), 
-			processTaskStepSubtaskVo.getProcessTaskStepId(), 
-			processTaskStepSubtaskVo.getUserId(), 
-			processTaskStepSubtaskVo.getUserName()
-		);
-		
-		ProcessTaskStepVo currentProcessTaskStepVo = new ProcessTaskStepVo();
-		currentProcessTaskStepVo.setProcessTaskId(processTaskStepSubtaskVo.getProcessTaskId());
-		currentProcessTaskStepVo.setId(processTaskStepSubtaskVo.getProcessTaskStepId());
-		currentProcessTaskStepVo.setParamObj(processTaskStepSubtaskVo.getParamObj());
-		try {
-			myCreateSubtask(processTaskStepSubtaskVo);
-		} catch (ProcessTaskException ex) {
-			logger.error(ex.getMessage(), ex);
-			currentProcessTaskStepVo.setIsActive(1);
-			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-			currentProcessTaskStepVo.setError(ex.getMessage());
-			updateProcessTaskStepStatus(currentProcessTaskStepVo);
-		}
-		//记录活动
-		AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.CREATESUBTASK);
-		return 1;
-	}
-	
-	protected abstract int myCreateSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) throws ProcessTaskException;
-	
-	@Override
-	public final int editSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) {
 
-		/** 锁定当前流程 **/
-		processTaskMapper.getProcessTaskLockById(processTaskStepSubtaskVo.getProcessTaskId());
-		
-		processTaskStepSubtaskVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
-		processTaskMapper.updateProcessTaskStepSubtaskStatus(processTaskStepSubtaskVo);
-		
-		JSONObject paramObj = processTaskStepSubtaskVo.getParamObj();
-		String oldUserId = paramObj.getString("oldUserId");
-		if(!processTaskStepSubtaskVo.getUserId().equals(oldUserId)) {//更新了处理人
-			updateProcessTaskStepUserAndWorkerForSubtask(
-				processTaskStepSubtaskVo.getProcessTaskId(), 
-				processTaskStepSubtaskVo.getProcessTaskStepId(), 
-				processTaskStepSubtaskVo.getUserId(), 
-				processTaskStepSubtaskVo.getUserName()
-			);
-			String oldUserName = paramObj.getString("oldUserName");
-			updateProcessTaskStepUserAndWorkerForSubtask(
-				processTaskStepSubtaskVo.getProcessTaskId(), 
-				processTaskStepSubtaskVo.getProcessTaskStepId(), 
-				oldUserId, 
-				oldUserName
-			);
-		}
-		
-		ProcessTaskStepVo currentProcessTaskStepVo = new ProcessTaskStepVo();
-		currentProcessTaskStepVo.setProcessTaskId(processTaskStepSubtaskVo.getProcessTaskId());
-		currentProcessTaskStepVo.setId(processTaskStepSubtaskVo.getProcessTaskStepId());
-		currentProcessTaskStepVo.setParamObj(processTaskStepSubtaskVo.getParamObj());
-		try {
-			myEditSubtask(processTaskStepSubtaskVo);
-		} catch (ProcessTaskException ex) {
-			logger.error(ex.getMessage(), ex);
-			currentProcessTaskStepVo.setIsActive(1);
-			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-			currentProcessTaskStepVo.setError(ex.getMessage());
-			updateProcessTaskStepStatus(currentProcessTaskStepVo);
-		}
-				
-		//记录活动
-		AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.EDITSUBTASK);
-		return 1;
-	}
-	
-	protected abstract int myEditSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) throws ProcessTaskException;
-	
 	@Override
-	public final int abortSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) {
-		/** 锁定当前流程 **/
-		processTaskMapper.getProcessTaskLockById(processTaskStepSubtaskVo.getProcessTaskId());
-		processTaskStepSubtaskVo.setStatus(ProcessTaskStatus.ABORTED.getValue());
-		processTaskMapper.updateProcessTaskStepSubtaskStatus(processTaskStepSubtaskVo);
-		
-		updateProcessTaskStepUserAndWorkerForSubtask(
-			processTaskStepSubtaskVo.getProcessTaskId(), 
-			processTaskStepSubtaskVo.getProcessTaskStepId(), 
-			processTaskStepSubtaskVo.getUserId(), 
-			processTaskStepSubtaskVo.getUserName()
-		);
-		
-		ProcessTaskStepVo currentProcessTaskStepVo = new ProcessTaskStepVo();
-		currentProcessTaskStepVo.setProcessTaskId(processTaskStepSubtaskVo.getProcessTaskId());
-		currentProcessTaskStepVo.setId(processTaskStepSubtaskVo.getProcessTaskStepId());
-		currentProcessTaskStepVo.setParamObj(processTaskStepSubtaskVo.getParamObj());
-		try {
-			myAbortSubtask(processTaskStepSubtaskVo);
-		} catch (ProcessTaskException ex) {
-			logger.error(ex.getMessage(), ex);
-			currentProcessTaskStepVo.setIsActive(1);
-			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-			currentProcessTaskStepVo.setError(ex.getMessage());
-			updateProcessTaskStepStatus(currentProcessTaskStepVo);
-		}
-		//记录活动
-		AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.ABORTSUBTASK);
-		return 0;
-	}
-	
-	protected abstract int myAbortSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) throws ProcessTaskException;
-	
-	@Override
-	public final int redoSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) {
-		/** 锁定当前流程 **/
-		processTaskMapper.getProcessTaskLockById(processTaskStepSubtaskVo.getProcessTaskId());
-
-		processTaskStepSubtaskVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
-		processTaskMapper.updateProcessTaskStepSubtaskStatus(processTaskStepSubtaskVo);
-
-		updateProcessTaskStepUserAndWorkerForSubtask(
-			processTaskStepSubtaskVo.getProcessTaskId(), 
-			processTaskStepSubtaskVo.getProcessTaskStepId(), 
-			processTaskStepSubtaskVo.getUserId(), 
-			processTaskStepSubtaskVo.getUserName()
-		);
-		
-		ProcessTaskStepVo currentProcessTaskStepVo = new ProcessTaskStepVo();
-		currentProcessTaskStepVo.setProcessTaskId(processTaskStepSubtaskVo.getProcessTaskId());
-		currentProcessTaskStepVo.setId(processTaskStepSubtaskVo.getProcessTaskStepId());
-		currentProcessTaskStepVo.setParamObj(processTaskStepSubtaskVo.getParamObj());
-		try {
-			myRedoSubtask(processTaskStepSubtaskVo);
-		} catch (ProcessTaskException ex) {
-			logger.error(ex.getMessage(), ex);
-			currentProcessTaskStepVo.setIsActive(1);
-			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-			currentProcessTaskStepVo.setError(ex.getMessage());
-			updateProcessTaskStepStatus(currentProcessTaskStepVo);
-		}
-				
-		//记录活动
-		AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.REDOSUBTASK);
-		return 1;
-	}
-	
-	protected abstract int myRedoSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) throws ProcessTaskException;
-	
-	@Override
-	public final int completeSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) {
-		/** 锁定当前流程 **/
-		processTaskMapper.getProcessTaskLockById(processTaskStepSubtaskVo.getProcessTaskId());
-		processTaskStepSubtaskVo.setStatus(ProcessTaskStatus.SUCCEED.getValue());
-		processTaskMapper.updateProcessTaskStepSubtaskStatus(processTaskStepSubtaskVo);
-		updateProcessTaskStepUserAndWorkerForSubtask(
-			processTaskStepSubtaskVo.getProcessTaskId(), 
-			processTaskStepSubtaskVo.getProcessTaskStepId(), 
-			processTaskStepSubtaskVo.getUserId(), 
-			processTaskStepSubtaskVo.getUserName()
-		);
-		//记录活动
-		ProcessTaskStepVo currentProcessTaskStepVo = new ProcessTaskStepVo();
-		currentProcessTaskStepVo.setProcessTaskId(processTaskStepSubtaskVo.getProcessTaskId());
-		currentProcessTaskStepVo.setId(processTaskStepSubtaskVo.getProcessTaskStepId());
-		currentProcessTaskStepVo.setParamObj(processTaskStepSubtaskVo.getParamObj());
-		AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.COMPLETESUBTASK);
-		return 1;
-	}
-	
-	protected abstract int myCompleteSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo) throws ProcessTaskException;
-
-	/**
-	 * 
-	* @Description: 子任务状态发生变化后，对子任务处理人的在 processtask_step_worker表和processtask_step_user表的数据做对应的变化
-	* @param @param processTaskId
-	* @param @param processTaskStepId
-	* @param @param userId
-	* @param @param userName 
-	* @return void
-	 */
-	private void updateProcessTaskStepUserAndWorkerForSubtask(Long processTaskId, Long processTaskStepId, String userId, String userName) {
+	public void updateProcessTaskStepUserAndWorkerForSubtask(Long processTaskId, Long processTaskStepId, String userId, String userName) {
 		//ProcessTaskStepUserVo
 		ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo();
 		processTaskStepUserVo.setProcessTaskId(processTaskId);
@@ -1527,5 +1343,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 		}
 		
+	}
+	
+	@Override
+	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action) {
+		AuditHandler.audit(currentProcessTaskStepVo, action);
 	}
 }

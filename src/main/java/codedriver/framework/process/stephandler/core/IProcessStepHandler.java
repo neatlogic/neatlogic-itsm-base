@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.constvalue.ProcessStepMode;
+import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.dto.ProcessStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepSubtaskVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -277,56 +277,22 @@ public interface IProcessStepHandler {
 	public void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj);
 	
 	/**
-	 * @Author:
-	 * @Time:
-	 * @Description: 创建子任务
-	 * @param @param  processTaskStepVo
-	 * @param @return
-	 * @return int
+	 * 
+	* @Description: 子任务状态发生变化后，对子任务处理人的在 processtask_step_worker表和processtask_step_user表的数据做对应的变化
+	* @param processTaskId
+	* @param processTaskStepId
+	* @param userId
+	* @param userName 
+	* @return void
 	 */
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-	public int createSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+	public void updateProcessTaskStepUserAndWorkerForSubtask(Long processTaskId, Long processTaskStepId, String userId, String userName);
 	
 	/**
-	 * @Author:
-	 * @Time:
-	 * @Description: 编辑子任务
-	 * @param @param  processTaskStepVo
-	 * @param @return
-	 * @return int
+	 * 
+	* @Description: 活动审计 
+	* @param @param currentProcessTaskStepVo
+	* @param @param action 
+	* @return void
 	 */
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-	public int editSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
-	
-	/**
-	 * @Author:
-	 * @Time:
-	 * @Description: 取消子任务
-	 * @param @param  processTaskStepVo
-	 * @param @return
-	 * @return int
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-	public int abortSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
-	
-	/**
-	 * @Author:
-	 * @Time:
-	 * @Description: 打回重做子任务
-	 * @param @param  processTaskStepVo
-	 * @param @return
-	 * @return int
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-	public int redoSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
-	/**
-	 * @Author:
-	 * @Time:
-	 * @Description: 完成子任务
-	 * @param @param  processTaskStepVo
-	 * @param @return
-	 * @return int
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-	public int completeSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action);
 }
