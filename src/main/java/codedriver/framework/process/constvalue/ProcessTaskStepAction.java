@@ -19,6 +19,9 @@ public enum ProcessTaskStepAction {
 	UPDATECONTENT("updatecontent", "更新上报描述内容"),
 	COMMENT("comment", "回复"),
 	CREATESUBTASK("createsubtask", "创建子任务"),
+	EDITSUBTASK("editsubtask", "编辑子任务"),
+	ABORTSUBTASK("abortsubtask", "取消子任务"),
+	REDOSUBTASK("redosubtask", "打回重做子任务"),
 	COMPLETESUBTASK("completesubtask", "完成子任务");
 	private String status;
 	private String text;

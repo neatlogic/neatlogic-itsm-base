@@ -840,6 +840,72 @@
 	AND `attribute_uuid` = #{attributeUuid}
 	</select>
 	
+	<select id="getProcessTaskStepSubtaskById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `id`,
+	  `owner`,
+	  `status`,
+	  `user_id` AS userId,
+	  `target_time` AS targetTime,
+	  `create_time` AS createTime,
+	  `start_time` AS startTime,
+	  `end_time` AS endTime,
+	  `cancel_user` AS cancelUser,
+	  `cancel_time` AS cancelTime
+	FROM `processtask_step_subtask` 
+	WHERE `id` = #{id}
+	</select>
+	
+	<select id="getProcessTaskStepSubtaskList" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `id`,
+	  `owner`,
+	  `status`,
+	  `user_id` AS userId,
+	  `target_time` AS targetTime,
+	  `create_time` AS createTime,
+	  `start_time` AS startTime,
+	  `end_time` AS endTime,
+	  `cancel_user` AS cancelUser,
+	  `cancel_time` AS cancelTime
+	FROM `processtask_step_subtask` 
+	<where>
+		<if test="id != null">
+		AND `id` = #{id}
+		</if>
+		<if test="processTaskId != null">
+		AND `processtask_id` = #{processTaskId}
+		</if>
+		<if test="processTaskStepId != null">
+		AND `processtask_step_id` = #{processTaskStepId}
+		</if>
+		<if test="userId != null and userId != ''">
+		AND `user_id` = #{userId}
+		</if>
+		<if test="owner != null and owner != ''">
+		AND `owner` = #{owner}
+		</if>
+		<if test="status != null and status != ''">
+		AND `status` = #{status}
+		</if>
+	</where>
+	</select>
+	<select id="getProcessTaskStepSubtaskContentById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
+	SELECT 
+	  `processtask_step_subtask_id` AS processTaskStepSubtaskId,
+	  `content_hash` AS contentHash,
+	  `fcd`,
+	  `fcu`,
+	  `lcd`,
+	  `lcu` 
+	FROM `processtask_step_subtask_content` 
+	WHERE `processtask_step_subtask_id` = #{processTaskStepSubtaskId}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1313,10 +1379,56 @@
 	  (
 	    #{processTaskId},
 	    #{processTaskStepId},
-	    #fileUuid}
+	    #{fileUuid}
+	  ) 
+	</insert>
+	
+	<insert id="insertProcessTaskStepSubtask" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
+	<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+			select LAST_INSERT_ID() as id
+	</selectKey>
+	INSERT INTO `processtask_step_subtask` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `id`,
+	  `owner`,
+	  `status`,
+	  `user_id`,
+	  `user_name`,
+	  `target_time`,
+	  `create_time`,
+	  `start_time`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{id},
+	    #{owner},
+	    #{status},
+	    #{userId},
+	    #{userName},
+	    #{targetTime},
+	    NOW(3),
+	    NOW(3)
 	  ) 
 	</insert>
 
+	<insert id="replaceProcessTaskStepSubtaskContent" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
+	REPLACE INTO `processtask_step_subtask_content` (
+	  `processtask_step_subtask_id`,
+	  `content_hash`,
+	  `fcd`,
+	  `fcu`
+	) 
+	VALUES
+	  (
+	    #{processTaskStepSubtaskId},
+	    #{contentHash},
+	    NOW(3),
+	    #{fcu}
+	  ) 
+	</insert>
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -1362,6 +1474,7 @@
 		WHERE
 		`processtask_step_id` = #{processTaskStepId}
 		AND `user_id` = #{userId}
+		AND `user_type` = #{userType}
 	</update>
 
 	<update id="updateProcessTaskStatus" parameterType="codedriver.framework.process.dto.ProcessTaskVo">
@@ -1390,7 +1503,28 @@
 	  `owner` = #{owner}
 	WHERE `id` = #{id}
 	</update>
-
+	
+	<update id="updateProcessTaskStepSubtaskStatus" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
+	UPDATE 
+	  `processtask_step_subtask` 
+	SET
+  	<if test="status == 'running'">
+  		`user_id` = #{userId},
+  		`user_name` = #{userName},
+  		`target_time` = #{targetTime},
+  		`start_time` = NOW(3),
+  	</if>
+  	<if test="status == 'succeed'">
+  		`end_time` = NOW(3),
+  	</if>
+  	<if test="status == 'canceled'">
+  		`cancel_user` = #{cancelUser},
+  		`cancel_time` = NOW(3),
+  	</if>
+	  `status` = #{status}
+	WHERE `id` = #{id} 
+	</update>
+	
 	<delete id="deleteProcessTaskStepWorkerByProcessTaskId" parameterType="java.lang.Long">
 		DELETE
 		FROM
@@ -1431,6 +1565,9 @@
 		WHERE `processtask_step_id` = #{processTaskStepId}
 		<if test="userType != null and userType != ''">
 			AND `user_type` = #{userType}
+		</if>
+		<if test="userId != null and userId != ''">
+			AND `user_id` = #{userId}
 		</if>
 	</delete>
 

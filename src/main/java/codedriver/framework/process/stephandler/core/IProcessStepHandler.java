@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.dto.ProcessStepVo;
+import codedriver.framework.process.dto.ProcessTaskStepSubtaskVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -267,4 +268,58 @@ public interface IProcessStepHandler {
 	 * @return void
 	 */
 	public void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj);
+	
+	/**
+	 * @Author:
+	 * @Time:
+	 * @Description: 创建子任务
+	 * @param @param  processTaskStepVo
+	 * @param @return
+	 * @return int
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+	public int createSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+	
+	/**
+	 * @Author:
+	 * @Time:
+	 * @Description: 编辑子任务
+	 * @param @param  processTaskStepVo
+	 * @param @return
+	 * @return int
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+	public int editSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+	
+	/**
+	 * @Author:
+	 * @Time:
+	 * @Description: 取消子任务
+	 * @param @param  processTaskStepVo
+	 * @param @return
+	 * @return int
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+	public int abortSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+	
+	/**
+	 * @Author:
+	 * @Time:
+	 * @Description: 打回重做子任务
+	 * @param @param  processTaskStepVo
+	 * @param @return
+	 * @return int
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+	public int redoSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+	/**
+	 * @Author:
+	 * @Time:
+	 * @Description: 完成子任务
+	 * @param @param  processTaskStepVo
+	 * @param @return
+	 * @return int
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+	public int completeSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
 }
