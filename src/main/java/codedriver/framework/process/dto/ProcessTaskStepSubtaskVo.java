@@ -4,30 +4,49 @@ import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
+import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepSubtaskVo {
-
+	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
+	@EntityField(name = "步骤id", type = ApiParamType.LONG)
 	private Long processTaskStepId;
+	@EntityField(name = "子任务id", type = ApiParamType.LONG)
 	private Long id;
+	@EntityField(name = "创建人", type = ApiParamType.STRING)
 	private String owner;
+	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
+	@EntityField(name = "处理人", type = ApiParamType.STRING)
 	private String userId;
+	@EntityField(name = "处理人名称", type = ApiParamType.STRING)
 	private String userName;
+	@EntityField(name = "期望完成时间", type = ApiParamType.LONG)
 	private Date targetTime;
+	@EntityField(name = "创建时间", type = ApiParamType.LONG)
 	private Date createTime;
+	@EntityField(name = "开始时间", type = ApiParamType.LONG)
 	private Date startTime;
+	@EntityField(name = "结束时间", type = ApiParamType.LONG)
 	private Date endTime;
+	@EntityField(name = "取消人", type = ApiParamType.STRING)
 	private String cancelUser;
 	private Date cancelTime;
+	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String content;
 	
+	@EntityField(name = "是否可编辑", type = ApiParamType.INTEGER)
 	private Integer isEditable;
+	@EntityField(name = "是否可取消", type = ApiParamType.INTEGER)
 	private Integer isAbortable;
+	@EntityField(name = "是否可打回重做", type = ApiParamType.INTEGER)
 	private Integer isRedoable;
+	@EntityField(name = "是否可完成", type = ApiParamType.INTEGER)
 	private Integer isCompletable;
+	
 	private JSONObject paramObj;
 	
 	public Long getProcessTaskId() {
