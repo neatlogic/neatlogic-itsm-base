@@ -23,6 +23,7 @@ public class PriorityVo extends BasePageVo {
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
 	
+	private transient String channelUuid;
 	private transient String keyword;
 	
 	public String getUuid() {
@@ -90,6 +91,14 @@ public class PriorityVo extends BasePageVo {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public String getChannelUuid() {
+		return channelUuid;
+	}
+
+	public void setChannelUuid(String channelUuid) {
+		this.channelUuid = channelUuid;
 	}
 
 }
