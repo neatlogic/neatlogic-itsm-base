@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.dto.ProcessStepVo;
+import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -282,7 +283,7 @@ public interface IProcessStepHandler {
 	* @param currentProcessTaskStepVo
 	* @return void
 	 */
-	public void updateProcessTaskStepUserAndWorker(ProcessTaskStepVo currentProcessTaskStepVo);
+	public void updateProcessTaskStepUserAndWorker(List<ProcessTaskStepWorkerVo> workerList, List<ProcessTaskStepUserVo> userList);
 	
 	/**
 	 * 
