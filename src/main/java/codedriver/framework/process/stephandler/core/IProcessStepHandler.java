@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.constvalue.ProcessStepMode;
+import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
@@ -274,4 +275,21 @@ public interface IProcessStepHandler {
 	 * @return void
 	 */
 	public void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj);
+	
+	/**
+	 * 
+	* @Description: 子任务状态发生变化后，对子任务处理人的在 processtask_step_worker表和processtask_step_user表的数据做对应的变化
+	* @param currentProcessTaskStepVo
+	* @return void
+	 */
+	public void updateProcessTaskStepUserAndWorker(ProcessTaskStepVo currentProcessTaskStepVo);
+	
+	/**
+	 * 
+	* @Description: 活动审计 
+	* @param @param currentProcessTaskStepVo
+	* @param @param action 
+	* @return void
+	 */
+	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action);
 }

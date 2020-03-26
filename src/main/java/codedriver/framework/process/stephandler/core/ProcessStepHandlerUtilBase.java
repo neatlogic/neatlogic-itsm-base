@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Stack;
 
 import javax.script.ScriptEngine;
@@ -824,16 +825,6 @@ public abstract class ProcessStepHandlerUtilBase {
 				handlerList.add(new AuditHandler(currentProcessTaskStepVo, action));
 			}
 		}
-
-//		private void saveAuditDetail(ProcessTaskStepAuditVo processTaskStepAuditVo, ProcessTaskStepAuditDetailVo oldAudit, ProcessTaskAuditDetailType detailType, String newValue) {
-//			if (oldAudit == null) {
-//				if (StringUtils.isNotBlank(newValue)) {
-//					processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), detailType.getValue(), null, newValue));
-//				}
-//			} else if ((StringUtils.isBlank(oldAudit.getNewContent()) && StringUtils.isNotBlank(newValue)) || !oldAudit.getNewContent().equals(newValue)) {
-//				processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), detailType.getValue(), oldAudit.getNewContent(), newValue));
-//			}
-//		}
 		
 		@Override
 		public void execute() {
@@ -848,77 +839,14 @@ public abstract class ProcessStepHandlerUtilBase {
 				processTaskMapper.insertProcessTaskStepAudit(processTaskStepAuditVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				if(MapUtils.isNotEmpty(paramObj)) {
-					String title = paramObj.getString(ProcessTaskAuditDetailType.TITLE.getParamName());
-					if(StringUtils.isNotBlank(title)) {
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.TITLE.getValue(), null, title));
-					}
-					String content = paramObj.getString(ProcessTaskAuditDetailType.CONTENT.getParamName());
-					if(StringUtils.isNotBlank(content)) {
-						ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
-						processTaskMapper.replaceProcessTaskContent(contentVo);
-						processTaskMapper.replaceProcessTaskStepContent(new ProcessTaskStepContentVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), contentVo.getHash()));
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.CONTENT.getValue(), null, contentVo.getHash()));
-					}
-					String priorityUuid = paramObj.getString(ProcessTaskAuditDetailType.PRIORITY.getParamName());
-					if(StringUtils.isNotBlank(priorityUuid)) {
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.PRIORITY.getValue(), null, priorityUuid));
-					}
-					String fileUuidList = paramObj.getString(ProcessTaskAuditDetailType.FILE.getParamName());
-					if(StringUtils.isNotBlank(fileUuidList)) {
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.FILE.getValue(), null, fileUuidList));
-					}
-					String workerList = paramObj.getString(ProcessTaskAuditDetailType.WORKER.getParamName());
-					if(StringUtils.isNotBlank(workerList)) {
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.WORKER.getValue(), null, workerList));
+					for(ProcessTaskAuditDetailType auditDetailType : ProcessTaskAuditDetailType.values()) {
+						String newData = paramObj.getString(auditDetailType.getParamName());
+						String oldData = paramObj.getString(auditDetailType.getOldDataParamName());
+						if(!Objects.equals(oldData, newData)) {
+							processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), auditDetailType.getValue(), oldData, newData));
+						}
 					}
 				}
-//				/** 获取作业信息 **/
-//				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-//				/** 获取开始节点内容信息 **/
-//				ProcessTaskContentVo startContentVo = null;
-//				List<ProcessTaskStepVo> stepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(currentProcessTaskStepVo.getProcessTaskId(), ProcessStepType.START.getValue());
-//				if (stepList.size() == 1) {
-//					ProcessTaskStepVo startStepVo = stepList.get(0);
-//					List<ProcessTaskStepContentVo> contentList = processTaskMapper.getProcessTaskStepContentProcessTaskStepId(startStepVo.getId());
-//					if (contentList.size() > 0) {
-//						ProcessTaskStepContentVo contentVo = contentList.get(0);
-//						startContentVo = processTaskMapper.getProcessTaskContentByHash(contentVo.getContentHash());
-//					}
-//				}
-//				/** 标题修改审计 **/
-//				ProcessTaskStepAuditDetailVo titleAudit = processTaskMapper.getProcessTaskStepAuditDetail(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskAuditDetailType.TITLE.getValue());
-//				saveAuditDetail(processTaskStepAuditVo, titleAudit, ProcessTaskAuditDetailType.TITLE, processTaskVo.getTitle());
-//
-//				/** 内容修改审计 **/
-//				if (startContentVo != null) {
-//					ProcessTaskStepAuditDetailVo contentAudit = processTaskMapper.getProcessTaskStepAuditDetail(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskAuditDetailType.CONTENT.getValue());
-//					saveAuditDetail(processTaskStepAuditVo, contentAudit, ProcessTaskAuditDetailType.CONTENT, startContentVo.getHash());
-//				}
-//				/** 优先级修改审计 **/
-//				ProcessTaskStepAuditDetailVo urgencyAudit = processTaskMapper.getProcessTaskStepAuditDetail(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskAuditDetailType.PRIORITY.getValue());
-//				saveAuditDetail(processTaskStepAuditVo, urgencyAudit, ProcessTaskAuditDetailType.PRIORITY, processTaskVo.getPriorityUuid());
-//
-//				/** 表单修改审计 **/
-//				ProcessTaskStepAuditDetailVo formAudit = processTaskMapper.getProcessTaskStepAuditDetail(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskAuditDetailType.FORM.getValue());
-//
-//				List<ProcessTaskFormAttributeDataVo> formAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-//				JSONObject newFormObj = new JSONObject();
-//				for (ProcessTaskFormAttributeDataVo attributeData : formAttributeDataList) {
-//					newFormObj.put(attributeData.getAttributeUuid(), attributeData.getData());
-//				}
-//
-//				if (formAudit == null) {
-//					if (!newFormObj.isEmpty()) {
-//						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.FORM.getValue(), null, newFormObj.toJSONString()));
-//					}
-//				} else {
-//					Javers javers = JaversBuilder.javers().build();
-//					JSONObject oldFormObj = JSONObject.parseObject(formAudit.getNewContent());
-//					Diff diff = javers.compare(newFormObj, oldFormObj);
-//					if (diff.hasChanges()) {
-//						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.FORM.getValue(), formAudit.getNewContent(), newFormObj.toJSONString()));
-//					}
-//				}
 
 			} catch (Exception ex) {
 				logger.error(ex.getMessage(), ex);

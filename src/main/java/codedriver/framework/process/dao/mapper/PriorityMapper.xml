@@ -4,35 +4,41 @@
 
 	<select id="searchPriorityCount" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="int">
 	SELECT 
-	COUNT(`uuid`) 
-	FROM `priority`
+	COUNT(p.`uuid`) 
+	FROM `priority` p
+	<if test="channelUuid != null and channelUuid != ''">
+	JOIN `channel_priority` cp ON cp.`priority_uuid` = p.`uuid` AND cp.`channel_uuid` = #{channelUuid} 
+	</if>
 	WHERE 1=1
 	<if test="keyword != null">
-	AND `name` LIKE CONCAT('%', #{keyword}, '%')
+	AND p.`name` LIKE CONCAT('%', #{keyword}, '%')
 	</if>
 	<if test="isActive != null">
-	AND `is_active` = #{isActive}
+	AND p.`is_active` = #{isActive}
 	</if>
 	</select>
 
 	<select id="searchPriorityList" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="codedriver.framework.process.dto.PriorityVo">
 	SELECT 
-	`uuid`,
-	`name`,
-	`is_active` as isActive,
-	`desc`,
-	`icon`,
-	`color`,
-	`sort`
-	FROM `priority`
+	p.`uuid`,
+	p.`name`,
+	p.`is_active` as isActive,
+	p.`desc`,
+	p.`icon`,
+	p.`color`,
+	p.`sort`
+	FROM `priority` p
+	<if test="channelUuid != null and channelUuid != ''">
+	JOIN `channel_priority` cp ON cp.`priority_uuid` = p.`uuid` AND cp.`channel_uuid` = #{channelUuid} 
+	</if>
 	WHERE 1=1
 	<if test="keyword != null">
-	AND `name` LIKE CONCAT('%', #{keyword}, '%')
+	AND p.`name` LIKE CONCAT('%', #{keyword}, '%')
 	</if>
 	<if test="isActive != null">
-	AND `is_active` = #{isActive}
+	AND p.`is_active` = #{isActive}
 	</if>
-	ORDER BY `sort` DESC
+	ORDER BY p.`sort` DESC
 	<if test="needPage">
 	limit #{startNum}, #{pageSize}
 	</if>
