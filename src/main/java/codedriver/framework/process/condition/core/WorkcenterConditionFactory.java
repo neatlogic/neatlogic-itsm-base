@@ -1,4 +1,4 @@
-package codedriver.framework.process.workcenter.condition.core;
+package codedriver.framework.process.condition.core;
 
 import java.util.HashMap;
 import java.util.Map;

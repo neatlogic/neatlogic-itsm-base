@@ -6,11 +6,11 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.process.condition.core.IWorkcenterCondition;
+import codedriver.framework.process.condition.core.WorkcenterConditionFactory;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.exception.workcenter.WorkcenterParamException;
-import codedriver.framework.process.workcenter.condition.core.IWorkcenterCondition;
-import codedriver.framework.process.workcenter.condition.core.WorkcenterConditionFactory;
 
 public class ConditionVo implements Serializable{
 	private static final long serialVersionUID = -776692828809703841L;
