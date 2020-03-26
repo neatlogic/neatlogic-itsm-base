@@ -10,7 +10,6 @@ import codedriver.framework.process.condition.core.IWorkcenterCondition;
 import codedriver.framework.process.condition.core.WorkcenterConditionFactory;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.exception.workcenter.WorkcenterParamException;
 
 public class ConditionVo implements Serializable{
 	private static final long serialVersionUID = -776692828809703841L;
@@ -31,11 +30,8 @@ public class ConditionVo implements Serializable{
 	
 	public ConditionVo(JSONObject jsonObj) {
 		this.uuid = jsonObj.getString("uuid");
-		if(!jsonObj.getString("name").contains("#")) {
-			throw new WorkcenterParamException("name");
-		}
-		this.name = jsonObj.getString("name").split("#")[1];
-		this.type = jsonObj.getString("name").split("#")[0];
+		this.name = jsonObj.getString("name");
+		this.type = jsonObj.getString("type");
 		this.expression = jsonObj.getString("expression");
 		String values = jsonObj.getString("valueList");
 		if(values.startsWith("[") && values.endsWith("]")) {

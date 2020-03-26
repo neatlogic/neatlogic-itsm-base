@@ -21,6 +21,7 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 
 public class WorkcenterFieldBuilder {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private List<String> userWillDoList = new ArrayList<String>();
 	
 	JSONObject dataJson = null;
 	
@@ -40,7 +41,7 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setPriority(String priority) {
-		dataJson.put(ProcessWorkcenterField.PRIORITY.getValue(), priority);
+		dataJson.put(ProcessWorkcenterField.PRIORITY.getValue(),priority);
 		return this;
 	}
 	public WorkcenterFieldBuilder setCatalog(String catalog) {
@@ -71,8 +72,10 @@ public class WorkcenterFieldBuilder {
 		dataJson.put(ProcessWorkcenterField.OWNER.getValue(), owner);
 		return this;
 	}
-	public WorkcenterFieldBuilder setReporter(String reporter) {
-		dataJson.put(ProcessWorkcenterField.REPORTER.getValue(), reporter);
+	public WorkcenterFieldBuilder setReporter(String reporter,String owner) {
+		if(!reporter.equals(owner)) {
+			dataJson.put(ProcessWorkcenterField.REPORTER.getValue(), String.format("user#%s", reporter));
+		}
 		return this;
 	}
 	public WorkcenterFieldBuilder setTransferFromUserList(List<ProcessTaskStepAuditVo> transferAuditList) {
@@ -97,18 +100,22 @@ public class WorkcenterFieldBuilder {
 					 JSONObject currentStepUserJson = new JSONObject();
 					 currentStepUserJson.put("handler", worker.getWorkerValue());
 					 stepUserArray.add(currentStepUserJson);
+					 userWillDoList.add(worker.getWorkerValue());
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
 					 JSONObject currentStepUserJson = new JSONObject();
-					 currentStepUserJson.put("handler", String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId()));
+					 String handler = String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId());
+					 currentStepUserJson.put("handler", handler);
 					 currentStepUserJson.put("handlerType", userVo.getUserType());
 					 stepUserArray.add(currentStepUserJson);
+					 userWillDoList.add(handler);
 				 }
 			 }
 			 currentStepList.add(currentStepJson);
 		 }
 		dataJson.put(ProcessWorkcenterField.CURRENT_STEP.getValue(), currentStepList);
+		dataJson.put(ProcessWorkcenterField.USER_WILL_DO.getValue(), userWillDoList);
 		return this;
 	}
 	public WorkcenterFieldBuilder setWorktime(String worktime) {
@@ -117,6 +124,11 @@ public class WorkcenterFieldBuilder {
 	}
 	public WorkcenterFieldBuilder setExpiredTime(Date expiredTime) {
 		dataJson.put(ProcessWorkcenterField.EXPIRED_TIME.getValue(), expiredTime == null?"":sdf.format(expiredTime));
+		return this;
+	}
+	
+	public WorkcenterFieldBuilder setUserWillDo() {
+		dataJson.put(ProcessWorkcenterField.USER_WILL_DO.getValue(), userWillDoList);
 		return this;
 	}
 }

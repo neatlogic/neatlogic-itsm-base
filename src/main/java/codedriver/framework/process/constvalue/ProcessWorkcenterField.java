@@ -19,6 +19,7 @@ public enum ProcessWorkcenterField {
 	CURRENT_STEP_STATUS("stepstatus","当前步骤状态","currentstep.status"),
 	WOKRTIME("worktime","时间窗口"),
 	TRANSFER_FROM_USER("transferfromuser","转交人","transferfromuser"),
+	USER_WILL_DO("userwilldo","用户待处理的","userwilldo"),
 	ACTION("action", "操作栏");
 	private String value;
 	private String name;
@@ -65,4 +66,12 @@ public enum ProcessWorkcenterField {
 		return "";
 	}
 
+	public static String getConditionValue(String _value) {
+		for (ProcessWorkcenterField s : ProcessWorkcenterField.values()) {
+			if (s.getValue().equals(_value)) {
+				return s.getConditionValue();
+			}
+		}
+		return null;
+	}
 }

@@ -29,6 +29,9 @@ public class WorkcenterTheadVo {
 	private String userId;
 	@EntityField(name = "字段类型", type = ApiParamType.STRING)
 	private String type ;
+	@EntityField(name = "字段样式", type = ApiParamType.STRING)
+	private String className ;
+	
 	
 	public WorkcenterTheadVo(JSONObject obj) {
 		this.name = obj.getString("name");
@@ -37,6 +40,7 @@ public class WorkcenterTheadVo {
 		this.isShow = obj.getInteger("isShow");
 		this.userId = UserContext.get().getUserId();
 		this.type = obj.getString("type");
+		this.className = obj.getString("className");
 	}
 	
 	public WorkcenterTheadVo(IWorkcenterColumn column) {
@@ -44,6 +48,7 @@ public class WorkcenterTheadVo {
 		this.userId = UserContext.get().getUserId();
 		this.displayName = column.getDisplayName();
 		this.type = ProcessFieldType.COMMON.getValue();
+		this.className = column.getClassName();
 	}
 	
 	public WorkcenterTheadVo(String _workcenterUuid,String _userId) {
@@ -112,5 +117,15 @@ public class WorkcenterTheadVo {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+	
+	
 	
 }
