@@ -35,5 +35,13 @@ public interface IWorkcenterColumn {
 	 * @Date: 2020/2/2
 	 */
 	public Object getValue(MultiAttrsObject el) throws RuntimeException;
+	
+	/**
+	 * @Description: 获取类型
+	 * @Param: 
+	 * @return: java.lang.String
+	 * @Date: 2020/3/25
+	 */
+	public String getType();
 
 }

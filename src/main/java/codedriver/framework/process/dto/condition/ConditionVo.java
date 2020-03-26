@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.process.constvalue.ProcessWorkcenterConditionType;
+import codedriver.framework.process.constvalue.ProcessWorkcenterColumnType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.exception.workcenter.WorkcenterParamException;
 import codedriver.framework.process.workcenter.condition.core.IWorkcenterCondition;
@@ -133,9 +133,9 @@ public class ConditionVo implements Serializable{
 
 	public boolean predicate(ProcessTaskStepVo currentProcessTaskStepVo) {
 		IWorkcenterCondition workcenterCondition = null;
-		if(ProcessWorkcenterConditionType.COMMON.getValue().equals(this.type)) {
+		if(ProcessWorkcenterColumnType.COMMON.getValue().equals(this.type)) {
 			workcenterCondition = WorkcenterConditionFactory.getHandler(this.name);
-		}else if(ProcessWorkcenterConditionType.FORM.getValue().equals(this.type)) {
+		}else if(ProcessWorkcenterColumnType.FORM.getValue().equals(this.type)) {
 			workcenterCondition = WorkcenterConditionFactory.getHandler(this.type);
 		}
 		if(workcenterCondition != null) {
