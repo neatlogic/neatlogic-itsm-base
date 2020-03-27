@@ -493,7 +493,7 @@
 		</collection>
 	</resultMap>
 	
-	<select id="getProcessTaskActiveStepByProcessTaskId" parameterType="java.lang.Long" resultMap="processTaskStepDetailMap">
+	<select id="getProcessTaskActiveStepByProcessTaskIdAndProcessStepType" parameterType="java.lang.Long" resultMap="processTaskStepDetailMap">
 		SELECT 
 		ps.`id`,
 		ps.`processtask_id` AS processTaskId,
@@ -516,7 +516,14 @@
 		FROM `processtask_step` ps 
 		LEFT JOIN `processtask_step_worker` psw ON ps.`processtask_id` = psw.`processtask_id` AND ps.`id` = psw.`processtask_step_id` 
 		LEFT JOIN `processtask_step_user` psu ON ps.`processtask_id` = psu.`processtask_id` AND ps.`id` = psu.`processtask_step_id`
-		WHERE ps.`processtask_id` = #{processTaskId} AND ps.`type` = 'process' AND ps.`is_active` =1 AND psw.`action` = 'handle'  
+		WHERE ps.`processtask_id` = #{processTaskId} 
+		<if test="processStepTypeList != null and processStepTypeList.size()>0">
+			AND ps.`type` in
+			<foreach collection="processStepTypeList" item="processStepType" open="(" separator=","  close=")">
+				#{processStepType}
+			</foreach>
+		</if>
+		AND ps.`is_active` =1 AND psw.`action` = 'handle'  
 	</select>
 
 	<select id="getProcessTaskStepRelByToId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
