@@ -30,6 +30,10 @@ public interface WorktimeMapper {
 	long startTime, @Param("endTime")
 	long endTime);
 
+	public int checkIsWithinWorktimeRange(@Param("worktimeUuid")String worktimeUuid, @Param("value") long value);
+
+	public int checkIsWithinWorktime(@Param("worktimeUuid")String worktimeUuid, @Param("date") String date);
+
 	public int insertWorktime(WorktimeVo worktimeVo);
 
 	public int insertBatchWorktimeRange(List<WorktimeRangeVo> worktimeRangeList);
