@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 
+import codedriver.framework.process.dto.AuthorityVo;
 import codedriver.framework.process.dto.ChannelPriorityVo;
-import codedriver.framework.process.dto.ChannelRoleVo;
 import codedriver.framework.process.dto.ChannelVo;
 
 public interface ChannelMapper {
@@ -18,12 +18,6 @@ public interface ChannelMapper {
 	Set<String> searchChannelParentUuidList(ChannelVo channelVo);
 
 	ChannelVo getChannelByUuid(String channelUuid);
-
-	int searchChannelRoleCount(ChannelRoleVo channelRoleVo);
-	
-	List<ChannelRoleVo> searchChannelRoleList(ChannelRoleVo channelRoleVo);
-	
-	List<ChannelRoleVo> getChannelRoleListByChannelUuid(String channelUuid);
 	
 	int getMaxSortByParentUuid(String parentUuid);
 
@@ -36,18 +30,20 @@ public interface ChannelMapper {
 	List<ChannelVo> getChannelListForTree(Integer isActive);
 
 	String getProcessUuidByChannelUuid(String channelUuid);
+
+	List<AuthorityVo> getChannelAuthorityListByChannelUuid(String uuid);
 	
 	int replaceChannelUser(@Param("userId")String userId, @Param("channelUuid")String channelUuid);	
 
 	int replaceChannel(ChannelVo channelVo);
-
-	int replaceChannelRole(ChannelRoleVo channelRole);
 
 	int insertChannelPriority(ChannelPriorityVo channelPriority);
 	
 	int replaceChannelProcess(@Param("channelUuid")String channelUuid, @Param("processUuid")String processUuid);
 
 	int replaceChannelWorktime(@Param("channelUuid")String channelUuid, @Param("worktimeUuid")String worktimeUuid);
+
+	int insertChannelAuthority(AuthorityVo authorityVo);
 
 	int updateChannelForMove(ChannelVo channelVo);
 
@@ -59,16 +55,14 @@ public interface ChannelMapper {
 	
 	int deleteChannelByUuid(String uuid);
 
-	int deleteChannelRole(ChannelRoleVo channelRole);
-
 	int deleteChannelPriorityByChannelUuid(String channelUuid);
 
 	int deleteChannelProcessByChannelUuid(String channelUuid);
 
 	int deleteChannelWorktimeByChannelUuid(String channelUuid);
 
-	int deleteChannelRoleByChannelUuid(String channelUuid);
-
 	int deleteChannelUserByChannelUuid(String channelUuid);
+
+	int deleteChannelAuthorityByChannelUuid(String uuid);
 	
 }

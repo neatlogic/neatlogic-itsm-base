@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 
+import codedriver.framework.process.dto.AuthorityVo;
 import codedriver.framework.process.dto.CatalogVo;
 
 public interface CatalogMapper {
@@ -15,8 +16,6 @@ public interface CatalogMapper {
 	
 	int getMaxSortByParentUuid(String parentUuid);
 	
-	List<String> getCatalogRoleNameListByCatalogUuid(String catalogUuid);
-	
 	int checkCatalogIsExists(String catalogUuid);
 
 	Set<String> getHasActiveChannelCatalogUuidList();
@@ -24,10 +23,12 @@ public interface CatalogMapper {
 	int checkCatalogNameIsRepeat(CatalogVo catalogVo);
 
 	List<CatalogVo> getCatalogListForTree(Integer isActive);
+
+	List<AuthorityVo> getCatalogAuthorityListByCatalogUuid(String uuid);
 	
 	int replaceCatalog(CatalogVo catalogVo);
 
-	int insertCatalogRole(@Param("catalogUuid")String catalogUuid, @Param("roleName")String roleName);
+	int insertCatalogAuthority(AuthorityVo authorityVo);
 
 	int updateCatalogForMove(CatalogVo catalogVo);
 
@@ -37,6 +38,6 @@ public interface CatalogMapper {
 	
 	int deleteCatalogByUuid(String uuid);
 
-	int deleteCatalogRoleByUuid(String uuid);
+	int deleteCatalogAuthorityByCatalogUuid(String uuid);
 
 }
