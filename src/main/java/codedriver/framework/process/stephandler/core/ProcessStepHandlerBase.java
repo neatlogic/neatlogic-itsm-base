@@ -429,7 +429,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
 
 			/** 检查处理人是否合法 **/
-			//ActionRoleChecker.start(currentProcessTaskStepVo);
+			ActionRoleChecker.start(currentProcessTaskStepVo);
 
 			ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 
@@ -597,7 +597,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		// 锁定当前流程
 		processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
 		/** 校验权限 **/
-		//ActionRoleChecker.abortProcessTask(currentProcessTaskVo);
+		ActionRoleChecker.abortProcessTask(currentProcessTaskVo);
 
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
 		for (ProcessTaskStepVo stepVo : processTaskStepList) {
@@ -652,7 +652,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		// 锁定当前流程
 		processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
 		/** 校验权限 **/
-		//ActionRoleChecker.recoverProcessTask(currentProcessTaskVo);
+		ActionRoleChecker.recoverProcessTask(currentProcessTaskVo);
 
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
 		for (ProcessTaskStepVo stepVo : processTaskStepList) {
@@ -791,7 +791,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		}
 
 		/** 校验权限 **/
-		//ActionRoleChecker.transfer(currentProcessTaskStepVo);
+		ActionRoleChecker.transfer(currentProcessTaskStepVo);
 
 		ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 		/** 检查步骤是否 “已激活” **/

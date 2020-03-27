@@ -69,9 +69,9 @@ public class ChannelVo extends BasePageVo implements ITree {
 	private Integer sla;
 	
 	@EntityField(name = "授权对象", type = ApiParamType.JSONARRAY)
-	private List<String> workerList;
+	private List<String> authorityList;
 	
-	private transient List<AuthorityVo> authorityList;
+	private transient List<AuthorityVo> authorityVoList;
 	
 	private transient ITree parent;
 
@@ -301,32 +301,32 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.sla = sla;
 	}
 
-	public List<String> getWorkerList() {
-		if(workerList == null && CollectionUtils.isNotEmpty(authorityList)) {
-			workerList = new ArrayList<>();
-			for(AuthorityVo authorityVo : authorityList) {
+	public List<String> getAuthorityList() {
+		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
+			authorityList = new ArrayList<>();
+			for(AuthorityVo authorityVo : authorityVoList) {
 				if(authorityVo.getUserId() != null) {
-					workerList.add(GroupSearch.USER.getValuePlugin() + authorityVo.getUserId());
+					authorityList.add(GroupSearch.USER.getValuePlugin() + authorityVo.getUserId());
 				}
 				if(authorityVo.getTeamUuid() != null) {
-					workerList.add(GroupSearch.TEAM.getValuePlugin() + authorityVo.getTeamUuid());
+					authorityList.add(GroupSearch.TEAM.getValuePlugin() + authorityVo.getTeamUuid());
 				}
 				if(authorityVo.getRoleName() != null) {
-					workerList.add(GroupSearch.ROLE.getValuePlugin() + authorityVo.getRoleName());
+					authorityList.add(GroupSearch.ROLE.getValuePlugin() + authorityVo.getRoleName());
 				}
 			}
 		}
-		return workerList;
+		return authorityList;
 	}
 
-	public void setWorkerList(List<String> workerList) {
-		this.workerList = workerList;
+	public void setAuthorityList(List<String> authorityList) {
+		this.authorityList = authorityList;
 	}
 
-	public List<AuthorityVo> getAuthorityList() {
-		if(authorityList == null && CollectionUtils.isNotEmpty(workerList)) {
-			authorityList = new ArrayList<>();
-			for(String worker : workerList) {
+	public List<AuthorityVo> getAuthorityVoList() {
+		if(authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
+			authorityVoList = new ArrayList<>();
+			for(String worker : authorityList) {
 				AuthorityVo authorityVo = new AuthorityVo();
 				authorityVo.setChannelUuid(uuid);
 				String[] split = worker.split("#");
@@ -339,14 +339,14 @@ public class ChannelVo extends BasePageVo implements ITree {
 				}else {
 					continue;
 				}
-				authorityList.add(authorityVo);
+				authorityVoList.add(authorityVo);
 			}
 		}
-		return authorityList;
+		return authorityVoList;
 	}
 
-	public void setAuthorityList(List<AuthorityVo> authorityList) {
-		this.authorityList = authorityList;
+	public void setAuthorityVoList(List<AuthorityVo> authorityVoList) {
+		this.authorityVoList = authorityVoList;
 	}
 
 	@Override

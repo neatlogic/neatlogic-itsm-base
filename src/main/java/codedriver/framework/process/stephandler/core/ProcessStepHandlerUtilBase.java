@@ -753,45 +753,45 @@ public abstract class ProcessStepHandlerUtilBase {
 		}
 	}
 
-//	protected static class ActionRoleChecker {
-//		protected static boolean isWorker(ProcessTaskStepVo currentProcessTaskStepVo) {
-//			List<ProcessTaskStepUserVo> userList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), UserType.MAJOR.getValue());
-//			boolean hasRight = false;
-//			if (userList.size() > 0) {
-//				for (ProcessTaskStepUserVo userVo : userList) {
-//					if (userVo.getUserId().equals(UserContext.get().getUserId())) {
-//						hasRight = true;
-//						break;
-//					}
-//				}
-//			}
-//			return hasRight;
-//		}
-//
-//		protected static boolean start(ProcessTaskStepVo currentProcessTaskStepVo) {
-//			boolean isWorker = isWorker(currentProcessTaskStepVo);
-//			if (!isWorker) {
-//				throw new ProcessTaskRuntimeException("您不是当前步骤处理人");
-//			}
-//			return isWorker;
-//		}
-//
-//		protected static boolean abortProcessTask(ProcessTaskVo currentProcessTaskVo) {
-//			return true;
-//		}
-//
-//		protected static boolean recoverProcessTask(ProcessTaskVo currentProcessTaskVo) {
-//			return true;
-//		}
-//
-//		protected static boolean transfer(ProcessTaskStepVo currentProcessTaskStepVo) {
-//			boolean isWorker = isWorker(currentProcessTaskStepVo);
-//			if (!isWorker) {
-//				throw new ProcessTaskRuntimeException("您不是当前步骤处理人");
-//			}
-//			return isWorker;
-//		}
-//	}
+	protected static class ActionRoleChecker {
+		protected static boolean isWorker(ProcessTaskStepVo currentProcessTaskStepVo) {
+			List<ProcessTaskStepUserVo> userList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), UserType.MAJOR.getValue());
+			boolean hasRight = false;
+			if (userList.size() > 0) {
+				for (ProcessTaskStepUserVo userVo : userList) {
+					if (userVo.getUserId().equals(UserContext.get().getUserId())) {
+						hasRight = true;
+						break;
+					}
+				}
+			}
+			return hasRight;
+		}
+
+		protected static boolean start(ProcessTaskStepVo currentProcessTaskStepVo) {
+			boolean isWorker = isWorker(currentProcessTaskStepVo);
+			if (!isWorker) {
+				throw new ProcessTaskRuntimeException("您不是当前步骤处理人");
+			}
+			return isWorker;
+		}
+
+		protected static boolean abortProcessTask(ProcessTaskVo currentProcessTaskVo) {
+			return true;
+		}
+
+		protected static boolean recoverProcessTask(ProcessTaskVo currentProcessTaskVo) {
+			return true;
+		}
+
+		protected static boolean transfer(ProcessTaskStepVo currentProcessTaskStepVo) {
+			boolean isWorker = isWorker(currentProcessTaskStepVo);
+			if (!isWorker) {
+				throw new ProcessTaskRuntimeException("您不是当前步骤处理人");
+			}
+			return isWorker;
+		}
+	}
 
 	protected static class AuditHandler extends CodeDriverThread {
 		private ProcessTaskStepVo currentProcessTaskStepVo;
