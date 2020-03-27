@@ -49,6 +49,7 @@ public class WorkcenterTheadVo {
 		this.displayName = column.getDisplayName();
 		this.type = ProcessFieldType.COMMON.getValue();
 		this.className = column.getClassName();
+		this.sort = column.getSort();
 	}
 	
 	public WorkcenterTheadVo(String _workcenterUuid,String _userId) {

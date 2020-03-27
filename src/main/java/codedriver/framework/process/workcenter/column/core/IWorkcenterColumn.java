@@ -51,5 +51,13 @@ public interface IWorkcenterColumn {
 	 * @Date: 2020/3/26
 	 */
 	public String getClassName();
+	
+	/**
+	 * @Description: 获取展示字段默认顺序
+	 * @Param: 
+	 * @return: java.lang.String
+	 * @Date: 2020/3/27
+	 */
+	public Integer getSort();
 
 }
