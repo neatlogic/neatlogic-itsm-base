@@ -150,6 +150,10 @@ public abstract class ProcessStepHandlerUtilBase {
 		notifyMapper = _notifyMapper;
 	}
 
+	@Autowired
+	public void setFileMapper(FileMapper _fileMapper) {
+		fileMapper = _fileMapper;
+	}
 	protected static class NotifyHandler extends CodeDriverThread {
 		private ProcessTaskStepVo currentProcessTaskStepVo;
 		private NotifyTriggerType notifyTriggerType;
