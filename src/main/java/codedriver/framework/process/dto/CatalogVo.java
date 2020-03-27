@@ -245,10 +245,10 @@ public class CatalogVo extends BasePageVo implements ITree{
 	public List<AuthorityVo> getAuthorityVoList() {
 		if(authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
 			authorityVoList = new ArrayList<>();
-			for(String worker : authorityList) {
+			for(String authority : authorityList) {
 				AuthorityVo authorityVo = new AuthorityVo();
 				authorityVo.setCatalogUuid(uuid);
-				String[] split = worker.split("#");
+				String[] split = authority.split("#");
 				if(GroupSearch.USER.getValue().equals(split[0])) {
 					authorityVo.setUserId(split[1]);
 				}else if(GroupSearch.TEAM.getValue().equals(split[0])) {
