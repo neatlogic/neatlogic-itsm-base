@@ -107,7 +107,7 @@ public class WorkcenterFieldBuilder {
 					 JSONObject currentStepUserJson = new JSONObject();
 					 String handler = String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId());
 					 currentStepUserJson.put("handler", handler);
-					 currentStepUserJson.put("handlerType", userVo.getUserType());
+					 currentStepUserJson.put("handlertype", userVo.getUserType());
 					 stepUserArray.add(currentStepUserJson);
 					 userWillDoList.add(handler);
 				 }
