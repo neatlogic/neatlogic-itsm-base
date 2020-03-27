@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.CatalogMapper">
-	<select id="getCatalogList" resultType="codedriver.framework.process.dto.CatalogVo">
+	<select id="getCatalogList" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="codedriver.framework.process.dto.CatalogVo">
 	SELECT 
 	  `uuid`,
 	  `name`,
@@ -23,7 +23,7 @@
 	 ORDER BY `sort`
 	</select>
 	
-	<select id="getCatalogByUuid" resultType="codedriver.framework.process.dto.CatalogVo">
+	<select id="getCatalogByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo">
 	SELECT 
 	  `uuid`,
 	  `name`,
@@ -38,15 +38,11 @@
 	 where `uuid` = #{uuid}
 	</select>
 	
-	<select id="getMaxSortByParentUuid" resultType="int">
+	<select id="getMaxSortByParentUuid" parameterType="java.lang.String" resultType="int">
 	SELECT  IFNULL(MAX(`sort`), 0) FROM `catalog` WHERE `parent_uuid` = #{parentUuid}
 	</select>
 	
-	<select id="getCatalogRoleNameListByCatalogUuid" resultType="java.lang.String">
-	SELECT `role_name` FROM `catalog_role` WHERE `catalog_uuid` = #{catalogUuid}
-	</select>
-	
-	<select id="checkCatalogIsExists" resultType="int">
+	<select id="checkCatalogIsExists" parameterType="java.lang.String" resultType="int">
 	SELECT COUNT(`uuid`) FROM `catalog` where `uuid`=#{uuid}
 	</select>
 	
@@ -58,7 +54,7 @@
 	WHERE ca.`is_active` = 1
 	</select>
 	
-	<select id="checkCatalogNameIsRepeat" resultType="int">
+	<select id="checkCatalogNameIsRepeat" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int">
 	SELECT COUNT(1) FROM `catalog` where `name`=#{name} AND `uuid`!=#{uuid}
 	</select>
 	
@@ -69,7 +65,7 @@
 		<result column="sort" property="sort"/>
 	</resultMap>
 	
-	<select id="getCatalogListForTree" resultMap="catalogMap">
+	<select id="getCatalogListForTree" parameterType="java.lang.Integer" resultMap="catalogMap">
 	SELECT 
 	  `uuid`,
 	  `name`,
@@ -82,20 +78,42 @@
 	 ORDER BY `parent_uuid`, `sort`
 	</select>
 	
-	<insert id="replaceCatalog">
+	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo">
+	SELECT 
+	  `catalog_uuid` AS catalogUuid,
+	  `user_id` AS userId,
+	  `team_uuid` AS teamUuid,
+	  `role_name` AS roleName
+	FROM `catalog_authority` 
+	WHERE `catalog_uuid` = #{catalogUuid}
+	</select>
+	
+	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 	REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `sort`) 
 	VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{sort})
 	</insert>
 	
-	<insert id="insertCatalogRole">
-	INSERT INTO `catalog_role`(`catalog_uuid`, `role_name`) VALUES(#{catalogUuid}, #{roleName})
+	<insert id="insertCatalogAuthority" parameterType="codedriver.framework.process.dto.AuthorityVo">
+	INSERT INTO `catalog_authority` (
+	  `catalog_uuid`,
+	  `user_id`,
+	  `team_uuid`,
+	  `role_name`
+	) 
+	VALUES
+	  (
+	    #{catalogUuid},
+	    #{userId},
+	    #{teamUuid},
+	    #{roleName}
+	  )
 	</insert>
 	
-	<update id="updateCatalogForMove">
+	<update id="updateCatalogForMove" parameterType="codedriver.framework.process.dto.CatalogVo">
 	UPDATE `catalog` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
 	</update>
 
-	<update id="updateSortIncrement" parameterType="java.util.HashMap">
+	<update id="updateSortIncrement">
 	UPDATE `catalog` SET `sort` = `sort` + 1 
 	WHERE `parent_uuid` = #{parentUuid} 
 	AND `sort` &gt;= #{fromSort} 
@@ -104,7 +122,7 @@
 	</if>
 	</update>
 
-	<update id="updateSortDecrement" parameterType="java.util.HashMap">
+	<update id="updateSortDecrement">
 	UPDATE `catalog` SET `sort` = `sort` - 1 
 	WHERE `parent_uuid` = #{parentUuid} 
 	AND `sort` &gt;= #{fromSort} 
@@ -113,12 +131,11 @@
 	</if>
 	</update>
 	
-	<delete id="deleteCatalogByUuid">
+	<delete id="deleteCatalogByUuid" parameterType="java.lang.String">
 	DELETE FROM `catalog` WHERE `uuid` = #{uuid}
 	</delete>
 	
-	<delete id="deleteCatalogRoleByUuid">
-	DELETE FROM `catalog_role` WHERE `catalog_uuid` = #{catalogUuid}
+	<delete id="deleteCatalogAuthorityByCatalogUuid" parameterType="java.lang.String">
+	DELETE FROM `catalog_authority` WHERE `catalog_uuid` = #{catalogUuid}
 	</delete>
-	
 </mapper>
