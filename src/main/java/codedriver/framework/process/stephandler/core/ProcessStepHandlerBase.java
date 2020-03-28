@@ -65,7 +65,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0;
 		for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
-			if (processTaskStepVo.getIsActive().equals(1) && !ProcessStepHandler.START.getHandler().equals(processTaskStepVo.getHandler())) {
+			if (processTaskStepVo.getIsActive().equals(1) && !ProcessStepType.START.getValue().equals(processTaskStepVo.getType())) {
 				runningCount += 1;
 			} else if (processTaskStepVo.getIsActive().equals(-1)) {
 				abortedCount += 1;
@@ -1018,6 +1018,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					/** 找到开始节点 **/
 					if (stepVo.getType().equals(ProcessStepType.START.getValue())) {
 						currentProcessTaskStepVo.setId(ptStepVo.getId());
+						currentProcessTaskStepVo.setHandler(ptStepVo.getHandler());
 					}
 				}
 			}
@@ -1052,19 +1053,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					}
 				}
 			}
-
-			try {
-				mySaveDraft(currentProcessTaskStepVo);
-				currentProcessTaskStepVo.setIsActive(1);
-				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
-				updateProcessTaskStepStatus(currentProcessTaskStepVo);
-			} catch (ProcessTaskException ex) {
-				logger.error(ex.getMessage(), ex);
-				currentProcessTaskStepVo.setIsActive(1);
-				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-				currentProcessTaskStepVo.setError(ex.getMessage());
-				updateProcessTaskStepStatus(currentProcessTaskStepVo);
-			}
+	
 			/** 加入上报人为处理人 **/
 			ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserId(true));
 			processTaskStepUserVo.setUserName(UserContext.get().getUserName());
@@ -1077,16 +1066,18 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			if (!ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
 				throw new ProcessTaskRuntimeException("工单非草稿状态，不能进行上报暂存操作");
 			}
-			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.START.getValue());
-			if (processTaskStepList.size() != 1) {
-				throw new ProcessTaskRuntimeException("工单：'" + processTaskId + "'有" + processTaskStepList.size() + "个开始步骤");
-			}
-			currentProcessTaskStepVo.setId(processTaskStepList.get(0).getId());
-			try {
-				mySaveDraft(currentProcessTaskStepVo);
-			} catch (ProcessTaskException ex) {
-				logger.error(ex.getMessage(), ex);
-			}
+		}
+		try {
+			mySaveDraft(currentProcessTaskStepVo);
+			currentProcessTaskStepVo.setIsActive(1);
+			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
+			updateProcessTaskStepStatus(currentProcessTaskStepVo);
+		} catch (ProcessTaskException ex) {
+			logger.error(ex.getMessage(), ex);
+			currentProcessTaskStepVo.setIsActive(1);
+			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
+			currentProcessTaskStepVo.setError(ex.getMessage());
+			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		}
 
 		return 1;
@@ -1182,7 +1173,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 	private void resetConvergeInfo(ProcessTaskStepVo nextStepVo) {
 
-		List<ProcessTaskStepVo> stepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(nextStepVo.getProcessTaskId(), ProcessStepType.END.getValue());
+		List<ProcessTaskStepVo> stepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(nextStepVo.getProcessTaskId(), ProcessStepHandler.END.getType());
 		ProcessTaskStepVo endStepVo = null;
 		if (stepList.size() == 1) {
 			endStepVo = stepList.get(0);

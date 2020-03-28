@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.process.constvalue.ProcessStepHandler;
+import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.stephandler.core.IProcessStepHandler;
 import codedriver.framework.process.stephandler.core.ProcessStepHandlerFactory;
@@ -176,15 +177,19 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				}
 			}
 		}
-		
+		String virtualStartStepUuid = "";//虚拟开始节点uuid
+		Map<String, ProcessStepVo> stepMap = new HashMap<>();
 		JSONArray stepList = processObj.getJSONArray("stepList");
 		if (stepList != null && stepList.size() > 0) {
 			this.stepList = new ArrayList<>();
 			for (int i = 0; i < stepList.size(); i++) {
 				JSONObject stepObj = stepList.getJSONObject(i);
-				
+				String handler = stepObj.getString("handler");
+				if(ProcessStepHandler.START.getHandler().equals(handler)) {//找到虚拟开始节点uuid,虚拟开始节点不写入process_step表
+					virtualStartStepUuid = stepObj.getString("uuid");
+					continue;
+				}
 				ProcessStepVo processStepVo = new ProcessStepVo();
-				this.stepList.add(processStepVo);
 				processStepVo.setProcessUuid(this.getUuid());
 				processStepVo.setConfig(stepObj.getString("stepConfig"));
 
@@ -197,7 +202,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				if (StringUtils.isNotBlank(name)) {
 					processStepVo.setName(name);
 				}
-				String handler = stepObj.getString("handler");
+				
 				if (StringUtils.isNotBlank(handler)) {
 					processStepVo.setHandler(handler);
 					processStepVo.setType(ProcessStepHandler.getType(handler));
@@ -211,6 +216,8 @@ public class ProcessVo extends BasePageVo implements Serializable {
 						throw new ProcessStepHandlerNotFoundException(handler);
 					}
 				}
+				this.stepList.add(processStepVo);
+				stepMap.put(processStepVo.getUuid(), processStepVo);
 			}
 		}
 		
@@ -219,9 +226,18 @@ public class ProcessVo extends BasePageVo implements Serializable {
 			this.stepRelList = new ArrayList<>();
 			for (int i = 0; i < relList.size(); i++) {
 				JSONObject relObj = relList.getJSONObject(i);
+				String fromStepUuid = relObj.getString("fromStepUuid");
+				String toStepUuid = relObj.getString("toStepUuid");
+				if(virtualStartStepUuid.equals(fromStepUuid)) {//通过虚拟开始节点连线找到真正的开始步骤
+					ProcessStepVo startStep = stepMap.get(toStepUuid);
+					if(startStep != null) {
+						startStep.setType(ProcessStepType.START.getValue());
+					}
+					continue;
+				}
 				ProcessStepRelVo processStepRelVo = new ProcessStepRelVo();
-				processStepRelVo.setFromStepUuid(relObj.getString("fromStepUuid"));
-				processStepRelVo.setToStepUuid(relObj.getString("toStepUuid"));
+				processStepRelVo.setFromStepUuid(fromStepUuid);
+				processStepRelVo.setToStepUuid(toStepUuid);
 				processStepRelVo.setUuid(relObj.getString("uuid"));
 				processStepRelVo.setProcessUuid(this.getUuid());
 				processStepRelVo.setCondition(relObj.getString("conditionConfig"));

@@ -46,7 +46,7 @@ public class ProcessStepHandlerFactory implements ApplicationListener<ContextRef
 		List<ProcessStepHandlerVo> returnProcessStepHandlerList = new ArrayList<>();
 		for (ProcessStepHandlerVo processStepHandler : processStepHandlerList) {
 			//开始和结束组件不用返回给前端
-			if(processStepHandler.getType().equals(ProcessStepHandler.END.getHandler()) || processStepHandler.getType().equals(ProcessStepHandler.START.getHandler())) {
+			if(processStepHandler.getType().equals(ProcessStepHandler.END.getType()) || processStepHandler.getType().equals(ProcessStepHandler.START.getType())) {
 				continue;
 			}
 			for (ModuleVo moduleVo : moduleList) {
