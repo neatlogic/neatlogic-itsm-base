@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.DigestUtils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
@@ -35,6 +37,7 @@ import codedriver.framework.process.dto.ProcessStepRelVo;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskConvergeVo;
+import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
@@ -65,7 +68,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0;
 		for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
-			if (processTaskStepVo.getIsActive().equals(1) && !ProcessStepHandler.START.getHandler().equals(processTaskStepVo.getHandler())) {
+			if (processTaskStepVo.getIsActive().equals(1) && !ProcessStepType.START.getValue().equals(processTaskStepVo.getType())) {
 				runningCount += 1;
 			} else if (processTaskStepVo.getIsActive().equals(-1)) {
 				abortedCount += 1;
@@ -515,6 +518,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 		if (canComplete) {
 			try {
+				DataValid.formAttributeDataValid(currentProcessTaskStepVo);
 				myComplete(currentProcessTaskStepVo);
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 					/** 更新处理人状态 **/
@@ -1052,19 +1056,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					}
 				}
 			}
-
-			try {
-				mySaveDraft(currentProcessTaskStepVo);
-				currentProcessTaskStepVo.setIsActive(1);
-				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
-				updateProcessTaskStepStatus(currentProcessTaskStepVo);
-			} catch (ProcessTaskException ex) {
-				logger.error(ex.getMessage(), ex);
-				currentProcessTaskStepVo.setIsActive(1);
-				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-				currentProcessTaskStepVo.setError(ex.getMessage());
-				updateProcessTaskStepStatus(currentProcessTaskStepVo);
-			}
+	
 			/** 加入上报人为处理人 **/
 			ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserId(true));
 			processTaskStepUserVo.setUserName(UserContext.get().getUserName());
@@ -1077,16 +1069,31 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			if (!ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
 				throw new ProcessTaskRuntimeException("工单非草稿状态，不能进行上报暂存操作");
 			}
-			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.START.getValue());
-			if (processTaskStepList.size() != 1) {
-				throw new ProcessTaskRuntimeException("工单：'" + processTaskId + "'有" + processTaskStepList.size() + "个开始步骤");
+		}
+		try {
+			/** 写入当前步骤的表单属性值 **/
+			JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
+			if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
+				for (int i = 0; i < formAttributeDataList.size(); i++) {
+					JSONObject formAttributeDataObj = formAttributeDataList.getJSONObject(i);
+					ProcessTaskFormAttributeDataVo attributeData = new ProcessTaskFormAttributeDataVo();
+					attributeData.setData(formAttributeDataObj.getString("dataList"));
+					attributeData.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+					attributeData.setAttributeUuid(formAttributeDataObj.getString("attributeUuid"));
+					attributeData.setType(formAttributeDataObj.getString("handler"));
+					processTaskMapper.replaceProcessTaskFormAttributeData(attributeData);
+				}
 			}
-			currentProcessTaskStepVo.setId(processTaskStepList.get(0).getId());
-			try {
-				mySaveDraft(currentProcessTaskStepVo);
-			} catch (ProcessTaskException ex) {
-				logger.error(ex.getMessage(), ex);
-			}
+			mySaveDraft(currentProcessTaskStepVo);
+			currentProcessTaskStepVo.setIsActive(1);
+			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
+			updateProcessTaskStepStatus(currentProcessTaskStepVo);
+		} catch (ProcessTaskException ex) {
+			logger.error(ex.getMessage(), ex);
+			currentProcessTaskStepVo.setIsActive(1);
+			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
+			currentProcessTaskStepVo.setError(ex.getMessage());
+			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		}
 
 		return 1;
@@ -1097,6 +1104,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	@Override
 	public final int startProcess(ProcessTaskStepVo currentProcessTaskStepVo) {
 		try {
+			DataValid.formAttributeDataValid(currentProcessTaskStepVo);
 			myStartProcess(currentProcessTaskStepVo);
 			/** 更新处理人状态 **/
 			ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getId(), UserContext.get().getUserId());

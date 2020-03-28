@@ -14,7 +14,7 @@ import org.springframework.core.annotation.Order;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.RootComponent;
 import codedriver.framework.dto.ModuleVo;
-import codedriver.framework.process.constvalue.ProcessStepHandler;
+import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
 
 @RootComponent
@@ -46,7 +46,7 @@ public class ProcessStepHandlerFactory implements ApplicationListener<ContextRef
 		List<ProcessStepHandlerVo> returnProcessStepHandlerList = new ArrayList<>();
 		for (ProcessStepHandlerVo processStepHandler : processStepHandlerList) {
 			//开始和结束组件不用返回给前端
-			if(processStepHandler.getType().equals(ProcessStepHandler.END.getHandler()) || processStepHandler.getType().equals(ProcessStepHandler.START.getHandler())) {
+			if(processStepHandler.getType().equals(ProcessStepType.END.getValue()) || processStepHandler.getType().equals(ProcessStepType.START.getValue())) {
 				continue;
 			}
 			for (ModuleVo moduleVo : moduleList) {
