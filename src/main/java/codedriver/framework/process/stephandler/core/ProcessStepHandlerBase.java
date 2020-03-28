@@ -1022,7 +1022,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					/** 找到开始节点 **/
 					if (stepVo.getType().equals(ProcessStepType.START.getValue())) {
 						currentProcessTaskStepVo.setId(ptStepVo.getId());
-						currentProcessTaskStepVo.setHandler(ptStepVo.getHandler());
 					}
 				}
 			}
