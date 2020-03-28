@@ -1173,7 +1173,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 	private void resetConvergeInfo(ProcessTaskStepVo nextStepVo) {
 
-		List<ProcessTaskStepVo> stepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(nextStepVo.getProcessTaskId(), ProcessStepHandler.END.getType());
+		List<ProcessTaskStepVo> stepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(nextStepVo.getProcessTaskId(), ProcessStepType.END.getValue());
 		ProcessTaskStepVo endStepVo = null;
 		if (stepList.size() == 1) {
 			endStepVo = stepList.get(0);
