@@ -69,7 +69,7 @@ public enum ProcessWorkcenterField {
 	public static String getConditionValue(String _value) {
 		for (ProcessWorkcenterField s : ProcessWorkcenterField.values()) {
 			if (s.getValue().equals(_value)) {
-				return s.getConditionValue();
+				return String.format("common.%s", s.getConditionValue());
 			}
 		}
 		return null;

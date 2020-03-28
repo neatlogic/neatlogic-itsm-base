@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.condition.core.IWorkcenterCondition;
@@ -35,7 +36,7 @@ public class ConditionVo implements Serializable{
 		this.expression = jsonObj.getString("expression");
 		String values = jsonObj.getString("valueList");
 		if(values.startsWith("[") && values.endsWith("]")) {
-			this.valueList = jsonObj.getJSONArray("valueList").toJavaList(String.class);
+			this.valueList = JSON.parseArray(jsonObj.getString("valueList"),String.class);
 		}else {
 			this.valueList = new ArrayList<>();
 			this.valueList.add(values);
