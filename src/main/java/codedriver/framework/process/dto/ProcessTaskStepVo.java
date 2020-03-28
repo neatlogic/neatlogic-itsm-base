@@ -81,6 +81,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
 	private String flowDirection;
+	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
 	public ProcessTaskStepVo() {
 
 	}
@@ -530,6 +532,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setProcessTaskStepAuditList(List<ProcessTaskStepAuditVo> processTaskStepAuditList) {
 		this.processTaskStepAuditList = processTaskStepAuditList;
+	}
+
+	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList() {
+		return processTaskStepSubtaskList;
+	}
+
+	public void setProcessTaskStepSubtaskList(List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList) {
+		this.processTaskStepSubtaskList = processTaskStepSubtaskList;
 	}
 
 }
