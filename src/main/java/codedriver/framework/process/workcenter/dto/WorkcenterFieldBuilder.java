@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
+import codedriver.framework.process.constvalue.UserType;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -86,30 +87,51 @@ public class WorkcenterFieldBuilder {
 		 dataJson.put(ProcessWorkcenterField.TRANSFER_FROM_USER.getValue(), transferUserIdList);
 		 return this;
 	}
+	
+	private JSONArray getUserType(UserType userType,JSONArray stepUserArray) {
+		 JSONArray userTypeArray = new JSONArray();
+		 JSONObject userTypeJson = new JSONObject();
+		 userTypeJson.put("usertype", userType.getValue());
+		 userTypeJson.put("usertypename", userType.getText());
+		 userTypeJson.put("userlist", stepUserArray);
+		 userTypeArray.add(userTypeJson);
+		 return userTypeArray;
+	}
 	public WorkcenterFieldBuilder setCurrentStepList( List<ProcessTaskStepVo>  processTaskActiveStepList) {
 		JSONArray currentStepList = new JSONArray();
 		 for(ProcessTaskStepVo step : processTaskActiveStepList) {
 			 JSONObject currentStepJson = new JSONObject();
-			 JSONArray stepUserArray = new JSONArray();
+			 JSONArray userTypeArray = new JSONArray();
+			 JSONArray majorUserTypeArray = new JSONArray();
+			 JSONArray minorUserTypeArray = new JSONArray();
+			 JSONArray agentUserTypeArray = new JSONArray();
+			 userTypeArray.add(getUserType(UserType.MAJOR,majorUserTypeArray));
+			 userTypeArray.add(getUserType(UserType.MINOR,minorUserTypeArray));
+			 userTypeArray.add(getUserType(UserType.AGENT,agentUserTypeArray));
 			 currentStepJson.put("id", step.getId());
 			 currentStepJson.put("name", step.getName());
 			 currentStepJson.put("status", step.getStatus());
-			 currentStepJson.put("handlerlist", stepUserArray);
+			 currentStepJson.put("usertypelist", userTypeArray);
 			 if(step.getStatus().equals(ProcessTaskStatus.PENDING.getValue())) {
 				 for(ProcessTaskStepWorkerVo worker : step.getWorkerList()) {
-					 JSONObject currentStepUserJson = new JSONObject();
-					 currentStepUserJson.put("handler", worker.getWorkerValue());
-					 stepUserArray.add(currentStepUserJson);
+					 //JSONObject currentStepUserJson = new JSONObject();
+					 //currentStepUserJson.put("handler", worker.getWorkerValue());
+					 //stepUserArray.add(currentStepUserJson);
 					 userWillDoList.add(worker.getWorkerValue());
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
-					 JSONObject currentStepUserJson = new JSONObject();
-					 String handler = String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId());
-					 currentStepUserJson.put("handler", handler);
-					 currentStepUserJson.put("handlertype", userVo.getUserType());
-					 stepUserArray.add(currentStepUserJson);
-					 userWillDoList.add(handler);
+					 String user = String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId());
+					 if(UserType.MAJOR.getValue().equals( userVo.getUserType())) {
+						 majorUserTypeArray.add(user);
+					 }
+					 if(UserType.MINOR.getValue().equals( userVo.getUserType())) {
+						 minorUserTypeArray.add(user);
+					 }
+					 if(UserType.AGENT.getValue().equals( userVo.getUserType())) {
+						 agentUserTypeArray.add(user);
+					 }
+					 userWillDoList.add(user);
 				 }
 			 }
 			 currentStepList.add(currentStepJson);
