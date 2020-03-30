@@ -33,6 +33,10 @@ public class WorkcenterFieldBuilder {
 	public JSONObject build() {
 		return dataJson;
 	}
+	public WorkcenterFieldBuilder setId(String id) {
+		dataJson.put(ProcessWorkcenterField.ID.getValue(), id);
+		return this;
+	}
 	public WorkcenterFieldBuilder setTitle(String title) {
 		dataJson.put(ProcessWorkcenterField.TITLE.getValue(), title);
 		return this;

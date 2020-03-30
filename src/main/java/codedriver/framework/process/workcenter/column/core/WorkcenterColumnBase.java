@@ -13,7 +13,6 @@ public abstract class WorkcenterColumnBase implements IWorkcenterColumn {
 		if(commonJson == null) {
 			return CollectionUtils.EMPTY_COLLECTION;
 		}
-		commonJson.put("id", el.getId());
 		return getMyValue(commonJson);
 	}
 
