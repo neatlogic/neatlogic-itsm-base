@@ -101,7 +101,7 @@ public class WorkcenterFieldBuilder {
 		 userTypeJson.put("userlist", stepUserArray);
 		 return userTypeJson;
 	}
-	public WorkcenterFieldBuilder setCurrentStepList( List<ProcessTaskStepVo>  processTaskActiveStepList) {
+	/*public WorkcenterFieldBuilder setCurrentStepList( List<ProcessTaskStepVo>  processTaskActiveStepList) {
 		JSONArray currentStepList = new JSONArray();
 		 for(ProcessTaskStepVo step : processTaskActiveStepList) {
 			 JSONObject currentStepJson = new JSONObject();
@@ -143,7 +143,7 @@ public class WorkcenterFieldBuilder {
 		dataJson.put(ProcessWorkcenterField.CURRENT_STEP.getValue(), currentStepList);
 		dataJson.put(ProcessWorkcenterField.USER_WILL_DO.getValue(), userWillDoList);
 		return this;
-	}
+	}*/
 	
 	public WorkcenterFieldBuilder setStepList( List<ProcessTaskStepVo>  processTaskStepList) {
 		JSONArray stepList = new JSONArray();
@@ -205,11 +205,6 @@ public class WorkcenterFieldBuilder {
 	}
 	public WorkcenterFieldBuilder setExpiredTime(Date expiredTime) {
 		dataJson.put(ProcessWorkcenterField.EXPIRED_TIME.getValue(), expiredTime == null?"":sdf.format(expiredTime));
-		return this;
-	}
-	
-	public WorkcenterFieldBuilder setUserWillDo() {
-		dataJson.put(ProcessWorkcenterField.USER_WILL_DO.getValue(), userWillDoList);
 		return this;
 	}
 }
