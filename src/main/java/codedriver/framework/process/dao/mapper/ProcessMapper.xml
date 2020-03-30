@@ -64,12 +64,7 @@
 		<collection property="formAttributeList" ofType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
 			<id column="formAttributeUuid" property="attributeUuid" />
 			<result column="formUuid" property="formUuid" />
-			<result column="formAttributeHandler" property="handler" />
-			<result column="formAttributeLabel" property="label" />
-			<result column="formAttributeType" property="type" />
-			<result column="formAttributeIsEditable" property="isEditable" />
-			<result column="formAttributeData" property="data" />
-			<result column="formAttributeConfig" property="config" />
+			<result column="action" property="action" />
 		</collection>
 		<collection property="workerPolicyList" ofType="codedriver.framework.process.dto.ProcessStepWorkerPolicyVo">
 			<id column="workerPolicy" property="policy" />
@@ -77,14 +72,6 @@
 			<result column="workerPolicyProcessStepUuid" property="processStepUuid" />
 			<result column="workerPolicySort" property="sort" />
 			<result column="workerPolicyConfig" property="config" />
-		</collection>
-		<collection property="timeoutPolicyList" ofType="codedriver.framework.process.dto.ProcessStepTimeoutPolicyVo">
-			<result column="timeoutPolicy" property="policy" />
-			<result column="timeoutPolicyProcessUuid" property="processUuid" />
-			<result column="timeoutPolicyProcessStepUuid" property="processStepUuid" />
-			<result column="timeoutPolicySort" property="sort" />
-			<result column="timeoutPolicyConfig" property="config" />
-			<result column="timeoutPolicyTime" property="time" />
 		</collection>
 	</resultMap>
 
@@ -98,6 +85,7 @@
 		a.`config` AS stepConfig,
 		b.`form_uuid` AS formUuid,
 		b.`attribute_uuid` AS formAttributeUuid,
+		b.`action` AS action,
 		c.`handler` AS formAttributeHandler,
 		c.`type` AS formAttributeType,
 		c.`label` AS attributeLabel,
@@ -105,19 +93,12 @@
 		h.`sort` AS workerPolicySort,
 		h.`config` AS workerPolicyConfig,
 		h.`process_uuid` AS workerPolicyProcessUuid,
-		h.`process_step_uuid` AS workerPolicyProcessStepUuid,
-		i.`policy` AS timeoutPolicy,
-		i.`time` AS timeoutPolicyTime,
-		i.`sort` AS timeoutPolicySort,
-		i.`config` AS timeoutPolicyConfig,
-		i.`process_uuid` AS timeoutPolicyProcessUuid,
-		i.`process_step_uuid` AS timeoutPolicyProcessStepUuid
+		h.`process_step_uuid` AS workerPolicyProcessStepUuid
 		FROM
 		`process_step` a
 		LEFT JOIN `process_step_formattribute` b ON a.`uuid` = b.`process_step_uuid`
 		LEFT JOIN `form_attribute` c ON b.`attribute_uuid` = c.`uuid`
 		LEFT JOIN `process_step_worker_policy` h ON a.`uuid` = h.`process_step_uuid`
-		LEFT JOIN `process_step_timeout_policy` i ON a.`uuid` = i.`process_step_uuid`
 		WHERE a.`process_uuid` = #{value}
 	</select>
 
@@ -346,7 +327,7 @@
 		(#{slaUuid}, #{stepUuid})
 	</insert>
 
-	<insert id="insertProcessStepTimeoutPolicy" parameterType="codedriver.framework.process.dto.ProcessStepTimeoutPolicyVo">
+	<!-- <insert id="insertProcessStepTimeoutPolicy" parameterType="codedriver.framework.process.dto.ProcessStepTimeoutPolicyVo">
 		INSERT INTO `process_step_timeout_policy` (
 		`process_uuid`,
 		`process_step_uuid`,
@@ -364,7 +345,7 @@
 		#{time},
 		#{config}
 		)
-	</insert>
+	</insert> -->
 
 	<insert id="insertProcess" parameterType="codedriver.framework.process.dto.ProcessVo">
 		INSERT INTO `process` (
@@ -576,12 +557,12 @@
 		WHERE process_uuid = #{value}
 	</delete>
 
-	<delete id="deleteProcessStepTimeoutPolicyByProcessUuid" parameterType="java.lang.String">
+	<!-- <delete id="deleteProcessStepTimeoutPolicyByProcessUuid" parameterType="java.lang.String">
 		DELETE
 		FROM
 		`process_step_timeout_policy`
 		WHERE `process_uuid` = #{value}
-	</delete>
+	</delete> -->
 
 	<delete id="deleteProcessStepFormAttributeByProcessUuid" parameterType="java.lang.String">
 		DELETE

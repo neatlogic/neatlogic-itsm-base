@@ -873,6 +873,7 @@
 	  `owner`,
 	  `status`,
 	  `user_id` AS userId,
+	  `user_name` AS userName,
 	  `target_time` AS targetTime,
 	  `create_time` AS createTime,
 	  `start_time` AS startTime,

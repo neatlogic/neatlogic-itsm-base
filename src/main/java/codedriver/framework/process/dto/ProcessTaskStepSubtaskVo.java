@@ -20,6 +20,8 @@ public class ProcessTaskStepSubtaskVo {
 	private String owner;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
+	@EntityField(name = "状态名", type = ApiParamType.STRING)
+	private String statusText;
 	@EntityField(name = "处理人", type = ApiParamType.STRING)
 	private String userId;
 	@EntityField(name = "处理人名称", type = ApiParamType.STRING)
@@ -78,6 +80,15 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getStatusText() {
+		if(statusText == null && status != null) {
+			statusText = ProcessTaskStatus.getText(status);
+		}
+		return statusText;
+	}
+	public void setStatusText(String statusText) {
+		this.statusText = statusText;
 	}
 	public String getUserId() {
 		return userId;

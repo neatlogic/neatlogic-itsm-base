@@ -210,13 +210,9 @@ public class ProcessTaskVo {
 	}
 
 	public String getStatusText() {
-		if(status == null) {
-			return null;
+		if(statusText == null && status != null) {
+			statusText = ProcessTaskStatus.getText(status);
 		}
-		if(statusText != null) {
-			return statusText;
-		}
-		statusText = ProcessTaskStatus.getText(status);
 		return statusText;
 	}
 
