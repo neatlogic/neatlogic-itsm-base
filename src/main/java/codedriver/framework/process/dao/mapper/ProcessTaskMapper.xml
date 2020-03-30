@@ -506,7 +506,7 @@
 		ps.`start_time` AS startTime,
 		ps.`end_time` AS endTime,
 		ps.`error`,
-		ps.`is_active`,
+		ps.`is_active` AS isActive,
 		psw.`role_name` AS roleName,
 		psw.`team_uuid` AS teamUuid,
 		psw.`user_id` AS userId,
@@ -514,7 +514,7 @@
 		psu.`user_id`,
 		psu.`user_type` AS userType
 		FROM `processtask_step` ps 
-		LEFT JOIN `processtask_step_worker` psw ON ps.`processtask_id` = psw.`processtask_id` AND ps.`id` = psw.`processtask_step_id` 
+		LEFT JOIN `processtask_step_worker` psw ON ps.`processtask_id` = psw.`processtask_id` AND ps.`id` = psw.`processtask_step_id` AND psw.`action` = 'handle'
 		LEFT JOIN `processtask_step_user` psu ON ps.`processtask_id` = psu.`processtask_id` AND ps.`id` = psu.`processtask_step_id`
 		WHERE ps.`processtask_id` = #{processTaskId} 
 		<if test="processStepTypeList != null and processStepTypeList.size()>0">
@@ -523,7 +523,9 @@
 				#{processStepType}
 			</foreach>
 		</if>
-		AND ps.`is_active` =1 AND psw.`action` = 'handle'  
+		<if test="isActive != null">
+			AND ps.`is_active` = #{isActive} 
+		</if>  
 	</select>
 
 	<select id="getProcessTaskStepRelByToId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
