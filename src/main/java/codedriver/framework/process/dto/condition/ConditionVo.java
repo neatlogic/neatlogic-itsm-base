@@ -7,6 +7,7 @@ import java.util.List;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.process.condition.core.IWorkcenterCondition;
 import codedriver.framework.process.condition.core.WorkcenterConditionFactory;
 import codedriver.framework.process.constvalue.ProcessFieldType;
@@ -34,7 +35,7 @@ public class ConditionVo implements Serializable{
 		this.name = jsonObj.getString("name");
 		this.type = jsonObj.getString("type");
 		this.expression = jsonObj.getString("expression");
-		String values = jsonObj.getString("valueList");
+		String values = jsonObj.getString("valueList").replaceAll("\\{LOGIN_USER}", String.format("user#%s", UserContext.get().getUserId()));
 		if(values.startsWith("[") && values.endsWith("]")) {
 			this.valueList = JSON.parseArray(jsonObj.getString("valueList"),String.class);
 		}else {
