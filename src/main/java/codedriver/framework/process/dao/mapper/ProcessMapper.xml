@@ -327,26 +327,6 @@
 		(#{slaUuid}, #{stepUuid})
 	</insert>
 
-	<!-- <insert id="insertProcessStepTimeoutPolicy" parameterType="codedriver.framework.process.dto.ProcessStepTimeoutPolicyVo">
-		INSERT INTO `process_step_timeout_policy` (
-		`process_uuid`,
-		`process_step_uuid`,
-		`policy`,
-		`sort`,
-		`time`,
-		`config`
-		)
-		VALUES
-		(
-		#{processUuid},
-		#{processStepUuid},
-		#{policy},
-		#{sort},
-		#{time},
-		#{config}
-		)
-	</insert> -->
-
 	<insert id="insertProcess" parameterType="codedriver.framework.process.dto.ProcessVo">
 		INSERT INTO `process` (
 		`uuid`,
@@ -556,13 +536,6 @@
 		`process_step_worker_policy`
 		WHERE process_uuid = #{value}
 	</delete>
-
-	<!-- <delete id="deleteProcessStepTimeoutPolicyByProcessUuid" parameterType="java.lang.String">
-		DELETE
-		FROM
-		`process_step_timeout_policy`
-		WHERE `process_uuid` = #{value}
-	</delete> -->
 
 	<delete id="deleteProcessStepFormAttributeByProcessUuid" parameterType="java.lang.String">
 		DELETE

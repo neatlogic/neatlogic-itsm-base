@@ -72,8 +72,6 @@ public interface ProcessMapper {
 
 	public int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
 
-	//public int insertProcessStepTimeoutPolicy(ProcessStepTimeoutPolicyVo processStepTimeoutPolicyVo);
-
 	public int insertProcessStepWorkerPolicy(ProcessStepWorkerPolicyVo processStepWorkerPolicyVo);
 
 	public int insertProcessForm(ProcessFormVo processFormVo);
@@ -97,8 +95,6 @@ public interface ProcessMapper {
 	public int deleteProcessStepTeamByProcessUuid(String processUuid);
 
 	public int deleteProcessStepWorkerPolicyByProcessUuid(String processUuid);
-
-	//public int deleteProcessStepTimeoutPolicyByProcessUuid(String processUuid);
 
 	public int deleteProcessStepFormAttributeByProcessUuid(String processUuid);
 
