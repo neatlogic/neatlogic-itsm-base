@@ -41,7 +41,7 @@ public class FormAttributeVo implements Serializable {
 	ProcessExpressionVo defaultExpression;
 	
 	@EntityField(name = "条件模型")
-	private String conditionModel;
+	private String conditionModel = ProcessWorkcenterConditionModel.CUSTOM.getValue();
 	
 	public FormAttributeVo() {
 

@@ -121,6 +121,23 @@
 	AND wtd.`start_time` &lt;= #{endTime}
 	</select>
 	
+	<select id="checkIsWithinWorktimeRange" resultType="int">
+	SELECT 
+	  COUNT(`worktime_uuid`)
+	FROM `worktime_range` 
+	WHERE `worktime_uuid` = #{worktimeUuid}
+	AND `start_time` &lt;= #{value} 
+	AND `end_time` &gt;= #{value}
+	</select>
+	
+	<select id="checkIsWithinWorktime" resultType="int">
+	SELECT 
+	  COUNT(`worktime_uuid`)
+	FROM `worktime_range` 
+	WHERE `worktime_uuid` = #{worktimeUuid}
+	AND `date` = #{date}
+	</select>
+	
 	<insert id="insertWorktime" parameterType="codedriver.framework.process.dto.WorktimeVo">
 	INSERT INTO `worktime` ( `uuid`, `name`, `is_active`, `lcu`, `lcd`, `config` ) 
 	VALUES ( #{uuid}, #{name}, #{isActive}, #{lcu}, now(), #{config})

@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
+import codedriver.framework.process.constvalue.UserType;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -21,6 +22,7 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 
 public class WorkcenterFieldBuilder {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private List<String> userWillDoList = new ArrayList<String>();
 	
 	JSONObject dataJson = null;
 	
@@ -31,6 +33,10 @@ public class WorkcenterFieldBuilder {
 	public JSONObject build() {
 		return dataJson;
 	}
+	public WorkcenterFieldBuilder setId(String id) {
+		dataJson.put(ProcessWorkcenterField.ID.getValue(), id);
+		return this;
+	}
 	public WorkcenterFieldBuilder setTitle(String title) {
 		dataJson.put(ProcessWorkcenterField.TITLE.getValue(), title);
 		return this;
@@ -40,7 +46,7 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setPriority(String priority) {
-		dataJson.put(ProcessWorkcenterField.PRIORITY.getValue(), priority);
+		dataJson.put(ProcessWorkcenterField.PRIORITY.getValue(),priority);
 		return this;
 	}
 	public WorkcenterFieldBuilder setCatalog(String catalog) {
@@ -68,11 +74,13 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setOwner(String owner) {
-		dataJson.put(ProcessWorkcenterField.OWNER.getValue(), owner);
+		dataJson.put(ProcessWorkcenterField.OWNER.getValue(), String.format("user#%s", owner));
 		return this;
 	}
-	public WorkcenterFieldBuilder setReporter(String reporter) {
-		dataJson.put(ProcessWorkcenterField.REPORTER.getValue(), reporter);
+	public WorkcenterFieldBuilder setReporter(String reporter,String owner) {
+		if(!reporter.equals(owner)) {
+			dataJson.put(ProcessWorkcenterField.REPORTER.getValue(), String.format("user#%s", reporter));
+		}
 		return this;
 	}
 	public WorkcenterFieldBuilder setTransferFromUserList(List<ProcessTaskStepAuditVo> transferAuditList) {
@@ -83,32 +91,55 @@ public class WorkcenterFieldBuilder {
 		 dataJson.put(ProcessWorkcenterField.TRANSFER_FROM_USER.getValue(), transferUserIdList);
 		 return this;
 	}
+	
+	private JSONObject getUserType(UserType userType,JSONArray stepUserArray) {
+		 JSONObject userTypeJson = new JSONObject();
+		 userTypeJson.put("usertype", userType.getValue());
+		 userTypeJson.put("usertypename", userType.getText());
+		 userTypeJson.put("userlist", stepUserArray);
+		 return userTypeJson;
+	}
 	public WorkcenterFieldBuilder setCurrentStepList( List<ProcessTaskStepVo>  processTaskActiveStepList) {
 		JSONArray currentStepList = new JSONArray();
 		 for(ProcessTaskStepVo step : processTaskActiveStepList) {
 			 JSONObject currentStepJson = new JSONObject();
-			 JSONArray stepUserArray = new JSONArray();
+			 JSONArray userTypeArray = new JSONArray();
+			 JSONArray majorUserTypeArray = new JSONArray();
+			 JSONArray minorUserTypeArray = new JSONArray();
+			 JSONArray agentUserTypeArray = new JSONArray();
+			 userTypeArray.add(getUserType(UserType.MAJOR,majorUserTypeArray));
+			 userTypeArray.add(getUserType(UserType.MINOR,minorUserTypeArray));
+			 userTypeArray.add(getUserType(UserType.AGENT,agentUserTypeArray));
 			 currentStepJson.put("id", step.getId());
 			 currentStepJson.put("name", step.getName());
 			 currentStepJson.put("status", step.getStatus());
-			 currentStepJson.put("handlerlist", stepUserArray);
+			 currentStepJson.put("usertypelist", userTypeArray);
 			 if(step.getStatus().equals(ProcessTaskStatus.PENDING.getValue())) {
 				 for(ProcessTaskStepWorkerVo worker : step.getWorkerList()) {
-					 JSONObject currentStepUserJson = new JSONObject();
-					 currentStepUserJson.put("handler", worker.getWorkerValue());
-					 stepUserArray.add(currentStepUserJson);
+					 //JSONObject currentStepUserJson = new JSONObject();
+					 //currentStepUserJson.put("handler", worker.getWorkerValue());
+					 //stepUserArray.add(currentStepUserJson);
+					 userWillDoList.add(worker.getWorkerValue());
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
-					 JSONObject currentStepUserJson = new JSONObject();
-					 currentStepUserJson.put("handler", String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId()));
-					 currentStepUserJson.put("handlerType", userVo.getUserType());
-					 stepUserArray.add(currentStepUserJson);
+					 String user = String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId());
+					 if(UserType.MAJOR.getValue().equals( userVo.getUserType())) {
+						 majorUserTypeArray.add(user);
+					 }
+					 if(UserType.MINOR.getValue().equals( userVo.getUserType())) {
+						 minorUserTypeArray.add(user);
+					 }
+					 if(UserType.AGENT.getValue().equals( userVo.getUserType())) {
+						 agentUserTypeArray.add(user);
+					 }
+					 userWillDoList.add(user);
 				 }
 			 }
 			 currentStepList.add(currentStepJson);
 		 }
 		dataJson.put(ProcessWorkcenterField.CURRENT_STEP.getValue(), currentStepList);
+		dataJson.put(ProcessWorkcenterField.USER_WILL_DO.getValue(), userWillDoList);
 		return this;
 	}
 	public WorkcenterFieldBuilder setWorktime(String worktime) {
@@ -117,6 +148,11 @@ public class WorkcenterFieldBuilder {
 	}
 	public WorkcenterFieldBuilder setExpiredTime(Date expiredTime) {
 		dataJson.put(ProcessWorkcenterField.EXPIRED_TIME.getValue(), expiredTime == null?"":sdf.format(expiredTime));
+		return this;
+	}
+	
+	public WorkcenterFieldBuilder setUserWillDo() {
+		dataJson.put(ProcessWorkcenterField.USER_WILL_DO.getValue(), userWillDoList);
 		return this;
 	}
 }

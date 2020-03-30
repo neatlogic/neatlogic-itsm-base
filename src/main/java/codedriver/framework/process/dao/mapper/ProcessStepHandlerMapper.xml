@@ -7,6 +7,14 @@
 		`config`
 		FROM `process_step_handler`
 	</select>
+	
+	<select id="getProcessStepHandlerByHandler" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepHandlerVo">
+		SELECT
+		`handler`,
+		`config`
+		FROM `process_step_handler`
+		WHERE `handler` = #{handler}
+	</select>
 
 	<update id="updateProcessStepHandlerConfig" parameterType="codedriver.framework.process.dto.ProcessStepHandlerVo">
 		UPDATE `process_step_handler` SET `config` = #{config} WHERE `handler` = #{handler}

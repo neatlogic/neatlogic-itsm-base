@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.process.exception.channel.ChannelUnsupportedOperationException;
 import codedriver.framework.restful.annotation.EntityField;
@@ -64,6 +67,11 @@ public class ChannelVo extends BasePageVo implements ITree {
 
 	@EntityField(name = "时效", type = ApiParamType.INTEGER)
 	private Integer sla;
+	
+	@EntityField(name = "授权对象", type = ApiParamType.JSONARRAY)
+	private List<String> authorityList;
+	
+	private transient List<AuthorityVo> authorityVoList;
 	
 	private transient ITree parent;
 
@@ -291,6 +299,54 @@ public class ChannelVo extends BasePageVo implements ITree {
 
 	public void setSla(Integer sla) {
 		this.sla = sla;
+	}
+
+	public List<String> getAuthorityList() {
+		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
+			authorityList = new ArrayList<>();
+			for(AuthorityVo authorityVo : authorityVoList) {
+				if(authorityVo.getUserId() != null) {
+					authorityList.add(GroupSearch.USER.getValuePlugin() + authorityVo.getUserId());
+				}
+				if(authorityVo.getTeamUuid() != null) {
+					authorityList.add(GroupSearch.TEAM.getValuePlugin() + authorityVo.getTeamUuid());
+				}
+				if(authorityVo.getRoleName() != null) {
+					authorityList.add(GroupSearch.ROLE.getValuePlugin() + authorityVo.getRoleName());
+				}
+			}
+		}
+		return authorityList;
+	}
+
+	public void setAuthorityList(List<String> authorityList) {
+		this.authorityList = authorityList;
+	}
+
+	public List<AuthorityVo> getAuthorityVoList() {
+		if(authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
+			authorityVoList = new ArrayList<>();
+			for(String authority : authorityList) {
+				AuthorityVo authorityVo = new AuthorityVo();
+				authorityVo.setChannelUuid(uuid);
+				String[] split = authority.split("#");
+				if(GroupSearch.USER.getValue().equals(split[0])) {
+					authorityVo.setUserId(split[1]);
+				}else if(GroupSearch.TEAM.getValue().equals(split[0])) {
+					authorityVo.setTeamUuid(split[1]);
+				}else if(GroupSearch.ROLE.getValue().equals(split[0])) {
+					authorityVo.setRoleName(split[1]);
+				}else {
+					continue;
+				}
+				authorityVoList.add(authorityVo);
+			}
+		}
+		return authorityVoList;
+	}
+
+	public void setAuthorityVoList(List<AuthorityVo> authorityVoList) {
+		this.authorityVoList = authorityVoList;
 	}
 
 	@Override

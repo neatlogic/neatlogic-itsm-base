@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.process.condition.core.IWorkcenterCondition;
 import codedriver.framework.process.condition.core.WorkcenterConditionFactory;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.exception.workcenter.WorkcenterParamException;
 
 public class ConditionVo implements Serializable{
 	private static final long serialVersionUID = -776692828809703841L;
@@ -31,15 +32,12 @@ public class ConditionVo implements Serializable{
 	
 	public ConditionVo(JSONObject jsonObj) {
 		this.uuid = jsonObj.getString("uuid");
-		if(!jsonObj.getString("name").contains("#")) {
-			throw new WorkcenterParamException("name");
-		}
-		this.name = jsonObj.getString("name").split("#")[1];
-		this.type = jsonObj.getString("name").split("#")[0];
+		this.name = jsonObj.getString("name");
+		this.type = jsonObj.getString("type");
 		this.expression = jsonObj.getString("expression");
-		String values = jsonObj.getString("valueList");
+		String values = jsonObj.getString("valueList").replaceAll("\\{LOGIN_USER}", String.format("user#%s", UserContext.get().getUserId()));
 		if(values.startsWith("[") && values.endsWith("]")) {
-			this.valueList = jsonObj.getJSONArray("valueList").toJavaList(String.class);
+			this.valueList = JSON.parseArray(values,String.class);
 		}else {
 			this.valueList = new ArrayList<>();
 			this.valueList.add(values);
