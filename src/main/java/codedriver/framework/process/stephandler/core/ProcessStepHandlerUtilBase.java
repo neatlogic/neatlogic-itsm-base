@@ -972,13 +972,20 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(CollectionUtils.isNotEmpty(processableStepList)) {
 				for(ProcessTaskStepVo processTaskStepVo : processableStepList) {
 					if(ProcessTaskStatus.PENDING.getValue().equals(processTaskStepVo.getStatus())) {//已激活未处理
+						List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), UserType.MAJOR.getValue());
+						String action = "";
+						if(majorUserList.isEmpty()) {//没有主处理人时是accept
+							action = ProcessTaskStepAction.ACCEPT.getValue();
+						}else {
+							action = ProcessTaskStepAction.START.getValue();
+						}
 						if(processTaskStepId != null) {
 							if(processTaskStepId.equals(processTaskStepVo.getId())) {
-								actionList.add(ProcessTaskStepAction.START.getValue());
+								actionList.add(action);
 								break;
 							}
 						}else {
-							actionList.add(ProcessTaskStepAction.START.getValue());
+							actionList.add(action);
 						}
 					}
 					
