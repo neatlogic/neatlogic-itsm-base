@@ -74,7 +74,7 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setOwner(String owner) {
-		dataJson.put(ProcessWorkcenterField.OWNER.getValue(), owner);
+		dataJson.put(ProcessWorkcenterField.OWNER.getValue(), String.format("user#%s", owner));
 		return this;
 	}
 	public WorkcenterFieldBuilder setReporter(String reporter,String owner) {
@@ -92,14 +92,12 @@ public class WorkcenterFieldBuilder {
 		 return this;
 	}
 	
-	private JSONArray getUserType(UserType userType,JSONArray stepUserArray) {
-		 JSONArray userTypeArray = new JSONArray();
+	private JSONObject getUserType(UserType userType,JSONArray stepUserArray) {
 		 JSONObject userTypeJson = new JSONObject();
 		 userTypeJson.put("usertype", userType.getValue());
 		 userTypeJson.put("usertypename", userType.getText());
 		 userTypeJson.put("userlist", stepUserArray);
-		 userTypeArray.add(userTypeJson);
-		 return userTypeArray;
+		 return userTypeJson;
 	}
 	public WorkcenterFieldBuilder setCurrentStepList( List<ProcessTaskStepVo>  processTaskActiveStepList) {
 		JSONArray currentStepList = new JSONArray();
