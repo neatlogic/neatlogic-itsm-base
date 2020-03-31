@@ -31,6 +31,7 @@
 		<result column="icon" property="icon" />
 		<result column="color" property="color" />
 		<result column="desc" property="desc" />
+		<result column="channel_type_uuid" property="channelTypeUuid" />
 		<result column="isFavorite" property="isFavorite" />
 		<result column="sort" property="sort" />
 	</resultMap>
@@ -44,6 +45,7 @@
 		c.`icon`,
 		c.`color`,
 		c.`desc`,
+		c.`channel_type_uuid`,
 		CASE WHEN cu.user_id IS NULL THEN 0 ELSE 1 END AS `isFavorite`,
 		c.`sort`
 		FROM
@@ -103,6 +105,7 @@
 		c.`allow_desc` AS allowDesc,
 		c.`help`,
 		c.`is_active_help` AS isActiveHelp,
+		c.`channel_type_uuid` AS channelTypeUuid,
 		cp.`process_uuid` AS processUuid,
 		cw.`worktime_uuid` AS worktimeUuid
 		FROM
@@ -243,7 +246,8 @@
 		`sla`,
 		`allow_desc`,
 		`help`,
-		`is_active_help`
+		`is_active_help`,
+		`channel_type_uuid`
 		)
 		VALUES
 		(
@@ -258,7 +262,8 @@
 		#{sla},
 		#{allowDesc},
 		#{help},
-		#{isActiveHelp}
+		#{isActiveHelp},
+		#{channelTypeUuid}
 		)
 	</insert>
 
