@@ -347,7 +347,7 @@
 	UPDATE `channel_type` 
 	SET
 	  `name` = #{name},
-	  `is_active` = #{is_active},
+	  `is_active` = #{isActive},
 	  `icon` = #{icon},
 	  `color` = #{color},
 	  `description` = #{description},
