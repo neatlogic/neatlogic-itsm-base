@@ -217,7 +217,11 @@
 	FROM `channel_type`
 	WHERE `uuid` = #{uuid}
 	</select>
-
+	
+	<select id="checkChannelTypeIsExists" parameterType="java.lang.String" resultType="int">
+	SELECT COUNT(`uuid`) FROM `channel_type` WHERE `uuid` = #{uuid}
+	</select>
+	
 	<select id="checkChannelTypeNameIsRepeat" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="int">
 	SELECT COUNT(1) FROM `channel_type` WHERE `name` = #{name} AND `uuid` != #{uuid}
 	</select>

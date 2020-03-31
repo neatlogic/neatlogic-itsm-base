@@ -40,6 +40,8 @@ public interface ChannelMapper {
 	
 	ChannelTypeVo getChannelTypeByUuid(String uuid);
 
+	int checkChannelTypeIsExists(String uuid);
+
 	public int checkChannelTypeNameIsRepeat(ChannelTypeVo channelTypeVo);
 
 	public Integer getChannelTypeMaxSort();

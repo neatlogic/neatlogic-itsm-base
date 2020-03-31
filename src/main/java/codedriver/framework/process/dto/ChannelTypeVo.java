@@ -23,7 +23,7 @@ public class ChannelTypeVo extends BasePageVo{
 	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String description;
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
-	private String sort;
+	private Integer sort;
 	
 	private transient String keyword;
 	
@@ -66,10 +66,10 @@ public class ChannelTypeVo extends BasePageVo{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getSort() {
+	public Integer getSort() {
 		return sort;
 	}
-	public void setSort(String sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 	public String getKeyword() {

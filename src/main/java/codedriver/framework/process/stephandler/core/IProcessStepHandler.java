@@ -323,6 +323,7 @@ public interface IProcessStepHandler {
 	* @param processTaskId
 	* @return Set<ProcessTaskStepVo>
 	 */
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId);
 	
 	/**
@@ -332,5 +333,6 @@ public interface IProcessStepHandler {
 	* @param processTaskId
 	* @return List<ProcessTaskStepVo>
 	 */
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId);
 }
