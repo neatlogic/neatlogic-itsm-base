@@ -32,7 +32,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	private Integer sort;
 	@EntityField(name = "数量", type = ApiParamType.INTEGER)
 	private Integer count;
-	@JSONField(serialize = false)
 	@EntityField(name = "过滤条件", type = ApiParamType.STRING)
 	private String conditionConfig;
 	@JSONField(serialize = false)
