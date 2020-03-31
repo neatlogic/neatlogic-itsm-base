@@ -1,6 +1,7 @@
 package codedriver.framework.process.stephandler.core;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -288,9 +289,48 @@ public interface IProcessStepHandler {
 	/**
 	 * 
 	* @Description: 活动审计 
-	* @param @param currentProcessTaskStepVo
-	* @param @param action 
+	* @param currentProcessTaskStepVo
+	* @param action 
 	* @return void
 	 */
 	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action);
+	
+	/**
+	 * 
+	* @Time:2020年3月30日
+	* @Description: 获取当前用户对当前步骤的操作权限列表 
+	* @param processTaskId
+	* @param processTaskStepId 
+	* @return List<String>
+	 */
+	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId);
+	
+	/**
+	 * 
+	* @Time:2020年3月30日
+	* @Description: 判断当前用户对当前步骤的某个操作是否有权限 
+	* @param processTaskId
+	* @param processTaskStepId
+	* @param action
+	* @return boolean
+	 */
+	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action);
+	
+	/**
+	 * 
+	* @Time:2020年3月30日
+	* @Description: 当前用户可撤回的步骤列表
+	* @param processTaskId
+	* @return Set<ProcessTaskStepVo>
+	 */
+	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId);
+	
+	/**
+	 * 
+	* @Time:2020年3月30日
+	* @Description: 当前用户可处理的步骤列表
+	* @param processTaskId
+	* @return List<ProcessTaskStepVo>
+	 */
+	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId);
 }

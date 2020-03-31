@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
@@ -210,13 +212,9 @@ public class ProcessTaskVo {
 	}
 
 	public String getStatusText() {
-		if(status == null) {
-			return null;
+		if(StringUtils.isBlank(statusText) && StringUtils.isNotBlank(status)) {
+			statusText = ProcessTaskStatus.getText(status);
 		}
-		if(statusText != null) {
-			return statusText;
-		}
-		statusText = ProcessTaskStatus.getText(status);
 		return statusText;
 	}
 
