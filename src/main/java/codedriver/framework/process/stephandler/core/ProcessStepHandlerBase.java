@@ -1310,15 +1310,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	
 	@Override
 	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId) {
-		// 锁定当前流程
-		processTaskMapper.getProcessTaskLockById(processTaskId);
 		return ActionRoleChecker.getProcessableStepList(processTaskId);
 	}
 	
 	@Override
 	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId) {
-		// 锁定当前流程
-		processTaskMapper.getProcessTaskLockById(processTaskId);
 		return ActionRoleChecker.getRetractableStepListByProcessTaskId(processTaskId);
 	}
 }
