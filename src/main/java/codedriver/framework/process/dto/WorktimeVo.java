@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -44,7 +46,7 @@ public class WorktimeVo extends BasePageVo {
 	private transient String keyword;
 	
 	public synchronized String getUuid() {
-		if(uuid == null) {
+		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
 		return uuid;

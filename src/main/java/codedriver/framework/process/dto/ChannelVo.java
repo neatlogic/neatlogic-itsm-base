@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
@@ -88,8 +89,8 @@ public class ChannelVo extends BasePageVo implements ITree {
 	private transient List<String> nameList;
 
 	@Override
-	public String getUuid() {
-		if (uuid == null) {
+	public synchronized String getUuid() {
+		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
 		return uuid;

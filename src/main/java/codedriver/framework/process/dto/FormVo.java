@@ -34,7 +34,7 @@ public class FormVo extends BasePageVo implements Serializable {
 	private List<FormVersionVo> versionList;
 	private transient String keyword;
 	
-	public String getUuid() {
+	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.process.dto.AuthorityVo;
 import codedriver.framework.process.dto.ChannelPriorityVo;
+import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 
 public interface ChannelMapper {
@@ -33,6 +34,16 @@ public interface ChannelMapper {
 
 	List<AuthorityVo> getChannelAuthorityListByChannelUuid(String uuid);
 	
+	int searchChannelTypeCount(ChannelTypeVo channelTypeVo);
+
+	List<ChannelTypeVo> searchChannelTypeList(ChannelTypeVo channelTypeVo);
+	
+	ChannelTypeVo getChannelTypeByUuid(String uuid);
+
+	public int checkChannelTypeNameIsRepeat(ChannelTypeVo channelTypeVo);
+
+	public Integer getChannelTypeMaxSort();
+	
 	int replaceChannelUser(@Param("userId")String userId, @Param("channelUuid")String channelUuid);	
 
 	int replaceChannel(ChannelVo channelVo);
@@ -44,12 +55,16 @@ public interface ChannelMapper {
 	int replaceChannelWorktime(@Param("channelUuid")String channelUuid, @Param("worktimeUuid")String worktimeUuid);
 
 	int insertChannelAuthority(AuthorityVo authorityVo);
+	
+	int insertChannelType(ChannelTypeVo channelTypeVo);
 
 	int updateChannelForMove(ChannelVo channelVo);
 
 	int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 
 	int updateSortDecrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+	
+	int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
 
 	int deleteChannelUser(@Param("userId")String userId, @Param("channelUuid")String channelUuid);
 	
@@ -65,4 +80,5 @@ public interface ChannelMapper {
 
 	int deleteChannelAuthorityByChannelUuid(String uuid);
 	
+	int deleteChannelTypeByUuid(String uuid);
 }

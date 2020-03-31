@@ -166,7 +166,66 @@
 	FROM `channel_authority` 
 	WHERE `channel_uuid` = #{channelUuid}
 	</select>
+	
+	<select id="searchChannelTypeCount" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="int">
+	SELECT 
+	  count(1)
+	FROM `channel_type`
+	<where>
+		<if test="keyword != null and keyword != ''">
+			AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+			AND `is_active` = #{isActive}
+		</if>
+	</where>
+	</select>
 
+	<select id="searchChannelTypeList" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="codedriver.framework.process.dto.ChannelTypeVo">
+	SELECT 
+	  `uuid`,
+	  `name`,
+	  `is_active` AS isActive,
+	  `icon`,
+	  `color`,
+	  `description`,
+	  `sort` 
+	FROM `channel_type`
+	<where>
+		<if test="keyword != null and keyword != ''">
+			AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+			AND `is_active` = #{isActive}
+		</if>
+	</where>
+	ORDER BY `sort` desc
+	<if test="needPage">
+		limit #{startNum}, #{pageSize}
+	</if>
+	</select>
+
+	<select id="getChannelTypeByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelTypeVo">
+	SELECT 
+	  `uuid`,
+	  `name`,
+	  `is_active` AS isActive,
+	  `icon`,
+	  `color`,
+	  `description`,
+	  `sort` 
+	FROM `channel_type`
+	WHERE `uuid` = #{uuid}
+	</select>
+
+	<select id="checkChannelTypeNameIsRepeat" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="int">
+	SELECT COUNT(1) FROM `channel_type` WHERE `name` = #{name} AND `uuid` != #{uuid}
+	</select>
+
+	<select id="getChannelTypeMaxSort" resultType="int">
+	SELECT MAX(`sort`) FROM `channel_type`
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
@@ -230,6 +289,28 @@
 	<insert id="replaceChannelWorktime">
 		REPLACE INTO `channel_worktime`(`channel_uuid`, `worktime_uuid`) VALUES(#{channelUuid}, #{worktimeUuid})
 	</insert>
+	
+	<insert id="insertChannelType" parameterType="codedriver.framework.process.dto.ChannelTypeVo">
+	INSERT INTO `channel_type` (
+	  `uuid`,
+	  `name`,
+	  `is_active`,
+	  `icon`,
+	  `color`,
+	  `description`,
+	  `sort`
+	) 
+	VALUES
+	  (
+	    #{uuid},
+	    #{name},
+	    #{isActive},
+	    #{icon},
+	    #{color},
+	    #{description},
+	    #{sort}
+	  )
+	</insert>
 
 	<update id="updateChannelForMove"  parameterType="codedriver.framework.process.dto.ChannelVo">
 		UPDATE `channel` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
@@ -251,6 +332,18 @@
 		<if test="toSort != null">
 			AND `sort` &lt;= #{toSort}
 		</if>
+	</update>
+	
+	<update id="updateChannelTypeByUuid" parameterType="codedriver.framework.process.dto.ChannelTypeVo">
+	UPDATE `channel_type` 
+	SET
+	  `name` = #{name},
+	  `is_active` = #{is_active},
+	  `icon` = #{icon},
+	  `color` = #{color},
+	  `description` = #{description},
+	  `sort` = #{sort} 
+	WHERE `uuid` = #{uuid}
 	</update>
 
 	<delete id="deleteChannelUser">
@@ -279,5 +372,9 @@
 
 	<delete id="deleteChannelAuthorityByChannelUuid" parameterType="java.lang.String">
 		DELETE FROM `channel_authority` WHERE `channel_uuid` = #{channelUuid}
+	</delete>
+	
+	<delete id="deleteChannelTypeByUuid" parameterType="java.lang.String">
+		DELETE FROM `channel_type` WHERE `uuid` = #{uuid}
 	</delete>
 </mapper>
