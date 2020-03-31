@@ -606,7 +606,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		// 锁定当前流程
 		processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
 		/** 校验权限 **/
-		ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskVo.getId(), null, ProcessTaskStepAction.ABORT);
+		ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskVo.getId(), ProcessTaskStepAction.ABORT);
 
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
 		for (ProcessTaskStepVo stepVo : processTaskStepList) {
@@ -661,7 +661,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		// 锁定当前流程
 		processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
 		/** 校验权限 **/
-		ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskVo.getId(), null, ProcessTaskStepAction.RECOVER);
+		ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskVo.getId(), ProcessTaskStepAction.RECOVER);
 
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
 		for (ProcessTaskStepVo stepVo : processTaskStepList) {

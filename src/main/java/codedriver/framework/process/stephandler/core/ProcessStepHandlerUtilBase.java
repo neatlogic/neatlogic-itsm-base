@@ -818,6 +818,10 @@ public abstract class ProcessStepHandlerUtilBase {
 //			}
 //			return isWorker;
 //		}
+		protected static boolean verifyActionAuthoriy(Long processTaskId, ProcessTaskStepAction action) {
+			return verifyActionAuthoriy(processTaskId, null, action);
+		}
+		
 		protected static boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action) {
 			List<String> actionList = getProcessTaskStepActionList(processTaskId, processTaskStepId);
 			if(!actionList.contains(action.getValue())) {

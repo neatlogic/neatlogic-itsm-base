@@ -2,6 +2,8 @@ package codedriver.framework.process.dto;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
@@ -82,7 +84,7 @@ public class ProcessTaskStepSubtaskVo {
 		this.status = status;
 	}
 	public String getStatusText() {
-		if(statusText == null && status != null) {
+		if(StringUtils.isBlank(statusText) && StringUtils.isNotBlank(status)) {
 			statusText = ProcessTaskStatus.getText(status);
 		}
 		return statusText;
