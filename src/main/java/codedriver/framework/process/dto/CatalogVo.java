@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
@@ -69,8 +70,8 @@ public class CatalogVo extends BasePageVo implements ITree{
 		this.uuid = uuid;
 	}
 	@Override
-	public String getUuid() {
-		if(uuid == null) {
+	public synchronized String getUuid() {
+		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
 		return uuid;
@@ -221,7 +222,7 @@ public class CatalogVo extends BasePageVo implements ITree{
 	}
 
 	public List<String> getAuthorityList() {
-		if(authorityList == null && CollectionUtils.isNotEmpty(authorityList)) {
+		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
 			authorityList = new ArrayList<>();
 			for(AuthorityVo authorityVo : authorityVoList) {
 				if(authorityVo.getUserId() != null) {

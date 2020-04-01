@@ -26,7 +26,7 @@ public class FormVersionVo extends BasePageVo implements Serializable {
 	private Date editTime;
 	private transient List<FormAttributeVo> formAttributeList;
 
-	public String getUuid() {
+	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
