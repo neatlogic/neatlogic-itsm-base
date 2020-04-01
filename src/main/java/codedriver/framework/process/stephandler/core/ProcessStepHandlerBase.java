@@ -1304,6 +1304,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	}
 	
 	@Override
+	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
+		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId, verifyActionList);
+	}
+	
+	@Override
 	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action) {
 		return ActionRoleChecker.verifyActionAuthoriy(processTaskId, processTaskStepId, action);
 	}

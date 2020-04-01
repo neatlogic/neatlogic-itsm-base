@@ -85,6 +85,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String flowDirection;
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
+	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
+	private Integer isView;
+	
 	public ProcessTaskStepVo() {
 
 	}
@@ -538,6 +541,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setProcessTaskStepSubtaskList(List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList) {
 		this.processTaskStepSubtaskList = processTaskStepSubtaskList;
+	}
+
+	public Integer getIsView() {
+		return isView;
+	}
+
+	public void setIsView(Integer isView) {
+		this.isView = isView;
 	}
 
 }
