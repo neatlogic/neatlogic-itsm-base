@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
@@ -71,6 +72,9 @@ public class ChannelVo extends BasePageVo implements ITree {
 	@EntityField(name = "授权对象", type = ApiParamType.JSONARRAY)
 	private List<String> authorityList;
 	
+	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+	private String channelTypeUuid;
+	
 	private transient List<AuthorityVo> authorityVoList;
 	
 	private transient ITree parent;
@@ -88,8 +92,8 @@ public class ChannelVo extends BasePageVo implements ITree {
 	private transient List<String> nameList;
 
 	@Override
-	public String getUuid() {
-		if (uuid == null) {
+	public synchronized String getUuid() {
+		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
 		return uuid;
@@ -347,6 +351,14 @@ public class ChannelVo extends BasePageVo implements ITree {
 
 	public void setAuthorityVoList(List<AuthorityVo> authorityVoList) {
 		this.authorityVoList = authorityVoList;
+	}
+
+	public String getChannelTypeUuid() {
+		return channelTypeUuid;
+	}
+
+	public void setChannelTypeUuid(String channelTypeUuid) {
+		this.channelTypeUuid = channelTypeUuid;
 	}
 
 	@Override
