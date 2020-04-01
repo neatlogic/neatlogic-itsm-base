@@ -222,7 +222,7 @@ public class CatalogVo extends BasePageVo implements ITree{
 	}
 
 	public List<String> getAuthorityList() {
-		if(authorityList == null && CollectionUtils.isNotEmpty(authorityList)) {
+		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
 			authorityList = new ArrayList<>();
 			for(AuthorityVo authorityVo : authorityVoList) {
 				if(authorityVo.getUserId() != null) {
