@@ -298,12 +298,24 @@ public interface IProcessStepHandler {
 	/**
 	 * 
 	* @Time:2020年3月30日
-	* @Description: 获取当前用户对当前步骤的操作权限列表 
+	* @Description: 获取当前用户对当前步骤的所有操作权限列表 
 	* @param processTaskId
 	* @param processTaskStepId 
 	* @return List<String>
 	 */
 	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId);
+	
+	/**
+	 * 
+	* @Author: 14378
+	* @Time:2020年4月1日
+	* @Description: 获取当前用户对当前步骤的部分操作权限列表（verifyActionList包含的那部分）
+	* @param processTaskId
+	* @param processTaskStepId
+	* @param verifyActionList
+	* @return List<String>
+	 */
+	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList);
 	
 	/**
 	 * 
