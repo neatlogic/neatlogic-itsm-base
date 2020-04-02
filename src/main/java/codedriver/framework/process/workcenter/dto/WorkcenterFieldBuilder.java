@@ -13,7 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
-import codedriver.framework.process.constvalue.UserType;
+import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -154,9 +154,9 @@ public class WorkcenterFieldBuilder {
 			 JSONArray minorUserTypeArray = new JSONArray();
 			 JSONArray agentUserTypeArray = new JSONArray();
 			 JSONArray pendingUserTypeArray = new JSONArray();
-			 userTypeArray.add(getUserType(UserType.MAJOR.getValue(),UserType.MAJOR.getText(),majorUserTypeArray));
-			 userTypeArray.add(getUserType(UserType.MINOR.getValue(),UserType.MINOR.getText(),minorUserTypeArray));
-			 userTypeArray.add(getUserType(UserType.AGENT.getValue(),UserType.AGENT.getText(),agentUserTypeArray));
+			 userTypeArray.add(getUserType(ProcessUserType.MAJOR.getValue(),ProcessUserType.MAJOR.getText(),majorUserTypeArray));
+			 userTypeArray.add(getUserType(ProcessUserType.MINOR.getValue(),ProcessUserType.MINOR.getText(),minorUserTypeArray));
+			 userTypeArray.add(getUserType(ProcessUserType.AGENT.getValue(),ProcessUserType.AGENT.getText(),agentUserTypeArray));
 			 userTypeArray.add(getUserType("pending","pending",pendingUserTypeArray));
 			 stepJson.put("id", step.getId());
 			 stepJson.put("name", step.getName());
@@ -173,13 +173,13 @@ public class WorkcenterFieldBuilder {
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
 					 String user = String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId());
-					 if(UserType.MAJOR.getValue().equals( userVo.getUserType())) {
+					 if(ProcessUserType.MAJOR.getValue().equals( userVo.getUserType())) {
 						 majorUserTypeArray.add(user);
 					 }
-					 if(UserType.MINOR.getValue().equals( userVo.getUserType())) {
+					 if(ProcessUserType.MINOR.getValue().equals( userVo.getUserType())) {
 						 minorUserTypeArray.add(user);
 					 }
-					 if(UserType.AGENT.getValue().equals( userVo.getUserType())) {
+					 if(ProcessUserType.AGENT.getValue().equals( userVo.getUserType())) {
 						 agentUserTypeArray.add(user);
 					 }
 					 if(step.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {

@@ -36,6 +36,7 @@ import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.asynchronization.threadpool.CommonThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.file.dao.mapper.FileMapper;
@@ -45,7 +46,7 @@ import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.constvalue.ProcessTaskStepWorkerAction;
-import codedriver.framework.process.constvalue.UserType;
+import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.FormMapper;
 import codedriver.framework.process.dao.mapper.ProcessMapper;
@@ -801,15 +802,15 @@ public abstract class ProcessStepHandlerUtilBase {
 			List<String> currentUserProcessUserTypeList = new ArrayList<>();
 			currentUserProcessUserTypeList.add(UserType.ALL.getValue());
 			if(UserContext.get().getUserId(true).equals(processTaskVo.getOwner())) {
-				currentUserProcessUserTypeList.add(UserType.OWNER.getValue());
+				currentUserProcessUserTypeList.add(ProcessUserType.OWNER.getValue());
 			}
 			if(UserContext.get().getUserId(true).equals(processTaskVo.getReporter())) {
-				currentUserProcessUserTypeList.add(UserType.REPORTER.getValue());
+				currentUserProcessUserTypeList.add(ProcessUserType.REPORTER.getValue());
 			}
 
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.STARTPROCESS.getValue())) {	
 				if(ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
-					if(currentUserProcessUserTypeList.contains(UserType.OWNER.getValue()) || currentUserProcessUserTypeList.contains(UserType.REPORTER.getValue())) {
+					if(currentUserProcessUserTypeList.contains(ProcessUserType.OWNER.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.REPORTER.getValue())) {
 						resultList.add(ProcessTaskStepAction.STARTPROCESS.getValue());
 					}
 				}
@@ -817,20 +818,20 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(processTaskStepId != null) {
 				//获取步骤信息
 				ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
-				List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, UserType.MAJOR.getValue());
+				List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MAJOR.getValue());
 				List<String> majorUserIdList = majorUserList.stream().map(ProcessTaskStepUserVo::getUserId).collect(Collectors.toList());
 				if(majorUserIdList.contains(UserContext.get().getUserId(true))) {
-					currentUserProcessUserTypeList.add(UserType.MAJOR.getValue());
+					currentUserProcessUserTypeList.add(ProcessUserType.MAJOR.getValue());
 				}
-				List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, UserType.MINOR.getValue());
+				List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
 				List<String> minorUserIdList = minorUserList.stream().map(ProcessTaskStepUserVo::getUserId).collect(Collectors.toList());
 				if(minorUserIdList.contains(UserContext.get().getUserId(true))) {
-					currentUserProcessUserTypeList.add(UserType.MINOR.getValue());
+					currentUserProcessUserTypeList.add(ProcessUserType.MINOR.getValue());
 				}
-				List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, UserType.AGENT.getValue());
+				List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.AGENT.getValue());
 				List<String> agentUserIdList = agentUserList.stream().map(ProcessTaskStepUserVo::getUserId).collect(Collectors.toList());
 				if(agentUserIdList.contains(UserContext.get().getUserId(true))) {
-					currentUserProcessUserTypeList.add(UserType.AGENT.getValue());
+					currentUserProcessUserTypeList.add(ProcessUserType.AGENT.getValue());
 				}
 
 				List<String> actionList = new ArrayList<>();
@@ -941,7 +942,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
 					if(processTaskStepVo.getIsActive() == 1 && ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus())) {
 						//完成complete 暂存save 评论comment 创建子任务createsubtask
-						if(currentUserProcessUserTypeList.contains(UserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(UserType.AGENT.getValue())) {
+						if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
 							resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
 							resultList.add(ProcessTaskStepAction.SAVE.getValue());
 							resultList.add(ProcessTaskStepAction.COMMENT.getValue());
@@ -960,7 +961,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				if(CollectionUtils.isNotEmpty(processableStepList)) {
 					for(ProcessTaskStepVo processTaskStepVo : processableStepList) {
 						if(ProcessTaskStatus.PENDING.getValue().equals(processTaskStepVo.getStatus())) {//已激活未处理
-							List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), UserType.MAJOR.getValue());
+							List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
 							String action = "";
 							if(majorUserList.isEmpty()) {//没有主处理人时是accept
 								action = ProcessTaskStepAction.ACCEPT.getValue();
@@ -1014,7 +1015,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				if(handler != null) {
 					if (ProcessStepMode.MT == handler.getMode()) {//手动处理节点
 						//获取步骤处理人
-						List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(fromStep.getId(), UserType.MAJOR.getValue());
+						List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(fromStep.getId(), ProcessUserType.MAJOR.getValue());
 						List<String> majorUserIdList = majorUserList.stream().map(ProcessTaskStepUserVo::getUserId).collect(Collectors.toList());
 						if(majorUserIdList.contains(UserContext.get().getUserId())) {
 							resultList.add(fromStep);
