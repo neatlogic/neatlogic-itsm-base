@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -869,24 +868,28 @@ public abstract class ProcessStepHandlerUtilBase {
 										String accept = acceptList.getString(j);
 										String[] split = accept.split("#");
 										if(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
-											processUserTypeList.add(split[1]);
+											if(currentUserProcessUserTypeList.contains(split[1])) {
+												configActionList.add(authorityObj.getString("action"));
+												break;
+											}
 										}else if(GroupSearch.USER.getValue().equals(split[0])) {
-											userList.add(split[1]);
+											if(UserContext.get().getUserId(true).equals(split[1])) {
+												configActionList.add(authorityObj.getString("action"));
+												break;
+											}
 										}else if(GroupSearch.TEAM.getValue().equals(split[0])) {
-											teamList.add(split[1]);
+											if(currentUserTeamList.contains(split[1])) {
+												configActionList.add(authorityObj.getString("action"));
+												break;
+											}
 										}else if(GroupSearch.ROLE.getValue().equals(split[0])) {
-											roleList.add(split[1]);
+											if(UserContext.get().getRoleNameList().contains(split[1])) {
+												configActionList.add(authorityObj.getString("action"));
+												break;
+											}
 										}
 									}
-									if(processUserTypeList.removeAll(currentUserProcessUserTypeList)) {
-										configActionList.add(authorityObj.getString("action"));
-									}else if(userList.contains(UserContext.get().getUserId(true))){
-										configActionList.add(authorityObj.getString("action"));
-									}else if(teamList.removeAll(currentUserTeamList)){
-										configActionList.add(authorityObj.getString("action"));
-									}else if(roleList.removeAll(UserContext.get().getRoleNameList())){
-										configActionList.add(authorityObj.getString("action"));
-									}
+
 								}else {
 									configActionList.add(authorityObj.getString("action"));
 								}
