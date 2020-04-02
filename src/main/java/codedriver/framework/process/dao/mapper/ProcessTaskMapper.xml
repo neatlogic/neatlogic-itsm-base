@@ -459,6 +459,7 @@
 		`type`,
 		`handler`,
 		`is_active` AS isActive,
+		`config_hash` AS configHash,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
