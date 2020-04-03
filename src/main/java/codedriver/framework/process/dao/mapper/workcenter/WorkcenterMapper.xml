@@ -32,8 +32,9 @@
 			pw.`type` = 'system'
 			and
 			(
+			pwr.`user_id` = '{all}'
 			<if test="userId != null and userId != ''">
-				pwr.`user_id` = #{userId}
+				or pwr.`user_id` = #{userId} 
 			</if>
 			<if test="roleNameList !=null and roleNameList.size()>0">
 				OR 
