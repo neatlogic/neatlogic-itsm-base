@@ -233,6 +233,29 @@
 	SELECT MAX(`sort`) FROM `channel_type`
 	</select>
 	
+	<select id="getAuthorizedChannelUuidList" resultType="java.lang.String">
+	SELECT 
+	  DISTINCT `channel_uuid`
+	FROM `channel_authority` 
+	<where>
+		<if test="userId != null and userId != ''">
+		`user_id` = #{userId}
+		</if>
+		<if test="teamUuidList != null and teamUuidList.size > 0">
+		OR `team_uuid` IN 
+			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
+			#{teamUuid}
+			</foreach>
+		</if>
+		<if test="roleNameList != null and roleNameList.size > 0">
+		OR `role_name` IN 
+			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
+				#{roleName}
+			</foreach>
+		</if>
+		</where>
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
