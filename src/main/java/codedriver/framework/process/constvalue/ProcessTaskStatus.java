@@ -7,14 +7,14 @@ import codedriver.framework.common.dto.ValueTextVo;
 
 public enum ProcessTaskStatus {
 	RUNNING("running", "处理中","#2d84fb"),
-	ABORTED("aborted", "已终止","#2d84fb"),
-	SUCCEED("succeed", "已成功","#2d84fb"),
-	PENDING("pending", "待处理","#2d84fb"),
-	FAILED("failed", "已失败","#2d84fb"),
-	ABORTING("aborting", "终止中","#2d84fb"),
-	BACK("back", "已回退","#2d84fb"),
-	HANG("hang", "已挂起","#2d84fb"),
-	DRAFT("draft", "未提交","#2d84fb");
+	ABORTED("aborted", "已终止","#f71010"),
+	SUCCEED("succeed", "已成功","#25b865"),
+	PENDING("pending", "待处理","#f71010"),
+	FAILED("failed", "已失败","#f71010"),
+	ABORTING("aborting", "终止中","#f71010"),
+	BACK("back", "已回退","#f71010"),
+	HANG("hang", "已挂起","#f71010"),
+	DRAFT("draft", "未提交","#f71010");
 	
 	private String status;
 	private String text;
