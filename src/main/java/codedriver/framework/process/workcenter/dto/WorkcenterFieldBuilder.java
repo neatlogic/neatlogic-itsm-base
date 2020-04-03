@@ -172,7 +172,7 @@ public class WorkcenterFieldBuilder {
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
-					 String user = String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId());
+					 String user = String.format("%s%s", GroupSearch.USER.getValuePlugin(),userVo.getUserId());
 					 if(ProcessUserType.MAJOR.getValue().equals( userVo.getUserType())) {
 						 majorUserTypeArray.add(user);
 					 }
@@ -182,7 +182,7 @@ public class WorkcenterFieldBuilder {
 					 if(ProcessUserType.AGENT.getValue().equals( userVo.getUserType())) {
 						 agentUserTypeArray.add(user);
 					 }
-					 if(step.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
+					 if(ProcessTaskStatus.RUNNING.getValue().equals(dataJson.getString("status"))&&(step.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())||step.getStatus().equals(ProcessTaskStatus.DRAFT.getValue())&&userVo.getStatus().equals("doing"))) {
 						 userWillDoList.add(user); 
 					 }else {
 						 userDoneList.add(user);
