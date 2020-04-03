@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.MatrixExternalMapper">
+	<select id="getMatrixExternalByMatrixUuid" parameterType="string" resultType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
+		SELECT `id`, `matrix_uuid` as `matrixUuid`, `plugin`, `config` FROM `process_matrix_external` WHERE `matrix_uuid` = #{matrixUuid}
+	</select>
+
+	<insert id="insertMatrixExternal" parameterType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
+		INSERT INTO
+		`process_matrix_external`(
+			`uuid`,
+			`matrix_uuid`,
+			`plugin`,
+			`config`
+		) VALUES (
+			#{uuid},
+			#{matrixUuid},
+			#{plugin},
+			#{config}
+		)
+
+	</insert>
+
+	<update id="updateMatrixExternal" parameterType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
+		UPDATE `process_matrix_external` SET
+		 `plugin` = #{plugin},
+		 `config` = #{config},
+		 WHERE `matrix_uuid` = #{matrixUuid}
+	</update>
+
+	<delete id="deleteMatrixExternalByMatrixUuid" parameterType="String">
+		DELETE FROM `process_matrix_external` WHERE `matrix_uuid` = #{matrixUuid}
+	</delete>
+
+
+</mapper>

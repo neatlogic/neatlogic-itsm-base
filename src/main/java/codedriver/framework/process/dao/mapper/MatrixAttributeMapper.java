@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface MatrixAttributeMapper {
-    public void insertMatirxAttribute(ProcessMatrixAttributeVo matrixAttributeVo);
+    public void insertMatrixAttribute(ProcessMatrixAttributeVo matrixAttributeVo);
 
     public List<ProcessMatrixAttributeVo> getMatrixAttributeByMatrixUuid(String matrixUuid);
 

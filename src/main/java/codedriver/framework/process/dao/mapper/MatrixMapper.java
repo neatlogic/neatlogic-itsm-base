@@ -7,7 +7,7 @@ import codedriver.framework.process.dto.ProcessMatrixVo;
 import java.util.List;
 
 public interface MatrixMapper {
-    public ProcessMatrixVo insertMatrix(ProcessMatrixVo matrixVo);
+    public int insertMatrix(ProcessMatrixVo matrixVo);
 
     public int insertMatrixFormComponent(ProcessMatrixFormComponentVo componentVo);
 
@@ -16,6 +16,8 @@ public interface MatrixMapper {
     public int searchMatrixCount(ProcessMatrixVo matrixVo);
 
     public ProcessMatrixVo getMatrixByUuid(String uuid);
+
+    public ProcessMatrixVo getMatrixByName(String name);
 
     public List<ProcessMatrixVo> searchMatrix(ProcessMatrixVo matrixVo);
 

@@ -1,12 +1,12 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessMatrixType {
-    CUSTOM("custom", "自定义数据源"), EXTERNAL("external", "外部数据源");
+public enum EncodingType {
+    UTF_8("utf-8", "UTF-8"), GBK("gbk", "GBK");
 
     private String value;
     private String name;
 
-    private ProcessMatrixType(String _value, String _name) {
+    private EncodingType(String _value, String _name) {
         this.value = _value;
         this.name = _name;
     }
@@ -20,7 +20,7 @@ public enum ProcessMatrixType {
     }
 
     public static String getValue(String _value) {
-        for (ProcessMatrixType s : ProcessMatrixType.values()) {
+        for (EncodingType s : EncodingType.values()) {
             if (s.getValue().equals(_value)) {
                 return s.getValue();
             }
@@ -29,7 +29,7 @@ public enum ProcessMatrixType {
     }
 
     public static String getName(String _value) {
-        for (ProcessMatrixType s : ProcessMatrixType.values()) {
+        for (EncodingType s : EncodingType.values()) {
             if (s.getValue().equals(_value)) {
                 return s.getName();
             }

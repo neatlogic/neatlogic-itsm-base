@@ -1,12 +1,12 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessMatrixType {
-    CUSTOM("custom", "自定义数据源"), EXTERNAL("external", "外部数据源");
+public enum RestfulType {
+    POST("POST", "POST"), GET("GET", "GET"), PUT("PUT", "PUT"), DELETE("DELETE", "DELETE");
 
     private String value;
     private String name;
 
-    private ProcessMatrixType(String _value, String _name) {
+    private RestfulType(String _value, String _name) {
         this.value = _value;
         this.name = _name;
     }
@@ -20,7 +20,7 @@ public enum ProcessMatrixType {
     }
 
     public static String getValue(String _value) {
-        for (ProcessMatrixType s : ProcessMatrixType.values()) {
+        for (RestfulType s : RestfulType.values()) {
             if (s.getValue().equals(_value)) {
                 return s.getValue();
             }
@@ -29,7 +29,7 @@ public enum ProcessMatrixType {
     }
 
     public static String getName(String _value) {
-        for (ProcessMatrixType s : ProcessMatrixType.values()) {
+        for (RestfulType s : RestfulType.values()) {
             if (s.getValue().equals(_value)) {
                 return s.getName();
             }

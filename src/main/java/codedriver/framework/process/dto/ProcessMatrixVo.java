@@ -37,6 +37,8 @@ public class ProcessMatrixVo extends BasePageVo {
     private String lcu;
     @EntityField(name = "引用次数", type = ApiParamType.INTEGER)
     private int usedCount;
+
+    private String externalConfig;
     private List<ProcessMatrixDispatcherVo> dispatcherVoList;
     private List<ProcessMatrixFormComponentVo> componentVoList;
 
@@ -152,5 +154,13 @@ public class ProcessMatrixVo extends BasePageVo {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public String getExternalConfig() {
+        return externalConfig;
+    }
+
+    public void setExternalConfig(String externalConfig) {
+        this.externalConfig = externalConfig;
     }
 }

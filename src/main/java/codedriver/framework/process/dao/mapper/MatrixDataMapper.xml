@@ -18,6 +18,13 @@
 		</if>
 	</select>
 
+	<select id = "getDynamicTableDataCountByUuid" resultType = "int">
+		SELECT
+			COUNT(`uuid`)
+		FROM matrix_${matrixUuid}
+		WHERE `uuid` = #{uuid}
+	</select>
+
 	<select id="searchDynamicTableData" parameterType="codedriver.framework.process.dto.ProcessMatrixAttributeVo" resultType="java.util.Map">
 		SELECT
 		`id`,
@@ -51,6 +58,6 @@
 	</insert>
 
 	<delete id="deleteDynamicTableDataByUuid">
-		DELETE FROM matirx_${matrixUuid} WHERE uuid = #{uuid}
+		DELETE FROM matrix_${matrixUuid} WHERE uuid = #{uuid}
 	</delete>
 </mapper>
