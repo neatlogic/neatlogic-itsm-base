@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.file.dto.FileVo;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -70,6 +71,8 @@ public class ProcessTaskVo {
 	private String worktimeUuid;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
 	private Map<String, String> formAttributeActionMap;
+	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
+	private List<FileVo> fileList;
 	
 	public ProcessTaskVo() {
 
@@ -325,6 +328,14 @@ public class ProcessTaskVo {
 
 	public void setFormAttributeActionMap(Map<String, String> formAttributeActionMap) {
 		this.formAttributeActionMap = formAttributeActionMap;
+	}
+
+	public List<FileVo> getFileList() {
+		return fileList;
+	}
+
+	public void setFileList(List<FileVo> fileList) {
+		this.fileList = fileList;
 	}
 
 }

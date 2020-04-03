@@ -797,21 +797,23 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId) {
 			return getProcessTaskStepActionList(processTaskId, processTaskStepId, null);
 		}
+		/**
+		 * 
+		* @Time:2020年4月3日
+		* @Description: 获取当前用户对当前步骤的部分操作权限列表（verifyActionList包含的那部分）
+		* @param processTaskId
+		* @param processTaskStepId
+		* @param verifyActionList 
+		* @return List<String>
+		 */
 		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
-			List<String> resultList = new ArrayList<>();
+			Set<String> resultList = new HashSet<>();
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
-			List<String> currentUserProcessUserTypeList = new ArrayList<>();
-			currentUserProcessUserTypeList.add(UserType.ALL.getValue());
-			if(UserContext.get().getUserId(true).equals(processTaskVo.getOwner())) {
-				currentUserProcessUserTypeList.add(ProcessUserType.OWNER.getValue());
-			}
-			if(UserContext.get().getUserId(true).equals(processTaskVo.getReporter())) {
-				currentUserProcessUserTypeList.add(ProcessUserType.REPORTER.getValue());
-			}
+			
 			//上报提交
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.STARTPROCESS.getValue())) {	
 				if(ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
-					if(currentUserProcessUserTypeList.contains(ProcessUserType.OWNER.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.REPORTER.getValue())) {
+					if(UserContext.get().getUserId(true).equals(processTaskVo.getOwner()) || UserContext.get().getUserId(true).equals(processTaskVo.getReporter())) {
 						resultList.add(ProcessTaskStepAction.STARTPROCESS.getValue());
 					}
 				}
@@ -819,6 +821,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(processTaskStepId != null) {
 				//获取步骤信息
 				ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
+				List<String> currentUserProcessUserTypeList = new ArrayList<>();
 				List<String> actionList = new ArrayList<>();
 				actionList.add(ProcessTaskStepAction.VIEW.getValue());
 				actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
@@ -828,7 +831,10 @@ public abstract class ProcessStepHandlerUtilBase {
 					actionList.add(ProcessTaskStepAction.VIEW.getValue());
 					actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
 					actionList.add(ProcessTaskStepAction.URGE.getValue());
-					List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStepVo, actionList);
+					if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
+						currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
+					}
+					List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStepVo, actionList, currentUserProcessUserTypeList);
 					//根据流程设置和步骤状态判断当前用户权限
 					for(String action : configActionList) {
 						if(ProcessTaskStepAction.VIEW.getValue().equals(action)) {
@@ -854,6 +860,9 @@ public abstract class ProcessStepHandlerUtilBase {
 				actionList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
 				if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
 					if(processTaskStepVo.getIsActive() == 1 && ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus())) {
+						if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
+							currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
+						}
 						//完成complete 暂存save 评论comment 创建子任务createsubtask
 						if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
 							resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
@@ -874,11 +883,11 @@ public abstract class ProcessStepHandlerUtilBase {
 				List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.PROCESS.getValue());
 				for(ProcessTaskStepVo processTaskStep : processTaskStepList) {
 					if(processTaskStep.getIsActive().intValue() == 1) {
+						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
 						actionList = new ArrayList<>();
 						actionList.add(ProcessTaskStepAction.ABORT.getValue());
-						actionList.add(ProcessTaskStepAction.RECOVER.getValue());
 						actionList.add(ProcessTaskStepAction.UPDATE.getValue());
-						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList);
+						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
 						//根据流程设置和步骤状态判断当前用户权限
 						for(String action : configActionList) {
 							if(ProcessTaskStepAction.ABORT.getValue().equals(action)) {
@@ -891,9 +900,13 @@ public abstract class ProcessStepHandlerUtilBase {
 							}
 						}
 					}else if(processTaskStep.getIsActive().intValue() == -1) {
+						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
 						actionList = new ArrayList<>();
-						actionList.add(ProcessTaskStepAction.RECOVER.getValue());
-						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList);
+						actionList.add(ProcessTaskStepAction.ABORT.getValue());
+						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
+						if(configActionList.contains(ProcessTaskStepAction.ABORT.getValue())) {
+							configActionList.add(ProcessTaskStepAction.RECOVER.getValue());
+						}
 						//根据流程设置和步骤状态判断当前用户权限
 						for(String action : configActionList) {
 							if(ProcessTaskStepAction.RECOVER.getValue().equals(action)) {
@@ -944,18 +957,17 @@ public abstract class ProcessStepHandlerUtilBase {
 				}
 			}
 
-			return resultList;
+			return new ArrayList<String>(resultList);
 		}
 		/**
 		 * 
-		* @Time:2020年4月2日
-		* @Description: 获取流程节点配置中的当前用户的拥有的权限 
-		* @param processTaskVo
-		* @param processTaskStepVo
-		* @param actionList 要获取的权限集合
+		* @Time:2020年4月3日
+		* @Description: 获取当前用户在当前步骤中工单干系人列表
+		* @param processTaskVo 工单信息
+		* @param processTaskStepId 步骤id 
 		* @return List<String>
 		 */
-		private static List<String> getProcessTaskStepConfigActionList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, List<String> actionList){
+		private static List<String> getCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, Long processTaskStepId){
 			List<String> currentUserProcessUserTypeList = new ArrayList<>();
 			currentUserProcessUserTypeList.add(UserType.ALL.getValue());
 			if(UserContext.get().getUserId(true).equals(processTaskVo.getOwner())) {
@@ -964,21 +976,35 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(UserContext.get().getUserId(true).equals(processTaskVo.getReporter())) {
 				currentUserProcessUserTypeList.add(ProcessUserType.REPORTER.getValue());
 			}
-			List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+			List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MAJOR.getValue());
 			List<String> majorUserIdList = majorUserList.stream().map(ProcessTaskStepUserVo::getUserId).collect(Collectors.toList());
 			if(majorUserIdList.contains(UserContext.get().getUserId(true))) {
 				currentUserProcessUserTypeList.add(ProcessUserType.MAJOR.getValue());
 			}
-			List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.MINOR.getValue());
+			List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
 			List<String> minorUserIdList = minorUserList.stream().map(ProcessTaskStepUserVo::getUserId).collect(Collectors.toList());
 			if(minorUserIdList.contains(UserContext.get().getUserId(true))) {
 				currentUserProcessUserTypeList.add(ProcessUserType.MINOR.getValue());
 			}
-			List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.AGENT.getValue());
+			List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.AGENT.getValue());
 			List<String> agentUserIdList = agentUserList.stream().map(ProcessTaskStepUserVo::getUserId).collect(Collectors.toList());
 			if(agentUserIdList.contains(UserContext.get().getUserId(true))) {
 				currentUserProcessUserTypeList.add(ProcessUserType.AGENT.getValue());
 			}
+			return currentUserProcessUserTypeList;
+		}
+		/**
+		 * 
+		* @Time:2020年4月2日
+		* @Description: 获取流程节点配置中的当前用户的拥有的权限 
+		* @param processTaskVo
+		* @param processTaskStepVo
+		* @param actionList 要获取的权限集合
+		* @param currentUserProcessUserTypeList 当前用户工单干系人列表
+		* @return List<String>
+		 */
+		private static List<String> getProcessTaskStepConfigActionList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, List<String> actionList, List<String> currentUserProcessUserTypeList){
+			
 			String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
 			JSONObject stepConfigObj = JSON.parseObject(stepConfig);
 			JSONArray authorityList = stepConfigObj.getJSONArray("authorityList");
@@ -1027,16 +1053,19 @@ public abstract class ProcessStepHandlerUtilBase {
 						configActionList.add(authorityObj.getString("action"));
 					}
 				}
-				if(configActionList.contains(ProcessTaskStepAction.ABORT.getValue())) {
-					configActionList.add(ProcessTaskStepAction.RECOVER.getValue());
-				}
 				configActionList.retainAll(actionList);
 			}else {//不设置，默认都有
 				configActionList.addAll(actionList);
 			}
 			return configActionList;
 		}
-		
+		/**
+		 * 
+		* @Time:2020年4月3日
+		* @Description: 获取工单中当前用户能撤回的步骤列表 
+		* @param processTaskId
+		* @return Set<ProcessTaskStepVo>
+		 */
 		protected static Set<ProcessTaskStepVo> getRetractableStepListByProcessTaskId(Long processTaskId) {
 			Set<ProcessTaskStepVo> resultSet = new HashSet<>();
 			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
@@ -1048,7 +1077,14 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 			return resultSet;
 		}
-		
+		/**
+		 * 
+		* @Author: 14378
+		* @Time:2020年4月3日
+		* @Description: 获取当前步骤的前置步骤列表中处理人是当前用户的步骤列表
+		* @param processTaskStepId 已激活的步骤id
+		* @return List<ProcessTaskStepVo>
+		 */
 		private static List<ProcessTaskStepVo> getRetractableStepListByProcessTaskStepId(Long processTaskStepId) {
 			List<ProcessTaskStepVo> resultList = new ArrayList<>();
 			/**所有前置步骤**/
@@ -1074,6 +1110,13 @@ public abstract class ProcessStepHandlerUtilBase {
 			return resultList;
 		}
 		
+		/**
+		 * 
+		* @Time:2020年4月3日
+		* @Description: 获取工单中当前用户能处理的步骤列表
+		* @param processTaskId
+		* @return List<ProcessTaskStepVo>
+		 */
 		protected static List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId) {
 			List<ProcessTaskStepVo> resultList = new ArrayList<>();
 			List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserId(UserContext.get().getUserId(true));
