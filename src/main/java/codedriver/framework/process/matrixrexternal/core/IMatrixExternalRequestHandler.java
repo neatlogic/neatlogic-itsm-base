@@ -57,9 +57,16 @@ public interface IMatrixExternalRequestHandler {
     public JSONObject getConfig();
     
     /**
-    * @Description: 插件执行访问请求
+    * @Description: 插件执行访问请求获取属性
     * @Param: [url, root, config]
     * @return: java.util.Map<java.lang.String,java.util.List<java.lang.String>>
     */
     public Map<String, List<String>> attributeHandler(String url, String root, JSONObject config);
+
+    /**
+    * @Description:  插件执行访问请求获取数据
+    * @Param: [url, root, jsonObject]
+    * @return: java.lang.String
+    */
+    public JSONArray dataHandler(String url, String root, JSONObject jsonObject);
 }

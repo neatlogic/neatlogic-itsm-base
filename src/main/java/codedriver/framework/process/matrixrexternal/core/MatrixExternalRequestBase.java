@@ -1,9 +1,9 @@
 package codedriver.framework.process.matrixrexternal.core;
 
-import codedriver.framework.common.util.StringUtil;
 import codedriver.framework.process.constvalue.AuthType;
 import codedriver.framework.process.constvalue.EncodingType;
 import codedriver.framework.process.constvalue.RestfulType;
+import codedriver.framework.process.exception.process.MatrixExternalException;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.CollectionUtils;
@@ -66,23 +66,27 @@ public abstract class MatrixExternalRequestBase implements IMatrixExternalReques
         String result = myHandler(url, authType, restfulType, encodingType, config);
         List<String> attributeList = new ArrayList<>();
         List<String> pageAttributeList = new ArrayList<>();
-        Map<String, List<String>> map = new  HashMap();
+        Map<String, List<String>> map = new HashMap();
         if (StringUtils.isNotBlank(result)){
             JSONObject dataObj = JSONObject.parseObject(result);
             String[] rootArray = root.split(".");
-            for (int i = 0; i < rootArray.length - 1; i++){
-                if (dataObj.containsKey(rootArray[i])){
-                    dataObj = dataObj.getJSONObject(rootArray[i]);
+            if (rootArray.length > 1) {
+                for (int i = 0; i < rootArray.length - 1; i++) {
+                    if (dataObj.containsKey(rootArray[i])) {
+                        dataObj = dataObj.getJSONObject(rootArray[i]);
+                    }else {
+                        throw new MatrixExternalException("根属性匹配错误");
+                    }
                 }
+                root = rootArray[rootArray.length - 1];
             }
-
             for (Map.Entry<String, Object> entry: dataObj.entrySet()){
-                if (!entry.getKey().equals(rootArray[rootArray.length - 1])){
+                if (!entry.getKey().equals(root)){
                     pageAttributeList.add(entry.getKey());
                 }
             }
-            JSONArray dataArray = dataObj.getJSONArray(rootArray[rootArray.length - 1]);
-            if (dataArray != null && dataArray.size() > 0){
+           JSONArray dataArray = dataObj.getJSONArray(root);
+            if (CollectionUtils.isNotEmpty(dataArray)){
                 JSONObject data = dataArray.getJSONObject(0);
                 for (Map.Entry<String, Object> entry : data.entrySet()){
                     attributeList.add(entry.getKey());
@@ -92,6 +96,31 @@ public abstract class MatrixExternalRequestBase implements IMatrixExternalReques
         map.put("attributeList", attributeList);
         map.put("pageAttributeList", pageAttributeList);
         return map;
+    }
+
+    @Override
+    public JSONArray dataHandler(String url, String root, JSONObject config) {
+        String restfulType = config.getString("restfulType");
+        String authType = config.getString("authType");
+        String encodingType = config.getString("encodingType");
+        String result = myHandler(url, authType, restfulType, encodingType, config);
+        if (StringUtils.isNotBlank(result)) {
+            JSONObject dataObj = JSONObject.parseObject(result);
+            String[] rootArray = root.split(".");
+            if (rootArray.length > 1){
+                for (int i = 0; i < rootArray.length - 1; i++) {
+                    if (dataObj.containsKey(rootArray[i])) {
+                        dataObj = dataObj.getJSONObject(rootArray[i]);
+                    }else {
+                        throw new MatrixExternalException("根属性匹配错误");
+                    }
+                }
+                root = rootArray[rootArray.length - 1];
+            }
+
+            return dataObj.getJSONArray(root);
+        }
+        return null;
     }
 
     public  abstract String myHandler(String url, String authType, String restfulType, String encodingType, JSONObject config);

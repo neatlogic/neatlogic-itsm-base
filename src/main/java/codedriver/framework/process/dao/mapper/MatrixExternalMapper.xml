@@ -8,12 +8,10 @@
 	<insert id="insertMatrixExternal" parameterType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
 		INSERT INTO
 		`process_matrix_external`(
-			`uuid`,
 			`matrix_uuid`,
 			`plugin`,
 			`config`
 		) VALUES (
-			#{uuid},
 			#{matrixUuid},
 			#{plugin},
 			#{config}
