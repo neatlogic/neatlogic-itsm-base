@@ -35,7 +35,7 @@
 	</if>
 	</select>
 	
-	<resultMap id="worktimeMap" type="codedriver.framework.process.dto.WorktimeVo" useCache="false">
+	<resultMap id="worktimeMap" type="codedriver.framework.process.dto.WorktimeVo">
 		<id column="uuid" property="uuid"/>
 		<result column="name" property="name"/>
 		<result column="is_active" property="isActive"/>
