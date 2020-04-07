@@ -89,7 +89,7 @@
 		</if>
 	</select>
 
-	<select id="searchChannelParentUuidList" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="java.lang.String" useCache="false">
+	<!-- <select id="searchChannelParentUuidList" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="java.lang.String" useCache="false">
 		SELECT
 		c.`parent_uuid`
 		FROM

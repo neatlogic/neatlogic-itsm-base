@@ -47,7 +47,7 @@
 	SELECT COUNT(`uuid`) FROM `catalog` where `uuid`=#{uuid}
 	</select>
 
-	<select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String" useCache="false">
+	<!-- <select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String" useCache="false">
 	SELECT 
 	DISTINCT ca.`uuid` 
 	FROM catalog ca
