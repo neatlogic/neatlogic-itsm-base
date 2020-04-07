@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.ChannelMapper">
 <cache type="codedriver.framework.dao.cache.CodeDriverCache" flushInterval="300000" size="1024" readOnly="true"></cache>
-	<select id="searchChannelCount" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="int">
+	<select id="searchChannelCount" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="int" useCache="false">
 		SELECT
 		count(c.`uuid`)
 		FROM
@@ -42,7 +42,7 @@
 		<result column="sort" property="sort" />
 	</resultMap>
 	
-	<select id="searchChannelList" parameterType="codedriver.framework.process.dto.ChannelVo" resultMap="channelMap">
+	<select id="searchChannelList" parameterType="codedriver.framework.process.dto.ChannelVo" resultMap="channelMap" useCache="false">
 		SELECT
 		c.`uuid`,
 		c.`name`,
@@ -89,7 +89,7 @@
 		</if>
 	</select>
 
-	<!-- <select id="searchChannelParentUuidList" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="java.lang.String">
+	<select id="searchChannelParentUuidList" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="java.lang.String" useCache="false">
 		SELECT
 		c.`parent_uuid`
 		FROM
@@ -127,11 +127,11 @@
 		WHERE `uuid` = #{uuid}
 	</select>
 	
-	<select id="getMaxSortByParentUuid"  parameterType="java.lang.String" resultType="int">
+	<select id="getMaxSortByParentUuid"  parameterType="java.lang.String" resultType="int" useCache="false">
 		SELECT IFNULL(MAX(`sort`), 0) FROM `channel` WHERE `parent_uuid` = #{parentUuid}
 	</select>
 
-	<select id="getChannelPriorityListByChannelUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelPriorityVo">
+	<select id="getChannelPriorityListByChannelUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelPriorityVo" useCache="false">
 		SELECT
 		`channel_uuid` AS channelUuid,
 		`priority_uuid` AS priorityUuid,
@@ -140,11 +140,11 @@
 		WHERE channel_uuid = #{channelUuid}
 	</select>
 
-	<select id="checkChannelIsExists" parameterType="java.lang.String" resultType="int">
+	<select id="checkChannelIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
 		SELECT COUNT(`uuid`) FROM `channel` where `uuid`=#{uuid}
 	</select>
 
-	<select id="checkChannelNameIsRepeat"  parameterType="codedriver.framework.process.dto.ChannelVo" resultType="int">
+	<select id="checkChannelNameIsRepeat"  parameterType="codedriver.framework.process.dto.ChannelVo" resultType="int" useCache="false">
 		SELECT COUNT(1) FROM `channel` where name=#{name} AND `uuid`!=#{uuid}
 	</select>
 
@@ -154,7 +154,7 @@
 		<result column="parent_uuid" property="parentUuid" />
 		<result column="sort" property="sort" />
 	</resultMap>
-	<select id="getChannelListForTree" parameterType="java.lang.Integer" resultMap="simpleChannelMap">
+	<select id="getChannelListForTree" parameterType="java.lang.Integer" resultMap="simpleChannelMap" useCache="false">
 		SELECT
 		c.`uuid`,
 		c.`name`,
@@ -168,11 +168,11 @@
 		ORDER BY c.`parent_uuid`, c.`sort`
 	</select>
 	
-	<select id="getProcessUuidByChannelUuid" parameterType="java.lang.String" resultType="java.lang.String">
+	<select id="getProcessUuidByChannelUuid" parameterType="java.lang.String" resultType="java.lang.String" useCache="false">
 	SELECT `process_uuid` FROM `channel_process` WHERE `channel_uuid` = #{channelUuid}
 	</select>
 	
-	<select id="getChannelAuthorityListByChannelUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo">
+	<select id="getChannelAuthorityListByChannelUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo" useCache="false">
 	SELECT 
 	  `channel_uuid` AS channelUuid,
 	  `user_id` AS userId,
@@ -182,7 +182,7 @@
 	WHERE `channel_uuid` = #{channelUuid}
 	</select>
 	
-	<select id="searchChannelTypeCount" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="int">
+	<select id="searchChannelTypeCount" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="int" useCache="false">
 	SELECT 
 	  count(1)
 	FROM `channel_type`
@@ -196,7 +196,7 @@
 	</where>
 	</select>
 
-	<select id="searchChannelTypeList" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="codedriver.framework.process.dto.ChannelTypeVo">
+	<select id="searchChannelTypeList" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="codedriver.framework.process.dto.ChannelTypeVo" useCache="false">
 	SELECT 
 	  `uuid`,
 	  `name`,
@@ -220,7 +220,7 @@
 	</if>
 	</select>
 
-	<select id="getChannelTypeByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelTypeVo">
+	<select id="getChannelTypeByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelTypeVo" useCache="false">
 	SELECT 
 	  `uuid`,
 	  `name`,
@@ -233,15 +233,15 @@
 	WHERE `uuid` = #{uuid}
 	</select>
 	
-	<select id="checkChannelTypeIsExists" parameterType="java.lang.String" resultType="int">
+	<select id="checkChannelTypeIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
 	SELECT COUNT(`uuid`) FROM `channel_type` WHERE `uuid` = #{uuid}
 	</select>
 	
-	<select id="checkChannelTypeNameIsRepeat" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="int">
+	<select id="checkChannelTypeNameIsRepeat" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="int" useCache="false">
 	SELECT COUNT(1) FROM `channel_type` WHERE `name` = #{name} AND `uuid` != #{uuid}
 	</select>
 
-	<select id="getChannelTypeMaxSort" resultType="int">
+	<select id="getChannelTypeMaxSort" resultType="int" useCache="false">
 	SELECT MAX(`sort`) FROM `channel_type`
 	</select>
 	
