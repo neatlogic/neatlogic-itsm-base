@@ -69,7 +69,7 @@
 	
 	<select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String">
 	SELECT 
-	DISTINCT `uuid` 
+	DISTINCT `parent_uuid` 
 	FROM channel  
 	<where>
 	<if test="channelUuidList != null and channelUuidList.size > 0">
@@ -110,6 +110,19 @@
 	 </if>
 	 ORDER BY `parent_uuid`, `sort`
 	</select>
+	
+	<!-- <select id="getCatalogListForTree" parameterType="java.lang.Integer" resultType="codedriver.framework.process.dto.CatalogVo">
+	SELECT 
+	  `uuid`,
+	  `name`,
+	  `parent_uuid` AS parentUuid,
+	  `sort`
+	FROM `catalog` 
+	 <if test="isActive != null">
+	 WHERE `is_active` = #{isActive}
+	 </if>
+	 ORDER BY `parent_uuid`, `sort`
+	</select> -->
 	
 	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo">
 	SELECT 
