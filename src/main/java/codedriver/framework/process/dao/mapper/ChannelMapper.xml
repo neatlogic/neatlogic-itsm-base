@@ -89,20 +89,6 @@
 		</if>
 	</select>
 
-	<!-- <select id="searchChannelParentUuidList" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="java.lang.String" useCache="false">
-		SELECT
-		c.`parent_uuid`
-		FROM
-		`channel` c
-		WHERE 1=1
-		<if test="keyword != null and keyword != ''">
-			AND c.`name` LIKE CONCAT('%',#{keyword},'%')
-		</if>
-		<if test="isActive != null">
-			AND c.`is_active` = #{isActive}
-		</if>
-	</select> -->
-
 	<select id="getChannelByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelVo" useCache="true">
 		SELECT
 		c.`uuid`,

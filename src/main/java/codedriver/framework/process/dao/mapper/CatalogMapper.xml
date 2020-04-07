@@ -46,28 +46,8 @@
 	<select id="checkCatalogIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
 	SELECT COUNT(`uuid`) FROM `catalog` where `uuid`=#{uuid}
 	</select>
-
-	<!-- <select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String" useCache="false">
-	SELECT 
-	DISTINCT ca.`uuid` 
-	FROM catalog ca
-	JOIN channel ch ON ch.`parent_uuid`=ca.`uuid` AND ch.`is_active` = 1
-	WHERE ca.`is_active` = 1
-	<if test="catalogUuidList != null and catalogUuidList.size > 0">
-	AND ca.`uuid` IN 
-		<foreach collection="catalogUuidList" item="catalogUuid" open="(" separator=","  close=")">
-		#{catalogUuid}
-		</foreach>
-	</if>
-	<if test="channelUuidList != null and channelUuidList.size > 0">
-	AND ch.`uuid` in 
-		<foreach collection="channelUuidList" item="channelUuid" open="(" separator=","  close=")">
-			#{channelUuid}
-		</foreach>
-	</if>
-	</select> -->
 	
-	<select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String">
+	<select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String" useCache="false">
 	SELECT 
 	DISTINCT `parent_uuid` 
 	FROM channel  
@@ -110,19 +90,6 @@
 	 </if>
 	 ORDER BY `parent_uuid`, `sort`
 	</select>
-	
-	<!-- <select id="getCatalogListForTree" parameterType="java.lang.Integer" resultType="codedriver.framework.process.dto.CatalogVo">
-	SELECT 
-	  `uuid`,
-	  `name`,
-	  `parent_uuid` AS parentUuid,
-	  `sort`
-	FROM `catalog` 
-	 <if test="isActive != null">
-	 WHERE `is_active` = #{isActive}
-	 </if>
-	 ORDER BY `parent_uuid`, `sort`
-	</select> -->
 	
 	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo" useCache="false">
 	SELECT 
