@@ -22,7 +22,8 @@ public enum ProcessTaskStepAction {
 	EDITSUBTASK("editsubtask", "编辑子任务"),
 	ABORTSUBTASK("abortsubtask", "取消子任务"),
 	REDOSUBTASK("redosubtask", "打回重做子任务"),
-	COMPLETESUBTASK("completesubtask", "完成子任务");
+	COMPLETESUBTASK("completesubtask", "完成子任务"),
+	URGE("urge","催办");
 	private String status;
 	private String text;
 

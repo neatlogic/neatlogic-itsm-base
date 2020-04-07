@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.WorktimeMapper">
-
-	<select id="getWorktimeByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.WorktimeVo">
+<cache type="codedriver.framework.dao.cache.CodeDriverCache" flushInterval="300000" size="1024" readOnly="true"></cache>
+	<select id="getWorktimeByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.WorktimeVo" flushCache="false" useCache="true">
 	SELECT 
 	  wt.`uuid`,
 	  wt.`name`,
@@ -14,15 +14,15 @@
 	WHERE wt.`uuid` = #{uuid}
 	</select>
 
-	<select id="checkWorktimeNameIsRepeat" parameterType="codedriver.framework.process.dto.WorktimeVo" resultType="int">
+	<select id="checkWorktimeNameIsRepeat" parameterType="codedriver.framework.process.dto.WorktimeVo" resultType="int" useCache="false">
 	SELECT COUNT(1) FROM `worktime` WHERE `name` = #{name} AND `uuid` != #{uuid}
 	</select>
 	
-	<select id="checkWorktimeIsExists" parameterType="java.lang.String" resultType="int">
+	<select id="checkWorktimeIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
 	SELECT COUNT(`uuid`) FROM `worktime` WHERE `uuid` = #{uuid}
 	</select>
 
-	<select id="searchWorktimeCount" parameterType="codedriver.framework.process.dto.WorktimeVo" resultType="int">
+	<select id="searchWorktimeCount" parameterType="codedriver.framework.process.dto.WorktimeVo" resultType="int" useCache="false">
 	SELECT 
 	  COUNT(`uuid`)
 	FROM `worktime` wt
@@ -45,7 +45,7 @@
 		</collection>
 	</resultMap>
 	
-	<select id="searchWorktimeList" parameterType="codedriver.framework.process.dto.WorktimeVo" resultMap="worktimeMap">
+	<select id="searchWorktimeList" parameterType="codedriver.framework.process.dto.WorktimeVo" resultMap="worktimeMap" useCache="false">
 	SELECT 
 	  wt.`uuid`,
 	  wt.`name`,
@@ -61,7 +61,6 @@
 	<if test="isActive != null">
 	AND wt.`is_active` = #{isActive}
 	</if>
-	GROUP BY wt.`uuid`, wtr.`year`
 	ORDER BY wt.`lcd`
 	<if test="needPage">
 	limit #{startNum}, #{pageSize}
@@ -75,7 +74,7 @@
 		<result column="start_time" property="startTime"/>
 		<result column="end_time" property="endTime"/>
 	</resultMap>
-	<select id="getWorktimeRangeListByWorktimeUuid" parameterType="java.lang.String" resultMap="worktimeRangeMap">
+	<select id="getWorktimeRangeListByWorktimeUuid" parameterType="java.lang.String" resultMap="worktimeRangeMap" useCache="false">
 	SELECT 
 	  `year`,
 	  `date`,
@@ -88,7 +87,7 @@
 	ORDER BY `start_time`
 	</select>
 	
-	<select id="getWorktimeDateList" parameterType="codedriver.framework.process.dto.WorktimeRangeVo" resultType="java.lang.String">
+	<select id="getWorktimeDateList" parameterType="codedriver.framework.process.dto.WorktimeRangeVo" resultType="java.lang.String" useCache="false">
 	SELECT 
 	  DISTINCT `date`
 	FROM
@@ -97,7 +96,7 @@
 	AND `year` = #{year}
 	</select>
 
-	<select id="getRecentWorktimeRange" parameterType="codedriver.framework.process.dto.WorktimeRangeVo" resultMap="worktimeRangeMap">
+	<select id="getRecentWorktimeRange" parameterType="codedriver.framework.process.dto.WorktimeRangeVo" resultMap="worktimeRangeMap" useCache="false">
 	SELECT 
 	  `year`,
 	  `date`,
@@ -112,7 +111,7 @@
 	limit 0,1
 	</select>
 	
-	<select id="calculateCostTime" resultType="long">
+	<select id="calculateCostTime" resultType="long" useCache="false">
 	SELECT 
 	  IFNULL(SUM(IF(wtd.`end_time` &gt; #{endTime}, #{endTime}, wtd.`end_time`) - IF(wtd.`start_time` &lt; #{startTime}, #{startTime}, wtd.`start_time`)),0)
 	FROM `worktime_range` wtd
@@ -121,7 +120,7 @@
 	AND wtd.`start_time` &lt;= #{endTime}
 	</select>
 	
-	<select id="checkIsWithinWorktimeRange" resultType="int">
+	<select id="checkIsWithinWorktimeRange" resultType="int" useCache="false">
 	SELECT 
 	  COUNT(`worktime_uuid`)
 	FROM `worktime_range` 
@@ -130,7 +129,7 @@
 	AND `end_time` &gt;= #{value}
 	</select>
 	
-	<select id="checkIsWithinWorktime" resultType="int">
+	<select id="checkIsWithinWorktime" resultType="int" useCache="false">
 	SELECT 
 	  COUNT(`worktime_uuid`)
 	FROM `worktime_range` 

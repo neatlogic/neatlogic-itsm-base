@@ -2,6 +2,8 @@ package codedriver.framework.process.dto;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
@@ -20,6 +22,8 @@ public class ProcessTaskStepSubtaskVo {
 	private String owner;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
+	@EntityField(name = "状态名", type = ApiParamType.STRING)
+	private String statusText;
 	@EntityField(name = "处理人", type = ApiParamType.STRING)
 	private String userId;
 	@EntityField(name = "处理人名称", type = ApiParamType.STRING)
@@ -78,6 +82,15 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getStatusText() {
+		if(StringUtils.isBlank(statusText) && StringUtils.isNotBlank(status)) {
+			statusText = ProcessTaskStatus.getText(status);
+		}
+		return statusText;
+	}
+	public void setStatusText(String statusText) {
+		this.statusText = statusText;
 	}
 	public String getUserId() {
 		return userId;

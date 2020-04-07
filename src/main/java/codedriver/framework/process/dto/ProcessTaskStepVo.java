@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
@@ -83,6 +85,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String flowDirection;
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
+	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
+	private Integer isView;
+	
 	public ProcessTaskStepVo() {
 
 	}
@@ -205,13 +210,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public String getStatusText() {
-		if(status == null) {
-			return null;
+		if(StringUtils.isBlank(statusText) && StringUtils.isNotBlank(status)) {
+			statusText = ProcessTaskStatus.getText(status);
 		}
-		if(statusText != null) {
-			return statusText;
-		}
-		statusText = ProcessTaskStatus.getText(status);
 		return statusText;
 	}
 
@@ -540,6 +541,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setProcessTaskStepSubtaskList(List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList) {
 		this.processTaskStepSubtaskList = processTaskStepSubtaskList;
+	}
+
+	public Integer getIsView() {
+		return isView;
+	}
+
+	public void setIsView(Integer isView) {
+		this.isView = isView;
 	}
 
 }

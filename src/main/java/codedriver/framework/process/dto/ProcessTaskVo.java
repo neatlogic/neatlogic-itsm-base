@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.file.dto.FileVo;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -53,8 +56,7 @@ public class ProcessTaskVo {
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
 	private String configHash;
-//	private String urgency;
-//	private String urgencyText;
+
 	private List<ProcessTaskStepVo> stepList;
 	
 	@EntityField(name = "描述内容", type = ApiParamType.STRING)
@@ -67,6 +69,10 @@ public class ProcessTaskVo {
 	Map<String, Object> formAttributeDataMap;
 	@EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
 	private String worktimeUuid;
+	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
+	private Map<String, String> formAttributeActionMap;
+	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
+	private List<FileVo> fileList;
 	
 	public ProcessTaskVo() {
 
@@ -210,13 +216,9 @@ public class ProcessTaskVo {
 	}
 
 	public String getStatusText() {
-		if(status == null) {
-			return null;
+		if(StringUtils.isBlank(statusText) && StringUtils.isNotBlank(status)) {
+			statusText = ProcessTaskStatus.getText(status);
 		}
-		if(statusText != null) {
-			return statusText;
-		}
-		statusText = ProcessTaskStatus.getText(status);
 		return statusText;
 	}
 
@@ -255,22 +257,6 @@ public class ProcessTaskVo {
 	public void setConfigHash(String configHash) {
 		this.configHash = configHash;
 	}
-
-//	public String getUrgency() {
-//		return urgency;
-//	}
-//
-//	public void setUrgency(String urgency) {
-//		this.urgency = urgency;
-//	}
-//
-//	public String getUrgencyText() {
-//		return urgencyText;
-//	}
-//
-//	public void setUrgencyText(String urgencyText) {
-//		this.urgencyText = urgencyText;
-//	}
 
 	public String getPriorityUuid() {
 		return priorityUuid;
@@ -334,6 +320,22 @@ public class ProcessTaskVo {
 
 	public void setWorktimeUuid(String worktimeUuid) {
 		this.worktimeUuid = worktimeUuid;
+	}
+
+	public Map<String, String> getFormAttributeActionMap() {
+		return formAttributeActionMap;
+	}
+
+	public void setFormAttributeActionMap(Map<String, String> formAttributeActionMap) {
+		this.formAttributeActionMap = formAttributeActionMap;
+	}
+
+	public List<FileVo> getFileList() {
+		return fileList;
+	}
+
+	public void setFileList(List<FileVo> fileList) {
+		this.fileList = fileList;
 	}
 
 }

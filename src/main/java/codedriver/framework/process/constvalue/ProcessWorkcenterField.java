@@ -14,12 +14,15 @@ public enum ProcessWorkcenterField {
 	REPORTER("reporter", "代报人"),
 	PRIORITY("priority", "优先级"),
 	STATUS("status", "工单状态"),
+	STEP("step","步骤"),
 	CURRENT_STEP("currentstep","当前步骤"),
 	CURRENT_STEP_USER("currentstepuser","当前步骤处理人","currentstep.usertypelist.userlist"),
 	CURRENT_STEP_STATUS("stepstatus","当前步骤状态","currentstep.status"),
 	WOKRTIME("worktime","时间窗口"),
 	TRANSFER_FROM_USER("transferfromuser","转交人","transferfromuser"),
 	USER_WILL_DO("userwilldo","用户待处理的","userwilldo"),
+	USER_DO("userdo","用户参与的","userdo"),
+	USER_DONE("userdone","用户已处理的","userdone"),
 	ACTION("action", "操作栏");
 	private String value;
 	private String name;
