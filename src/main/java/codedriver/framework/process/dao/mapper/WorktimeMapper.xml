@@ -61,7 +61,6 @@
 	<if test="isActive != null">
 	AND wt.`is_active` = #{isActive}
 	</if>
-	GROUP BY wt.`uuid`, wtr.`year`
 	ORDER BY wt.`lcd`
 	<if test="needPage">
 	limit #{startNum}, #{pageSize}
