@@ -1,7 +1,6 @@
 package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
-import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -18,13 +17,17 @@ public interface CatalogMapper {
 	
 	int checkCatalogIsExists(String catalogUuid);
 
-	Set<String> getHasActiveChannelCatalogUuidList();
+	List<String> getHasActiveChannelCatalogUuidList(@Param("catalogUuidList")List<String> catalogUuidList, @Param("channelUuidList")List<String> channelUuidList);
 
 	int checkCatalogNameIsRepeat(CatalogVo catalogVo);
 
 	List<CatalogVo> getCatalogListForTree(Integer isActive);
 
 	List<AuthorityVo> getCatalogAuthorityListByCatalogUuid(String uuid);
+	
+	List<String> getAuthorizedCatalogUuidList();
+	
+	List<String> getAuthorizedCatalogUuidList(@Param("userId")String userId, @Param("teamUuidList")List<String> teamUuidList, @Param("roleNameList")List<String> roleNameList);
 	
 	int replaceCatalog(CatalogVo catalogVo);
 

@@ -1,7 +1,6 @@
 package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
-import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -15,8 +14,6 @@ public interface ChannelMapper {
 	int searchChannelCount(ChannelVo channelVo);
 
 	List<ChannelVo> searchChannelList(ChannelVo channelVo);
-
-	Set<String> searchChannelParentUuidList(ChannelVo channelVo);
 
 	ChannelVo getChannelByUuid(String channelUuid);
 	
@@ -45,6 +42,10 @@ public interface ChannelMapper {
 	public int checkChannelTypeNameIsRepeat(ChannelTypeVo channelTypeVo);
 
 	public Integer getChannelTypeMaxSort();
+	
+	List<String> getAuthorizedChannelUuidList();
+	
+	List<String> getAuthorizedChannelUuidList(@Param("userId")String userId, @Param("teamUuidList")List<String> teamUuidList, @Param("roleNameList")List<String> roleNameList);
 	
 	int replaceChannelUser(@Param("userId")String userId, @Param("channelUuid")String channelUuid);	
 
