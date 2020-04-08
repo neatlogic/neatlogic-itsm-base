@@ -7,9 +7,16 @@ public class ProcessTaskStatusVo {
 	private String status;
 	private String text;
 	private String color;
+	public ProcessTaskStatusVo() {
+	}
 	public ProcessTaskStatusVo(String status) {
 		this.status = status;
 		this.text = ProcessTaskStatus.getText(status);
+		this.color = ProcessTaskStatus.getColor(status);
+	}
+	public ProcessTaskStatusVo(String status, String text) {
+		this.status = status;
+		this.text = text;
 		this.color = ProcessTaskStatus.getColor(status);
 	}
 	public String getStatus() {

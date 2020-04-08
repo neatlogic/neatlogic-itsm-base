@@ -13,7 +13,6 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.process.constvalue.ProcessTaskFlowDirection;
-import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepVo extends BasePageVo {
