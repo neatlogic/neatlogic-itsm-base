@@ -40,9 +40,6 @@
 		<result column="name" property="name"/>
 		<result column="is_active" property="isActive"/>
 		<result column="config" property="config"/>
-		<collection property="yearList" ofType="java.lang.Integer">
-			<id column="year"/>
-		</collection>
 	</resultMap>
 	
 	<select id="searchWorktimeList" parameterType="codedriver.framework.process.dto.WorktimeVo" resultMap="worktimeMap" useCache="false">
@@ -50,10 +47,8 @@
 	  wt.`uuid`,
 	  wt.`name`,
 	  wt.`is_active`,
-	  wt.`config`,
-	  wtr.`year`
+	  wt.`config`
 	FROM `worktime` wt
-	LEFT JOIN `worktime_range` wtr ON wtr.`worktime_uuid` = wt.`uuid`
 	WHERE 1 = 1
 	<if test="keyword != null and keyword != ''">
 	AND wt.`name` LIKE CONCAT('%', #{keyword}, '%')
@@ -135,6 +130,27 @@
 	FROM `worktime_range` 
 	WHERE `worktime_uuid` = #{worktimeUuid}
 	AND `date` = #{date}
+	</select>
+	
+	<resultMap id="worktimeYearListMap" type="codedriver.framework.process.dto.WorktimeVo">
+		<id column="worktime_uuid" property="uuid"/>
+		<collection property="yearList" ofType="java.lang.Integer">
+			<id column="year"/>
+		</collection>
+	</resultMap>
+	<select id="getYearListByWorktimeUuidList" parameterType="java.util.List" resultMap="worktimeYearListMap" useCache="false">
+	SELECT 
+	  `worktime_uuid`,
+	  `year`
+	FROM `worktime_range`
+	<where>
+		<if test="list != null and list.size > 0">
+			`worktime_uuid` in 
+			<foreach collection="list" item="worktimeUuid" open="(" separator="," close=")">
+				#{worktimeUuid}
+			</foreach>
+		</if>
+	</where>
 	</select>
 	
 	<insert id="insertWorktime" parameterType="codedriver.framework.process.dto.WorktimeVo">
