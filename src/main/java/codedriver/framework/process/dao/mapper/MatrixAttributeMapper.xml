@@ -13,7 +13,7 @@
 	</select>
 
 	<select id="checkMatrixAttributeTableExist" parameterType="string" resultType="int">
-		SELECT COUNT(`table_name`) FROM information_schema.TABLES WHERE table_name = #{tableName} limit 0,1;
+		SELECT COUNT(`table_name`) FROM information_schema.TABLES WHERE table_name = #{tableName} limit 1
 	</select>
 
 	<delete id="deleteAttributeByMatrixUuid" parameterType="string">
@@ -44,7 +44,7 @@
 		</foreach>
 		,PRIMARY KEY (`uuid`),
 		KEY `id`(`id`)
-		)ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8
+		)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 
 	</update>
 
