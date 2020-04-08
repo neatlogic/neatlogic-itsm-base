@@ -10,7 +10,6 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.file.dto.FileVo;
-import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskVo {
@@ -36,8 +35,8 @@ public class ProcessTaskVo {
 	private JSONObject configObj;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
-	@EntityField(name = "状态名", type = ApiParamType.STRING)
-	private String statusText;
+	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStatusVo statusVo;
 	@EntityField(name = "上报人userId", type = ApiParamType.STRING)
 	private String owner;
 	@EntityField(name = "上报人", type = ApiParamType.STRING)
@@ -215,15 +214,15 @@ public class ProcessTaskVo {
 		this.status = status;
 	}
 
-	public String getStatusText() {
-		if(StringUtils.isBlank(statusText) && StringUtils.isNotBlank(status)) {
-			statusText = ProcessTaskStatus.getText(status);
+	public ProcessTaskStatusVo getStatusVo() {
+		if(statusVo == null && StringUtils.isNotBlank(status)) {
+			statusVo = new ProcessTaskStatusVo(status);
 		}
-		return statusText;
+		return statusVo;
 	}
 
-	public void setStatusText(String statusText) {
-		this.statusText = statusText;
+	public void setStatusVo(ProcessTaskStatusVo statusVo) {
+		this.statusVo = statusVo;
 	}
 
 	public Date getExpireTime() {
