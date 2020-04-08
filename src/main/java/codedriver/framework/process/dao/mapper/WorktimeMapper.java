@@ -34,6 +34,8 @@ public interface WorktimeMapper {
 
 	public int checkIsWithinWorktime(@Param("worktimeUuid")String worktimeUuid, @Param("date") String date);
 
+	public List<WorktimeVo> getYearListByWorktimeUuidList(List<String> worktimeUuidList);
+
 	public int insertWorktime(WorktimeVo worktimeVo);
 
 	public int insertBatchWorktimeRange(List<WorktimeRangeVo> worktimeRangeList);
