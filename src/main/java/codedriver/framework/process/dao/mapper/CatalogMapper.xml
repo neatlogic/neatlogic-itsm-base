@@ -49,10 +49,22 @@
 	
 	<select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String" useCache="false">
 	SELECT 
-	DISTINCT ca.`uuid` 
-	FROM catalog ca
-	JOIN channel ch ON ch.`parent_uuid`=ca.`uuid` AND ch.`is_active` = 1
-	WHERE ca.`is_active` = 1
+	DISTINCT `parent_uuid` 
+	FROM channel  
+	<where>
+	<if test="channelUuidList != null and channelUuidList.size > 0">
+	`uuid` IN 
+		<foreach collection="channelUuidList" item="channelUuid" open="(" separator=","  close=")">
+			#{channelUuid}
+		</foreach>
+	</if>
+	<if test="catalogUuidList != null and catalogUuidList.size > 0">
+	AND `parent_uuid` IN 
+		<foreach collection="catalogUuidList" item="catalogUuid" open="(" separator=","  close=")">
+		#{catalogUuid}
+		</foreach>
+	</if>
+	</where>
 	</select>
 	
 	<select id="checkCatalogNameIsRepeat" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int" useCache="false">
@@ -87,6 +99,29 @@
 	  `role_name` AS roleName
 	FROM `catalog_authority` 
 	WHERE `catalog_uuid` = #{catalogUuid}
+	</select>
+	
+	<select id="getAuthorizedCatalogUuidList" resultType="java.lang.String">
+	SELECT 
+	  DISTINCT `catalog_uuid`
+	FROM `catalog_authority` 
+	<where>
+		<if test="userId != null and userId != ''">
+		`user_id` = #{userId}
+		</if>
+		<if test="teamUuidList != null and teamUuidList.size > 0">
+		OR `team_uuid` IN 
+			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
+			#{teamUuid}
+			</foreach>
+		</if>
+		<if test="roleNameList != null and roleNameList.size > 0">
+		OR `role_name` IN 
+			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
+				#{roleName}
+			</foreach>
+		</if>
+		</where>
 	</select>
 	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
