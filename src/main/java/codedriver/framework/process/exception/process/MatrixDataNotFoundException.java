@@ -10,7 +10,7 @@ import codedriver.framework.exception.core.ApiRuntimeException;
 public class MatrixDataNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = -4508274752209783532L;
 
-    public MatrixDataNotFoundException() {
-        super("矩阵数据不存在");
+    public MatrixDataNotFoundException(String matrixName) {
+        super("矩阵" + matrixName + "数据不存在");
     }
 }
