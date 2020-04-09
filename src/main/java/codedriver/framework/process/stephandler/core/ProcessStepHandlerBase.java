@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -523,22 +524,25 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			try {
 				myComplete(currentProcessTaskStepVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
-				//获取旧表单数据
-				List<ProcessTaskFormAttributeDataVo> oldProcessTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-				if(CollectionUtils.isNotEmpty(oldProcessTaskFormAttributeDataList)) {
-					oldProcessTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
-					paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), JSON.toJSONString(oldProcessTaskFormAttributeDataList));
-				}
-				//写入新表单数据
-				Object formAttributeDataList = paramObj.get(ProcessTaskAuditDetailType.FORM.getParamName());
-				if(formAttributeDataList != null) {
-					List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = JSON.parseArray(formAttributeDataList.toString(), ProcessTaskFormAttributeDataVo.class);
-					if(CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
-						for(ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo : processTaskFormAttributeDataList) {
-							processTaskMapper.replaceProcessTaskFormAttributeData(processTaskFromAttributeDataVo);
+				if(MapUtils.isNotEmpty(paramObj)) {
+					//获取旧表单数据
+					List<ProcessTaskFormAttributeDataVo> oldProcessTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+					if(CollectionUtils.isNotEmpty(oldProcessTaskFormAttributeDataList)) {
+						oldProcessTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
+						paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), JSON.toJSONString(oldProcessTaskFormAttributeDataList));
+					}
+					//写入新表单数据
+					Object formAttributeDataList = paramObj.get(ProcessTaskAuditDetailType.FORM.getParamName());
+					if(formAttributeDataList != null) {
+						List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = JSON.parseArray(formAttributeDataList.toString(), ProcessTaskFormAttributeDataVo.class);
+						if(CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
+							for(ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo : processTaskFormAttributeDataList) {
+								processTaskMapper.replaceProcessTaskFormAttributeData(processTaskFromAttributeDataVo);
+							}
 						}
 					}
 				}
+				
 				DataValid.formAttributeDataValid(currentProcessTaskStepVo);
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 					/** 更新处理人状态 **/
