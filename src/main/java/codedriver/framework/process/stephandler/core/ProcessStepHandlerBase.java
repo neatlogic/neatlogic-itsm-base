@@ -17,6 +17,7 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.DigestUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -26,6 +27,7 @@ import codedriver.framework.dto.UserVo;
 import codedriver.framework.process.constvalue.ProcessStepHandler;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
+import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
@@ -520,6 +522,23 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		if (canComplete) {
 			try {
 				myComplete(currentProcessTaskStepVo);
+				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+				//获取旧表单数据
+				List<ProcessTaskFormAttributeDataVo> oldProcessTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+				if(CollectionUtils.isNotEmpty(oldProcessTaskFormAttributeDataList)) {
+					oldProcessTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
+					paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), JSON.toJSONString(oldProcessTaskFormAttributeDataList));
+				}
+				//写入新表单数据
+				Object formAttributeDataList = paramObj.get(ProcessTaskAuditDetailType.FORM.getParamName());
+				if(formAttributeDataList != null) {
+					List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = JSON.parseArray(formAttributeDataList.toString(), ProcessTaskFormAttributeDataVo.class);
+					if(CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
+						for(ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo : processTaskFormAttributeDataList) {
+							processTaskMapper.replaceProcessTaskFormAttributeData(processTaskFromAttributeDataVo);
+						}
+					}
+				}
 				DataValid.formAttributeDataValid(currentProcessTaskStepVo);
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 					/** 更新处理人状态 **/
@@ -1120,6 +1139,13 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskStepAction.STARTPROCESS);
 			DataValid.formAttributeDataValid(currentProcessTaskStepVo);
 			myStartProcess(currentProcessTaskStepVo);
+			//获取表单数据
+			List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+			if(CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {				
+				processTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
+				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+				paramObj.put(ProcessTaskAuditDetailType.FORM.getParamName(), JSON.toJSONString(processTaskFormAttributeDataList));
+			}
 			/** 更新处理人状态 **/
 			ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getId(), UserContext.get().getUserId());
 			processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
