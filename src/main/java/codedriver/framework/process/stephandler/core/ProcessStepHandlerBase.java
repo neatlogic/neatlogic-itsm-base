@@ -519,8 +519,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 		if (canComplete) {
 			try {
-				DataValid.formAttributeDataValid(currentProcessTaskStepVo);
 				myComplete(currentProcessTaskStepVo);
+				DataValid.formAttributeDataValid(currentProcessTaskStepVo);
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 					/** 更新处理人状态 **/
 					ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserId(true));
