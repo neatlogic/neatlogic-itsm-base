@@ -128,22 +128,24 @@
 		e.`version`,
 		f.`name` as `formName`,
 		e.`uuid` as `formUuid`
-		FROM `process_matrix` a
+		FROM (
+				SELECT *
+				FROM `process_matrix`
+				<where>
+					<if test="keyword != null and keyword != ''">
+						AND `name` LIKE CONCAT('%', #{keyword}, '%')
+					</if>
+				</where>
+				ORDER BY `id` ASC
+				<if test="needPage == true">
+					LIMIT #{startNum}, #{pageSize}
+				</if>
+				) a
 		LEFT JOIN `process_matrix_dispatcher` b ON a.`uuid` = b.`matrix_uuid`
 		LEFT JOIN `process` c ON b.`process_uuid` = c.`uuid`
 		LEFT JOIN `process_matrix_form_component` d ON a.`uuid` = d.`matrix_uuid`
 		LEFT JOIN `form_version` e ON d.`form_version_uuid` = e.`uuid`
 		LEFT JOIN `form` f ON e.`form_uuid` = f. `uuid`
-		<where>
-			<if test="keyword != null and keyword != ''">
-				AND a.`name` LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-		</where>
-		ORDER BY a.`id` ASC
-		<if test="needPage == true">
-			LIMIT #{startNum}, #{pageSize}
-		</if>
-
 	</select>
 
 	<update id="updateMatrixNameAndLcu" parameterType="codedriver.framework.process.dto.ProcessMatrixVo">
