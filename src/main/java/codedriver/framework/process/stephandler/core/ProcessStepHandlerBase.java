@@ -1091,6 +1091,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					attributeData.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 					attributeData.setAttributeUuid(formAttributeDataObj.getString("attributeUuid"));
 					attributeData.setType(formAttributeDataObj.getString("handler"));
+					attributeData.setSort(i);
 					processTaskMapper.replaceProcessTaskFormAttributeData(attributeData);
 				}
 			}
