@@ -12,6 +12,12 @@
 		</if>
 		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.user_id = #{userId}
 		WHERE 1=1
+		<if test="authorizedUuidList != null and authorizedUuidList.size > 0">
+			AND c.`uuid` IN 
+			<foreach collection="authorizedUuidList" item="authorizedUuid" open="(" separator=","  close=")">
+				#{authorizedUuid}
+			</foreach>
+		</if>
 		<if test="parentUuid != null">
 			AND c.`parent_uuid` = #{parentUuid}
 		</if>
@@ -55,6 +61,12 @@
 		</if>
 		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.user_id = #{userId}
 		WHERE 1=1
+		<if test="authorizedUuidList != null and authorizedUuidList.size > 0">
+			AND c.`uuid` IN 
+			<foreach collection="authorizedUuidList" item="authorizedUuid" open="(" separator=","  close=")">
+				#{authorizedUuid}
+			</foreach>
+		</if>
 		<if test="parentUuid != null">
 			AND c.`parent_uuid` = #{parentUuid}
 		</if>
@@ -74,20 +86,6 @@
 		</choose>
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
-		</if>
-	</select>
-
-	<select id="searchChannelParentUuidList" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="java.lang.String" useCache="false">
-		SELECT
-		c.`parent_uuid`
-		FROM
-		`channel` c
-		WHERE 1=1
-		<if test="keyword != null and keyword != ''">
-			AND c.`name` LIKE CONCAT('%',#{keyword},'%')
-		</if>
-		<if test="isActive != null">
-			AND c.`is_active` = #{isActive}
 		</if>
 	</select>
 
@@ -231,6 +229,29 @@
 
 	<select id="getChannelTypeMaxSort" resultType="int" useCache="false">
 	SELECT MAX(`sort`) FROM `channel_type`
+	</select>
+	
+	<select id="getAuthorizedChannelUuidList" resultType="java.lang.String">
+	SELECT 
+	  DISTINCT `channel_uuid`
+	FROM `channel_authority` 
+	<where>
+		<if test="userId != null and userId != ''">
+		`user_id` = #{userId}
+		</if>
+		<if test="teamUuidList != null and teamUuidList.size > 0">
+		OR `team_uuid` IN 
+			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
+			#{teamUuid}
+			</foreach>
+		</if>
+		<if test="roleNameList != null and roleNameList.size > 0">
+		OR `role_name` IN 
+			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
+				#{roleName}
+			</foreach>
+		</if>
+		</where>
 	</select>
 	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
