@@ -512,7 +512,9 @@ public abstract class ProcessStepHandlerUtilBase {
 							if (attributeData.getAttributeUuid().equals(key.substring(5))) {
 								IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(attributeData.getType());
 								if (handler != null) {
-									value = handler.getValue(attributeData);
+									//configObj是表单属性配置，暂时用空JSONObject对象代替
+									JSONObject configObj = new JSONObject();
+									value = handler.getValue(attributeData, configObj);
 								}
 								break;
 							}
