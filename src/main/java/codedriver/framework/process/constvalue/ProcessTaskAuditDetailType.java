@@ -7,7 +7,8 @@ public enum ProcessTaskAuditDetailType {
 	PRIORITY("priority", "优先级", "priorityUuid", "oldPriorityUuid", 3),
 	FORM("form", "表单", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 4),
 	WORKER("worker", "处理人", "workerList", "oldWorkerList", 5),
-	DATE("date", "期望时间", "targetTime", "oldTargetTime", 6),
+	//DATE("date", "期望时间", "targetTime", "oldTargetTime", 6),
+	SUBTASK("subtask", "子任务", "subtask", "oldSubtask", 6),
 	FILE("file", "上传文件", "fileUuidList", "oldFileUuidList", 7);
 	
 	private String value;

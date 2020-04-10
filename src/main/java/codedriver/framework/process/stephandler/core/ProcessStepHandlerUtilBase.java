@@ -868,16 +868,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						}
 						//完成complete 暂存save 评论comment 创建子任务createsubtask
 						if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
-							boolean complete = true;
-							List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
-							for(ProcessTaskStepUserVo minorUser : minorUserList) {
-								if(ProcessTaskStepUserStatus.DOING.getValue().equals(minorUser.getStatus())) {
-									complete = false;//如果还有子任务未完成，该步骤不能流转
-								}
-							}
-							if(complete) {
-								resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
-							}
+							resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
 							resultList.add(ProcessTaskStepAction.SAVE.getValue());
 							resultList.add(ProcessTaskStepAction.COMMENT.getValue());
 							resultList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());

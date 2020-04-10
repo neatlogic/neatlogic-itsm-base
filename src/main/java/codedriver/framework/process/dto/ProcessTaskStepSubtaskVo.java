@@ -22,8 +22,8 @@ public class ProcessTaskStepSubtaskVo {
 	private String owner;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
-	@EntityField(name = "状态名", type = ApiParamType.STRING)
-	private String statusText;
+	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStatusVo statusVo;
 	@EntityField(name = "处理人", type = ApiParamType.STRING)
 	private String userId;
 	@EntityField(name = "处理人名称", type = ApiParamType.STRING)
@@ -41,6 +41,8 @@ public class ProcessTaskStepSubtaskVo {
 	private Date cancelTime;
 	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String content;
+	@EntityField(name = "描述hash值", type = ApiParamType.STRING)
+	private String contentHash;
 	
 	@EntityField(name = "是否可编辑", type = ApiParamType.INTEGER)
 	private Integer isEditable;
@@ -51,7 +53,7 @@ public class ProcessTaskStepSubtaskVo {
 	@EntityField(name = "是否可完成", type = ApiParamType.INTEGER)
 	private Integer isCompletable;
 	
-	private JSONObject paramObj;
+	private transient JSONObject paramObj;
 	
 	public Long getProcessTaskId() {
 		return processTaskId;
@@ -83,14 +85,14 @@ public class ProcessTaskStepSubtaskVo {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getStatusText() {
-		if(StringUtils.isBlank(statusText) && StringUtils.isNotBlank(status)) {
-			statusText = ProcessTaskStatus.getText(status);
+	public ProcessTaskStatusVo getStatusVo() {
+		if(statusVo == null && StringUtils.isNotBlank(status)) {
+			statusVo = new ProcessTaskStatusVo(status);
 		}
-		return statusText;
+		return statusVo;
 	}
-	public void setStatusText(String statusText) {
-		this.statusText = statusText;
+	public void setStatusVo(ProcessTaskStatusVo statusVo) {
+		this.statusVo = statusVo;
 	}
 	public String getUserId() {
 		return userId;
@@ -152,6 +154,12 @@ public class ProcessTaskStepSubtaskVo {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public String getContentHash() {
+		return contentHash;
+	}
+	public void setContentHash(String contentHash) {
+		this.contentHash = contentHash;
+	}
 	public Integer getIsEditable() {
 		if(isEditable == null) {
 			String currentUser = UserContext.get().getUserId();
@@ -207,6 +215,47 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public void setIsCompletable(Integer isCompletable) {
 		this.isCompletable = isCompletable;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((contentHash == null) ? 0 : contentHash.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((targetTime == null) ? 0 : targetTime.hashCode());
+		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProcessTaskStepSubtaskVo other = (ProcessTaskStepSubtaskVo) obj;
+		if (contentHash == null) {
+			if (other.contentHash != null)
+				return false;
+		} else if (!contentHash.equals(other.contentHash))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (targetTime == null) {
+			if (other.targetTime != null)
+				return false;
+		} else if (!targetTime.equals(other.targetTime))
+			return false;
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equals(other.userId))
+			return false;
+		return true;
 	}
 	
 }
