@@ -46,6 +46,7 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
+import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepWorkerAction;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
@@ -512,7 +513,9 @@ public abstract class ProcessStepHandlerUtilBase {
 							if (attributeData.getAttributeUuid().equals(key.substring(5))) {
 								IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(attributeData.getType());
 								if (handler != null) {
-									value = handler.getValue(attributeData);
+									//configObj是表单属性配置，暂时用空JSONObject对象代替
+									JSONObject configObj = new JSONObject();
+									value = handler.getValue(attributeData, configObj);
 								}
 								break;
 							}
@@ -865,7 +868,16 @@ public abstract class ProcessStepHandlerUtilBase {
 						}
 						//完成complete 暂存save 评论comment 创建子任务createsubtask
 						if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
-							resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
+							boolean complete = true;
+							List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
+							for(ProcessTaskStepUserVo minorUser : minorUserList) {
+								if(ProcessTaskStepUserStatus.DOING.getValue().equals(minorUser.getStatus())) {
+									complete = false;//如果还有子任务未完成，该步骤不能流转
+								}
+							}
+							if(complete) {
+								resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
+							}
 							resultList.add(ProcessTaskStepAction.SAVE.getValue());
 							resultList.add(ProcessTaskStepAction.COMMENT.getValue());
 							resultList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
