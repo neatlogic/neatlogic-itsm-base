@@ -14,6 +14,34 @@ public class ProcessMatrixDataVo extends BasePageVo {
     private String matrixUuid;
     private List<String> columnList;
 
+    private String targetColumn;
+    private String sourceColumn;
+    private String sourceColumnValue;
+
+    public String getSourceColumnValue() {
+        return sourceColumnValue;
+    }
+
+    public void setSourceColumnValue(String sourceColumnValue) {
+        this.sourceColumnValue = sourceColumnValue;
+    }
+
+    public String getTargetColumn() {
+        return targetColumn;
+    }
+
+    public void setTargetColumn(String targetColumn) {
+        this.targetColumn = targetColumn;
+    }
+
+    public String getSourceColumn() {
+        return sourceColumn;
+    }
+
+    public void setSourceColumn(String sourceColumn) {
+        this.sourceColumn = sourceColumn;
+    }
+
     public String getKeyword() {
         return keyword;
     }

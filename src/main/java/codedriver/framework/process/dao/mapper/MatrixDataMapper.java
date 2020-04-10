@@ -16,4 +16,6 @@ public interface MatrixDataMapper {
     public int getDynamicTableDataCountByUuid(@Param("uuid") String uuid,@Param("matrixUuid") String matrixUuid);
 
     public List<Map<String, String>> searchDynamicTableData(ProcessMatrixDataVo dataVo);
+
+    public List<Map<String, String>> getDynamicTableDataByColumn(ProcessMatrixDataVo dataVo);
 }

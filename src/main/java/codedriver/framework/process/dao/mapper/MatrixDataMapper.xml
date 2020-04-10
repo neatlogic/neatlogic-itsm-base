@@ -25,7 +25,7 @@
 		WHERE `uuid` = #{uuid}
 	</select>
 
-	<select id="searchDynamicTableData" parameterType="codedriver.framework.process.dto.ProcessMatrixAttributeVo" resultType="java.util.Map">
+	<select id="searchDynamicTableData" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.Map">
 		SELECT
 		`id`,
 		`uuid`,
@@ -44,6 +44,17 @@
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
+	</select>
+
+	<select id="getDynamicTableDataByColumn" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.Map">
+		SELECT
+			${targetColumn}
+		FROM matrix_${matrixUuid}
+		<where>
+			<if test="sourceColumn != null and sourceColumn !=''">
+				${sourceColumn} = #{sourceColumnValue}
+			</if>
+		</where>
 	</select>
 
 	<insert id="insertDynamicTableData">
