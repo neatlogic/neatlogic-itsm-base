@@ -1,9 +1,10 @@
 package codedriver.framework.process.dto;
 
 import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ProcessTaskStepAuditDetailVo {
+public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepAuditDetailVo> {
 	@EntityField(name = "活动id", type = ApiParamType.LONG)
 	private Long auditId;
 	@EntityField(name = "详情类型，title(标题)、priority(优先级)、content(内容)、worker(处理人)、file(上传文件)", type = ApiParamType.STRING)
@@ -54,6 +55,11 @@ public class ProcessTaskStepAuditDetailVo {
 
 	public void setNewContent(String newContent) {
 		this.newContent = newContent;
+	}
+
+	@Override
+	public int compareTo(ProcessTaskStepAuditDetailVo auditDetail) {
+		return Integer.compare(ProcessTaskAuditDetailType.getSort(type), ProcessTaskAuditDetailType.getSort(auditDetail.getType()));
 	}
 
 }

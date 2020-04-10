@@ -13,7 +13,6 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.process.constvalue.ProcessTaskFlowDirection;
-import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepVo extends BasePageVo {
@@ -29,8 +28,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String name;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
-	@EntityField(name = "状态名", type = ApiParamType.STRING)
-	private String statusText;
+	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStatusVo statusVo;
 	@EntityField(name = "步骤处理器", type = ApiParamType.STRING)
 	private String handler;
 	@EntityField(name = "步骤类型", type = ApiParamType.STRING)
@@ -209,15 +208,15 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.status = status;
 	}
 
-	public String getStatusText() {
-		if(StringUtils.isBlank(statusText) && StringUtils.isNotBlank(status)) {
-			statusText = ProcessTaskStatus.getText(status);
+	public ProcessTaskStatusVo getStatusVo() {
+		if(statusVo == null && StringUtils.isNotBlank(status)) {
+			statusVo = new ProcessTaskStatusVo(status);
 		}
-		return statusText;
+		return statusVo;
 	}
 
-	public void setStatusText(String statusText) {
-		this.statusText = statusText;
+	public void setStatusVo(ProcessTaskStatusVo statusVo) {
+		this.statusVo = statusVo;
 	}
 
 	public Integer getIsActive() {

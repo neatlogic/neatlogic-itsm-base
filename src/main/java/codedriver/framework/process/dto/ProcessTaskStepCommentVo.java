@@ -20,8 +20,8 @@ public class ProcessTaskStepCommentVo {
 	}
 	public ProcessTaskStepCommentVo(ProcessTaskStepAuditVo processTaskStepAuditVo) {
 		auditId = processTaskStepAuditVo.getId();
-		List<ProcessTaskStepAuditDetailVo> processTaskStepAuditDetailListt = processTaskStepAuditVo.getAuditDetailList();
-		for(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo : processTaskStepAuditDetailListt) {
+		List<ProcessTaskStepAuditDetailVo> processTaskStepAuditDetailList = processTaskStepAuditVo.getAuditDetailList();
+		for(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo : processTaskStepAuditDetailList) {
 			IProcessTaskStepAuditDetailHandler auditDetailHandler = ProcessTaskStepAuditDetailHandlerFactory.getHandler(processTaskStepAuditDetailVo.getType());
 			if(auditDetailHandler != null) {
 				auditDetailHandler.handle(processTaskStepAuditDetailVo);
