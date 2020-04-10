@@ -53,7 +53,7 @@ public class ProcessTaskStepSubtaskVo {
 	@EntityField(name = "是否可完成", type = ApiParamType.INTEGER)
 	private Integer isCompletable;
 	
-	private JSONObject paramObj;
+	private transient JSONObject paramObj;
 	
 	public Long getProcessTaskId() {
 		return processTaskId;
