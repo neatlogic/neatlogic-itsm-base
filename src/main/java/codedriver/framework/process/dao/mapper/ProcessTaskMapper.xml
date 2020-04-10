@@ -197,7 +197,8 @@
 		`processtask_id` AS processTaskId,
 		`attribute_uuid` AS attributeUuid,
 		`type` AS type,
-		`data`
+		`data`,
+		`sort`
 		FROM
 		`processtask_formattribute_data`
 		WHERE `processtask_id` = #{value}
@@ -1125,14 +1126,16 @@
 		`processtask_id`,
 		`attribute_uuid`,
 		`data`,
-		`type`
+		`type`,
+		`sort`
 		)
 		VALUES
 		(
 		#{processTaskId},
 		#{attributeUuid},
 		#{data},
-		#{type}
+		#{type},
+		#{sort}
 		)
 	</insert>
 

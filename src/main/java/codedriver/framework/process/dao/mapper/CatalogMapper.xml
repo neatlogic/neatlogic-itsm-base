@@ -40,7 +40,7 @@
 	</select>
 	
 	<select id="getMaxSortByParentUuid" parameterType="java.lang.String" resultType="int" useCache="false">
-	SELECT  IFNULL(MAX(`sort`), 0) FROM `catalog` WHERE `parent_uuid` = #{parentUuid}
+	SELECT  IFNULL(MAX(`sort`), 0) FROM `catalog` WHERE `parent_uuid` = #{parentUuid} FOR UPDATE
 	</select>
 	
 	<select id="checkCatalogIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
