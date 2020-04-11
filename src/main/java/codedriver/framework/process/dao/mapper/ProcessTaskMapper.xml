@@ -354,16 +354,17 @@
 
 	<select id="getProcessTaskStepWorkerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		SELECT
-		`processtask_id` AS processTaskId,
-		`processtask_step_id` AS processTaskStepId,
-		`user_id` AS userId,
-  		`role_name` AS roleName,
-  		`team_uuid` AS teamUuid,
-  		`action` 
-		FROM
-		`processtask_step_worker`
-		WHERE
-		processtask_step_id = #{value}
+		ptsw.`processtask_id` AS processTaskId,
+		ptsw.`processtask_step_id` AS processTaskStepId,
+		ptsw.`type`,
+		ptsw.`uuid`,
+		CASE `type` 
+		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`user_id` = `uuid`) 
+		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`) 
+		WHEN 'role' THEN (SELECT r.`description` FROM `role` r WHERE r.`name` = `uuid`) 
+		ELSE NULL END AS `name`
+		FROM `processtask_step_worker` ptsw
+		WHERE ptsw.processtask_step_id = #{value}
 	</select>
 
 	<select id="getFromProcessTaskStepByToId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
@@ -485,9 +486,8 @@
 		<result column="endTime" property="endTime" />
 		<result column="error" property="error" />
 		<collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
-			<result column="roleName" property="roleName" />
-			<result column="teamUuid" property="teamUuid" />
-			<result column="userId" property="userId" />
+			<result column="type" property="type" />
+			<result column="uuid" property="uuid" />
 		</collection>
 		<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 			<result column="userType" property="userType" />
@@ -509,10 +509,8 @@
 		ps.`end_time` AS endTime,
 		ps.`error`,
 		ps.`is_active` AS isActive,
-		psw.`role_name` AS roleName,
-		psw.`team_uuid` AS teamUuid,
-		psw.`user_id` AS userId,
-		psw.`action`,
+		psw.`type`,
+		psw.`uuid`,
 		psu.`user_id`,
 		psu.`user_type` AS userType
 		FROM `processtask_step` ps 
@@ -795,31 +793,29 @@
 		<result column="user_id" property="userId"/>
 		<result column="role_name" property="roleName"/>
 		<result column="team_uuid" property="teamUuid"/>
-		<result column="action" property="action"/>
 	</resultMap>
 	<select id="getProcessTaskStepWorkerList" resultMap="processTaskStepWorkerMap">
 	SELECT 
 	  `processtask_id`,
 	  `processtask_step_id`,
-	  `user_id`,
-	  `role_name`,
-	  `team_uuid`,
-	  `action` 
+	  `type`,
+	  `uuid` 
 	FROM `processtask_step_worker` 
-	WHERE `action`='handle' and (`user_id` = #{userId}
-	<if test="teamUuidList != null and teamUuidList.size > 0">
-	OR `team_uuid` in 
+	WHERE (`type` = 'user' AND `uuid` = #{userId})
+	<if test="teamUuidList != null and teamUuidList.size() > 0">
+	OR (`type` = 'team' AND `uuid` in 
 		<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
 		#{teamUuid}
 		</foreach>
+		)
 	</if>
-	<if test="roleNameList != null and roleNameList.size > 0">
-	OR `role_name` in 
+	<if test="roleNameList != null and roleNameList.size() > 0">
+	OR (`type` = 'team' AND `uuid` in 
 		<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
 			#{roleName}
 		</foreach>
+		)
 	</if>
-	)
 	</select>
 	
 	<select id="getProcessTaskActiveStepListByStepIdList" resultType="java.util.HashMap">
@@ -1157,19 +1153,15 @@
 		INSERT INTO `processtask_step_worker` (
 		`processtask_id`,
 		`processtask_step_id`,
-		`user_id`,
-		`team_uuid`,
-		`role_name`,
-		`action`
+		`type`,
+		`uuid`
 		)
 		VALUES
 		(
 		#{processTaskId},
 		#{processTaskStepId},
-		#{userId},
-		#{teamUuid},
-		#{roleName},
-		#{action}
+		#{type},
+		#{uuid}
 		)
 	</insert>
 
@@ -1540,13 +1532,6 @@
 	  `status` = #{status}
 	WHERE `id` = #{id} 
 	</update>
-	
-	<delete id="deleteProcessTaskStepWorkerByProcessTaskId" parameterType="java.lang.Long">
-		DELETE
-		FROM
-		`processtask_step_worker`
-		WHERE `processtask_id` = #{value}
-	</delete>
 
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
@@ -1564,14 +1549,22 @@
 		AND `attribute_uuid` = #{attributeUuid}
 	</delete>
 
-	<delete id="deleteProcessTaskStepWorker">
-		DELETE
-		FROM
-		`processtask_step_worker`
-		WHERE `processtask_step_id` = #{processTaskStepId}
-		<if test="userId != null and userId != ''">
-			AND `user_id` = #{userId}
-		</if>
+	<delete id="deleteProcessTaskStepWorker" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+		DELETE FROM `processtask_step_worker`
+		<where>
+			<if test="processTaskId != null and processTaskId != ''">
+			`processtask_id` = #{processTaskId}
+			</if>
+			<if test="processTaskStepId != null and processTaskStepId != ''">
+			AND `processtask_step_id` = #{processTaskStepId}
+			</if>
+			<if test="type != null and type != ''">
+			AND `type` = #{type}
+			</if>
+			<if test="uuid != null and uuid != ''">
+			AND `uuid` = #{uuid}
+			</if>
+		</where>
 	</delete>
 
 	<delete id="deleteProcessTaskStepUser">

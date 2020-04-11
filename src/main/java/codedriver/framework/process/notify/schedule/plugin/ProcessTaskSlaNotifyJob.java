@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.notify.NotifyMapper;
@@ -188,7 +189,9 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 										notifyBuilder.addUserId(processTaskVo.getOwner());
 									} else if (receiver.equalsIgnoreCase("worker")) {
 										for (ProcessTaskStepWorkerVo workerVo : workerList) {
-											notifyBuilder.addUserId(workerVo.getUserId());
+											if(GroupSearch.USER.getValue().equals(workerVo.getType())) {
+												notifyBuilder.addUserId(workerVo.getUuid());
+											}
 										}
 									}
 								} else if (receiver.startsWith("user.")) {

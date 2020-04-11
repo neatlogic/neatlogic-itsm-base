@@ -144,7 +144,7 @@
 	  `year`
 	FROM `worktime_range`
 	<where>
-		<if test="list != null and list.size > 0">
+		<if test="list != null and list.size() > 0">
 			`worktime_uuid` in 
 			<foreach collection="list" item="worktimeUuid" open="(" separator="," close=")">
 				#{worktimeUuid}
