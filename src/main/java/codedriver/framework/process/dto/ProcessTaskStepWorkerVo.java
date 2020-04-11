@@ -14,7 +14,6 @@ public class ProcessTaskStepWorkerVo {
 	private String type;
 	private String uuid;
 	private String name;
-	private String action = "handle";
 
 	public ProcessTaskStepWorkerVo() {
 
@@ -112,14 +111,6 @@ public class ProcessTaskStepWorkerVo {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
 	}
 
 	public String getWorkerValue() {

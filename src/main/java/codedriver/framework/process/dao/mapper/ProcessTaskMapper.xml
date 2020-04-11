@@ -354,15 +354,17 @@
 
 	<select id="getProcessTaskStepWorkerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		SELECT
-		`processtask_id` AS processTaskId,
-		`processtask_step_id` AS processTaskStepId,
-		`type`,
-  		`uuid`,
-  		`action` 
-		FROM
-		`processtask_step_worker`
-		WHERE
-		processtask_step_id = #{value}
+		ptsw.`processtask_id` AS processTaskId,
+		ptsw.`processtask_step_id` AS processTaskStepId,
+		ptsw.`type`,
+		ptsw.`uuid`,
+		CASE `type` 
+		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`user_id` = `uuid`) 
+		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`) 
+		WHEN 'role' THEN (SELECT r.`description` FROM `role` r WHERE r.`name` = `uuid`) 
+		ELSE NULL END AS `name`
+		FROM `processtask_step_worker` ptsw
+		WHERE ptsw.processtask_step_id = #{value}
 	</select>
 
 	<select id="getFromProcessTaskStepByToId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
@@ -509,7 +511,6 @@
 		ps.`is_active` AS isActive,
 		psw.`type`,
 		psw.`uuid`,
-		psw.`action`,
 		psu.`user_id`,
 		psu.`user_type` AS userType
 		FROM `processtask_step` ps 
@@ -792,33 +793,29 @@
 		<result column="user_id" property="userId"/>
 		<result column="role_name" property="roleName"/>
 		<result column="team_uuid" property="teamUuid"/>
-		<result column="action" property="action"/>
 	</resultMap>
 	<select id="getProcessTaskStepWorkerList" resultMap="processTaskStepWorkerMap">
 	SELECT 
 	  `processtask_id`,
 	  `processtask_step_id`,
 	  `type`,
-	  `uuid`,
-	  `action` 
+	  `uuid` 
 	FROM `processtask_step_worker` 
-	WHERE `action`='handle' and (
-	(`type` = 'user' AND `uuid` = #{userId})
-	<if test="teamUuidList != null and teamUuidList.size > 0">
+	WHERE (`type` = 'user' AND `uuid` = #{userId})
+	<if test="teamUuidList != null and teamUuidList.size() > 0">
 	OR (`type` = 'team' AND `uuid` in 
 		<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
 		#{teamUuid}
 		</foreach>
 		)
 	</if>
-	<if test="roleNameList != null and roleNameList.size > 0">
+	<if test="roleNameList != null and roleNameList.size() > 0">
 	OR (`type` = 'team' AND `uuid` in 
 		<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
 			#{roleName}
 		</foreach>
 		)
 	</if>
-	)
 	</select>
 	
 	<select id="getProcessTaskActiveStepListByStepIdList" resultType="java.util.HashMap">
@@ -1157,16 +1154,14 @@
 		`processtask_id`,
 		`processtask_step_id`,
 		`type`,
-		`uuid`,
-		`action`
+		`uuid`
 		)
 		VALUES
 		(
 		#{processTaskId},
 		#{processTaskStepId},
 		#{type},
-		#{uuid},
-		#{action}
+		#{uuid}
 		)
 	</insert>
 
@@ -1537,13 +1532,6 @@
 	  `status` = #{status}
 	WHERE `id` = #{id} 
 	</update>
-	
-	<!-- <delete id="deleteProcessTaskStepWorkerByProcessTaskId" parameterType="java.lang.Long">
-		DELETE
-		FROM
-		`processtask_step_worker`
-		WHERE `processtask_id` = #{value}
-	</delete> -->
 
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
@@ -1575,9 +1563,6 @@
 			</if>
 			<if test="uuid != null and uuid != ''">
 			AND `uuid` = #{uuid}
-			</if>
-			<if test="action != null and action != ''">
-			AND `action` = #{action}
 			</if>
 		</where>
 	</delete>

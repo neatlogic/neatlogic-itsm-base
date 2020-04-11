@@ -1131,17 +1131,15 @@ public abstract class ProcessStepHandlerUtilBase {
 				if (stepVo.getIsActive().equals(1)) {
 					List<ProcessTaskStepWorkerVo> processTaskStepWorkerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(stepVo.getId());
 					for(ProcessTaskStepWorkerVo processTaskStepWorkerVo : processTaskStepWorkerList) {
-						if(ProcessTaskStepWorkerAction.HANDLE.getValue().equals(processTaskStepWorkerVo.getAction())) {
-							if(GroupSearch.USER.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getUserId(true).equals(processTaskStepWorkerVo.getUuid())) {
-								resultList.add(stepVo);
-								break;
-							}else if(GroupSearch.TEAM.getValue().equals(processTaskStepWorkerVo.getType()) && currentUserTeamList.contains(processTaskStepWorkerVo.getUuid())){
-								resultList.add(stepVo);
-								break;
-							}else if(GroupSearch.ROLE.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getRoleNameList().contains(processTaskStepWorkerVo.getUuid())){
-								resultList.add(stepVo);
-								break;
-							}
+						if(GroupSearch.USER.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getUserId(true).equals(processTaskStepWorkerVo.getUuid())) {
+							resultList.add(stepVo);
+							break;
+						}else if(GroupSearch.TEAM.getValue().equals(processTaskStepWorkerVo.getType()) && currentUserTeamList.contains(processTaskStepWorkerVo.getUuid())){
+							resultList.add(stepVo);
+							break;
+						}else if(GroupSearch.ROLE.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getRoleNameList().contains(processTaskStepWorkerVo.getUuid())){
+							resultList.add(stepVo);
+							break;
 						}
 					}				
 				}

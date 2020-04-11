@@ -12,7 +12,7 @@
 		</if>
 		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.user_id = #{userId}
 		WHERE 1=1
-		<if test="authorizedUuidList != null and authorizedUuidList.size > 0">
+		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
 			AND c.`uuid` IN 
 			<foreach collection="authorizedUuidList" item="authorizedUuid" open="(" separator=","  close=")">
 				#{authorizedUuid}
@@ -61,7 +61,7 @@
 		</if>
 		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.user_id = #{userId}
 		WHERE 1=1
-		<if test="authorizedUuidList != null and authorizedUuidList.size > 0">
+		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
 			AND c.`uuid` IN 
 			<foreach collection="authorizedUuidList" item="authorizedUuid" open="(" separator=","  close=")">
 				#{authorizedUuid}
@@ -239,13 +239,13 @@
 		<if test="userId != null and userId != ''">
 		`user_id` = #{userId}
 		</if>
-		<if test="teamUuidList != null and teamUuidList.size > 0">
+		<if test="teamUuidList != null and teamUuidList.size() > 0">
 		OR `team_uuid` IN 
 			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
 			#{teamUuid}
 			</foreach>
 		</if>
-		<if test="roleNameList != null and roleNameList.size > 0">
+		<if test="roleNameList != null and roleNameList.size() > 0">
 		OR `role_name` IN 
 			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
 				#{roleName}
