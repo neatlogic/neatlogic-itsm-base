@@ -157,7 +157,7 @@ public class WorkcenterFieldBuilder {
 			 userTypeArray.add(getUserType(ProcessUserType.MAJOR.getValue(),ProcessUserType.MAJOR.getText(),majorUserTypeArray));
 			 userTypeArray.add(getUserType(ProcessUserType.MINOR.getValue(),ProcessUserType.MINOR.getText(),minorUserTypeArray));
 			 userTypeArray.add(getUserType(ProcessUserType.AGENT.getValue(),ProcessUserType.AGENT.getText(),agentUserTypeArray));
-			 userTypeArray.add(getUserType("pending","pending",pendingUserTypeArray));
+			 userTypeArray.add(getUserType(ProcessTaskStatus.PENDING.getValue(),ProcessTaskStatus.PENDING.getText(),pendingUserTypeArray));
 			 stepJson.put("id", step.getId());
 			 stepJson.put("name", step.getName());
 			 stepJson.put("status", step.getStatus());
