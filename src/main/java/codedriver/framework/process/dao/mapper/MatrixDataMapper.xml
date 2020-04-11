@@ -51,10 +51,20 @@
 			${targetColumn}
 		FROM matrix_${matrixUuid}
 		<where>
-			<if test="sourceColumn != null and sourceColumn !=''">
-				${sourceColumn} = #{sourceColumnValue}
+			<if test="sourceColumnList != null and sourceColumnList.size > 0">
+				<foreach collection="sourceColumnList" item="sourceColumn">
+					AND ${sourceColumn.column} = #{sourceColumn.value}
+				</foreach>
 			</if>
 		</where>
+	</select>
+
+	<select id="getDynamicTableDataByColumnList" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.Map">
+		SELECT
+		<foreach collection="columnList" item="column" separator=",">
+			${column}
+		</foreach>
+		FROM matrix_${matrixUuid}
 	</select>
 
 	<insert id="insertDynamicTableData">
