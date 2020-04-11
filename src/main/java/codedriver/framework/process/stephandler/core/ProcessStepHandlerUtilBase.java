@@ -268,7 +268,9 @@ public abstract class ProcessStepHandlerUtilBase {
 												notifyBuilder.addUserId(processTaskVo.getOwner());
 											} else if (worker.equalsIgnoreCase("worker")) {
 												for (ProcessTaskStepWorkerVo workerVo : workerList) {
-													notifyBuilder.addUserId(workerVo.getUserId());
+													if(GroupSearch.USER.getValue().equals(workerVo)) {
+														notifyBuilder.addUserId(workerVo.getUuid());
+													}
 												}
 											}
 										} else if (worker.startsWith("user.")) {
@@ -1129,20 +1131,17 @@ public abstract class ProcessStepHandlerUtilBase {
 				if (stepVo.getIsActive().equals(1)) {
 					List<ProcessTaskStepWorkerVo> processTaskStepWorkerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(stepVo.getId());
 					for(ProcessTaskStepWorkerVo processTaskStepWorkerVo : processTaskStepWorkerList) {
-						if(ProcessTaskStepWorkerAction.UPDATE.getValue().equals(processTaskStepWorkerVo.getAction())) {
-							continue;
-						}
-						if(UserContext.get().getUserId(true).equals(processTaskStepWorkerVo.getUserId())) {
-							resultList.add(stepVo);
-							break;
-						}
-						if(currentUserTeamList.contains(processTaskStepWorkerVo.getTeamUuid())) {
-							resultList.add(stepVo);
-							break;
-						}
-						if(UserContext.get().getRoleNameList().contains(processTaskStepWorkerVo.getRoleName())) {
-							resultList.add(stepVo);
-							break;
+						if(ProcessTaskStepWorkerAction.HANDLE.getValue().equals(processTaskStepWorkerVo.getAction())) {
+							if(GroupSearch.USER.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getUserId(true).equals(processTaskStepWorkerVo.getUuid())) {
+								resultList.add(stepVo);
+								break;
+							}else if(GroupSearch.TEAM.getValue().equals(processTaskStepWorkerVo.getType()) && currentUserTeamList.contains(processTaskStepWorkerVo.getUuid())){
+								resultList.add(stepVo);
+								break;
+							}else if(GroupSearch.ROLE.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getRoleNameList().contains(processTaskStepWorkerVo.getUuid())){
+								resultList.add(stepVo);
+								break;
+							}
 						}
 					}				
 				}

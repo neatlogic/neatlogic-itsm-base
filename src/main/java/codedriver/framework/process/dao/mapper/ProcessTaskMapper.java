@@ -228,7 +228,7 @@ public interface ProcessTaskMapper {
 
 	public int deleteProcessTaskFormAttributeValueByProcessTaskIdAndAttributeUuid(@Param("processTaskId") Long processTaskId, @Param("attributeUuid") String attributeUuid);
 
-	public int deleteProcessTaskStepWorker(@Param("processTaskStepId") Long processTaskStepId, @Param("userId") String userId);
+	public int deleteProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
 	public int deleteProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
@@ -236,7 +236,7 @@ public interface ProcessTaskMapper {
 
 	public int deleteProcessTaskSlaNotifyById(Long slaNotifyId);
 
-	public int deleteProcessTaskStepWorkerByProcessTaskId(Long processTaskId);
+	//public int deleteProcessTaskStepWorkerByProcessTaskId(Long processTaskId);
 
 	public int deleteProcessTaskSlaTransferById(Long slaTransferId);
 	
