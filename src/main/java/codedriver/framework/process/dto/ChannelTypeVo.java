@@ -24,6 +24,8 @@ public class ChannelTypeVo extends BasePageVo{
 	private String description;
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
+	@EntityField(name = "工单号前缀", type = ApiParamType.STRING)
+	private String prefix;
 	
 	private transient String keyword;
 	

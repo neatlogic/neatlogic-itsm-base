@@ -190,7 +190,8 @@
 	  `icon`,
 	  `color`,
 	  `description`,
-	  `sort` 
+	  `sort`,
+	  `prefix`
 	FROM `channel_type`
 	<where>
 		<if test="keyword != null and keyword != ''">
@@ -214,7 +215,8 @@
 	  `icon`,
 	  `color`,
 	  `description`,
-	  `sort` 
+	  `sort`,
+	  `prefix`
 	FROM `channel_type`
 	WHERE `uuid` = #{uuid}
 	</select>
@@ -228,7 +230,7 @@
 	</select>
 
 	<select id="getChannelTypeMaxSort" resultType="int" useCache="false">
-	SELECT MAX(`sort`) FROM `channel_type`
+	SELECT MAX(`sort`) FROM `channel_type` FOR UPDATE
 	</select>
 	
 	<select id="getAuthorizedChannelUuidList" resultType="java.lang.String">
@@ -328,7 +330,8 @@
 	  `icon`,
 	  `color`,
 	  `description`,
-	  `sort`
+	  `sort`,
+	  `prefix`
 	) 
 	VALUES
 	  (
@@ -338,7 +341,8 @@
 	    #{icon},
 	    #{color},
 	    #{description},
-	    #{sort}
+	    #{sort},
+	    #{prefix}
 	  )
 	</insert>
 
@@ -372,7 +376,8 @@
 	  `icon` = #{icon},
 	  `color` = #{color},
 	  `description` = #{description},
-	  `sort` = #{sort} 
+	  `sort` = #{sort},
+	  `prefix` = #{prefix} 
 	WHERE `uuid` = #{uuid}
 	</update>
 
