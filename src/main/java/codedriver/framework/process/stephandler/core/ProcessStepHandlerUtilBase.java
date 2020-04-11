@@ -1031,7 +1031,12 @@ public abstract class ProcessStepHandlerUtilBase {
 						for(int j = 0; j < acceptList.size(); j++) {
 							String accept = acceptList.getString(j);
 							String[] split = accept.split("#");
-							if(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
+							if(GroupSearch.COMMON.getValue().equals(split[0])) {
+								if(currentUserProcessUserTypeList.contains(split[1])) {
+									configActionList.add(authorityObj.getString("action"));
+									break;
+								}
+							}else if(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
 								if(currentUserProcessUserTypeList.contains(split[1])) {
 									configActionList.add(authorityObj.getString("action"));
 									break;
@@ -1053,14 +1058,9 @@ public abstract class ProcessStepHandlerUtilBase {
 								}
 							}
 						}
-
-					}else {
-						configActionList.add(authorityObj.getString("action"));
 					}
 				}
 				configActionList.retainAll(actionList);
-			}else {//不设置，默认都有
-				configActionList.addAll(actionList);
 			}
 			return configActionList;
 		}
