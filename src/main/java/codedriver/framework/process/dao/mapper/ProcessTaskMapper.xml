@@ -514,7 +514,7 @@
 		psu.`user_id`,
 		psu.`user_type` AS userType
 		FROM `processtask_step` ps 
-		LEFT JOIN `processtask_step_worker` psw ON ps.`processtask_id` = psw.`processtask_id` AND ps.`id` = psw.`processtask_step_id` AND psw.`action` = 'handle'
+		LEFT JOIN `processtask_step_worker` psw ON ps.`processtask_id` = psw.`processtask_id` AND ps.`id` = psw.`processtask_step_id`
 		LEFT JOIN `processtask_step_user` psu ON ps.`processtask_id` = psu.`processtask_id` AND ps.`id` = psu.`processtask_step_id`
 		WHERE ps.`processtask_id` = #{processTaskId} 
 		<if test="processStepTypeList != null and processStepTypeList.size()>0">
