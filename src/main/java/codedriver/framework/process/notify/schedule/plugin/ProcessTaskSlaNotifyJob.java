@@ -189,7 +189,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 										notifyBuilder.addUserId(processTaskVo.getOwner());
 									} else if (receiver.equalsIgnoreCase("worker")) {
 										for (ProcessTaskStepWorkerVo workerVo : workerList) {
-											if(GroupSearch.USER.getValue().equals(workerVo)) {
+											if(GroupSearch.USER.getValue().equals(workerVo.getType())) {
 												notifyBuilder.addUserId(workerVo.getUuid());
 											}
 										}

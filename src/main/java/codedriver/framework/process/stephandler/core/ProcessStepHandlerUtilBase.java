@@ -268,7 +268,7 @@ public abstract class ProcessStepHandlerUtilBase {
 												notifyBuilder.addUserId(processTaskVo.getOwner());
 											} else if (worker.equalsIgnoreCase("worker")) {
 												for (ProcessTaskStepWorkerVo workerVo : workerList) {
-													if(GroupSearch.USER.getValue().equals(workerVo)) {
+													if(GroupSearch.USER.getValue().equals(workerVo.getType())) {
 														notifyBuilder.addUserId(workerVo.getUuid());
 													}
 												}

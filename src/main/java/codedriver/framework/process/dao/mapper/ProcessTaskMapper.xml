@@ -1565,7 +1565,7 @@
 		DELETE FROM `processtask_step_worker`
 		<where>
 			<if test="processTaskId != null and processTaskId != ''">
-			AND `processtask_id` = #{processTaskId}
+			`processtask_id` = #{processTaskId}
 			</if>
 			<if test="processTaskStepId != null and processTaskStepId != ''">
 			AND `processtask_step_id` = #{processTaskStepId}

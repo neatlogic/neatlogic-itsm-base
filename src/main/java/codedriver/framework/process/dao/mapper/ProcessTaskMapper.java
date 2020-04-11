@@ -236,8 +236,6 @@ public interface ProcessTaskMapper {
 
 	public int deleteProcessTaskSlaNotifyById(Long slaNotifyId);
 
-	//public int deleteProcessTaskStepWorkerByProcessTaskId(Long processTaskId);
-
 	public int deleteProcessTaskSlaTransferById(Long slaTransferId);
 	
 	public int deleteProcessTaskFile(ProcessTaskFileVo processTaskFileVo);
