@@ -59,6 +59,14 @@
 		</where>
 	</select>
 
+	<select id="getDynamicTableDataByColumnList" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.Map">
+		SELECT
+		<foreach collection="columnList" item="column" separator=",">
+			${column}
+		</foreach>
+		FROM matrix_${matrixUuid}
+	</select>
+
 	<insert id="insertDynamicTableData">
 		INSERT INTO matrix_${matrixUuid}
 		<foreach collection="columnList" open="(" close=")" item="column" separator=",">
