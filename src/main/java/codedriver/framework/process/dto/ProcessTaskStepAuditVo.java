@@ -74,9 +74,6 @@ public class ProcessTaskStepAuditVo {
 	}
 
 	public String getUserId() {
-//		if (StringUtils.isBlank(userId)) {
-//			userId = UserContext.get().getUserId();
-//		}
 		return userId;
 	}
 

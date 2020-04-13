@@ -1,10 +1,8 @@
 package codedriver.framework.process.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 
 import codedriver.framework.file.dto.FileVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskStepAuditDetailHandler;
@@ -21,19 +19,19 @@ public class ProcessTaskStepCommentVo {
 	public ProcessTaskStepCommentVo(ProcessTaskStepAuditVo processTaskStepAuditVo) {
 		auditId = processTaskStepAuditVo.getId();
 		List<ProcessTaskStepAuditDetailVo> processTaskStepAuditDetailList = processTaskStepAuditVo.getAuditDetailList();
-		for(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo : processTaskStepAuditDetailList) {
-			IProcessTaskStepAuditDetailHandler auditDetailHandler = ProcessTaskStepAuditDetailHandlerFactory.getHandler(processTaskStepAuditDetailVo.getType());
-			if(auditDetailHandler != null) {
-				auditDetailHandler.handle(processTaskStepAuditDetailVo);
-			}
+		for(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo : processTaskStepAuditDetailList) {		
 			if(ProcessTaskAuditDetailType.CONTENT.getValue().equals(processTaskStepAuditDetailVo.getType())) {
+				IProcessTaskStepAuditDetailHandler auditDetailHandler = ProcessTaskStepAuditDetailHandlerFactory.getHandler(processTaskStepAuditDetailVo.getType());
+				if(auditDetailHandler != null) {
+					auditDetailHandler.handle(processTaskStepAuditDetailVo);
+				}
 				content = processTaskStepAuditDetailVo.getNewContent();
 			}else if(ProcessTaskAuditDetailType.FILE.getValue().equals(processTaskStepAuditDetailVo.getType())){
-				FileVo fileVo = JSON.parseObject(processTaskStepAuditDetailVo.getNewContent(), new TypeReference<FileVo>() {});
-				if(fileList == null) {
-					fileList = new ArrayList<>();
+				IProcessTaskStepAuditDetailHandler auditDetailHandler = ProcessTaskStepAuditDetailHandlerFactory.getHandler(processTaskStepAuditDetailVo.getType());
+				if(auditDetailHandler != null) {
+					auditDetailHandler.handle(processTaskStepAuditDetailVo);
+					fileList = JSON.parseArray(processTaskStepAuditDetailVo.getNewContent(), FileVo.class);
 				}
-				fileList.add(fileVo);
 			}
 		}
 	}
