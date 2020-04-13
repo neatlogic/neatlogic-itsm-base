@@ -10,25 +10,25 @@ import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.common.RootComponent;
 
 @RootComponent
-public class WorkcenterConditionFactory extends ApplicationListenerBase{
+public class ProcessTaskConditionFactory extends ApplicationListenerBase{
 
-	private static Map<String, IWorkcenterCondition> conditionComponentMap = new HashMap<>();
+	private static Map<String, IProcessTaskCondition> conditionComponentMap = new HashMap<>();
 	
-	public static IWorkcenterCondition getHandler(String name) {
+	public static IProcessTaskCondition getHandler(String name) {
 		return conditionComponentMap.get(name);
 	}
 	
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		ApplicationContext context = event.getApplicationContext();
-		Map<String, IWorkcenterCondition> myMap = context.getBeansOfType(IWorkcenterCondition.class);
-		for (Map.Entry<String, IWorkcenterCondition> entry : myMap.entrySet()) {
-			IWorkcenterCondition column= entry.getValue();
+		Map<String, IProcessTaskCondition> myMap = context.getBeansOfType(IProcessTaskCondition.class);
+		for (Map.Entry<String, IProcessTaskCondition> entry : myMap.entrySet()) {
+			IProcessTaskCondition column= entry.getValue();
 			conditionComponentMap.put(column.getName(), column);
 		}
 	}
 	
-	public static Map<String, IWorkcenterCondition> getConditionComponentMap() {
+	public static Map<String, IProcessTaskCondition> getConditionComponentMap() {
 		return conditionComponentMap;
 	}
 
