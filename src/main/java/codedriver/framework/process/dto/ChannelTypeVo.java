@@ -80,5 +80,11 @@ public class ChannelTypeVo extends BasePageVo{
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
+	public String getPrefix() {
+		return prefix;
+	}
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 	
 }
