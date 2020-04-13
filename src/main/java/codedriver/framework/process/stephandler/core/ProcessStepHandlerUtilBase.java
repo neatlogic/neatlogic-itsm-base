@@ -870,7 +870,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
 							currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
 						}
-						if(currentUserProcessUserTypeList.contains(ProcessUserType.WORKER)) {
+						if(currentUserProcessUserTypeList.contains(ProcessUserType.WORKER.getValue())) {
 							if(ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus())) {
 								//完成complete 暂存save 评论comment 创建子任务createsubtask
 								if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
