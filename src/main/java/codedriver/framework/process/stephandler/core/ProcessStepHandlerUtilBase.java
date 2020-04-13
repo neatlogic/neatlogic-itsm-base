@@ -863,17 +863,29 @@ public abstract class ProcessStepHandlerUtilBase {
 				actionList.add(ProcessTaskStepAction.SAVE.getValue());
 				actionList.add(ProcessTaskStepAction.COMMENT.getValue());
 				actionList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
+				actionList.add(ProcessTaskStepAction.ACCEPT.getValue());
+				actionList.add(ProcessTaskStepAction.START.getValue());
 				if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
-					if(processTaskStepVo.getIsActive() == 1 && ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus())) {
+					if(processTaskStepVo.getIsActive() == 1) {
 						if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
 							currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
 						}
-						//完成complete 暂存save 评论comment 创建子任务createsubtask
-						if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
-							resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
-							resultList.add(ProcessTaskStepAction.SAVE.getValue());
-							resultList.add(ProcessTaskStepAction.COMMENT.getValue());
-							resultList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
+						if(currentUserProcessUserTypeList.contains(ProcessUserType.WORKER)) {
+							if(ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus())) {
+								//完成complete 暂存save 评论comment 创建子任务createsubtask
+								if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
+									resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
+									resultList.add(ProcessTaskStepAction.SAVE.getValue());
+									resultList.add(ProcessTaskStepAction.COMMENT.getValue());
+									resultList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
+								}
+							}else if(ProcessTaskStatus.PENDING.getValue().equals(processTaskStepVo.getStatus())) {//已激活未处理
+								if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue())) {
+									resultList.add(ProcessTaskStepAction.START.getValue());
+								}else {//没有主处理人时是accept
+									resultList.add(ProcessTaskStepAction.ACCEPT.getValue());
+								}
+							}
 						}
 					}
 				}
@@ -925,32 +937,11 @@ public abstract class ProcessStepHandlerUtilBase {
 				}
 			}
 			
-			actionList = new ArrayList<>();
-			actionList.add(ProcessTaskStepAction.ACCEPT.getValue());
-			actionList.add(ProcessTaskStepAction.START.getValue());
-			if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
-				//获取当前用户可处理步骤列表
+			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.WORK.getValue())) {
+				//有可处理步骤work
 				List<ProcessTaskStepVo> processableStepList = getProcessableStepList(processTaskId);
 				if(CollectionUtils.isNotEmpty(processableStepList)) {
-					for(ProcessTaskStepVo processTaskStepVo : processableStepList) {
-						if(ProcessTaskStatus.PENDING.getValue().equals(processTaskStepVo.getStatus())) {//已激活未处理
-							List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
-							String action = "";
-							if(majorUserList.isEmpty()) {//没有主处理人时是accept
-								action = ProcessTaskStepAction.ACCEPT.getValue();
-							}else {
-								action = ProcessTaskStepAction.START.getValue();
-							}
-							if(processTaskStepId != null) {
-								if(processTaskStepId.equals(processTaskStepVo.getId())) {
-									resultList.add(action);
-									break;
-								}
-							}else {
-								resultList.add(action);
-							}
-						}
-					}
+					resultList.add(ProcessTaskStepAction.WORK.getValue());
 				}
 			}
 
@@ -996,6 +987,23 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(agentUserIdList.contains(UserContext.get().getUserId(true))) {
 				currentUserProcessUserTypeList.add(ProcessUserType.AGENT.getValue());
 			}
+			List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepId);
+			if(CollectionUtils.isNotEmpty(workerList)) {
+				List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserId(UserContext.get().getUserId(true));
+				for(ProcessTaskStepWorkerVo worker : workerList) {
+					if(GroupSearch.USER.getValue().equals(worker.getType()) && UserContext.get().getUserId(true).equals(worker.getUuid())) {
+						currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
+						break;
+					}else if(GroupSearch.TEAM.getValue().equals(worker.getType()) && currentUserTeamList.contains(worker.getUuid())){
+						currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
+						break;
+					}else if(GroupSearch.ROLE.getValue().equals(worker.getType()) && UserContext.get().getRoleNameList().contains(worker.getUuid())){
+						currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
+						break;
+					}
+				}
+			}
+			
 			return currentUserProcessUserTypeList;
 		}
 		/**
@@ -1031,7 +1039,12 @@ public abstract class ProcessStepHandlerUtilBase {
 						for(int j = 0; j < acceptList.size(); j++) {
 							String accept = acceptList.getString(j);
 							String[] split = accept.split("#");
-							if(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
+							if(GroupSearch.COMMON.getValue().equals(split[0])) {
+								if(currentUserProcessUserTypeList.contains(split[1])) {
+									configActionList.add(authorityObj.getString("action"));
+									break;
+								}
+							}else if(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
 								if(currentUserProcessUserTypeList.contains(split[1])) {
 									configActionList.add(authorityObj.getString("action"));
 									break;
@@ -1053,14 +1066,9 @@ public abstract class ProcessStepHandlerUtilBase {
 								}
 							}
 						}
-
-					}else {
-						configActionList.add(authorityObj.getString("action"));
 					}
 				}
 				configActionList.retainAll(actionList);
-			}else {//不设置，默认都有
-				configActionList.addAll(actionList);
 			}
 			return configActionList;
 		}
