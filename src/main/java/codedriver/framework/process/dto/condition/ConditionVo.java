@@ -10,8 +10,8 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.UserType;
-import codedriver.framework.process.condition.core.IWorkcenterCondition;
-import codedriver.framework.process.condition.core.WorkcenterConditionFactory;
+import codedriver.framework.process.condition.core.IProcessTaskCondition;
+import codedriver.framework.process.condition.core.ProcessTaskConditionFactory;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 
@@ -132,11 +132,11 @@ public class ConditionVo implements Serializable{
 	}
 
 	public boolean predicate(ProcessTaskStepVo currentProcessTaskStepVo) {
-		IWorkcenterCondition workcenterCondition = null;
+		IProcessTaskCondition workcenterCondition = null;
 		if(ProcessFieldType.COMMON.getValue().equals(this.type)) {
-			workcenterCondition = WorkcenterConditionFactory.getHandler(this.name);
+			workcenterCondition = ProcessTaskConditionFactory.getHandler(this.name);
 		}else if(ProcessFieldType.FORM.getValue().equals(this.type)) {
-			workcenterCondition = WorkcenterConditionFactory.getHandler(this.type);
+			workcenterCondition = ProcessTaskConditionFactory.getHandler(this.type);
 		}
 		if(workcenterCondition != null) {
 			return workcenterCondition.predicate(currentProcessTaskStepVo, this);

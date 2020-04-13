@@ -8,7 +8,7 @@ import codedriver.framework.process.constvalue.ProcessExpression;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.condition.ConditionVo;
 
-public interface IWorkcenterCondition { 
+public interface IProcessTaskCondition { 
 	/**
 	 * @Description: 条件英文名
 	 * @Param:
@@ -81,5 +81,13 @@ public interface IWorkcenterCondition {
 	 * @Date: 2020/2/11
 	 */
 	public boolean predicate(ProcessTaskStepVo currentProcessTaskStepVo, ConditionVo conditionVo);
+	
+	/**
+	 * @Description: 拼接ES where条件
+	 * @Param: 
+	 * @return: boolean
+	 * @Date: 2020/4/13
+	 */
+	public String  getEsWhere(ConditionVo condition,List<ConditionVo> conditionList);
 
 }
