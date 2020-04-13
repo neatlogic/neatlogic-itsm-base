@@ -19,6 +19,7 @@ import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
+import codedriver.framework.util.HtmlUtil;
 
 public class WorkcenterFieldBuilder {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -64,7 +65,9 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setContent(ProcessTaskContentVo startContentVo) {
-		dataJson.put(ProcessWorkcenterField.CONTENT.getValue(), startContentVo== null?StringUtils.EMPTY:startContentVo.getContent());
+		String contentIncludeHtml = startContentVo== null?StringUtils.EMPTY:startContentVo.getContent();
+		dataJson.put(ProcessWorkcenterField.CONTENT.getValue(), HtmlUtil.removeHtml(contentIncludeHtml, null));
+		dataJson.put(ProcessWorkcenterField.CONTENT.getConditionValue(), contentIncludeHtml);
 		return this;
 	}
 	public WorkcenterFieldBuilder setStartTime(Date startTime) {

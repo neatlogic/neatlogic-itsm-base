@@ -6,7 +6,7 @@ public enum ProcessWorkcenterField {
 	CHANNELTYPE("channeltype", "服务类型"),
 	CHANNEL("channel", "服务"),
 	CATALOG("catalog", "服务目录"),
-	CONTENT("content", "上报内容"),
+	CONTENT("content", "上报内容","contentincludehtml"),
 	ENDTIME("endtime", "结束时间"),
 	STARTTIME("starttime", "开始时间"),
 	EXPIRED_TIME("expiredtime", "剩余时间"),
