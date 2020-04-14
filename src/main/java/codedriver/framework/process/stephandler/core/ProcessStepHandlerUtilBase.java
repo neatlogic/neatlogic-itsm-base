@@ -46,8 +46,6 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
-import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
-import codedriver.framework.process.constvalue.ProcessTaskStepWorkerAction;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.FormMapper;
@@ -954,14 +952,10 @@ public abstract class ProcessStepHandlerUtilBase {
 			
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.WORK.getValue())) {
 				List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserId(UserContext.get().getUserId(true));
+				//有可处理步骤work
 				if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
 					resultList.add(ProcessTaskStepAction.WORK.getValue());
 				}
-				//有可处理步骤work
-//				List<ProcessTaskStepVo> processableStepList = getProcessableStepList(processTaskId);
-//				if(CollectionUtils.isNotEmpty(processableStepList)) {
-//					resultList.add(ProcessTaskStepAction.WORK.getValue());
-//				}
 			}
 
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.RETREAT.getValue())) {
