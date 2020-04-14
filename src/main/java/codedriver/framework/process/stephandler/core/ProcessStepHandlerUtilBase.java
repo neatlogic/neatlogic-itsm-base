@@ -814,7 +814,7 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
 			Set<String> resultList = new HashSet<>();
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
-			//工单信息查看权限，有本工单对应服务的上报权限或者上报人、代报人，才有该工单信息查看权限;
+			//工单信息查看权限，有本工单对应服务的上报权限或者工单干系人，才有该工单信息查看权限;
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.POCESSTASKVIEW.getValue())) {
 				if(UserContext.get().getUserId(true).equals(processTaskVo.getOwner())) {
 					resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
@@ -825,7 +825,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					List<String> channelList = channelMapper.getAuthorizedChannelUuidList(UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList(), processTaskVo.getChannelUuid());
 					if(channelList.contains(processTaskVo.getChannelUuid())) {
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
-					}else if(processTaskMapper.checkIsWorker(processTaskId, processTaskStepId, UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
+					}else if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
 					}
 				}
@@ -953,11 +953,15 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 			
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.WORK.getValue())) {
-				//有可处理步骤work
-				List<ProcessTaskStepVo> processableStepList = getProcessableStepList(processTaskId);
-				if(CollectionUtils.isNotEmpty(processableStepList)) {
+				List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserId(UserContext.get().getUserId(true));
+				if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
 					resultList.add(ProcessTaskStepAction.WORK.getValue());
 				}
+				//有可处理步骤work
+//				List<ProcessTaskStepVo> processableStepList = getProcessableStepList(processTaskId);
+//				if(CollectionUtils.isNotEmpty(processableStepList)) {
+//					resultList.add(ProcessTaskStepAction.WORK.getValue());
+//				}
 			}
 
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.RETREAT.getValue())) {
