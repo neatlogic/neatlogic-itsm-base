@@ -51,11 +51,13 @@
 		INSERT INTO `process_matrix_form_component` (
 		`form_version_uuid`,
 		`matrix_uuid`,
-		`component_name`
+		`form_attribute_uuid`,
+		`form_attribute_label`
 		) VALUES (
 		#{formVersionUuid},
 		#{matrixUuid},
-		#{componentName}
+		#{formAttributeUuid},
+		#{formAttributeLabel}
 		)
 	</insert>
 
@@ -123,7 +125,8 @@
 		c.`name` as `processName`,
 		b.`process_uuid` as `processUuid`,
 		b.`dispatcher_name` as `dispatcherName`,
-		d.`component_name` as `componentName`,
+		d.`form_attribute_label` as `formAttributeLabel`,
+		d.`form_attribute_uuid` as `formAttributeUuid`,
 		d.`form_version_uuid` as `formVersionUuid`,
 		e.`version`,
 		f.`name` as `formName`,

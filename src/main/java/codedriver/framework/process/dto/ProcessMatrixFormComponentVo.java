@@ -8,7 +8,8 @@ package codedriver.framework.process.dto;
 public class ProcessMatrixFormComponentVo {
     private String matrixUuid;
     private String formVersionUuid;
-    private String componentName;
+    private String formAttributeUuid;
+    private String formAttributeLabel;
     private String formName;
     private String formUuid;
     private String version;
@@ -29,15 +30,23 @@ public class ProcessMatrixFormComponentVo {
         this.formVersionUuid = formVersionUuid;
     }
 
-    public String getComponentName() {
-        return componentName;
-    }
+    public String getFormAttributeUuid() {
+		return formAttributeUuid;
+	}
 
-    public void setComponentName(String componentName) {
-        this.componentName = componentName;
-    }
+	public void setFormAttributeUuid(String formAttributeUuid) {
+		this.formAttributeUuid = formAttributeUuid;
+	}
 
-    public String getFormName() {
+	public String getFormAttributeLabel() {
+		return formAttributeLabel;
+	}
+
+	public void setFormAttributeLabel(String formAttributeLabel) {
+		this.formAttributeLabel = formAttributeLabel;
+	}
+
+	public String getFormName() {
         return formName;
     }
 
