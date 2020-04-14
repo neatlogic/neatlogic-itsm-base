@@ -228,14 +228,9 @@ public class CatalogVo extends BasePageVo implements ITree{
 		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
 			authorityList = new ArrayList<>();
 			for(AuthorityVo authorityVo : authorityVoList) {
-				if(authorityVo.getUserId() != null) {
-					authorityList.add(GroupSearch.USER.getValuePlugin() + authorityVo.getUserId());
-				}
-				if(authorityVo.getTeamUuid() != null) {
-					authorityList.add(GroupSearch.TEAM.getValuePlugin() + authorityVo.getTeamUuid());
-				}
-				if(authorityVo.getRoleName() != null) {
-					authorityList.add(GroupSearch.ROLE.getValuePlugin() + authorityVo.getRoleName());
+				GroupSearch groupSearch = GroupSearch.getGroupSearch(authorityVo.getType());
+				if(groupSearch != null) {
+					authorityList.add(groupSearch.getValuePlugin() + authorityVo.getUuid());
 				}
 			}
 		}
@@ -250,19 +245,14 @@ public class CatalogVo extends BasePageVo implements ITree{
 		if(authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
 			authorityVoList = new ArrayList<>();
 			for(String authority : authorityList) {
-				AuthorityVo authorityVo = new AuthorityVo();
-				authorityVo.setCatalogUuid(uuid);
 				String[] split = authority.split("#");
-				if(GroupSearch.USER.getValue().equals(split[0])) {
-					authorityVo.setUserId(split[1]);
-				}else if(GroupSearch.TEAM.getValue().equals(split[0])) {
-					authorityVo.setTeamUuid(split[1]);
-				}else if(GroupSearch.ROLE.getValue().equals(split[0])) {
-					authorityVo.setRoleName(split[1]);
-				}else {
-					continue;
+				if(GroupSearch.getGroupSearch(split[0]) != null) {
+					AuthorityVo authorityVo = new AuthorityVo();
+					authorityVo.setCatalogUuid(uuid);
+					authorityVo.setType(split[0]);
+					authorityVo.setUuid(split[1]);
+					authorityVoList.add(authorityVo);
 				}
-				authorityVoList.add(authorityVo);
 			}
 		}
 		return authorityVoList;
