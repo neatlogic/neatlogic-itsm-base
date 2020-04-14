@@ -56,6 +56,6 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml-schemas</artifactId>
             <version>3.6</version>
-        </dependency>
+        </dependency> 
 	</dependencies>
 </project>
