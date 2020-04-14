@@ -50,12 +50,6 @@ public interface ChannelMapper {
 			@Param("channelUuid") String channelUuid
 			);
 	
-//	List<String> getAuthorizedChannelUuidList(
-//			@Param("userId")String userId, 
-//			@Param("teamUuidList")List<String> teamUuidList, 
-//			@Param("roleNameList")List<String> roleNameList
-//			);
-	
 	int replaceChannelUser(@Param("userId")String userId, @Param("channelUuid")String channelUuid);	
 
 	int replaceChannel(ChannelVo channelVo);

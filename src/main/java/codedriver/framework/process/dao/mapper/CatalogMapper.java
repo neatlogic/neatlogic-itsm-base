@@ -32,12 +32,6 @@ public interface CatalogMapper {
 			@Param("catalogUuid") String catalogUuid
 			);
 	
-//	List<String> getAuthorizedCatalogUuidList(
-//			@Param("userId")String userId, 
-//			@Param("teamUuidList")List<String> teamUuidList, 
-//			@Param("roleNameList")List<String> roleNameList
-//			);
-	
 	int replaceCatalog(CatalogVo catalogVo);
 
 	int insertCatalogAuthority(AuthorityVo authorityVo);
