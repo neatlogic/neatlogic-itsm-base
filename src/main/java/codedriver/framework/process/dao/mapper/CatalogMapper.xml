@@ -101,7 +101,7 @@
 		<if test="catalogUuid != null and catalogUuid != ''">
 		`catalog_uuid` = #{catalogUuid} AND (
 		</if>
-		(type = 'common' AND `uuid` = 'allUser')
+		(type = 'common' AND `uuid` = 'alluser')
 		<if test="userId != null and userId != ''">
 		OR (type = 'user' AND `uuid` = #{userId})
 		</if>

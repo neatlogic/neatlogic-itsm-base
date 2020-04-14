@@ -240,7 +240,7 @@
 		<if test="channelUuid != null and channelUuid != ''">
 		`channel_uuid` = #{channelUuid} AND (
 		</if>
-		(type = 'common' AND `uuid` = 'allUser')
+		(type = 'common' AND `uuid` = 'alluser')
 		<if test="userId != null and userId != ''">
 		OR (type = 'user' AND `uuid` = #{userId})
 		</if>
