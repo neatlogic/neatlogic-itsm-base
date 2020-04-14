@@ -814,7 +814,20 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
 			Set<String> resultList = new HashSet<>();
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
-			
+			//工单信息查看权限，有本工单对应服务的上报权限或者上报人、代报人，才有该工单信息查看权限;
+			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.POCESSTASKVIEW.getValue())) {
+				if(UserContext.get().getUserId(true).equals(processTaskVo.getOwner())) {
+					resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+				}else if(UserContext.get().getUserId(true).equals(processTaskVo.getReporter())) {
+					resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+				}else {
+					List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserId(UserContext.get().getUserId(true));
+					List<String> channelList = channelMapper.getAuthorizedChannelUuidList(UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList(), processTaskVo.getChannelUuid());
+					if(channelList.contains(processTaskVo.getChannelUuid())) {
+						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+					}
+				}
+			}
 			//上报提交
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.STARTPROCESS.getValue())) {	
 				if(ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
