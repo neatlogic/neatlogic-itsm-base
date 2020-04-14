@@ -4,9 +4,8 @@ public class AuthorityVo {
 
 	private String catalogUuid;
 	private String channelUuid;
-	private String userId;
-	private String teamUuid;
-	private String roleName;
+	private String type;
+	private String uuid;
 	public String getCatalogUuid() {
 		return catalogUuid;
 	}
@@ -19,23 +18,17 @@ public class AuthorityVo {
 	public void setChannelUuid(String channelUuid) {
 		this.channelUuid = channelUuid;
 	}
-	public String getUserId() {
-		return userId;
+	public String getType() {
+		return type;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setType(String type) {
+		this.type = type;
 	}
-	public String getTeamUuid() {
-		return teamUuid;
+	public String getUuid() {
+		return uuid;
 	}
-	public void setTeamUuid(String teamUuid) {
-		this.teamUuid = teamUuid;
-	}
-	public String getRoleName() {
-		return roleName;
-	}
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 	
 }

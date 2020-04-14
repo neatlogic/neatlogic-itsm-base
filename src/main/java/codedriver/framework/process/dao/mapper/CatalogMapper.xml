@@ -51,20 +51,13 @@
 	SELECT 
 	DISTINCT `parent_uuid` 
 	FROM channel  
-	<where>
-	<if test="channelUuidList != null and channelUuidList.size() > 0">
-	`uuid` IN 
-		<foreach collection="channelUuidList" item="channelUuid" open="(" separator=","  close=")">
+	WHERE `is_active` = 1
+	<if test="list != null and list.size() > 0">
+	AND `uuid` IN 
+		<foreach collection="list" item="channelUuid" open="(" separator=","  close=")">
 			#{channelUuid}
 		</foreach>
 	</if>
-	<if test="catalogUuidList != null and catalogUuidList.size() > 0">
-	AND `parent_uuid` IN 
-		<foreach collection="catalogUuidList" item="catalogUuid" open="(" separator=","  close=")">
-		#{catalogUuid}
-		</foreach>
-	</if>
-	</where>
 	</select>
 	
 	<select id="checkCatalogNameIsRepeat" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int" useCache="false">
@@ -94,9 +87,8 @@
 	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo" useCache="false">
 	SELECT 
 	  `catalog_uuid` AS catalogUuid,
-	  `user_id` AS userId,
-	  `team_uuid` AS teamUuid,
-	  `role_name` AS roleName
+	  `type`,
+	  `uuid`
 	FROM `catalog_authority` 
 	WHERE `catalog_uuid` = #{catalogUuid}
 	</select>
@@ -106,22 +98,31 @@
 	  DISTINCT `catalog_uuid`
 	FROM `catalog_authority` 
 	<where>
+		<if test="catalogUuid != null and catalogUuid != ''">
+		`catalog_uuid` = #{catalogUuid} AND (
+		</if>
+		(type = 'common' AND `uuid` = 'alluser')
 		<if test="userId != null and userId != ''">
-		`user_id` = #{userId}
+		OR (type = 'user' AND `uuid` = #{userId})
 		</if>
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
-		OR `team_uuid` IN 
+		OR (type = 'team' AND `uuid` IN 
 			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
 			#{teamUuid}
 			</foreach>
+			)
 		</if>
 		<if test="roleNameList != null and roleNameList.size() > 0">
-		OR `role_name` IN 
+		OR (type = 'role' AND `uuid` IN 
 			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
 				#{roleName}
 			</foreach>
+			)
 		</if>
-		</where>
+		<if test="catalogUuid != null and catalogUuid != ''">
+		)
+		</if>
+	</where>
 	</select>
 	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
@@ -132,16 +133,14 @@
 	<insert id="insertCatalogAuthority" parameterType="codedriver.framework.process.dto.AuthorityVo">
 	INSERT INTO `catalog_authority` (
 	  `catalog_uuid`,
-	  `user_id`,
-	  `team_uuid`,
-	  `role_name`
+	  `type`,
+	  `uuid`
 	) 
 	VALUES
 	  (
 	    #{catalogUuid},
-	    #{userId},
-	    #{teamUuid},
-	    #{roleName}
+	    #{type},
+	    #{uuid}
 	  )
 	</insert>
 	

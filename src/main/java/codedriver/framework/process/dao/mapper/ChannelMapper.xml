@@ -161,9 +161,8 @@
 	<select id="getChannelAuthorityListByChannelUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo" useCache="false">
 	SELECT 
 	  `channel_uuid` AS channelUuid,
-	  `user_id` AS userId,
-	  `team_uuid` AS teamUuid,
-	  `role_name` AS roleName 
+	  `type`,
+	  `uuid`
 	FROM `channel_authority` 
 	WHERE `channel_uuid` = #{channelUuid}
 	</select>
@@ -238,20 +237,29 @@
 	  DISTINCT `channel_uuid`
 	FROM `channel_authority` 
 	<where>
+		<if test="channelUuid != null and channelUuid != ''">
+		`channel_uuid` = #{channelUuid} AND (
+		</if>
+		(type = 'common' AND `uuid` = 'alluser')
 		<if test="userId != null and userId != ''">
-		`user_id` = #{userId}
+		OR (type = 'user' AND `uuid` = #{userId})
 		</if>
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
-		OR `team_uuid` IN 
+		OR (type = 'team' AND `uuid` IN 
 			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
 			#{teamUuid}
 			</foreach>
+			)
 		</if>
 		<if test="roleNameList != null and roleNameList.size() > 0">
-		OR `role_name` IN 
+		OR (type = 'role' AND `uuid` IN 
 			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
 				#{roleName}
 			</foreach>
+			)
+		</if>
+		<if test="channelUuid != null and channelUuid != ''">
+		)
 		</if>
 		</where>
 	</select>
@@ -305,16 +313,14 @@
 	<insert id="insertChannelAuthority" parameterType="codedriver.framework.process.dto.AuthorityVo">
 	INSERT INTO `channel_authority` (
 	  `channel_uuid`,
-	  `user_id`,
-	  `team_uuid`,
-	  `role_name`
+	  `type`,
+	  `uuid`
 	) 
 	VALUES
 	  (
 	    #{channelUuid},
-	    #{userId},
-	    #{teamUuid},
-	    #{roleName}
+	    #{type},
+	    #{uuid}
 	  )
 	</insert>
 	

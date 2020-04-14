@@ -17,7 +17,7 @@ public interface CatalogMapper {
 	
 	int checkCatalogIsExists(String catalogUuid);
 
-	List<String> getHasActiveChannelCatalogUuidList(@Param("catalogUuidList")List<String> catalogUuidList, @Param("channelUuidList")List<String> channelUuidList);
+	List<String> getHasActiveChannelCatalogUuidList(List<String> channelUuidList);
 
 	int checkCatalogNameIsRepeat(CatalogVo catalogVo);
 
@@ -25,9 +25,12 @@ public interface CatalogMapper {
 
 	List<AuthorityVo> getCatalogAuthorityListByCatalogUuid(String uuid);
 	
-	List<String> getAuthorizedCatalogUuidList();
-	
-	List<String> getAuthorizedCatalogUuidList(@Param("userId")String userId, @Param("teamUuidList")List<String> teamUuidList, @Param("roleNameList")List<String> roleNameList);
+	List<String> getAuthorizedCatalogUuidList(
+			@Param("userId")String userId, 
+			@Param("teamUuidList")List<String> teamUuidList, 
+			@Param("roleNameList")List<String> roleNameList, 
+			@Param("catalogUuid") String catalogUuid
+			);
 	
 	int replaceCatalog(CatalogVo catalogVo);
 
