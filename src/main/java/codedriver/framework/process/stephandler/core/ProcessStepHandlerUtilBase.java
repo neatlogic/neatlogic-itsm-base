@@ -825,6 +825,8 @@ public abstract class ProcessStepHandlerUtilBase {
 					List<String> channelList = channelMapper.getAuthorizedChannelUuidList(UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList(), processTaskVo.getChannelUuid());
 					if(channelList.contains(processTaskVo.getChannelUuid())) {
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+					}else if(processTaskMapper.checkIsWorker(processTaskId, processTaskStepId, UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
+						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
 					}
 				}
 			}

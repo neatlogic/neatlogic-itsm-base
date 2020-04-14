@@ -914,6 +914,33 @@
 	WHERE `processtask_step_subtask_id` = #{processTaskStepSubtaskId}
 	</select>
 	
+	<select id="checkIsWorker" resultType="int">
+	SELECT 
+	  COUNT(1)
+	FROM `processtask_step_worker` 
+	WHERE `processtask_id` = #{processTaskId}
+	<if test="processTaskStepId != null and processTaskStepId != ''">
+	AND `processtask_step_id` = #{processTaskStepId}
+	</if>
+	AND (
+		(`type` = 'user' AND `uuid` = #{userId})
+		<if test="teamUuidList != null and teamUuidList.size() > 0">
+		OR (`type` = 'team' AND `uuid` IN  
+			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
+			#{teamUuid}
+			</foreach>
+			)
+		</if>
+		<if test="roleNameList != null and roleNameList.size() > 0">
+		OR (`type` = 'role' AND `uuid` IN 
+			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
+				#{roleName}
+			</foreach>
+			)
+		</if>
+	)
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
