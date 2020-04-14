@@ -526,9 +526,25 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				myComplete(currentProcessTaskStepVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				if(MapUtils.isNotEmpty(paramObj)) {
+					//表单属性显示控制
+					Map<String, String> formAttributeActionMap = new HashMap<>();
+					List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
+					if(processTaskStepFormAttributeList.size() > 0) {
+						for(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
+							formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
+						}
+					}
 					//获取旧表单数据
 					List<ProcessTaskFormAttributeDataVo> oldProcessTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 					if(CollectionUtils.isNotEmpty(oldProcessTaskFormAttributeDataList)) {
+						Iterator<ProcessTaskFormAttributeDataVo> iterator = oldProcessTaskFormAttributeDataList.iterator();
+						while(iterator.hasNext()) {
+							ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo = iterator.next();
+							String attributeUuid = processTaskFormAttributeDataVo.getAttributeUuid();
+							if(formAttributeActionMap.get(attributeUuid) != null) {//只读或隐藏
+								iterator.remove();
+							}
+						}
 						oldProcessTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
 						paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), JSON.toJSONString(oldProcessTaskFormAttributeDataList));
 					}
@@ -1105,11 +1121,23 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 		}
 		try {
+			//表单属性显示控制
+			Map<String, String> formAttributeActionMap = new HashMap<>();
+			List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
+			if(processTaskStepFormAttributeList.size() > 0) {
+				for(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
+					formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
+				}
+			}
 			/** 写入当前步骤的表单属性值 **/
 			JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
 			if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
 				for (int i = 0; i < formAttributeDataList.size(); i++) {
 					JSONObject formAttributeDataObj = formAttributeDataList.getJSONObject(i);
+					String attributeUuid = formAttributeDataObj.getString("attributeUuid");
+					if(formAttributeActionMap.get(attributeUuid) != null) {//对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
+						continue;
+					}
 					ProcessTaskFormAttributeDataVo attributeData = new ProcessTaskFormAttributeDataVo();
 					attributeData.setData(formAttributeDataObj.getString("dataList"));
 					attributeData.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
