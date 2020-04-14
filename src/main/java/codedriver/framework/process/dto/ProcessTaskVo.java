@@ -72,6 +72,10 @@ public class ProcessTaskVo {
 	private Map<String, String> formAttributeActionMap;
 	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
 	private List<FileVo> fileList;
+	@EntityField(name = "服务类型信息", type = ApiParamType.JSONOBJECT)
+	private ChannelTypeVo channelType;
+	@EntityField(name = "描述是否必填", type = ApiParamType.INTEGER)
+	private Integer isRequired;
 	
 	public ProcessTaskVo() {
 
@@ -335,6 +339,22 @@ public class ProcessTaskVo {
 
 	public void setFileList(List<FileVo> fileList) {
 		this.fileList = fileList;
+	}
+
+	public ChannelTypeVo getChannelType() {
+		return channelType;
+	}
+
+	public void setChannelType(ChannelTypeVo channelType) {
+		this.channelType = channelType;
+	}
+
+	public Integer getIsRequired() {
+		return isRequired;
+	}
+
+	public void setIsRequired(Integer isRequired) {
+		this.isRequired = isRequired;
 	}
 
 }
