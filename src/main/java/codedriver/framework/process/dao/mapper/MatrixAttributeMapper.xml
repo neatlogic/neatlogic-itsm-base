@@ -4,12 +4,29 @@
 	<select id="getMatrixAttributeByMatrixUuid" parameterType="string" resultType="codedriver.framework.process.dto.ProcessMatrixAttributeVo">
 		SELECT
 		`uuid`,
-		`matrix_uuid`,
+		`matrix_uuid` as matrixUuid,
 		`name`,
 		`config`
 		FROM `process_matrix_attribute`
 		WHERE `matrix_uuid` = #{MatrixUuid}
 		ORDER BY `id`
+	</select>
+	
+	<select id="getMatrixAttributeByMatrixUuidList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessMatrixAttributeVo">
+		SELECT
+		`uuid`,
+		`matrix_uuid` as matrixUuid,
+		`name`,
+		`config`
+		FROM `process_matrix_attribute`
+		<where>
+			<if test="columnList != null and columnList.size > 0">
+				matrix_uuid in
+				<foreach collection="columnList" open="(" close=")" item="data" separator=",">
+					#{data}
+				</foreach>
+			</if>
+		</where>
 	</select>
 
 	<select id="checkMatrixAttributeTableExist" parameterType="string" resultType="int">
