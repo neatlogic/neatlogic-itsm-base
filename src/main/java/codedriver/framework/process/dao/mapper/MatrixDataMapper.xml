@@ -27,10 +27,9 @@
 
 	<select id="searchDynamicTableData" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
 		SELECT
-		`id`,
 		`uuid`,
   		<foreach collection="columnList" separator="," item="column">
-			${column}
+			`${column}`
 		</foreach>
 		FROM matrix_${matrixUuid}
 		<where>
@@ -48,8 +47,9 @@
 
 	<select id="getDynamicTableDataByColumnList" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
 		SELECT
+		`uuid`,
 		<foreach collection="columnList" item="column" separator=",">
-			${column}
+			`${column}`
 		</foreach>
 		FROM matrix_${matrixUuid}
 		<where>
@@ -59,6 +59,7 @@
 				</foreach>
 			</if>
 		</where>
+		ORDER BY `id`
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
