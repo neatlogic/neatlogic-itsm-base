@@ -134,6 +134,14 @@ public interface ProcessTaskMapper {
 	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
 
 	public ProcessTaskStepSubtaskContentVo getProcessTaskStepSubtaskContentById(Long processTaskStepSubtaskId);
+
+	public int checkIsWorker(
+			@Param("processTaskId") Long processTaskId, 
+			@Param("processTaskStepId") Long processTaskStepId, 
+			@Param("userId") String userId, 
+			@Param("teamUuidList") List<String> teamUuidList, 
+			@Param("roleNameList") List<String> roleNameList
+			);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 

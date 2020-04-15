@@ -46,8 +46,6 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
-import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
-import codedriver.framework.process.constvalue.ProcessTaskStepWorkerAction;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.FormMapper;
@@ -814,7 +812,22 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
 			Set<String> resultList = new HashSet<>();
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
-			
+			//工单信息查看权限，有本工单对应服务的上报权限或者工单干系人，才有该工单信息查看权限;
+			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.POCESSTASKVIEW.getValue())) {
+				if(UserContext.get().getUserId(true).equals(processTaskVo.getOwner())) {
+					resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+				}else if(UserContext.get().getUserId(true).equals(processTaskVo.getReporter())) {
+					resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+				}else {
+					List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserId(UserContext.get().getUserId(true));
+					List<String> channelList = channelMapper.getAuthorizedChannelUuidList(UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList(), processTaskVo.getChannelUuid());
+					if(channelList.contains(processTaskVo.getChannelUuid())) {
+						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+					}else if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
+						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+					}
+				}
+			}
 			//上报提交
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.STARTPROCESS.getValue())) {	
 				if(ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
@@ -938,9 +951,9 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 			
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.WORK.getValue())) {
+				List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserId(UserContext.get().getUserId(true));
 				//有可处理步骤work
-				List<ProcessTaskStepVo> processableStepList = getProcessableStepList(processTaskId);
-				if(CollectionUtils.isNotEmpty(processableStepList)) {
+				if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserId(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
 					resultList.add(ProcessTaskStepAction.WORK.getValue());
 				}
 			}
