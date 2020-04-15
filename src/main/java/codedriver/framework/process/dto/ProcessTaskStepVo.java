@@ -285,10 +285,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public String getFlowDirection() {
 		if(this.isActive != null) {
-			if(this.isActive.intValue() == 2) {
-				flowDirection = ProcessTaskFlowDirection.BACKWARD.getText();
-			}else {
+			if(this.isActive.intValue() == 0) {
 				flowDirection = ProcessTaskFlowDirection.FORWARD.getText();
+			}else {
+				flowDirection = ProcessTaskFlowDirection.BACKWARD.getText();
 			}
 		}
 		return flowDirection;
