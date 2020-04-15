@@ -12,7 +12,8 @@
 		<result property="lcd" column="lcd"/>
 		<collection property="componentVoList"  ofType="codedriver.framework.process.dto.ProcessMatrixFormComponentVo">
 			<result property="formVersionUuid" column="formVersionUuid"/>
-			<result property="componentName" column="componentName"/>
+			<result property="formAttributeLabel" column="formAttributeLabel"/>
+			<result property="formAttributeUuid" column="formAttributeUuid"/>
 			<result property="formName" column="formName"/>
 			<result property="formUuid" column="formUuid"/>
 			<result property="version" column="version"/>
@@ -130,7 +131,7 @@
 		d.`form_version_uuid` as `formVersionUuid`,
 		e.`version`,
 		f.`name` as `formName`,
-		e.`uuid` as `formUuid`
+		e.`form_uuid` as `formUuid`
 		FROM (
 				SELECT *
 				FROM `process_matrix`
@@ -139,8 +140,8 @@
 						AND `name` LIKE CONCAT('%', #{keyword}, '%')
 					</if>
 				</where>
-				ORDER BY `id` ASC
 				<if test="needPage == true">
+					ORDER BY `id` desc
 					LIMIT #{startNum}, #{pageSize}
 				</if>
 				) a
@@ -149,6 +150,7 @@
 		LEFT JOIN `process_matrix_form_component` d ON a.`uuid` = d.`matrix_uuid`
 		LEFT JOIN `form_version` e ON d.`form_version_uuid` = e.`uuid`
 		LEFT JOIN `form` f ON e.`form_uuid` = f. `uuid`
+		ORDER BY a.`id` DESC
 	</select>
 
 	<update id="updateMatrixNameAndLcu" parameterType="codedriver.framework.process.dto.ProcessMatrixVo">
