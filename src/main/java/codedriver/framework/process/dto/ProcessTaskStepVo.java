@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -276,6 +277,15 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public Integer getIsRequired() {
+		if(isRequired == null && StringUtils.isNotBlank(config)) {
+			JSONObject stepConfigObj = JSONObject.parseObject(config);
+			if (MapUtils.isNotEmpty(stepConfigObj)) {
+				JSONObject workerPolicyConfig = stepConfigObj.getJSONObject("workerPolicyConfig");
+				if (MapUtils.isNotEmpty(workerPolicyConfig)) {
+					isRequired = workerPolicyConfig.getInteger("isRequired");
+				}
+			}
+		}
 		return isRequired;
 	}
 
