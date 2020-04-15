@@ -1,14 +1,14 @@
 package codedriver.framework.process.dto;
 
-import codedriver.framework.apiparam.core.ApiParamType;
-import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.common.util.StringUtil;
-import codedriver.framework.process.constvalue.ProcessMatrixType;
-import codedriver.framework.restful.annotation.EntityField;
+import java.util.List;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.constvalue.ProcessMatrixType;
+import codedriver.framework.restful.annotation.EntityField;
 
 /**
  * @program: codedriver
