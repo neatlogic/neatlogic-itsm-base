@@ -140,8 +140,8 @@
 						AND `name` LIKE CONCAT('%', #{keyword}, '%')
 					</if>
 				</where>
-				ORDER BY `id` ASC
 				<if test="needPage == true">
+					ORDER BY `id` desc
 					LIMIT #{startNum}, #{pageSize}
 				</if>
 				) a
@@ -150,6 +150,7 @@
 		LEFT JOIN `process_matrix_form_component` d ON a.`uuid` = d.`matrix_uuid`
 		LEFT JOIN `form_version` e ON d.`form_version_uuid` = e.`uuid`
 		LEFT JOIN `form` f ON e.`form_uuid` = f. `uuid`
+		ORDER BY a.`id` DESC
 	</select>
 
 	<update id="updateMatrixNameAndLcu" parameterType="codedriver.framework.process.dto.ProcessMatrixVo">
