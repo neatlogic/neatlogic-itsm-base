@@ -1,7 +1,6 @@
 package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +11,7 @@ public interface MatrixAttributeMapper {
 
     public List<ProcessMatrixAttributeVo> getMatrixAttributeByMatrixUuid(String matrixUuid);
     
-    public List<ProcessMatrixAttributeVo> getMatrixAttributeByMatrixUuidList(@Param("columnList")List<String> columnList);
+    public List<ProcessMatrixAttributeVo> getMatrixAttributeByMatrixUuidList(@Param("columnList")List<String> columnList,@Param("matrixUuid") String matrixUuid);
 
     public void deleteAttributeByMatrixUuid(String matrixUuid);
 

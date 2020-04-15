@@ -8,7 +8,7 @@
 		`name`,
 		`config`
 		FROM `process_matrix_attribute`
-		WHERE `matrix_uuid` = #{MatrixUuid}
+		WHERE `matrix_uuid` = #{matrixUuid}
 		ORDER BY `id`
 	</select>
 	
@@ -20,8 +20,9 @@
 		`config`
 		FROM `process_matrix_attribute`
 		<where>
+			`matrix_uuid` = #{matrixUuid}
 			<if test="columnList != null and columnList.size > 0">
-				matrix_uuid in
+				and uuid in
 				<foreach collection="columnList" open="(" close=")" item="data" separator=",">
 					#{data}
 				</foreach>

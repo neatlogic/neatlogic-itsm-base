@@ -25,7 +25,7 @@
 		WHERE `uuid` = #{uuid}
 	</select>
 
-	<select id="searchDynamicTableData" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.Map">
+	<select id="searchDynamicTableData" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
 		SELECT
 		`id`,
 		`uuid`,
@@ -46,7 +46,7 @@
 		</if>
 	</select>
 
-	<select id="getDynamicTableDataByColumnList" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.Map">
+	<select id="getDynamicTableDataByColumnList" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
 		SELECT
 		<foreach collection="columnList" item="column" separator=",">
 			${column}
@@ -64,7 +64,7 @@
 		</if>
 	</select>
 	
-	<select id="getDynamicTableDataByColumnCount" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.Map">
+	<select id="getDynamicTableDataByColumnCount" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="int">
 		SELECT
 		count(id)
 		FROM matrix_${matrixUuid}
