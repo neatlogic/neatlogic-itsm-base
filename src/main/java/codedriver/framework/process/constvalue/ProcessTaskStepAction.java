@@ -11,7 +11,7 @@ public enum ProcessTaskStepAction {
 	STARTPROCESS("startprocess", "上报"),
 	START("start", "开始"),
 	ACTIVE("active", "激活"),
-	COMPLETE("complete", "流转"),
+	COMPLETE("complete", "流转"),//下一步骤列表中有未激活的步骤时，有流转权限
 	RETREAT("retreat", "撤回"),
 	ACCEPT("accept", "开始"),
 	WORK("work","处理"),//可处理步骤权限，有accept、start、complete其中一个权限，就会有work权限
@@ -33,7 +33,7 @@ public enum ProcessTaskStepAction {
 	 * 如果是步骤处理人操作，会记录在步骤中，同时生成一条活动；如果是非处理人操作，则步骤中无需记录，只生成活动即可；
 	 */
 	TRANSFER("transfer", "转交"),
-	BACK("back", "回退"),
+	BACK("back", "回退"),//下一步骤列表中有已激活的步骤时，有回退权限
 	SAVE("save", "暂存"),
 	/**
 	 * 修改上报内容
@@ -89,5 +89,4 @@ public enum ProcessTaskStepAction {
 		}
 		return "";
 	}
-
 }

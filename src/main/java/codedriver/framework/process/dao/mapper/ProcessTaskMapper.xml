@@ -426,7 +426,7 @@
 		a.`result`,
 		a.`type`,
 		a.`handler`,
-		a.`is_active`,
+		a.`is_active` AS isActive,
 		a.`start_time` AS startTime,
 		a.`end_time` AS endTime,
 		a.`error`

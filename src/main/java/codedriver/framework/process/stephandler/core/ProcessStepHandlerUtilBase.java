@@ -887,7 +887,16 @@ public abstract class ProcessStepHandlerUtilBase {
 							if(ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus())) {
 								//完成complete 暂存save 评论comment 创建子任务createsubtask
 								if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
-									resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
+									List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getToProcessTaskStepByFromId(processTaskStepId);
+									for(ProcessTaskStepVo processTaskStep : processTaskStepList) {
+										if(processTaskStep.getIsActive() != null) {
+											if(processTaskStep.getIsActive().intValue() == 0) {
+												resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
+											}else {
+												resultList.add(ProcessTaskStepAction.BACK.getValue());
+											}
+										}
+									}
 									resultList.add(ProcessTaskStepAction.SAVE.getValue());
 									resultList.add(ProcessTaskStepAction.COMMENT.getValue());
 									resultList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
