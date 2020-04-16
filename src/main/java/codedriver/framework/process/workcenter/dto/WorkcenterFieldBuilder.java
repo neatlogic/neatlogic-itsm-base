@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.constvalue.ProcessUserType;
@@ -142,8 +143,10 @@ public class WorkcenterFieldBuilder {
 					 if(ProcessUserType.AGENT.getValue().equals( userVo.getUserType())) {
 						 agentUserTypeArray.add(user);
 					 }
-					 //if(ProcessTaskStatus.RUNNING.getValue().equals(dataJson.getString("status"))&&(step.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())||step.getStatus().equals(ProcessTaskStatus.DRAFT.getValue())&&userVo.getStatus().equals("doing"))) {
-					 userStepStatusList.add(user+"#"+step.getStatus());
+					 //过滤上报节点
+					 if(!(step.getType().equals(ProcessStepType.START.getValue()))) {
+						 userStepStatusList.add(user+"#"+step.getStatus());
+					 }
 					 processTaskUserList.add(user);
 				 }
 			 }
