@@ -74,10 +74,10 @@
 		</foreach>
 		FROM matrix_${matrixUuid}
 		<where>
-			<if test="dataUuidList != null and dataUuidList.size() >0">
+			<if test="dataUuidList != null and dataUuidList.size() > 0">
 				`uuid` in 
 				<foreach collection="dataUuidList" open="(" close=")" item="uuid" separator=",">
-					${uuid}
+					#{uuid}
 				</foreach>
 			</if>
 		</where>
