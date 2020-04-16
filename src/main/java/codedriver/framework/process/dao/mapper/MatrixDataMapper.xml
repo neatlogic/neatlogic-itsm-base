@@ -54,7 +54,7 @@
 		</foreach>
 		FROM matrix_${matrixUuid}
 		<where>
-			<if test="sourceColumnList != null and sourceColumnList.size > 0">
+			<if test="sourceColumnList != null and sourceColumnList.size() > 0">
 				<foreach collection="sourceColumnList" item="sourceColumn">
 					AND ${sourceColumn.column} = #{sourceColumn.value}
 				</foreach>
