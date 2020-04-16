@@ -65,6 +65,23 @@
 		</if>
 	</select>
 	
+	<select id="getDynamicTableDataByDataUuidList" resultType="java.util.LinkedHashMap">
+		SELECT
+		`uuid`,
+		<foreach collection="targetColumnList" item="column" separator=",">
+			`${column}`
+		</foreach>
+		FROM matrix_${matrixUuid}
+		<where>
+			<if test="dataUuidList != null and dataUuidList.size() >0">
+				`uuid` in 
+				<foreach collection="dataUuidList" open="(" close=")" item="uuid" separator=",">
+					${uuid}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
 	<select id="getDynamicTableDataByColumnCount" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="int">
 		SELECT
 		count(id)
