@@ -68,8 +68,6 @@ public class ProcessTaskVo {
 	Map<String, Object> formAttributeDataMap;
 	@EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
 	private String worktimeUuid;
-	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
-	private Map<String, String> formAttributeActionMap;
 	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
 	private List<FileVo> fileList;
 	@EntityField(name = "服务类型信息", type = ApiParamType.JSONOBJECT)
@@ -323,14 +321,6 @@ public class ProcessTaskVo {
 
 	public void setWorktimeUuid(String worktimeUuid) {
 		this.worktimeUuid = worktimeUuid;
-	}
-
-	public Map<String, String> getFormAttributeActionMap() {
-		return formAttributeActionMap;
-	}
-
-	public void setFormAttributeActionMap(Map<String, String> formAttributeActionMap) {
-		this.formAttributeActionMap = formAttributeActionMap;
 	}
 
 	public List<FileVo> getFileList() {

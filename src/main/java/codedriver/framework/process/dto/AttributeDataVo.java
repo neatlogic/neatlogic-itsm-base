@@ -1,5 +1,9 @@
 package codedriver.framework.process.dto;
 
+import java.util.List;
+
+import com.alibaba.fastjson.JSON;
+
 public class AttributeDataVo {
 	private String attributeUuid;
 	private String data;
@@ -20,6 +24,17 @@ public class AttributeDataVo {
 		this.data = data;
 	}
 
+	public Object getDataObj() {
+		if(data == null) {
+			return null;
+		}
+		if(data.startsWith("[") && data.endsWith("]")) {
+			return JSON.parseArray(data, String.class);
+		}else {
+			return data;
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
