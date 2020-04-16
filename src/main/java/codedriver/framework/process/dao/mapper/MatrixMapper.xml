@@ -140,8 +140,8 @@
 						AND `name` LIKE CONCAT('%', #{keyword}, '%')
 					</if>
 				</where>
+				ORDER BY `id` desc
 				<if test="needPage == true">
-					ORDER BY `id` desc
 					LIMIT #{startNum}, #{pageSize}
 				</if>
 				) a
