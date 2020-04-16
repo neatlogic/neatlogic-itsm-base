@@ -21,7 +21,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 	@Override
 	public String getEsWhere(ConditionVo condition,List<ConditionVo> conditionList) {
 		String where = getMyEsWhere(condition,conditionList);
-		if(StringUtils.isBlank(where)) {
+		if(StringUtils.isEmpty(where)) {
 			Object value = condition.getValueList().get(0);
 			if(condition.getValueList().size()>1) {
 				value = String.join("','",condition.getValueList());
@@ -36,7 +36,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 	}
 
 	
-	protected String getDateWhere(ConditionVo condition,List<ConditionVo> conditionList) {
+	protected String getDateEsWhere(ConditionVo condition,List<ConditionVo> conditionList) {
 		JSONArray dateJSONArray = JSONArray.parseArray(JSON.toJSONString(condition.getValueList()));
 		String where = StringUtils.EMPTY;
 		if(CollectionUtils.isNotEmpty(dateJSONArray)) {
