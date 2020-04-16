@@ -89,13 +89,4 @@ public enum ProcessTaskStepAction {
 		}
 		return "";
 	}
-	
-	public static ProcessTaskStepAction getProcessTaskStepAction(String _status) {
-		for (ProcessTaskStepAction s : ProcessTaskStepAction.values()) {
-			if (s.getValue().equals(_status)) {
-				return s;
-			}
-		}
-		return null;
-	}
 }
