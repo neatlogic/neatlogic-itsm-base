@@ -27,6 +27,7 @@
 
 	<select id="searchDynamicTableData" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
 		SELECT
+		`id`,
 		`uuid`,
   		<foreach collection="columnList" separator="," item="column">
 			`${column}`
@@ -53,7 +54,7 @@
 		</foreach>
 		FROM matrix_${matrixUuid}
 		<where>
-			<if test="sourceColumnList != null and sourceColumnList.size > 0">
+			<if test="sourceColumnList != null and sourceColumnList.size() > 0">
 				<foreach collection="sourceColumnList" item="sourceColumn">
 					AND ${sourceColumn.column} = #{sourceColumn.value}
 				</foreach>
@@ -73,10 +74,10 @@
 		</foreach>
 		FROM matrix_${matrixUuid}
 		<where>
-			<if test="dataUuidList != null and dataUuidList.size() >0">
+			<if test="dataUuidList != null and dataUuidList.size() > 0">
 				`uuid` in 
 				<foreach collection="dataUuidList" open="(" close=")" item="uuid" separator=",">
-					${uuid}
+					#{uuid}
 				</foreach>
 			</if>
 		</where>
