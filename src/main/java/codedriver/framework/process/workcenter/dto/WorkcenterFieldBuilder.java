@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.constvalue.ProcessUserType;
@@ -23,9 +24,9 @@ import codedriver.framework.util.HtmlUtil;
 
 public class WorkcenterFieldBuilder {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private List<String> userWillDoList = new ArrayList<String>();
-	private List<String> userDoneList = new ArrayList<String>();
-	private List<String> userDoList = new ArrayList<String>();
+	private List<String> userStepStatusList = new ArrayList<String>();
+	private List<String> processTaskUserList = new ArrayList<String>();
+	
 	
 	JSONObject dataJson = null;
 	
@@ -104,49 +105,6 @@ public class WorkcenterFieldBuilder {
 		 userTypeJson.put("userlist", stepUserArray);
 		 return userTypeJson;
 	}
-	/*public WorkcenterFieldBuilder setCurrentStepList( List<ProcessTaskStepVo>  processTaskActiveStepList) {
-		JSONArray currentStepList = new JSONArray();
-		 for(ProcessTaskStepVo step : processTaskActiveStepList) {
-			 JSONObject currentStepJson = new JSONObject();
-			 JSONArray userTypeArray = new JSONArray();
-			 JSONArray majorUserTypeArray = new JSONArray();
-			 JSONArray minorUserTypeArray = new JSONArray();
-			 JSONArray agentUserTypeArray = new JSONArray();
-			 JSONArray pendingUserTypeArray = new JSONArray();
-			 userTypeArray.add(getUserType(UserType.MAJOR.getValue(),UserType.MAJOR.getText(),majorUserTypeArray));
-			 userTypeArray.add(getUserType(UserType.MINOR.getValue(),UserType.MINOR.getText(),minorUserTypeArray));
-			 userTypeArray.add(getUserType(UserType.AGENT.getValue(),UserType.AGENT.getText(),agentUserTypeArray));
-			 userTypeArray.add(getUserType("pending","pending",pendingUserTypeArray));
-			 currentStepJson.put("id", step.getId());
-			 currentStepJson.put("name", step.getName());
-			 currentStepJson.put("status", step.getStatus());
-			 currentStepJson.put("usertypelist", userTypeArray);
-			 if(step.getStatus().equals(ProcessTaskStatus.PENDING.getValue())) {
-				 for(ProcessTaskStepWorkerVo worker : step.getWorkerList()) {
-					 pendingUserTypeArray.add(worker.getWorkerValue());
-					 userWillDoList.add(worker.getWorkerValue());
-				 }
-			 }else {
-				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
-					 String user = String.format("%s#%s", GroupSearch.USER.getValue(),userVo.getUserId());
-					 if(UserType.MAJOR.getValue().equals( userVo.getUserType())) {
-						 majorUserTypeArray.add(user);
-					 }
-					 if(UserType.MINOR.getValue().equals( userVo.getUserType())) {
-						 minorUserTypeArray.add(user);
-					 }
-					 if(UserType.AGENT.getValue().equals( userVo.getUserType())) {
-						 agentUserTypeArray.add(user);
-					 }
-					 userWillDoList.add(user);
-				 }
-			 }
-			 currentStepList.add(currentStepJson);
-		 }
-		dataJson.put(ProcessWorkcenterField.CURRENT_STEP.getValue(), currentStepList);
-		dataJson.put(ProcessWorkcenterField.USER_WILL_DO.getValue(), userWillDoList);
-		return this;
-	}*/
 	
 	public WorkcenterFieldBuilder setStepList( List<ProcessTaskStepVo>  processTaskStepList) {
 		JSONArray stepList = new JSONArray();
@@ -170,8 +128,8 @@ public class WorkcenterFieldBuilder {
 			 if(step.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) && step.getIsActive() == 1) {
 				 for(ProcessTaskStepWorkerVo worker : step.getWorkerList()) {
 					 pendingUserTypeArray.add(worker.getWorkerValue());
-					 userWillDoList.add(worker.getWorkerValue());
-					 userDoList.add(worker.getWorkerValue());
+					 userStepStatusList.add(worker.getWorkerValue()+"#"+step.getStatus());
+					 processTaskUserList.add(worker.getWorkerValue());
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
@@ -185,20 +143,18 @@ public class WorkcenterFieldBuilder {
 					 if(ProcessUserType.AGENT.getValue().equals( userVo.getUserType())) {
 						 agentUserTypeArray.add(user);
 					 }
-					 if(ProcessTaskStatus.RUNNING.getValue().equals(dataJson.getString("status"))&&(step.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())||step.getStatus().equals(ProcessTaskStatus.DRAFT.getValue())&&userVo.getStatus().equals("doing"))) {
-						 userWillDoList.add(user); 
-					 }else {
-						 userDoneList.add(user);
+					 //过滤上报节点
+					 if(!(step.getType().equals(ProcessStepType.START.getValue()))) {
+						 userStepStatusList.add(user+"#"+step.getStatus());
 					 }
-					 userDoList.add(user);
+					 processTaskUserList.add(user);
 				 }
 			 }
 			 stepList.add(stepJson);
 		 }
 		dataJson.put(ProcessWorkcenterField.STEP.getValue(), stepList);
-		dataJson.put(ProcessWorkcenterField.USER_WILL_DO.getValue(), userWillDoList);
-		dataJson.put(ProcessWorkcenterField.USER_DO.getValue(), userDoList);
-		dataJson.put(ProcessWorkcenterField.USER_DONE.getValue(), userDoneList);
+		dataJson.put(ProcessWorkcenterField.USER_STEPSTATUS.getValue(), userStepStatusList);
+		dataJson.put(ProcessWorkcenterField.PROCESSTASK_USER.getValue(), processTaskUserList);
 		return this;
 	}
 	

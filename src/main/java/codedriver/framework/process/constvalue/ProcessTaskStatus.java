@@ -7,7 +7,7 @@ import codedriver.framework.common.dto.ValueTextVo;
 
 public enum ProcessTaskStatus {
 	RUNNING("running", "处理中","#2d84fb"),
-	ABORTED("aborted", "已取消","#8E949F"),
+	ABORTED("aborted", "已取消","#F9A825"),
 	SUCCEED("succeed", "已成功","#25b865"),
 	PENDING("pending", "待处理","#8E949F"),
 	FAILED("failed", "已失败","#f71010"),
