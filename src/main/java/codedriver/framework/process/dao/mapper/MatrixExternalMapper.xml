@@ -21,9 +21,10 @@
 
 	<update id="updateMatrixExternal" parameterType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
 		UPDATE `process_matrix_external` SET
+		 `matrix_uuid` = #{matrixUuid}
 		 `plugin` = #{plugin},
 		 `config` = #{config},
-		 WHERE `matrix_uuid` = #{matrixUuid}
+		 WHERE `id` = #{id}
 	</update>
 
 	<delete id="deleteMatrixExternalByMatrixUuid" parameterType="String">
