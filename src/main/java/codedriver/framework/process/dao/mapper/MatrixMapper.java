@@ -25,6 +25,8 @@ public interface MatrixMapper {
 
 	public List<ProcessMatrixFormComponentVo> getMatrixFormComponentByMatrixUuid(String matrixUuid);
 
+	public int checkMatrixIsExists(String uuid);
+
     public int deleteMatrixByUuid(String uuid);
 
     public int updateMatrixNameAndLcu(ProcessMatrixVo matrixVo);

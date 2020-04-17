@@ -179,6 +179,10 @@
 	WHERE a.`matrix_uuid` = #{matrixUuid}
 	</select>
 	
+	<select id="checkMatrixIsExists" parameterType="java.lang.String" resultType="int">
+	select count(`uuid`) from process_matrix where uuid = #{uuid}
+	</select>
+	
 	<update id="updateMatrixNameAndLcu" parameterType="codedriver.framework.process.dto.ProcessMatrixVo">
 		UPDATE `process_matrix` SET
 		 `name` = #{name},
