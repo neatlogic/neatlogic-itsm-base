@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -122,6 +123,7 @@ public class WorkcenterFieldBuilder {
 			 stepJson.put("id", step.getId());
 			 stepJson.put("name", step.getName());
 			 stepJson.put("status", step.getStatus());
+			 stepJson.put("type", step.getType());
 			 stepJson.put("isactive", step.getIsActive());
 			 stepJson.put("usertypelist", userTypeArray);
 			 //已激活未开始
@@ -146,6 +148,7 @@ public class WorkcenterFieldBuilder {
 					 //过滤上报节点
 					 if(!(step.getType().equals(ProcessStepType.START.getValue()))) {
 						 userStepStatusList.add(user+"#"+step.getStatus());
+						 stepJson.put("filtstatus", step.getStatus());
 					 }
 					 processTaskUserList.add(user);
 				 }
@@ -153,8 +156,8 @@ public class WorkcenterFieldBuilder {
 			 stepList.add(stepJson);
 		 }
 		dataJson.put(ProcessWorkcenterField.STEP.getValue(), stepList);
-		dataJson.put(ProcessWorkcenterField.USER_STEPSTATUS.getValue(), userStepStatusList);
-		dataJson.put(ProcessWorkcenterField.PROCESSTASK_USER.getValue(), processTaskUserList);
+		dataJson.put(ProcessWorkcenterField.USER_STEPSTATUS.getValue(), userStepStatusList.stream().distinct().collect(Collectors.toList()));
+		dataJson.put(ProcessWorkcenterField.PROCESSTASK_USER.getValue(), processTaskUserList.stream().distinct().collect(Collectors.toList()));
 		return this;
 	}
 	

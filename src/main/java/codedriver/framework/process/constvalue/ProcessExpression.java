@@ -3,7 +3,7 @@ package codedriver.framework.process.constvalue;
 public enum ProcessExpression {
 	LIKE("like", "包含", " %s contains %s "),
 	EQUAL("equal", "等于", " %s = %s "),
-	UNEQUAL("unequal", "不等于", " not %s = %s "),
+	UNEQUAL("unequal", "不等于", " not %s = '%s' "),
 	INCLUDE("include", "属于", " %s contains any ( %s ) "),
 	EXCLUDE("exclude", "不属于", " not %s contains any ( %s ) "),
 	BETWEEN("between","等于"," %s between '%s' and '%s' "),
