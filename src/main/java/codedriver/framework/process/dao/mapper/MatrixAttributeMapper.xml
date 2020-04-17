@@ -21,7 +21,7 @@
 		FROM `process_matrix_attribute`
 		<where>
 			`matrix_uuid` = #{matrixUuid}
-			<if test="columnList != null and columnList.size > 0">
+			<if test="columnList != null and columnList.size() > 0">
 				and uuid in
 				<foreach collection="columnList" open="(" close=")" item="data" separator=",">
 					#{data}

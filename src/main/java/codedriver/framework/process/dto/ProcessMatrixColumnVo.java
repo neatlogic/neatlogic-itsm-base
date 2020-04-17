@@ -9,7 +9,15 @@ public class ProcessMatrixColumnVo {
     private String column;
     private String value;
 
-    public String getColumn() {
+    public ProcessMatrixColumnVo() {
+	}
+
+	public ProcessMatrixColumnVo(String column, String value) {
+		this.column = column;
+		this.value = value;
+	}
+
+	public String getColumn() {
         return column;
     }
 

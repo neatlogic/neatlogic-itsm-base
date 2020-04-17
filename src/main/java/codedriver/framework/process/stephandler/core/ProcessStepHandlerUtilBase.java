@@ -878,6 +878,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				actionList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
 				actionList.add(ProcessTaskStepAction.ACCEPT.getValue());
 				actionList.add(ProcessTaskStepAction.START.getValue());
+				actionList.add(ProcessTaskStepAction.BACK.getValue());
 				if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
 					if(processTaskStepVo.getIsActive() == 1) {
 						if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
