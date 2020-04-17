@@ -6,6 +6,7 @@
 		`uuid`,
 		`matrix_uuid` as matrixUuid,
 		`name`,
+		`type`,
 		`config`
 		FROM `process_matrix_attribute`
 		WHERE `matrix_uuid` = #{matrixUuid}
@@ -17,6 +18,7 @@
 		`uuid`,
 		`matrix_uuid` as matrixUuid,
 		`name`,
+		`type`,
 		`config`
 		FROM `process_matrix_attribute`
 		<where>
@@ -44,11 +46,13 @@
 			`matrix_uuid`,
 			`uuid`,
 			`name`,
+			`type`,
 			`config`
 		) VALUES (
 			#{matrixUuid},
 			#{uuid},
 			#{name},
+			#{type},
 			#{config}
 		)
 	</insert>
