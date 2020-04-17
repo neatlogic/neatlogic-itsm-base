@@ -21,6 +21,10 @@ public interface MatrixMapper {
 
     public List<ProcessMatrixVo> searchMatrix(ProcessMatrixVo matrixVo);
 
+	public List<ProcessMatrixDispatcherVo> getMatrixDispatcherByMatrixUuid(String matrixUuid);
+
+	public List<ProcessMatrixFormComponentVo> getMatrixFormComponentByMatrixUuid(String matrixUuid);
+
     public int deleteMatrixByUuid(String uuid);
 
     public int updateMatrixNameAndLcu(ProcessMatrixVo matrixVo);
