@@ -34,7 +34,7 @@ public interface CatalogMapper {
 	
 	int replaceCatalog(CatalogVo catalogVo);
 
-	int insertCatalogAuthority(AuthorityVo authorityVo);
+	int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
 
 	int updateCatalogForMove(CatalogVo catalogVo);
 

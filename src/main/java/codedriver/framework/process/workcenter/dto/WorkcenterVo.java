@@ -13,6 +13,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.process.dto.AuthorityVo;
 import codedriver.framework.process.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -38,7 +40,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	@EntityField(name = "显示的字段", type = ApiParamType.JSONARRAY)
 	private JSONArray headerList;
 	@JSONField(serialize = false)
-	private List<WorkcenterRoleVo> workcenterRoleList;
+	private List<AuthorityVo> authorityList;
 	@EntityField(name = "角色列表", type = ApiParamType.JSONARRAY)
 	private List<String> valueList;
 	@EntityField(name = "是否拥有编辑权限", type = ApiParamType.JSONARRAY)
@@ -102,14 +104,14 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 		this.name = name;
 	}
 	
-	public List<WorkcenterRoleVo> getWorkcenterRoleList() {
-		return workcenterRoleList;
+	public List<AuthorityVo> getAuthorityList() {
+		return authorityList;
 	}
 
-	public void setWorkcenterRoleList(List<WorkcenterRoleVo> workcenterRoleList) {
-		this.workcenterRoleList = workcenterRoleList;
+	public void setAuthorityList(List<AuthorityVo> authorityList) {
+		this.authorityList = authorityList;
 	}
-	
+
 	public String getOwner() {
 		return owner;
 	}
@@ -157,11 +159,11 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	public List<String> getValueList() {
 		if(valueList == null) {
 			valueList = new ArrayList<String>();
-			for(WorkcenterRoleVo workcenterRoleVo : this.workcenterRoleList) {
-				if(workcenterRoleVo.getRoleName() !=null) {
-					valueList.add("role#" + workcenterRoleVo.getRoleName());
-				}else if(workcenterRoleVo.getUserId() !=null){
-					valueList.add("user#" + workcenterRoleVo.getUserId());
+			for(AuthorityVo workcenterAuthorityVo : this.authorityList) {
+				if(workcenterAuthorityVo.getType().equals(GroupSearch.ROLE.getValue())) {
+					valueList.add(GroupSearch.ROLE.getValuePlugin() + workcenterAuthorityVo.getUuid());
+				}else if(workcenterAuthorityVo.getType().equals(GroupSearch.USER.getValue())){
+					valueList.add(GroupSearch.USER.getValuePlugin() + workcenterAuthorityVo.getUuid());
 				}
 			}
 		}

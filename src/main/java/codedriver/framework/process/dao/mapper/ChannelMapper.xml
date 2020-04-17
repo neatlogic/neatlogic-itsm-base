@@ -310,7 +310,7 @@
 		REPLACE INTO `channel_process`(`channel_uuid`, `process_uuid`) VALUES(#{channelUuid}, #{processUuid})
 	</insert>
 	
-	<insert id="insertChannelAuthority" parameterType="codedriver.framework.process.dto.AuthorityVo">
+	<insert id="insertChannelAuthority" >
 	INSERT INTO `channel_authority` (
 	  `channel_uuid`,
 	  `type`,
@@ -319,8 +319,8 @@
 	VALUES
 	  (
 	    #{channelUuid},
-	    #{type},
-	    #{uuid}
+	    #{authorityVo.type},
+	    #{authorityVo.uuid}
 	  )
 	</insert>
 	

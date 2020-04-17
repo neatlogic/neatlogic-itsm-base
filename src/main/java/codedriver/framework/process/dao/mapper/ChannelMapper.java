@@ -60,7 +60,7 @@ public interface ChannelMapper {
 
 	int replaceChannelWorktime(@Param("channelUuid")String channelUuid, @Param("worktimeUuid")String worktimeUuid);
 
-	int insertChannelAuthority(AuthorityVo authorityVo);
+	int insertChannelAuthority(@Param("authorityVo")AuthorityVo authority,@Param("channelUuid") String channelUuid);
 	
 	int insertChannelType(ChannelTypeVo channelTypeVo);
 

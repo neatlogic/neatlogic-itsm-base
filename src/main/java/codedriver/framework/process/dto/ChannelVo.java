@@ -331,7 +331,6 @@ public class ChannelVo extends BasePageVo implements ITree {
 				String[] split = authority.split("#");
 				if(GroupSearch.getGroupSearch(split[0]) != null) {
 					AuthorityVo authorityVo = new AuthorityVo();
-					authorityVo.setChannelUuid(uuid);
 					authorityVo.setType(split[0]);
 					authorityVo.setUuid(split[1]);
 					authorityVoList.add(authorityVo);
