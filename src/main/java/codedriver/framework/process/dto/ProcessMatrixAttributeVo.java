@@ -16,6 +16,8 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
     private String uuid;
     @EntityField( name = "name", type = ApiParamType.STRING)
     private String name;
+    @EntityField( name = "type", type = ApiParamType.STRING)
+    private String type;
     @EntityField( name = "config", type = ApiParamType.STRING)
     private String config;
 
@@ -43,7 +45,15 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
         this.name = name;
     }
 
-    public String getConfig() {
+    public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getConfig() {
         return config;
     }
 
