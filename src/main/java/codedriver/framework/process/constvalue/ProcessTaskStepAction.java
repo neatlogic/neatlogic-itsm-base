@@ -14,7 +14,7 @@ public enum ProcessTaskStepAction {
 	COMPLETE("complete", "流转"),//下一步骤列表中有未激活的步骤时，有流转权限
 	RETREAT("retreat", "撤回"),
 	ACCEPT("accept", "开始"),
-	WORK("work","处理"),//可处理步骤权限，有accept、start、complete其中一个权限，就会有work权限
+	WORK("work","处理"),//可处理步骤权限，有accept、start、complete、startprocess、completesubtask其中一个权限，就会有work权限
 	/**
 	 * 取消
 	 * 该功能是工单级别的操作，但将权限下放到步骤中配置；被授权的对象可在该步骤处于‘待处理’或‘进行中’时取消/恢复工单，如果同时有多个“待处理”或‘进行中’的步骤，则将每个步骤中配置的授权对象取并集；
