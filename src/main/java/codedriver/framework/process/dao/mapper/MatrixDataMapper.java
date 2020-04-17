@@ -19,7 +19,10 @@ public interface MatrixDataMapper {
 
     public List<Map<String, String>> getDynamicTableDataByColumnList(ProcessMatrixDataVo dataVo);
     
-    public List<Map<String, String>> getDynamicTableDataByDataUuidList(@Param("dataUuidList") List<String> dataUuidList, @Param("targetColumnList") List<String> targetColumnList, @Param("matrixUuid") String matrixUuid);
+    //public List<Map<String, String>> getDynamicTableDataByDataUuidList(@Param("dataUuidList") List<String> dataUuidList, @Param("targetColumnList") List<String> targetColumnList, @Param("matrixUuid") String matrixUuid);
+    public List<Map<String, String>> getDynamicTableDataByUuidList(ProcessMatrixDataVo processMatrixDataVo);
 
 	public int getDynamicTableDataByColumnCount(ProcessMatrixDataVo dataVo);
+	
+	public int getDynamicTableDataByUuidCount(ProcessMatrixDataVo dataVo);
 }

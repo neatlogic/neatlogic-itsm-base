@@ -66,21 +66,24 @@
 		</if>
 	</select>
 	
-	<select id="getDynamicTableDataByDataUuidList" resultType="java.util.LinkedHashMap">
+	<select id="getDynamicTableDataByUuidList" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
 		SELECT
 		`uuid`,
-		<foreach collection="targetColumnList" item="column" separator=",">
+		<foreach collection="columnList" item="column" separator=",">
 			`${column}`
 		</foreach>
 		FROM matrix_${matrixUuid}
 		<where>
-			<if test="dataUuidList != null and dataUuidList.size() > 0">
+			<if test="uuidList != null and uuidList.size() > 0">
 				`uuid` in 
-				<foreach collection="dataUuidList" open="(" close=")" item="uuid" separator=",">
+				<foreach collection="uuidList" open="(" close=")" item="uuid" separator=",">
 					#{uuid}
 				</foreach>
 			</if>
 		</where>
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
 	</select>
 	
 	<select id="getDynamicTableDataByColumnCount" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="int">
@@ -95,7 +98,21 @@
 			</if>
 		</where>
 	</select>
-
+	
+	<select id="getDynamicTableDataByUuidCount" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="int">
+		SELECT
+		count(`id`)
+		FROM matrix_${matrixUuid}
+		<where>
+			<if test="uuidList != null and uuidList.size() > 0">
+				`uuid` in 
+				<foreach collection="uuidList" open="(" close=")" item="uuid" separator=",">
+					#{uuid}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
 	<insert id="insertDynamicTableData">
 		INSERT INTO matrix_${matrixUuid}
 		<foreach collection="columnList" open="(" close=")" item="column" separator=",">
