@@ -124,6 +124,26 @@
 		</foreach>
 	</insert>
 
+	<insert id="insertDynamicTableData2">
+		INSERT INTO matrix_${matrixUuid}
+		<foreach collection="rowData" open="(" close=")" item="columnData" separator=",">
+			`${columnData.column}`
+		</foreach>
+		VALUES
+		<foreach collection="rowData" open="(" close=")" item="columnData" separator=",">
+			#{columnData.value}
+		</foreach>
+	</insert>
+
+	<update id="updateDynamicTableDataByUuid">
+	UPDATE `matrix_${matrixUuid}`
+	SET
+		<foreach collection="rowData" item="columnData" separator=",">
+			`${columnData.column}` = #{columnData.value}
+		</foreach>
+	WHERE `${uuidColumn.column}` = #{uuidColumn.value}
+	</update>
+	
 	<delete id="deleteDynamicTableDataByUuid">
 		DELETE FROM matrix_${matrixUuid} WHERE uuid = #{uuid}
 	</delete>
