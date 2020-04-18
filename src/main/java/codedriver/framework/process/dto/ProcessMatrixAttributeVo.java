@@ -18,6 +18,8 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
     private String name;
     @EntityField( name = "type", type = ApiParamType.STRING)
     private String type;
+    @EntityField( name = "type", type = ApiParamType.INTEGER)
+    private Integer isRequired;
     @EntityField( name = "config", type = ApiParamType.STRING)
     private String config;
 
@@ -51,6 +53,14 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Integer getIsRequired() {
+		return isRequired;
+	}
+
+	public void setIsRequired(Integer isRequired) {
+		this.isRequired = isRequired;
 	}
 
 	public String getConfig() {
