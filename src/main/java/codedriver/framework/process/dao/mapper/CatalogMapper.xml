@@ -130,7 +130,7 @@
 	VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{sort})
 	</insert>
 	
-	<insert id="insertCatalogAuthority" parameterType="codedriver.framework.process.dto.AuthorityVo">
+	<insert id="insertCatalogAuthority">
 	INSERT INTO `catalog_authority` (
 	  `catalog_uuid`,
 	  `type`,
@@ -139,8 +139,8 @@
 	VALUES
 	  (
 	    #{catalogUuid},
-	    #{type},
-	    #{uuid}
+	    #{authorityVo.type},
+	    #{authorityVo.uuid}
 	  )
 	</insert>
 	
