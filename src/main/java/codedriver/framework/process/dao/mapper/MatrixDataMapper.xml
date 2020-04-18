@@ -27,7 +27,6 @@
 
 	<select id="searchDynamicTableData" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
 		SELECT
-		`id`,
 		`uuid`,
   		<foreach collection="columnList" separator="," item="column">
 			`${column}`
