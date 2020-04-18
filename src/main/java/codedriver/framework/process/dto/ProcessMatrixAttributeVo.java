@@ -20,6 +20,8 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
     private String type;
     @EntityField( name = "type", type = ApiParamType.INTEGER)
     private Integer isRequired;
+    @EntityField( name = "sort", type = ApiParamType.INTEGER)
+    private Integer sort;
     @EntityField( name = "config", type = ApiParamType.STRING)
     private String config;
 
@@ -70,6 +72,14 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
     public void setConfig(String config) {
         this.config = config;
     }
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
 
 //    @Override
 //    public boolean equals(Object obj) {

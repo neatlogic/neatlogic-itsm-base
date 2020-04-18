@@ -8,6 +8,7 @@
 		`name`,
 		`type`,
 		`is_required` AS isRequired,
+		`sort`,
 		`config`
 		FROM `process_matrix_attribute`
 		WHERE `matrix_uuid` = #{matrixUuid}
@@ -21,6 +22,7 @@
 		`name`,
 		`type`,
 		`is_required` AS isRequired,
+		`sort`,
 		`config`
 		FROM `process_matrix_attribute`
 		<where>
@@ -50,6 +52,7 @@
 			`name`,
 			`type`,
 			`is_required`,
+			`sort`,
 			`config`
 		) VALUES (
 			#{matrixUuid},
@@ -57,6 +60,7 @@
 			#{name},
 			#{type},
 			#{isRequired},
+			#{sort},
 			#{config}
 		)
 	</insert>
