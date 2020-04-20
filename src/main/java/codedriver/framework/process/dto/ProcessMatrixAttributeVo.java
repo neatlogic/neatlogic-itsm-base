@@ -1,7 +1,9 @@
 package codedriver.framework.process.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.apiparam.core.ApiParamType;
@@ -33,9 +35,9 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
     @EntityField( name = "配置信息", type = ApiParamType.STRING)
     private String config;
     @EntityField( name = "表达式列表", type = ApiParamType.JSONARRAY)
-    private List<ProcessExpression> expressionList;
+    private List<ProcessExpressionVo> expressionList;
     @EntityField( name = "默认表达式", type = ApiParamType.JSONOBJECT)
-    private ProcessExpression defaultExpression;
+    private ProcessExpressionVo defaultExpression;
     
     public String getMatrixUuid() {
         return matrixUuid;
@@ -101,25 +103,34 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 		this.isDeletable = isDeletable;
 	}
 
-	public List<ProcessExpression> getExpressionList() {
+	public List<ProcessExpressionVo> getExpressionList() {
 		if(expressionList == null && StringUtils.isNotBlank(type)) {
-			expressionList = ProcessFormHandler.getExpressionList(type);
+			List<ProcessExpression> expressionEnumList = ProcessFormHandler.getExpressionList(type);
+			if(CollectionUtils.isNotEmpty(expressionEnumList)) {
+				expressionList = new ArrayList<>();
+				for(ProcessExpression expression : expressionEnumList) {
+					expressionList.add(new ProcessExpressionVo(expression));
+				}
+			}
 		}
 		return expressionList;
 	}
 
-	public void setExpressionList(List<ProcessExpression> expressionList) {
+	public void setExpressionList(List<ProcessExpressionVo> expressionList) {
 		this.expressionList = expressionList;
 	}
 
-	public ProcessExpression getDefaultExpression() {
+	public ProcessExpressionVo getDefaultExpression() {
 		if(defaultExpression == null && StringUtils.isNotBlank(type)) {
-			defaultExpression = ProcessFormHandler.getExpression(type);
+			ProcessExpression expressionEnum = ProcessFormHandler.getExpression(type);
+			if(expressionEnum != null) {
+				defaultExpression = new ProcessExpressionVo(expressionEnum);
+			}
 		}
 		return defaultExpression;
 	}
 
-	public void setDefaultExpression(ProcessExpression defaultExpression) {
+	public void setDefaultExpression(ProcessExpressionVo defaultExpression) {
 		this.defaultExpression = defaultExpression;
 	}
 }
