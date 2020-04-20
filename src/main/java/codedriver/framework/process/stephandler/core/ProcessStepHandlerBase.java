@@ -1382,4 +1382,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId) {
 		return ActionRoleChecker.getRetractableStepListByProcessTaskId(processTaskId);
 	}
+	
+	@Override
+	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId) {
+		return ActionRoleChecker.getUrgeableStepList(processTaskId);
+	}
 }

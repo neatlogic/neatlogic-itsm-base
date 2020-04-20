@@ -345,4 +345,13 @@ public interface IProcessStepHandler {
 	* @return List<ProcessTaskStepVo>
 	 */
 	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId);
+	
+	/**
+	 * 
+	* @Time:2020年4月18日
+	* @Description: 获取工单中当前用户能催办的步骤列表
+	* @param processTaskId
+	* @return List<ProcessTaskStepVo>
+	 */
+	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId);
 }
