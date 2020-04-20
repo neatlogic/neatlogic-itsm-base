@@ -843,12 +843,10 @@ public abstract class ProcessStepHandlerUtilBase {
 				List<String> actionList = new ArrayList<>();
 				actionList.add(ProcessTaskStepAction.VIEW.getValue());
 				actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
-				actionList.add(ProcessTaskStepAction.URGE.getValue());
 				if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
 					actionList = new ArrayList<>();
 					actionList.add(ProcessTaskStepAction.VIEW.getValue());
 					actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
-					actionList.add(ProcessTaskStepAction.URGE.getValue());
 					if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
 						currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
 					}
@@ -859,11 +857,6 @@ public abstract class ProcessStepHandlerUtilBase {
 							resultList.add(action);
 						}else if(ProcessTaskStepAction.TRANSFER.getValue().equals(action)) {
 							//步骤状态为已激活的才能转交
-							if(processTaskStepVo.getIsActive() == 1) {
-								resultList.add(action);
-							}
-						} else if(ProcessTaskStepAction.URGE.getValue().equals(action)) {
-							//步骤状态为已激活的才能催办
 							if(processTaskStepVo.getIsActive() == 1) {
 								resultList.add(action);
 							}
@@ -918,6 +911,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			actionList.add(ProcessTaskStepAction.ABORT.getValue());
 			actionList.add(ProcessTaskStepAction.RECOVER.getValue());
 			actionList.add(ProcessTaskStepAction.UPDATE.getValue());
+			actionList.add(ProcessTaskStepAction.URGE.getValue());
 			if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
 				//终止/恢复流程abort、修改上报内容update取工单当前所有正在处理的节点权限配置的并集
 				List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.PROCESS.getValue());
@@ -927,6 +921,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						actionList = new ArrayList<>();
 						actionList.add(ProcessTaskStepAction.ABORT.getValue());
 						actionList.add(ProcessTaskStepAction.UPDATE.getValue());
+						actionList.add(ProcessTaskStepAction.URGE.getValue());
 						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
 						//根据流程设置和步骤状态判断当前用户权限
 						for(String action : configActionList) {
@@ -936,6 +931,8 @@ public abstract class ProcessStepHandlerUtilBase {
 									resultList.add(action);
 								}
 							}else if(ProcessTaskStepAction.UPDATE.getValue().equals(action)) {
+								resultList.add(action);
+							}else if(ProcessTaskStepAction.URGE.getValue().equals(action)) {
 								resultList.add(action);
 							}
 						}
@@ -1173,6 +1170,31 @@ public abstract class ProcessStepHandlerUtilBase {
 							break;
 						}
 					}				
+				}
+			}
+			return resultList;
+		}
+		
+		/**
+		 * 
+		* @Time:2020年4月18日
+		* @Description: 获取工单中当前用户能催办的步骤列表
+		* @param processTaskId
+		* @return List<ProcessTaskStepVo>
+		 */
+		protected static List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId){
+			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
+			List<ProcessTaskStepVo> resultList = new ArrayList<>();
+			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.PROCESS.getValue());
+			for(ProcessTaskStepVo processTaskStep : processTaskStepList) {
+				if(processTaskStep.getIsActive().intValue() == 1) {
+					List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
+					List<String> actionList = new ArrayList<>();
+					actionList.add(ProcessTaskStepAction.URGE.getValue());
+					List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
+					if(configActionList.contains(ProcessTaskStepAction.URGE.getValue())) {
+						resultList.add(processTaskStep);
+					}
 				}
 			}
 			return resultList;
