@@ -122,28 +122,4 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 	public void setDefaultExpression(ProcessExpression defaultExpression) {
 		this.defaultExpression = defaultExpression;
 	}
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if(!(obj instanceof ProcessMatrixAttributeVo)) {
-//            return false;
-//        }
-//        ProcessMatrixAttributeVo attributeVo = (ProcessMatrixAttributeVo) obj;
-//        if (this == attributeVo) {
-//            return true;
-//        }
-//        if (attributeVo.uuid.equals(this.uuid)){
-//            return true;
-//        }else {
-//            return false;
-//        }
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = uuid.hashCode();
-//        result = 17 * result + matrixUuid.hashCode();
-//        result = 17 * result + name.hashCode();
-//        return result;
-//    }
 }
