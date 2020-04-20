@@ -1,5 +1,6 @@
 package codedriver.framework.process.dao.mapper;
 
+import codedriver.framework.process.dto.ProcessMatrixColumnVo;
 import codedriver.framework.process.dto.ProcessMatrixDataVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -8,6 +9,10 @@ import java.util.Map;
 
 public interface MatrixDataMapper {
     public int insertDynamicTableData(@Param("columnList") List<String> columnList, @Param("dataList") List<String> dataList, @Param("matrixUuid") String matrixUuid);
+
+	public int insertDynamicTableData2(@Param("rowData") List<ProcessMatrixColumnVo> rowData, @Param("matrixUuid") String matrixUuid);
+
+	public int updateDynamicTableDataByUuid(@Param("rowData") List<ProcessMatrixColumnVo> rowData, @Param("uuidColumn") ProcessMatrixColumnVo uuidColumn, @Param("matrixUuid") String matrixUuid);
 
     public int deleteDynamicTableDataByUuid(@Param("matrixUuid") String matrixUuid, @Param("uuid") String uuid);
 

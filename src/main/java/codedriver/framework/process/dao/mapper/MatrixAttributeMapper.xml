@@ -4,9 +4,11 @@
 	<select id="getMatrixAttributeByMatrixUuid" parameterType="string" resultType="codedriver.framework.process.dto.ProcessMatrixAttributeVo">
 		SELECT
 		`uuid`,
-		`matrix_uuid` as matrixUuid,
+		`matrix_uuid` AS matrixUuid,
 		`name`,
 		`type`,
+		`is_required` AS isRequired,
+		`sort`,
 		`config`
 		FROM `process_matrix_attribute`
 		WHERE `matrix_uuid` = #{matrixUuid}
@@ -19,6 +21,8 @@
 		`matrix_uuid` as matrixUuid,
 		`name`,
 		`type`,
+		`is_required` AS isRequired,
+		`sort`,
 		`config`
 		FROM `process_matrix_attribute`
 		<where>
@@ -47,12 +51,16 @@
 			`uuid`,
 			`name`,
 			`type`,
+			`is_required`,
+			`sort`,
 			`config`
 		) VALUES (
 			#{matrixUuid},
 			#{uuid},
 			#{name},
 			#{type},
+			#{isRequired},
+			#{sort},
 			#{config}
 		)
 	</insert>

@@ -12,13 +12,19 @@ import codedriver.framework.restful.annotation.EntityField;
 public class ProcessMatrixAttributeVo extends BasePageVo {
     @EntityField( name = "矩阵uuid", type = ApiParamType.STRING)
     private String matrixUuid;
-    @EntityField( name = "uuid", type = ApiParamType.STRING)
+    @EntityField( name = "属性uuid", type = ApiParamType.STRING)
     private String uuid;
-    @EntityField( name = "name", type = ApiParamType.STRING)
+    @EntityField( name = "属性名", type = ApiParamType.STRING)
     private String name;
-    @EntityField( name = "type", type = ApiParamType.STRING)
+    @EntityField( name = "类型", type = ApiParamType.STRING)
     private String type;
-    @EntityField( name = "config", type = ApiParamType.STRING)
+    @EntityField( name = "是否必填", type = ApiParamType.INTEGER)
+    private Integer isRequired;
+    @EntityField( name = "排序", type = ApiParamType.INTEGER)
+    private Integer sort;
+	@EntityField(name = "是否能删除", type = ApiParamType.INTEGER)
+	private Integer isDeletable = 1;
+    @EntityField( name = "配置信息", type = ApiParamType.STRING)
     private String config;
 
     public String getMatrixUuid() {
@@ -53,6 +59,14 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 		this.type = type;
 	}
 
+	public Integer getIsRequired() {
+		return isRequired;
+	}
+
+	public void setIsRequired(Integer isRequired) {
+		this.isRequired = isRequired;
+	}
+
 	public String getConfig() {
         return config;
     }
@@ -61,27 +75,43 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
         this.config = config;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof ProcessMatrixAttributeVo)) {
-            return false;
-        }
-        ProcessMatrixAttributeVo attributeVo = (ProcessMatrixAttributeVo) obj;
-        if (this == attributeVo) {
-            return true;
-        }
-        if (attributeVo.uuid.equals(this.uuid)){
-            return true;
-        }else {
-            return false;
-        }
-    }
+	public Integer getSort() {
+		return sort;
+	}
 
-    @Override
-    public int hashCode() {
-        int result = uuid.hashCode();
-        result = 17 * result + matrixUuid.hashCode();
-        result = 17 * result + name.hashCode();
-        return result;
-    }
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+
+	public Integer getIsDeletable() {
+		return isDeletable;
+	}
+
+	public void setIsDeletable(Integer isDeletable) {
+		this.isDeletable = isDeletable;
+	}
+
+//    @Override
+//    public boolean equals(Object obj) {
+//        if(!(obj instanceof ProcessMatrixAttributeVo)) {
+//            return false;
+//        }
+//        ProcessMatrixAttributeVo attributeVo = (ProcessMatrixAttributeVo) obj;
+//        if (this == attributeVo) {
+//            return true;
+//        }
+//        if (attributeVo.uuid.equals(this.uuid)){
+//            return true;
+//        }else {
+//            return false;
+//        }
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int result = uuid.hashCode();
+//        result = 17 * result + matrixUuid.hashCode();
+//        result = 17 * result + name.hashCode();
+//        return result;
+//    }
 }
