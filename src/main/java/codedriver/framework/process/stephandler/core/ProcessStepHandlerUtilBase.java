@@ -1192,7 +1192,6 @@ public abstract class ProcessStepHandlerUtilBase {
 					List<String> actionList = new ArrayList<>();
 					actionList.add(ProcessTaskStepAction.URGE.getValue());
 					List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
-					//根据流程设置和步骤状态判断当前用户权限
 					if(configActionList.contains(ProcessTaskStepAction.URGE.getValue())) {
 						resultList.add(processTaskStep);
 					}
