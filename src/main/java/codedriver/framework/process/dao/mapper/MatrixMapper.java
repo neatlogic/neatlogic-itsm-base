@@ -13,7 +13,7 @@ public interface MatrixMapper {
 
     public int insertMatrixDispatcher(ProcessMatrixDispatcherVo dispatcherVo);
 
-    public int searchMatrixCount(ProcessMatrixVo matrixVo);
+    public int searchMatrixCount (ProcessMatrixVo matrixVo);
 
     public ProcessMatrixVo getMatrixByUuid(String uuid);
 
