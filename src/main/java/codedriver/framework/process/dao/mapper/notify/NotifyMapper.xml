@@ -16,32 +16,45 @@
 
 	<select id="searchNotifyTemplateCount" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo" resultType="int">
 		SELECT
-		COUNT(*)
+		COUNT(1)
 		FROM `process_notifytemplate`
-		WHERE 1=1
-		<if test="type != null and type != ''">
-			AND `type` = #{type}
-		</if>
-		<if test="keyword != null and keyword != ''">
-			AND `name` LIKE CONCAT('%', #{keyword}, '%')
-		</if>
+		<where>
+			<if test="type != null and type != ''">
+				AND `type` = #{type}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND `name` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
 	</select>
 
 	<select id="searchNotifyTemplate" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo" resultType="codedriver.framework.process.notify.dto.NotifyTemplateVo">
 		SELECT
 		`uuid`,
-		`name`
+		`name`,
+		`title`,
+		`content`,
+		`type`
 		FROM `process_notifytemplate`
-		WHERE 1=1
+		<where>
 		<if test="type != null and type != ''">
 			AND `type` = #{type}
 		</if>
 		<if test="keyword != null and keyword != ''">
 			AND `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
+		</where>
+		ORDER BY `fcd` DESC
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
 		</if>
+	</select>
+	
+	<select id="getNotifyTemplateTypeList" resultType="java.lang.String">
+	SELECT 
+	  DISTINCT `type`
+	FROM `process_notifytemplate` 
+	ORDER BY `type`
 	</select>
 	
 	<insert id="insertNotifyTemplate" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo">

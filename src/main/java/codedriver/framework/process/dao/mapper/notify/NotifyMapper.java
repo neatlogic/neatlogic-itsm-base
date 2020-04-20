@@ -12,6 +12,8 @@ public interface NotifyMapper {
 
 	public NotifyTemplateVo getNotifyTemplateByUuid(String uuid);
 
+	public List<String> getNotifyTemplateTypeList();
+
 	public int insertNotifyTemplate(NotifyTemplateVo notifyTemplate);
 
 	public int updateNotifyTemplateByUuid(NotifyTemplateVo notifyTemplate);
