@@ -1,7 +1,13 @@
 package codedriver.framework.process.dto;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.constvalue.ProcessExpression;
+import codedriver.framework.process.constvalue.ProcessFormHandler;
 import codedriver.framework.restful.annotation.EntityField;
 
 /**
@@ -26,7 +32,11 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 	private Integer isDeletable = 1;
     @EntityField( name = "配置信息", type = ApiParamType.STRING)
     private String config;
-
+    @EntityField( name = "表达式列表", type = ApiParamType.JSONARRAY)
+    private List<ProcessExpression> expressionList;
+    @EntityField( name = "默认表达式", type = ApiParamType.JSONOBJECT)
+    private ProcessExpression defaultExpression;
+    
     public String getMatrixUuid() {
         return matrixUuid;
     }
@@ -91,27 +101,25 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 		this.isDeletable = isDeletable;
 	}
 
-//    @Override
-//    public boolean equals(Object obj) {
-//        if(!(obj instanceof ProcessMatrixAttributeVo)) {
-//            return false;
-//        }
-//        ProcessMatrixAttributeVo attributeVo = (ProcessMatrixAttributeVo) obj;
-//        if (this == attributeVo) {
-//            return true;
-//        }
-//        if (attributeVo.uuid.equals(this.uuid)){
-//            return true;
-//        }else {
-//            return false;
-//        }
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = uuid.hashCode();
-//        result = 17 * result + matrixUuid.hashCode();
-//        result = 17 * result + name.hashCode();
-//        return result;
-//    }
+	public List<ProcessExpression> getExpressionList() {
+		if(expressionList == null && StringUtils.isNotBlank(type)) {
+			expressionList = ProcessFormHandler.getExpressionList(type);
+		}
+		return expressionList;
+	}
+
+	public void setExpressionList(List<ProcessExpression> expressionList) {
+		this.expressionList = expressionList;
+	}
+
+	public ProcessExpression getDefaultExpression() {
+		if(defaultExpression == null && StringUtils.isNotBlank(type)) {
+			defaultExpression = ProcessFormHandler.getExpression(type);
+		}
+		return defaultExpression;
+	}
+
+	public void setDefaultExpression(ProcessExpression defaultExpression) {
+		this.defaultExpression = defaultExpression;
+	}
 }
