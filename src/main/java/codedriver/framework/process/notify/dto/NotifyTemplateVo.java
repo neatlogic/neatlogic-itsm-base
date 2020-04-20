@@ -2,6 +2,8 @@ package codedriver.framework.process.notify.dto;
 
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import codedriver.framework.common.dto.BasePageVo;
 
 public class NotifyTemplateVo extends BasePageVo {
@@ -11,11 +13,14 @@ public class NotifyTemplateVo extends BasePageVo {
 	private String title;
 	private String content;
 	private String type;
-
+	
+	private transient String fcu;
+	private transient String lcu;
+	
 	private transient String keyword;
 
-	public String getUuid() {
-		if (uuid == null) {
+	public synchronized String getUuid() {
+		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
 		return uuid;
@@ -63,5 +68,21 @@ public class NotifyTemplateVo extends BasePageVo {
 
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+
+	public String getFcu() {
+		return fcu;
+	}
+
+	public void setFcu(String fcu) {
+		this.fcu = fcu;
+	}
+
+	public String getLcu() {
+		return lcu;
+	}
+
+	public void setLcu(String lcu) {
+		this.lcu = lcu;
 	}
 }

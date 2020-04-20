@@ -43,4 +43,43 @@
 			limit #{startNum}, #{pageSize}
 		</if>
 	</select>
+	
+	<insert id="insertNotifyTemplate" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo">
+	INSERT INTO `process_notifytemplate` (
+	  `uuid`,
+	  `name`,
+	  `title`,
+	  `content`,
+	  `type`,
+	  `fcd`,
+	  `fcu`
+	) 
+	VALUES
+	  (
+	    #{uuid},
+	    #{name},
+	    #{title},
+	    #{content},
+	    #{type},
+	    NOW(),
+	    #{fcu}
+	  ) 
+	</insert>
+	
+	<update id="updateNotifyTemplateByUuid" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo">
+	UPDATE 
+	  `process_notifytemplate` 
+	SET
+	  `name` = #{name},
+	  `title` = #{title},
+	  `content` = #{content},
+	  `type` = #{type},
+	  `lcd` = NOW(),
+	  `lcu` = #{lcu} 
+	WHERE `uuid` = #{uuid}
+	</update>
+	
+	<delete id="deleteNotifyTemplateByUuid" parameterType="java.lang.String">
+	DELETE FROM `process_notifytemplate` where `uuid`=#{uuid}
+	</delete>
 </mapper>

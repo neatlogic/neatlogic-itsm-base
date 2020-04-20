@@ -12,4 +12,10 @@ public interface NotifyMapper {
 
 	public NotifyTemplateVo getNotifyTemplateByUuid(String uuid);
 
+	public int insertNotifyTemplate(NotifyTemplateVo notifyTemplate);
+
+	public int updateNotifyTemplateByUuid(NotifyTemplateVo notifyTemplate);
+
+	public int deleteNotifyTemplateByUuid(String uuid);
+
 }
