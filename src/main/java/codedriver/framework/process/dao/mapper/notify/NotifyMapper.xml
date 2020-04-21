@@ -16,31 +16,91 @@
 
 	<select id="searchNotifyTemplateCount" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo" resultType="int">
 		SELECT
-		COUNT(*)
+		COUNT(1)
 		FROM `process_notifytemplate`
-		WHERE 1=1
-		<if test="type != null and type != ''">
-			AND `type` = #{type}
-		</if>
-		<if test="keyword != null and keyword != ''">
-			AND `name` LIKE CONCAT('%', #{keyword}, '%')
-		</if>
+		<where>
+			<if test="type != null and type != ''">
+				AND `type` = #{type}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND `name` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
 	</select>
 
 	<select id="searchNotifyTemplate" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo" resultType="codedriver.framework.process.notify.dto.NotifyTemplateVo">
 		SELECT
 		`uuid`,
-		`name`
+		`name`,
+		`title`,
+		`content`,
+		`type`
 		FROM `process_notifytemplate`
-		WHERE 1=1
+		<where>
 		<if test="type != null and type != ''">
 			AND `type` = #{type}
 		</if>
 		<if test="keyword != null and keyword != ''">
 			AND `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
+		</where>
+		ORDER BY `fcd` DESC
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
 		</if>
 	</select>
+	
+	<select id="getNotifyTemplateTypeList" resultType="java.lang.String">
+	SELECT 
+	  DISTINCT `type`
+	FROM `process_notifytemplate` 
+	ORDER BY `type`
+	</select>
+	
+	<select id="getNotifyTemplateListForSelect" resultType="codedriver.framework.common.dto.ValueTextVo">
+	SELECT
+	`uuid` AS value,
+	`name` AS text
+	FROM `process_notifytemplate`
+	ORDER BY `name`
+	</select>
+	
+	<insert id="insertNotifyTemplate" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo">
+	INSERT INTO `process_notifytemplate` (
+	  `uuid`,
+	  `name`,
+	  `title`,
+	  `content`,
+	  `type`,
+	  `fcd`,
+	  `fcu`
+	) 
+	VALUES
+	  (
+	    #{uuid},
+	    #{name},
+	    #{title},
+	    #{content},
+	    #{type},
+	    NOW(),
+	    #{fcu}
+	  ) 
+	</insert>
+	
+	<update id="updateNotifyTemplateByUuid" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo">
+	UPDATE 
+	  `process_notifytemplate` 
+	SET
+	  `name` = #{name},
+	  `title` = #{title},
+	  `content` = #{content},
+	  `type` = #{type},
+	  `lcd` = NOW(),
+	  `lcu` = #{lcu} 
+	WHERE `uuid` = #{uuid}
+	</update>
+	
+	<delete id="deleteNotifyTemplateByUuid" parameterType="java.lang.String">
+	DELETE FROM `process_notifytemplate` where `uuid`=#{uuid}
+	</delete>
 </mapper>
