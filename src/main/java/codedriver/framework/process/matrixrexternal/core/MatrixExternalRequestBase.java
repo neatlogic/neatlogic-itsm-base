@@ -60,16 +60,17 @@ public abstract class MatrixExternalRequestBase implements IMatrixExternalReques
 
     @Override
     public Map<String, List<String>> attributeHandler(String url, String root, JSONObject config) {
-        String restfulType = config.getString("restfulType");
+        String requestMethod = config.getString("requestMethod");
         String authType = config.getString("authType");
-        String encodingType = config.getString("encodingType");
-        String result = myHandler(url, authType, restfulType, encodingType, config);
+        String charsetName = config.getString("charsetName");
+        String result = myHandler(url, authType, requestMethod, charsetName, config);
+        System.out.println("result:"+result);
         List<String> attributeList = new ArrayList<>();
         List<String> pageAttributeList = new ArrayList<>();
-        Map<String, List<String>> map = new HashMap();
+        Map<String, List<String>> map = new HashMap<>();
         if (StringUtils.isNotBlank(result)){
             JSONObject dataObj = JSONObject.parseObject(result);
-            String[] rootArray = root.split(".");
+            String[] rootArray = root.split("\\.");
             if (rootArray.length > 1) {
                 for (int i = 0; i < rootArray.length - 1; i++) {
                     if (dataObj.containsKey(rootArray[i])) {
@@ -100,13 +101,13 @@ public abstract class MatrixExternalRequestBase implements IMatrixExternalReques
 
     @Override
     public JSONArray dataHandler(String url, String root, JSONObject config) {
-        String restfulType = config.getString("restfulType");
+        String requestMethod = config.getString("requestMethod");
         String authType = config.getString("authType");
-        String encodingType = config.getString("encodingType");
-        String result = myHandler(url, authType, restfulType, encodingType, config);
+        String charsetName = config.getString("charsetName");
+        String result = myHandler(url, authType, requestMethod, charsetName, config);
         if (StringUtils.isNotBlank(result)) {
             JSONObject dataObj = JSONObject.parseObject(result);
-            String[] rootArray = root.split(".");
+            String[] rootArray = root.split("\\.");
             if (rootArray.length > 1){
                 for (int i = 0; i < rootArray.length - 1; i++) {
                     if (dataObj.containsKey(rootArray[i])) {

@@ -2,7 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.MatrixExternalMapper">
 	<select id="getMatrixExternalByMatrixUuid" parameterType="string" resultType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
-		SELECT `id`, `matrix_uuid` as `matrixUuid`, `plugin`, `config` FROM `process_matrix_external` WHERE `matrix_uuid` = #{matrixUuid}
+		SELECT 
+		`id`, 
+		`matrix_uuid` as `matrixUuid`, 
+		`plugin`, 
+		`config` 
+		FROM `process_matrix_external` 
+		WHERE `matrix_uuid` = #{matrixUuid}
 	</select>
 
 	<insert id="insertMatrixExternal" parameterType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
