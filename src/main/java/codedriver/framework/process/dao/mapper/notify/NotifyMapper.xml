@@ -57,6 +57,14 @@
 	ORDER BY `type`
 	</select>
 	
+	<select id="getNotifyTemplateListForSelect" resultType="codedriver.framework.common.dto.ValueTextVo">
+	SELECT
+	`uuid` AS value,
+	`name` AS text
+	FROM `process_notifytemplate`
+	ORDER BY `name`
+	</select>
+	
 	<insert id="insertNotifyTemplate" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo">
 	INSERT INTO `process_notifytemplate` (
 	  `uuid`,
