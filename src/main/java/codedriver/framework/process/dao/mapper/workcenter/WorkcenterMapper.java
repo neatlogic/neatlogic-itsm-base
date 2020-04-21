@@ -7,15 +7,18 @@ import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.process.dto.AuthorityVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterTheadVo;
+import codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 
 public interface WorkcenterMapper {
 	
-	List<WorkcenterVo> getAuthorizedWorkcenterList(
+	public List<String> getAuthorizedWorkcenterUuidList(
 			@Param("userId")String userId, 
 			@Param("teamUuidList")List<String> teamUuidList,
 			@Param("roleNameList")List<String> roleNameList
 			);
+	
+	public List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);
 	
 	public Integer checkWorkcenterNameIsRepeat(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
 	
@@ -24,6 +27,10 @@ public interface WorkcenterMapper {
 	public Map<String,String> getWorkcenterConditionConfig();
 	
 	public List<WorkcenterTheadVo> getWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
+	
+	public WorkcenterUserProfileVo getWorkcenterUserProfileByUserId(@Param("userId")String userId);
+	
+	public Integer deleteWorkcenterUserProfileByUserId(@Param("userId")String userId);
 	
 	public Integer deleteWorkcenterByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
@@ -41,5 +48,8 @@ public interface WorkcenterMapper {
 	
 	public Integer insertWorkcenterThead(WorkcenterTheadVo workcenterTheadVo); 
 	
+	public Integer insertWorkcenterUserProfile(WorkcenterUserProfileVo workcenterUserProfileVo);
+	
 	public Integer updateWorkcenter(WorkcenterVo workcenterVo);
+	
 }
