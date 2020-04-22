@@ -1,9 +1,12 @@
 package codedriver.framework.process.dto;
 
+import java.io.Serializable;
+
 import codedriver.framework.process.constvalue.ProcessExpression;
 
-public class ProcessExpressionVo {
+public class ProcessExpressionVo implements Serializable {
 
+	private static final long serialVersionUID = -2045500057556272026L;
 	private String expression;
 	private String expressionName;
 	private String expressionEs;
