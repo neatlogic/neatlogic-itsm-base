@@ -6,7 +6,6 @@ import codedriver.framework.process.constvalue.AuthType;
 import codedriver.framework.process.constvalue.EncodingType;
 import codedriver.framework.process.constvalue.RestfulType;
 import codedriver.framework.process.dto.MatrixExternalRequestVo;
-import codedriver.framework.process.exception.process.MatrixExternalException;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.ApplicationContext;
@@ -34,11 +33,8 @@ public class MatrixExternalRequestFactory implements ApplicationListener<Context
         return requestVoList;
     }
 
-    public static IMatrixExternalRequestHandler getHandler(String handlerId){
-        if (map.containsKey(handlerId)){
-            return map.get(handlerId);
-        }
-        throw new MatrixExternalException("插件不存在");
+    public static IMatrixExternalRequestHandler getHandler(String handler){
+            return map.get(handler);
     }
 
     @Override
