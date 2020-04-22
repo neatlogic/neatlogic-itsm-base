@@ -100,11 +100,14 @@ public abstract class MatrixExternalRequestBase implements IMatrixExternalReques
     }
 
     @Override
-    public JSONArray dataHandler(String url, String root, JSONObject config) {
+    public JSONObject dataHandler(String url, String root, JSONObject config) {
+    	JSONObject resultObj = new JSONObject();
         String requestMethod = config.getString("requestMethod");
         String authType = config.getString("authType");
         String charsetName = config.getString("charsetName");
+        System.out.println("url:"+url);
         String result = myHandler(url, authType, requestMethod, charsetName, config);
+        System.out.println("result:"+result);
         if (StringUtils.isNotBlank(result)) {
             JSONObject dataObj = JSONObject.parseObject(result);
             String[] rootArray = root.split("\\.");
@@ -118,11 +121,16 @@ public abstract class MatrixExternalRequestBase implements IMatrixExternalReques
                 }
                 root = rootArray[rootArray.length - 1];
             }
-
-            return dataObj.getJSONArray(root);
+            resultObj.put("tbodyList", dataObj.getJSONArray(root));
+            if(config.getBooleanValue("needPage")){
+            	resultObj.put("rowNum", dataObj.getString(config.getString("rowNum")));
+            	resultObj.put("pageCount", dataObj.getString(config.getString("pageCount")));
+            	resultObj.put("currentPage", dataObj.getString(config.getString("currentPage")));
+            	resultObj.put("pageSize", dataObj.getString(config.getString("pageSize")));
+            }          
         }
-        return null;
+        return resultObj;
     }
 
-    public  abstract String myHandler(String url, String authType, String restfulType, String encodingType, JSONObject config);
+    public abstract String myHandler(String url, String authType, String restfulType, String encodingType, JSONObject config);
 }
