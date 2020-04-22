@@ -10,4 +10,6 @@ public interface MatrixExternalMapper {
     public void deleteMatrixExternalByMatrixUuid(String matrixUuid);
 
     public ProcessMatrixExternalVo getMatrixExternalByMatrixUuid(String matrixUuid);
+
+	public int getMatrixExternalIsExists(String matrixUuid);
 }

@@ -12,7 +12,7 @@
 		`config`
 		FROM `process_matrix_attribute`
 		WHERE `matrix_uuid` = #{matrixUuid}
-		ORDER BY `id`
+		ORDER BY `sort`
 	</select>
 	
 	<select id="getMatrixAttributeByMatrixUuidList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessMatrixAttributeVo">
