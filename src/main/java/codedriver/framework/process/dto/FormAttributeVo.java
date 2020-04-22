@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.process.constvalue.ProcessExpression;
 import codedriver.framework.process.constvalue.ProcessFormHandler;
+import codedriver.framework.process.constvalue.ProcessFormHandlerType;
 import codedriver.framework.process.constvalue.ProcessWorkcenterConditionModel;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -156,7 +157,11 @@ public class FormAttributeVo implements Serializable {
 			return null;
 		}
 		ProcessExpression processExpression = ProcessFormHandler.getExpression(handler);
-		return new ProcessExpressionVo(processExpression);
+		if(processExpression != null) {
+			return new ProcessExpressionVo(processExpression);
+		}else {
+			return null;
+		}
 	}
 
 	public void setDefaultExpression(ProcessExpressionVo defaultExpression) {
@@ -207,7 +212,8 @@ public class FormAttributeVo implements Serializable {
 		if(conditionModel == null) {
 			return null;
 		}
-		return ProcessFormHandler.getType(handler, conditionModel).toString();
+		ProcessFormHandlerType  handlerType = ProcessFormHandler.getType(handler, conditionModel);
+		return handlerType == null?null:handlerType.toString();
 	}
 	
 	public Boolean getIsMultiple() {
