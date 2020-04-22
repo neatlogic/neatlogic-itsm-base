@@ -132,9 +132,9 @@
 	</select>
 	
 	<insert id="insertDynamicTableData">
-		INSERT INTO matrix_${matrixUuid}
+		INSERT INTO `matrix_${matrixUuid}`
 		<foreach collection="columnList" open="(" close=")" item="column" separator=",">
-			${column}
+			`${column}`
 		</foreach>
 		VALUES
 		<foreach collection="dataList" open="(" close=")" item="data" separator=",">

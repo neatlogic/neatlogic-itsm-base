@@ -1,6 +1,5 @@
 package codedriver.framework.process.exception.process;
 
-import codedriver.framework.exception.core.ApiException;
 import codedriver.framework.exception.core.ApiRuntimeException;
 
 /**
