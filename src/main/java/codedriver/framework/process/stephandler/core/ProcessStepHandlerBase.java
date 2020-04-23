@@ -47,7 +47,6 @@ import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
-import codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
@@ -60,8 +59,6 @@ import codedriver.framework.process.exception.process.ProcessStepHandlerNotFound
 import codedriver.framework.process.exception.processtask.ProcessTaskStepUnActivedException;
 import codedriver.framework.process.exception.processtask.ProcessTaskStepUserIsExistsException;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
-import codedriver.framework.process.timeoutpolicy.handler.ITimeoutPolicyHandler;
-import codedriver.framework.process.timeoutpolicy.handler.TimeoutPolicyHandlerFactory;
 
 public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase implements IProcessStepHandler {
 	static Logger logger = LoggerFactory.getLogger(ProcessStepHandlerBase.class);
@@ -171,24 +168,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
 				}
 
-				/** 启动超时计时器 **/
-				List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList = processTaskMapper.getProcessTaskStepTimeoutPolicyByProcessTaskStepId(currentProcessTaskStepVo.getId());
-				if (timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
-					boolean hasTimeout = false;
-					for (ProcessTaskStepTimeoutPolicyVo timeoutPolicyVo : timeoutPolicyList) {
-						if (hasTimeout) {
-							break;
-						}
-						ITimeoutPolicyHandler timeoutPolicyHandler = TimeoutPolicyHandlerFactory.getHandler(timeoutPolicyVo.getPolicy());
-						if (timeoutPolicyHandler != null) {
-							hasTimeout = timeoutPolicyHandler.execute(timeoutPolicyVo, currentProcessTaskStepVo);
-						}
-					}
-					if (hasTimeout && currentProcessTaskStepVo.getExpireTimeLong() != null) {
-						/** TODO 结合工作日历计算最终超时时间，启动超时告警线程 **/
-
-					}
-				}
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 					/** 如果已经存在过处理人，则继续使用旧处理人，否则启用分派 **/
 					List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
