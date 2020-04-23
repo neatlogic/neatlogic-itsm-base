@@ -11,7 +11,8 @@ public enum NotifyTriggerType {
 	ACCEPT("accept", "接管", "流程步骤接管", "流程步骤接管"),
 	TRANSFER("transfer", "转交", "流程步骤已转交", "流程步骤已转交"),
 	ASSIGN("assign", "分配处理人", "流程步骤已分配", "流程步骤已分配"),
-	TIMEOUT("timeout", "超时", "超时标题", "超时内容");
+	TIMEOUT("timeout", "超时", "超时标题", "超时内容"),
+	URGE("urge", "催办", "催办标题", "催办内容");
 
 	private String trigger;
 	private String text;

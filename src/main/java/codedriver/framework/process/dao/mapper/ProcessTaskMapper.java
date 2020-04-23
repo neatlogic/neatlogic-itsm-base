@@ -133,7 +133,7 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
 
-	public ProcessTaskStepSubtaskContentVo getProcessTaskStepSubtaskContentById(Long processTaskStepSubtaskId);
+	public List<ProcessTaskStepSubtaskContentVo> getProcessTaskStepSubtaskContentBySubtaskId(Long processTaskStepSubtaskId);
 
 	public int checkIsWorker(
 			@Param("processTaskId") Long processTaskId, 
@@ -141,6 +141,12 @@ public interface ProcessTaskMapper {
 			@Param("userId") String userId, 
 			@Param("teamUuidList") List<String> teamUuidList, 
 			@Param("roleNameList") List<String> roleNameList
+			);
+	
+	public int checkIsProcessTaskStepUser(
+			@Param("processTaskId") Long processTaskId, 
+			@Param("processTaskStepId") Long processTaskStepId, 
+			@Param("userId") String userId
 			);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
@@ -205,7 +211,7 @@ public interface ProcessTaskMapper {
 
 	public int insertProcessTaskStepSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
 
-	public int replaceProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
+	public int insertProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
 	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
@@ -233,6 +239,8 @@ public interface ProcessTaskMapper {
 	public int updateProcessTaskTitleOwnerPriorityUuid(ProcessTaskVo processTaskVo);
 
 	public int updateProcessTaskStepSubtaskStatus(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+
+	public int updateProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
 
 	public int deleteProcessTaskFormAttributeValueByProcessTaskIdAndAttributeUuid(@Param("processTaskId") Long processTaskId, @Param("attributeUuid") String attributeUuid);
 

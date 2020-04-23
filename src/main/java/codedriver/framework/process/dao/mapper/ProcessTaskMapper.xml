@@ -902,16 +902,20 @@
 		</if>
 	</where>
 	</select>
-	<select id="getProcessTaskStepSubtaskContentById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
+	<select id="getProcessTaskStepSubtaskContentBySubtaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
 	SELECT 
-	  `processtask_step_subtask_id` AS processTaskStepSubtaskId,
-	  `content_hash` AS contentHash,
-	  `fcd`,
-	  `fcu`,
-	  `lcd`,
-	  `lcu` 
-	FROM `processtask_step_subtask_content` 
-	WHERE `processtask_step_subtask_id` = #{processTaskStepSubtaskId}
+	  a.`id`,
+	  a.`processtask_step_subtask_id` AS processTaskStepSubtaskId,
+	  a.`content_hash` AS contentHash,
+	  b.`content`,
+	  a.`action`,
+	  a.`fcd`,
+	  a.`fcu`,
+	  a.`lcd`,
+	  a.`lcu` 
+	FROM `processtask_step_subtask_content` a
+	JOIN `processtask_content` b on b.`hash` = a.`content_hash`
+	WHERE a.`processtask_step_subtask_id` = #{processTaskStepSubtaskId}
 	</select>
 	
 	<select id="checkIsWorker" resultType="int">
@@ -939,6 +943,17 @@
 			)
 		</if>
 	)
+	</select>
+	
+	<select id="checkIsProcessTaskStepUser" resultType="int">
+	SELECT 
+		COUNT(1)
+	FROM `processtask_step_user`
+	WHERE `processtask_id` = #{processTaskId}
+	<if test="processTaskStepId != null">
+		AND `processtask_step_id` = #{processTaskStepId}
+	</if>
+	AND `user_id` = #{userId}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
@@ -1449,10 +1464,11 @@
 	  ) 
 	</insert>
 
-	<insert id="replaceProcessTaskStepSubtaskContent" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
-	REPLACE INTO `processtask_step_subtask_content` (
+	<insert id="insertProcessTaskStepSubtaskContent" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
+	INSERT INTO `processtask_step_subtask_content` (
 	  `processtask_step_subtask_id`,
 	  `content_hash`,
+	  `action`,
 	  `fcd`,
 	  `fcu`
 	) 
@@ -1460,6 +1476,7 @@
 	  (
 	    #{processTaskStepSubtaskId},
 	    #{contentHash},
+	    #{action},
 	    NOW(3),
 	    #{fcu}
 	  ) 
@@ -1560,6 +1577,14 @@
 	WHERE `id` = #{id} 
 	</update>
 
+	<update id="updateProcessTaskStepSubtaskContent" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
+	UPDATE `processtask_step_subtask_content` 
+	SET `content_hash` = #{contentHash},
+	  `lcd` = NOW(3),
+	  `lcu` = #{lcu}
+	WHERE `id` = #{id}
+	</update>
+	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
 		FROM
