@@ -495,7 +495,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 //					break;
 //				}
 //			}
-			canComplete = ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskStepAction.COMPLETE);
+//			canComplete = ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskStepAction.COMPLETE);
+			List<String> verifyActionList = new ArrayList<>();
+			verifyActionList.add(ProcessTaskStepAction.COMPLETE.getValue());
+			verifyActionList.add(ProcessTaskStepAction.BACK.getValue());
+			List<String> actionList = ActionRoleChecker.getProcessTaskStepActionList(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), verifyActionList);
+			if(actionList.removeAll(verifyActionList)) {
+				canComplete = true;
+			}
 		} else if (this.getMode().equals(ProcessStepMode.AT)) {
 			canComplete = true;
 		}

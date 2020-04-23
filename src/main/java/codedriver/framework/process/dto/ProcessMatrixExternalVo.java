@@ -6,19 +6,19 @@ package codedriver.framework.process.dto;
  * @create: 2020-04-02 18:25
  **/
 public class ProcessMatrixExternalVo {
-    private Long id;
+    //private Long id;
     private String uuid;
     private String matrixUuid;
     private String plugin;
     private String config;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public String getUuid() {
         return uuid;
