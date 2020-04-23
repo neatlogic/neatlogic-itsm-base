@@ -798,7 +798,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			return true;
 		}
 		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId) {
-			return getProcessTaskStepActionList(processTaskId, processTaskStepId, null);
+			return getProcessTaskStepActionList(processTaskId, processTaskStepId, new ArrayList<>());
 		}
 		/**
 		 * 
@@ -974,7 +974,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				//撤销权限retreat
 				Set<ProcessTaskStepVo> retractableStepSet = getRetractableStepListByProcessTaskId(processTaskId);
 				if(CollectionUtils.isNotEmpty(retractableStepSet)) {
-					if(processTaskStepId != null) {
+					if(processTaskStepId != null && verifyActionList.contains(ProcessTaskStepAction.RETREAT.getValue())) {
 						for(ProcessTaskStepVo processTaskStepVo : retractableStepSet) {
 							if(processTaskStepId.equals(processTaskStepVo.getId())) {
 								resultList.add(ProcessTaskStepAction.RETREAT.getValue());
