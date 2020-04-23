@@ -974,7 +974,15 @@ public abstract class ProcessStepHandlerUtilBase {
 				//撤销权限retreat
 				Set<ProcessTaskStepVo> retractableStepSet = getRetractableStepListByProcessTaskId(processTaskId);
 				if(CollectionUtils.isNotEmpty(retractableStepSet)) {
-					resultList.add(ProcessTaskStepAction.RETREAT.getValue());
+					if(processTaskStepId != null) {
+						for(ProcessTaskStepVo processTaskStepVo : retractableStepSet) {
+							if(processTaskStepId.equals(processTaskStepVo.getId())) {
+								resultList.add(ProcessTaskStepAction.RETREAT.getValue());
+							}
+						}
+					}else {
+						resultList.add(ProcessTaskStepAction.RETREAT.getValue());
+					}
 				}
 			}
 
