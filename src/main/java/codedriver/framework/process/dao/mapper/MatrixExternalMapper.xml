@@ -34,7 +34,7 @@
 	<update id="updateMatrixExternal" parameterType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
 		UPDATE `process_matrix_external` SET
 		 `plugin` = #{plugin},
-		 `config` = #{config},
+		 `config` = #{config}
 		 WHERE `matrix_uuid` = #{matrixUuid}
 	</update>
 
