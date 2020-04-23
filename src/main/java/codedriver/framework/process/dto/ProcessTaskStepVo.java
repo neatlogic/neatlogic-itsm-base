@@ -6,9 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
@@ -54,7 +56,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Boolean isAllDone = false;
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
-	private Boolean isAttributeListSorted = false;
+	//private Boolean isAttributeListSorted = false;
 	private Boolean isTimeoutPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> userList;
@@ -211,6 +213,22 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public ProcessTaskStatusVo getStatusVo() {
 		if(statusVo == null && StringUtils.isNotBlank(status)) {
+			JSONObject stepConfigObj = JSONObject.parseObject(config);
+			if (MapUtils.isNotEmpty(stepConfigObj)) {
+				JSONArray customStatusList = stepConfigObj.getJSONArray("customStatusList");
+				if(CollectionUtils.isNotEmpty(customStatusList)) {
+					for(int i = 0; i < customStatusList.size(); i++) {
+						JSONObject customStatus = customStatusList.getJSONObject(i);							
+						if(status.equals(customStatus.getString("name"))) {
+							String value = customStatus.getString("value");
+							if(StringUtils.isNotBlank(value)) {
+								statusVo = new ProcessTaskStatusVo(status, value);
+								return statusVo;
+							}
+						}
+					}
+				}
+			}
 			statusVo = new ProcessTaskStatusVo(status);
 		}
 		return statusVo;
