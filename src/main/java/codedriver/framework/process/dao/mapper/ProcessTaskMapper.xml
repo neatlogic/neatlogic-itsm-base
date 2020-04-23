@@ -831,9 +831,9 @@
 	#{stepId}
 	</foreach>
 	<if test="keyword != null and keyword != ''">
-	AND pt.`title` LIKE CONCAT(#{keyword},'%')
+	AND (pt.`title` LIKE CONCAT('%', #{keyword}, '%') OR pt.`id` LIKE CONCAT('%', #{keyword}, '%'))
 	</if>
-	ORDER BY pts.`id`DESC
+	ORDER BY pts.`id` DESC
 	</select>
 	
 	<select id="getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo" resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
