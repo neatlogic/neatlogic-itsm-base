@@ -941,6 +941,17 @@
 	)
 	</select>
 	
+	<select id="checkIsProcessTaskStepUser" resultType="int">
+	SELECT 
+		COUNT(1)
+	FROM `processtask_step_user`
+	WHERE `processtask_id` = #{processTaskId}
+	<if test="processTaskStepId != null">
+		AND `processtask_step_id` = #{processTaskStepId}
+	</if>
+	AND `user_id` = #{userId}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}

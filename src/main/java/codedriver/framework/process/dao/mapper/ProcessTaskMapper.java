@@ -143,6 +143,12 @@ public interface ProcessTaskMapper {
 			@Param("roleNameList") List<String> roleNameList
 			);
 	
+	public int checkIsProcessTaskStepUser(
+			@Param("processTaskId") Long processTaskId, 
+			@Param("processTaskStepId") Long processTaskStepId, 
+			@Param("userId") String userId
+			);
+	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
 	public int insertProcessTaskForm(ProcessTaskFormVo processTaskFormVo);
