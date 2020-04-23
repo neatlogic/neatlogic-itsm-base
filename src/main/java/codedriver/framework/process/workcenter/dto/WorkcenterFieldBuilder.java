@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,8 +13,8 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
-import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.constvalue.ProcessUserType;
+import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -25,9 +24,6 @@ import codedriver.framework.util.HtmlUtil;
 
 public class WorkcenterFieldBuilder {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private List<String> userStepStatusList = new ArrayList<String>();
-	private List<String> processTaskUserList = new ArrayList<String>();
-	
 	
 	JSONObject dataJson = null;
 	
@@ -130,8 +126,6 @@ public class WorkcenterFieldBuilder {
 			 if(step.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) && step.getIsActive() == 1) {
 				 for(ProcessTaskStepWorkerVo worker : step.getWorkerList()) {
 					 pendingUserTypeArray.add(worker.getWorkerValue());
-					 userStepStatusList.add(worker.getWorkerValue()+"#"+step.getStatus());
-					 processTaskUserList.add(worker.getWorkerValue());
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
@@ -147,17 +141,13 @@ public class WorkcenterFieldBuilder {
 					 }
 					 //过滤上报节点
 					 if(!(step.getType().equals(ProcessStepType.START.getValue()))) {
-						 userStepStatusList.add(user+"#"+step.getStatus());
 						 stepJson.put("filtstatus", step.getStatus());
 					 }
-					 processTaskUserList.add(user);
 				 }
 			 }
 			 stepList.add(stepJson);
 		 }
 		dataJson.put(ProcessWorkcenterField.STEP.getValue(), stepList);
-		dataJson.put(ProcessWorkcenterField.USER_STEPSTATUS.getValue(), userStepStatusList.stream().distinct().collect(Collectors.toList()));
-		dataJson.put(ProcessWorkcenterField.PROCESSTASK_USER.getValue(), processTaskUserList.stream().distinct().collect(Collectors.toList()));
 		return this;
 	}
 	
