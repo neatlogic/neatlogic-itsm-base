@@ -645,24 +645,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
 			}
 
-			/** 启动超时计时器 **/
-			List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList = processTaskMapper.getProcessTaskStepTimeoutPolicyByProcessTaskStepId(currentProcessTaskStepVo.getId());
-			if (timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
-				boolean hasTimeout = false;
-				for (ProcessTaskStepTimeoutPolicyVo timeoutPolicyVo : timeoutPolicyList) {
-					if (hasTimeout) {
-						break;
-					}
-					ITimeoutPolicyHandler timeoutPolicyHandler = TimeoutPolicyHandlerFactory.getHandler(timeoutPolicyVo.getPolicy());
-					if (timeoutPolicyHandler != null) {
-						hasTimeout = timeoutPolicyHandler.execute(timeoutPolicyVo, currentProcessTaskStepVo);
-					}
-				}
-				if (hasTimeout && currentProcessTaskStepVo.getExpireTimeLong() != null) {
-					/** TODO 结合工作日历计算最终超时时间，启动超时告警线程 **/
-
-				}
-			}
 			/** 如果已经存在过处理人，则继续使用旧处理人，否则启用分派 **/
 			List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
 			processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
