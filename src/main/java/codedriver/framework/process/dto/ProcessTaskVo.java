@@ -1,6 +1,5 @@
 package codedriver.framework.process.dto;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -75,9 +74,6 @@ public class ProcessTaskVo {
 	private ChannelTypeVo channelType;
 	@EntityField(name = "描述是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
-
-	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
 	
 	public ProcessTaskVo() {
 
@@ -349,14 +345,6 @@ public class ProcessTaskVo {
 
 	public void setIsRequired(Integer isRequired) {
 		this.isRequired = isRequired;
-	}
-
-	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList() {
-		return processTaskStepSubtaskList;
-	}
-
-	public void setProcessTaskStepSubtaskList(List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList) {
-		this.processTaskStepSubtaskList = processTaskStepSubtaskList;
 	}
 
 }
