@@ -139,11 +139,11 @@ public class WorkcenterFieldBuilder {
 					 if(ProcessUserType.AGENT.getValue().equals( userVo.getUserType())) {
 						 agentUserTypeArray.add(user);
 					 }
-					 //过滤上报节点
-					 if(!(step.getType().equals(ProcessStepType.START.getValue()))) {
-						 stepJson.put("filtstatus", step.getStatus());
-					 }
 				 }
+			 }
+			//过滤上报节点
+			 if(!(step.getType().equals(ProcessStepType.START.getValue()))) {
+				 stepJson.put("filtstatus", step.getStatus());
 			 }
 			 stepList.add(stepJson);
 		 }

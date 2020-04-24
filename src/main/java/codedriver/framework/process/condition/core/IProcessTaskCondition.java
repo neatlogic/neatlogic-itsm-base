@@ -1,6 +1,7 @@
 package codedriver.framework.process.condition.core;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -88,6 +89,6 @@ public interface IProcessTaskCondition {
 	 * @return: boolean
 	 * @Date: 2020/4/13
 	 */
-	public String  getEsWhere(ConditionVo condition,List<ConditionVo> conditionList);
+	public String  getEsWhere(List<ConditionVo> conditionList,Integer index);
 
 }
