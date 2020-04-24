@@ -14,9 +14,10 @@ import codedriver.framework.process.utils.FreemarkerUtil;
 public class NotifyVo {
 	private String title;
 	private String content;
-	private List<UserVo> toUserList;
+	private List<UserVo> toUserList = new ArrayList<>();
 	private List<String> toUserIdList;
 	private List<String> toTeamIdList;
+	private List<String> toRoleNameList;
 	private String fromUser;
 	private String fromUserEmail;
 	private JSONObject data = new JSONObject();
@@ -28,8 +29,9 @@ public class NotifyVo {
 		this.templateTitle = builder.templateTitle;
 		this.templateContent = builder.templateContent;
 		this.data = builder.data;
-		this.toUserIdList = toUserIdList;
-		this.toTeamIdList = toTeamIdList;
+		this.toUserIdList = builder.toUserIdList;
+		this.toTeamIdList = builder.toTeamIdList;
+		this.toRoleNameList = builder.toRoleNameList;
 	}
 
 	private NotifyVo() {
@@ -37,9 +39,6 @@ public class NotifyVo {
 	}
 
 	public void addUser(UserVo userVo) {
-		if (toUserList == null) {
-			toUserList = new ArrayList<>();
-		}
 		if (!toUserList.contains(userVo)) {
 			toUserList.add(userVo);
 		}
@@ -113,6 +112,10 @@ public class NotifyVo {
 		return toTeamIdList;
 	}
 
+	public List<String> getToRoleNameList() {
+		return toRoleNameList;
+	}
+
 	public NotifyTriggerType getTrigger() {
 		return trigger;
 	}
@@ -125,8 +128,9 @@ public class NotifyVo {
 		private String templateContent;
 		private String templateTitle;
 		private JSONObject data = new JSONObject();
-		private List<String> toUserIdList;
-		private List<String> toTeamIdList;
+		private List<String> toUserIdList = new ArrayList<>();
+		private List<String> toTeamIdList = new ArrayList<>();
+		private List<String> toRoleNameList = new ArrayList<>();
 
 		public Builder(NotifyTriggerType _trigger) {
 			this.trigger = _trigger;
@@ -152,9 +156,6 @@ public class NotifyVo {
 		}
 
 		public Builder addUserId(String userId) {
-			if (toUserIdList == null) {
-				toUserIdList = new ArrayList<>();
-			}
 			if (!toUserIdList.contains(userId)) {
 				toUserIdList.add(userId);
 			}
@@ -162,11 +163,15 @@ public class NotifyVo {
 		}
 
 		public Builder addTeamId(String teamId) {
-			if (toTeamIdList == null) {
-				toTeamIdList = new ArrayList<>();
-			}
 			if (!toTeamIdList.contains(teamId)) {
 				toTeamIdList.add(teamId);
+			}
+			return this;
+		}
+		
+		public Builder addRoleName(String roleName) {
+			if(! toRoleNameList.contains(roleName)) {
+				toRoleNameList.add(roleName);
 			}
 			return this;
 		}
