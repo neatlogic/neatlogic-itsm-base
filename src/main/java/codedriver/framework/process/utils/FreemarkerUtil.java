@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -41,5 +43,17 @@ public class FreemarkerUtil {
 			}
 		}
 		return resultStr;
+	}
+	
+	public static void main(String[] args) {
+		String content = "【ITSM服务单催办】【${task.id}】-【${task.title}】";
+		JSONObject dataObj = new JSONObject();
+		ProcessTaskVo processTaskVo = new ProcessTaskVo();
+		processTaskVo.setId(10L);
+		processTaskVo.setTitle("标题");
+		dataObj.put("task", processTaskVo);
+		ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
+		dataObj.put("step", processTaskStepVo);
+		System.out.println(FreemarkerUtil.getNotifyContent(dataObj, content));//【ITSM服务单催办】【10】-【标题】
 	}
 }

@@ -1431,4 +1431,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId) {
 		return ActionRoleChecker.getUrgeableStepList(processTaskId);
 	}
+	
+	@Override
+	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
+		NotifyHandler.notify(currentProcessTaskStepVo, trigger);
+	}
 }
