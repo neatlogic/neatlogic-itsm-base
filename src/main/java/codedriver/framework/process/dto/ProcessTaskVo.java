@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class ProcessTaskVo {
 	private Integer isRequired;
 
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
+	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
 	
 	public ProcessTaskVo() {
 
