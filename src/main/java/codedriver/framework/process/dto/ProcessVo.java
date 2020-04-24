@@ -241,6 +241,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				processStepRelVo.setUuid(relObj.getString("uuid"));
 				processStepRelVo.setProcessUuid(this.getUuid());
 				processStepRelVo.setCondition(relObj.getString("conditionConfig"));
+				processStepRelVo.setName(relObj.getString("name"));
 				stepRelList.add(processStepRelVo);
 			}
 		}

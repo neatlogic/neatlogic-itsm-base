@@ -15,7 +15,6 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.process.constvalue.ProcessTaskFlowDirection;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepVo extends BasePageVo {
@@ -84,11 +83,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
-	private String flowDirection;
+	private String flowDirection = "";
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
 	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
 	private Integer isView;
+	
+	private transient String aliasName;
 	
 	public ProcessTaskStepVo() {
 
@@ -312,13 +313,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public String getFlowDirection() {
-		if(this.isActive != null) {
-			if(this.isActive.intValue() == 0) {
-				flowDirection = ProcessTaskFlowDirection.FORWARD.getText();
-			}else {
-				flowDirection = ProcessTaskFlowDirection.BACKWARD.getText();
-			}
-		}
 		return flowDirection;
 	}
 
@@ -576,6 +570,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setIsView(Integer isView) {
 		this.isView = isView;
+	}
+
+	public String getAliasName() {
+		return aliasName;
+	}
+
+	public void setAliasName(String aliasName) {
+		this.aliasName = aliasName;
 	}
 
 }

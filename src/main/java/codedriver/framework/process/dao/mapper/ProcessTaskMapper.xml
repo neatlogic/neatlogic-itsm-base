@@ -427,7 +427,8 @@
 		a.`is_active` AS isActive,
 		a.`start_time` AS startTime,
 		a.`end_time` AS endTime,
-		a.`error`
+		a.`error`,
+		b.`name` AS aliasName
 		FROM
 		`processtask_step` a JOIN `processtask_step_rel` b ON a.`id` = b.`to_processtask_step_id`
 		WHERE
@@ -1214,7 +1215,8 @@
 		`to_processtask_step_id`,
 		`condition`,
 		`is_hit`,
-		`uuid`
+		`uuid`,
+		`name`
 		)
 		VALUES
 		(
@@ -1225,7 +1227,8 @@
 		#{toProcessTaskStepId},
 		#{condition},
 		#{isHit},
-		#{processStepRelUuid}
+		#{processStepRelUuid},
+		#{name}
 		)
 	</insert>
 
