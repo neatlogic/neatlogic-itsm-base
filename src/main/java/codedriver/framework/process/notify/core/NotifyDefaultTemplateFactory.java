@@ -1,5 +1,6 @@
 package codedriver.framework.process.notify.core;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,20 +31,21 @@ public class NotifyDefaultTemplateFactory {
 		Set<Class<? extends IDefaultTemplate>> defaultTemplateClassSet = reflections.getSubTypesOf(IDefaultTemplate.class);
 		for(Class<? extends IDefaultTemplate> clazz : defaultTemplateClassSet) {
 			try {
-				IDefaultTemplate defaultTemplateBase = clazz.newInstance();			
-				defaultTemplateList.add(
-						new NotifyTemplateVo(
-								defaultTemplateBase.getUuid(), 
-								defaultTemplateBase.getName(), 
-								defaultTemplateBase.getType(),
-								defaultTemplateBase.getIsReadOnly(),
-								defaultTemplateBase.getNotifyHandlerType(),
-								defaultTemplateBase.getTrigger(),
-								defaultTemplateBase.getTitle(),
-								defaultTemplateBase.getContent()
-						)
-				);
-								
+				if(!Modifier.isAbstract(clazz.getModifiers())) {
+					IDefaultTemplate defaultTemplateBase = clazz.newInstance();	
+					defaultTemplateList.add(
+							new NotifyTemplateVo(
+									defaultTemplateBase.getUuid(), 
+									defaultTemplateBase.getName(), 
+									defaultTemplateBase.getType(),
+									defaultTemplateBase.getIsReadOnly(),
+									defaultTemplateBase.getNotifyHandlerType(),
+									defaultTemplateBase.getTrigger(),
+									defaultTemplateBase.getTitle(),
+									defaultTemplateBase.getContent()
+							)
+					);
+				}				
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
