@@ -50,7 +50,7 @@ public enum NotifyTriggerType {
 				return s.getTitleTemplate();
 			}
 		}
-		return null;
+		return "";
 	}
 
 	public static String getContentTemplate(String trigger) {
@@ -59,6 +59,15 @@ public enum NotifyTriggerType {
 				return s.getContentTemplate();
 			}
 		}
-		return null;
+		return "";
+	}
+	
+	public static String getText(String trigger) {
+		for(NotifyTriggerType n : NotifyTriggerType.values()) {
+			if(n.getTrigger().equals(trigger)) {
+				return n.getText();
+			}
+		}
+		return "";
 	}
 }

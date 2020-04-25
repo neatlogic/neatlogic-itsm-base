@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.notify.core.NotifyHandlerType;
+import codedriver.framework.process.notify.core.NotifyTriggerType;
 
 public class NotifyTemplateVo extends BasePageVo {
 
@@ -15,7 +17,9 @@ public class NotifyTemplateVo extends BasePageVo {
 	private String type;
 	private int isReadOnly = 0;
 	private String notifyHandlerType;
+	private String notifyHandlerTypeText;
 	private String trigger;
+	private String triggerText;
 	
 	private transient String fcu;
 	private transient String lcu;
@@ -125,5 +129,27 @@ public class NotifyTemplateVo extends BasePageVo {
 
 	public void setTrigger(String trigger) {
 		this.trigger = trigger;
+	}
+
+	public String getNotifyHandlerTypeText() {
+		if(StringUtils.isNotBlank(notifyHandlerTypeText) && StringUtils.isNotBlank(notifyHandlerType)) {
+			notifyHandlerTypeText = NotifyHandlerType.getText(notifyHandlerType);
+		}
+		return notifyHandlerTypeText;
+	}
+
+	public void setNotifyHandlerTypeText(String notifyHandlerTypeText) {
+		this.notifyHandlerTypeText = notifyHandlerTypeText;
+	}
+
+	public String getTriggerText() {
+		if(StringUtils.isNotBlank(triggerText) && StringUtils.isNotBlank(trigger)) {
+			triggerText = NotifyTriggerType.getText(trigger);
+		}
+		return triggerText;
+	}
+
+	public void setTriggerText(String triggerText) {
+		this.triggerText = triggerText;
 	}
 }

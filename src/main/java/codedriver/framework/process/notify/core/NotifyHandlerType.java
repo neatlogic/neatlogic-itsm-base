@@ -19,4 +19,13 @@ public enum NotifyHandlerType {
 	public String getText() {
 		return text;
 	}
+	
+	public static String getText(String _value) {
+		for(NotifyHandlerType n : NotifyHandlerType.values()) {
+			if(n.getValue().equals(_value)) {
+				return n.getText();
+			}
+		}
+		return "";
+	}
 }
