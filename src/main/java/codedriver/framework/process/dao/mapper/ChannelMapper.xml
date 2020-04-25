@@ -113,6 +113,33 @@
 		WHERE `uuid` = #{uuid}
 	</select>
 	
+	<select id="getChannelByUuidList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ChannelVo" useCache="true">
+		SELECT
+		c.`uuid`,
+		c.`name`,
+		c.`parent_uuid` AS parentUuid,
+		c.`is_active` AS isActive,
+		c.`icon`,
+		c.`color`,
+		c.`desc`,
+		c.`sort`,
+		c.`sla`,
+		c.`allow_desc` AS allowDesc,
+		c.`help`,
+		c.`is_active_help` AS isActiveHelp,
+		c.`channel_type_uuid` AS channelTypeUuid,
+		cp.`process_uuid` AS processUuid,
+		cw.`worktime_uuid` AS worktimeUuid
+		FROM
+		`channel` c
+		JOIN `channel_process` cp ON cp.channel_uuid = c.uuid
+		JOIN `channel_worktime` cw ON cw.channel_uuid = c.uuid
+		WHERE `uuid` in
+		<foreach collection="channelUuidList" item="channelUuid" open="(" separator=","  close=")">
+				#{channelUuid}
+		</foreach>
+	</select>
+	
 	<select id="getMaxSortByParentUuid"  parameterType="java.lang.String" resultType="int" useCache="false">
 		SELECT IFNULL(MAX(`sort`), 0) FROM `channel` WHERE `parent_uuid` = #{parentUuid}
 	</select>
