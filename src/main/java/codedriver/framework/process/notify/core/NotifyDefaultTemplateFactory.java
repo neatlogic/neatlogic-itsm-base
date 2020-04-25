@@ -33,7 +33,7 @@ public class NotifyDefaultTemplateFactory {
     }
     
 	static {
-		Reflections reflections = new Reflections("codedriver");
+		Reflections reflections = new Reflections("codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory");
 		Set<Class<? extends DefaultTemplateBase>> defaultTemplateClassSet = reflections.getSubTypesOf(DefaultTemplateBase.class);
 		for(Class<? extends DefaultTemplateBase> clazz : defaultTemplateClassSet) {
 			try {
