@@ -13,11 +13,24 @@ public class NotifyTemplateVo extends BasePageVo {
 	private String title;
 	private String content;
 	private String type;
+	private int isReadOnly = 0;
 	
 	private transient String fcu;
 	private transient String lcu;
 	
 	private transient String keyword;
+
+	public NotifyTemplateVo() {
+	}
+
+	public NotifyTemplateVo(String uuid, String name, String type, Integer isReadOnly, String title, String content) {
+		this.uuid = uuid;
+		this.name = name;
+		this.title = title;
+		this.content = content;
+		this.type = type;
+		this.isReadOnly = isReadOnly;
+	}
 
 	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
@@ -84,5 +97,13 @@ public class NotifyTemplateVo extends BasePageVo {
 
 	public void setLcu(String lcu) {
 		this.lcu = lcu;
+	}
+
+	public int getIsReadOnly() {
+		return isReadOnly;
+	}
+
+	public void setIsReadOnly(int isReadOnly) {
+		this.isReadOnly = isReadOnly;
 	}
 }

@@ -83,6 +83,7 @@ import codedriver.framework.process.exception.worktime.WorktimeNotFoundException
 import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
 import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
 import codedriver.framework.process.notify.core.INotifyHandler;
+import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
 import codedriver.framework.process.notify.core.NotifyHandlerFactory;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.notify.dto.NotifyTemplateVo;
@@ -242,7 +243,12 @@ public abstract class ProcessStepHandlerUtilBase {
 										NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(notifyTriggerType);
 										String templateUuid = notifyObj.getString("template");
 										if (StringUtils.isNotBlank(templateUuid)) {
-											NotifyTemplateVo notifyTemplateVo = notifyMapper.getNotifyTemplateByUuid(templateUuid);
+											NotifyTemplateVo notifyTemplateVo = null;
+											if(templateUuid.startsWith(NotifyDefaultTemplateFactory.DEFAULT_TEMPLATE_UUID_PREFIX)) {
+												notifyTemplateVo = NotifyDefaultTemplateFactory.getDefaultTemplateByUuid(templateUuid);
+											}else {
+												notifyTemplateVo = notifyMapper.getNotifyTemplateByUuid(templateUuid);
+											}
 											if (notifyTemplateVo != null) {
 												notifyBuilder.withContentTemplate(notifyTemplateVo.getContent());
 												notifyBuilder.withTitleTemplate(notifyTemplateVo.getTitle());
