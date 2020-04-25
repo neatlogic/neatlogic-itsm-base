@@ -128,8 +128,7 @@ public class NotifyTemplateVo extends BasePageVo {
 		return notifyHandlerType;
 	}
 
-	public void setNotifyHandlerType(String notifyHandlerType) {
-		
+	public void setNotifyHandlerType(String notifyHandlerType) {	
 		this.notifyHandlerType = notifyHandlerType;
 	}
 

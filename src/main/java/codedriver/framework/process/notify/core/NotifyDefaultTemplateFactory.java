@@ -39,7 +39,7 @@ public class NotifyDefaultTemplateFactory {
 			try {
 				DefaultTemplateBase defaultTemplateBase = clazz.newInstance();
 				if(defaultTemplateBaseList.contains(defaultTemplateBase)) {
-					logger.error("默认模板：'" + defaultTemplateBase.toString() + "'已存在");
+					logger.error(defaultTemplateBase.toString() + "已重复");
 				}else {
 					defaultTemplateBaseList.add(defaultTemplateBase);
 					defaultTemplateList.add(
@@ -150,6 +150,10 @@ public class NotifyDefaultTemplateFactory {
 			result = prime * result + (getNotifyHandlerType() == null ? 0 : getNotifyHandlerType().hashCode());
 			result = prime * result + (getTrigger() == null ? 0 : getTrigger().hashCode());
 			return result;
+		}
+		@Override
+		public String toString() {
+			return NotifyHandlerType.getText(getNotifyHandlerType())+ "_" + NotifyTriggerType.getText(getTrigger()) + "默认模板：'" + getName() + "'"; 
 		}
 	}
 	
