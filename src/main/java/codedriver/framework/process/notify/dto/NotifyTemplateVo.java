@@ -14,6 +14,8 @@ public class NotifyTemplateVo extends BasePageVo {
 	private String content;
 	private String type;
 	private int isReadOnly = 0;
+	private String notifyHandlerType;
+	private String trigger;
 	
 	private transient String fcu;
 	private transient String lcu;
@@ -23,13 +25,15 @@ public class NotifyTemplateVo extends BasePageVo {
 	public NotifyTemplateVo() {
 	}
 
-	public NotifyTemplateVo(String uuid, String name, String type, Integer isReadOnly, String title, String content) {
+	public NotifyTemplateVo(String uuid, String name, String type, Integer isReadOnly, String notifyHandlerType, String trigger, String title, String content) {
 		this.uuid = uuid;
 		this.name = name;
 		this.title = title;
 		this.content = content;
 		this.type = type;
 		this.isReadOnly = isReadOnly;
+		this.notifyHandlerType = notifyHandlerType;
+		this.trigger = trigger;
 	}
 
 	public synchronized String getUuid() {
@@ -105,5 +109,21 @@ public class NotifyTemplateVo extends BasePageVo {
 
 	public void setIsReadOnly(int isReadOnly) {
 		this.isReadOnly = isReadOnly;
+	}
+
+	public String getNotifyHandlerType() {
+		return notifyHandlerType;
+	}
+
+	public void setNotifyHandlerType(String notifyHandlerType) {
+		this.notifyHandlerType = notifyHandlerType;
+	}
+
+	public String getTrigger() {
+		return trigger;
+	}
+
+	public void setTrigger(String trigger) {
+		this.trigger = trigger;
 	}
 }

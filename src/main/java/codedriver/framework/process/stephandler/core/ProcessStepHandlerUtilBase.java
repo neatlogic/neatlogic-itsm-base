@@ -244,8 +244,8 @@ public abstract class ProcessStepHandlerUtilBase {
 										String templateUuid = notifyObj.getString("template");
 										if (StringUtils.isNotBlank(templateUuid)) {
 											NotifyTemplateVo notifyTemplateVo = null;
-											if(templateUuid.startsWith(NotifyDefaultTemplateFactory.DEFAULT_TEMPLATE_UUID_PREFIX)) {
-												notifyTemplateVo = NotifyDefaultTemplateFactory.getDefaultTemplateByUuid(templateUuid);
+											if(NotifyDefaultTemplateFactory.DEFAULT_TEMPLATE_UUID_PREFIX.equals(templateUuid)) {
+												notifyTemplateVo = NotifyDefaultTemplateFactory.getDefaultTemplateByNotifyHandlerTypeAndTrigger(handler.getType(), trigger);
 											}else {
 												notifyTemplateVo = notifyMapper.getNotifyTemplateByUuid(templateUuid);
 											}
