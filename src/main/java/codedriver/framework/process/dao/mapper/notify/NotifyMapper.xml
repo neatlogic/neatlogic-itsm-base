@@ -89,6 +89,10 @@
 	ORDER BY `name`
 	</select>
 	
+	<select id="checkNotifyTemplateNameIsRepeat" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo" resultType="int">
+	SELECT COUNT(1) FROM `process_notifytemplate` WHERE `name` = #{name} AND `uuid` != #{uuid}
+	</select>
+	
 	<insert id="insertNotifyTemplate" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo">
 	INSERT INTO `process_notifytemplate` (
 	  `uuid`,

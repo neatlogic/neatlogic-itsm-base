@@ -17,6 +17,8 @@ public interface NotifyMapper {
 
 	public List<ValueTextVo> getNotifyTemplateListForSelect(NotifyTemplateVo notifyTemplateVo);
 
+	public int checkNotifyTemplateNameIsRepeat(NotifyTemplateVo notifyTemplateVo);
+
 	public int insertNotifyTemplate(NotifyTemplateVo notifyTemplate);
 
 	public int updateNotifyTemplateByUuid(NotifyTemplateVo notifyTemplate);
