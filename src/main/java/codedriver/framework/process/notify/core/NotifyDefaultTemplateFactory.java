@@ -7,54 +7,43 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import codedriver.framework.process.notify.dto.NotifyTemplateVo;
+import codedriver.framework.process.notify.template.IDefaultTemplate;
 
 public class NotifyDefaultTemplateFactory {
-
-	private final static Logger logger = LoggerFactory.getLogger(NotifyDefaultTemplateFactory.class);
 	
 	public final static String DEFAULT_TEMPLATE_TYPE = "默认";
 	
 	public final static String DEFAULT_TEMPLATE_UUID_PREFIX = "default_";
 	
-	private final static int DEFAULT_TEMPLATE_IS_READ_ONLY = 1;
-	
 	private static List<NotifyTemplateVo> defaultTemplateList = new ArrayList<>();
-	
-	private static List<DefaultTemplateBase> defaultTemplateBaseList = new ArrayList<>();
 	
 
 	private static int number;
-    private static synchronized int nextNum() {
+    public static synchronized int nextNum() {
         return number++;
     }
     
 	static {
-		Reflections reflections = new Reflections("codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory");
-		Set<Class<? extends DefaultTemplateBase>> defaultTemplateClassSet = reflections.getSubTypesOf(DefaultTemplateBase.class);
-		for(Class<? extends DefaultTemplateBase> clazz : defaultTemplateClassSet) {
+		Reflections reflections = new Reflections("codedriver.framework.process.notify.template");
+		Set<Class<? extends IDefaultTemplate>> defaultTemplateClassSet = reflections.getSubTypesOf(IDefaultTemplate.class);
+		for(Class<? extends IDefaultTemplate> clazz : defaultTemplateClassSet) {
 			try {
-				DefaultTemplateBase defaultTemplateBase = clazz.newInstance();
-				if(defaultTemplateBaseList.contains(defaultTemplateBase)) {
-					logger.error(defaultTemplateBase.toString() + "已重复");
-				}else {
-					defaultTemplateBaseList.add(defaultTemplateBase);
-					defaultTemplateList.add(
-							new NotifyTemplateVo(
-									defaultTemplateBase.getUuid(), 
-									defaultTemplateBase.getName(), 
-									defaultTemplateBase.getType(),
-									defaultTemplateBase.getIsReadOnly(),
-									defaultTemplateBase.getNotifyHandlerType(),
-									defaultTemplateBase.getTrigger(),
-									defaultTemplateBase.getTitle(),
-									defaultTemplateBase.getContent()
-							)
-					);
-				}				
+				IDefaultTemplate defaultTemplateBase = clazz.newInstance();			
+				defaultTemplateList.add(
+						new NotifyTemplateVo(
+								defaultTemplateBase.getUuid(), 
+								defaultTemplateBase.getName(), 
+								defaultTemplateBase.getType(),
+								defaultTemplateBase.getIsReadOnly(),
+								defaultTemplateBase.getNotifyHandlerType(),
+								defaultTemplateBase.getTrigger(),
+								defaultTemplateBase.getTitle(),
+								defaultTemplateBase.getContent()
+						)
+				);
+								
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -107,121 +96,4 @@ public class NotifyDefaultTemplateFactory {
 		return null;
 	}
 	
-	protected static abstract class DefaultTemplateBase {
-	    
-		public String getUuid() {;
-			return DEFAULT_TEMPLATE_UUID_PREFIX + nextNum();
-		}
-		public abstract String getName();
-		public abstract String getNotifyHandlerType();
-		public abstract String getTrigger();
-		public abstract String getTitle();
-		public abstract String getContent();
-		
-		public String getType() {
-			return DEFAULT_TEMPLATE_TYPE;
-		}
-		public int getIsReadOnly() {
-			return DEFAULT_TEMPLATE_IS_READ_ONLY;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if(this == obj) {
-				return true;
-			}
-			if(obj == null) {
-				return false;
-			}
-			DefaultTemplateBase other = (DefaultTemplateBase) obj;
-			if(!Objects.equals(getNotifyHandlerType(), other.getNotifyHandlerType())) {
-				return false;
-			}
-			if(!Objects.equals(getTrigger(), other.getTrigger())) {
-				return false;
-			}
-			return true;
-		}
-		
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + (getNotifyHandlerType() == null ? 0 : getNotifyHandlerType().hashCode());
-			result = prime * result + (getTrigger() == null ? 0 : getTrigger().hashCode());
-			return result;
-		}
-		@Override
-		public String toString() {
-			return NotifyHandlerType.getText(getNotifyHandlerType())+ "_" + NotifyTriggerType.getText(getTrigger()) + "默认模板：'" + getName() + "'"; 
-		}
-	}
-	
-	protected static class EmailUrge extends DefaultTemplateBase {
-
-		@Override
-		public String getName() {
-			return "邮件通知催办默认模板";
-		}
-
-		@Override
-		public String getNotifyHandlerType() {
-			return NotifyHandlerType.EMAIL.getValue();
-		}
-
-		@Override
-		public String getTrigger() {
-			return NotifyTriggerType.URGE.getTrigger();
-		}
-
-		@Override
-		public String getTitle() {
-			return new StringBuilder(39)//标题
-					.append("【ITSM服务单催办】【${task.id}】-【${task.title}】")
-					.toString();
-		}
-
-		@Override
-		public String getContent() {
-			return new StringBuilder(307)//内容
-					.append("您好，<br>")
-					.append("请注意，用户催办<a href=\"${home}task/getTaskStepDetail.do?processTaskId=${task.id}&processTaskStepId=${step.id}\"><b>【${task.id}】：【${task.title}】</b></a><br><br>")
-					.append("请<a href=\"${home}process.html#/task-detail?processTaskId==${task.id}&processTaskStepId=${step.id}\"><b>点击此处</b></a>查看详情，及时派单或处理，并主动告知用户进度，谢谢！<br>")
-					.toString();
-		}
-	}
-	
-	protected static class EmailAbort extends DefaultTemplateBase {
-
-		@Override
-		public String getName() {
-			return "邮件通知工单取消默认模板";
-		}
-
-		@Override
-		public String getNotifyHandlerType() {
-			return NotifyHandlerType.EMAIL.getValue();
-		}
-
-		@Override
-		public String getTrigger() {
-			return NotifyTriggerType.ABORT.getTrigger();
-		}
-
-		@Override
-		public String getTitle() {
-			return new StringBuilder(39)//标题
-					.append("【ITSM服务单催办】【${task.id}】-【${task.title}】")
-					.toString();
-		}
-
-		@Override
-		public String getContent() {
-			return new StringBuilder(307)//内容
-					.append("您好，<br>")
-					.append("请注意，用户催办<a href=\"${home}task/getTaskStepDetail.do?processTaskId=${task.id}&processTaskStepId=${step.id}\"><b>【${task.id}】：【${task.title}】</b></a><br><br>")
-					.append("请<a href=\"${home}process.html#/task-detail?processTaskId==${task.id}&processTaskStepId=${step.id}\"><b>点击此处</b></a>查看详情，及时派单或处理，并主动告知用户进度，谢谢！<br>")
-					.toString();
-		}
-	}
 }
