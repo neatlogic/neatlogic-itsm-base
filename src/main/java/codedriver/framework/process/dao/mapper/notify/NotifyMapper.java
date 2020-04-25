@@ -15,7 +15,7 @@ public interface NotifyMapper {
 
 	public List<String> getNotifyTemplateTypeList();
 
-	public List<ValueTextVo> getNotifyTemplateListForSelect();
+	public List<ValueTextVo> getNotifyTemplateListForSelect(NotifyTemplateVo notifyTemplateVo);
 
 	public int insertNotifyTemplate(NotifyTemplateVo notifyTemplate);
 

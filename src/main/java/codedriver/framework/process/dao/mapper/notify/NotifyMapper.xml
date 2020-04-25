@@ -37,12 +37,18 @@
 		`type`
 		FROM `process_notifytemplate`
 		<where>
-		<if test="type != null and type != ''">
-			AND `type` = #{type}
-		</if>
-		<if test="keyword != null and keyword != ''">
-			AND `name` LIKE CONCAT('%', #{keyword}, '%')
-		</if>
+			<if test="notifyHandlerType != null and notifyHandlerType != ''">
+				AND `notify_handler_type` = #{notifyHandlerType}
+			</if>
+			<if test="trigger != null and trigger != ''">
+				AND `trigger` = #{trigger}
+			</if>
+			<if test="type != null and type != ''">
+				AND `type` = #{type}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND `name` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
 		</where>
 		ORDER BY `fcd` DESC
 		<if test="needPage">
@@ -57,11 +63,19 @@
 	ORDER BY `type`
 	</select>
 	
-	<select id="getNotifyTemplateListForSelect" resultType="codedriver.framework.common.dto.ValueTextVo">
+	<select id="getNotifyTemplateListForSelect" parameterType="codedriver.framework.process.notify.dto.NotifyTemplateVo" resultType="codedriver.framework.common.dto.ValueTextVo">
 	SELECT
 	`uuid` AS value,
 	`name` AS text
 	FROM `process_notifytemplate`
+	<where>
+		<if test="notifyHandlerType != null and notifyHandlerType != ''">
+		AND `notify_handler_type` = #{notifyHandlerType}
+		</if>
+		<if test="trigger != null and trigger != ''">
+		AND `trigger` = #{trigger}
+		</if>
+	</where>
 	ORDER BY `name`
 	</select>
 	
