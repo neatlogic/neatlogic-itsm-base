@@ -7,11 +7,15 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import codedriver.framework.process.notify.dto.NotifyTemplateVo;
 
 public class NotifyDefaultTemplateFactory {
 
+	private final static Logger logger = LoggerFactory.getLogger(NotifyDefaultTemplateFactory.class);
+	
 	public final static String DEFAULT_TEMPLATE_TYPE = "默认";
 	
 	public final static String DEFAULT_TEMPLATE_UUID_PREFIX = "default_";
@@ -35,7 +39,7 @@ public class NotifyDefaultTemplateFactory {
 			try {
 				DefaultTemplateBase defaultTemplateBase = clazz.newInstance();
 				if(defaultTemplateBaseList.contains(defaultTemplateBase)) {
-					System.out.println("默认模板重复了");
+					logger.error("默认模板：'" + defaultTemplateBase.toString() + "'已存在");
 				}else {
 					defaultTemplateBaseList.add(defaultTemplateBase);
 					defaultTemplateList.add(
@@ -59,21 +63,12 @@ public class NotifyDefaultTemplateFactory {
 		}
 	}
 	
-	public static List<NotifyTemplateVo> getDefaultTemplateList() {
-		return defaultTemplateList;
-	}
-	
 	public static List<NotifyTemplateVo> getDefaultTemplateList(NotifyTemplateVo notifyTemplateVo) {
 		List<NotifyTemplateVo> resultList = new ArrayList<>();
 		for(NotifyTemplateVo notifyTemplate : defaultTemplateList) {
 			if(notifyTemplateVo != null) {
-				if(StringUtils.isNotBlank(notifyTemplateVo.getNotifyHandlerType())) {
-					INotifyHandler handler = NotifyHandlerFactory.getHandler(notifyTemplateVo.getNotifyHandlerType());
-					if (handler != null) {
-						if(!Objects.equals(handler.getType(), notifyTemplate.getNotifyHandlerType())) {
-							continue;
-						}
-					}
+				if(StringUtils.isNotBlank(notifyTemplateVo.getNotifyHandlerType()) && !Objects.equals(notifyTemplateVo.getNotifyHandlerType(), notifyTemplate.getNotifyHandlerType())) {
+					continue;
 				}
 				if(StringUtils.isNotBlank(notifyTemplateVo.getTrigger()) && !Objects.equals(notifyTemplateVo.getTrigger(), notifyTemplate.getTrigger())) {
 					continue;
@@ -112,7 +107,7 @@ public class NotifyDefaultTemplateFactory {
 		return null;
 	}
 	
-	public static abstract class DefaultTemplateBase {
+	protected static abstract class DefaultTemplateBase {
 	    
 		public String getUuid() {;
 			return DEFAULT_TEMPLATE_UUID_PREFIX + nextNum();
@@ -158,7 +153,7 @@ public class NotifyDefaultTemplateFactory {
 		}
 	}
 	
-	public static class EmailUrge extends DefaultTemplateBase {
+	protected static class EmailUrge extends DefaultTemplateBase {
 
 		@Override
 		public String getName() {
@@ -192,7 +187,7 @@ public class NotifyDefaultTemplateFactory {
 		}
 	}
 	
-	public static class EmailAbort extends DefaultTemplateBase {
+	protected static class EmailAbort extends DefaultTemplateBase {
 
 		@Override
 		public String getName() {

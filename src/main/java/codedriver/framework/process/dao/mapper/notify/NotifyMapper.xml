@@ -7,7 +7,9 @@
 		`name`,
 		`title`,
 		`content`,
-		`type`
+		`type`,
+		`notify_handler` AS notifyHandler,
+		`trigger`
 		FROM
 		`process_notifytemplate`
 		WHERE
@@ -19,6 +21,12 @@
 		COUNT(1)
 		FROM `process_notifytemplate`
 		<where>
+			<if test="notifyHandler != null and notifyHandler != ''">
+				AND `notify_handler` = #{notifyHandler}
+			</if>
+			<if test="trigger != null and trigger != ''">
+				AND `trigger` = #{trigger}
+			</if>
 			<if test="type != null and type != ''">
 				AND `type` = #{type}
 			</if>
@@ -34,11 +42,13 @@
 		`name`,
 		`title`,
 		`content`,
-		`type`
+		`type`,
+		`notify_handler` AS notifyHandler,
+		`trigger`
 		FROM `process_notifytemplate`
 		<where>
-			<if test="notifyHandlerType != null and notifyHandlerType != ''">
-				AND `notify_handler_type` = #{notifyHandlerType}
+			<if test="notifyHandler != null and notifyHandler != ''">
+				AND `notify_handler` = #{notifyHandler}
 			</if>
 			<if test="trigger != null and trigger != ''">
 				AND `trigger` = #{trigger}
@@ -69,8 +79,8 @@
 	`name` AS text
 	FROM `process_notifytemplate`
 	<where>
-		<if test="notifyHandlerType != null and notifyHandlerType != ''">
-		AND `notify_handler_type` = #{notifyHandlerType}
+		<if test="notifyHandler != null and notifyHandler != ''">
+		AND `notify_handler` = #{notifyHandler}
 		</if>
 		<if test="trigger != null and trigger != ''">
 		AND `trigger` = #{trigger}
@@ -86,6 +96,8 @@
 	  `title`,
 	  `content`,
 	  `type`,
+	  `notify_handler`,
+	  `trigger`,
 	  `fcd`,
 	  `fcu`
 	) 
@@ -96,6 +108,8 @@
 	    #{title},
 	    #{content},
 	    #{type},
+	    #{notifyHandler},
+	    #{trigger},
 	    NOW(),
 	    #{fcu}
 	  ) 
@@ -109,6 +123,8 @@
 	  `title` = #{title},
 	  `content` = #{content},
 	  `type` = #{type},
+	  `notify_handler`=#{notifyHandler},
+	  `trigger`=#{trigger},
 	  `lcd` = NOW(),
 	  `lcu` = #{lcu} 
 	WHERE `uuid` = #{uuid}

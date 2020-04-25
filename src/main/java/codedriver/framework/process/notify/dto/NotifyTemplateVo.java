@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.notify.core.INotifyHandler;
+import codedriver.framework.process.notify.core.NotifyHandlerFactory;
 import codedriver.framework.process.notify.core.NotifyHandlerType;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 
@@ -20,6 +22,7 @@ public class NotifyTemplateVo extends BasePageVo {
 	private String notifyHandlerTypeText;
 	private String trigger;
 	private String triggerText;
+	private String notifyHandler;
 	
 	private transient String fcu;
 	private transient String lcu;
@@ -116,10 +119,17 @@ public class NotifyTemplateVo extends BasePageVo {
 	}
 
 	public String getNotifyHandlerType() {
+		if(StringUtils.isBlank(notifyHandlerType) && StringUtils.isNotBlank(notifyHandler)) {
+			INotifyHandler handler = NotifyHandlerFactory.getHandler(notifyHandler);
+			if (handler != null) {
+				notifyHandlerType = handler.getType();
+			}
+		}
 		return notifyHandlerType;
 	}
 
 	public void setNotifyHandlerType(String notifyHandlerType) {
+		
 		this.notifyHandlerType = notifyHandlerType;
 	}
 
@@ -132,8 +142,8 @@ public class NotifyTemplateVo extends BasePageVo {
 	}
 
 	public String getNotifyHandlerTypeText() {
-		if(StringUtils.isNotBlank(notifyHandlerTypeText) && StringUtils.isNotBlank(notifyHandlerType)) {
-			notifyHandlerTypeText = NotifyHandlerType.getText(notifyHandlerType);
+		if(StringUtils.isBlank(notifyHandlerTypeText) && StringUtils.isNotBlank(getNotifyHandlerType())) {
+			notifyHandlerTypeText = NotifyHandlerType.getText(getNotifyHandlerType());
 		}
 		return notifyHandlerTypeText;
 	}
@@ -143,7 +153,7 @@ public class NotifyTemplateVo extends BasePageVo {
 	}
 
 	public String getTriggerText() {
-		if(StringUtils.isNotBlank(triggerText) && StringUtils.isNotBlank(trigger)) {
+		if(StringUtils.isBlank(triggerText) && StringUtils.isNotBlank(trigger)) {
 			triggerText = NotifyTriggerType.getText(trigger);
 		}
 		return triggerText;
@@ -151,5 +161,13 @@ public class NotifyTemplateVo extends BasePageVo {
 
 	public void setTriggerText(String triggerText) {
 		this.triggerText = triggerText;
+	}
+
+	public String getNotifyHandler() {
+		return notifyHandler;
+	}
+
+	public void setNotifyHandler(String notifyHandler) {
+		this.notifyHandler = notifyHandler;
 	}
 }
