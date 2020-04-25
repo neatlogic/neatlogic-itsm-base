@@ -67,8 +67,13 @@ public class NotifyDefaultTemplateFactory {
 		List<NotifyTemplateVo> resultList = new ArrayList<>();
 		for(NotifyTemplateVo notifyTemplate : defaultTemplateList) {
 			if(notifyTemplateVo != null) {
-				if(StringUtils.isNotBlank(notifyTemplateVo.getNotifyHandlerType()) && !Objects.equals(notifyTemplateVo.getNotifyHandlerType(), notifyTemplate.getNotifyHandlerType())) {
-					continue;
+				if(StringUtils.isNotBlank(notifyTemplateVo.getNotifyHandlerType())) {
+					INotifyHandler handler = NotifyHandlerFactory.getHandler(notifyTemplateVo.getNotifyHandlerType());
+					if (handler != null) {
+						if(!Objects.equals(handler.getType(), notifyTemplate.getNotifyHandlerType())) {
+							continue;
+						}
+					}
 				}
 				if(StringUtils.isNotBlank(notifyTemplateVo.getTrigger()) && !Objects.equals(notifyTemplateVo.getTrigger(), notifyTemplate.getTrigger())) {
 					continue;
