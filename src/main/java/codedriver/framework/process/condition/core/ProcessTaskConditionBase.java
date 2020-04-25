@@ -33,7 +33,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 		return where;
 	}
 	
-	protected String getMyEsWhere(Integer condition,List<ConditionVo> conditionList) {
+	protected String getMyEsWhere(Integer index,List<ConditionVo> conditionList) {
 		return null;
 	}
 
