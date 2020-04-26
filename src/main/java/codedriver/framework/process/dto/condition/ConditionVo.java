@@ -13,6 +13,7 @@ import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.process.condition.core.IProcessTaskCondition;
 import codedriver.framework.process.condition.core.ProcessTaskConditionFactory;
 import codedriver.framework.process.constvalue.ProcessFieldType;
+import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 
 public class ConditionVo implements Serializable{
@@ -143,4 +144,10 @@ public class ConditionVo implements Serializable{
 		}
 		return false;
 	}
+
+	public String getConditionValue() {
+		return ProcessWorkcenterField.getConditionValue(name);
+	}
+	
+	
 }

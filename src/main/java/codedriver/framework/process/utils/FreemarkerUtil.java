@@ -42,6 +42,4 @@ public class FreemarkerUtil {
 		}
 		return resultStr;
 	}
-	
-	
 }

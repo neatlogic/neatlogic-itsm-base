@@ -88,6 +88,6 @@ public interface IProcessTaskCondition {
 	 * @return: boolean
 	 * @Date: 2020/4/13
 	 */
-	public String  getEsWhere(ConditionVo condition,List<ConditionVo> conditionList);
+	public String  getEsWhere(List<ConditionVo> conditionList,Integer index);
 
 }

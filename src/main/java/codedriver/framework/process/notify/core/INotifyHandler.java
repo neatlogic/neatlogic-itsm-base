@@ -11,6 +11,8 @@ public interface INotifyHandler {
 	 * @return: void
 	 */
 	public void execute(NotifyVo notifyVo);
+	
+	public String getType();
 
 	/**
 	 * @Author: chenqiwei

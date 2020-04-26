@@ -15,66 +15,61 @@
 		</collection>
 	</resultMap>
 	
-	<select id="getAuthorizedWorkcenterList"  parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo" resultMap="workcenterMap">
-		(SELECT 
-		  pw.`uuid`,
-		  pw.`name`,
-		  pw.`type`,
-		  pw.`sort`,
-		  pw.`condition_config`,
-		  NULL AS `owner`,
-		  pwa.`type` as authType,
-		  pwa.`uuid` as authUuid
+	<select id="getAuthorizedWorkcenterUuidList" resultType="java.lang.String">
+		SELECT 
+		  pw.`uuid`
 		FROM
 		  `process_workcenter` pw 
 		   LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
+		   LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
 		<where>
-			pw.`type` = 'system'
-			and
-			(
-				(pwa.type = 'common' AND pwa.`uuid` = 'alluser')
-				<if test="userId != null and userId != ''">
-				  	OR	(pwa.type = 'user' AND pwa.`uuid` = #{userId})
-				</if>
-				<if test="teamUuidList != null and teamUuidList.size() > 0">
-					OR (pwa.type = 'team' AND pwa.`uuid` IN 
-					<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
-						#{teamUuid}
+			(pwa.type = 'common' AND pwa.`uuid` = 'alluser')
+			<if test="userId != null and userId != ''">
+			  	OR	(pwa.type = 'user' AND pwa.`uuid` = #{userId})
+			</if>
+			<if test="teamUuidList != null and teamUuidList.size() > 0">
+				OR (pwa.type = 'team' AND pwa.`uuid` IN 
+				<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
+					#{teamUuid}
+				</foreach>
+					)
+			</if>
+			<if test="roleNameList != null and roleNameList.size() > 0">
+				OR (pwa.type = 'role' AND pwa.`uuid` IN 
+					<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
+						#{roleName}
 					</foreach>
-						)
-				</if>
-				<if test="roleNameList != null and roleNameList.size() > 0">
-					OR (pwa.type = 'role' AND pwa.`uuid` IN 
-						<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
-							#{roleName}
-						</foreach>
-						)
-				</if>
-			)
+					)
+			</if>
+			<if test="userId != null and userId != ''">
+			or	pwo.`user_id` = #{userId}
+			</if>
 		</where>
-		ORDER BY pw.`sort` ASC)
-		union
-		(SELECT 
+	</select>
+	
+	<select id="getAuthorizedWorkcenterListByUuidList"  parameterType="java.util.List" resultMap="workcenterMap">
+		SELECT 
 		  pw.`uuid`,
 		  pw.`name`,
 		  pw.`type`,
 		  pw.`sort`,
 		  pw.`condition_config`,
-		  pwo.user_id as `owner`,
-		  null as `authType`,
-		  null as `authUuid`
+		  pwa.`type` as authType,
+		  pwa.`uuid` as authUuid,
+		  pwo.user_id as `owner`
 		FROM
 		  `process_workcenter` pw 
+		   LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
 		   LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
 		<where>
-			pw.`type` = 'custom'
-			<if test="userId != null and userId != ''">
-			and	pwo.`user_id` = #{userId}
+			<if test="uuidList != null and uuidList.size() > 0">
+				 pw.`uuid` IN 
+				<foreach collection="uuidList" item="uuid" open="(" separator=","  close=")">
+					#{uuid}
+				</foreach>
 			</if>
-			
 		</where>
-		ORDER BY pw.`sort` ASC)
-		
+		ORDER BY pw.type asc,pw.`sort` ASC
 	</select>
 	
 	<select id="checkWorkcenterNameIsRepeat"  parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -98,9 +93,11 @@
 		  pw.`name`,
 		  pw.`type`,
 		  pw.`sort`,
-		  pw.`condition_config`
+		  pw.`condition_config`,
+		  pwo.user_id as `owner`
 		FROM
 		 	`process_workcenter` pw 
+		 	LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
 		<where>
 			<if test="name != null and name != ''">
 				pw.`name` = #{name}
@@ -134,6 +131,11 @@
 		   and user_id = #{userId}
 	</select>
 	
+	<select id="getWorkcenterUserProfileByUserId" parameterType="java.lang.String" resultType="codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo">
+		select * from `process_workcenter_user_profile`
+		where user_id = #{userId}
+	</select>
+	
 	<delete id="deleteWorkcenterByUuid" parameterType="java.lang.String">
 		DELETE 
 		FROM
@@ -165,6 +167,13 @@
 				and user_id = #{userId}
 			</if>
 		</where>
+	</delete>
+	
+	<delete id="deleteWorkcenterUserProfileByUserId" parameterType="java.lang.String">
+		DELETE 
+		FROM
+		  `process_workcenter_user_profile` 
+		WHERE `user_id` = #{userId} ;
 	</delete>
 
 	<insert id="insertWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
@@ -225,6 +234,12 @@
 		INSERT INTO `process_workcenter_owner` (`workcenter_uuid`, `user_id`) 
 		VALUES
 		(#{uuid}, #{userId}) ;
+	</insert>
+	
+	<insert id="insertWorkcenterUserProfile" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo">
+		INSERT INTO `process_workcenter_user_profile` (`user_id`, `config`) 
+		VALUES
+		(#{user_id}, #{config}) ;
 	</insert>
 	
 	<update id="updateWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">

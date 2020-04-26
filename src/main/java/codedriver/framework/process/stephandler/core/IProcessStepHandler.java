@@ -17,6 +17,7 @@ import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskException;
+import codedriver.framework.process.notify.core.NotifyTriggerType;
 
 //需要把事务隔离级别调低，避免并发insert时因为gap lock导致deadlock
 public interface IProcessStepHandler {
@@ -354,4 +355,6 @@ public interface IProcessStepHandler {
 	* @return List<ProcessTaskStepVo>
 	 */
 	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId);
+	
+	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger);
 }

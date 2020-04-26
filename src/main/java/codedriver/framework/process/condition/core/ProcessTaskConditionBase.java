@@ -19,19 +19,21 @@ import codedriver.framework.util.TimeUtil;
 public abstract class ProcessTaskConditionBase implements IProcessTaskCondition {
 
 	@Override
-	public String getEsWhere(ConditionVo condition,List<ConditionVo> conditionList) {
-		String where = getMyEsWhere(condition,conditionList);
-		if(StringUtils.isEmpty(where)) {
+	public String getEsWhere(List<ConditionVo> conditionList,Integer index) {
+		ConditionVo condition = conditionList.get(index);
+		String where = getMyEsWhere(index,conditionList);
+		if(StringUtils.isBlank(where)) {
 			Object value = condition.getValueList().get(0);
 			if(condition.getValueList().size()>1) {
 				value = String.join("','",condition.getValueList());
 			}
 			where = String.format(ProcessExpression.getExpressionEs(condition.getExpression()),ProcessWorkcenterField.getConditionValue(condition.getName()),String.format("'%s'",  value));
+			
 		}
 		return where;
 	}
 	
-	protected String getMyEsWhere(ConditionVo condition,List<ConditionVo> conditionList) {
+	protected String getMyEsWhere(Integer index,List<ConditionVo> conditionList) {
 		return null;
 	}
 

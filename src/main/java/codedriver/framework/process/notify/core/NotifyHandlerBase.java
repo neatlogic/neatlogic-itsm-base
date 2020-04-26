@@ -2,6 +2,7 @@ package codedriver.framework.process.notify.core;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,8 +17,8 @@ public abstract class NotifyHandlerBase implements INotifyHandler {
 
 
 	public final void execute(NotifyVo notifyVo) {
-		if ((notifyVo.getToUserList() == null || notifyVo.getToUserList().size() <= 0)) {
-			if (notifyVo.getToUserIdList() != null && notifyVo.getToUserIdList().size() > 0) {
+		if (CollectionUtils.isEmpty(notifyVo.getToUserList())) {
+			if (CollectionUtils.isNotEmpty(notifyVo.getToUserIdList())) {
 				for (String userId : notifyVo.getToUserIdList()) {
 					UserVo userVo = userMapper.getUserBaseInfoByUserId(userId);
 					if (userVo != null) {
@@ -25,10 +26,18 @@ public abstract class NotifyHandlerBase implements INotifyHandler {
 					}
 				}
 			}
-			if (notifyVo.getToTeamIdList() != null && notifyVo.getToTeamIdList().size() > 0) {
+			if (CollectionUtils.isNotEmpty(notifyVo.getToTeamIdList())) {
 				for (String teamId : notifyVo.getToTeamIdList()) {
 					List<UserVo> teamUserList = userMapper.getActiveUserByTeamId(teamId);
 					for (UserVo userVo : teamUserList) {
+						notifyVo.addUser(userVo);
+					}
+				}
+			}
+			if (CollectionUtils.isNotEmpty(notifyVo.getToRoleNameList())) {
+				for (String roleName : notifyVo.getToRoleNameList()) {
+					List<UserVo> roleUserList = userMapper.getActiveUserByRoleName(roleName);
+					for (UserVo userVo : roleUserList) {
 						notifyVo.addUser(userVo);
 					}
 				}
@@ -40,7 +49,7 @@ public abstract class NotifyHandlerBase implements INotifyHandler {
 				notifyVo.setFromUserEmail(userVo.getEmail());
 			}
 		}
-		if (notifyVo.getToUserList().size() > 0) {
+		if (CollectionUtils.isNotEmpty(notifyVo.getToUserList())) {
 			myExecute(notifyVo);
 		} else {
 			throw new NotifyNoReceiverException();

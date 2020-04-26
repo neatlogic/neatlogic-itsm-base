@@ -6,14 +6,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.process.constvalue.ProcessTaskFlowDirection;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepVo extends BasePageVo {
@@ -54,7 +55,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Boolean isAllDone = false;
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
-	private Boolean isAttributeListSorted = false;
+	//private Boolean isAttributeListSorted = false;
 	private Boolean isTimeoutPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> userList;
@@ -82,11 +83,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
-	private String flowDirection;
+	private String flowDirection = "";
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
 	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
 	private Integer isView;
+	
+	private transient String aliasName;
 	
 	public ProcessTaskStepVo() {
 
@@ -211,6 +214,22 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public ProcessTaskStatusVo getStatusVo() {
 		if(statusVo == null && StringUtils.isNotBlank(status)) {
+			JSONObject stepConfigObj = JSONObject.parseObject(config);
+			if (MapUtils.isNotEmpty(stepConfigObj)) {
+				JSONArray customStatusList = stepConfigObj.getJSONArray("customStatusList");
+				if(CollectionUtils.isNotEmpty(customStatusList)) {
+					for(int i = 0; i < customStatusList.size(); i++) {
+						JSONObject customStatus = customStatusList.getJSONObject(i);							
+						if(status.equals(customStatus.getString("name"))) {
+							String value = customStatus.getString("value");
+							if(StringUtils.isNotBlank(value)) {
+								statusVo = new ProcessTaskStatusVo(status, value);
+								return statusVo;
+							}
+						}
+					}
+				}
+			}
 			statusVo = new ProcessTaskStatusVo(status);
 		}
 		return statusVo;
@@ -294,13 +313,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public String getFlowDirection() {
-		if(this.isActive != null) {
-			if(this.isActive.intValue() == 0) {
-				flowDirection = ProcessTaskFlowDirection.FORWARD.getText();
-			}else {
-				flowDirection = ProcessTaskFlowDirection.BACKWARD.getText();
-			}
-		}
 		return flowDirection;
 	}
 
@@ -558,6 +570,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setIsView(Integer isView) {
 		this.isView = isView;
+	}
+
+	public String getAliasName() {
+		return aliasName;
+	}
+
+	public void setAliasName(String aliasName) {
+		this.aliasName = aliasName;
 	}
 
 }

@@ -6,12 +6,15 @@ public enum NotifyTriggerType {
 	FAILED("failed", "失败", "流程步骤已失败", "流程步骤已失败"),
 	SUCCEED("succeed", "成功", "流程步骤已成功", "流程步骤已成功"),
 	HANG("hang", "挂起", "流程步骤已挂起", "流程步骤已挂起"),
-	ABORT("aborted", "终止", "流程步骤已终止", "流程步骤已终止"),
+	ABORT("abort", "终止", "流程步骤已终止", "流程步骤已终止"),
 	RECOVER("recover", "恢复", "流程步骤已恢复", "流程步骤已恢复"),
-	ACCEPT("accept", "接管", "流程步骤接管", "流程步骤接管"),
+	//ACCEPT("accept", "接管", "流程步骤接管", "流程步骤接管"),
 	TRANSFER("transfer", "转交", "流程步骤已转交", "流程步骤已转交"),
 	ASSIGN("assign", "分配处理人", "流程步骤已分配", "流程步骤已分配"),
-	TIMEOUT("timeout", "超时", "超时标题", "超时内容");
+	TIMEOUT("timeout", "超时", "超时标题", "超时内容"),
+	URGE("urge", "催办", "催办标题", "催办内容"),
+	RETREAT("retreat", "撤回", "撤回标题", "撤回内容"),
+	BACK("back", "回退", "回退标题", "回退内容");
 
 	private String trigger;
 	private String text;
@@ -47,7 +50,7 @@ public enum NotifyTriggerType {
 				return s.getTitleTemplate();
 			}
 		}
-		return null;
+		return "";
 	}
 
 	public static String getContentTemplate(String trigger) {
@@ -56,6 +59,15 @@ public enum NotifyTriggerType {
 				return s.getContentTemplate();
 			}
 		}
-		return null;
+		return "";
+	}
+	
+	public static String getText(String trigger) {
+		for(NotifyTriggerType n : NotifyTriggerType.values()) {
+			if(n.getTrigger().equals(trigger)) {
+				return n.getText();
+			}
+		}
+		return "";
 	}
 }

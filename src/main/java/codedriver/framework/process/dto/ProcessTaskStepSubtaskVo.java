@@ -1,6 +1,7 @@
 package codedriver.framework.process.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -43,6 +44,8 @@ public class ProcessTaskStepSubtaskVo {
 	private String content;
 	@EntityField(name = "描述hash值", type = ApiParamType.STRING)
 	private String contentHash;
+	@EntityField(name = "回复内容列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepSubtaskContentVo> contentList;
 	
 	@EntityField(name = "是否可编辑", type = ApiParamType.INTEGER)
 	private Integer isEditable;
@@ -52,6 +55,8 @@ public class ProcessTaskStepSubtaskVo {
 	private Integer isRedoable;
 	@EntityField(name = "是否可完成", type = ApiParamType.INTEGER)
 	private Integer isCompletable;
+	@EntityField(name = "是否可回复", type = ApiParamType.INTEGER)
+	private Integer isCommentable;
 	
 	private transient JSONObject paramObj;
 	
@@ -160,6 +165,12 @@ public class ProcessTaskStepSubtaskVo {
 	public void setContentHash(String contentHash) {
 		this.contentHash = contentHash;
 	}
+	public List<ProcessTaskStepSubtaskContentVo> getContentList() {
+		return contentList;
+	}
+	public void setContentList(List<ProcessTaskStepSubtaskContentVo> contentList) {
+		this.contentList = contentList;
+	}
 	public Integer getIsEditable() {
 		if(isEditable == null) {
 			String currentUser = UserContext.get().getUserId();
@@ -215,6 +226,20 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public void setIsCompletable(Integer isCompletable) {
 		this.isCompletable = isCompletable;
+	}
+	public Integer getIsCommentable() {
+		if(isCommentable == null) {
+			String currentUser = UserContext.get().getUserId();
+			if(currentUser != null && (currentUser.equals(this.userId) || currentUser.equals(this.owner)) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
+				isCommentable = 1;
+			}else {
+				isCommentable = 0;
+			}
+		}
+		return isCommentable;
+	}
+	public void setIsCommentable(Integer isCommentable) {
+		this.isCommentable = isCommentable;
 	}
 	@Override
 	public int hashCode() {

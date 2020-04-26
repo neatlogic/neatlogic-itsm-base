@@ -4,7 +4,6 @@ import codedriver.framework.process.constvalue.AuthType;
 import codedriver.framework.process.constvalue.EncodingType;
 import codedriver.framework.process.constvalue.RestfulType;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.util.ClassUtils;
 
@@ -68,5 +67,5 @@ public interface IMatrixExternalRequestHandler {
     * @Param: [url, root, jsonObject]
     * @return: java.lang.String
     */
-    public JSONArray dataHandler(String url, String root, JSONObject jsonObject);
+    public JSONObject dataHandler(String url, String root, JSONObject jsonObject);
 }
