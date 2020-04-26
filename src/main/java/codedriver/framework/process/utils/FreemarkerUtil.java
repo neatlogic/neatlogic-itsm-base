@@ -20,7 +20,7 @@ public class FreemarkerUtil {
 	public static String getNotifyContent(JSONObject dataObj, String content) {
 		String resultStr = "";
 		if (content != null) {
-			Configuration cfg = new Configuration();
+			Configuration cfg = new Configuration(Configuration.VERSION_2_3_30);
 			cfg.setNumberFormat("0.##");
 			cfg.setClassicCompatible(true);
 			StringTemplateLoader stringLoader = new StringTemplateLoader();
@@ -42,4 +42,6 @@ public class FreemarkerUtil {
 		}
 		return resultStr;
 	}
+	
+	
 }
