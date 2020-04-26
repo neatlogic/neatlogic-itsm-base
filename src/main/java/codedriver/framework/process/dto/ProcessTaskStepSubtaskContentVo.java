@@ -12,6 +12,7 @@ public class ProcessTaskStepSubtaskContentVo {
 	private String action;
 	private String fcd;
 	private String fcu;
+	private String fcuName;
 	private String lcd;
 	private String lcu;
 
@@ -87,6 +88,14 @@ public class ProcessTaskStepSubtaskContentVo {
 
 	public void setFcu(String fcu) {
 		this.fcu = fcu;
+	}
+
+	public String getFcuName() {
+		return fcuName;
+	}
+
+	public void setFcuName(String fcuName) {
+		this.fcuName = fcuName;
 	}
 
 	public String getLcd() {

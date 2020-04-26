@@ -862,7 +862,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				//AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.ACCEPT);
 
 				/** 触发通知 **/
-				NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.ACCEPT);
+				//NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.ACCEPT);
 			}
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
