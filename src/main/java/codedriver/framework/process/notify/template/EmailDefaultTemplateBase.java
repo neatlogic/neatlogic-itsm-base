@@ -26,6 +26,11 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 					.append("请<a href=\"${home}process.html#/task-detail?processTaskId==${task.id}&processTaskStepId=${step.id}\"><b>点击此处</b></a>查看详情，及时派单或处理，并主动告知用户进度，谢谢！<br>")
 					.toString();
 		}
+
+		@Override
+		public String description() {
+			return "邮件通知催办默认模板";
+		}
 	}
 	
 	public static class Abort extends EmailDefaultTemplateBase {
@@ -44,6 +49,11 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 					.append("请注意，用户催办<a href=\"${home}task/getTaskStepDetail.do?processTaskId=${task.id}&processTaskStepId=${step.id}\"><b>【${task.id}】：【${task.title}】</b></a><br><br>")
 					.append("请<a href=\"${home}process.html#/task-detail?processTaskId==${task.id}&processTaskStepId=${step.id}\"><b>点击此处</b></a>查看详情，及时派单或处理，并主动告知用户进度，谢谢！<br>")
 					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知取消默认模板";
 		}
 	}
 }

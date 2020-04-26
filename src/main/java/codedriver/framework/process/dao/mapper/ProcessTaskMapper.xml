@@ -910,10 +910,12 @@
 	  a.`action`,
 	  a.`fcd`,
 	  a.`fcu`,
+	  c.`user_name` AS fcuName,
 	  a.`lcd`,
 	  a.`lcu` 
 	FROM `processtask_step_subtask_content` a
 	JOIN `processtask_content` b on b.`hash` = a.`content_hash`
+	LEFT JOIN `user` c ON c.`user_id` = a.`fcu`
 	WHERE a.`processtask_step_subtask_id` = #{processTaskStepSubtaskId}
 	</select>
 	

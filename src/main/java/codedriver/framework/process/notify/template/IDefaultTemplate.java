@@ -26,4 +26,5 @@ public interface IDefaultTemplate {
 	public String getNotifyHandlerType();
 	public String getTitle();
 	public String getContent();
+	public String description();
 }
