@@ -4,7 +4,10 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Objects;
+
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.notify.core.INotifyHandler;
 import codedriver.framework.process.notify.core.NotifyHandlerFactory;
 import codedriver.framework.process.notify.core.NotifyHandlerType;
@@ -163,6 +166,14 @@ public class NotifyTemplateVo extends BasePageVo {
 	}
 
 	public String getNotifyHandler() {
+		if(StringUtils.isBlank(notifyHandler) && StringUtils.isNotBlank(notifyHandlerType)) {
+			for(ValueTextVo valueTextVo : NotifyHandlerFactory.getNotifyHandlerTypeList()) {
+				INotifyHandler handler = NotifyHandlerFactory.getHandler(valueTextVo.getValue());
+				if(Objects.equal(handler.getType(), notifyHandlerType)) {
+					notifyHandler = valueTextVo.getValue();
+				}
+			}
+		}
 		return notifyHandler;
 	}
 
