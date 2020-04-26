@@ -17,7 +17,7 @@ import freemarker.template.TemplateException;
 public class FreemarkerUtil {
 	static Logger logger = LoggerFactory.getLogger(FreemarkerUtil.class);
 
-	public static String getNotifyContent(JSONObject dataObj, String content) {
+	public static String transfer(JSONObject dataObj, String content) {
 		String resultStr = "";
 		if (content != null) {
 			Configuration cfg = new Configuration(Configuration.VERSION_2_3_30);
@@ -41,5 +41,33 @@ public class FreemarkerUtil {
 			}
 		}
 		return resultStr;
+	}
+
+	public static void transfer(JSONObject dataObj, String content, Writer out) throws Exception {
+		// String resultStr = "";
+		try {
+			if (content != null && !content.equals("")) {
+				Configuration cfg = new Configuration();
+				cfg.setNumberFormat("0.##");
+				cfg.setClassicCompatible(true);
+				StringTemplateLoader stringLoader = new StringTemplateLoader();
+				stringLoader.putTemplate("template", content);
+				cfg.setTemplateLoader(stringLoader);
+				Template temp;
+
+				try {
+					temp = cfg.getTemplate("template", "utf-8");
+					temp.process(dataObj, out);
+				} catch (IOException e) {
+					logger.error(e.getMessage(), e);
+					throw e;
+				} catch (TemplateException e) {
+					logger.error(e.getMessage(), e);
+					throw e;
+				}
+			}
+		} catch (Exception ex) {
+			throw ex;
+		}
 	}
 }
