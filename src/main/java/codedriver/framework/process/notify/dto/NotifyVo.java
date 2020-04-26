@@ -46,14 +46,14 @@ public class NotifyVo {
 
 	public String getTitle() {
 		if (StringUtils.isBlank(title) && StringUtils.isNotBlank(this.getTemplateTitle())) {
-			title = FreemarkerUtil.transfer(this.getData(), this.getTemplateTitle());
+			title = FreemarkerUtil.transform(this.getData(), this.getTemplateTitle());
 		}
 		return title;
 	}
 
 	public String getContent() {
 		if (StringUtils.isBlank(content) && StringUtils.isNotBlank(this.getTemplateContent())) {
-			content = FreemarkerUtil.transfer(this.getData(), this.getTemplateContent());
+			content = FreemarkerUtil.transform(this.getData(), this.getTemplateContent());
 		}
 		return content;
 	}
