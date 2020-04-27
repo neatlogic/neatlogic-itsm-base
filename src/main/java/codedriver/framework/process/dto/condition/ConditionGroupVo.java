@@ -33,7 +33,7 @@ public class ConditionGroupVo implements Serializable{
 		this.uuid = jsonObj.getString("uuid");
 		JSONArray conditionArray =jsonObj.getJSONArray("conditionList");
 		if(conditionArray.size() == 0) {
-			 new ParamIrregularException("'conditionList'参数不能为空数组");
+			throw new ParamIrregularException("'conditionList'参数不能为空数组");
 		}
 		JSONArray channelArray =jsonObj.getJSONArray("channelUuidList");
 		if(CollectionUtils.isNotEmpty(channelArray)) {
@@ -43,6 +43,9 @@ public class ConditionGroupVo implements Serializable{
 		conditionMap = new HashMap<String, ConditionVo>();
 		for(Object condition:conditionArray) {
 			ConditionVo conditionVo = new ConditionVo((JSONObject) JSONObject.toJSON(condition));
+			if(CollectionUtils.isEmpty(conditionVo.getValueList())){
+				throw new ParamIrregularException("'conditionList.valueList'参数不能为空数组");
+			}
 			conditionList.add(conditionVo);
 			conditionMap.put(conditionVo.getUuid(), conditionVo);
 		}
