@@ -1,9 +1,9 @@
 package codedriver.framework.process.constvalue;
 
 public enum ProcessMatrixAttributeType {
-	FORMINPUT("forminput","文本框"),
-	FORMSELECT("formselect","下拉框"),
-	FORMDATE("formdate","日期"),
+	INPUT("input","文本框"),
+	SELECT("select","下拉框"),
+	DATE("date","日期"),
 	USER("user","用户"),
 	TEAM("team","用户组"),
 	ROLE("role","角色");

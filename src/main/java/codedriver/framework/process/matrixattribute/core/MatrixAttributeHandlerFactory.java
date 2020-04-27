@@ -18,7 +18,7 @@ public class MatrixAttributeHandlerFactory extends ApplicationListenerBase {
 	public static IMatrixAttributeHandler getHandler(String type) {
 		IMatrixAttributeHandler handler = handlerMap.get(type);
 		if(handler == null) {
-			handler = handlerMap.get(ProcessMatrixAttributeType.FORMINPUT.getValue());
+			handler = handlerMap.get(ProcessMatrixAttributeType.INPUT.getValue());
 		}
 		return handler;
 	}
