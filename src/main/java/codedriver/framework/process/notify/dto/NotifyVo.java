@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
-import codedriver.framework.process.utils.FreemarkerUtil;
+import codedriver.framework.util.FreemarkerUtil;
 
 public class NotifyVo {
 	private String title;
