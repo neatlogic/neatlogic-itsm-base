@@ -324,7 +324,7 @@
 		ORDER BY `sort`
 	</select>
 
-	<select id="getProcessTaskStepWorkerPolicyByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo">
+	<select id="getProcessTaskStepWorkerPolicy" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo">
 		SELECT
 		`processtask_id` as processTaskId,
 		`processtask_step_id` as processTaskStepId,
@@ -332,10 +332,15 @@
 		`policy`,
 		`sort`,
 		`config`
-		FROM
-		`processtask_step_worker_policy`
-		WHERE
-		`processtask_step_id` = #{value}
+		FROM `processtask_step_worker_policy`
+		<where>
+			<if test="processTaskId != null">
+			AND `processtask_id` = #{processTaskId}
+			</if>
+			<if test="processTaskStepId != null">
+			AND `processtask_step_id` = #{processTaskStepId}
+			</if>
+		</where> 
 		ORDER BY `sort`
 	</select>
 
@@ -957,6 +962,22 @@
 	AND `user_id` = #{userId}
 	</select>
 	
+	<select id="getPrcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo" resultType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `from_processtask_step_id` AS fromProcessTaskStepId,
+	  `from_process_step_uuid` AS fromProcessStepUuid,
+	  `type`,
+	  `uuid`,
+	  `fcu`,
+	  `fcd` 
+	FROM `processtask_assignworker` 
+	WHERE `processtask_id` = #{processTaskId}
+	AND `processtask_step_id` = #{processTaskStepId}
+	AND `from_process_step_uuid` = #{fromProcessStepUuid}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1484,6 +1505,31 @@
 	    #{fcu}
 	  ) 
 	</insert>
+	
+	<insert id="insertProcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
+	INSERT INTO `processtask_assignworker` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `from_processtask_step_id`,
+	  `from_process_step_uuid`,
+	  `type`,
+	  `uuid`,
+	  `fcu`,
+	  `fcd`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{fromProcessTaskStepId},
+	    #{fromProcessStepUuid},
+	    #{type},
+	    #{uuid},
+	    #{fcu},
+	    NOW(3)
+	  ) 
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -1668,4 +1714,9 @@
 	AND `content_hash` = #{contentHash}
 	</delete>
 	
+	<delete id="deleteProcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
+	DELETE FROM`processtask_assignworker` 
+	WHERE `processtask_step_id` = #{processTaskStepId}
+	AND `from_processtask_step_id` = #{fromProcessTaskStepId}
+	</delete>
 </mapper>

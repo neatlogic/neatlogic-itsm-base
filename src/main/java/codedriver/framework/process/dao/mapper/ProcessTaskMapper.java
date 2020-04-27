@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.elasticsearch.annotation.ElasticSearch;
 import codedriver.framework.process.dto.ProcessTaskAssignUserVo;
+import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskConvergeVo;
@@ -83,7 +84,7 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepTimeoutPolicyVo> getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);
 
-	public List<ProcessTaskStepWorkerPolicyVo> getProcessTaskStepWorkerPolicyByProcessTaskStepId(Long processTaskStepId);
+	public List<ProcessTaskStepWorkerPolicyVo> getProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
 
 	public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerByProcessTaskStepId(Long processTaskStepId);
 
@@ -148,6 +149,8 @@ public interface ProcessTaskMapper {
 			@Param("processTaskStepId") Long processTaskStepId, 
 			@Param("userId") String userId
 			);
+
+	public List<ProcessTaskAssignWorkerVo> getPrcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -213,6 +216,8 @@ public interface ProcessTaskMapper {
 
 	public int insertProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
 	
+	public int insertProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
+	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
 
@@ -259,4 +264,6 @@ public interface ProcessTaskMapper {
 	public int deleteProcessTaskStepAuditById(Long auditId);
 	
 	public int deleteProcessTaskStepContent(ProcessTaskStepContentVo processTaskStepContentVo);
+
+	public int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 }

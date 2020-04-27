@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
@@ -10,10 +12,10 @@ public class ProcessTaskStepSubtaskContentVo {
 	private String contentHash;
 	private String content;
 	private String action;
-	private String fcd;
+	private Date fcd;
 	private String fcu;
 	private String fcuName;
-	private String lcd;
+	private Date lcd;
 	private String lcu;
 
 	public ProcessTaskStepSubtaskContentVo() {
@@ -71,11 +73,11 @@ public class ProcessTaskStepSubtaskContentVo {
 		this.action = action;
 	}
 
-	public String getFcd() {
+	public Date getFcd() {
 		return fcd;
 	}
 
-	public void setFcd(String fcd) {
+	public void setFcd(Date fcd) {
 		this.fcd = fcd;
 	}
 
@@ -98,11 +100,11 @@ public class ProcessTaskStepSubtaskContentVo {
 		this.fcuName = fcuName;
 	}
 
-	public String getLcd() {
+	public Date getLcd() {
 		return lcd;
 	}
 
-	public void setLcd(String lcd) {
+	public void setLcd(Date lcd) {
 		this.lcd = lcd;
 	}
 
