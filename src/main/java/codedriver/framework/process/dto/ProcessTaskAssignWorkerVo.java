@@ -16,18 +16,7 @@ public class ProcessTaskAssignWorkerVo {
 	private String uuid;
 	private Date fcd;
 	private String fcu;
-	
-//	public ProcessTaskAssignWorkerVo() {
-//	}
-//	
-//	public ProcessTaskAssignWorkerVo(Long processTaskId, Long processTaskStepId, Long fromProcessTaskStepId, String fromProcessStepUuid, String type, String uuid) {
-//		this.processTaskId = processTaskId;
-//		this.processTaskStepId = processTaskStepId;
-//		this.fromProcessTaskStepId = fromProcessTaskStepId;
-//		this.fromProcessStepUuid = fromProcessStepUuid;
-//		this.type = type;
-//		this.uuid = uuid;
-//	}
+
 	public Long getProcessTaskId() {
 		return processTaskId;
 	}
