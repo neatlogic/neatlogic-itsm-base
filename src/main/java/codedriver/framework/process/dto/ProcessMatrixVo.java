@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -29,12 +30,12 @@ public class ProcessMatrixVo extends BasePageVo {
     private String typeName;
     @EntityField( name = "创建人",  type = ApiParamType.STRING)
     private String fcu;
-    @EntityField( name = "创建时间",  type = ApiParamType.STRING)
-    private String fcd;
+    @EntityField( name = "创建时间",  type = ApiParamType.LONG)
+    private Date fcd;
     @EntityField( name = "修改人",  type = ApiParamType.STRING)
-    private String lcd;
-    @EntityField(name = "修改时间", type = ApiParamType.STRING)
     private String lcu;
+    @EntityField(name = "修改时间", type = ApiParamType.LONG)
+    private Date lcd;
     @EntityField(name = "引用次数", type = ApiParamType.INTEGER)
     private int usedCount;
 
@@ -89,23 +90,23 @@ public class ProcessMatrixVo extends BasePageVo {
         this.fcu = fcu;
     }
 
-    public String getFcd() {
-        return fcd;
-    }
+    public Date getFcd() {
+		return fcd;
+	}
 
-    public void setFcd(String fcd) {
-        this.fcd = fcd;
-    }
+	public void setFcd(Date fcd) {
+		this.fcd = fcd;
+	}
 
-    public String getLcd() {
-        return lcd;
-    }
+	public Date getLcd() {
+		return lcd;
+	}
 
-    public void setLcd(String lcd) {
-        this.lcd = lcd;
-    }
+	public void setLcd(Date lcd) {
+		this.lcd = lcd;
+	}
 
-    public String getLcu() {
+	public String getLcu() {
         return lcu;
     }
 

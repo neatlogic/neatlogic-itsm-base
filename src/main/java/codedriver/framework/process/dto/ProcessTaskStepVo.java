@@ -88,6 +88,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
 	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
 	private Integer isView;
+	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepVo> assignableWorkerStepList;
 	
 	private transient String aliasName;
 	
@@ -578,6 +580,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setAliasName(String aliasName) {
 		this.aliasName = aliasName;
+	}
+
+	public List<ProcessTaskStepVo> getAssignableWorkerStepList() {
+		return assignableWorkerStepList;
+	}
+
+	public void setAssignableWorkerStepList(List<ProcessTaskStepVo> assignableWorkerStepList) {
+		this.assignableWorkerStepList = assignableWorkerStepList;
 	}
 
 }
