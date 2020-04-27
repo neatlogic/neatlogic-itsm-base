@@ -185,7 +185,7 @@
 	SELECT `process_uuid` FROM `channel_process` WHERE `channel_uuid` = #{channelUuid}
 	</select>
 	
-	<select id="getChannelAuthorityListByChannelUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo" useCache="false">
+	<select id="getChannelAuthorityListByChannelUuid" parameterType="java.lang.String" resultType="codedriver.framework.dto.AuthorityVo" useCache="false">
 	SELECT 
 	  `channel_uuid` AS channelUuid,
 	  `type`,
