@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class CatalogVo extends BasePageVo implements ITree{

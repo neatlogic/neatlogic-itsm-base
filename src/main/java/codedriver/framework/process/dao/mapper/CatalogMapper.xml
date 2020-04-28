@@ -84,7 +84,7 @@
 	 ORDER BY `parent_uuid`, `sort`
 	</select>
 	
-	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.AuthorityVo" useCache="false">
+	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.dto.AuthorityVo" useCache="false">
 	SELECT 
 	  `catalog_uuid` AS catalogUuid,
 	  `type`,

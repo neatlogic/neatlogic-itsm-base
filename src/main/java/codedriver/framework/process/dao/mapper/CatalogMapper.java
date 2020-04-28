@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import codedriver.framework.process.dto.AuthorityVo;
+import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.process.dto.CatalogVo;
 
 public interface CatalogMapper {

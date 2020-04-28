@@ -14,7 +14,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
-import codedriver.framework.process.dto.AuthorityVo;
+import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.process.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
 

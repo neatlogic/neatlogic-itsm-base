@@ -9,7 +9,7 @@
 		<result column="type" property="type" />
 		<result column="sort" property="sort" />
 		<result column="condition_config" property="conditionConfig" />
-		<collection property="authorityList" ofType="codedriver.framework.process.dto.AuthorityVo">
+		<collection property="authorityList" ofType="codedriver.framework.dto.AuthorityVo">
 			<result column="authUuid" property="uuid" />
 			<result column="authType" property="type" />
 		</collection>
