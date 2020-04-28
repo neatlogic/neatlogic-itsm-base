@@ -30,4 +30,6 @@ public interface MatrixDataMapper {
 	public int getDynamicTableDataByColumnCount(ProcessMatrixDataVo dataVo);
 	
 	public int getDynamicTableDataByUuidCount(ProcessMatrixDataVo dataVo);
+	
+	public String getDynamicTableCellData(@Param("matrixUuid") String matrixUuid, @Param("sourceColumnVo") ProcessMatrixColumnVo sourceColumnVo, @Param("targetColumn") String targetColumn);
 }

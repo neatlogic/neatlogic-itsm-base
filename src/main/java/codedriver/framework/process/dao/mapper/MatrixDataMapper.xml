@@ -131,6 +131,13 @@
 		</where>
 	</select>
 	
+	<select id="getDynamicTableCellData" resultType="java.lang.String">
+	SELECT 
+	  `${targetColumn}`
+	FROM `matrix_${matrixUuid}` 
+	WHERE `${sourceColumnVo.column}` = #{sourceColumnVo.value}
+	</select>
+	
 	<insert id="insertDynamicTableData">
 		INSERT INTO `matrix_${matrixUuid}`
 		<foreach collection="columnList" open="(" close=")" item="column" separator=",">
