@@ -180,7 +180,7 @@
 	</select>
 	
 	<select id="checkMatrixIsExists" parameterType="java.lang.String" resultType="int">
-	select count(`uuid`) from process_matrix where `uuid` = #{uuid}
+	SELECT COUNT(`uuid`) FROM `process_matrix` WHERE `uuid` = #{uuid}
 	</select>
 	
 	<update id="updateMatrixNameAndLcu" parameterType="codedriver.framework.process.dto.ProcessMatrixVo">

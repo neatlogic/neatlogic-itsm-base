@@ -90,7 +90,7 @@
 		<foreach collection="columnList" item="column" separator=",">
 			`${column}`
 		</foreach>
-		FROM matrix_${matrixUuid}
+		FROM `matrix_${matrixUuid}`
 		<where>
 			<if test="uuidList != null and uuidList.size() > 0">
 				`uuid` in 
@@ -106,12 +106,12 @@
 	
 	<select id="getDynamicTableDataByColumnCount" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="int">
 		SELECT
-		count(id)
-		FROM matrix_${matrixUuid}
+		COUNT(`id`)
+		FROM `matrix_${matrixUuid}`
 		<where>
 			<if test="sourceColumnList != null and sourceColumnList.size > 0">
 				<foreach collection="sourceColumnList" item="sourceColumn">
-					AND ${sourceColumn.column} = #{sourceColumn.value}
+					AND `${sourceColumn.column}` = #{sourceColumn.value}
 				</foreach>
 			</if>
 		</where>
@@ -119,8 +119,8 @@
 	
 	<select id="getDynamicTableDataByUuidCount" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="int">
 		SELECT
-		count(`id`)
-		FROM matrix_${matrixUuid}
+		COUNT(`id`)
+		FROM `matrix_${matrixUuid}`
 		<where>
 			<if test="uuidList != null and uuidList.size() > 0">
 				`uuid` in 
@@ -150,7 +150,7 @@
 	</insert>
 
 	<insert id="insertDynamicTableData2">
-		INSERT INTO matrix_${matrixUuid}
+		INSERT INTO `matrix_${matrixUuid}`
 		<foreach collection="rowData" open="(" close=")" item="columnData" separator=",">
 			`${columnData.column}`
 		</foreach>
@@ -170,6 +170,6 @@
 	</update>
 	
 	<delete id="deleteDynamicTableDataByUuid">
-		DELETE FROM matrix_${matrixUuid} WHERE uuid = #{uuid}
+		DELETE FROM `matrix_${matrixUuid}` WHERE `uuid` = #{uuid}
 	</delete>
 </mapper>
