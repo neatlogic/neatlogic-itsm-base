@@ -3,21 +3,25 @@
 <mapper namespace="codedriver.framework.process.dao.mapper.MatrixDataMapper">
 	<select id="getDynamicTableDataCount" parameterType="codedriver.framework.process.dto.ProcessMatrixAttributeVo" resultType="int">
 		SELECT
-			COUNT(`uuid`)
-		FROM `matrix_${matrixUuid}`
+			COUNT(uuid)
+		FROM matrix_${matrixUuid}
 		<where>
 			<if test="keyword != null and keyword != ''">
 				<foreach collection="columnList" separator="OR" item="column">
-					`${column}` LIKE CONCAT('%', #{keyword}, '%')
+					${column} LIKE CONCAT('%', #{keyword}, '%')
 				</foreach>
  			</if>
 		</where>
+		ORDER BY `id`
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
 	</select>
 
 	<select id = "getDynamicTableDataCountByUuid" resultType = "int">
 		SELECT
 			COUNT(`uuid`)
-		FROM `matrix_${matrixUuid}`
+		FROM matrix_${matrixUuid}
 		WHERE `uuid` = #{uuid}
 	</select>
 
@@ -27,11 +31,11 @@
   		<foreach collection="columnList" separator="," item="column">
 			`${column}`
 		</foreach>
-		FROM `matrix_${matrixUuid}`
+		FROM matrix_${matrixUuid}
 		<where>
 			<if test="keyword != null and keyword != ''">
 				<foreach collection="columnList" separator="OR" item="column">
-					`${column}` LIKE CONCAT('%', #{keyword}, '%')
+					${column} LIKE CONCAT('%', #{keyword}, '%')
 				</foreach>
 			</if>
 		</where>

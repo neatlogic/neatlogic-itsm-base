@@ -183,10 +183,6 @@
 	SELECT COUNT(`uuid`) FROM `process_matrix` WHERE `uuid` = #{uuid}
 	</select>
 	
-	<select id="checkMatrixNameIsRepeat" parameterType="codedriver.framework.process.dto.ProcessMatrixVo" resultType="int">
-	SELECT COUNT(1) FROM `process_matrix` WHERE `name` = #{name} AND `uuid` != #{uuid}
-	</select>
-	
 	<update id="updateMatrixNameAndLcu" parameterType="codedriver.framework.process.dto.ProcessMatrixVo">
 		UPDATE `process_matrix` SET
 		 `name` = #{name},
@@ -196,6 +192,6 @@
 	</update>
 
 	<delete id="deleteMatrixByUuid" parameterType="string">
-		DELETE FROM `process_matrix` WHERE `uuid` = #{uuid}
+		DELETE FROM`process_matrix` WHERE `uuid` = #{uuid}
 	</delete>
 </mapper>
