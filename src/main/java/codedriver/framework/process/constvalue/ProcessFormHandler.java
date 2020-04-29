@@ -65,7 +65,7 @@ public enum ProcessFormHandler {
 	}
 
 	public ProcessFormHandlerType getType(String processWorkcenterConditionType) {
-		if(ProcessWorkcenterConditionModel.CUSTOM.getValue().equals(processWorkcenterConditionType)) {
+		if(ProcessConditionModel.CUSTOM.getValue().equals(processWorkcenterConditionType)) {
 			if(type == ProcessFormHandlerType.RADIO || type == ProcessFormHandlerType.CHECKBOX) {
 				return ProcessFormHandlerType.SELECT;
 			}

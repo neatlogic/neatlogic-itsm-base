@@ -13,7 +13,7 @@ import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.process.constvalue.ProcessExpression;
 import codedriver.framework.process.constvalue.ProcessFormHandler;
 import codedriver.framework.process.constvalue.ProcessFormHandlerType;
-import codedriver.framework.process.constvalue.ProcessWorkcenterConditionModel;
+import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class FormAttributeVo implements Serializable {
@@ -42,7 +42,7 @@ public class FormAttributeVo implements Serializable {
 	ProcessExpressionVo defaultExpression;
 	
 	@EntityField(name = "条件模型")
-	private String conditionModel = ProcessWorkcenterConditionModel.CUSTOM.getValue();
+	private String conditionModel = ProcessConditionModel.CUSTOM.getValue();
 	
 	public FormAttributeVo() {
 
@@ -225,7 +225,7 @@ public class FormAttributeVo implements Serializable {
 			return configObj.getBoolean("isMultiple");
 		} 
 
-		if(conditionModel.equals(ProcessWorkcenterConditionModel.CUSTOM.getValue())) {
+		if(conditionModel.equals(ProcessConditionModel.CUSTOM.getValue())) {
 			if(ProcessFormHandler.FORMCHECKBOX.getHandler().equals(handler)){
 				return true;
 			}else {

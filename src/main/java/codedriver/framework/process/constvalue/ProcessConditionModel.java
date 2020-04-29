@@ -1,11 +1,11 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessWorkcenterConditionModel {
+public enum ProcessConditionModel {
 	SIMPLE("simple", "简单模式"), CUSTOM("custom", "自定义模式");
 	private String value;
 	private String name;
 
-	private ProcessWorkcenterConditionModel(String _value, String _name) {
+	private ProcessConditionModel(String _value, String _name) {
 		this.value = _value;
 		this.name = _name;
 	}
@@ -19,7 +19,7 @@ public enum ProcessWorkcenterConditionModel {
 	}
 
 	public static String getValue(String _value) {
-		for (ProcessWorkcenterConditionModel s : ProcessWorkcenterConditionModel.values()) {
+		for (ProcessConditionModel s : ProcessConditionModel.values()) {
 			if (s.getValue().equals(_value)) {
 				return s.getValue();
 			}
@@ -28,7 +28,7 @@ public enum ProcessWorkcenterConditionModel {
 	}
 
 	public static String getName(String _value) {
-		for (ProcessWorkcenterConditionModel s : ProcessWorkcenterConditionModel.values()) {
+		for (ProcessConditionModel s : ProcessConditionModel.values()) {
 			if (s.getValue().equals(_value)) {
 				return s.getName();
 			}
