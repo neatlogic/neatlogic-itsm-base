@@ -97,7 +97,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		}
 	}
 	
-	public static class Success extends EmailDefaultTemplateBase {
+	public static class Succeed extends EmailDefaultTemplateBase {
 
 		@Override
 		public String getTitle() {

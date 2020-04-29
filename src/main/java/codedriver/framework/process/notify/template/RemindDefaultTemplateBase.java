@@ -97,7 +97,7 @@ public abstract class RemindDefaultTemplateBase implements IDefaultTemplate {
 		}
 	}
 	
-	public static class Success extends RemindDefaultTemplateBase {
+	public static class Succeed extends RemindDefaultTemplateBase {
 
 		@Override
 		public String getTitle() {

@@ -14,12 +14,7 @@ import codedriver.framework.process.notify.template.IDefaultTemplate;
 
 public class NotifyDefaultTemplateFactory {
 	
-	public final static String DEFAULT_TEMPLATE_TYPE = "默认";
-	
-	public final static String DEFAULT_TEMPLATE_UUID_PREFIX = "default_";
-	
-	private static List<NotifyTemplateVo> defaultTemplateList = new ArrayList<>();
-	
+	private static List<NotifyTemplateVo> defaultTemplateList = new ArrayList<>();	
 
 	private static int number;
     public static synchronized int nextNum() {

@@ -94,6 +94,7 @@ import codedriver.framework.process.notify.dto.NotifyTemplateVo;
 import codedriver.framework.process.notify.dto.NotifyVo;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
+import codedriver.framework.process.notify.template.IDefaultTemplate;
 import codedriver.framework.scheduler.core.IJob;
 import codedriver.framework.scheduler.core.SchedulerManager;
 import codedriver.framework.scheduler.dto.JobObject;
@@ -275,7 +276,7 @@ public abstract class ProcessStepHandlerUtilBase {
 										String templateUuid = notifyObj.getString("template");
 										if (StringUtils.isNotBlank(templateUuid)) {
 											NotifyTemplateVo notifyTemplateVo = null;
-											if(NotifyDefaultTemplateFactory.DEFAULT_TEMPLATE_UUID_PREFIX.equals(templateUuid)) {
+											if(IDefaultTemplate.DEFAULT_TEMPLATE_UUID_PREFIX.equals(templateUuid)) {
 												notifyTemplateVo = NotifyDefaultTemplateFactory.getDefaultTemplateByNotifyHandlerTypeAndTrigger(handler.getType(), trigger);
 											}else {
 												notifyTemplateVo = notifyMapper.getNotifyTemplateByUuid(templateUuid);
