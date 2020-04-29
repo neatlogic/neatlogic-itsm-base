@@ -27,6 +27,8 @@ public interface MatrixMapper {
 
 	public int checkMatrixIsExists(String uuid);
 
+	public int checkMatrixNameIsRepeat(ProcessMatrixVo matrixVo);
+
     public int deleteMatrixByUuid(String uuid);
 
     public int updateMatrixNameAndLcu(ProcessMatrixVo matrixVo);
