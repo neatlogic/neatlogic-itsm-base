@@ -35,6 +35,7 @@ import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.asynchronization.threadpool.CommonThreadPool;
+import codedriver.framework.common.config.Config;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
@@ -56,6 +57,7 @@ import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
 import codedriver.framework.process.dao.mapper.notify.NotifyMapper;
+import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
@@ -69,6 +71,8 @@ import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
+import codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo;
+import codedriver.framework.process.dto.ProcessTaskStepSubtaskVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
@@ -90,6 +94,7 @@ import codedriver.framework.process.notify.dto.NotifyTemplateVo;
 import codedriver.framework.process.notify.dto.NotifyVo;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
+import codedriver.framework.process.notify.template.IDefaultTemplate;
 import codedriver.framework.scheduler.core.IJob;
 import codedriver.framework.scheduler.core.SchedulerManager;
 import codedriver.framework.scheduler.dto.JobObject;
@@ -224,6 +229,33 @@ public abstract class ProcessStepHandlerUtilBase {
 			try {
 				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
+				ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
+				ChannelTypeVo channelTypeVo = channelMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid());
+				processTaskVo.setChannelType(channelTypeVo);
+				List<ProcessTaskStepUserVo> processTaskUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+				if(CollectionUtils.isNotEmpty(processTaskUserList)) {
+					stepVo.setMajorUser(processTaskUserList.get(0));
+				}else {
+					stepVo.setWorkerList(processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(currentProcessTaskStepVo.getId()));
+				}
+				String content = null;
+				ProcessTaskStepSubtaskVo subtask = null;
+				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+				if(MapUtils.isNotEmpty(paramObj)) {
+					content = paramObj.getString("content");
+					Long processTaskStepSubtaskId = paramObj.getLong("processTaskStepSubtaskId");
+					if(processTaskStepSubtaskId != null) {
+						subtask = processTaskMapper.getProcessTaskStepSubtaskById(processTaskStepSubtaskId);
+						List<ProcessTaskStepSubtaskContentVo> processTaskStepSubtaskContentList = processTaskMapper.getProcessTaskStepSubtaskContentBySubtaskId(processTaskStepSubtaskId);
+						for(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo : processTaskStepSubtaskContentList) {
+							if(processTaskStepSubtaskContentVo != null 
+									&& processTaskStepSubtaskContentVo.getContentHash() != null 
+									&& ProcessTaskStepAction.CREATESUBTASK.getValue().equals(processTaskStepSubtaskContentVo.getAction())) {
+								subtask.setContentHash(processTaskStepSubtaskContentVo.getContentHash());
+							}
+						}
+					}
+				}
 				List<ProcessTaskStepWorkerVo> workerList = null;
 				if (StringUtils.isNotBlank(stepVo.getConfigHash())) {
 					String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
@@ -244,7 +276,7 @@ public abstract class ProcessStepHandlerUtilBase {
 										String templateUuid = notifyObj.getString("template");
 										if (StringUtils.isNotBlank(templateUuid)) {
 											NotifyTemplateVo notifyTemplateVo = null;
-											if(NotifyDefaultTemplateFactory.DEFAULT_TEMPLATE_UUID_PREFIX.equals(templateUuid)) {
+											if(IDefaultTemplate.DEFAULT_TEMPLATE_UUID_PREFIX.equals(templateUuid)) {
 												notifyTemplateVo = NotifyDefaultTemplateFactory.getDefaultTemplateByNotifyHandlerTypeAndTrigger(handler.getType(), trigger);
 											}else {
 												notifyTemplateVo = notifyMapper.getNotifyTemplateByUuid(templateUuid);
@@ -256,7 +288,19 @@ public abstract class ProcessStepHandlerUtilBase {
 										}
 
 										/** 注入流程作业信息 不够将来再补充 **/
-										notifyBuilder.addData("task", processTaskVo).addData("step", stepVo);
+										notifyBuilder
+										.addData("task", processTaskVo)
+										.addData("step", stepVo)
+										.addData("homeUrl", Config.HOME_URL)
+										.addData("tenant", TenantContext.get().getTenantUuid())
+										.addData("currentUserName", UserContext.get().getUserName());
+										
+										if(StringUtils.isNotBlank(content)) {
+											notifyBuilder.addData("content", content);
+										}
+										if(subtask != null) {
+											notifyBuilder.addData("subtask", subtask);
+										}
 										/** 注入结束 **/
 
 										for (int u = 0; u < receiverList.size(); u++) {

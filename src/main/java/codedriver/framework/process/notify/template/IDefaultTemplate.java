@@ -7,14 +7,23 @@ import codedriver.framework.process.notify.core.NotifyHandlerType;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 
 public interface IDefaultTemplate {
+	
+	String DEFAULT_TEMPLATE_TYPE = "默认";
+	
+	String DEFAULT_TEMPLATE_UUID_PREFIX = "default_";
+
+	String PROCESSTASK_DETAILS_URL = "${homeUrl}/${tenant}/process.html#/task-detail?processTaskId=${task.id}";
+	String PROCESSTASK_ID_TITLE = "<a href=" + PROCESSTASK_DETAILS_URL + "><b>【${task.channelType.prefix}${task.id}-${task.title}】</b></a>";
+	String PROCESSTASK_DETAILS_LINK = "点击查看详情：<a href=" + PROCESSTASK_DETAILS_URL + "><b>【工单链接】</b></a>";
+	String PROCESSTASK_STEP_MOJOR_OR_WORKERLIST = "<#if step.majorUser??>【${step.majorUser.name}】<#else><#if step.workerList?? && step.workerList.size > 0><#list step.workerList as worker>【${worker.name}】<#if worker_has_next>、</#if></#list></#if></#if>";
 	public default String getUuid() {
-		return NotifyDefaultTemplateFactory.DEFAULT_TEMPLATE_UUID_PREFIX + NotifyDefaultTemplateFactory.nextNum();
+		return DEFAULT_TEMPLATE_UUID_PREFIX + NotifyDefaultTemplateFactory.nextNum();
 	}
 	public default String getName() {
 		return NotifyHandlerType.getText(getNotifyHandlerType())+ "_" + NotifyTriggerType.getText(getTrigger());
 	}
 	public default String getType() {
-		return NotifyDefaultTemplateFactory.DEFAULT_TEMPLATE_TYPE;
+		return DEFAULT_TEMPLATE_TYPE;
 	}
 	public default int getIsReadOnly() {
 		return 1;

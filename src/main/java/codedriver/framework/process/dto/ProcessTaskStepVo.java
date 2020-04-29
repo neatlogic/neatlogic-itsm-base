@@ -70,6 +70,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
 	private Map<String, String> formAttributeActionMap;
+	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStepUserVo majorUser;
 	@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> majorUserList;
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
@@ -588,6 +590,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setAssignableWorkerStepList(List<ProcessTaskStepVo> assignableWorkerStepList) {
 		this.assignableWorkerStepList = assignableWorkerStepList;
+	}
+
+	public ProcessTaskStepUserVo getMajorUser() {
+		return majorUser;
+	}
+
+	public void setMajorUser(ProcessTaskStepUserVo majorUser) {
+		this.majorUser = majorUser;
 	}
 
 }

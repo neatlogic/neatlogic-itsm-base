@@ -80,7 +80,7 @@ public interface ProcessMapper {
 
 	public int insertProcessSla(ProcessSlaVo processSlaVo);
 
-	public int insertProcessStepNotifyTemplate(ProcessStepNotifyTemplateVo processStepNotifyTemplateVo);
+	public int replaceProcessStepNotifyTemplate(ProcessStepNotifyTemplateVo processStepNotifyTemplateVo);
 
 	public int insertProcessDraft(ProcessDraftVo processDraftVo);
 
