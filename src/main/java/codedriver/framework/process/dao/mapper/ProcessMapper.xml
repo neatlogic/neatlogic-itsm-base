@@ -463,8 +463,8 @@
 		VALUES (#{processUuid}, #{formUuid})
 	</insert>
 
-	<insert id="insertProcessStepNotifyTemplate" parameterType="codedriver.framework.process.dto.ProcessStepNotifyTemplateVo">
-		INSERT INTO `process_step_notifytemplate` ( `process_uuid`, `process_step_uuid`, `template_uuid` )
+	<insert id="replaceProcessStepNotifyTemplate" parameterType="codedriver.framework.process.dto.ProcessStepNotifyTemplateVo">
+		REPLACE INTO `process_step_notifytemplate` ( `process_uuid`, `process_step_uuid`, `template_uuid` )
 		VALUES ( #{processUuid}, #{processStepUuid}, #{templateUuid} )
 	</insert>
 
