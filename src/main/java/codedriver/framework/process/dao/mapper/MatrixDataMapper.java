@@ -32,4 +32,48 @@ public interface MatrixDataMapper {
 	public int getDynamicTableDataByUuidCount(ProcessMatrixDataVo dataVo);
 	
 	public String getDynamicTableCellData(@Param("matrixUuid") String matrixUuid, @Param("sourceColumnVo") ProcessMatrixColumnVo sourceColumnVo, @Param("targetColumn") String targetColumn);
+
+	public List<Map<String, String>> getDynamicTableDataByColumnList2(ProcessMatrixDataVo dataVo);
+
+	public List<String> getUuidListByAttributeValueListForSelectType(
+			@Param("matrixUuid") String matrixUuid, 
+			@Param("attributeUuid") String attributeUuid, 
+			@Param("attributeValueList") List<String> attributeValueList, 
+			@Param("pageSize") int pageSize
+			);
+
+	public List<String> getUuidListByKeywordForUserType(
+			@Param("matrixUuid") String matrixUuid, 
+			@Param("attributeUuid") String attributeUuid, 
+			@Param("keyword") String keyword, 
+			@Param("pageSize") int pageSize
+			);
+
+	public List<String> getUuidListByKeywordForTeamType(
+			@Param("matrixUuid") String matrixUuid, 
+			@Param("attributeUuid") String attributeUuid, 
+			@Param("keyword") String keyword, 
+			@Param("pageSize") int pageSize
+			);
+
+	public List<String> getUuidListByKeywordForRoleType(
+			@Param("matrixUuid") String matrixUuid, 
+			@Param("attributeUuid") String attributeUuid, 
+			@Param("keyword") String keyword, 
+			@Param("pageSize") int pageSize
+			);
+
+	public List<String> getUuidListByKeywordForDateType(
+			@Param("matrixUuid") String matrixUuid, 
+			@Param("attributeUuid") String attributeUuid, 
+			@Param("keyword") String keyword, 
+			@Param("pageSize") int pageSize
+			);
+
+	public List<String> getUuidListByKeywordForInputType(
+			@Param("matrixUuid") String matrixUuid, 
+			@Param("attributeUuid") String attributeUuid, 
+			@Param("keyword") String keyword, 
+			@Param("pageSize") int pageSize
+			);
 }
