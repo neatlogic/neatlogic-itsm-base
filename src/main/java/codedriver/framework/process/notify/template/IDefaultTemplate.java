@@ -12,10 +12,10 @@ public interface IDefaultTemplate {
 	
 	String DEFAULT_TEMPLATE_UUID_PREFIX = "default_";
 
-	String PROCESSTASK_DETAILS_URL = "${homeUrl}/${tenant}/process.html#/task-detail?processTaskId=${task.id}";
-	String PROCESSTASK_ID_TITLE = "<a href=" + PROCESSTASK_DETAILS_URL + "><b>【${task.channelType.prefix}${task.id}-${task.title}】</b></a>";
+	String PROCESSTASK_DETAILS_URL = "${DATA.DATA.homeUrl}/${DATA.tenant}/process.html#/task-detail?processTaskId=${DATA.task.id}";
+	String PROCESSTASK_ID_TITLE = "<a href=" + PROCESSTASK_DETAILS_URL + "><b>【${DATA.task.channelType.prefix}${DATA.task.id}-${task.title}】</b></a>";
 	String PROCESSTASK_DETAILS_LINK = "点击查看详情：<a href=" + PROCESSTASK_DETAILS_URL + "><b>【工单链接】</b></a>";
-	String PROCESSTASK_STEP_MOJOR_OR_WORKERLIST = "<#if step.majorUser??>【${step.majorUser.name}】<#else><#if step.workerList?? && step.workerList.size > 0><#list step.workerList as worker>【${worker.name}】<#if worker_has_next>、</#if></#list></#if></#if>";
+	String PROCESSTASK_STEP_MOJOR_OR_WORKERLIST = "<#if step.majorUser??>【${DATA.step.majorUser.name}】<#else><#if step.workerList?? && step.workerList.size > 0><#list step.workerList as worker>【${DATA.worker.name}】<#if worker_has_next>、</#if></#list></#if></#if>";
 	public default String getUuid() {
 		return DEFAULT_TEMPLATE_UUID_PREFIX + NotifyDefaultTemplateFactory.nextNum();
 	}

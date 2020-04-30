@@ -19,7 +19,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${step.name}】；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -41,7 +41,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "的【${step.name}】步骤已由处理人【${step.majorUser.userName}】受理；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "的【${DATA.step.name}】步骤已由处理人【${DATA.step.majorUser.userName}】受理；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -63,8 +63,8 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${currentUserName}】已将【${step.name}】步骤转交给" + PROCESSTASK_STEP_MOJOR_OR_WORKERLIST + "处理；<br>")
-					.append("原因：【${content}】 ；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.currentUserName}】已将【${DATA.step.name}】步骤转交给" + PROCESSTASK_STEP_MOJOR_OR_WORKERLIST + "处理；<br>")
+					.append("原因：【${DATA.content}】 ；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -86,7 +86,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${currentUserName}】发起了一条催办通知，请尽快处理；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.currentUserName}】发起了一条催办通知，请尽快处理；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -107,7 +107,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "的【${step.name}】步骤已处理完成；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "的【${DATA.step.name}】步骤已处理完成；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -128,8 +128,8 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "已回退至【${step.name}】；<br>")
-					.append("原因：【${content}】 ；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "已回退至【${DATA.step.name}】；<br>")
+					.append("原因：【${DATA.content}】 ；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -150,8 +150,8 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${currentUserName}】已将工单" + PROCESSTASK_ID_TITLE + "的【${step.name}】步骤撤回；<br>")
-					.append("原因：【${content}】 ；<br>")
+					.append("【${DATA.currentUserName}】已将工单" + PROCESSTASK_ID_TITLE + "的【${DATA.step.name}】步骤撤回；<br>")
+					.append("原因：【${DATA.content}】 ；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -172,7 +172,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${step.name}】步骤已挂起；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.step.name}】步骤已挂起；<br>")
 					.append("原因：因【步骤名称】步骤回退导致  ；<br>")//TODO linbq步骤名称有替换成变量
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
@@ -194,7 +194,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${currentUser}】取消了工单" + PROCESSTASK_ID_TITLE + "；<br>")
+					.append("【${DATA.currentUser}】取消了工单" + PROCESSTASK_ID_TITLE + "；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -215,7 +215,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${currentUser}】恢复了工单" + PROCESSTASK_ID_TITLE + "；<br>")
+					.append("【${DATA.currentUser}】恢复了工单" + PROCESSTASK_ID_TITLE + "；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -236,8 +236,8 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${step.name}】步骤流转失败；<br>")
-					.append("原因：【${step.error}】  ；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.step.name}】步骤流转失败；<br>")
+					.append("原因：【${DATA.step.error}】  ；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -258,7 +258,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${subtask.ownerName}】为【${step.name}】步骤创建了一个子任务，待【${subtask.userName}】处理；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.subtask.ownerName}】为【${DATA.step.name}】步骤创建了一个子任务，待【${DATA.subtask.userName}】处理；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -279,8 +279,8 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${subtask.ownerName}】更新了分配给【${subtask.userName}】的任务：<br>")
-					.append("【${subtask.content}】；<br>")
+					.append("【${DATA.subtask.ownerName}】更新了分配给【${DATA.subtask.userName}】的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -301,8 +301,8 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${subtask.userName}】完成了【${subtask.ownerName}】分配的任务：<br>")
-					.append("【${subtask.content}】；<br>")
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -323,9 +323,9 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${subtask.ownerName}】退回了分配给【${subtask.userName}】的任务：<br>")
-					.append("【${subtask.content}】；<br>")
-					.append("原因：【${content}】  ；<br>")
+					.append("【${DATA.subtask.ownerName}】退回了分配给【${DATA.subtask.userName}】的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append("原因：【${DATA.content}】  ；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
@@ -346,8 +346,8 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${subtask.ownerName}】取消了分配给【${subtask.userName}】的任务：<br>")
-					.append("【${subtask.content}】；<br>")
+					.append("【${DATA.subtask.ownerName}】取消了分配给【${DATA.subtask.userName}】的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
