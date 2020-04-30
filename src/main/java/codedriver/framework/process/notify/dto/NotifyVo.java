@@ -46,14 +46,20 @@ public class NotifyVo {
 
 	public String getTitle() {
 		if (StringUtils.isBlank(title) && StringUtils.isNotBlank(this.getTemplateTitle())) {
-			title = FreemarkerUtil.transform(this.getData(), this.getTemplateTitle());
+			try {
+				title = FreemarkerUtil.transform(this.getData(), this.getTemplateTitle());
+			} catch (Exception e) {
+			}
 		}
 		return title;
 	}
 
 	public String getContent() {
 		if (StringUtils.isBlank(content) && StringUtils.isNotBlank(this.getTemplateContent())) {
-			content = FreemarkerUtil.transform(this.getData(), this.getTemplateContent());
+			try {
+				content = FreemarkerUtil.transform(this.getData(), this.getTemplateContent());
+			} catch (Exception e) {
+			}
 		}
 		return content;
 	}
@@ -168,9 +174,9 @@ public class NotifyVo {
 			}
 			return this;
 		}
-		
+
 		public Builder addRoleName(String roleName) {
-			if(! toRoleNameList.contains(roleName)) {
+			if (!toRoleNameList.contains(roleName)) {
 				toRoleNameList.add(roleName);
 			}
 			return this;
