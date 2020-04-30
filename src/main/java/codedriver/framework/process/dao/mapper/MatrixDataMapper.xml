@@ -80,6 +80,23 @@
 		</if>
 	</select>
 	
+	<select id="getDynamicTableDataByColumnList2" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
+		SELECT
+		DISTINCT 
+		<foreach collection="columnList" item="column" separator=",">
+			`${column}`
+		</foreach>
+		FROM `matrix_${matrixUuid}`
+		WHERE `uuid` IN
+		<foreach collection="uuidList" item="uuid" open="(" close=")" separator=",">
+		#{uuid}
+		</foreach>
+		ORDER BY `id`
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+	</select>
+	
 	<select id="getDynamicTableDataByUuidList" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
 		SELECT
 		`uuid`,
@@ -132,6 +149,70 @@
 	  `${targetColumn}`
 	FROM `matrix_${matrixUuid}` 
 	WHERE `${sourceColumnVo.column}` = #{sourceColumnVo.value}
+	</select>
+	
+	<select id="getUuidListByAttributeValueListForSelectType" resultType="java.lang.String">
+	SELECT 
+	  `uuid` 
+	FROM `matrix_${matrixUuid}` 
+	WHERE `${attributeUuid}` IN 
+	<foreach collection="attributeValueList" item="attributeValue" open="(" close=")" separator=",">
+	#{attributeValue}
+	</foreach>
+	LIMIT #{pageSize}
+	</select>
+
+	<select id="getUuidListByKeywordForUserType" resultType="java.lang.String">
+	SELECT 
+	  a.`uuid` 
+	FROM `matrix_${matrixUuid}` a
+	JOIN `user` b ON b.`user_id` = a.`${attributeUuid}`
+	<if test="keyword != null and keyword != ''">
+	WHERE b.`user_id` LIKE CONCAT('%', #{keyword}, '%') OR b.`user_name` LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	LIMIT #{pageSize}
+	</select>
+
+	<select id="getUuidListByKeywordForTeamType" resultType="java.lang.String">
+	SELECT 
+	  a.`uuid` 
+	FROM `matrix_${matrixUuid}` a
+	JOIN `team` b ON b.`uuid` = a.`${attributeUuid}`
+	<if test="keyword != null and keyword != ''">
+	WHERE b.`uuid` LIKE CONCAT('%', #{keyword}, '%') OR b.`name` LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	LIMIT #{pageSize}
+	</select>
+
+	<select id="getUuidListByKeywordForRoleType" resultType="java.lang.String">
+	SELECT 
+	  a.`uuid` 
+	FROM `matrix_${matrixUuid}` a
+	JOIN `role` b ON b.`name` = a.`${attributeUuid}`
+	<if test="keyword != null and keyword != ''">
+	WHERE b.`name` LIKE CONCAT('%', #{keyword}, '%') OR b.`description` LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	LIMIT #{pageSize}
+	</select>
+	
+	<select id="getUuidListByKeywordForDateType" resultType="java.lang.String">
+	SELECT 
+	  `uuid` 
+	FROM `matrix_${matrixUuid}` 
+	<if test="keyword != null and keyword != ''">
+	WHERE `${attributeUuid}` LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	LIMIT #{pageSize}
+	</select>
+
+	<select id="getUuidListByKeywordForInputType" resultType="java.lang.String">
+	SELECT 
+	  `uuid` 
+	FROM `matrix_${matrixUuid}` 
+	<if test="keyword != null and keyword != ''">
+	WHERE `${attributeUuid}` LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	LIMIT #{pageSize}
 	</select>
 	
 	<insert id="insertDynamicTableData">
