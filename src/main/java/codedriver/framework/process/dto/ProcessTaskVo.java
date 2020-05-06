@@ -9,7 +9,6 @@ import org.apache.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
-import codedriver.framework.file.dto.FileVo;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskVo {
@@ -58,8 +57,6 @@ public class ProcessTaskVo {
 
 	private List<ProcessTaskStepVo> stepList;
 	
-	@EntityField(name = "描述内容", type = ApiParamType.STRING)
-	private String content;
 	@EntityField(name = "优先级信息", type = ApiParamType.JSONOBJECT)
 	private PriorityVo priority;
 	@EntityField(name = "工单表单信息", type = ApiParamType.STRING)
@@ -68,12 +65,14 @@ public class ProcessTaskVo {
 	Map<String, Object> formAttributeDataMap;
 	@EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
 	private String worktimeUuid;
-	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
-	private List<FileVo> fileList;
+
 	@EntityField(name = "服务类型信息", type = ApiParamType.JSONOBJECT)
 	private ChannelTypeVo channelType;
-	@EntityField(name = "描述是否必填", type = ApiParamType.INTEGER)
-	private Integer isRequired;
+
+	@EntityField(name = "工单开始步骤信息", type = ApiParamType.JSONOBJECT)
+	ProcessTaskStepVo startProcessTaskStep;
+	@EntityField(name = "工单当前步骤信息", type = ApiParamType.JSONOBJECT)
+	ProcessTaskStepVo currentProcessTaskStep;
 	
 	public ProcessTaskVo() {
 
@@ -275,14 +274,6 @@ public class ProcessTaskVo {
 		this.priorityName = priorityName;
 	}
 
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
 	public Long getParentId() {
 		return parentId;
 	}
@@ -323,14 +314,6 @@ public class ProcessTaskVo {
 		this.worktimeUuid = worktimeUuid;
 	}
 
-	public List<FileVo> getFileList() {
-		return fileList;
-	}
-
-	public void setFileList(List<FileVo> fileList) {
-		this.fileList = fileList;
-	}
-
 	public ChannelTypeVo getChannelType() {
 		return channelType;
 	}
@@ -339,12 +322,20 @@ public class ProcessTaskVo {
 		this.channelType = channelType;
 	}
 
-	public Integer getIsRequired() {
-		return isRequired;
+	public ProcessTaskStepVo getStartProcessTaskStep() {
+		return startProcessTaskStep;
 	}
 
-	public void setIsRequired(Integer isRequired) {
-		this.isRequired = isRequired;
+	public void setStartProcessTaskStep(ProcessTaskStepVo startProcessTaskStepVo) {
+		this.startProcessTaskStep = startProcessTaskStepVo;
+	}
+
+	public ProcessTaskStepVo getCurrentProcessTaskStep() {
+		return currentProcessTaskStep;
+	}
+
+	public void setCurrentProcessTaskStep(ProcessTaskStepVo currentProcessTaskStepVo) {
+		this.currentProcessTaskStep = currentProcessTaskStepVo;
 	}
 
 }

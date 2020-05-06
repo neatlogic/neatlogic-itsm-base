@@ -169,19 +169,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				}
 
 				if (this.getMode().equals(ProcessStepMode.MT)) {
-					/** 如果已经存在过处理人，则继续使用旧处理人，否则启用分派 **/
-					List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
-					if (oldUserList.size() > 0) {
-						processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
-						for (ProcessTaskStepUserVo oldUserVo : oldUserList) {
-							oldUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
-							processTaskMapper.updateProcessTaskStepUserStatus(oldUserVo);
-							processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserId()));
-						}
-					} else {
-						/** 分配处理人 **/
-						assign(currentProcessTaskStepVo);
-					}
+					/** 分配处理人 **/
+					assign(currentProcessTaskStepVo);
 				} else if (this.getMode().equals(ProcessStepMode.AT)) {
 					/** 自动处理 **/
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
@@ -237,20 +226,19 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		/** 清空处理人 **/
 		List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 		List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-		processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
-		ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo();
-		processTaskStepUserVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-		processTaskStepUserVo.setUserType(null);
-		processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
-
 		myAssign(currentProcessTaskStepVo, workerList, userList);
 
+		processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
 		if (workerList.size() > 0) {
 			for (ProcessTaskStepWorkerVo workerVo : workerList) {
 				processTaskMapper.insertProcessTaskStepWorker(workerVo);
 			}
 		}
-
+		
+		ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo();
+		processTaskStepUserVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+		processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());//只删除主处理人人
+		processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
 		if (userList.size() > 0) {
 			for (ProcessTaskStepUserVo userVo : userList) {
 				processTaskMapper.insertProcessTaskStepUser(userVo);

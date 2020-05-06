@@ -9,6 +9,8 @@ import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -18,6 +20,9 @@ import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepVo extends BasePageVo {
+
+	private final static Logger logger = LoggerFactory.getLogger(ProcessTaskStepVo.class);
+	
 	@EntityField(name = "工单步骤id", type = ApiParamType.LONG)
 	private Long id;
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
@@ -46,52 +51,50 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
 	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
-	private String config;
+	private transient String config;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
 	private String configHash;
-	private JSONObject configObj;
+	private transient JSONObject configObj;
 	private Boolean isAllDone = false;
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
 	//private Boolean isAttributeListSorted = false;
 	private Boolean isTimeoutPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> userList;
+	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
 	//@EntityField(name = "处理组列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepTeamVo> teamList;
-	private List<ProcessTaskStepRelVo> relList;
+	private List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
+	private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepWorkerVo> workerList;
-	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList;
-	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList;
-	private List<ProcessTaskStepFormAttributeVo> formAttributeList;
+	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
+	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
+	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList = new ArrayList<>();
+	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
 	private JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
 	private Map<String, String> formAttributeActionMap;
 	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepUserVo majorUser;
-	@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> majorUserList;
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> minorUserList;
+	private List<ProcessTaskStepUserVo> minorUserList = new ArrayList<>();
 	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> agentUserList;
+	private List<ProcessTaskStepUserVo> agentUserList = new ArrayList<>();
 	@EntityField(name = "暂存评论附件或上报描述附件", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepCommentVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepAuditVo> processTaskStepAuditList;
+	private List<ProcessTaskStepAuditVo> processTaskStepAuditList = new ArrayList<>();
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
 	private String flowDirection = "";
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
+	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
 	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
 	private Integer isView;
 	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepVo> assignableWorkerStepList;
+	private List<ProcessTaskStepVo> assignableWorkerStepList = new ArrayList<>();
 	
 	private transient String aliasName;
 	
@@ -218,9 +221,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public ProcessTaskStatusVo getStatusVo() {
 		if(statusVo == null && StringUtils.isNotBlank(status)) {
-			JSONObject stepConfigObj = JSONObject.parseObject(config);
-			if (MapUtils.isNotEmpty(stepConfigObj)) {
-				JSONArray customStatusList = stepConfigObj.getJSONArray("customStatusList");
+			if (MapUtils.isNotEmpty(getConfigObj())) {
+				JSONArray customStatusList = getConfigObj().getJSONArray("customStatusList");
 				if(CollectionUtils.isNotEmpty(customStatusList)) {
 					for(int i = 0; i < customStatusList.size(); i++) {
 						JSONObject customStatus = customStatusList.getJSONObject(i);							
@@ -276,6 +278,15 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public JSONObject getConfigObj() {
+		if(configObj == null && StringUtils.isNotBlank(config)) {
+			try {
+				configObj = JSONObject.parseObject(config);
+			} catch (Exception ex) {
+				if(StringUtils.isNotBlank(configHash)) {
+					logger.error("hash为" + configHash + "的processtask_step_config内容不是合法的JSON格式", ex);					
+				}
+			}
+		}
 		return configObj;
 	}
 
@@ -300,13 +311,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public Integer getIsRequired() {
-		if(isRequired == null && StringUtils.isNotBlank(config)) {
-			JSONObject stepConfigObj = JSONObject.parseObject(config);
-			if (MapUtils.isNotEmpty(stepConfigObj)) {
-				JSONObject workerPolicyConfig = stepConfigObj.getJSONObject("workerPolicyConfig");
-				if (MapUtils.isNotEmpty(workerPolicyConfig)) {
-					isRequired = workerPolicyConfig.getInteger("isRequired");
-				}
+		if(isRequired == null && MapUtils.isNotEmpty(getConfigObj())) {
+			JSONObject workerPolicyConfig = getConfigObj().getJSONObject("workerPolicyConfig");
+			if (MapUtils.isNotEmpty(workerPolicyConfig)) {
+				isRequired = workerPolicyConfig.getInteger("isRequired");
 			}
 		}
 		return isRequired;
@@ -518,14 +526,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setFormAttributeActionMap(Map<String, String> formAttributeActionMap) {
 		this.formAttributeActionMap = formAttributeActionMap;
-	}
-
-	public List<ProcessTaskStepUserVo> getMajorUserList() {
-		return majorUserList;
-	}
-
-	public void setMajorUserList(List<ProcessTaskStepUserVo> majorUserList) {
-		this.majorUserList = majorUserList;
 	}
 
 	public List<ProcessTaskStepUserVo> getMinorUserList() {

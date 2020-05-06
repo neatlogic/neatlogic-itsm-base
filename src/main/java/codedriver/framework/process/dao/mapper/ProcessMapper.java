@@ -60,6 +60,10 @@ public interface ProcessMapper {
 
 	public String getEarliestProcessDraft(ProcessDraftVo processDraftVo);
 
+	public List<ProcessStepWorkerPolicyVo> getProcessStepWorkerPolicyListByProcessUuid(String processUuid);
+
+	public ProcessStepVo getProcessStepByUuid(String processStepUuid);
+
 	public int insertProcess(ProcessVo processVo);
 
 	public int insertProcessStep(ProcessStepVo processStepVo);
