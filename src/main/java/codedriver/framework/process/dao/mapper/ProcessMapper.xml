@@ -308,8 +308,8 @@
 
 	<select id="getProcessStepWorkerPolicyListByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepWorkerPolicyVo">
 	SELECT 
-	  `process_uuid`,
-	  `process_step_uuid`,
+	  `process_uuid` AS processUuid,
+	  `process_step_uuid` AS processStepUuid,
 	  `policy`,
 	  `sort`,
 	  `config` 
