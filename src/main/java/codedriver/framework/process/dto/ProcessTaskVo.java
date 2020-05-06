@@ -73,9 +73,9 @@ public class ProcessTaskVo {
 	private ChannelTypeVo channelType;
 
 	@EntityField(name = "工单开始步骤信息", type = ApiParamType.JSONOBJECT)
-	ProcessTaskStepVo startProcessTaskStepVo;
+	ProcessTaskStepVo startProcessTaskStep;
 	@EntityField(name = "工单当前步骤信息", type = ApiParamType.JSONOBJECT)
-	ProcessTaskStepVo currentProcessTaskStepVo;
+	ProcessTaskStepVo currentProcessTaskStep;
 	
 	public ProcessTaskVo() {
 
@@ -341,20 +341,20 @@ public class ProcessTaskVo {
 		this.channelType = channelType;
 	}
 
-	public ProcessTaskStepVo getStartProcessTaskStepVo() {
-		return startProcessTaskStepVo;
+	public ProcessTaskStepVo getStartProcessTaskStep() {
+		return startProcessTaskStep;
 	}
 
-	public void setStartProcessTaskStepVo(ProcessTaskStepVo startProcessTaskStepVo) {
-		this.startProcessTaskStepVo = startProcessTaskStepVo;
+	public void setStartProcessTaskStep(ProcessTaskStepVo startProcessTaskStepVo) {
+		this.startProcessTaskStep = startProcessTaskStepVo;
 	}
 
-	public ProcessTaskStepVo getCurrentProcessTaskStepVo() {
-		return currentProcessTaskStepVo;
+	public ProcessTaskStepVo getCurrentProcessTaskStep() {
+		return currentProcessTaskStep;
 	}
 
-	public void setCurrentProcessTaskStepVo(ProcessTaskStepVo currentProcessTaskStepVo) {
-		this.currentProcessTaskStepVo = currentProcessTaskStepVo;
+	public void setCurrentProcessTaskStep(ProcessTaskStepVo currentProcessTaskStepVo) {
+		this.currentProcessTaskStep = currentProcessTaskStepVo;
 	}
 
 }
