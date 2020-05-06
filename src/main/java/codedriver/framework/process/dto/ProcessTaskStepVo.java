@@ -46,52 +46,52 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
 	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
-	private String config;
+	private transient String config;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
 	private String configHash;
-	private JSONObject configObj;
+	private transient JSONObject configObj;
 	private Boolean isAllDone = false;
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
 	//private Boolean isAttributeListSorted = false;
 	private Boolean isTimeoutPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> userList;
+	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
 	//@EntityField(name = "处理组列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepTeamVo> teamList;
-	private List<ProcessTaskStepRelVo> relList;
+	private List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
+	private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepWorkerVo> workerList;
-	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList;
-	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList;
-	private List<ProcessTaskStepFormAttributeVo> formAttributeList;
+	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
+	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
+	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList = new ArrayList<>();
+	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
 	private JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
 	private Map<String, String> formAttributeActionMap;
 	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepUserVo majorUser;
 	@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> majorUserList;
+	private List<ProcessTaskStepUserVo> majorUserList = new ArrayList<>();
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> minorUserList;
+	private List<ProcessTaskStepUserVo> minorUserList = new ArrayList<>();
 	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> agentUserList;
+	private List<ProcessTaskStepUserVo> agentUserList = new ArrayList<>();
 	@EntityField(name = "暂存评论附件或上报描述附件", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepCommentVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepAuditVo> processTaskStepAuditList;
+	private List<ProcessTaskStepAuditVo> processTaskStepAuditList = new ArrayList<>();
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
 	private String flowDirection = "";
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList;
+	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
 	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
 	private Integer isView;
 	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepVo> assignableWorkerStepList;
+	private List<ProcessTaskStepVo> assignableWorkerStepList = new ArrayList<>();
 	
 	private transient String aliasName;
 	
