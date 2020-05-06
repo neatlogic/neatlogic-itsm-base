@@ -77,8 +77,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Map<String, String> formAttributeActionMap;
 	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepUserVo majorUser;
-	@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> majorUserList = new ArrayList<>();
+//	@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
+//	private List<ProcessTaskStepUserVo> majorUserList = new ArrayList<>();
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> minorUserList = new ArrayList<>();
 	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
@@ -530,13 +530,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.formAttributeActionMap = formAttributeActionMap;
 	}
 
-	public List<ProcessTaskStepUserVo> getMajorUserList() {
-		return majorUserList;
-	}
-
-	public void setMajorUserList(List<ProcessTaskStepUserVo> majorUserList) {
-		this.majorUserList = majorUserList;
-	}
+//	public List<ProcessTaskStepUserVo> getMajorUserList() {
+//		return majorUserList;
+//	}
+//
+//	public void setMajorUserList(List<ProcessTaskStepUserVo> majorUserList) {
+//		this.majorUserList = majorUserList;
+//	}
 
 	public List<ProcessTaskStepUserVo> getMinorUserList() {
 		return minorUserList;
