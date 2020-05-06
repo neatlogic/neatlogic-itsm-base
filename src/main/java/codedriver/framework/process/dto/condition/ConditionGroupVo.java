@@ -43,9 +43,9 @@ public class ConditionGroupVo implements Serializable{
 		conditionMap = new HashMap<String, ConditionVo>();
 		for(Object condition:conditionArray) {
 			ConditionVo conditionVo = new ConditionVo((JSONObject) JSONObject.toJSON(condition));
-			if(CollectionUtils.isEmpty(conditionVo.getValueList())){
+			/*if(CollectionUtils.isEmpty(conditionVo.getValueList())){
 				throw new ParamIrregularException("'conditionList.valueList'参数不能为空数组");
-			}
+			}*/
 			conditionList.add(conditionVo);
 			conditionMap.put(conditionVo.getUuid(), conditionVo);
 		}
