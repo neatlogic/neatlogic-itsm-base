@@ -151,6 +151,8 @@ public interface ProcessTaskMapper {
 			);
 
 	public List<ProcessTaskAssignWorkerVo> getPrcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
+
+	public ProcessTaskStepVo getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuid(@Param("processTaskId") Long processTaskId, @Param("processStepUuid") String processStepUuid);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 

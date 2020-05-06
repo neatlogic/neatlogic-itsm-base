@@ -978,6 +978,26 @@
 	AND `from_process_step_uuid` = #{fromProcessStepUuid}
 	</select>
 	
+	<select id="getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuid" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+		SELECT
+		`id`,
+		`processtask_id` AS processTaskId,
+		`name`,
+		`process_step_uuid` AS processStepUuid,
+		`status`,
+		`result`,
+		`type`,
+		`handler`,
+		`is_active` AS isActive,
+		`config_hash` AS configHash,
+		`start_time` AS startTime,
+		`end_time` AS endTime,
+		`error`
+		FROM `processtask_step`
+		WHERE `processtask_id` = #{processTaskId} 
+		AND `process_step_uuid` = #{processStepUuid}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}

@@ -306,6 +306,30 @@
 		LIMIT 5, 1
 	</select>
 
+	<select id="getProcessStepWorkerPolicyListByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepWorkerPolicyVo">
+	SELECT 
+	  `process_uuid`,
+	  `process_step_uuid`,
+	  `policy`,
+	  `sort`,
+	  `config` 
+	FROM `process_step_worker_policy` 
+	WHERE `process_uuid` = #{processUuid}
+	</select>
+
+	<select id="getProcessStepByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepVo">
+	SELECT 
+	  `process_uuid` AS processUuid,
+	  `uuid`,
+	  `name`,
+	  `type`,
+	  `handler`,
+	  `config`,
+	  `description` 
+	FROM `process_step`
+	WHERE `uuid` = #{uuid}
+	</select>
+	
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,
