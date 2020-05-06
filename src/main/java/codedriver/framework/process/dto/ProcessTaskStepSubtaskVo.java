@@ -21,6 +21,8 @@ public class ProcessTaskStepSubtaskVo {
 	private Long id;
 	@EntityField(name = "创建人", type = ApiParamType.STRING)
 	private String owner;
+	@EntityField(name = "创建人名称", type = ApiParamType.STRING)
+	private String ownerName;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
 	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
@@ -83,6 +85,12 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+	public String getOwnerName() {
+		return ownerName;
+	}
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
 	}
 	public String getStatus() {
 		return status;

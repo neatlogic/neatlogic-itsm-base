@@ -871,38 +871,39 @@
 	
 	<select id="getProcessTaskStepSubtaskList" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
 	SELECT 
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `id`,
-	  `owner`,
-	  `status`,
-	  `user_id` AS userId,
-	  `user_name` AS userName,
-	  `target_time` AS targetTime,
-	  `create_time` AS createTime,
-	  `start_time` AS startTime,
-	  `end_time` AS endTime,
-	  `cancel_user` AS cancelUser,
-	  `cancel_time` AS cancelTime
-	FROM `processtask_step_subtask` 
+	  a.`processtask_id` AS processTaskId,
+	  a.`processtask_step_id` AS processTaskStepId,
+	  a.`id`,
+	  a.`owner`,
+	  (SELECT `user_name` FROM `user` WHERE `user_id` = `owner`) AS ownerName,
+	  a.`status`,
+	  a.`user_id` AS userId,
+	  (SELECT `user_name` FROM `user` WHERE `user_id` = a.`user_id`) AS userName,
+	  a.`target_time` AS targetTime,
+	  a.`create_time` AS createTime,
+	  a.`start_time` AS startTime,
+	  a.`end_time` AS endTime,
+	  a.`cancel_user` AS cancelUser,
+	  a.`cancel_time` AS cancelTime
+	FROM `processtask_step_subtask` a
 	<where>
 		<if test="id != null">
-		AND `id` = #{id}
+		AND a.`id` = #{id}
 		</if>
 		<if test="processTaskId != null">
-		AND `processtask_id` = #{processTaskId}
+		AND a.`processtask_id` = #{processTaskId}
 		</if>
 		<if test="processTaskStepId != null">
-		AND `processtask_step_id` = #{processTaskStepId}
+		AND a.`processtask_step_id` = #{processTaskStepId}
 		</if>
 		<if test="userId != null and userId != ''">
-		AND `user_id` = #{userId}
+		AND a.`user_id` = #{userId}
 		</if>
 		<if test="owner != null and owner != ''">
-		AND `owner` = #{owner}
+		AND a.`owner` = #{owner}
 		</if>
 		<if test="status != null and status != ''">
-		AND `status` = #{status}
+		AND a.`status` = #{status}
 		</if>
 	</where>
 	</select>
@@ -1023,6 +1024,7 @@
 		`is_active` = #{isActive},
 		<if test="isActive == 1">
 			`start_time` = NOW(3),
+			`end_time` = NULL,
 		</if>
 		<if test="isActive == 2">
 			`end_time` = NOW(3),
@@ -1488,7 +1490,6 @@
 	  `owner`,
 	  `status`,
 	  `user_id`,
-	  `user_name`,
 	  `target_time`,
 	  `create_time`,
 	  `start_time`
@@ -1501,7 +1502,6 @@
 	    #{owner},
 	    #{status},
 	    #{userId},
-	    #{userName},
 	    #{targetTime},
 	    NOW(3),
 	    NOW(3)
@@ -1582,16 +1582,16 @@
 		UPDATE
 		`processtask_step_user`
 		SET
-		`status` = #{status}
 		<choose>
 			<when test="status == 'doing'">
-				,`start_time` = NOW(3),
-				`end_time` = null
+				`start_time` = NOW(3),
+				`end_time` = NULL,
 			</when>
 			<when test="status == 'done'">
-				,`end_time` = NOW(3)
+				`end_time` = NOW(3),
 			</when>
 		</choose>
+		`status` = #{status}
 		WHERE
 		`processtask_step_id` = #{processTaskStepId}
 		AND `user_id` = #{userId}
@@ -1631,7 +1631,6 @@
 	SET
   	<if test="status == 'running'">
   		`user_id` = #{userId},
-  		`user_name` = #{userName},
   		`target_time` = #{targetTime},
   		`start_time` = NOW(3),
   	</if>
