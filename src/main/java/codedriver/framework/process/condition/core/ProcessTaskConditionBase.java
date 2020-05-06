@@ -23,11 +23,17 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 		ConditionVo condition = conditionList.get(index);
 		String where = getMyEsWhere(index,conditionList);
 		if(StringUtils.isBlank(where)) {
-			Object value = condition.getValueList().get(0);
+			Object value = StringUtils.EMPTY;
+			if(CollectionUtils.isNotEmpty(condition.getValueList())) {
+				value = condition.getValueList().get(0);
+			}
 			if(condition.getValueList().size()>1) {
 				value = String.join("','",condition.getValueList());
 			}
-			where = String.format(ProcessExpression.getExpressionEs(condition.getExpression()),ProcessWorkcenterField.getConditionValue(condition.getName()),String.format("'%s'",  value));
+			if(StringUtils.isNotBlank(value.toString())) {
+				value = String.format("'%s'",  value);
+			}
+			where = String.format(ProcessExpression.getExpressionEs(condition.getExpression()),ProcessWorkcenterField.getConditionValue(condition.getName()),value);
 			
 		}
 		return where;
