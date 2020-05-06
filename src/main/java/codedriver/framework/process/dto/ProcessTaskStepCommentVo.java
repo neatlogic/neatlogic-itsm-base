@@ -5,14 +5,18 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 
+import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.file.dto.FileVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskStepAuditDetailHandler;
 import codedriver.framework.process.audithandler.core.ProcessTaskStepAuditDetailHandlerFactory;
 import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
+import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepCommentVo {
 	private Long auditId;
+	@EntityField(name = "描述内容", type = ApiParamType.STRING)
 	private String content;
+	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
 	private List<FileVo> fileList = new ArrayList<>();
 	
 	public ProcessTaskStepCommentVo() {
