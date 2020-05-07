@@ -129,6 +129,7 @@
 		where
 		   workcenter_uuid = #{workcenterUuid}
 		   and user_id = #{userId}
+		order by sort asc
 	</select>
 	
 	<select id="getWorkcenterUserProfileByUserId" parameterType="java.lang.String" resultType="codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo">
