@@ -25,7 +25,12 @@ public class ProcessTaskStepAuditVo {
 	private String action;
 	//@EntityField(name = "活动详情列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepAuditDetailVo> auditDetailList;
-
+	
+	@EntityField(name = "目标步骤id", type = ApiParamType.LONG)
+	private Long nextStepId;
+	@EntityField(name = "目标步骤名称", type = ApiParamType.STRING)
+	private String nextStepName;
+	
 	public ProcessTaskStepAuditVo() { 
 	}
 	
@@ -111,6 +116,22 @@ public class ProcessTaskStepAuditVo {
 
 	public void setAuditDetailList(List<ProcessTaskStepAuditDetailVo> auditDetailList) {
 		this.auditDetailList = auditDetailList;
+	}
+
+	public Long getNextStepId() {
+		return nextStepId;
+	}
+
+	public void setNextStepId(Long nextStepId) {
+		this.nextStepId = nextStepId;
+	}
+
+	public String getNextStepName() {
+		return nextStepName;
+	}
+
+	public void setNextStepName(String nextStepName) {
+		this.nextStepName = nextStepName;
 	}
 
 }
