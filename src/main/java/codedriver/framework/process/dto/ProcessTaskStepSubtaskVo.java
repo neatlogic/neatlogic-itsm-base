@@ -60,6 +60,11 @@ public class ProcessTaskStepSubtaskVo {
 	@EntityField(name = "是否可回复", type = ApiParamType.INTEGER)
 	private Integer isCommentable;
 	
+	@EntityField(name = "超时时长", type = ApiParamType.LONG)
+	private Long timeout;
+	@EntityField(name = "超时时长描述", type = ApiParamType.STRING)
+	private String timeoutDesc;
+	
 	private transient JSONObject paramObj;
 	
 	public Long getProcessTaskId() {
@@ -248,6 +253,55 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public void setIsCommentable(Integer isCommentable) {
 		this.isCommentable = isCommentable;
+	}
+	
+	public Long getTimeout() {
+		if(timeout == null && targetTime != null && endTime != null) {
+			timeout = endTime.getTime() - targetTime.getTime();
+		}
+		return timeout;
+	}
+	public void setTimeout(Long timeout) {
+		this.timeout = timeout;
+	}
+	
+	public String getTimeoutDesc() {
+		if(StringUtils.isBlank(timeoutDesc) && getTimeout() != null) {
+			StringBuilder stringBuilder = new StringBuilder();
+			long timeoutLong = getTimeout();
+			if(timeoutLong < 0) {
+				stringBuilder.append("提前");
+			}else if(timeoutLong > 0){
+				stringBuilder.append("超时");
+			}else {
+				stringBuilder.append("准时");
+				timeoutDesc = stringBuilder.toString();
+				return timeoutDesc;
+			}
+			timeoutLong = Math.abs(timeoutLong);
+			if(timeoutLong >= (60 * 60 * 1000)) {
+				long hours = timeoutLong / (60 * 60 * 1000);
+				stringBuilder.append(hours);
+				stringBuilder.append("h");
+				timeoutLong = timeoutLong % (60 * 60 * 1000);
+			}
+			if(timeoutLong >= (60 * 1000)) {
+				long minutes = timeoutLong / (60 * 1000);
+				stringBuilder.append(minutes);
+				stringBuilder.append("m");
+				timeoutLong = timeoutLong % (60 * 1000);
+			}
+			if(timeoutLong >= 1000) {
+				long seconds = timeoutLong / 1000;
+				stringBuilder.append(seconds);
+				stringBuilder.append("s");
+			}
+			timeoutDesc = stringBuilder.toString();
+		}
+		return timeoutDesc;
+	}
+	public void setTimeoutDesc(String timeoutDesc) {
+		this.timeoutDesc = timeoutDesc;
 	}
 	@Override
 	public int hashCode() {

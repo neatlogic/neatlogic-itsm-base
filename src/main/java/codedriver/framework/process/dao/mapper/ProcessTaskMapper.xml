@@ -729,7 +729,7 @@
 	  psad.`new_content`
 	FROM `processtask_step_audit` psa
 	LEFT JOIN `processtask_step_audit_detail` psad ON psad.`audit_id` = psa.`id`
-	JOIN `processtask_step` ps on ps.`id` = psa.`processtask_step_id`
+	LEFT JOIN `processtask_step` ps on ps.`id` = psa.`processtask_step_id`
 	WHERE psa.`processtask_id` = #{processTaskId}
 	<if test="processTaskStepId != null">
 	AND psa.`processtask_step_id` = #{processTaskStepId} 
@@ -1633,6 +1633,7 @@
   		`user_id` = #{userId},
   		`target_time` = #{targetTime},
   		`start_time` = NOW(3),
+  		`end_time` = NULL,
   	</if>
   	<if test="status == 'succeed'">
   		`end_time` = NOW(3),

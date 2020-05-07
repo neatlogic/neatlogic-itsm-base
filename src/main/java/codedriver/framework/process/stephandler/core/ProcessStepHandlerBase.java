@@ -470,6 +470,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue())) {
 			throw new ProcessTaskRuntimeException("请先开始步骤");
 		}
+		NotifyTriggerType notifyTriggerType = NotifyTriggerType.SUCCEED;
+		ProcessTaskStepAction processTaskStepAction = ProcessTaskStepAction.COMPLETE;
 		boolean canComplete = false;
 //		ProcessTaskStepUserVo processTaskMajorUser = null;
 		if (this.getMode().equals(ProcessStepMode.MT)) {
@@ -483,14 +485,23 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 //					break;
 //				}
 //			}
-//			canComplete = ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskStepAction.COMPLETE);
-			List<String> verifyActionList = new ArrayList<>();
-			verifyActionList.add(ProcessTaskStepAction.COMPLETE.getValue());
-			verifyActionList.add(ProcessTaskStepAction.BACK.getValue());
-			List<String> actionList = ActionRoleChecker.getProcessTaskStepActionList(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), verifyActionList);
-			if(actionList.removeAll(verifyActionList)) {
-				canComplete = true;
+		
+			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+			if(MapUtils.isNotEmpty(paramObj)) {
+				String action = paramObj.getString("action");
+				if(ProcessTaskStepAction.BACK.getValue().equals(action)) {
+					processTaskStepAction = ProcessTaskStepAction.BACK;
+					notifyTriggerType = NotifyTriggerType.BACK;
+				}
 			}
+			canComplete = ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), processTaskStepAction);
+//			List<String> verifyActionList = new ArrayList<>();
+//			verifyActionList.add(ProcessTaskStepAction.COMPLETE.getValue());
+//			verifyActionList.add(ProcessTaskStepAction.BACK.getValue());
+//			List<String> actionList = ActionRoleChecker.getProcessTaskStepActionList(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), verifyActionList);
+//			if(actionList.removeAll(verifyActionList)) {
+//				canComplete = true;
+//			}
 		} else if (this.getMode().equals(ProcessStepMode.AT)) {
 			canComplete = true;
 		}
@@ -533,8 +544,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						}
 					}
 				}
-				
-				DataValid.formAttributeDataValid(currentProcessTaskStepVo);
+				if(processTaskStepAction == ProcessTaskStepAction.COMPLETE) {
+					DataValid.formAttributeDataValid(currentProcessTaskStepVo);					
+				}
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 					/** 更新处理人状态 **/
 					ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserId(true));
@@ -568,7 +580,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					throw new ProcessTaskException("找不到可流转路径");
 				}
 				/** 触发通知 **/
-				NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
+				NotifyHandler.notify(currentProcessTaskStepVo, notifyTriggerType);
 			} catch (ProcessTaskException ex) {
 				logger.error(ex.getMessage(), ex);
 				currentProcessTaskStepVo.setError(ex.getMessage());
@@ -580,9 +592,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 			if (this.getMode().equals(ProcessStepMode.MT)) {
 				/** 处理历史记录 **/
-				AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.COMPLETE);
+				AuditHandler.audit(currentProcessTaskStepVo, processTaskStepAction);
 				/** 写入时间审计 **/
-				TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.COMPLETE);
+				TimeAuditHandler.audit(currentProcessTaskStepVo, processTaskStepAction);
 				/** 计算SLA **/
 				SlaHandler.calculate(currentProcessTaskStepVo);
 			}

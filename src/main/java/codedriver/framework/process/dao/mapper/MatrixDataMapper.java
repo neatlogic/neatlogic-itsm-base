@@ -76,4 +76,6 @@ public interface MatrixDataMapper {
 			@Param("keyword") String keyword, 
 			@Param("pageSize") int pageSize
 			);
+
+	public Map<String, String> getDynamicRowDataByUuid(ProcessMatrixDataVo dataVo);
 }

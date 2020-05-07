@@ -87,10 +87,38 @@
 			`${column}`
 		</foreach>
 		FROM `matrix_${matrixUuid}`
-		WHERE `uuid` IN
+		<where>
+		<if test="uuidList != null and uuidList.size() > 0">
+		`uuid` IN
 		<foreach collection="uuidList" item="uuid" open="(" close=")" separator=",">
 		#{uuid}
 		</foreach>
+		</if>
+		<if test="sourceColumnList != null and sourceColumnList.size() > 0">
+			<foreach collection="sourceColumnList" item="sourceColumn">
+				<choose>
+					<when test="sourceColumn.expression == 'equal'">
+					AND `${sourceColumn.column}` = #{sourceColumn.value}
+					</when>
+					<when test="sourceColumn.expression == 'unequal'">
+					AND `${sourceColumn.column}` != #{sourceColumn.value}
+					</when>
+					<when test="sourceColumn.expression == 'like'">
+					AND `${sourceColumn.column}` LIKE CONCAT('%', #{sourceColumn.value}, '%')
+					</when>
+					<when test="sourceColumn.expression == 'greater-than'">
+					AND `${sourceColumn.column}` &gt; #{sourceColumn.value}
+					</when>
+					<when test="sourceColumn.expression == 'less-than'">
+					AND `${sourceColumn.column}` &lt; #{sourceColumn.value}
+					</when>
+					<otherwise>
+					AND `${sourceColumn.column}` = #{sourceColumn.value}
+					</otherwise>
+				</choose>
+			</foreach>
+		</if>
+		</where>
 		ORDER BY `id`
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
@@ -213,6 +241,16 @@
 	WHERE `${attributeUuid}` LIKE CONCAT('%', #{keyword}, '%')
 	</if>
 	LIMIT #{pageSize}
+	</select>
+	
+	<select id="getDynamicRowDataByUuid" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
+		SELECT
+		`uuid`,
+  		<foreach collection="columnList" separator="," item="column">
+			`${column}`
+		</foreach>
+		FROM `matrix_${matrixUuid}`
+		WHERE `uuid` = #{uuid}
 	</select>
 	
 	<insert id="insertDynamicTableData">
