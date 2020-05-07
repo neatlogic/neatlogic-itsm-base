@@ -215,6 +215,16 @@
 	LIMIT #{pageSize}
 	</select>
 	
+	<select id="getDynamicRowDataByUuid" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
+		SELECT
+		`uuid`,
+  		<foreach collection="columnList" separator="," item="column">
+			`${column}`
+		</foreach>
+		FROM `matrix_${matrixUuid}`
+		WHERE `uuid` = #{uuid}
+	</select>
+	
 	<insert id="insertDynamicTableData">
 		INSERT INTO `matrix_${matrixUuid}`
 		<foreach collection="columnList" open="(" close=")" item="column" separator=",">

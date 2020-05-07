@@ -15,6 +15,7 @@ public class ProcessMatrixDataVo extends BasePageVo {
     private List<String> columnList;
     private List<ProcessMatrixColumnVo> sourceColumnList;
     private List<String> uuidList;
+    private String uuid;
 //    private String targetColumn;
 //
 //    public String getTargetColumn() {
@@ -61,7 +62,15 @@ public class ProcessMatrixDataVo extends BasePageVo {
 		return uuidList;
 	}
 
-	public void setuuidList(List<String> uuidList) {
+	public void setUuidList(List<String> uuidList) {
 		this.uuidList = uuidList;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 }
