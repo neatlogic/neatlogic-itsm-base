@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -25,7 +27,7 @@ public class FormVersionVo extends BasePageVo implements Serializable {
 	private String editor;
 	private Date editTime;
 	private transient List<FormAttributeVo> formAttributeList;
-
+	private transient List<ProcessMatrixFormComponentVo> processMatrixFormComponentList;
 	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
@@ -89,33 +91,24 @@ public class FormVersionVo extends BasePageVo implements Serializable {
 	}
 
 	public List<FormAttributeVo> getFormAttributeList() {
-		if(formAttributeList != null) {
-			return formAttributeList;
-		}
-		if(StringUtils.isBlank(this.formConfig)) {
-			return null;
-		}
-		JSONObject formConfig = JSONObject.parseObject(this.formConfig);
-		if(formConfig == null || !formConfig.containsKey("controllerList")) {
-			return null;
-		}
-		
-		JSONArray controllerList = formConfig.getJSONArray("controllerList");
-		if(controllerList == null || controllerList.isEmpty()) {
-			return null;
-		}
-		formAttributeList = new ArrayList<>();
-		for(int i = 0; i < controllerList.size(); i++) {
-			JSONObject controllerObj = controllerList.getJSONObject(i);
-			if(!controllerObj.containsKey("config")) {
-				continue;
-			}
-			JSONObject config = controllerObj.getJSONObject("config");
-			if(config == null || config.isEmpty()) {
-				continue;
-			}
-			formAttributeList.add(new FormAttributeVo(this.getFormUuid(), this.getUuid(), controllerObj.getString("uuid"), controllerObj.getString("label"), controllerObj.getString("type"), controllerObj.getString("handler"), config.getBooleanValue("isRequired"), controllerObj.getString("config"), config.getString("defaultValueList")));
-		}
+		if(formAttributeList == null) {
+			if(StringUtils.isNotBlank(this.formConfig)) {
+				JSONObject formConfigObj = JSONObject.parseObject(this.formConfig);
+				if(MapUtils.isNotEmpty(formConfigObj)) {
+					JSONArray controllerList = formConfigObj.getJSONArray("controllerList");
+					if(CollectionUtils.isNotEmpty(controllerList)) {
+						formAttributeList = new ArrayList<>();
+						for(int i = 0; i < controllerList.size(); i++) {
+							JSONObject controllerObj = controllerList.getJSONObject(i);
+							JSONObject config = controllerObj.getJSONObject("config");
+							if(MapUtils.isNotEmpty(config)) {
+								formAttributeList.add(new FormAttributeVo(this.getFormUuid(), this.getUuid(), controllerObj.getString("uuid"), controllerObj.getString("label"), controllerObj.getString("type"), controllerObj.getString("handler"), config.getBooleanValue("isRequired"), controllerObj.getString("config"), config.getString("defaultValueList")));
+							}
+						}
+					}
+				}
+			}			
+		}		
 		return formAttributeList;
 	}
 
@@ -129,6 +122,43 @@ public class FormVersionVo extends BasePageVo implements Serializable {
 
 	public void setFormName(String formName) {
 		this.formName = formName;
+	}
+
+	public List<ProcessMatrixFormComponentVo> getProcessMatrixFormComponentList() {
+		if(processMatrixFormComponentList == null) {
+			if(StringUtils.isNotBlank(this.formConfig)) {
+				JSONObject formConfigObj = JSONObject.parseObject(this.formConfig);
+				if(MapUtils.isNotEmpty(formConfigObj)) {
+					JSONArray controllerList = formConfigObj.getJSONArray("controllerList");
+					if(CollectionUtils.isNotEmpty(controllerList)) {
+						processMatrixFormComponentList = new ArrayList<>();
+						for(int i = 0; i < controllerList.size(); i++) {
+							JSONObject controllerObj = controllerList.getJSONObject(i);
+							JSONObject config = controllerObj.getJSONObject("config");
+							if(MapUtils.isNotEmpty(config)) {
+								String dataSource = config.getString("dataSource");
+								if("matrix".equals(dataSource)) {
+									String matrixUuid = config.getString("matrixUuid");
+									if(StringUtils.isNotBlank(matrixUuid)) {
+										ProcessMatrixFormComponentVo processMatrixFormComponentVo = new ProcessMatrixFormComponentVo();
+										processMatrixFormComponentVo.setMatrixUuid(matrixUuid);
+										processMatrixFormComponentVo.setFormVersionUuid(getUuid());
+										processMatrixFormComponentVo.setFormAttributeLabel(controllerObj.getString("label"));
+										processMatrixFormComponentVo.setFormAttributeUuid(controllerObj.getString("uuid"));
+										processMatrixFormComponentList.add(processMatrixFormComponentVo);
+									}
+								}
+							}
+						}
+					}
+				}
+			}			
+		}
+		return processMatrixFormComponentList;
+	}
+
+	public void setProcessMatrixFormComponentList(List<ProcessMatrixFormComponentVo> processMatrixFormComponentList) {
+		this.processMatrixFormComponentList = processMatrixFormComponentList;
 	}
 
 	@Override
