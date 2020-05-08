@@ -6,10 +6,10 @@ import java.util.List;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.common.constvalue.IUserProfile;
 import codedriver.framework.common.constvalue.ModuleEnum;
 import codedriver.framework.common.util.ModuleUtil;
 import codedriver.framework.dto.UserProfileVo;
-import codedriver.framework.restful.api.IUserProfile;
 
 public enum UserProfile implements IUserProfile{
 	PROCESSTASK_SUCESS("processtasksucess","服务上报成功",Arrays.asList(UserProfileOperate.KEEP_ON_CREATE_TASK,UserProfileOperate.VIEW_PROCESSTASK_DETAIL,UserProfileOperate.BACK_CATALOG_LIST));
