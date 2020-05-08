@@ -252,19 +252,8 @@
 		FROM `matrix_${matrixUuid}`
 		WHERE `uuid` = #{uuid}
 	</select>
-	
-	<insert id="insertDynamicTableData">
-		INSERT INTO `matrix_${matrixUuid}`
-		<foreach collection="columnList" open="(" close=")" item="column" separator=",">
-			`${column}`
-		</foreach>
-		VALUES
-		<foreach collection="dataList" open="(" close=")" item="data" separator=",">
-			#{data}
-		</foreach>
-	</insert>
 
-	<insert id="insertDynamicTableData2">
+	<insert id="insertDynamicTableData">
 		INSERT INTO `matrix_${matrixUuid}`
 		<foreach collection="rowData" open="(" close=")" item="columnData" separator=",">
 			`${columnData.column}`
