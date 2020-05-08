@@ -78,4 +78,11 @@ public interface MatrixDataMapper {
 			);
 
 	public Map<String, String> getDynamicRowDataByUuid(ProcessMatrixDataVo dataVo);
+
+	public int insertDynamicTableDataForCopy(
+			@Param("sourceMatrixUuid") String sourceMatrixUuid, 
+			@Param("sourceColumnList") List<String> sourceColumnList, 
+			@Param("targetMatrixUuid") String targetMatrixUuid, 
+			@Param("targetColumnList") List<String> targetColumnList
+			);
 }

@@ -274,7 +274,23 @@
 			#{columnData.value}
 		</foreach>
 	</insert>
-
+	
+	<insert id="insertDynamicTableDataForCopy">
+	INSERT INTO `matrix_${targetMatrixUuid}` 
+	(`uuid`, 
+	<foreach collection="targetColumnList" item="targetColumn" separator=",">
+		`${targetColumn}`
+	</foreach>
+	)
+	SELECT 
+	REPLACE(UUID(),'-',''),
+	<foreach collection="sourceColumnList" item="sourceColumn" separator=",">
+		`${sourceColumn}`
+	</foreach>
+	FROM `matrix_${sourceMatrixUuid}`
+	ORDER BY `id`
+	</insert>
+	
 	<update id="updateDynamicTableDataByUuid">
 	UPDATE `matrix_${matrixUuid}`
 	SET
