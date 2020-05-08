@@ -3,9 +3,8 @@
 <mapper namespace="codedriver.framework.process.dao.mapper.MatrixExternalMapper">
 	<select id="getMatrixExternalByMatrixUuid" parameterType="string" resultType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
 		SELECT
-		`matrix_uuid` as `matrixUuid`, 
-		`plugin`, 
-		`config` 
+		`matrix_uuid` AS matrixUuid, 
+		`integration_uuid` AS integrationUuid
 		FROM `process_matrix_external` 
 		WHERE `matrix_uuid` = #{matrixUuid}
 	</select>
@@ -21,20 +20,17 @@
 		INSERT INTO
 		`process_matrix_external`(
 			`matrix_uuid`,
-			`plugin`,
-			`config`
+			`integration_uuid`
 		) VALUES (
 			#{matrixUuid},
-			#{plugin},
-			#{config}
+			#{integrationUuid}
 		)
 
 	</insert>
 
 	<update id="updateMatrixExternal" parameterType="codedriver.framework.process.dto.ProcessMatrixExternalVo">
 		UPDATE `process_matrix_external` SET
-		 `plugin` = #{plugin},
-		 `config` = #{config}
+		 `integration_uuid` = #{integrationUuid}
 		 WHERE `matrix_uuid` = #{matrixUuid}
 	</update>
 

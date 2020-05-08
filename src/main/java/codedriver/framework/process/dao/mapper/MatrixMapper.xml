@@ -79,6 +79,9 @@
 			COUNT(`uuid`)
 		FROM `process_matrix`
 		<where>
+			<if test="type != null and type != ''">
+				AND `type` = #{type}
+			</if>
 			<if test="keyword != null and keyword != ''">
 				AND `name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
@@ -136,6 +139,9 @@
 				SELECT *
 				FROM `process_matrix`
 				<where>
+					<if test="type != null and type != ''">
+						AND `type` = #{type}
+					</if>
 					<if test="keyword != null and keyword != ''">
 						AND `name` LIKE CONCAT('%', #{keyword}, '%')
 					</if>
