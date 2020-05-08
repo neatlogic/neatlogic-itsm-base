@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface MatrixDataMapper {
-    public int insertDynamicTableData(@Param("columnList") List<String> columnList, @Param("dataList") List<String> dataList, @Param("matrixUuid") String matrixUuid);
-
-	public int insertDynamicTableData2(@Param("rowData") List<ProcessMatrixColumnVo> rowData, @Param("matrixUuid") String matrixUuid);
+    public int insertDynamicTableData(@Param("rowData") List<ProcessMatrixColumnVo> rowData, @Param("matrixUuid") String matrixUuid);
 
 	public int updateDynamicTableDataByUuid(@Param("rowData") List<ProcessMatrixColumnVo> rowData, @Param("uuidColumn") ProcessMatrixColumnVo uuidColumn, @Param("matrixUuid") String matrixUuid);
 
@@ -78,4 +76,11 @@ public interface MatrixDataMapper {
 			);
 
 	public Map<String, String> getDynamicRowDataByUuid(ProcessMatrixDataVo dataVo);
+
+	public int insertDynamicTableDataForCopy(
+			@Param("sourceMatrixUuid") String sourceMatrixUuid, 
+			@Param("sourceColumnList") List<String> sourceColumnList, 
+			@Param("targetMatrixUuid") String targetMatrixUuid, 
+			@Param("targetColumnList") List<String> targetColumnList
+			);
 }
