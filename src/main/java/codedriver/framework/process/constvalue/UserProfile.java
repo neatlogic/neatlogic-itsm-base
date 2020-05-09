@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.IUserProfile;
-import codedriver.framework.common.constvalue.ModuleEnum;
 import codedriver.framework.common.util.ModuleUtil;
 import codedriver.framework.dto.UserProfileVo;
 
@@ -44,7 +43,7 @@ public enum UserProfile implements IUserProfile{
 	}
 
 	public static String getText(String value){
-        for (ModuleEnum f : ModuleEnum.values()){
+        for (UserProfile f : UserProfile.values()){
             if (f.getValue().equals(value)){
                 return f.getText();
             }
