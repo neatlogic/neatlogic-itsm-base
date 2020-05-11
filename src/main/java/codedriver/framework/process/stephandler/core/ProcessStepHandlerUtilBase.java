@@ -291,7 +291,7 @@ public abstract class ProcessStepHandlerUtilBase {
 										notifyBuilder
 										.addData("task", processTaskVo)
 										.addData("step", stepVo)
-										.addData("homeUrl", Config.HOME_URL)
+										.addData("homeUrl", Config.HOME_URL())
 										.addData("tenant", TenantContext.get().getTenantUuid())
 										.addData("currentUserName", UserContext.get().getUserName());
 										
