@@ -67,6 +67,12 @@
 						<when test="sourceColumn.expression == 'less-than'">
 						AND `${sourceColumn.column}` &lt; #{sourceColumn.value}
 						</when>
+						<when test="sourceColumn.expression == 'include' and sourceColumn.value != null and sourceColumn.value.size() > 0">
+						AND `${sourceColumn.column}` IN 
+						<foreach collection="sourceColumn.value" item="item" open="(" close=")" separator=",">
+						 #{item}
+						</foreach>
+						</when>
 						<otherwise>
 						AND `${sourceColumn.column}` = #{sourceColumn.value}
 						</otherwise>
