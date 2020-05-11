@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum ProcessMatrixAttributeType {
-	INPUT("input","文本框", Arrays.asList(ProcessExpression.EQUAL, ProcessExpression.LIKE),ProcessExpression.LIKE),
-	SELECT("select","下拉框", null, null),
+	INPUT("input","文本框", Arrays.asList(ProcessExpression.EQUAL, ProcessExpression.LIKE), ProcessExpression.LIKE),
+	SELECT("select","下拉框", Arrays.asList(ProcessExpression.INCLUDE), ProcessExpression.INCLUDE),
 	DATE("date","日期", Arrays.asList(ProcessExpression.EQUAL, ProcessExpression.LESSTHAN,ProcessExpression.GREATERTHAN), ProcessExpression.EQUAL),
-	USER("user","用户", null, null),
-	TEAM("team","用户组", null, null),
-	ROLE("role","角色", null, null);
+	USER("user","用户", Arrays.asList(ProcessExpression.INCLUDE), ProcessExpression.INCLUDE),
+	TEAM("team","用户组", Arrays.asList(ProcessExpression.INCLUDE), ProcessExpression.INCLUDE),
+	ROLE("role","角色", Arrays.asList(ProcessExpression.INCLUDE), ProcessExpression.INCLUDE);
 	
 	private String value;
 	private String text;
