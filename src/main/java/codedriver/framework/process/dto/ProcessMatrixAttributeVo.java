@@ -38,7 +38,8 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
     private List<ProcessExpressionVo> expressionList;
     @EntityField( name = "默认表达式", type = ApiParamType.JSONOBJECT)
     private ProcessExpressionVo defaultExpression;
-    
+    @EntityField(name = "是否能搜索", type = ApiParamType.INTEGER)
+	private Integer isSearchable = 1;
     public String getMatrixUuid() {
         return matrixUuid;
     }
@@ -132,5 +133,13 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 
 	public void setDefaultExpression(ProcessExpressionVo defaultExpression) {
 		this.defaultExpression = defaultExpression;
+	}
+
+	public Integer getIsSearchable() {
+		return isSearchable;
+	}
+
+	public void setIsSearchable(Integer isSearchable) {
+		this.isSearchable = isSearchable;
 	}
 }

@@ -29,7 +29,7 @@ public interface MatrixDataMapper {
 	
 	public int getDynamicTableDataByUuidCount(ProcessMatrixDataVo dataVo);
 	
-	public String getDynamicTableCellData(@Param("matrixUuid") String matrixUuid, @Param("sourceColumnVo") ProcessMatrixColumnVo sourceColumnVo, @Param("targetColumn") String targetColumn);
+	public List<String> getDynamicTableCellData(@Param("matrixUuid") String matrixUuid, @Param("sourceColumnVo") ProcessMatrixColumnVo sourceColumnVo, @Param("targetColumn") String targetColumn);
 
 	public List<Map<String, String>> getDynamicTableDataByColumnList2(ProcessMatrixDataVo dataVo);
 
@@ -76,6 +76,8 @@ public interface MatrixDataMapper {
 			);
 
 	public Map<String, String> getDynamicRowDataByUuid(ProcessMatrixDataVo dataVo);
+
+	public Map<String, Long> checkMatrixAttributeHasDataByAttributeUuidList(@Param("matrixUuid") String matrixUuid, @Param("attributeUuidList") List<String> attributeUuidList);
 
 	public int insertDynamicTableDataForCopy(
 			@Param("sourceMatrixUuid") String sourceMatrixUuid, 
