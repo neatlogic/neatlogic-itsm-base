@@ -28,7 +28,7 @@
 		<where>
 			`matrix_uuid` = #{matrixUuid}
 			<if test="columnList != null and columnList.size() > 0">
-				and uuid in
+				AND `uuid` IN
 				<foreach collection="columnList" open="(" close=")" item="data" separator=",">
 					#{data}
 				</foreach>
