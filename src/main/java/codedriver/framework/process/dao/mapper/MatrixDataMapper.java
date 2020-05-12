@@ -77,6 +77,8 @@ public interface MatrixDataMapper {
 
 	public Map<String, String> getDynamicRowDataByUuid(ProcessMatrixDataVo dataVo);
 
+	public Map<String, Long> checkMatrixAttributeHasDataByAttributeUuidList(@Param("matrixUuid") String matrixUuid, @Param("attributeUuidList") List<String> attributeUuidList);
+
 	public int insertDynamicTableDataForCopy(
 			@Param("sourceMatrixUuid") String sourceMatrixUuid, 
 			@Param("sourceColumnList") List<String> sourceColumnList, 

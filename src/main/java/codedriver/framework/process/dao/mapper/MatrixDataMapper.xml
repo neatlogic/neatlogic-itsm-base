@@ -259,6 +259,14 @@
 		WHERE `uuid` = #{uuid}
 	</select>
 
+	<select id="checkMatrixAttributeHasDataByAttributeUuidList" resultType="java.util.LinkedHashMap">
+	SELECT 
+	<foreach collection="attributeUuidList" item="attributeUuid" separator=",">
+	COUNT(`${attributeUuid}`) AS `${attributeUuid}`
+	</foreach>
+	 FROM `matrix_${matrixUuid}`
+	</select>
+	
 	<insert id="insertDynamicTableData">
 		INSERT INTO `matrix_${matrixUuid}`
 		<foreach collection="rowData" open="(" close=")" item="columnData" separator=",">
