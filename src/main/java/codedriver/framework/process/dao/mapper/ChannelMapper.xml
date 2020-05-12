@@ -233,7 +233,7 @@
 	</if>
 	</select>
 
-	<select id="getChannelTypeByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelTypeVo" useCache="false">
+	<select id="getChannelTypeByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelTypeVo" useCache="true">
 	SELECT 
 	  `uuid`,
 	  `name`,
