@@ -1384,12 +1384,15 @@ public abstract class ProcessStepHandlerUtilBase {
 			for(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
 				formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
 			}
-			
+			List<String> hidecomponentList = processTaskMapper.getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId(currentProcessTaskStepVo.getId());
 			for(FormAttributeVo formAttributeVo : formAttributeList) {
 				if(!formAttributeVo.isRequired()) {
 					continue;
 				}
 				if(formAttributeActionMap.containsKey(formAttributeVo.getUuid())) {
+					continue;
+				}
+				if(hidecomponentList.contains(formAttributeVo.getUuid())) {
 					continue;
 				}
 				String data = formAttributeDataMap.get(formAttributeVo.getUuid());

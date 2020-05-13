@@ -219,6 +219,8 @@ public interface ProcessTaskMapper {
 	public int insertProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
 	
 	public int insertProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
+
+	public int insertProcessTaskStepDynamicHideFormAttribute(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
 	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
@@ -268,4 +270,8 @@ public interface ProcessTaskMapper {
 	public int deleteProcessTaskStepContent(ProcessTaskStepContentVo processTaskStepContentVo);
 
 	public int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
+
+	public int deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId(Long processTaskStepId);
+
+	public List<String> getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId(Long processTaskStepId);
 }

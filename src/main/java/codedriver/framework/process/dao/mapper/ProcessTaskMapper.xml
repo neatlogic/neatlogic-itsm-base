@@ -991,6 +991,10 @@
 		AND `process_step_uuid` = #{processStepUuid}
 	</select>
 	
+	<select id="getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.String">
+	SELECT `attribute_uuid` FROM `processtask_step_dynamic_hide_formattribute` WHERE `processtask_step_id` = #{processTaskStepId}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1544,6 +1548,20 @@
 	  ) 
 	</insert>
 	
+	<insert id="insertProcessTaskStepDynamicHideFormAttribute" parameterType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
+	INSERT INTO `processtask_step_dynamic_hide_formattribute` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `attribute_uuid`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{attributeUuid}
+	  ) 
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -1732,5 +1750,9 @@
 	DELETE FROM`processtask_assignworker` 
 	WHERE `processtask_step_id` = #{processTaskStepId}
 	AND `from_processtask_step_id` = #{fromProcessTaskStepId}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_step_dynamic_hide_formattribute` WHERE `processtask_step_id` = #{processTaskStepId}
 	</delete>
 </mapper>
