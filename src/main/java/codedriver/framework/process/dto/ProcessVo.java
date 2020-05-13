@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepHandler;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
@@ -242,6 +243,11 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				processStepRelVo.setProcessUuid(this.getUuid());
 				processStepRelVo.setCondition(relObj.getString("conditionConfig"));
 				processStepRelVo.setName(relObj.getString("name"));
+				String type = relObj.getString("type");
+				if(!ProcessFlowDirection.BACKWARD.getValue().equals(type)) {
+					type = ProcessFlowDirection.FORWARD.getValue();
+				}
+				processStepRelVo.setType(type);
 				stepRelList.add(processStepRelVo);
 			}
 		}

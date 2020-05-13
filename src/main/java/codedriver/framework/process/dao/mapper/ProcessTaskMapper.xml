@@ -433,7 +433,8 @@
 		a.`start_time` AS startTime,
 		a.`end_time` AS endTime,
 		a.`error`,
-		b.`name` AS aliasName
+		b.`name` AS aliasName,
+		b.`type` AS flowDirection
 		FROM
 		`processtask_step` a JOIN `processtask_step_rel` b ON a.`id` = b.`to_processtask_step_id`
 		WHERE
@@ -1261,7 +1262,8 @@
 		`condition`,
 		`is_hit`,
 		`uuid`,
-		`name`
+		`name`,
+		`type`
 		)
 		VALUES
 		(
@@ -1273,7 +1275,8 @@
 		#{condition},
 		#{isHit},
 		#{processStepRelUuid},
-		#{name}
+		#{name},
+		#{type}
 		)
 	</insert>
 

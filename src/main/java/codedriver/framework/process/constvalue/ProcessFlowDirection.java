@@ -1,13 +1,13 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessTaskFlowDirection {
+public enum ProcessFlowDirection {
 	FORWARD("forward", "流转至："),
 	BACKWARD("backward", "回退至：");
 	
 	private String value;
 	private String text;
 	
-	private ProcessTaskFlowDirection(String value, String text) {
+	private ProcessFlowDirection(String value, String text) {
 		this.value = value;
 		this.text = text;
 	}
