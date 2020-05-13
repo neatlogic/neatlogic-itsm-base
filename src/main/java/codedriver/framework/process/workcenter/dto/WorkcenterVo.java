@@ -33,7 +33,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
 	@EntityField(name = "数量", type = ApiParamType.INTEGER)
-	private Integer count;
+	private String count;
 	@EntityField(name = "过滤条件", type = ApiParamType.STRING)
 	private String conditionConfig;
 	@JSONField(serialize = false)
@@ -148,11 +148,11 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 		this.headerList = headerArray;
 	}
 
-	public Integer getCount() {
+	public String getCount() {
 		return count;
 	}
 
-	public void setCount(Integer count) {
+	public void setCount(String count) {
 		this.count = count;
 	}
 
