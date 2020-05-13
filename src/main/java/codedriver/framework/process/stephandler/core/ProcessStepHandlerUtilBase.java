@@ -41,6 +41,7 @@ import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.file.dao.mapper.FileMapper;
+import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
@@ -963,9 +964,9 @@ public abstract class ProcessStepHandlerUtilBase {
 									List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getToProcessTaskStepByFromId(processTaskStepId);
 									for(ProcessTaskStepVo processTaskStep : processTaskStepList) {
 										if(processTaskStep.getIsActive() != null) {
-											if(processTaskStep.getIsActive().intValue() == 0) {
+											if(ProcessFlowDirection.FORWARD.getValue().equals(processTaskStep.getFlowDirection())) {
 												resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
-											}else {
+											}else if(ProcessFlowDirection.BACKWARD.getValue().equals(processTaskStep.getFlowDirection()) && processTaskStep.getIsActive().intValue() != 0){
 												resultList.add(ProcessTaskStepAction.BACK.getValue());
 											}
 										}

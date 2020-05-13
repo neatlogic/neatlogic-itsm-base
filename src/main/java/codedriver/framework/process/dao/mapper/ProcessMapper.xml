@@ -48,6 +48,7 @@
 		`from_step_uuid` AS fromStepUuid,
 		`to_step_uuid` AS toStepUuid,
 		`name`,
+		`type`,
 		`condition`
 		FROM
 		`process_step_rel`
@@ -437,7 +438,8 @@
 		`from_step_uuid`,
 		`to_step_uuid`,
 		`condition`,
-		`name`
+		`name`,
+		`type`
 		)
 		VALUES
 		(
@@ -446,7 +448,8 @@
 		#{fromStepUuid},
 		#{toStepUuid},
 		#{condition},
-		#{name}
+		#{name},
+		#{type}
 		)
 	</insert>
 
