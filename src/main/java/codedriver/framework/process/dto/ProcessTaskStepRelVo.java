@@ -28,6 +28,7 @@ public class ProcessTaskStepRelVo {
 		this.setCondition(processStepRelVo.getCondition());
 		this.setProcessStepRelUuid(processStepRelVo.getUuid());
 		this.setName(processStepRelVo.getName());
+		this.setType(processStepRelVo.getType());
 	}
 
 	public Long getProcessTaskId() {
