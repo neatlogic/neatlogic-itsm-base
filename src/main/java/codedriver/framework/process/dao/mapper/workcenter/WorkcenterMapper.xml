@@ -252,4 +252,12 @@
 		WHERE `uuid` = #{uuid} ;
 	</update>
 	
+	<update id="updateWorkcenterCondition" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
+		UPDATE 
+		  `process_workcenter` 
+		SET
+		  `condition_config` = #{conditionConfig}
+		WHERE `uuid` = #{uuid} ;
+	</update>
+	
 </mapper>

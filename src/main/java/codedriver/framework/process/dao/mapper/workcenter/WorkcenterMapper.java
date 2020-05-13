@@ -52,4 +52,6 @@ public interface WorkcenterMapper {
 	
 	public Integer updateWorkcenter(WorkcenterVo workcenterVo);
 	
+	public Integer updateWorkcenterCondition(WorkcenterVo workcenterVo);
+	
 }
