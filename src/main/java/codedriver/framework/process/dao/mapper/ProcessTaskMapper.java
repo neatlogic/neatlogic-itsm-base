@@ -124,7 +124,7 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
-	public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerList(@Param("userId") String userId, @Param("teamUuidList") List<String> teamUuidList, @Param("roleNameList") List<String> roleNameList);
+	public List<Long> getProcessTaskStepIdList(@Param("userId") String userId, @Param("teamUuidList") List<String> teamUuidList, @Param("roleNameList") List<String> roleNameList);
 
 	public List<Map<String, Object>> getProcessTaskActiveStepListByStepIdList(@Param("keyword") String keyword, @Param("processTaskStepIdList") List<Long> processTaskStepIdList);
 
@@ -219,6 +219,8 @@ public interface ProcessTaskMapper {
 	public int insertProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
 	
 	public int insertProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
+
+	public int insertProcessTaskStepDynamicHideFormAttribute(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
 	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
@@ -268,4 +270,8 @@ public interface ProcessTaskMapper {
 	public int deleteProcessTaskStepContent(ProcessTaskStepContentVo processTaskStepContentVo);
 
 	public int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
+
+	public int deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId(Long processTaskStepId);
+
+	public List<String> getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId(Long processTaskStepId);
 }
