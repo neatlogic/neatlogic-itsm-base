@@ -7,11 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import codedriver.framework.process.dto.ProcessMatrixAttributeVo;
 
 public interface MatrixAttributeMapper {
-    public void insertMatrixAttribute(ProcessMatrixAttributeVo matrixAttributeVo);
+    public int insertMatrixAttribute(ProcessMatrixAttributeVo matrixAttributeVo);
 
     public List<ProcessMatrixAttributeVo> getMatrixAttributeByMatrixUuid(String matrixUuid);
-    
-    public List<ProcessMatrixAttributeVo> getMatrixAttributeByMatrixUuidList(@Param("columnList")List<String> columnList,@Param("matrixUuid") String matrixUuid);
 
     public void deleteAttributeByMatrixUuid(String matrixUuid);
 

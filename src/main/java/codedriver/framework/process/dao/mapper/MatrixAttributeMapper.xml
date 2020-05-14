@@ -14,27 +14,6 @@
 		WHERE `matrix_uuid` = #{matrixUuid}
 		ORDER BY `sort`
 	</select>
-	
-	<select id="getMatrixAttributeByMatrixUuidList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessMatrixAttributeVo">
-		SELECT
-		`uuid`,
-		`matrix_uuid` as matrixUuid,
-		`name`,
-		`type`,
-		`is_required` AS isRequired,
-		`sort`,
-		`config`
-		FROM `process_matrix_attribute`
-		<where>
-			`matrix_uuid` = #{matrixUuid}
-			<if test="columnList != null and columnList.size() > 0">
-				AND `uuid` IN
-				<foreach collection="columnList" open="(" close=")" item="data" separator=",">
-					#{data}
-				</foreach>
-			</if>
-		</where>
-	</select>
 
 	<select id="checkMatrixAttributeTableExist" parameterType="string" resultType="int">
 		SELECT COUNT(`table_name`) FROM information_schema.TABLES WHERE table_name = #{tableName} limit 1
