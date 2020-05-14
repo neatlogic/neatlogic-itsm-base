@@ -17,8 +17,6 @@ public interface MatrixMapper {
 
     public ProcessMatrixVo getMatrixByUuid(String uuid);
 
-    public ProcessMatrixVo getMatrixByName(String name);
-
     public List<ProcessMatrixVo> searchMatrix(ProcessMatrixVo matrixVo);
 
 	public List<ProcessMatrixDispatcherVo> getMatrixDispatcherByMatrixUuid(String matrixUuid);
