@@ -1,17 +1,16 @@
-package codedriver.framework.process.exception.process;
+package codedriver.framework.process.exception.matrix;
 
 import codedriver.framework.exception.core.ApiRuntimeException;
 
 /**
  * @program: codedriver
  * @description:
- * @create: 2020-04-01 17:38
+ * @create: 2020-04-03 11:50
  **/
-public class MatrixImportException extends ApiRuntimeException {
-
+public class MatrixExternalException extends ApiRuntimeException {
     private static final long serialVersionUID = -4508274752209783532L;
 
-    public MatrixImportException(String msg) {
+    public MatrixExternalException(String msg) {
         super(msg);
     }
 }
