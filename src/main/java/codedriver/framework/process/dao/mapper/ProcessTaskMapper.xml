@@ -995,6 +995,37 @@
 	SELECT `attribute_uuid` FROM `processtask_step_dynamic_hide_formattribute` WHERE `processtask_step_id` = #{processTaskStepId}
 	</select>
 	
+	<select id="getProcessTaskStepCommentListByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
+	SELECT 
+	  `id`,
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `content_hash` AS contentHash,
+	  `file_uuid_list_hash` fileUuidListHash,
+	  `fcd`,
+	  `fcu`,
+	  `lcd`,
+	  `lcu` 
+	FROM `processtask_step_comment` 
+	WHERE `processtask_step_id` = #{processtaskStepId}
+	ORDER BY id
+	</select>
+	
+	<select id="getProcessTaskStepCommentById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
+	SELECT 
+	  `id`,
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `content_hash` AS contentHash,
+	  `file_uuid_list_hash` fileUuidListHash,
+	  `fcd`,
+	  `fcu`,
+	  `lcd`,
+	  `lcu` 
+	FROM `processtask_step_comment` 
+	WHERE `id` = #{id}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1562,6 +1593,29 @@
 	  ) 
 	</insert>
 	
+	<insert id="insertProcessTaskStepComment" parameterType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
+	<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+		select LAST_INSERT_ID() AS id
+	</selectKey>
+	INSERT INTO `processtask_step_comment` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `content_hash`,
+	  `file_uuid_list_hash`,
+	  `fcd`,
+	  `fcu`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{contentHash},
+	    #{fileUuidListHash},
+	    NOW(3),
+	    #{fcu}
+	  ) 
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -1666,6 +1720,16 @@
 	WHERE `id` = #{id}
 	</update>
 	
+	<update id="updateProcessTaskStepCommentById" parameterType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
+	UPDATE  `processtask_step_comment` 
+	SET
+	  `content_hash` = #{contentHash},
+	  `file_uuid_list_hash` = #{fileUuidListHash},
+	  `lcd` = NOW(3),
+	  `lcu` = #{lcu} 
+	WHERE `id` = #{id}
+	</update>
+	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
 		FROM
@@ -1754,5 +1818,9 @@
 	
 	<delete id="deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId" parameterType="java.lang.Long">
 	DELETE FROM `processtask_step_dynamic_hide_formattribute` WHERE `processtask_step_id` = #{processTaskStepId}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepCommentById" parameterType="java.lang.Long">
+	DELETE FROM `processtask_step_comment` WHERE `id` = #{id}
 	</delete>
 </mapper>

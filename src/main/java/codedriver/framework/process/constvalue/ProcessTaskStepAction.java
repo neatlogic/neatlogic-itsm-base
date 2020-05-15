@@ -45,6 +45,8 @@ public enum ProcessTaskStepAction {
 	UPDATEPRIORITY("updatepriority", "更新优先级"),
 	UPDATECONTENT("updatecontent", "更新上报描述内容"),
 	COMMENT("comment", "回复"),
+	EDITCOMMENT("editcomment", "编辑回复"),
+	DELETECOMMENT("deletecomment", "删除回复"),
 	CREATESUBTASK("createsubtask", "创建子任务"),
 	EDITSUBTASK("editsubtask", "编辑子任务"),
 	ABORTSUBTASK("abortsubtask", "取消子任务"),
