@@ -13,7 +13,7 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepCommentVo {
-	private Long auditId;
+	//private Long auditId;
 	@EntityField(name = "描述内容", type = ApiParamType.STRING)
 	private String content;
 	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
@@ -22,7 +22,7 @@ public class ProcessTaskStepCommentVo {
 	public ProcessTaskStepCommentVo() {
 	}
 	public ProcessTaskStepCommentVo(ProcessTaskStepAuditVo processTaskStepAuditVo) {
-		auditId = processTaskStepAuditVo.getId();
+		//auditId = processTaskStepAuditVo.getId();
 		List<ProcessTaskStepAuditDetailVo> processTaskStepAuditDetailList = processTaskStepAuditVo.getAuditDetailList();
 		for(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo : processTaskStepAuditDetailList) {
 			IProcessTaskStepAuditDetailHandler auditDetailHandler = ProcessTaskStepAuditDetailHandlerFactory.getHandler(processTaskStepAuditDetailVo.getType());		
@@ -52,11 +52,11 @@ public class ProcessTaskStepCommentVo {
 		this.fileList = fileList;
 	}
 
-	public Long getAuditId() {
-		return auditId;
-	}
-	public void setAuditId(Long auditId) {
-		this.auditId = auditId;
-	}
+//	public Long getAuditId() {
+//		return auditId;
+//	}
+//	public void setAuditId(Long auditId) {
+//		this.auditId = auditId;
+//	}
 
 }
