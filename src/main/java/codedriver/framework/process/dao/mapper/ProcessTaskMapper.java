@@ -21,6 +21,7 @@ import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
+import codedriver.framework.process.dto.ProcessTaskStepCommentVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
@@ -153,6 +154,12 @@ public interface ProcessTaskMapper {
 	public List<ProcessTaskAssignWorkerVo> getPrcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
 	public ProcessTaskStepVo getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuid(@Param("processTaskId") Long processTaskId, @Param("processStepUuid") String processStepUuid);
+
+	public List<String> getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId(Long processTaskStepId);
+
+	public List<ProcessTaskStepCommentVo> getProcessTaskStepCommentListByProcessTaskStepId(Long processTaskStepId);
+
+	public ProcessTaskStepCommentVo getProcessTaskStepCommentById(Long id);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -221,6 +228,8 @@ public interface ProcessTaskMapper {
 	public int insertProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
 	public int insertProcessTaskStepDynamicHideFormAttribute(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
+
+	public int insertProcessTaskStepComment(ProcessTaskStepCommentVo processTaskStepCommentVo);
 	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
@@ -251,6 +260,8 @@ public interface ProcessTaskMapper {
 
 	public int updateProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
 
+	public int updateProcessTaskStepCommentById(ProcessTaskStepCommentVo processTaskStepCommentVo);
+
 	public int deleteProcessTaskFormAttributeValueByProcessTaskIdAndAttributeUuid(@Param("processTaskId") Long processTaskId, @Param("attributeUuid") String attributeUuid);
 
 	public int deleteProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
@@ -273,5 +284,5 @@ public interface ProcessTaskMapper {
 
 	public int deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId(Long processTaskStepId);
 
-	public List<String> getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId(Long processTaskStepId);
+	public int deleteProcessTaskStepCommentById(Long id);
 }
