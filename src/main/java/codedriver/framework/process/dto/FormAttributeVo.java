@@ -10,9 +10,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.common.constvalue.FormHandlerType;
 import codedriver.framework.process.constvalue.ProcessExpression;
 import codedriver.framework.process.constvalue.ProcessFormHandler;
-import codedriver.framework.process.constvalue.ProcessFormHandlerType;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -212,7 +212,7 @@ public class FormAttributeVo implements Serializable {
 		if(conditionModel == null) {
 			return null;
 		}
-		ProcessFormHandlerType  handlerType = ProcessFormHandler.getType(handler, conditionModel);
+		FormHandlerType  handlerType = ProcessFormHandler.getType(handler, conditionModel);
 		return handlerType == null?null:handlerType.toString();
 	}
 	
