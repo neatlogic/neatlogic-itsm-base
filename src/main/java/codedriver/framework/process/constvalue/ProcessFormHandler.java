@@ -3,16 +3,18 @@ package codedriver.framework.process.constvalue;
 import java.util.Arrays;
 import java.util.List;
 
+import codedriver.framework.common.constvalue.FormHandlerType;
+
 public enum ProcessFormHandler {
 	
-	FORMSELECT("formselect","下拉框",ProcessFormHandlerType.SELECT,Arrays.asList(ProcessExpression.UNEQUAL,ProcessExpression.INCLUDE,ProcessExpression.EXCLUDE),ProcessExpression.INCLUDE,List.class.getSimpleName().toLowerCase()),
-	FORMINPUT("forminput","文本框",ProcessFormHandlerType.INPUT,Arrays.asList(ProcessExpression.EQUAL,ProcessExpression.UNEQUAL,ProcessExpression.LIKE),ProcessExpression.LIKE,String.class.getSimpleName().toLowerCase()),
-	FORMTEXTAREA("formtextarea","文本域",ProcessFormHandlerType.TEXTAREA,Arrays.asList(ProcessExpression.LIKE),ProcessExpression.LIKE,String.class.getSimpleName().toLowerCase()),
-	FORMEDITOR("formeditor","富文本框",ProcessFormHandlerType.EDITOR,Arrays.asList(ProcessExpression.LIKE),ProcessExpression.LIKE,String.class.getSimpleName().toLowerCase()),
-	FORMRADIO("formradio","单选框",ProcessFormHandlerType.RADIO,Arrays.asList(ProcessExpression.EQUAL,ProcessExpression.UNEQUAL),ProcessExpression.EQUAL,String.class.getSimpleName().toLowerCase()),
-	FORMCHECKBOX("formcheckbox","复选框",ProcessFormHandlerType.CHECKBOX,Arrays.asList(ProcessExpression.INCLUDE,ProcessExpression.EXCLUDE),ProcessExpression.INCLUDE,List.class.getSimpleName().toLowerCase()),
-	FORMDATE("formdate","日期",ProcessFormHandlerType.DATE,Arrays.asList(ProcessExpression.EQUAL,ProcessExpression.UNEQUAL,ProcessExpression.LESSTHAN,ProcessExpression.GREATERTHAN),ProcessExpression.EQUAL,String.class.getSimpleName().toLowerCase()),
-	FORMTIME("formtime","时间",ProcessFormHandlerType.TIME,Arrays.asList(ProcessExpression.EQUAL,ProcessExpression.UNEQUAL,ProcessExpression.LESSTHAN,ProcessExpression.GREATERTHAN),ProcessExpression.EQUAL,String.class.getSimpleName().toLowerCase()),
+	FORMSELECT("formselect","下拉框",FormHandlerType.SELECT,Arrays.asList(ProcessExpression.UNEQUAL,ProcessExpression.INCLUDE,ProcessExpression.EXCLUDE),ProcessExpression.INCLUDE,List.class.getSimpleName().toLowerCase()),
+	FORMINPUT("forminput","文本框",FormHandlerType.INPUT,Arrays.asList(ProcessExpression.EQUAL,ProcessExpression.UNEQUAL,ProcessExpression.LIKE),ProcessExpression.LIKE,String.class.getSimpleName().toLowerCase()),
+	FORMTEXTAREA("formtextarea","文本域",FormHandlerType.TEXTAREA,Arrays.asList(ProcessExpression.LIKE),ProcessExpression.LIKE,String.class.getSimpleName().toLowerCase()),
+	FORMEDITOR("formeditor","富文本框",FormHandlerType.EDITOR,Arrays.asList(ProcessExpression.LIKE),ProcessExpression.LIKE,String.class.getSimpleName().toLowerCase()),
+	FORMRADIO("formradio","单选框",FormHandlerType.RADIO,Arrays.asList(ProcessExpression.EQUAL,ProcessExpression.UNEQUAL),ProcessExpression.EQUAL,String.class.getSimpleName().toLowerCase()),
+	FORMCHECKBOX("formcheckbox","复选框",FormHandlerType.CHECKBOX,Arrays.asList(ProcessExpression.INCLUDE,ProcessExpression.EXCLUDE),ProcessExpression.INCLUDE,List.class.getSimpleName().toLowerCase()),
+	FORMDATE("formdate","日期",FormHandlerType.DATE,Arrays.asList(ProcessExpression.EQUAL,ProcessExpression.UNEQUAL,ProcessExpression.LESSTHAN,ProcessExpression.GREATERTHAN),ProcessExpression.EQUAL,String.class.getSimpleName().toLowerCase()),
+	FORMTIME("formtime","时间",FormHandlerType.TIME,Arrays.asList(ProcessExpression.EQUAL,ProcessExpression.UNEQUAL,ProcessExpression.LESSTHAN,ProcessExpression.GREATERTHAN),ProcessExpression.EQUAL,String.class.getSimpleName().toLowerCase()),
 	FORMSTATICLIST("formstaticList","静态列表",null,null,null,null),
 	FORMCASCADELIST("formcascadeList","级联下拉",null,null,null,null),
 	FORMDYNAMICLIST("formdynamicList","动态列表",null,null,null,null),
@@ -21,12 +23,12 @@ public enum ProcessFormHandler {
 	
 	private String handler;
 	private String handlerName;
-	private ProcessFormHandlerType type;
+	private FormHandlerType type;
 	private List<ProcessExpression> expressionList;
 	private ProcessExpression expression;
 	private String dataType;
 	
-	private ProcessFormHandler(String _handler,String _handlerName,ProcessFormHandlerType _type,List<ProcessExpression> _expressionList,ProcessExpression _expression,String _dataType) {
+	private ProcessFormHandler(String _handler,String _handlerName,FormHandlerType _type,List<ProcessExpression> _expressionList,ProcessExpression _expression,String _dataType) {
 		this.handler = _handler;
 		this.handlerName = _handlerName;
 		this.type = _type;
@@ -45,7 +47,7 @@ public enum ProcessFormHandler {
 		return null;
 	}
 	
-	public static ProcessFormHandlerType getType(String _handler,String processWorkcenterConditionType) {
+	public static FormHandlerType getType(String _handler,String processWorkcenterConditionType) {
 		for (ProcessFormHandler s : ProcessFormHandler.values()) {
 			if (s.getHandler().equals(_handler)) {
 				
@@ -64,13 +66,13 @@ public enum ProcessFormHandler {
 		return null;
 	}
 
-	public ProcessFormHandlerType getType(String processWorkcenterConditionType) {
+	public FormHandlerType getType(String processWorkcenterConditionType) {
 		if(ProcessConditionModel.CUSTOM.getValue().equals(processWorkcenterConditionType)) {
-			if(type == ProcessFormHandlerType.RADIO || type == ProcessFormHandlerType.CHECKBOX) {
-				return ProcessFormHandlerType.SELECT;
+			if(type == FormHandlerType.RADIO || type == FormHandlerType.CHECKBOX) {
+				return FormHandlerType.SELECT;
 			}
-			if(type == ProcessFormHandlerType.TEXTAREA || type == ProcessFormHandlerType.EDITOR) {
-				return ProcessFormHandlerType.INPUT;
+			if(type == FormHandlerType.TEXTAREA || type == FormHandlerType.EDITOR) {
+				return FormHandlerType.INPUT;
 			}
 		}
 		return type;
