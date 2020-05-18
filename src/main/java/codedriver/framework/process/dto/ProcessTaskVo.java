@@ -36,11 +36,11 @@ public class ProcessTaskVo {
 	private String status;
 	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStatusVo statusVo;
-	@EntityField(name = "上报人userId", type = ApiParamType.STRING)
+	@EntityField(name = "上报人userUuid", type = ApiParamType.STRING)
 	private String owner;
 	@EntityField(name = "上报人", type = ApiParamType.STRING)
 	private String ownerName;
-	@EntityField(name = "代报人userId", type = ApiParamType.STRING)
+	@EntityField(name = "代报人userUuid", type = ApiParamType.STRING)
 	private String reporter;
 	@EntityField(name = "代报人", type = ApiParamType.STRING)
 	private String reporterName;

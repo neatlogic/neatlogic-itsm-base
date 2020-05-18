@@ -56,7 +56,7 @@
 		  pw.`condition_config`,
 		  pwa.`type` as authType,
 		  pwa.`uuid` as authUuid,
-		  pwo.user_id as `owner`
+		  pwo.`user_uuid` as `owner`
 		FROM
 		  `process_workcenter` pw 
 		   LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
@@ -123,12 +123,12 @@
 		  `sort`,
 		  `is_show` as isShow,
 		  `type`,
-		  `user_id`  as userId
+		  `user_uuid`  as userUuid
 		FROM
 		  `process_workcenter_thead` 
 		where
 		   workcenter_uuid = #{workcenterUuid}
-		   and user_id = #{userId}
+		   and user_uuid = #{userUuid}
 		order by sort asc
 	</select>
 	
@@ -217,7 +217,7 @@
 			  `type`,
 			  `is_show`,
 			  `width`,
-			  `user_id`
+			  `user_uuid`
 			) 
 			VALUES
 			  (
@@ -227,7 +227,7 @@
 			    #{type},
 			    #{isShow},
 			    #{width},
-			    #{userId}
+			    #{userUuid}
 			  ) ;
 	</insert>
 	

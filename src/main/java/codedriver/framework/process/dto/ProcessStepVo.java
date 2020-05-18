@@ -24,9 +24,9 @@ public class ProcessStepVo implements Serializable {
 	private String description;
 	private JSONObject configObj;
 	private Boolean isWorkerPolicyListSorted = false;
-	private Boolean isAttributeListSorted = false;
+//	private Boolean isAttributeListSorted = false;
 	private Boolean isTimeoutPolicyListSorted = false;
-	private List<ProcessStepUserVo> userList;
+//	private List<ProcessStepUserVo> userList;
 	private List<ProcessStepRelVo> relList;
 	private List<ProcessStepTeamVo> teamList;
 	private List<ProcessStepWorkerPolicyVo> workerPolicyList;
@@ -136,13 +136,13 @@ public class ProcessStepVo implements Serializable {
 		this.configObj = configObj;
 	}
 
-	public List<ProcessStepUserVo> getUserList() {
-		return userList;
-	}
-
-	public void setUserList(List<ProcessStepUserVo> userList) {
-		this.userList = userList;
-	}
+//	public List<ProcessStepUserVo> getUserList() {
+//		return userList;
+//	}
+//
+//	public void setUserList(List<ProcessStepUserVo> userList) {
+//		this.userList = userList;
+//	}
 
 	public List<ProcessStepRelVo> getRelList() {
 		return relList;

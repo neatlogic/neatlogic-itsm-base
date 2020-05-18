@@ -294,20 +294,6 @@
 		</if>
 	</select>
 
-	<select id="getProcessAssignUserByToStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskAssignUserVo">
-		SELECT
-		`processtask_id` AS processTaskId,
-		`from_step_id` AS fromStepId,
-		`to_step_id` AS toStepId,
-		`user_id` AS userId,
-		`assign_time` AS assignTime
-		FROM
-		`processtask_assignuser`
-		WHERE
-		to_step_id = #{value}
-		ORDER BY assign_time
-	</select>
-
 	<select id="getProcessTaskStepTimeoutPolicyByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo">
 		SELECT
 		`processtask_id` as processTaskId,
@@ -796,7 +782,7 @@
 	SELECT 
 		DISTINCT `processtask_step_id` 
 	FROM `processtask_step_worker` 
-	WHERE (`type` = 'user' AND `uuid` = #{userId})
+	WHERE (`type` = 'user' AND `uuid` = #{userUuid})
 	<if test="teamUuidList != null and teamUuidList.size() > 0">
 	OR (`type` = 'team' AND `uuid` in 
 		<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
@@ -888,7 +874,7 @@
 		<if test="processTaskStepId != null">
 		AND a.`processtask_step_id` = #{processTaskStepId}
 		</if>
-		<if test="userId != null and userId != ''">
+		<if test="userUuid != null and userUuid != ''">
 		AND a.`user_uuid` = #{userUuid}
 		</if>
 		<if test="owner != null and owner != ''">

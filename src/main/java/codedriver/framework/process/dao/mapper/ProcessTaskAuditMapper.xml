@@ -23,24 +23,4 @@
 	 	</if>
 	</select>
 
-	<!-- <insert id="insertProcessTaskStepAudit" parameterType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
-		<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
-			select LAST_INSERT_ID() as id
-		</selectKey>
-		INSERT INTO `processtask_step_audit` (
-		`processtask_id`,
-		`processtask_step_id`,
-		`user_id`,
-		`action_time`,
-		`action`
-		)
-		VALUES
-		(
-		#{processTaskId},
-		#{processTaskStepId},
-		#{userId},
-		NOW(3),
-		#{action}
-		)
-	</insert> -->
 </mapper>

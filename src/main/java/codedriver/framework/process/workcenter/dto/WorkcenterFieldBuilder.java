@@ -87,11 +87,11 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setTransferFromUserList(List<ProcessTaskStepAuditVo> transferAuditList) {
-		 List<String> transferUserIdList = new ArrayList<String>();
+		 List<String> transferUserUuidList = new ArrayList<String>();
 		 for(ProcessTaskStepAuditVo auditVo : transferAuditList) {
-			 transferUserIdList.add(auditVo.getUserUuid());
+			 transferUserUuidList.add(auditVo.getUserUuid());
 		 }
-		 dataJson.put(ProcessWorkcenterField.TRANSFER_FROM_USER.getValue(), transferUserIdList);
+		 dataJson.put(ProcessWorkcenterField.TRANSFER_FROM_USER.getValue(), transferUserUuidList);
 		 return this;
 	}
 	

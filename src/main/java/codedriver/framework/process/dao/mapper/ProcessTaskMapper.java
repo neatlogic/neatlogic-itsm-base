@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.elasticsearch.annotation.ElasticSearch;
-import codedriver.framework.process.dto.ProcessTaskAssignUserVo;
 import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
@@ -79,8 +78,6 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepVo> searchProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
 
-	public List<ProcessTaskAssignUserVo> getProcessAssignUserByToStepId(Long toStepId);
-
 //	public int checkProcessTaskStepUserIsExists(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public List<ProcessTaskStepTimeoutPolicyVo> getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);
@@ -125,7 +122,7 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
-	public List<Long> getProcessTaskStepIdList(@Param("userId") String userId, @Param("teamUuidList") List<String> teamUuidList, @Param("roleNameList") List<String> roleNameList);
+	public List<Long> getProcessTaskStepIdList(@Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleNameList") List<String> roleNameList);
 
 	public List<Map<String, Object>> getProcessTaskActiveStepListByStepIdList(@Param("keyword") String keyword, @Param("processTaskStepIdList") List<Long> processTaskStepIdList);
 

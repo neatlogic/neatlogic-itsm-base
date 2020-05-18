@@ -111,14 +111,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.setType(processStepVo.getType());
 		this.setConfig(processStepVo.getConfig());
 		this.setFormUuid(processStepVo.getFormUuid());
-		if (processStepVo.getUserList() != null && processStepVo.getUserList().size() > 0) {
-			List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-			for (ProcessStepUserVo userVo : processStepVo.getUserList()) {
-				ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(userVo);
-				userList.add(processTaskStepUserVo);
-			}
-			this.setUserList(userList);
-		}
+//		if (processStepVo.getUserList() != null && processStepVo.getUserList().size() > 0) {
+//			List<ProcessTaskStepUserVo> userList = new ArrayList<>();
+//			for (ProcessStepUserVo userVo : processStepVo.getUserList()) {
+//				ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(userVo);
+//				userList.add(processTaskStepUserVo);
+//			}
+//			this.setUserList(userList);
+//		}
 		if (processStepVo.getTeamList() != null && processStepVo.getTeamList().size() > 0) {
 			List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
 			for (ProcessStepTeamVo teamVo : processStepVo.getTeamList()) {

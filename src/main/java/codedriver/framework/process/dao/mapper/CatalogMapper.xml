@@ -102,8 +102,8 @@
 		`catalog_uuid` = #{catalogUuid} AND (
 		</if>
 		(type = 'common' AND `uuid` = 'alluser')
-		<if test="userId != null and userId != ''">
-		OR (type = 'user' AND `uuid` = #{userId})
+		<if test="userUuid != null and userUuid != ''">
+		OR (type = 'user' AND `uuid` = #{userUuid})
 		</if>
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
 		OR (type = 'team' AND `uuid` IN 

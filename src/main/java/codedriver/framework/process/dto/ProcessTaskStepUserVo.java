@@ -36,10 +36,10 @@ public class ProcessTaskStepUserVo {
 		this.setUserUuid(_userUuid);
 	}
 
-	public ProcessTaskStepUserVo(ProcessStepUserVo processStepUserVo) {
-		this.setUserUuid(processStepUserVo.getUserUuid());
-		this.setUserName(processStepUserVo.getUserName());
-	}
+//	public ProcessTaskStepUserVo(ProcessStepUserVo processStepUserVo) {
+//		this.setUserUuid(processStepUserVo.getUserUuid());
+//		this.setUserName(processStepUserVo.getUserName());
+//	}
 
 	public Long getProcessTaskStepId() {
 		return processTaskStepId;

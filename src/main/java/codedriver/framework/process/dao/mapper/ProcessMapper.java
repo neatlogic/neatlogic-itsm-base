@@ -13,7 +13,6 @@ import codedriver.framework.process.dto.ProcessStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessStepNotifyTemplateVo;
 import codedriver.framework.process.dto.ProcessStepRelVo;
 import codedriver.framework.process.dto.ProcessStepTeamVo;
-import codedriver.framework.process.dto.ProcessStepUserVo;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTypeVo;
@@ -72,8 +71,6 @@ public interface ProcessMapper {
 
 	public int insertProcessStepRel(ProcessStepRelVo processStepRelVo);
 
-	public int insertProcessStepUser(ProcessStepUserVo processStepUserVo);
-
 	public int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
 
 	public int insertProcessStepWorkerPolicy(ProcessStepWorkerPolicyVo processStepWorkerPolicyVo);
@@ -93,8 +90,6 @@ public interface ProcessMapper {
 	public int deleteProcessStepByProcessUuid(String processUuid);
 
 	public int deleteProcessStepRelByProcessUuid(String processUuid);
-
-	public int deleteProcessStepUserByProcessUuid(String processUuid);
 
 	public int deleteProcessStepTeamByProcessUuid(String processUuid);
 
