@@ -2,8 +2,8 @@ package codedriver.framework.process.formattribute.core;
 
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.attribute.exception.AttributeValidException;
 import codedriver.framework.process.dto.AttributeDataVo;
+import codedriver.framework.process.exception.form.AttributeValidException;
 
 public interface IFormAttributeHandler {
 	public String getType();
