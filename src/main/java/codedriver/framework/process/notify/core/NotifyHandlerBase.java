@@ -34,9 +34,9 @@ public abstract class NotifyHandlerBase implements INotifyHandler {
 					}
 				}
 			}
-			if (CollectionUtils.isNotEmpty(notifyVo.getToRoleNameList())) {
-				for (String roleName : notifyVo.getToRoleNameList()) {
-					List<UserVo> roleUserList = userMapper.getActiveUserByRoleName(roleName);
+			if (CollectionUtils.isNotEmpty(notifyVo.getToRoleUuidList())) {
+				for (String roleUuid : notifyVo.getToRoleUuidList()) {
+					List<UserVo> roleUserList = userMapper.getActiveUserByRoleUuid(roleUuid);
 					for (UserVo userVo : roleUserList) {
 						notifyVo.addUser(userVo);
 					}

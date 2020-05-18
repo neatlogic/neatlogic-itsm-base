@@ -17,7 +17,7 @@ public class NotifyVo {
 	private List<UserVo> toUserList = new ArrayList<>();
 	private List<String> toUserUuidList;
 	private List<String> toTeamIdList;
-	private List<String> toRoleNameList;
+	private List<String> toRoleUuidList;
 	private String fromUser;
 	private String fromUserEmail;
 	private JSONObject data = new JSONObject();
@@ -31,7 +31,7 @@ public class NotifyVo {
 		this.data = builder.data;
 		this.toUserUuidList = builder.toUserUuidList;
 		this.toTeamIdList = builder.toTeamIdList;
-		this.toRoleNameList = builder.toRoleNameList;
+		this.toRoleUuidList = builder.toRoleUuidList;
 	}
 
 	private NotifyVo() {
@@ -118,8 +118,8 @@ public class NotifyVo {
 		return toTeamIdList;
 	}
 
-	public List<String> getToRoleNameList() {
-		return toRoleNameList;
+	public List<String> getToRoleUuidList() {
+		return toRoleUuidList;
 	}
 
 	public NotifyTriggerType getTrigger() {
@@ -136,7 +136,7 @@ public class NotifyVo {
 		private JSONObject data = new JSONObject();
 		private List<String> toUserUuidList = new ArrayList<>();
 		private List<String> toTeamIdList = new ArrayList<>();
-		private List<String> toRoleNameList = new ArrayList<>();
+		private List<String> toRoleUuidList = new ArrayList<>();
 
 		public Builder(NotifyTriggerType _trigger) {
 			this.trigger = _trigger;
@@ -175,9 +175,9 @@ public class NotifyVo {
 			return this;
 		}
 
-		public Builder addRoleName(String roleName) {
-			if (!toRoleNameList.contains(roleName)) {
-				toRoleNameList.add(roleName);
+		public Builder addRoleUuid(String roleUuid) {
+			if (!toRoleUuidList.contains(roleUuid)) {
+				toRoleUuidList.add(roleUuid);
 			}
 			return this;
 		}

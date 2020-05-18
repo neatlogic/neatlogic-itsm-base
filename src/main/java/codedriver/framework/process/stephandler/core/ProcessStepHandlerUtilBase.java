@@ -337,7 +337,7 @@ public abstract class ProcessStepHandlerUtilBase {
 														}else if(GroupSearch.TEAM.getValue().equals(workerVo.getType())) {
 															notifyBuilder.addTeamId(workerVo.getUuid());
 														}else if(GroupSearch.ROLE.getValue().equals(workerVo.getType())) {
-															notifyBuilder.addRoleName(workerVo.getUuid());
+															notifyBuilder.addRoleUuid(workerVo.getUuid());
 														}
 													}
 												}
@@ -346,7 +346,7 @@ public abstract class ProcessStepHandlerUtilBase {
 											}else if(GroupSearch.TEAM.getValue().equals(split[0])) {
 												notifyBuilder.addTeamId(split[1]);
 											}else if(GroupSearch.ROLE.getValue().equals(split[0])) {
-												notifyBuilder.addRoleName(split[1]);
+												notifyBuilder.addRoleUuid(split[1]);
 											}
 										}
 										NotifyVo notifyVo = notifyBuilder.build();
