@@ -28,7 +28,7 @@ public interface CatalogMapper {
 	List<String> getAuthorizedCatalogUuidList(
 			@Param("userUuid")String userUuid, 
 			@Param("teamUuidList")List<String> teamUuidList, 
-			@Param("roleNameList")List<String> roleNameList, 
+			@Param("roleUuidList")List<String> roleUuidList, 
 			@Param("catalogUuid") String catalogUuid
 			);
 	

@@ -805,7 +805,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					if (GroupSearch.USER.getValue().equals(workerVo.getType()) && workerVo.getUuid().equals(UserContext.get().getUserUuid(true))) {
 						canTake = true;
 						break;
-					} else if (GroupSearch.ROLE.getValue().equals(workerVo.getType()) && UserContext.get().getRoleNameList().contains(workerVo.getUuid())) {
+					} else if (GroupSearch.ROLE.getValue().equals(workerVo.getType()) && UserContext.get().getRoleUuidList().contains(workerVo.getUuid())) {
 						canTake = true;
 						break;
 					} else if (GroupSearch.TEAM.getValue().equals(workerVo.getType()) && userMapper.checkUserIsInTeam(UserContext.get().getUserUuid(true), workerVo.getUuid()) > 0) {

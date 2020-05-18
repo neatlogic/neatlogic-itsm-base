@@ -122,7 +122,7 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
-	public List<Long> getProcessTaskStepIdList(@Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleNameList") List<String> roleNameList);
+	public List<Long> getProcessTaskStepIdList(@Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList);
 
 	public List<Map<String, Object>> getProcessTaskActiveStepListByStepIdList(@Param("keyword") String keyword, @Param("processTaskStepIdList") List<Long> processTaskStepIdList);
 

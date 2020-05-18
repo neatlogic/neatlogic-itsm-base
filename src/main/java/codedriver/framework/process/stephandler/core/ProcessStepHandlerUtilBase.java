@@ -891,10 +891,10 @@ public abstract class ProcessStepHandlerUtilBase {
 					resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
 				}else {
 					List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
-					List<String> channelList = channelMapper.getAuthorizedChannelUuidList(UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleNameList(), processTaskVo.getChannelUuid());
+					List<String> channelList = channelMapper.getAuthorizedChannelUuidList(UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleUuidList(), processTaskVo.getChannelUuid());
 					if(channelList.contains(processTaskVo.getChannelUuid())) {
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
-					}else if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
+					}else if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleUuidList()) > 0){
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
 					}else if(processTaskMapper.checkIsProcessTaskStepUser(processTaskId, null, UserContext.get().getUserUuid(true)) > 0) {
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
@@ -1040,7 +1040,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.WORK.getValue())) {
 				List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
 				//有可处理步骤work
-				if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleNameList()) > 0){
+				if(processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleUuidList()) > 0){
 					resultList.add(ProcessTaskStepAction.WORK.getValue());
 				}
 			}
@@ -1105,7 +1105,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					}else if(GroupSearch.TEAM.getValue().equals(worker.getType()) && currentUserTeamList.contains(worker.getUuid())){
 						currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
 						break;
-					}else if(GroupSearch.ROLE.getValue().equals(worker.getType()) && UserContext.get().getRoleNameList().contains(worker.getUuid())){
+					}else if(GroupSearch.ROLE.getValue().equals(worker.getType()) && UserContext.get().getRoleUuidList().contains(worker.getUuid())){
 						currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
 						break;
 					}
@@ -1168,7 +1168,7 @@ public abstract class ProcessStepHandlerUtilBase {
 									break;
 								}
 							}else if(GroupSearch.ROLE.getValue().equals(split[0])) {
-								if(UserContext.get().getRoleNameList().contains(split[1])) {
+								if(UserContext.get().getRoleUuidList().contains(split[1])) {
 									configActionList.add(authorityObj.getString("action"));
 									break;
 								}
@@ -1253,7 +1253,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						}else if(GroupSearch.TEAM.getValue().equals(processTaskStepWorkerVo.getType()) && currentUserTeamList.contains(processTaskStepWorkerVo.getUuid())){
 							resultList.add(stepVo);
 							break;
-						}else if(GroupSearch.ROLE.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getRoleNameList().contains(processTaskStepWorkerVo.getUuid())){
+						}else if(GroupSearch.ROLE.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getRoleUuidList().contains(processTaskStepWorkerVo.getUuid())){
 							resultList.add(stepVo);
 							break;
 						}
