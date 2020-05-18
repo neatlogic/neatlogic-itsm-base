@@ -81,7 +81,7 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskAssignUserVo> getProcessAssignUserByToStepId(Long toStepId);
 
-	public int checkProcessTaskStepUserIsExists(ProcessTaskStepUserVo processTaskStepUserVo);
+//	public int checkProcessTaskStepUserIsExists(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public List<ProcessTaskStepTimeoutPolicyVo> getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);
 
@@ -140,7 +140,7 @@ public interface ProcessTaskMapper {
 	public int checkIsWorker(
 			@Param("processTaskId") Long processTaskId, 
 			@Param("processTaskStepId") Long processTaskStepId, 
-			@Param("userId") String userId, 
+			@Param("userUuid") String userUuid, 
 			@Param("teamUuidList") List<String> teamUuidList, 
 			@Param("roleNameList") List<String> roleNameList
 			);
@@ -148,7 +148,7 @@ public interface ProcessTaskMapper {
 	public int checkIsProcessTaskStepUser(
 			@Param("processTaskId") Long processTaskId, 
 			@Param("processTaskStepId") Long processTaskStepId, 
-			@Param("userId") String userId
+			@Param("userUuid") String userUuid
 			);
 
 	public List<ProcessTaskAssignWorkerVo> getPrcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);

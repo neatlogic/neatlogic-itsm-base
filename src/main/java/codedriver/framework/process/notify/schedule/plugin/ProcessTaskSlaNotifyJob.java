@@ -184,19 +184,19 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 								if (receiver.startsWith("common.")) {
 									receiver = receiver.substring(7);
 									if (receiver.equalsIgnoreCase("reporter")) {
-										notifyBuilder.addUserId(processTaskVo.getReporter());
+										notifyBuilder.addUserUuid(processTaskVo.getReporter());
 									} else if (receiver.equalsIgnoreCase("owner")) {
-										notifyBuilder.addUserId(processTaskVo.getOwner());
+										notifyBuilder.addUserUuid(processTaskVo.getOwner());
 									} else if (receiver.equalsIgnoreCase("worker")) {
 										for (ProcessTaskStepWorkerVo workerVo : workerList) {
 											if(GroupSearch.USER.getValue().equals(workerVo.getType())) {
-												notifyBuilder.addUserId(workerVo.getUuid());
+												notifyBuilder.addUserUuid(workerVo.getUuid());
 											}
 										}
 									}
 								} else if (receiver.startsWith("user.")) {
 									receiver = receiver.substring(5);
-									notifyBuilder.addUserId(receiver);
+									notifyBuilder.addUserUuid(receiver);
 								} else if (receiver.startsWith("team.")) {
 									receiver = receiver.substring(5);
 									notifyBuilder.addTeamId(receiver);

@@ -65,7 +65,7 @@ public class FormVersionVo extends BasePageVo implements Serializable {
 
 	public String getEditor() {
 		if (StringUtils.isBlank(editor)) {
-			editor = UserContext.get().getUserId();
+			editor = UserContext.get().getUserUuid();
 		}
 		return editor;
 	}

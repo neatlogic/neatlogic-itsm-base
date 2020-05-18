@@ -15,8 +15,8 @@ public class ProcessTaskStepAuditVo {
 	private Long processTaskStepId;
 	@EntityField(name = "步骤名称", type = ApiParamType.STRING)
 	private String processTaskStepName;
-	@EntityField(name = "用户userId", type = ApiParamType.STRING)
-	private String userId;
+	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
+	private String userUuid;
 	@EntityField(name = "用户名", type = ApiParamType.STRING)
 	private String userName;
 	@EntityField(name = "创建时间", type = ApiParamType.LONG)
@@ -39,10 +39,10 @@ public class ProcessTaskStepAuditVo {
 		this.action = _action;
 	}
 
-	public ProcessTaskStepAuditVo(Long processTaskId, Long processTaskStepId, String userId, String action) {
+	public ProcessTaskStepAuditVo(Long processTaskId, Long processTaskStepId, String userUuid, String action) {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
-		this.userId = userId;
+		this.userUuid = userUuid;
 		this.action = action;
 	}
 
@@ -78,12 +78,12 @@ public class ProcessTaskStepAuditVo {
 		this.processTaskStepName = processTaskStepName;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserUuid() {
+		return userUuid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 
 	public String getUserName() {

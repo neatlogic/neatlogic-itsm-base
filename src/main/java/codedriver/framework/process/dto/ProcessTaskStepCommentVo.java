@@ -52,7 +52,7 @@ public class ProcessTaskStepCommentVo {
 	public ProcessTaskStepCommentVo(ProcessTaskStepAuditVo processTaskStepAuditVo) {
 		this.id = processTaskStepAuditVo.getId();
 		this.fcd = processTaskStepAuditVo.getActionTime();
-		this.fcu = processTaskStepAuditVo.getUserId();
+		this.fcu = processTaskStepAuditVo.getUserUuid();
 		this.fcuName = processTaskStepAuditVo.getUserName();
 		List<ProcessTaskStepAuditDetailVo> processTaskStepAuditDetailList = processTaskStepAuditVo.getAuditDetailList();
 		for(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo : processTaskStepAuditDetailList) {
@@ -156,7 +156,7 @@ public class ProcessTaskStepCommentVo {
 	}
 	public Integer getIsEditable() {
 		if(isEditable == null) {
-			String currentUser = UserContext.get().getUserId();
+			String currentUser = UserContext.get().getUserUuid();
 			if(currentUser != null && currentUser.equals(this.fcu)) {
 				isEditable = 1;
 			}else {
@@ -170,7 +170,7 @@ public class ProcessTaskStepCommentVo {
 	}
 	public Integer getIsDeletable() {
 		if(isDeletable == null) {
-			String currentUser = UserContext.get().getUserId();
+			String currentUser = UserContext.get().getUserUuid();
 			if(currentUser != null && currentUser.equals(this.fcu)) {
 				isDeletable = 1;
 			}else {

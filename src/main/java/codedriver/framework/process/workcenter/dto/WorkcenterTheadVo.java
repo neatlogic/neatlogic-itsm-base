@@ -26,7 +26,7 @@ public class WorkcenterTheadVo {
 	private Integer isShow = 1;
 	@JSONField(serialize = false)
 	@EntityField(name = "所属用户", type = ApiParamType.STRING)
-	private String userId;
+	private String userUuid;
 	@EntityField(name = "字段类型", type = ApiParamType.STRING)
 	private String type ;
 	@EntityField(name = "字段样式", type = ApiParamType.STRING)
@@ -38,23 +38,23 @@ public class WorkcenterTheadVo {
 		this.sort = obj.getInteger("sort");
 		this.width = obj.getInteger("width");
 		this.isShow = obj.getInteger("isShow");
-		this.userId = UserContext.get().getUserId();
+		this.userUuid = UserContext.get().getUserUuid();
 		this.type = obj.getString("type");
 		this.className = obj.getString("className");
 	}
 	
 	public WorkcenterTheadVo(IWorkcenterColumn column) {
 		this.name = column.getName();
-		this.userId = UserContext.get().getUserId();
+		this.userUuid = UserContext.get().getUserUuid();
 		this.displayName = column.getDisplayName();
 		this.type = ProcessFieldType.COMMON.getValue();
 		this.className = column.getClassName();
 		this.sort = column.getSort();
 	}
 	
-	public WorkcenterTheadVo(String _workcenterUuid,String _userId) {
+	public WorkcenterTheadVo(String _workcenterUuid,String _userUuid) {
 		this.workcenterUuid = _workcenterUuid;
-		this.userId = _userId;
+		this.userUuid = _userUuid;
 	}
 		
 	public WorkcenterTheadVo() {
@@ -79,12 +79,12 @@ public class WorkcenterTheadVo {
 		this.sort = sort;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserUuid() {
+		return userUuid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 
 	public Integer getWidth() {

@@ -18,9 +18,9 @@ public abstract class NotifyHandlerBase implements INotifyHandler {
 
 	public final void execute(NotifyVo notifyVo) {
 		if (CollectionUtils.isEmpty(notifyVo.getToUserList())) {
-			if (CollectionUtils.isNotEmpty(notifyVo.getToUserIdList())) {
-				for (String userId : notifyVo.getToUserIdList()) {
-					UserVo userVo = userMapper.getUserBaseInfoByUserId(userId);
+			if (CollectionUtils.isNotEmpty(notifyVo.getToUserUuidList())) {
+				for (String userUuid : notifyVo.getToUserUuidList()) {
+					UserVo userVo = userMapper.getUserBaseInfoByUuid(userUuid);
 					if (userVo != null) {
 						notifyVo.addUser(userVo);
 					}
@@ -44,7 +44,7 @@ public abstract class NotifyHandlerBase implements INotifyHandler {
 			}
 		}
 		if (StringUtils.isNotBlank(notifyVo.getFromUser())) {
-			UserVo userVo = userMapper.getUserBaseInfoByUserId(notifyVo.getFromUser());
+			UserVo userVo = userMapper.getUserBaseInfoByUuid(notifyVo.getFromUser());
 			if (userVo != null && StringUtils.isNotBlank(userVo.getEmail())) {
 				notifyVo.setFromUserEmail(userVo.getEmail());
 			}

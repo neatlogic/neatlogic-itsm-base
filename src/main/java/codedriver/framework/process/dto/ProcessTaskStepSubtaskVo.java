@@ -28,7 +28,7 @@ public class ProcessTaskStepSubtaskVo {
 	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStatusVo statusVo;
 	@EntityField(name = "处理人", type = ApiParamType.STRING)
-	private String userId;
+	private String userUuid;
 	@EntityField(name = "处理人名称", type = ApiParamType.STRING)
 	private String userName;
 	@EntityField(name = "期望完成时间", type = ApiParamType.LONG)
@@ -112,11 +112,11 @@ public class ProcessTaskStepSubtaskVo {
 	public void setStatusVo(ProcessTaskStatusVo statusVo) {
 		this.statusVo = statusVo;
 	}
-	public String getUserId() {
-		return userId;
+	public String getUserUuid() {
+		return userUuid;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 	public String getUserName() {
 		return userName;
@@ -186,7 +186,7 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public Integer getIsEditable() {
 		if(isEditable == null) {
-			String currentUser = UserContext.get().getUserId();
+			String currentUser = UserContext.get().getUserUuid();
 			if(currentUser != null && currentUser.equals(this.owner) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
 				isEditable = 1;
 			}else {
@@ -200,7 +200,7 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public Integer getIsAbortable() {
 		if(isAbortable == null) {
-			String currentUser = UserContext.get().getUserId();
+			String currentUser = UserContext.get().getUserUuid();
 			if(currentUser != null && currentUser.equals(this.owner) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
 				isAbortable = 1;
 			}else {
@@ -214,7 +214,7 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public Integer getIsRedoable() {
 		if(isRedoable == null) {
-			String currentUser = UserContext.get().getUserId();
+			String currentUser = UserContext.get().getUserUuid();
 			if(currentUser != null && currentUser.equals(this.owner) && ProcessTaskStatus.SUCCEED.getValue().equals(this.status)) {
 				isRedoable = 1;
 			}else {
@@ -228,8 +228,8 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public Integer getIsCompletable() {
 		if(isCompletable == null) {
-			String currentUser = UserContext.get().getUserId();
-			if(currentUser != null && currentUser.equals(this.userId) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
+			String currentUser = UserContext.get().getUserUuid();
+			if(currentUser != null && currentUser.equals(this.userUuid) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
 				isCompletable = 1;
 			}else {
 				isCompletable = 0;
@@ -242,8 +242,8 @@ public class ProcessTaskStepSubtaskVo {
 	}
 	public Integer getIsCommentable() {
 		if(isCommentable == null) {
-			String currentUser = UserContext.get().getUserId();
-			if(currentUser != null && (currentUser.equals(this.userId) || currentUser.equals(this.owner)) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
+			String currentUser = UserContext.get().getUserUuid();
+			if(currentUser != null && (currentUser.equals(this.userUuid) || currentUser.equals(this.owner)) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
 				isCommentable = 1;
 			}else {
 				isCommentable = 0;
@@ -310,7 +310,7 @@ public class ProcessTaskStepSubtaskVo {
 		result = prime * result + ((contentHash == null) ? 0 : contentHash.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((targetTime == null) ? 0 : targetTime.hashCode());
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		result = prime * result + ((userUuid == null) ? 0 : userUuid.hashCode());
 		return result;
 	}
 	@Override
@@ -337,10 +337,10 @@ public class ProcessTaskStepSubtaskVo {
 				return false;
 		} else if (!targetTime.equals(other.targetTime))
 			return false;
-		if (userId == null) {
-			if (other.userId != null)
+		if (userUuid == null) {
+			if (other.userUuid != null)
 				return false;
-		} else if (!userId.equals(other.userId))
+		} else if (!userUuid.equals(other.userUuid))
 			return false;
 		return true;
 	}

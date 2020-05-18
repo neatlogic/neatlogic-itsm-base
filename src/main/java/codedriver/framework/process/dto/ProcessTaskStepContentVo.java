@@ -60,7 +60,7 @@ public class ProcessTaskStepContentVo {
 
 	public String getFcu() {
 		if (StringUtils.isBlank(fcu)) {
-			fcu = UserContext.get().getUserId();
+			fcu = UserContext.get().getUserUuid();
 		}
 		return fcu;
 	}
@@ -79,7 +79,7 @@ public class ProcessTaskStepContentVo {
 
 	public String getLcu() {
 		if (StringUtils.isBlank(lcu)) {
-			lcu = UserContext.get().getUserId();
+			lcu = UserContext.get().getUserUuid();
 		}
 		return lcu;
 	}

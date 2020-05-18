@@ -61,7 +61,7 @@ public class ProcessTaskAssignWorkerVo {
 	}
 	public String getFcu() {
 		if(StringUtils.isBlank(fcu)) {
-			fcu = UserContext.get().getUserId();
+			fcu = UserContext.get().getUserUuid();
 		}
 		return fcu;
 	}

@@ -136,7 +136,7 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 					JSONObject policyObj = processTaskSlaTransferVo.getConfigObj();
 					String transferTo = policyObj.getString("transferTo");
 					if (StringUtils.isNotBlank(transferTo)) {
-						UserVo userVo = userMapper.getUserBaseInfoByUserId(transferTo);
+						UserVo userVo = userMapper.getUserBaseInfoByUuid(transferTo);
 						ProcessTaskStepWorkerVo workerVo = null;
 						if (userVo != null) {
 							List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();

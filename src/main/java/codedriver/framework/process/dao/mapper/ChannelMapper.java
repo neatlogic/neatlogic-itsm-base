@@ -46,13 +46,13 @@ public interface ChannelMapper {
 	public Integer getChannelTypeMaxSort();
 	
 	List<String> getAuthorizedChannelUuidList(
-			@Param("userId")String userId, 
+			@Param("userUuid")String userUuid, 
 			@Param("teamUuidList")List<String> teamUuidList, 
 			@Param("roleNameList")List<String> roleNameList,
 			@Param("channelUuid") String channelUuid
 			);
 	
-	int replaceChannelUser(@Param("userId")String userId, @Param("channelUuid")String channelUuid);	
+	int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
 	int replaceChannel(ChannelVo channelVo);
 
@@ -74,7 +74,7 @@ public interface ChannelMapper {
 	
 	int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
 
-	int deleteChannelUser(@Param("userId")String userId, @Param("channelUuid")String channelUuid);
+	int deleteChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
 	
 	int deleteChannelByUuid(String uuid);
 

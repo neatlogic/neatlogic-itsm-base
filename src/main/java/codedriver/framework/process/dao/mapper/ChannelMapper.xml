@@ -59,7 +59,7 @@
 		<if test="isFavorite != 1">
 			LEFT
 		</if>
-		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.user_id = #{userId}
+		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.`user_uuid` = #{userUuid}
 		WHERE 1=1
 		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
 			AND c.`uuid` IN 
@@ -326,7 +326,7 @@
 	</insert>
 
 	<insert id="replaceChannelUser">
-		REPLACE INTO `channel_user`(`user_id`, `channel_uuid`, `insert_time`) VALUES(#{userId}, #{channelUuid}, now())
+		REPLACE INTO `channel_user`(`user_uuid`, `channel_uuid`, `insert_time`) VALUES(#{userUuid}, #{channelUuid}, now())
 	</insert>
 
 	<insert id="insertChannelPriority">
@@ -415,7 +415,7 @@
 	</update>
 
 	<delete id="deleteChannelUser">
-		DELETE FROM `channel_user` WHERE `user_id` = #{userId} AND `channel_uuid` = #{channelUuid}
+		DELETE FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
 	</delete>
 
 	<delete id="deleteChannelByUuid" parameterType="java.lang.String">

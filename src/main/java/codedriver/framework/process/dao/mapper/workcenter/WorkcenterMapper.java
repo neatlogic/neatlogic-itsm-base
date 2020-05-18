@@ -13,7 +13,7 @@ import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 public interface WorkcenterMapper {
 	
 	public List<String> getAuthorizedWorkcenterUuidList(
-			@Param("userId")String userId, 
+			@Param("userUuid")String userUuid, 
 			@Param("teamUuidList")List<String> teamUuidList,
 			@Param("roleNameList")List<String> roleNameList
 			);
@@ -28,9 +28,9 @@ public interface WorkcenterMapper {
 	
 	public List<WorkcenterTheadVo> getWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
 	
-	public WorkcenterUserProfileVo getWorkcenterUserProfileByUserId(@Param("userId")String userId);
+	public WorkcenterUserProfileVo getWorkcenterUserProfileByUserUuid(String userUuid);
 	
-	public Integer deleteWorkcenterUserProfileByUserId(@Param("userId")String userId);
+	public Integer deleteWorkcenterUserProfileByUserUuid(String userUuid);
 	
 	public Integer deleteWorkcenterByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
@@ -44,7 +44,7 @@ public interface WorkcenterMapper {
 	
 	public Integer insertWorkcenterAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("workcenterUuid") String workcenterUuid); 
 	
-	public Integer insertWorkcenterOwner(@Param("userId")String owner,@Param("uuid")String workcenterUuid); 
+	public Integer insertWorkcenterOwner(@Param("userUuid")String owner,@Param("uuid")String workcenterUuid); 
 	
 	public Integer insertWorkcenterThead(WorkcenterTheadVo workcenterTheadVo); 
 	

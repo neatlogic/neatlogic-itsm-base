@@ -8,5 +8,5 @@ public interface ProcessTaskAuditMapper {
 	
 	public List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 	
-	public int insertProcessTaskStepAudit(ProcessTaskStepAuditVo processTaskStepAuditVo);
+//	public int insertProcessTaskStepAudit(ProcessTaskStepAuditVo processTaskStepAuditVo);
 }

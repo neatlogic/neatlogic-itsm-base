@@ -39,7 +39,7 @@ public class ConditionVo implements Serializable{
 		this.type = jsonObj.getString("type");
 		this.handler = jsonObj.getString("handler");
 		this.expression = jsonObj.getString("expression");
-		String values = jsonObj.getString("valueList").replaceAll(GroupSearch.COMMON.getValuePlugin()+UserType.LOGIN_USER.getValue(), GroupSearch.USER.getValuePlugin()+UserContext.get().getUserId());
+		String values = jsonObj.getString("valueList").replaceAll(GroupSearch.COMMON.getValuePlugin()+UserType.LOGIN_USER.getValue(), GroupSearch.USER.getValuePlugin()+UserContext.get().getUserUuid());
 		if(values.startsWith("[") && values.endsWith("]")) {
 			this.valueList = JSON.parseArray(values,String.class);
 		}else {
