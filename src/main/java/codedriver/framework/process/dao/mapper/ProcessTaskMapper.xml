@@ -159,9 +159,9 @@
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`owner`,
-		(SELECT user_name FROM `user` x WHERE x.user_id = `owner`) AS ownerName,
+		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
 		`reporter`,
-		(SELECT user_name FROM `user` x WHERE x.user_id = `reporter`) AS reporterName,
+		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
 		`error`
@@ -348,7 +348,7 @@
 		ptsw.`type`,
 		ptsw.`uuid`,
 		CASE `type` 
-		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`user_id` = `uuid`) 
+		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` = `uuid`) 
 		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`) 
 		WHEN 'role' THEN (SELECT r.`description` FROM `role` r WHERE r.`name` = `uuid`) 
 		ELSE NULL END AS `name`
@@ -899,7 +899,7 @@
 	  a.`lcu` 
 	FROM `processtask_step_subtask_content` a
 	JOIN `processtask_content` b on b.`hash` = a.`content_hash`
-	LEFT JOIN `user` c ON c.`user_id` = a.`fcu`
+	LEFT JOIN `user` c ON c.`uuid` = a.`fcu`
 	WHERE a.`processtask_step_subtask_id` = #{processTaskStepSubtaskId}
 	</select>
 	

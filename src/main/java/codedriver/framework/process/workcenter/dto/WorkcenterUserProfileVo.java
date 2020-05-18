@@ -16,7 +16,7 @@ public class WorkcenterUserProfileVo {
 		this.user_uuid = user_uuid;
 		this.config = config;
 	}
-	public String getUser_id() {
+	public String getUser_uuid() {
 		return user_uuid;
 	}
 	public void setUser_uuid(String user_uuid) {
