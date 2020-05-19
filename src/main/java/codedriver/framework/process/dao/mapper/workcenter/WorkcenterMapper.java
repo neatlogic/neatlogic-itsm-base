@@ -15,7 +15,7 @@ public interface WorkcenterMapper {
 	public List<String> getAuthorizedWorkcenterUuidList(
 			@Param("userUuid")String userUuid, 
 			@Param("teamUuidList")List<String> teamUuidList,
-			@Param("roleUuidList")List<String> roleNameList
+			@Param("roleUuidList")List<String> roleUuidList
 			);
 	
 	public List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);

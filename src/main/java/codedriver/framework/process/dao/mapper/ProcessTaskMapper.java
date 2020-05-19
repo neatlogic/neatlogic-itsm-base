@@ -139,7 +139,7 @@ public interface ProcessTaskMapper {
 			@Param("processTaskStepId") Long processTaskStepId, 
 			@Param("userUuid") String userUuid, 
 			@Param("teamUuidList") List<String> teamUuidList, 
-			@Param("roleNameList") List<String> roleNameList
+			@Param("roleUuidList") List<String> roleUuidList
 			);
 	
 	public int checkIsProcessTaskStepUser(
