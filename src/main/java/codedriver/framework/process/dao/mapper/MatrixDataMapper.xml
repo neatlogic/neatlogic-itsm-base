@@ -94,6 +94,9 @@
 		</foreach>
 		FROM `matrix_${matrixUuid}`
 		<where>
+		<foreach collection="columnList" item="column" separator="AND">
+		`${column}` IS NOT NULL
+		</foreach>
 		<if test="uuidList != null and uuidList.size() > 0">
 		`uuid` IN
 		<foreach collection="uuidList" item="uuid" open="(" close=")" separator=",">
