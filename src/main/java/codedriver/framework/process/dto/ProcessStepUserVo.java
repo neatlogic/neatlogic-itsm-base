@@ -6,18 +6,18 @@ public class ProcessStepUserVo implements Serializable {
 	private static final long serialVersionUID = -5937965926873063781L;
 	private String processUuid;
 	private String processStepUuid;
-	private String userId;
+	private String userUuid;
 	private String userName;
 	private String userType;
 	private String userTypeName;
 	private Integer sort;
 
-	public String getUserId() {
-		return userId;
+	public String getUserUuid() {
+		return userUuid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 
 	public String getUserName() {

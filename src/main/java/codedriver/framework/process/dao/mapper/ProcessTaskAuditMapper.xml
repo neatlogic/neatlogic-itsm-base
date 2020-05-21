@@ -6,7 +6,7 @@
 		SELECT 
 		`processtask_id` as processTaskId,
 		`processtask_step_id` as processTaskStepId,
-		`user_id` as userId,
+		`user_uuid` as userUuid,
 		`action_time` as actionTime,
 		`action`
 		FROM
@@ -15,32 +15,12 @@
 		<if test="processTaskId != null">
 	 		and `processtask_id` = #{processTaskId}
 	 	</if>
-		<if test="userId != null">
-	 		and `user_id` = #{userId}
+		<if test="userUuid != null">
+	 		and `user_uuid` = #{userUuid}
 	 	</if>
 	 	<if test="action != null">
 	 		and `action` = #{action}
 	 	</if>
 	</select>
 
-	<insert id="insertProcessTaskStepAudit" parameterType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
-		<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
-			select LAST_INSERT_ID() as id
-		</selectKey>
-		INSERT INTO `processtask_step_audit` (
-		`processtask_id`,
-		`processtask_step_id`,
-		`user_id`,
-		`action_time`,
-		`action`
-		)
-		VALUES
-		(
-		#{processTaskId},
-		#{processTaskStepId},
-		#{userId},
-		NOW(3),
-		#{action}
-		)
-	</insert>
 </mapper>

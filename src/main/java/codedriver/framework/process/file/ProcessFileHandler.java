@@ -11,7 +11,7 @@ import codedriver.framework.file.dto.FileVo;
 public class ProcessFileHandler extends FileTypeHandlerBase {
 
 	@Override
-	public boolean valid(String userId, JSONObject jsonObj) {
+	public boolean valid(String userUuid, JSONObject jsonObj) {
 		return true;
 	}
 

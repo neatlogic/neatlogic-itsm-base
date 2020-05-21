@@ -467,24 +467,6 @@
 		)
 	</insert>
 
-	<insert id="insertProcessStepUser" parameterType="codedriver.framework.process.dto.ProcessStepUserVo">
-		INSERT INTO `process_step_user` (
-		`process_uuid`,
-		`process_step_uuid`,
-		`user_id`,
-		`user_name`,
-		`sort`
-		)
-		VALUES
-		(
-		#{processUuid},
-		#{processStepUuid},
-		#{userId},
-		#{userName},
-		#{sort}
-		)
-	</insert>
-
 	<insert id="insertProcessForm" parameterType="codedriver.framework.process.dto.ProcessFormVo">
 		INSERT INTO `process_form` (`process_uuid`, `form_uuid`)
 		VALUES (#{processUuid}, #{formUuid})
@@ -543,13 +525,6 @@
 		DELETE
 		FROM
 		`process_step_rel`
-		WHERE `process_uuid` = #{value}
-	</delete>
-
-	<delete id="deleteProcessStepUserByProcessUuid" parameterType="java.lang.String">
-		DELETE
-		FROM
-		`process_step_user`
 		WHERE `process_uuid` = #{value}
 	</delete>
 

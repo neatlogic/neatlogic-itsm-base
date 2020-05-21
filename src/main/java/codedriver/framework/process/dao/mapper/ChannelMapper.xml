@@ -10,7 +10,7 @@
 		<if test="isFavorite != 1">
 			LEFT
 		</if>
-		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.user_id = #{userId}
+		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.`user_uuid` = #{userUuid}
 		WHERE 1=1
 		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
 			AND c.`uuid` IN 
@@ -52,14 +52,14 @@
 		c.`color`,
 		c.`desc`,
 		c.`channel_type_uuid`,
-		CASE WHEN cu.user_id IS NULL THEN 0 ELSE 1 END AS `isFavorite`,
+		CASE WHEN cu.`user_uuid` IS NULL THEN 0 ELSE 1 END AS `isFavorite`,
 		c.`sort`
 		FROM
 		`channel` c
 		<if test="isFavorite != 1">
 			LEFT
 		</if>
-		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.user_id = #{userId}
+		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.`user_uuid` = #{userUuid}
 		WHERE 1=1
 		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
 			AND c.`uuid` IN 
@@ -268,8 +268,8 @@
 		`channel_uuid` = #{channelUuid} AND (
 		</if>
 		(type = 'common' AND `uuid` = 'alluser')
-		<if test="userId != null and userId != ''">
-		OR (type = 'user' AND `uuid` = #{userId})
+		<if test="userUuid != null and userUuid != ''">
+		OR (type = 'user' AND `uuid` = #{userUuid})
 		</if>
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
 		OR (type = 'team' AND `uuid` IN 
@@ -278,10 +278,10 @@
 			</foreach>
 			)
 		</if>
-		<if test="roleNameList != null and roleNameList.size() > 0">
+		<if test="roleUuidList != null and roleUuidList.size() > 0">
 		OR (type = 'role' AND `uuid` IN 
-			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
-				#{roleName}
+			<foreach collection="roleUuidList" item="roleUuid" open="(" separator=","  close=")">
+				#{roleUuid}
 			</foreach>
 			)
 		</if>
@@ -326,7 +326,7 @@
 	</insert>
 
 	<insert id="replaceChannelUser">
-		REPLACE INTO `channel_user`(`user_id`, `channel_uuid`, `insert_time`) VALUES(#{userId}, #{channelUuid}, now())
+		REPLACE INTO `channel_user`(`user_uuid`, `channel_uuid`, `insert_time`) VALUES(#{userUuid}, #{channelUuid}, now())
 	</insert>
 
 	<insert id="insertChannelPriority">
@@ -415,7 +415,7 @@
 	</update>
 
 	<delete id="deleteChannelUser">
-		DELETE FROM `channel_user` WHERE `user_id` = #{userId} AND `channel_uuid` = #{channelUuid}
+		DELETE FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
 	</delete>
 
 	<delete id="deleteChannelByUuid" parameterType="java.lang.String">

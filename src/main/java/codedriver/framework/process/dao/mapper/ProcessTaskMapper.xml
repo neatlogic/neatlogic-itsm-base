@@ -159,9 +159,9 @@
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`owner`,
-		(SELECT user_name FROM `user` x WHERE x.user_id = `owner`) AS ownerName,
+		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
 		`reporter`,
-		(SELECT user_name FROM `user` x WHERE x.user_id = `reporter`) AS reporterName,
+		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
 		`error`
@@ -250,7 +250,7 @@
 		SELECT
 		`processtask_id` as processTaskId,
 		`processtask_step_id` as processTaskStepId,
-		`user_id` as userId,
+		`user_uuid` as userUuid,
 		`user_type` as userType,
 		`user_name` as userName,
 		`status` as status,
@@ -294,20 +294,6 @@
 		</if>
 	</select>
 
-	<select id="getProcessAssignUserByToStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskAssignUserVo">
-		SELECT
-		`processtask_id` AS processTaskId,
-		`from_step_id` AS fromStepId,
-		`to_step_id` AS toStepId,
-		`user_id` AS userId,
-		`assign_time` AS assignTime
-		FROM
-		`processtask_assignuser`
-		WHERE
-		to_step_id = #{value}
-		ORDER BY assign_time
-	</select>
-
 	<select id="getProcessTaskStepTimeoutPolicyByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo">
 		SELECT
 		`processtask_id` as processTaskId,
@@ -344,7 +330,7 @@
 		ORDER BY `sort`
 	</select>
 
-	<select id="checkProcessTaskStepUserIsExists" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo" resultType="int">
+<!-- 	<select id="checkProcessTaskStepUserIsExists" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo" resultType="int">
 		SELECT
 		COUNT(1)
 		FROM
@@ -352,8 +338,8 @@
 		WHERE
 		`processtask_step_id` = #{processTaskStepId}
 		AND
-		`user_id` = #{userId}
-	</select>
+		`user_uuid` = #{userUuid}
+	</select> -->
 
 	<select id="getProcessTaskStepWorkerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		SELECT
@@ -362,7 +348,7 @@
 		ptsw.`type`,
 		ptsw.`uuid`,
 		CASE `type` 
-		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`user_id` = `uuid`) 
+		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` = `uuid`) 
 		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`) 
 		WHEN 'role' THEN (SELECT r.`description` FROM `role` r WHERE r.`name` = `uuid`) 
 		ELSE NULL END AS `name`
@@ -496,7 +482,7 @@
 		</collection>
 		<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 			<result column="userType" property="userType" />
-			<result column="user_id" property="userId" />
+			<result column="user_uuid" property="userUuid" />
 		</collection>
 	</resultMap>
 	
@@ -516,7 +502,7 @@
 		ps.`is_active` AS isActive,
 		psw.`type` as workerType,
 		psw.`uuid`,
-		psu.`user_id`,
+		psu.`user_uuid`,
 		psu.`user_type` AS userType
 		FROM `processtask_step` ps 
 		LEFT JOIN `processtask_step_worker` psw ON ps.`processtask_id` = psw.`processtask_id` AND ps.`id` = psw.`processtask_step_id`
@@ -703,7 +689,7 @@
 		<result column="processtask_id" property="processTaskId"/>
 		<result column="processtask_step_id" property="processTaskStepId"/>
 		<result column="processTaskStepName" property="processTaskStepName"/>
-		<result column="user_id" property="userId"/>
+		<result column="user_uuid" property="userUuid"/>
 		<result column="userName" property="userName"/>
 		<result column="action_time" property="actionTime"/>
 		<result column="action" property="action"/>
@@ -720,8 +706,8 @@
 	  psa.`processtask_id`,
 	  psa.`processtask_step_id`,
 	  ps.`name` AS processTaskStepName,
-	  psa.`user_id`,
-	  (SELECT user_name FROM `user` x WHERE x.user_id = psa.`user_id`) AS userName,
+	  psa.`user_uuid`,
+	  (SELECT user_name FROM `user` x WHERE x.uuid = psa.`user_uuid`) AS userName,
 	  psa.`action_time`,
 	  psa.`action`, 
 	  psad.`audit_id`,
@@ -738,8 +724,8 @@
 	<if test="action != null and action != ''">
 	AND psa.`action` = #{action} 
 	</if>
-	<if test="userId != null and userId != ''">
-	AND psa.`user_id` = #{userId} 
+	<if test="userUuid != null and userUuid != ''">
+	AND psa.`user_uuid` = #{userUuid} 
 	</if>
 	ORDER BY psa.`id` ASC
 	</select>
@@ -749,7 +735,7 @@
 	  `id`,
 	  `processtask_id` AS processTaskId,
 	  `processtask_step_id` AS processTaskStepId,
-	  `user_id` AS userId,
+	  `user_uuid` AS userUuid,
 	  `action_time` AS actionTime,
 	  `action` 
 	FROM `processtask_step_audit`
@@ -796,7 +782,7 @@
 	SELECT 
 		DISTINCT `processtask_step_id` 
 	FROM `processtask_step_worker` 
-	WHERE (`type` = 'user' AND `uuid` = #{userId})
+	WHERE (`type` = 'user' AND `uuid` = #{userUuid})
 	<if test="teamUuidList != null and teamUuidList.size() > 0">
 	OR (`type` = 'team' AND `uuid` in 
 		<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
@@ -804,10 +790,10 @@
 		</foreach>
 		)
 	</if>
-	<if test="roleNameList != null and roleNameList.size() > 0">
+	<if test="roleUuidList != null and roleUuidList.size() > 0">
 	OR (`type` = 'team' AND `uuid` in 
-		<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
-			#{roleName}
+		<foreach collection="roleUuidList" item="roleUuid" open="(" separator=","  close=")">
+			#{roleUuid}
 		</foreach>
 		)
 	</if>
@@ -850,7 +836,7 @@
 	  `id`,
 	  `owner`,
 	  `status`,
-	  `user_id` AS userId,
+	  `user_uuid` AS userUuid,
 	  `target_time` AS targetTime,
 	  `create_time` AS createTime,
 	  `start_time` AS startTime,
@@ -867,10 +853,10 @@
 	  a.`processtask_step_id` AS processTaskStepId,
 	  a.`id`,
 	  a.`owner`,
-	  (SELECT `user_name` FROM `user` WHERE `user_id` = `owner`) AS ownerName,
+	  (SELECT `user_name` FROM `user` WHERE `uuid` = `owner`) AS ownerName,
 	  a.`status`,
-	  a.`user_id` AS userId,
-	  (SELECT `user_name` FROM `user` WHERE `user_id` = a.`user_id`) AS userName,
+	  a.`user_uuid` AS userUuid,
+	  (SELECT `user_name` FROM `user` WHERE `uuid` = a.`user_uuid`) AS userName,
 	  a.`target_time` AS targetTime,
 	  a.`create_time` AS createTime,
 	  a.`start_time` AS startTime,
@@ -888,8 +874,8 @@
 		<if test="processTaskStepId != null">
 		AND a.`processtask_step_id` = #{processTaskStepId}
 		</if>
-		<if test="userId != null and userId != ''">
-		AND a.`user_id` = #{userId}
+		<if test="userUuid != null and userUuid != ''">
+		AND a.`user_uuid` = #{userUuid}
 		</if>
 		<if test="owner != null and owner != ''">
 		AND a.`owner` = #{owner}
@@ -913,7 +899,7 @@
 	  a.`lcu` 
 	FROM `processtask_step_subtask_content` a
 	JOIN `processtask_content` b on b.`hash` = a.`content_hash`
-	LEFT JOIN `user` c ON c.`user_id` = a.`fcu`
+	LEFT JOIN `user` c ON c.`uuid` = a.`fcu`
 	WHERE a.`processtask_step_subtask_id` = #{processTaskStepSubtaskId}
 	</select>
 	
@@ -926,7 +912,7 @@
 	AND `processtask_step_id` = #{processTaskStepId}
 	</if>
 	AND (
-		(`type` = 'user' AND `uuid` = #{userId})
+		(`type` = 'user' AND `uuid` = #{userUuid})
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
 		OR (`type` = 'team' AND `uuid` IN  
 			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
@@ -934,10 +920,10 @@
 			</foreach>
 			)
 		</if>
-		<if test="roleNameList != null and roleNameList.size() > 0">
+		<if test="roleUuidList != null and roleUuidList.size() > 0">
 		OR (`type` = 'role' AND `uuid` IN 
-			<foreach collection="roleNameList" item="roleName" open="(" separator=","  close=")">
-				#{roleName}
+			<foreach collection="roleUuidList" item="roleUuid" open="(" separator=","  close=")">
+				#{roleUuid}
 			</foreach>
 			)
 		</if>
@@ -952,7 +938,7 @@
 	<if test="processTaskStepId != null">
 		AND `processtask_step_id` = #{processTaskStepId}
 	</if>
-	AND `user_id` = #{userId}
+	AND `user_uuid` = #{userUuid}
 	</select>
 	
 	<select id="getPrcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo" resultType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
@@ -1152,7 +1138,7 @@
 		INSERT INTO `processtask_step_audit` (
 		`processtask_id`,
 		`processtask_step_id`,
-		`user_id`,
+		`user_uuid`,
 		`action_time`,
 		`action`
 		)
@@ -1160,7 +1146,7 @@
 		(
 		#{processTaskId},
 		#{processTaskStepId},
-		#{userId},
+		#{userUuid},
 		NOW(3),
 		#{action}
 		)
@@ -1426,7 +1412,7 @@
 		INSERT INTO `processtask_step_user` (
 		`processtask_id`,
 		`processtask_step_id`,
-		`user_id`,
+		`user_uuid`,
 		`user_type`,
 		`user_name`,
 		`status`,
@@ -1437,7 +1423,7 @@
 		(
 		#{processTaskId},
 		#{processTaskStepId},
-		#{userId},
+		#{userUuid},
 		#{userType},
 		#{userName},
 		#{status},
@@ -1518,7 +1504,7 @@
 	  `id`,
 	  `owner`,
 	  `status`,
-	  `user_id`,
+	  `user_uuid`,
 	  `target_time`,
 	  `create_time`,
 	  `start_time`
@@ -1530,7 +1516,7 @@
 	    #{id},
 	    #{owner},
 	    #{status},
-	    #{userId},
+	    #{userUuid},
 	    #{targetTime},
 	    NOW(3),
 	    NOW(3)
@@ -1660,7 +1646,7 @@
 		`status` = #{status}
 		WHERE
 		`processtask_step_id` = #{processTaskStepId}
-		AND `user_id` = #{userId}
+		AND `user_uuid` = #{userUuid}
 		AND `user_type` = #{userType}
 	</update>
 
@@ -1696,7 +1682,7 @@
 	  `processtask_step_subtask` 
 	SET
   	<if test="status == 'running'">
-  		`user_id` = #{userId},
+  		`user_uuid` = #{userUuid},
   		`target_time` = #{targetTime},
   		`start_time` = NOW(3),
   		`end_time` = NULL,
@@ -1772,8 +1758,8 @@
 		<if test="userType != null and userType != ''">
 			AND `user_type` = #{userType}
 		</if>
-		<if test="userId != null and userId != ''">
-			AND `user_id` = #{userId}
+		<if test="userUuid != null and userUuid != ''">
+			AND `user_uuid` = #{userUuid}
 		</if>
 	</delete>
 

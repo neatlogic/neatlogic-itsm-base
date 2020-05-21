@@ -15,9 +15,9 @@ public class NotifyVo {
 	private String title;
 	private String content;
 	private List<UserVo> toUserList = new ArrayList<>();
-	private List<String> toUserIdList;
+	private List<String> toUserUuidList;
 	private List<String> toTeamIdList;
-	private List<String> toRoleNameList;
+	private List<String> toRoleUuidList;
 	private String fromUser;
 	private String fromUserEmail;
 	private JSONObject data = new JSONObject();
@@ -29,9 +29,9 @@ public class NotifyVo {
 		this.templateTitle = builder.templateTitle;
 		this.templateContent = builder.templateContent;
 		this.data = builder.data;
-		this.toUserIdList = builder.toUserIdList;
+		this.toUserUuidList = builder.toUserUuidList;
 		this.toTeamIdList = builder.toTeamIdList;
-		this.toRoleNameList = builder.toRoleNameList;
+		this.toRoleUuidList = builder.toRoleUuidList;
 	}
 
 	private NotifyVo() {
@@ -98,8 +98,8 @@ public class NotifyVo {
 		this.toUserList = toUserList;
 	}
 
-	public List<String> getToUserIdList() {
-		return toUserIdList;
+	public List<String> getToUserUuidList() {
+		return toUserUuidList;
 	}
 
 	public JSONObject getData() {
@@ -118,8 +118,8 @@ public class NotifyVo {
 		return toTeamIdList;
 	}
 
-	public List<String> getToRoleNameList() {
-		return toRoleNameList;
+	public List<String> getToRoleUuidList() {
+		return toRoleUuidList;
 	}
 
 	public NotifyTriggerType getTrigger() {
@@ -134,9 +134,9 @@ public class NotifyVo {
 		private String templateContent;
 		private String templateTitle;
 		private JSONObject data = new JSONObject();
-		private List<String> toUserIdList = new ArrayList<>();
+		private List<String> toUserUuidList = new ArrayList<>();
 		private List<String> toTeamIdList = new ArrayList<>();
-		private List<String> toRoleNameList = new ArrayList<>();
+		private List<String> toRoleUuidList = new ArrayList<>();
 
 		public Builder(NotifyTriggerType _trigger) {
 			this.trigger = _trigger;
@@ -161,9 +161,9 @@ public class NotifyVo {
 			return new NotifyVo(this);
 		}
 
-		public Builder addUserId(String userId) {
-			if (!toUserIdList.contains(userId)) {
-				toUserIdList.add(userId);
+		public Builder addUserUuid(String userUuid) {
+			if (!toUserUuidList.contains(userUuid)) {
+				toUserUuidList.add(userUuid);
 			}
 			return this;
 		}
@@ -175,9 +175,9 @@ public class NotifyVo {
 			return this;
 		}
 
-		public Builder addRoleName(String roleName) {
-			if (!toRoleNameList.contains(roleName)) {
-				toRoleNameList.add(roleName);
+		public Builder addRoleUuid(String roleUuid) {
+			if (!toRoleUuidList.contains(roleUuid)) {
+				toRoleUuidList.add(roleUuid);
 			}
 			return this;
 		}

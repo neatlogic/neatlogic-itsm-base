@@ -94,6 +94,9 @@
 		</foreach>
 		FROM `matrix_${matrixUuid}`
 		<where>
+		<foreach collection="columnList" item="column" separator="AND">
+		`${column}` IS NOT NULL
+		</foreach>
 		<if test="uuidList != null and uuidList.size() > 0">
 		`uuid` IN
 		<foreach collection="uuidList" item="uuid" open="(" close=")" separator=",">
@@ -200,7 +203,7 @@
 	SELECT 
 	  a.`uuid` 
 	FROM `matrix_${matrixUuid}` a
-	JOIN `user` b ON b.`user_id` = a.`${attributeUuid}`
+	JOIN `user` b ON b.`uuid` = a.`${attributeUuid}`
 	<if test="keyword != null and keyword != ''">
 	WHERE b.`user_id` LIKE CONCAT('%', #{keyword}, '%') OR b.`user_name` LIKE CONCAT('%', #{keyword}, '%')
 	</if>

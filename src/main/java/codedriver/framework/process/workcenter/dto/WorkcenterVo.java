@@ -49,8 +49,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	private Integer isCanRole;
 	
 	//params
-	private String userId;
-	private List<String> roleNameList;
 	private List<String> channelUuidList;
 	
 	public WorkcenterVo() {
@@ -58,12 +56,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	
 	public WorkcenterVo(String _name) {
 		this.name =_name;
-	}
-	
-	public WorkcenterVo(String _userId,List<String> _roleNameList,String _owner) {
-		this.userId = _userId;
-		this.roleNameList = _roleNameList;
-		this.owner = _owner;
 	}
 	
 	public WorkcenterVo(JSONObject jsonObj) {
@@ -184,22 +176,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 
 	public void setIsCanRole(Integer isCanRole) {
 		this.isCanRole = isCanRole;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public List<String> getRoleNameList() {
-		return roleNameList;
-	}
-
-	public void setRoleNameList(List<String> roleNameList) {
-		this.roleNameList = roleNameList;
 	}
 
 	public List<String> getChannelUuidList() {

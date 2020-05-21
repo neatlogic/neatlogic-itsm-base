@@ -84,7 +84,7 @@ public class ChannelVo extends BasePageVo implements ITree {
 
 	private transient String keyword;
 
-	private transient String userId;
+	private transient String userUuid;
 
 	private transient int childrenCount = 0;
 
@@ -185,12 +185,12 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.keyword = keyword;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserUuid() {
+		return userUuid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 
 	@Override
