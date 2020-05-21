@@ -348,9 +348,9 @@
 		ptsw.`type`,
 		ptsw.`uuid`,
 		CASE `type` 
-		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` = `uuid`) 
+		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` = ptsw.`uuid`) 
 		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`) 
-		WHEN 'role' THEN (SELECT r.`description` FROM `role` r WHERE r.`name` = `uuid`) 
+		WHEN 'role' THEN (SELECT r.`name` FROM `role` r WHERE r.`uuid` = ptsw.`uuid`) 
 		ELSE NULL END AS `name`
 		FROM `processtask_step_worker` ptsw
 		WHERE ptsw.processtask_step_id = #{value}
