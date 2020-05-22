@@ -10,6 +10,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -136,17 +137,18 @@ public class FormVersionVo extends BasePageVo implements Serializable {
 							JSONObject controllerObj = controllerList.getJSONObject(i);
 							JSONObject config = controllerObj.getJSONObject("config");
 							if(MapUtils.isNotEmpty(config)) {
-								String dataSource = config.getString("dataSource");
-								if("matrix".equals(dataSource)) {
-									String matrixUuid = config.getString("matrixUuid");
-									if(StringUtils.isNotBlank(matrixUuid)) {
-										ProcessMatrixFormComponentVo processMatrixFormComponentVo = new ProcessMatrixFormComponentVo();
-										processMatrixFormComponentVo.setMatrixUuid(matrixUuid);
-										processMatrixFormComponentVo.setFormVersionUuid(getUuid());
-										processMatrixFormComponentVo.setFormAttributeLabel(controllerObj.getString("label"));
-										processMatrixFormComponentVo.setFormAttributeUuid(controllerObj.getString("uuid"));
-										processMatrixFormComponentList.add(processMatrixFormComponentVo);
-									}
+								List<String> relMatrixUuidList = JSON.parseArray(config.getString("relMatrixUuidList"), String.class);
+								if(CollectionUtils.isNotEmpty(relMatrixUuidList)) {
+									for(String matrixUuid : relMatrixUuidList) {
+										if(StringUtils.isNotBlank(matrixUuid)) {
+											ProcessMatrixFormComponentVo processMatrixFormComponentVo = new ProcessMatrixFormComponentVo();
+											processMatrixFormComponentVo.setMatrixUuid(matrixUuid);
+											processMatrixFormComponentVo.setFormVersionUuid(getUuid());
+											processMatrixFormComponentVo.setFormAttributeLabel(controllerObj.getString("label"));
+											processMatrixFormComponentVo.setFormAttributeUuid(controllerObj.getString("uuid"));
+											processMatrixFormComponentList.add(processMatrixFormComponentVo);
+										}
+									}								
 								}
 							}
 						}
