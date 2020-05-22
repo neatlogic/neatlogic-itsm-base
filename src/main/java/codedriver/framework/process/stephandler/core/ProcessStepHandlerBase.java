@@ -576,6 +576,19 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				updateProcessTaskStepStatus(currentProcessTaskStepVo);
 				/** 触发通知 **/
 				NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
+			}finally {
+				if (ProcessTaskStatus.FAILED.getValue().equals(currentProcessTaskStepVo.getStatus())) {
+					/**
+					 * 发生异常不能完成当前步骤，执行当前步骤的回退操作
+					 */
+					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
+					doNext(new ProcessStepThread(currentProcessTaskStepVo) {
+						@Override
+						public void execute() {
+							handler.back(currentProcessTaskStepVo);
+						}
+					});
+				}
 			}
 			if (this.getMode().equals(ProcessStepMode.MT)) {
 				/** 处理历史记录 **/
