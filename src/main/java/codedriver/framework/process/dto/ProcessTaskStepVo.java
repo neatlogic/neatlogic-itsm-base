@@ -61,16 +61,16 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
 	//private Boolean isAttributeListSorted = false;
-	private Boolean isTimeoutPolicyListSorted = false;
+//	private Boolean isTimeoutPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
 	//@EntityField(name = "处理组列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
+//	private List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
 	private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
-	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList = new ArrayList<>();
+//	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList = new ArrayList<>();
 	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
 	private JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
@@ -96,7 +96,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Integer isView;
 	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepVo> assignableWorkerStepList = new ArrayList<>();
-	
+	@EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
 	private transient String aliasName;
 	
 	public ProcessTaskStepVo() {
@@ -119,14 +120,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 //			}
 //			this.setUserList(userList);
 //		}
-		if (processStepVo.getTeamList() != null && processStepVo.getTeamList().size() > 0) {
-			List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
-			for (ProcessStepTeamVo teamVo : processStepVo.getTeamList()) {
-				ProcessTaskStepTeamVo processTaskStepTeamVo = new ProcessTaskStepTeamVo(teamVo);
-				teamList.add(processTaskStepTeamVo);
-			}
-			this.setTeamList(teamList);
-		}
+//		if (processStepVo.getTeamList() != null && processStepVo.getTeamList().size() > 0) {
+//			List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
+//			for (ProcessStepTeamVo teamVo : processStepVo.getTeamList()) {
+//				ProcessTaskStepTeamVo processTaskStepTeamVo = new ProcessTaskStepTeamVo(teamVo);
+//				teamList.add(processTaskStepTeamVo);
+//			}
+//			this.setTeamList(teamList);
+//		}
 		if (processStepVo.getFormAttributeList() != null && processStepVo.getFormAttributeList().size() > 0) {
 			List<ProcessTaskStepFormAttributeVo> attributeList = new ArrayList<>();
 			for (ProcessStepFormAttributeVo attributeVo : processStepVo.getFormAttributeList()) {
@@ -145,15 +146,15 @@ public class ProcessTaskStepVo extends BasePageVo {
 			}
 			this.setWorkerPolicyList(policyList);
 		}
-		if (processStepVo.getTimeoutPolicyList() != null && processStepVo.getTimeoutPolicyList().size() > 0) {
-			List<ProcessTaskStepTimeoutPolicyVo> timeoutList = new ArrayList<>();
-			for (ProcessStepTimeoutPolicyVo policyVo : processStepVo.getTimeoutPolicyList()) {
-				policyVo.setProcessStepUuid(processStepVo.getUuid());
-				ProcessTaskStepTimeoutPolicyVo processTaskStepTimeoutPolicyVo = new ProcessTaskStepTimeoutPolicyVo(policyVo);
-				timeoutList.add(processTaskStepTimeoutPolicyVo);
-			}
-			this.setTimeoutPolicyList(timeoutList);
-		}
+//		if (processStepVo.getTimeoutPolicyList() != null && processStepVo.getTimeoutPolicyList().size() > 0) {
+//			List<ProcessTaskStepTimeoutPolicyVo> timeoutList = new ArrayList<>();
+//			for (ProcessStepTimeoutPolicyVo policyVo : processStepVo.getTimeoutPolicyList()) {
+//				policyVo.setProcessStepUuid(processStepVo.getUuid());
+//				ProcessTaskStepTimeoutPolicyVo processTaskStepTimeoutPolicyVo = new ProcessTaskStepTimeoutPolicyVo(policyVo);
+//				timeoutList.add(processTaskStepTimeoutPolicyVo);
+//			}
+//			this.setTimeoutPolicyList(timeoutList);
+//		}
 	}
 
 	@Override
@@ -303,13 +304,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.userList = userList;
 	}
 
-	public List<ProcessTaskStepTeamVo> getTeamList() {
-		return teamList;
-	}
-
-	public void setTeamList(List<ProcessTaskStepTeamVo> teamList) {
-		this.teamList = teamList;
-	}
+//	public List<ProcessTaskStepTeamVo> getTeamList() {
+//		return teamList;
+//	}
+//
+//	public void setTeamList(List<ProcessTaskStepTeamVo> teamList) {
+//		this.teamList = teamList;
+//	}
 
 	public Integer getIsRequired() {
 		if(isRequired == null && MapUtils.isNotEmpty(getConfigObj())) {
@@ -461,17 +462,17 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.isCurrentUserDone = isCurrentUserDone;
 	}
 
-	public List<ProcessTaskStepTimeoutPolicyVo> getTimeoutPolicyList() {
-		if (!isTimeoutPolicyListSorted && timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
-			Collections.sort(timeoutPolicyList);
-			isTimeoutPolicyListSorted = true;
-		}
-		return timeoutPolicyList;
-	}
-
-	public void setTimeoutPolicyList(List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList) {
-		this.timeoutPolicyList = timeoutPolicyList;
-	}
+//	public List<ProcessTaskStepTimeoutPolicyVo> getTimeoutPolicyList() {
+//		if (!isTimeoutPolicyListSorted && timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
+//			Collections.sort(timeoutPolicyList);
+//			isTimeoutPolicyListSorted = true;
+//		}
+//		return timeoutPolicyList;
+//	}
+//
+//	public void setTimeoutPolicyList(List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList) {
+//		this.timeoutPolicyList = timeoutPolicyList;
+//	}
 
 	public Date getExpireTime() {
 		return expireTime;
@@ -607,6 +608,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setMajorUser(ProcessTaskStepUserVo majorUser) {
 		this.majorUser = majorUser;
+	}
+
+	public List<ProcessTaskSlaTimeVo> getSlaTimeList() {
+		return slaTimeList;
+	}
+
+	public void setSlaTimeList(List<ProcessTaskSlaTimeVo> slaTimeList) {
+		this.slaTimeList = slaTimeList;
 	}
 
 }
