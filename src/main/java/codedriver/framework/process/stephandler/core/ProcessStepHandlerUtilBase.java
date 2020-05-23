@@ -53,7 +53,6 @@ import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.FormMapper;
 import codedriver.framework.process.dao.mapper.ProcessMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
-import codedriver.framework.process.dao.mapper.ProcessTaskAuditMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
@@ -109,7 +108,6 @@ public abstract class ProcessStepHandlerUtilBase {
 	private static final ThreadLocal<List<NotifyHandler>> NOTIFY_HANDLERS = new ThreadLocal<>();
 	protected static ProcessMapper processMapper;
 	protected static ProcessTaskMapper processTaskMapper;
-	protected static ProcessTaskAuditMapper processTaskAuditMapper;
 	protected static FormMapper formMapper;
 	protected static UserMapper userMapper;
 	protected static ProcessTaskStepTimeAuditMapper processTaskStepTimeAuditMapper;
@@ -134,11 +132,6 @@ public abstract class ProcessStepHandlerUtilBase {
 	@Autowired
 	public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
 		processTaskMapper = _processTaskMapper;
-	}
-
-	@Autowired
-	public void setProcessTaskAuditMapper(ProcessTaskAuditMapper _processTaskAuditMapper) {
-		processTaskAuditMapper = _processTaskAuditMapper;
 	}
 
 	@Autowired
