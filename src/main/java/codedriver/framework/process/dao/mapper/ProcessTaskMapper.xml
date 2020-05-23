@@ -1017,6 +1017,27 @@
 	FROM `processtask_step_comment` 
 	WHERE `id` = #{id}
 	</select>
+
+	<select id="getProcessTaskAuditList" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
+		SELECT 
+		`processtask_id` as processTaskId,
+		`processtask_step_id` as processTaskStepId,
+		`user_uuid` as userUuid,
+		`action_time` as actionTime,
+		`action`
+		FROM
+		  `processtask_step_audit`
+		WHERE 1=1
+		<if test="processTaskId != null">
+	 		and `processtask_id` = #{processTaskId}
+	 	</if>
+		<if test="userUuid != null">
+	 		and `user_uuid` = #{userUuid}
+	 	</if>
+	 	<if test="action != null">
+	 		and `action` = #{action}
+	 	</if>
+	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}

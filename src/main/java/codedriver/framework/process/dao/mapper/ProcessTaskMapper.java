@@ -158,6 +158,8 @@ public interface ProcessTaskMapper {
 
 	public ProcessTaskStepCommentVo getProcessTaskStepCommentById(Long id);
 	
+	public List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
+	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
 	public int insertProcessTaskForm(ProcessTaskFormVo processTaskFormVo);
