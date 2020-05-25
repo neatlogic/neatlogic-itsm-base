@@ -1437,10 +1437,11 @@
 	</insert>
 
 	<insert id="insertProcessTaskStep" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
-		<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+		<!-- <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
 			select LAST_INSERT_ID() as id
-		</selectKey>
+		</selectKey> -->
 		INSERT INTO `processtask_step` (
+		`id`,
 		`processtask_id`,
 		`name`,
 		`process_step_uuid`,
@@ -1452,6 +1453,7 @@
 		)
 		VALUES
 		(
+		#{id},
 		#{processTaskId},
 		#{name,typeHandler=XssHandler},
 		#{processStepUuid},
@@ -1464,10 +1466,11 @@
 	</insert>
 
 	<insert id="insertProcessTask" parameterType="codedriver.framework.process.dto.ProcessTaskVo">
-		<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+		<!-- <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
 			select LAST_INSERT_ID() as id
-		</selectKey>
+		</selectKey> -->
 		INSERT INTO `processtask` (
+		`id`,
 		`title`,
 		`process_uuid`,
 		`channel_uuid`,
@@ -1482,6 +1485,7 @@
 		)
 		VALUES
 		(
+		#{id},
 		#{title},
 		#{processUuid},
 		#{channelUuid},

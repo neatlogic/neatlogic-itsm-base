@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
+import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskVo {
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
@@ -87,7 +88,10 @@ public class ProcessTaskVo {
 		this.id = _id;
 	}
 
-	public Long getId() {
+	public synchronized Long getId() {
+		if(id == null) {
+			id = SnowflakeUtil.uniqueLong();
+		}
 		return id;
 	}
 

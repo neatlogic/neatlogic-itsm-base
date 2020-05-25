@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
+import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskStepVo extends BasePageVo {
 
@@ -168,7 +169,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 		return result;
 	}
 
-	public Long getId() {
+	public synchronized Long getId() {
+		if(id == null) {
+			id = SnowflakeUtil.uniqueLong();
+		}
 		return id;
 	}
 
