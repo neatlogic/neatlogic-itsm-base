@@ -211,7 +211,20 @@ public class ProcessTaskStepVo extends BasePageVo {
 							String value = customStatus.getString("value");
 							if(StringUtils.isNotBlank(value)) {
 								statusVo = new ProcessTaskStatusVo(status, value);
-								return statusVo;
+							}
+						}
+					}
+				}
+			}
+			if(statusVo == null && MapUtils.isNotEmpty(getGlobalConfigObj())) {
+				JSONArray customStatusList = getGlobalConfigObj().getJSONArray("customStatusList");
+				if(CollectionUtils.isNotEmpty(customStatusList)) {
+					for(int i = 0; i < customStatusList.size(); i++) {
+						JSONObject customStatus = customStatusList.getJSONObject(i);							
+						if(status.equals(customStatus.getString("name"))) {
+							String value = customStatus.getString("value");
+							if(StringUtils.isNotBlank(value)) {
+								statusVo = new ProcessTaskStatusVo(status, value);
 							}
 						}
 					}
