@@ -814,9 +814,31 @@
 	WHERE pts.`processtask_id` = #{processTaskId}
 	</select>
 
-	<select id="getProcessTaskStepIdList" resultType="java.lang.Long">
+	<!-- <select id="getProcessTaskStepIdList" resultType="java.lang.Long">
 	SELECT 
 		DISTINCT `processtask_step_id` 
+	FROM `processtask_step_worker` 
+	WHERE (`type` = 'user' AND `uuid` = #{userUuid})
+	<if test="teamUuidList != null and teamUuidList.size() > 0">
+	OR (`type` = 'team' AND `uuid` in 
+		<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
+		#{teamUuid}
+		</foreach>
+		)
+	</if>
+	<if test="roleUuidList != null and roleUuidList.size() > 0">
+	OR (`type` = 'team' AND `uuid` in 
+		<foreach collection="roleUuidList" item="roleUuid" open="(" separator=","  close=")">
+			#{roleUuid}
+		</foreach>
+		)
+	</if>
+	</select> -->
+	
+	<select id="getProcessTaskStepWorkerListByUserUuidTeamUuidListRoleUuidList" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+	SELECT 
+	`processtask_id` AS processTaskId,
+	`processtask_step_id` AS processTaskStepId
 	FROM `processtask_step_worker` 
 	WHERE (`type` = 'user' AND `uuid` = #{userUuid})
 	<if test="teamUuidList != null and teamUuidList.size() > 0">
@@ -1069,6 +1091,55 @@
 	 	<if test="action != null">
 	 		and `action` = #{action}
 	 	</if>
+	</select>
+	
+	<select id="getProcessTaskListByKeywordAndIdList" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	SELECT 
+	  `id`,
+	  `title`,
+	  `process_uuid` AS processUuid,
+	  `channel_uuid` AS channelUuid,
+	  `config_hash` AS configHash,
+	  `priority_uuid` AS priorityUuid,
+	  `status`,
+	  `start_time` AS startTime,
+	  `end_time` AS endTime,
+	  `owner`,
+	  `reporter`,
+	  `expire_time` AS expireTime,
+	  `worktime_uuid` AS worktimeUuid,
+	  `error` 
+	FROM `processtask` 
+	WHERE `id` IN 
+	<foreach collection="processTaskIdList" item="id" open="(" separator="," close=")">
+	#{id}
+	</foreach>	
+	<if test="keyword != null and keyword != ''">
+	AND (`title` LIKE CONCAT('%', #{keyword}, '%') OR `id` LIKE CONCAT('%', #{keyword}, '%'))
+	</if>
+	</select>
+	
+	<select id="getProcessTaskStepListByIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+	SELECT 
+	  `id`,
+	  `processtask_id` AS processTaskId,
+	  `name`,
+	  `process_step_uuid` AS processStepUuid,
+	  `status`,
+	  `result`,
+	  `type`,
+	  `handler`,
+	  `is_active` AS isActive,
+	  `start_time` AS startTime,
+	  `end_time` AS endTime,
+	  `error`,
+	  `expire_time` AS expireTime,
+	  `config_hash` AS configHash
+	FROM `processtask_step` 
+	WHERE `id` IN 
+	<foreach collection="list" item="id" open="(" separator="," close=")">
+	#{id}
+	</foreach>
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">

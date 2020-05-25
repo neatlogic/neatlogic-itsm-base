@@ -52,11 +52,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Date expireTime;
 	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
 	private transient String config;
+	private transient JSONObject configObj;
+	private transient String globalConfig;
+	private transient JSONObject globalConfigObj;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
 	private String configHash;
-	private transient JSONObject configObj;
 	private Boolean isAllDone = false;
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
@@ -112,22 +114,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.setType(processStepVo.getType());
 		this.setConfig(processStepVo.getConfig());
 		this.setFormUuid(processStepVo.getFormUuid());
-//		if (processStepVo.getUserList() != null && processStepVo.getUserList().size() > 0) {
-//			List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-//			for (ProcessStepUserVo userVo : processStepVo.getUserList()) {
-//				ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(userVo);
-//				userList.add(processTaskStepUserVo);
-//			}
-//			this.setUserList(userList);
-//		}
-//		if (processStepVo.getTeamList() != null && processStepVo.getTeamList().size() > 0) {
-//			List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
-//			for (ProcessStepTeamVo teamVo : processStepVo.getTeamList()) {
-//				ProcessTaskStepTeamVo processTaskStepTeamVo = new ProcessTaskStepTeamVo(teamVo);
-//				teamList.add(processTaskStepTeamVo);
-//			}
-//			this.setTeamList(teamList);
-//		}
+
 		if (processStepVo.getFormAttributeList() != null && processStepVo.getFormAttributeList().size() > 0) {
 			List<ProcessTaskStepFormAttributeVo> attributeList = new ArrayList<>();
 			for (ProcessStepFormAttributeVo attributeVo : processStepVo.getFormAttributeList()) {
@@ -146,15 +133,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 			}
 			this.setWorkerPolicyList(policyList);
 		}
-//		if (processStepVo.getTimeoutPolicyList() != null && processStepVo.getTimeoutPolicyList().size() > 0) {
-//			List<ProcessTaskStepTimeoutPolicyVo> timeoutList = new ArrayList<>();
-//			for (ProcessStepTimeoutPolicyVo policyVo : processStepVo.getTimeoutPolicyList()) {
-//				policyVo.setProcessStepUuid(processStepVo.getUuid());
-//				ProcessTaskStepTimeoutPolicyVo processTaskStepTimeoutPolicyVo = new ProcessTaskStepTimeoutPolicyVo(policyVo);
-//				timeoutList.add(processTaskStepTimeoutPolicyVo);
-//			}
-//			this.setTimeoutPolicyList(timeoutList);
-//		}
+
 	}
 
 	@Override
@@ -296,6 +275,31 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.configObj = configObj;
 	}
 
+	public String getGlobalConfig() {
+		return globalConfig;
+	}
+
+	public void setGlobalConfig(String globalConfig) {
+		this.globalConfig = globalConfig;
+	}
+
+	public JSONObject getGlobalConfigObj() {
+		if(globalConfigObj == null && StringUtils.isNotBlank(globalConfig)) {
+			try {
+				globalConfigObj = JSONObject.parseObject(globalConfig);
+			} catch (Exception ex) {
+				if(StringUtils.isNotBlank(handler)) {
+					logger.error("handler为" + handler + "的process_step_handler内容不是合法的JSON格式", ex);					
+				}
+			}
+		}
+		return globalConfigObj;
+	}
+
+	public void setGlobalConfigObj(JSONObject globalConfigObj) {
+		this.globalConfigObj = globalConfigObj;
+	}
+
 	public List<ProcessTaskStepUserVo> getUserList() {
 		return userList;
 	}
@@ -303,14 +307,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public void setUserList(List<ProcessTaskStepUserVo> userList) {
 		this.userList = userList;
 	}
-
-//	public List<ProcessTaskStepTeamVo> getTeamList() {
-//		return teamList;
-//	}
-//
-//	public void setTeamList(List<ProcessTaskStepTeamVo> teamList) {
-//		this.teamList = teamList;
-//	}
 
 	public Integer getIsRequired() {
 		if(isRequired == null && MapUtils.isNotEmpty(getConfigObj())) {
@@ -462,18 +458,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.isCurrentUserDone = isCurrentUserDone;
 	}
 
-//	public List<ProcessTaskStepTimeoutPolicyVo> getTimeoutPolicyList() {
-//		if (!isTimeoutPolicyListSorted && timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
-//			Collections.sort(timeoutPolicyList);
-//			isTimeoutPolicyListSorted = true;
-//		}
-//		return timeoutPolicyList;
-//	}
-//
-//	public void setTimeoutPolicyList(List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList) {
-//		this.timeoutPolicyList = timeoutPolicyList;
-//	}
-
 	public Date getExpireTime() {
 		return expireTime;
 	}
@@ -553,14 +537,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public void setComment(ProcessTaskStepCommentVo comment) {
 		this.comment = comment;
 	}
-
-//	public List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList() {
-//		return processTaskStepAuditList;
-//	}
-//
-//	public void setProcessTaskStepAuditList(List<ProcessTaskStepAuditVo> processTaskStepAuditList) {
-//		this.processTaskStepAuditList = processTaskStepAuditList;
-//	}
 
 	public List<ProcessTaskStepCommentVo> getCommentList() {
 		return commentList;
