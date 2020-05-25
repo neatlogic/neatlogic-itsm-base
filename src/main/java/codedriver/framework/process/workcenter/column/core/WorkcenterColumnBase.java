@@ -19,4 +19,14 @@ public abstract class WorkcenterColumnBase implements IWorkcenterColumn {
 	public Object getMyValue(JSONObject json) {
 		return null;
 	}
+	
+	@Override
+	public JSONObject getValueText(MultiAttrsObject el) throws RuntimeException{
+		JSONObject commonJson = (JSONObject) el.getJSON(this.getType());
+		return getMyValueText(commonJson);
+	}
+	
+	public JSONObject getMyValueText(JSONObject json) {
+		return null;
+	}
 }

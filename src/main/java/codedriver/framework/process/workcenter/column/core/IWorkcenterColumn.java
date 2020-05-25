@@ -1,5 +1,6 @@
 package codedriver.framework.process.workcenter.column.core;
 
+import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
 
 public interface IWorkcenterColumn {
@@ -29,12 +30,20 @@ public interface IWorkcenterColumn {
 	public Boolean allowSort();
 
 	/**
-	 * @Description: 获取显示值
+	 * @Description: 获取显示值 workcenter
 	 * @Param: 
 	 * @return: java.lang.Object
 	 * @Date: 2020/2/2
 	 */
 	public Object getValue(MultiAttrsObject el) throws RuntimeException;
+	
+	/**
+	 * @Description: 获取显示值 dashboard
+	 * @Param: 
+	 * @return: java.lang.Object
+	 * @Date: 2020/2/2
+	 */
+	public JSONObject getValueText(MultiAttrsObject el) throws RuntimeException;
 	
 	/**
 	 * @Description: 获取类型
