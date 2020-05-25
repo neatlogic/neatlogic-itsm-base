@@ -54,6 +54,8 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskStepId(Long processTaskStepId);
 
+	public List<ProcessTaskSlaTimeVo> getProcessTaskSlaTimeByProcessTaskStepIdList(List<Long> processTaskStepIdList);
+
 	public ProcessTaskStepAuditDetailVo getProcessTaskStepAuditDetail(@Param("processTaskId") Long processTaskId, @Param("type") String type);
 
 	public ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);

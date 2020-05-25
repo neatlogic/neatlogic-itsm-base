@@ -68,9 +68,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	private int updateProcessTaskStatus(Long processTaskId) {
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
 
-		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0;
+		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0;
 		for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
-			if (processTaskStepVo.getIsActive().equals(1) && !ProcessStepType.START.getValue().equals(processTaskStepVo.getType())) {
+			if(ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus()) && processTaskStepVo.getIsActive().equals(1)) {
+				draftCount += 1;
+			}else if (processTaskStepVo.getIsActive().equals(1)) {
 				runningCount += 1;
 			} else if (processTaskStepVo.getIsActive().equals(-1)) {
 				abortedCount += 1;
@@ -83,7 +85,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 		ProcessTaskVo processTaskVo = new ProcessTaskVo();
 		processTaskVo.setId(processTaskId);
-		if (runningCount > 0) {
+		if(draftCount > 0) {
+			processTaskVo.setStatus(ProcessTaskStatus.DRAFT.getValue());
+		}else if (runningCount > 0) {
 			processTaskVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
 		} else if (abortedCount > 0) {
 			processTaskVo.setStatus(ProcessTaskStatus.ABORTED.getValue());
@@ -1200,7 +1204,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 			mySaveDraft(currentProcessTaskStepVo);
 			currentProcessTaskStepVo.setIsActive(1);
-			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
+			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.DRAFT.getValue());
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);

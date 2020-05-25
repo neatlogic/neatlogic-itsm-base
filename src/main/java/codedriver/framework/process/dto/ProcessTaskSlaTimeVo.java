@@ -6,6 +6,10 @@ import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskSlaTimeVo {
+	@EntityField(name = "工单id", type = ApiParamType.LONG)
+	private Long processTaskId;
+	@EntityField(name = "步骤id", type = ApiParamType.LONG)
+	private Long processTaskStepId;
 	@EntityField(name = "slaId", type = ApiParamType.LONG)
 	private Long slaId;
 	@EntityField(name = "名称", type = ApiParamType.STRING)
@@ -26,6 +30,22 @@ public class ProcessTaskSlaTimeVo {
 	@EntityField(name = "剩余时间描述（不考虑工作日历）", type = ApiParamType.STRING)
 	private String realTimeLeftDesc;
 	
+	public Long getProcessTaskId() {
+		return processTaskId;
+	}
+
+	public void setProcessTaskId(Long processTaskId) {
+		this.processTaskId = processTaskId;
+	}
+
+	public Long getProcessTaskStepId() {
+		return processTaskStepId;
+	}
+
+	public void setProcessTaskStepId(Long processTaskStepId) {
+		this.processTaskStepId = processTaskStepId;
+	}
+
 	public Long getSlaId() {
 		return slaId;
 	}
