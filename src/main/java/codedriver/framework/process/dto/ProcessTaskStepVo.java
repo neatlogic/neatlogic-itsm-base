@@ -63,17 +63,12 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Boolean isAllDone = false;
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
-	//private Boolean isAttributeListSorted = false;
-//	private Boolean isTimeoutPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-	//@EntityField(name = "处理组列表", type = ApiParamType.JSONARRAY)
-//	private List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
 	private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
-//	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList = new ArrayList<>();
 	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
 	private JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
@@ -88,7 +83,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private ProcessTaskStepCommentVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepCommentVo> commentList = new ArrayList<>();
-//	private List<ProcessTaskStepAuditVo> processTaskStepAuditList = new ArrayList<>();
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)

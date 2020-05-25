@@ -362,17 +362,6 @@
 		ORDER BY `sort`
 	</select>
 
-<!-- 	<select id="checkProcessTaskStepUserIsExists" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo" resultType="int">
-		SELECT
-		COUNT(1)
-		FROM
-		`processtask_step_user`
-		WHERE
-		`processtask_step_id` = #{processTaskStepId}
-		AND
-		`user_uuid` = #{userUuid}
-	</select> -->
-
 	<select id="getProcessTaskStepWorkerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		SELECT
 		ptsw.`processtask_id` AS processTaskId,
@@ -813,27 +802,6 @@
 	FROM `processtask_step` pts
 	WHERE pts.`processtask_id` = #{processTaskId}
 	</select>
-
-	<!-- <select id="getProcessTaskStepIdList" resultType="java.lang.Long">
-	SELECT 
-		DISTINCT `processtask_step_id` 
-	FROM `processtask_step_worker` 
-	WHERE (`type` = 'user' AND `uuid` = #{userUuid})
-	<if test="teamUuidList != null and teamUuidList.size() > 0">
-	OR (`type` = 'team' AND `uuid` in 
-		<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
-		#{teamUuid}
-		</foreach>
-		)
-	</if>
-	<if test="roleUuidList != null and roleUuidList.size() > 0">
-	OR (`type` = 'team' AND `uuid` in 
-		<foreach collection="roleUuidList" item="roleUuid" open="(" separator=","  close=")">
-			#{roleUuid}
-		</foreach>
-		)
-	</if>
-	</select> -->
 	
 	<select id="getProcessTaskStepWorkerListByUserUuidTeamUuidListRoleUuidList" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 	SELECT 

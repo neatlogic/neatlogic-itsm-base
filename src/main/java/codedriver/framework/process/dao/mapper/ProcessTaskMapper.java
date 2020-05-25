@@ -80,8 +80,6 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepVo> searchProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
 
-//	public int checkProcessTaskStepUserIsExists(ProcessTaskStepUserVo processTaskStepUserVo);
-
 	public List<ProcessTaskStepTimeoutPolicyVo> getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);
 
 	public List<ProcessTaskStepWorkerPolicyVo> getProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
@@ -123,8 +121,6 @@ public interface ProcessTaskMapper {
 	public ProcessTaskStepAuditVo getProcessTaskStepAuditById(Long auditId);
 
 	public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
-
-//	public List<Long> getProcessTaskStepIdList(@Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList);
 
 	public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByUserUuidTeamUuidListRoleUuidList(
 			@Param("userUuid") String userUuid, 
