@@ -575,7 +575,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			} catch (ProcessTaskException ex) {
 				logger.error(ex.getMessage(), ex);
 				currentProcessTaskStepVo.setError(ex.getMessage());
-				currentProcessTaskStepVo.setIsActive(1);
+				currentProcessTaskStepVo.setIsActive(0);
 				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 				updateProcessTaskStepStatus(currentProcessTaskStepVo);
 				/** 触发通知 **/
