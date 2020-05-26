@@ -41,10 +41,6 @@
 	 where `uuid` = #{uuid}
 	</select>
 	
-	<!-- <select id="getMaxSortByParentUuid" parameterType="java.lang.String" resultType="int" useCache="false">
-	SELECT  IFNULL(MAX(`sort`), 0) FROM `catalog` WHERE `parent_uuid` = #{parentUuid} FOR UPDATE
-	</select> -->
-	
 	<select id="checkCatalogIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
 	SELECT COUNT(`uuid`) FROM `catalog` where `uuid`=#{uuid}
 	</select>
@@ -63,7 +59,7 @@
 	</select>
 	
 	<select id="checkCatalogNameIsRepeat" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int" useCache="false">
-	SELECT COUNT(1) FROM `catalog` where `name`=#{name} AND `uuid`!=#{uuid}
+	SELECT COUNT(1) FROM `catalog` where `parent_uuid`=#{parentUuid} AND `name`=#{name} AND `uuid`!=#{uuid}
 	</select>
 	
 	<resultMap type="codedriver.framework.process.dto.CatalogVo" id="catalogMap">
@@ -188,24 +184,6 @@
 	<update id="updateCatalogParentUuidByUuid" parameterType="codedriver.framework.process.dto.CatalogVo">
 	UPDATE `catalog` SET `parent_uuid` = #{parentUuid} WHERE `uuid` = #{uuid}
 	</update>
-
-	<!-- <update id="updateSortIncrement">
-	UPDATE `catalog` SET `sort` = `sort` + 1 
-	WHERE `parent_uuid` = #{parentUuid} 
-	AND `sort` &gt;= #{fromSort} 
-	<if test="toSort != null">
-	AND `sort` &lt;= #{toSort}
-	</if>
-	</update> -->
-
-	<!-- <update id="updateSortDecrement">
-	UPDATE `catalog` SET `sort` = `sort` - 1 
-	WHERE `parent_uuid` = #{parentUuid} 
-	AND `sort` &gt;= #{fromSort} 
-	<if test="toSort != null">
-	AND `sort` &lt;= #{toSort}
-	</if>
-	</update> -->
 	
 	<update id="updateCatalogLeftRightCode">
 	UPDATE `catalog` SET `lft` = #{lft}, `rht` = #{rht} WHERE `uuid` = #{uuid}

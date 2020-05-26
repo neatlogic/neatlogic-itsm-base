@@ -13,8 +13,6 @@ public interface CatalogMapper {
 
 	CatalogVo getCatalogByUuid(String uuid);
 	
-//	int getMaxSortByParentUuid(String parentUuid);
-	
 	int checkCatalogIsExists(String catalogUuid);
 
 	List<String> getHasActiveChannelCatalogUuidList(List<String> channelUuidList);
@@ -45,10 +43,6 @@ public interface CatalogMapper {
 	int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
 
 	int updateCatalogParentUuidByUuid(CatalogVo catalogVo);
-
-//	int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
-
-//	int updateSortDecrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 
 	int updateCatalogLeftRightCode(@Param("uuid") String uuid, @Param("lft") int lft, @Param("rht") int rht);
 

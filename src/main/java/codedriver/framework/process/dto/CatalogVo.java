@@ -55,8 +55,7 @@ public class CatalogVo extends BasePageVo implements ITree{
 	private transient List<AuthorityVo> authorityVoList;
 	
 	private transient ITree parent;
-	
-//	private transient Integer sort;
+
 	@EntityField(name = "子节点数", type = ApiParamType.INTEGER)
 	private int childrenCount = 0;
 	
@@ -214,16 +213,6 @@ public class CatalogVo extends BasePageVo implements ITree{
 			parent.setSelectedCascade(selected);
 		}
 	}
-
-//	@Override
-//	public Integer getSort() {
-//		return sort;
-//	}
-//
-//	@Override
-//	public void setSort(Integer sort) {
-//		this.sort = sort;
-//	}
 
 	@Override
 	public String getType() {

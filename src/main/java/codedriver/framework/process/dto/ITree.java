@@ -19,9 +19,7 @@ public interface ITree extends Comparable<ITree> {
 	public ITree getParent();
 	public void setParent(ITree parent);
 	public void setOpenCascade(boolean open);
-	public void setSelectedCascade(boolean selected);
-//	public Integer getSort();
-//	public void setSort(Integer sort);	
+	public void setSelectedCascade(boolean selected);	
 	public String getType();
 	public int getChildrenCount();
 	public void setChildrenCount(int count);
