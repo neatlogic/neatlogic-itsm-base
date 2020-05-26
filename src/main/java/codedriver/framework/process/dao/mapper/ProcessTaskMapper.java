@@ -54,6 +54,8 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskStepId(Long processTaskStepId);
 
+	public List<ProcessTaskSlaTimeVo> getProcessTaskSlaTimeByProcessTaskStepIdList(List<Long> processTaskStepIdList);
+
 	public ProcessTaskStepAuditDetailVo getProcessTaskStepAuditDetail(@Param("processTaskId") Long processTaskId, @Param("type") String type);
 
 	public ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);
@@ -77,8 +79,6 @@ public interface ProcessTaskMapper {
 	public List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(@Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
 
 	public List<ProcessTaskStepVo> searchProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
-
-//	public int checkProcessTaskStepUserIsExists(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public List<ProcessTaskStepTimeoutPolicyVo> getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);
 
@@ -122,7 +122,11 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
-	public List<Long> getProcessTaskStepIdList(@Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList);
+	public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByUserUuidTeamUuidListRoleUuidList(
+			@Param("userUuid") String userUuid, 
+			@Param("teamUuidList") List<String> teamUuidList, 
+			@Param("roleUuidList") List<String> roleUuidList
+			);
 
 	public List<Map<String, Object>> getProcessTaskActiveStepListByStepIdList(@Param("keyword") String keyword, @Param("processTaskStepIdList") List<Long> processTaskStepIdList);
 
@@ -159,6 +163,10 @@ public interface ProcessTaskMapper {
 	public ProcessTaskStepCommentVo getProcessTaskStepCommentById(Long id);
 	
 	public List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
+
+	public List<ProcessTaskVo> getProcessTaskListByKeywordAndIdList(@Param("keyword")String keyword, @Param("processTaskIdList")List<Long> processTaskIdList);
+
+	public List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 

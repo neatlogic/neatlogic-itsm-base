@@ -1,6 +1,5 @@
 package codedriver.framework.process.notify.schedule.plugin;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,33 +73,28 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 					String unit = policyObj.getString("unit");
 					String transferTo = policyObj.getString("transferTo");
 					if (StringUtils.isNotBlank(expression) && StringUtils.isNotBlank(transferTo)) {
-						try {
-							Date etdate = sdf.parse(slaTimeVo.getExpireTime());
-							Calendar transferDate = Calendar.getInstance();
-							transferDate.setTime(etdate);
-							if (expression.equalsIgnoreCase("before")) {
-								time = -time;
+						Calendar transferDate = Calendar.getInstance();
+						transferDate.setTime(slaTimeVo.getExpireTime());
+						if (expression.equalsIgnoreCase("before")) {
+							time = -time;
+						}
+						if (StringUtils.isNotBlank(unit) && time != 0) {
+							if (unit.equalsIgnoreCase("day")) {
+								transferDate.add(time, Calendar.DAY_OF_MONTH);
+							} else if (unit.equalsIgnoreCase("hour")) {
+								transferDate.add(time, Calendar.HOUR);
+							} else {
+								transferDate.add(time, Calendar.MINUTE);
 							}
-							if (StringUtils.isNotBlank(unit) && time != 0) {
-								if (unit.equalsIgnoreCase("day")) {
-									transferDate.add(time, Calendar.DAY_OF_MONTH);
-								} else if (unit.equalsIgnoreCase("hour")) {
-									transferDate.add(time, Calendar.HOUR);
-								} else {
-									transferDate.add(time, Calendar.MINUTE);
-								}
-							}
-							JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(transferDate.getTime()).addData("slaTransferId", processTaskSlaTransferVo.getId());
-							JobObject newJobObject = newJobObjectBuilder.build();
-							Date triggerDate = schedulerManager.loadJob(newJobObject);
-							if (triggerDate != null) {
-								// 更新通知记录时间
-								processTaskSlaTransferVo.setTriggerTime(sdf.format(triggerDate));
-								processTaskMapper.updateProcessTaskSlaTransfer(processTaskSlaTransferVo);
-								isJobLoaded = true;
-							}
-						} catch (ParseException e) {
-							logger.error(e.getMessage(), e);
+						}
+						JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(transferDate.getTime()).addData("slaTransferId", processTaskSlaTransferVo.getId());
+						JobObject newJobObject = newJobObjectBuilder.build();
+						Date triggerDate = schedulerManager.loadJob(newJobObject);
+						if (triggerDate != null) {
+							// 更新通知记录时间
+							processTaskSlaTransferVo.setTriggerTime(sdf.format(triggerDate));
+							processTaskMapper.updateProcessTaskSlaTransfer(processTaskSlaTransferVo);
+							isJobLoaded = true;
 						}
 					}
 				}

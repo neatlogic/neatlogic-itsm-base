@@ -1,6 +1,5 @@
 package codedriver.framework.process.notify.schedule.plugin;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,33 +87,28 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 						}
 					}
 					if (StringUtils.isNotBlank(expression) && receiverList != null && receiverList.size() > 0 && notifyPluginList != null && notifyPluginList.size() > 0) {
-						try {
-							Date etdate = sdf.parse(slaTimeVo.getExpireTime());
-							Calendar notifyDate = Calendar.getInstance();
-							notifyDate.setTime(etdate);
-							if (expression.equalsIgnoreCase("before")) {
-								time = -time;
+						Calendar notifyDate = Calendar.getInstance();
+						notifyDate.setTime(slaTimeVo.getExpireTime());
+						if (expression.equalsIgnoreCase("before")) {
+							time = -time;
+						}
+						if (StringUtils.isNotBlank(unit) && time != 0) {
+							if (unit.equalsIgnoreCase("day")) {
+								notifyDate.add(time, Calendar.DAY_OF_MONTH);
+							} else if (unit.equalsIgnoreCase("hour")) {
+								notifyDate.add(time, Calendar.HOUR);
+							} else {
+								notifyDate.add(time, Calendar.MINUTE);
 							}
-							if (StringUtils.isNotBlank(unit) && time != 0) {
-								if (unit.equalsIgnoreCase("day")) {
-									notifyDate.add(time, Calendar.DAY_OF_MONTH);
-								} else if (unit.equalsIgnoreCase("hour")) {
-									notifyDate.add(time, Calendar.HOUR);
-								} else {
-									notifyDate.add(time, Calendar.MINUTE);
-								}
-							}
-							JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(notifyDate.getTime()).withIntervalInSeconds(intervalTime).addData("slaNotifyId", processTaskSlaNotifyVo.getId());
-							JobObject newJobObject = newJobObjectBuilder.build();
-							Date triggerDate = schedulerManager.loadJob(newJobObject);
-							if (triggerDate != null) {
-								// 更新通知记录时间
-								processTaskSlaNotifyVo.setTriggerTime(sdf.format(triggerDate));
-								processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
-								isJobLoaded = true;
-							}
-						} catch (ParseException e) {
-							logger.error(e.getMessage(), e);
+						}
+						JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(notifyDate.getTime()).withIntervalInSeconds(intervalTime).addData("slaNotifyId", processTaskSlaNotifyVo.getId());
+						JobObject newJobObject = newJobObjectBuilder.build();
+						Date triggerDate = schedulerManager.loadJob(newJobObject);
+						if (triggerDate != null) {
+							// 更新通知记录时间
+							processTaskSlaNotifyVo.setTriggerTime(sdf.format(triggerDate));
+							processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
+							isJobLoaded = true;
 						}
 					}
 				}

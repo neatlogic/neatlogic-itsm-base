@@ -624,7 +624,7 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected void execute() {
 			List<ProcessTaskSlaVo> slaList = processTaskMapper.getProcessTaskSlaByProcessTaskStepId(currentProcessTaskStepVo.getId());
 			if (slaList != null && slaList.size() > 0) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				long now = System.currentTimeMillis();
 				String worktimeUuid = null;
 				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
@@ -700,17 +700,17 @@ public abstract class ProcessStepHandlerUtilBase {
 
 					// 修正最终超时日期
 					if (slaTimeVo != null) {
-						slaTimeVo.setRealExpireTime(sdf.format(new Date(now + slaTimeVo.getRealTimeLeft())));
+						slaTimeVo.setRealExpireTime(new Date(now + slaTimeVo.getRealTimeLeft()));
 						if (StringUtils.isNotBlank(worktimeUuid)) {
 							if (slaTimeVo.getTimeLeft() != null) {
 								long expireTime = calculateExpireTime(now, slaTimeVo.getTimeLeft(), worktimeUuid);
-								slaTimeVo.setExpireTime(sdf.format(new Date(expireTime)));
+								slaTimeVo.setExpireTime(new Date(expireTime));
 							} else {
 								throw new RuntimeException("计算剩余时间失败");
 							}
 						} else {
 							if (slaTimeVo.getTimeLeft() != null) {
-								slaTimeVo.setExpireTime(sdf.format(new Date(now + slaTimeVo.getTimeLeft())));
+								slaTimeVo.setExpireTime(new Date(now + slaTimeVo.getTimeLeft()));
 							} else {
 								throw new RuntimeException("计算剩余时间失败");
 							}
@@ -722,7 +722,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							processTaskMapper.insertProcessTaskSlaTime(slaTimeVo);
 						}
 
-						if (StringUtils.isNotBlank(slaTimeVo.getExpireTime()) && slaVo.getConfigObj() != null) {
+						if (slaTimeVo.getExpireTime() != null && slaVo.getConfigObj() != null) {
 							// 加载定时作业，执行超时通知操作
 							JSONArray notifyPolicyList = slaVo.getConfigObj().getJSONArray("notifyPolicyList");
 							if (notifyPolicyList != null && notifyPolicyList.size() > 0) {
@@ -951,7 +951,8 @@ public abstract class ProcessStepHandlerUtilBase {
 							currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
 						}
 						if(currentUserProcessUserTypeList.contains(ProcessUserType.WORKER.getValue())) {
-							if(ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus())) {
+							if(ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus()) 
+									|| ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus())) {
 								//完成complete 暂存save 评论comment 创建子任务createsubtask
 								if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
 									List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getToProcessTaskStepByFromId(processTaskStepId);

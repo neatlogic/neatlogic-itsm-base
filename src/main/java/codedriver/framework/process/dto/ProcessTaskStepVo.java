@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
+import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskStepVo extends BasePageVo {
 
@@ -52,25 +53,22 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Date expireTime;
 	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
 	private transient String config;
+	private transient JSONObject configObj;
+	private transient String globalConfig;
+	private transient JSONObject globalConfigObj;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
 	private String configHash;
-	private transient JSONObject configObj;
 	private Boolean isAllDone = false;
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
-	//private Boolean isAttributeListSorted = false;
-	private Boolean isTimeoutPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-	//@EntityField(name = "处理组列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
 	private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
-	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList = new ArrayList<>();
 	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
 	private JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
@@ -85,7 +83,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private ProcessTaskStepCommentVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepCommentVo> commentList = new ArrayList<>();
-//	private List<ProcessTaskStepAuditVo> processTaskStepAuditList = new ArrayList<>();
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
@@ -96,7 +93,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Integer isView;
 	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepVo> assignableWorkerStepList = new ArrayList<>();
-	
+	@EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
 	private transient String aliasName;
 	
 	public ProcessTaskStepVo() {
@@ -111,22 +109,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.setType(processStepVo.getType());
 		this.setConfig(processStepVo.getConfig());
 		this.setFormUuid(processStepVo.getFormUuid());
-//		if (processStepVo.getUserList() != null && processStepVo.getUserList().size() > 0) {
-//			List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-//			for (ProcessStepUserVo userVo : processStepVo.getUserList()) {
-//				ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(userVo);
-//				userList.add(processTaskStepUserVo);
-//			}
-//			this.setUserList(userList);
-//		}
-		if (processStepVo.getTeamList() != null && processStepVo.getTeamList().size() > 0) {
-			List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
-			for (ProcessStepTeamVo teamVo : processStepVo.getTeamList()) {
-				ProcessTaskStepTeamVo processTaskStepTeamVo = new ProcessTaskStepTeamVo(teamVo);
-				teamList.add(processTaskStepTeamVo);
-			}
-			this.setTeamList(teamList);
-		}
+
 		if (processStepVo.getFormAttributeList() != null && processStepVo.getFormAttributeList().size() > 0) {
 			List<ProcessTaskStepFormAttributeVo> attributeList = new ArrayList<>();
 			for (ProcessStepFormAttributeVo attributeVo : processStepVo.getFormAttributeList()) {
@@ -145,15 +128,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 			}
 			this.setWorkerPolicyList(policyList);
 		}
-		if (processStepVo.getTimeoutPolicyList() != null && processStepVo.getTimeoutPolicyList().size() > 0) {
-			List<ProcessTaskStepTimeoutPolicyVo> timeoutList = new ArrayList<>();
-			for (ProcessStepTimeoutPolicyVo policyVo : processStepVo.getTimeoutPolicyList()) {
-				policyVo.setProcessStepUuid(processStepVo.getUuid());
-				ProcessTaskStepTimeoutPolicyVo processTaskStepTimeoutPolicyVo = new ProcessTaskStepTimeoutPolicyVo(policyVo);
-				timeoutList.add(processTaskStepTimeoutPolicyVo);
-			}
-			this.setTimeoutPolicyList(timeoutList);
-		}
+
 	}
 
 	@Override
@@ -188,7 +163,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 		return result;
 	}
 
-	public Long getId() {
+	public synchronized Long getId() {
+		if(id == null) {
+			id = SnowflakeUtil.uniqueLong();
+		}
 		return id;
 	}
 
@@ -231,7 +209,20 @@ public class ProcessTaskStepVo extends BasePageVo {
 							String value = customStatus.getString("value");
 							if(StringUtils.isNotBlank(value)) {
 								statusVo = new ProcessTaskStatusVo(status, value);
-								return statusVo;
+							}
+						}
+					}
+				}
+			}
+			if(statusVo == null && MapUtils.isNotEmpty(getGlobalConfigObj())) {
+				JSONArray customStatusList = getGlobalConfigObj().getJSONArray("customStatusList");
+				if(CollectionUtils.isNotEmpty(customStatusList)) {
+					for(int i = 0; i < customStatusList.size(); i++) {
+						JSONObject customStatus = customStatusList.getJSONObject(i);							
+						if(status.equals(customStatus.getString("name"))) {
+							String value = customStatus.getString("value");
+							if(StringUtils.isNotBlank(value)) {
+								statusVo = new ProcessTaskStatusVo(status, value);
 							}
 						}
 					}
@@ -295,20 +286,37 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.configObj = configObj;
 	}
 
+	public String getGlobalConfig() {
+		return globalConfig;
+	}
+
+	public void setGlobalConfig(String globalConfig) {
+		this.globalConfig = globalConfig;
+	}
+
+	public JSONObject getGlobalConfigObj() {
+		if(globalConfigObj == null && StringUtils.isNotBlank(globalConfig)) {
+			try {
+				globalConfigObj = JSONObject.parseObject(globalConfig);
+			} catch (Exception ex) {
+				if(StringUtils.isNotBlank(handler)) {
+					logger.error("handler为" + handler + "的process_step_handler内容不是合法的JSON格式", ex);					
+				}
+			}
+		}
+		return globalConfigObj;
+	}
+
+	public void setGlobalConfigObj(JSONObject globalConfigObj) {
+		this.globalConfigObj = globalConfigObj;
+	}
+
 	public List<ProcessTaskStepUserVo> getUserList() {
 		return userList;
 	}
 
 	public void setUserList(List<ProcessTaskStepUserVo> userList) {
 		this.userList = userList;
-	}
-
-	public List<ProcessTaskStepTeamVo> getTeamList() {
-		return teamList;
-	}
-
-	public void setTeamList(List<ProcessTaskStepTeamVo> teamList) {
-		this.teamList = teamList;
 	}
 
 	public Integer getIsRequired() {
@@ -461,18 +469,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.isCurrentUserDone = isCurrentUserDone;
 	}
 
-	public List<ProcessTaskStepTimeoutPolicyVo> getTimeoutPolicyList() {
-		if (!isTimeoutPolicyListSorted && timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
-			Collections.sort(timeoutPolicyList);
-			isTimeoutPolicyListSorted = true;
-		}
-		return timeoutPolicyList;
-	}
-
-	public void setTimeoutPolicyList(List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList) {
-		this.timeoutPolicyList = timeoutPolicyList;
-	}
-
 	public Date getExpireTime() {
 		return expireTime;
 	}
@@ -553,14 +549,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.comment = comment;
 	}
 
-//	public List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList() {
-//		return processTaskStepAuditList;
-//	}
-//
-//	public void setProcessTaskStepAuditList(List<ProcessTaskStepAuditVo> processTaskStepAuditList) {
-//		this.processTaskStepAuditList = processTaskStepAuditList;
-//	}
-
 	public List<ProcessTaskStepCommentVo> getCommentList() {
 		return commentList;
 	}
@@ -607,6 +595,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setMajorUser(ProcessTaskStepUserVo majorUser) {
 		this.majorUser = majorUser;
+	}
+
+	public List<ProcessTaskSlaTimeVo> getSlaTimeList() {
+		return slaTimeList;
+	}
+
+	public void setSlaTimeList(List<ProcessTaskSlaTimeVo> slaTimeList) {
+		this.slaTimeList = slaTimeList;
 	}
 
 }
