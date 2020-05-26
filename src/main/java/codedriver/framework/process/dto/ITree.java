@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface ITree extends Comparable<ITree> {
 	public final static String ROOT_UUID = "0";
+	public final static String ROOT_PARENTUUID = "-1";
 	
 	public String getUuid();
 	public void setUuid(String uuid);
@@ -19,8 +20,8 @@ public interface ITree extends Comparable<ITree> {
 	public void setParent(ITree parent);
 	public void setOpenCascade(boolean open);
 	public void setSelectedCascade(boolean selected);
-	public Integer getSort();
-	public void setSort(Integer sort);	
+//	public Integer getSort();
+//	public void setSort(Integer sort);	
 	public String getType();
 	public int getChildrenCount();
 	public void setChildrenCount(int count);

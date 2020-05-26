@@ -11,17 +11,18 @@
 	  `icon`,
 	  `color`,
 	  `desc`,
-	  `sort` 
-	FROM
-	  `catalog`
-	 WHERE 1=1
+	  `lft`,
+	  `rht` 
+	FROM `catalog`
+	 <where>
 	 <if test="isActive != null">
 	 	AND `is_active` = #{isActive}
 	 </if>
-	 <if test="parentUuid != null">
+	 <if test="parentUuid != null and parentUuid != ''">
 	 	AND `parent_uuid` = #{parentUuid}
 	 </if>
-	 ORDER BY `sort`
+	 </where>
+	 ORDER BY `lft`
 	</select>
 	
 	<select id="getCatalogByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo" useCache="true">
@@ -33,15 +34,16 @@
 	  `icon`,
 	  `color`,
 	  `desc`,
-	  `sort` 
+	  `lft`,
+	  `rht`  
 	FROM
 	  `catalog`
 	 where `uuid` = #{uuid}
 	</select>
 	
-	<select id="getMaxSortByParentUuid" parameterType="java.lang.String" resultType="int" useCache="false">
+	<!-- <select id="getMaxSortByParentUuid" parameterType="java.lang.String" resultType="int" useCache="false">
 	SELECT  IFNULL(MAX(`sort`), 0) FROM `catalog` WHERE `parent_uuid` = #{parentUuid} FOR UPDATE
-	</select>
+	</select> -->
 	
 	<select id="checkCatalogIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
 	SELECT COUNT(`uuid`) FROM `catalog` where `uuid`=#{uuid}
@@ -50,7 +52,7 @@
 	<select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String" useCache="false">
 	SELECT 
 	DISTINCT `parent_uuid` 
-	FROM channel  
+	FROM `channel`  
 	WHERE `is_active` = 1
 	<if test="list != null and list.size() > 0">
 	AND `uuid` IN 
@@ -68,7 +70,7 @@
 		<id column="uuid" property="uuid"/>
 		<result column="name" property="name"/>
 		<result column="parent_uuid" property="parentUuid"/>
-		<result column="sort" property="sort"/>
+		<result column="lft" property="lft"/>
 	</resultMap>
 	
 	<select id="getCatalogListForTree" parameterType="java.lang.Integer" resultMap="catalogMap" useCache="false">
@@ -76,12 +78,12 @@
 	  `uuid`,
 	  `name`,
 	  `parent_uuid`,
-	  `sort`
+	  `lft`
 	FROM `catalog` 
 	 <if test="isActive != null">
 	 WHERE `is_active` = #{isActive}
 	 </if>
-	 ORDER BY `parent_uuid`, `sort`
+	 ORDER BY `parent_uuid`,`lft`
 	</select>
 	
 	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.dto.AuthorityVo" useCache="false">
@@ -125,9 +127,48 @@
 	</where>
 	</select>
 	
+	<select id="getCatalogLockByUuid" parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT `uuid` FROM `catalog` WHERE `uuid` = #{uuid} FOR UPDATE
+	</select>
+	
+	<select id="getCatalogCount" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int">
+	SELECT 
+	  COUNT(1)
+	FROM `catalog`
+	 <where>
+	 <if test="isActive != null">
+	 	AND `is_active` = #{isActive}
+	 </if>
+	 <if test="parentUuid != null and parentUuid != ''">
+	 	AND `parent_uuid` = #{parentUuid}
+	 </if>
+	 </where>
+	</select>
+	
+	<select id="getCatalogByParentUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo">
+	SELECT 
+	  a.`uuid`,
+	  a.`name`,
+	  a.`parent_uuid` AS `parentUuid`,
+	  a.`is_active` AS `isActive`,
+	  a.`icon`,
+	  a.`color`,
+	  a.`desc`,
+	  a.`lft`,
+	  a.`rht`,
+	  (SELECT COUNT(1) FROM `catalog` b WHERE b.`parent_uuid` = a.`uuid`) AS childrenCount 
+	FROM `catalog` a
+	WHERE a.`parent_uuid` = #{parentUuid}
+	ORDER BY a.`lft`
+	</select>
+	
+	<select id="checkCatalogIsExistsByLeftRightCode" resultType="int">
+	SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
+	</select>
+	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
-	REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `sort`) 
-	VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{sort})
+	REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` ) 
+	VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})
 	</insert>
 	
 	<insert id="insertCatalogAuthority">
@@ -144,26 +185,42 @@
 	  )
 	</insert>
 	
-	<update id="updateCatalogForMove" parameterType="codedriver.framework.process.dto.CatalogVo">
-	UPDATE `catalog` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
+	<update id="updateCatalogParentUuidByUuid" parameterType="codedriver.framework.process.dto.CatalogVo">
+	UPDATE `catalog` SET `parent_uuid` = #{parentUuid} WHERE `uuid` = #{uuid}
 	</update>
 
-	<update id="updateSortIncrement">
+	<!-- <update id="updateSortIncrement">
 	UPDATE `catalog` SET `sort` = `sort` + 1 
 	WHERE `parent_uuid` = #{parentUuid} 
 	AND `sort` &gt;= #{fromSort} 
 	<if test="toSort != null">
 	AND `sort` &lt;= #{toSort}
 	</if>
-	</update>
+	</update> -->
 
-	<update id="updateSortDecrement">
+	<!-- <update id="updateSortDecrement">
 	UPDATE `catalog` SET `sort` = `sort` - 1 
 	WHERE `parent_uuid` = #{parentUuid} 
 	AND `sort` &gt;= #{fromSort} 
 	<if test="toSort != null">
 	AND `sort` &lt;= #{toSort}
 	</if>
+	</update> -->
+	
+	<update id="updateCatalogLeftRightCode">
+	UPDATE `catalog` SET `lft` = #{lft}, `rht` = #{rht} WHERE `uuid` = #{uuid}
+	</update>
+	
+	<update id="batchUpdateCatalogLeftRightCodeByLeftRightCode">
+	UPDATE `catalog` SET `lft` = `lft` + #{step}, `rht` = `rht` + #{step} WHERE `lft` &gt;= #{lft} AND `rht` &lt;= #{rht}	
+	</update>
+	
+	<update id="batchUpdateCatalogLeftCode">
+	UPDATE `catalog` set `lft` = `lft` + #{step} WHERE `lft` &gt;= #{minCode}	
+	</update>
+	
+	<update id="batchUpdateCatalogRightCode">
+	UPDATE `catalog` set `rht` = `rht` + #{step} WHERE `rht` &gt;= #{minCode}
 	</update>
 	
 	<delete id="deleteCatalogByUuid" parameterType="java.lang.String">

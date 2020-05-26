@@ -13,7 +13,7 @@ public interface CatalogMapper {
 
 	CatalogVo getCatalogByUuid(String uuid);
 	
-	int getMaxSortByParentUuid(String parentUuid);
+//	int getMaxSortByParentUuid(String parentUuid);
 	
 	int checkCatalogIsExists(String catalogUuid);
 
@@ -31,16 +31,32 @@ public interface CatalogMapper {
 			@Param("roleUuidList")List<String> roleUuidList, 
 			@Param("catalogUuid") String catalogUuid
 			);
+
+	String getCatalogLockByUuid(String uuid);
+
+	List<CatalogVo> getCatalogByParentUuid(String parentUuid);
+
+	int checkCatalogIsExistsByLeftRightCode(@Param("uuid")String uuid, @Param("lft") Integer lft, @Param("rht") Integer rht);
+
+	int getCatalogCount(CatalogVo catalogVo);
 	
 	int replaceCatalog(CatalogVo catalogVo);
 
 	int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
 
-	int updateCatalogForMove(CatalogVo catalogVo);
+	int updateCatalogParentUuidByUuid(CatalogVo catalogVo);
 
-	int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+//	int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 
-	int updateSortDecrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+//	int updateSortDecrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+
+	int updateCatalogLeftRightCode(@Param("uuid") String uuid, @Param("lft") int lft, @Param("rht") int rht);
+
+	int batchUpdateCatalogLeftRightCodeByLeftRightCode(@Param("lft") Integer lft, @Param("rht") Integer rht, @Param("step") int step);
+
+	int batchUpdateCatalogLeftCode(@Param("minCode") Integer minCode, @Param("step") int step);
+
+	int batchUpdateCatalogRightCode(@Param("minCode") Integer minCode, @Param("step") int step);
 	
 	int deleteCatalogByUuid(String uuid);
 

@@ -56,13 +56,18 @@ public class CatalogVo extends BasePageVo implements ITree{
 	
 	private transient ITree parent;
 	
-	private transient Integer sort;
+//	private transient Integer sort;
 	@EntityField(name = "子节点数", type = ApiParamType.INTEGER)
 	private int childrenCount = 0;
 	
 	private transient List<Integer> sortList;
 	
 	private transient List<String> nameList;
+	
+	@EntityField(name = "左编码", type = ApiParamType.INTEGER)
+	private Integer lft;
+	@EntityField(name = "右编码", type = ApiParamType.INTEGER)
+	private Integer rht;
 	
 	public CatalogVo() {
 	}
@@ -210,15 +215,15 @@ public class CatalogVo extends BasePageVo implements ITree{
 		}
 	}
 
-	@Override
-	public Integer getSort() {
-		return sort;
-	}
-
-	@Override
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
+//	@Override
+//	public Integer getSort() {
+//		return sort;
+//	}
+//
+//	@Override
+//	public void setSort(Integer sort) {
+//		this.sort = sort;
+//	}
 
 	@Override
 	public String getType() {
@@ -279,17 +284,12 @@ public class CatalogVo extends BasePageVo implements ITree{
 		}else {
 			sortList = new ArrayList<>();
 		}		
-		sortList.add(sort);
+		sortList.add(lft);
 		return sortList;
 	}
 	@Override
 	public void setSortList(List<Integer> sortList) {
 		this.sortList = sortList;
-	}
-
-	@Override
-	public String toString() {
-		return "CatalogVo [uuid=" + uuid + ", name=" + name + ", parentUuid=" + parentUuid + ", sort=" + sort + ", sortList=" + sortList + "]";
 	}
 
 	@Override
@@ -347,6 +347,20 @@ public class CatalogVo extends BasePageVo implements ITree{
 		return true;
 	}
 
-	
+	public Integer getLft() {
+		return lft;
+	}
+
+	public void setLft(Integer lft) {
+		this.lft = lft;
+	}
+
+	public Integer getRht() {
+		return rht;
+	}
+
+	public void setRht(Integer rht) {
+		this.rht = rht;
+	}
 
 }
