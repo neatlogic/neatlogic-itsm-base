@@ -193,12 +193,10 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.userUuid = userUuid;
 	}
 
-	@Override
 	public Integer getSort() {
 		return sort;
 	}
 
-	@Override
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
@@ -380,7 +378,6 @@ public class ChannelVo extends BasePageVo implements ITree {
 	@Override
 	public void setSortList(List<Integer> sortList) {
 		this.sortList = sortList;
-
 	}
 
 	@Override

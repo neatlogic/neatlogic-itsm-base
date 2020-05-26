@@ -11,82 +11,82 @@ import codedriver.framework.process.dto.ChannelVo;
 
 public interface ChannelMapper {
 
-	int searchChannelCount(ChannelVo channelVo);
+	public int searchChannelCount(ChannelVo channelVo);
 
-	List<ChannelVo> searchChannelList(ChannelVo channelVo);
+	public List<ChannelVo> searchChannelList(ChannelVo channelVo);
 
-	ChannelVo getChannelByUuid(String channelUuid);
+	public ChannelVo getChannelByUuid(String channelUuid);
 	
-	List<ChannelVo> getChannelByUuidList(@Param("channelUuidList")List<String> channelUuidList);
+	public List<ChannelVo> getChannelByUuidList(@Param("channelUuidList")List<String> channelUuidList);
 	
-	int getMaxSortByParentUuid(String parentUuid);
+	public int getMaxSortByParentUuid(String parentUuid);
 
-	List<ChannelPriorityVo> getChannelPriorityListByChannelUuid(String uuid);
+	public List<ChannelPriorityVo> getChannelPriorityListByChannelUuid(String uuid);
 	
-	int checkChannelIsExists(String channelUuid);
+	public int checkChannelIsExists(String channelUuid);
 
-	int checkChannelNameIsRepeat(ChannelVo channelVo);
+	public int checkChannelNameIsRepeat(ChannelVo channelVo);
 
-	List<ChannelVo> getChannelListForTree(Integer isActive);
+	public List<ChannelVo> getChannelListForTree(Integer isActive);
 
-	String getProcessUuidByChannelUuid(String channelUuid);
+	public String getProcessUuidByChannelUuid(String channelUuid);
 
-	List<AuthorityVo> getChannelAuthorityListByChannelUuid(String uuid);
+	public List<AuthorityVo> getChannelAuthorityListByChannelUuid(String uuid);
 	
-	int searchChannelTypeCount(ChannelTypeVo channelTypeVo);
+	public int searchChannelTypeCount(ChannelTypeVo channelTypeVo);
 
-	List<ChannelTypeVo> searchChannelTypeList(ChannelTypeVo channelTypeVo);
+	public List<ChannelTypeVo> searchChannelTypeList(ChannelTypeVo channelTypeVo);
 	
-	ChannelTypeVo getChannelTypeByUuid(String uuid);
+	public ChannelTypeVo getChannelTypeByUuid(String uuid);
 
-	int checkChannelTypeIsExists(String uuid);
+	public int checkChannelTypeIsExists(String uuid);
 
 	public int checkChannelTypeNameIsRepeat(ChannelTypeVo channelTypeVo);
 
 	public Integer getChannelTypeMaxSort();
 	
-	List<String> getAuthorizedChannelUuidList(
+	public List<String> getAuthorizedChannelUuidList(
 			@Param("userUuid")String userUuid, 
 			@Param("teamUuidList")List<String> teamUuidList, 
 			@Param("roleUuidList")List<String> roleUuidList,
 			@Param("channelUuid") String channelUuid
 			);
 	
-	int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
+	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
-	int replaceChannel(ChannelVo channelVo);
+	public int replaceChannel(ChannelVo channelVo);
 
-	int insertChannelPriority(ChannelPriorityVo channelPriority);
+	public int insertChannelPriority(ChannelPriorityVo channelPriority);
 	
-	int replaceChannelProcess(@Param("channelUuid")String channelUuid, @Param("processUuid")String processUuid);
+	public int replaceChannelProcess(@Param("channelUuid")String channelUuid, @Param("processUuid")String processUuid);
 
-	int replaceChannelWorktime(@Param("channelUuid")String channelUuid, @Param("worktimeUuid")String worktimeUuid);
+	public int replaceChannelWorktime(@Param("channelUuid")String channelUuid, @Param("worktimeUuid")String worktimeUuid);
 
-	int insertChannelAuthority(@Param("authorityVo")AuthorityVo authority,@Param("channelUuid") String channelUuid);
+	public int insertChannelAuthority(@Param("authorityVo")AuthorityVo authority,@Param("channelUuid") String channelUuid);
 	
-	int insertChannelType(ChannelTypeVo channelTypeVo);
+	public int insertChannelType(ChannelTypeVo channelTypeVo);
 
-	int updateChannelForMove(ChannelVo channelVo);
+	public int updateChannelForMove(ChannelVo channelVo);
 
-	int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+	public int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 
-	int updateSortDecrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+	public int updateSortDecrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 	
-	int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
+	public int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
 
-	int deleteChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
+	public int deleteChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
 	
-	int deleteChannelByUuid(String uuid);
+	public int deleteChannelByUuid(String uuid);
 
-	int deleteChannelPriorityByChannelUuid(String channelUuid);
+	public int deleteChannelPriorityByChannelUuid(String channelUuid);
 
-	int deleteChannelProcessByChannelUuid(String channelUuid);
+	public int deleteChannelProcessByChannelUuid(String channelUuid);
 
-	int deleteChannelWorktimeByChannelUuid(String channelUuid);
+	public int deleteChannelWorktimeByChannelUuid(String channelUuid);
 
-	int deleteChannelUserByChannelUuid(String channelUuid);
+	public int deleteChannelUserByChannelUuid(String channelUuid);
 
-	int deleteChannelAuthorityByChannelUuid(String uuid);
+	public int deleteChannelAuthorityByChannelUuid(String uuid);
 	
-	int deleteChannelTypeByUuid(String uuid);
+	public int deleteChannelTypeByUuid(String uuid);
 }

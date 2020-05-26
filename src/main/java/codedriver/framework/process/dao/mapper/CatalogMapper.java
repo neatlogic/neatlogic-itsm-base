@@ -9,41 +9,51 @@ import codedriver.framework.process.dto.CatalogVo;
 
 public interface CatalogMapper {
 
-	List<CatalogVo> getCatalogList(CatalogVo catalogVo);
+	public List<CatalogVo> getCatalogList(CatalogVo catalogVo);
 
-	CatalogVo getCatalogByUuid(String uuid);
+	public CatalogVo getCatalogByUuid(String uuid);
 	
-	int getMaxSortByParentUuid(String parentUuid);
+	public int checkCatalogIsExists(String catalogUuid);
+
+	public List<String> getHasActiveChannelCatalogUuidList(List<String> channelUuidList);
+
+	public int checkCatalogNameIsRepeat(CatalogVo catalogVo);
+
+	public List<CatalogVo> getCatalogListForTree(Integer isActive);
+
+	public List<AuthorityVo> getCatalogAuthorityListByCatalogUuid(String uuid);
 	
-	int checkCatalogIsExists(String catalogUuid);
-
-	List<String> getHasActiveChannelCatalogUuidList(List<String> channelUuidList);
-
-	int checkCatalogNameIsRepeat(CatalogVo catalogVo);
-
-	List<CatalogVo> getCatalogListForTree(Integer isActive);
-
-	List<AuthorityVo> getCatalogAuthorityListByCatalogUuid(String uuid);
-	
-	List<String> getAuthorizedCatalogUuidList(
+	public List<String> getAuthorizedCatalogUuidList(
 			@Param("userUuid")String userUuid, 
 			@Param("teamUuidList")List<String> teamUuidList, 
 			@Param("roleUuidList")List<String> roleUuidList, 
 			@Param("catalogUuid") String catalogUuid
 			);
+
+	public String getCatalogLockByUuid(String uuid);
+
+	public List<CatalogVo> getCatalogByParentUuid(String parentUuid);
+
+	public int checkCatalogIsExistsByLeftRightCode(@Param("uuid")String uuid, @Param("lft") Integer lft, @Param("rht") Integer rht);
+
+	public int getCatalogCount(CatalogVo catalogVo);
 	
-	int replaceCatalog(CatalogVo catalogVo);
+	public int replaceCatalog(CatalogVo catalogVo);
 
-	int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
+	public int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
 
-	int updateCatalogForMove(CatalogVo catalogVo);
+	public int updateCatalogParentUuidByUuid(CatalogVo catalogVo);
 
-	int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+	public int updateCatalogLeftRightCode(@Param("uuid") String uuid, @Param("lft") int lft, @Param("rht") int rht);
 
-	int updateSortDecrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+	public int batchUpdateCatalogLeftRightCodeByLeftRightCode(@Param("lft") Integer lft, @Param("rht") Integer rht, @Param("step") int step);
+
+	public int batchUpdateCatalogLeftCode(@Param("minCode") Integer minCode, @Param("step") int step);
+
+	public int batchUpdateCatalogRightCode(@Param("minCode") Integer minCode, @Param("step") int step);
 	
-	int deleteCatalogByUuid(String uuid);
+	public int deleteCatalogByUuid(String uuid);
 
-	int deleteCatalogAuthorityByCatalogUuid(String uuid);
+	public int deleteCatalogAuthorityByCatalogUuid(String uuid);
 
 }
