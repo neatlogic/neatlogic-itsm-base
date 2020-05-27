@@ -48,6 +48,7 @@ public class NotifyPolicyVo extends BaseEditorVo {
 				triggerObj.put("trigger", notifyTriggerType.getTrigger());
 				triggerObj.put("triggerName", notifyTriggerType.getText());
 				triggerObj.put("handlerList", new JSONArray());
+				triggerList.add(triggerObj);
 			}
 			configObj.put("triggerList", triggerList);
 			notifyPolicyVo.setConfig(configObj.toJSONString());
