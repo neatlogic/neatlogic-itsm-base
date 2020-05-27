@@ -1,9 +1,7 @@
 package codedriver.framework.process.dto;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,23 +19,23 @@ import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class NotifyPolicyVo extends BaseEditorVo {
-	public final static List<NotifyPolicyVo> notifyPolicyList = new ArrayList<>(100);
 	public final static Map<String, NotifyPolicyVo> notifyPolicyMap = new HashMap<>();
 	static {
+		Date currentDate = new Date();
 		for(int i = 0; i < 100; i++) {
 			NotifyPolicyVo notifyPolicyVo = new NotifyPolicyVo();
 			notifyPolicyVo.setName("test" + i);
 			notifyPolicyVo.setReferenceCount(i%10);
 			if(i % 2 == 0) {
 				notifyPolicyVo.setFcu("linbq");
-				notifyPolicyVo.setFcd(new Date());
+				notifyPolicyVo.setFcd(new Date(currentDate.getTime() + (i * 1000)));
 				notifyPolicyVo.setFcuName("林邦泉");
 				notifyPolicyVo.setLcu("lvzk");
-				notifyPolicyVo.setLcd(new Date());
+				notifyPolicyVo.setLcd(new Date(currentDate.getTime() + (i * 1000)));
 				notifyPolicyVo.setLcuName("吕佐康");
 			}else {
 				notifyPolicyVo.setFcu("linbq");
-				notifyPolicyVo.setFcd(new Date());
+				notifyPolicyVo.setFcd(new Date(currentDate.getTime() + (i * 1000)));
 				notifyPolicyVo.setFcuName("林邦泉");
 			}
 			JSONObject configObj = new JSONObject();
@@ -53,7 +51,6 @@ public class NotifyPolicyVo extends BaseEditorVo {
 			}
 			configObj.put("triggerList", triggerList);
 			notifyPolicyVo.setConfig(configObj.toJSONString());
-			notifyPolicyList.add(notifyPolicyVo);
 			notifyPolicyMap.put(notifyPolicyVo.getUuid(), notifyPolicyVo);
 		}
 	}
