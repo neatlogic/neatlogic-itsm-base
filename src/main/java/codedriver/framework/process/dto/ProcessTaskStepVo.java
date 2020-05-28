@@ -96,7 +96,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
 	private transient String aliasName;
-	
+	private transient Boolean isAutoGenerateId = true;
 	public ProcessTaskStepVo() {
 
 	}
@@ -164,7 +164,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public synchronized Long getId() {
-		if(id == null) {
+		if(id == null && isAutoGenerateId) {
 			id = SnowflakeUtil.uniqueLong();
 		}
 		return id;
@@ -603,6 +603,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setSlaTimeList(List<ProcessTaskSlaTimeVo> slaTimeList) {
 		this.slaTimeList = slaTimeList;
+	}
+
+	public Boolean getIsAutoGenerateId() {
+		return isAutoGenerateId;
+	}
+
+	public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
+		this.isAutoGenerateId = isAutoGenerateId;
 	}
 
 }

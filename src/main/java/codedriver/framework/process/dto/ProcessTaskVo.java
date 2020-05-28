@@ -75,6 +75,8 @@ public class ProcessTaskVo {
 	@EntityField(name = "工单当前步骤信息", type = ApiParamType.JSONOBJECT)
 	ProcessTaskStepVo currentProcessTaskStep;
 	
+	private transient Boolean isAutoGenerateId = true;
+	
 	public ProcessTaskVo() {
 
 	}
@@ -89,7 +91,7 @@ public class ProcessTaskVo {
 	}
 
 	public synchronized Long getId() {
-		if(id == null) {
+		if(id == null && isAutoGenerateId) {
 			id = SnowflakeUtil.uniqueLong();
 		}
 		return id;
@@ -340,6 +342,14 @@ public class ProcessTaskVo {
 
 	public void setCurrentProcessTaskStep(ProcessTaskStepVo currentProcessTaskStepVo) {
 		this.currentProcessTaskStep = currentProcessTaskStepVo;
+	}
+
+	public Boolean getIsAutoGenerateId() {
+		return isAutoGenerateId;
+	}
+
+	public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
+		this.isAutoGenerateId = isAutoGenerateId;
 	}
 
 }
