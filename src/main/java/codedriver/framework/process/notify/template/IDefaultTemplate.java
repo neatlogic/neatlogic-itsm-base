@@ -2,8 +2,8 @@ package codedriver.framework.process.notify.template;
 
 import org.springframework.util.ClassUtils;
 
+import codedriver.framework.notify.core.NotifyHandlerType;
 import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
-import codedriver.framework.process.notify.core.NotifyHandlerType;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 
 public interface IDefaultTemplate {

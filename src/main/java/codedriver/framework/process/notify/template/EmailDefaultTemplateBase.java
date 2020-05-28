@@ -1,6 +1,6 @@
 package codedriver.framework.process.notify.template;
 
-import codedriver.framework.process.notify.core.NotifyHandlerType;
+import codedriver.framework.notify.core.NotifyHandlerType;
 
 public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 	

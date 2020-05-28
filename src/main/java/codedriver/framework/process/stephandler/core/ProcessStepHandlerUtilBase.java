@@ -41,6 +41,11 @@ import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.file.dao.mapper.FileMapper;
+import codedriver.framework.notify.core.INotifyHandler;
+import codedriver.framework.notify.core.NotifyHandlerFactory;
+import codedriver.framework.notify.dao.mapper.NotifyMapper;
+import codedriver.framework.notify.dto.NotifyTemplateVo;
+import codedriver.framework.notify.dto.NotifyVo;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
@@ -56,7 +61,6 @@ import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
-import codedriver.framework.process.dao.mapper.notify.NotifyMapper;
 import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.FormAttributeVo;
@@ -86,12 +90,8 @@ import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissio
 import codedriver.framework.process.exception.worktime.WorktimeNotFoundException;
 import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
 import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
-import codedriver.framework.process.notify.core.INotifyHandler;
 import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
-import codedriver.framework.process.notify.core.NotifyHandlerFactory;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
-import codedriver.framework.process.notify.dto.NotifyTemplateVo;
-import codedriver.framework.process.notify.dto.NotifyVo;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
 import codedriver.framework.process.notify.template.IDefaultTemplate;
@@ -266,7 +266,7 @@ public abstract class ProcessStepHandlerUtilBase {
 									String type = notifyObj.getString("type");
 									INotifyHandler handler = NotifyHandlerFactory.getHandler(type);
 									if (handler != null) {
-										NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(notifyTriggerType);
+										NotifyVo.Builder notifyBuilder = new NotifyVo.Builder();//notifyTriggerType
 										String templateUuid = notifyObj.getString("template");
 										if (StringUtils.isNotBlank(templateUuid)) {
 											NotifyTemplateVo notifyTemplateVo = null;

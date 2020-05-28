@@ -20,20 +20,20 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.notify.core.INotifyHandler;
+import codedriver.framework.notify.core.NotifyHandlerFactory;
+import codedriver.framework.notify.dao.mapper.NotifyMapper;
+import codedriver.framework.notify.dto.NotifyTemplateVo;
+import codedriver.framework.notify.dto.NotifyVo;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.dao.mapper.notify.NotifyMapper;
 import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
 import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.notify.core.INotifyHandler;
-import codedriver.framework.process.notify.core.NotifyHandlerFactory;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
-import codedriver.framework.process.notify.dto.NotifyTemplateVo;
-import codedriver.framework.process.notify.dto.NotifyVo;
 import codedriver.framework.scheduler.core.JobBase;
 import codedriver.framework.scheduler.dto.JobObject;
 
@@ -144,7 +144,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 				JSONArray notifyPluginList = policyObj.getJSONArray("pluginList");
 				JSONArray receiverList = policyObj.getJSONArray("receiverList");
 				String templateUuid = policyObj.getString("template");
-				NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(NotifyTriggerType.TIMEOUT);
+				NotifyVo.Builder notifyBuilder = new NotifyVo.Builder();//NotifyTriggerType.TIMEOUT
 				if (notifyPluginList != null && notifyPluginList.size() > 0 && receiverList != null && receiverList.size() > 0) {
 					NotifyTemplateVo templateVo = notifyMapper.getNotifyTemplateByUuid(templateUuid);
 					if (templateVo != null) {
