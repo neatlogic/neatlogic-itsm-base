@@ -9,7 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 
-import codedriver.framework.process.notify.dto.NotifyTemplateVo;
+import codedriver.framework.notify.dto.NotifyTemplateVo;
 import codedriver.framework.process.notify.template.IDefaultTemplate;
 
 public class NotifyDefaultTemplateFactory {
