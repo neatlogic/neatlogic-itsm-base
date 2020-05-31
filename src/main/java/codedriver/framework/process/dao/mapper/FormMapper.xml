@@ -300,4 +300,8 @@
 	<delete id="deleteFormVersionByUuid" parameterType="java.lang.String">
 	DELETE FROM `form_version` WHERE `uuid` = #{uuid}
 	</delete>
+	
+	<delete id="deleteProcessMatrixFormComponentByFormVersionUuid" parameterType="java.lang.String">
+	DELETE FROM `codedriver_tenant`.`process_matrix_form_component` WHERE `form_version_uuid` = #{formVersionUuid} 
+	</delete>
 </mapper>
