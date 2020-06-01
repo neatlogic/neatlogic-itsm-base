@@ -63,5 +63,7 @@ public interface FormMapper {
 
 	public int deleteProcessFormByFormUuid(String formUuid);
 
-	public void deleteFormVersionByUuid(String uuid);
+	public int deleteFormVersionByUuid(String uuid);
+
+	public int deleteProcessMatrixFormComponentByFormVersionUuid(String formVersionUuid);
 }
