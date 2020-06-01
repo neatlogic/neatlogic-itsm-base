@@ -17,7 +17,7 @@ public class NotifyDefaultTemplateFactory {
 	private static List<NotifyTemplateVo> defaultTemplateList = new ArrayList<>();	
 
 	private static int number;
-    public static synchronized int nextNum() {
+    public static synchronized long nextNum() {
         return number++;
     }
     
@@ -30,7 +30,7 @@ public class NotifyDefaultTemplateFactory {
 					IDefaultTemplate defaultTemplateBase = clazz.newInstance();	
 					defaultTemplateList.add(
 							new NotifyTemplateVo(
-									defaultTemplateBase.getUuid(), 
+									defaultTemplateBase.getId(), 
 									defaultTemplateBase.getName(), 
 									defaultTemplateBase.getType(),
 									defaultTemplateBase.getIsReadOnly(),
@@ -74,9 +74,9 @@ public class NotifyDefaultTemplateFactory {
 		return resultList;
 	}
 	
-	public static NotifyTemplateVo getDefaultTemplateByUuid(String uuid) {
+	public static NotifyTemplateVo getDefaultTemplateById(String id) {
 		for(NotifyTemplateVo notifyTemplate : defaultTemplateList) {
-			if(notifyTemplate.getUuid().equals(uuid)) {
+			if(notifyTemplate.getId().equals(id)) {
 				return notifyTemplate;
 			}
 		}
