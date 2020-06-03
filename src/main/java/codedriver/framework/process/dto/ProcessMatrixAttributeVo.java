@@ -7,8 +7,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.process.constvalue.ProcessExpression;
 import codedriver.framework.process.constvalue.ProcessMatrixAttributeType;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -106,10 +106,10 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 
 	public List<ProcessExpressionVo> getExpressionList() {
 		if(expressionList == null && StringUtils.isNotBlank(type)) {
-			List<ProcessExpression> expressionEnumList = ProcessMatrixAttributeType.getExpressionList(type);
+			List<Expression> expressionEnumList = ProcessMatrixAttributeType.getExpressionList(type);
 			if(CollectionUtils.isNotEmpty(expressionEnumList)) {
 				expressionList = new ArrayList<>();
-				for(ProcessExpression expression : expressionEnumList) {
+				for(Expression expression : expressionEnumList) {
 					expressionList.add(new ProcessExpressionVo(expression));
 				}
 			}
@@ -123,7 +123,7 @@ public class ProcessMatrixAttributeVo extends BasePageVo {
 
 	public ProcessExpressionVo getDefaultExpression() {
 		if(defaultExpression == null && StringUtils.isNotBlank(type)) {
-			ProcessExpression expressionEnum = ProcessMatrixAttributeType.getExpression(type);
+			Expression expressionEnum = ProcessMatrixAttributeType.getExpression(type);
 			if(expressionEnum != null) {
 				defaultExpression = new ProcessExpressionVo(expressionEnum);
 			}

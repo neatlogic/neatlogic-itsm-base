@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.process.constvalue.ProcessExpression;
+import codedriver.framework.common.constvalue.BasicType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.condition.ConditionVo;
 
@@ -59,20 +59,12 @@ public interface IProcessTaskCondition {
 	public Integer getSort();
 	
 	/**
-	 * @Description: 后端查询es使用
+	 * @Description: 基本类型（表达式）
 	 * @Param: 
 	 * @return: java.lang.Integer
 	 * @Date: 2020/2/11
 	 */
-	public List<ProcessExpression> getExpressionList();
-
-	/**
-	 * @Description: 后端查询es使用 默认表达式
-	 * @Param: 
-	 * @return: java.lang.Integer
-	 * @Date: 2020/2/11
-	 */
-	ProcessExpression getDefaultExpression();
+	public BasicType getBasicType();
 
 	/**
 	 * @Description: 判断条件是否成立

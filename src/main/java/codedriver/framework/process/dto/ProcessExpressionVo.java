@@ -2,7 +2,7 @@ package codedriver.framework.process.dto;
 
 import java.io.Serializable;
 
-import codedriver.framework.process.constvalue.ProcessExpression;
+import codedriver.framework.common.constvalue.Expression;
 
 public class ProcessExpressionVo implements Serializable {
 
@@ -13,7 +13,7 @@ public class ProcessExpressionVo implements Serializable {
 	
 	public ProcessExpressionVo() {
 	}
-	public ProcessExpressionVo(ProcessExpression processExpression) {
+	public ProcessExpressionVo(Expression processExpression) {
 		this.expression = processExpression.getExpression();
 		this.expressionName = processExpression.getExpressionName();
 		this.expressionEs = processExpression.getExpressionEs();
