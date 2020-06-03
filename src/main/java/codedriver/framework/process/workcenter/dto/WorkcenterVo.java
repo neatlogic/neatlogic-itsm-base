@@ -64,6 +64,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	
 	public WorkcenterVo(JSONObject jsonObj) {
 		super(jsonObj);
+		this.isMeWillDo = jsonObj.getInteger("isMeWillDo")!=null?jsonObj.getInteger("isMeWillDo"):0;
 		uuid = jsonObj.getString("uuid");
 		this.setCurrentPage(jsonObj.getInteger("currentPage"));
 		this.setPageSize(jsonObj.getInteger("pageSize"));
