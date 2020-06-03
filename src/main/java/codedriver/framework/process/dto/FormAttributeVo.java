@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.constvalue.FormHandlerType;
-import codedriver.framework.process.constvalue.ProcessExpression;
+import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.process.constvalue.ProcessFormHandler;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.restful.annotation.EntityField;
@@ -156,7 +156,7 @@ public class FormAttributeVo implements Serializable {
 		if(handler == null) {
 			return null;
 		}
-		ProcessExpression processExpression = ProcessFormHandler.getExpression(handler);
+		Expression processExpression = ProcessFormHandler.getExpression(handler);
 		if(processExpression != null) {
 			return new ProcessExpressionVo(processExpression);
 		}else {
@@ -175,12 +175,12 @@ public class FormAttributeVo implements Serializable {
 		if(handler == null) {
 			return null;
 		}
-		List<ProcessExpression> processExpressionList = ProcessFormHandler.getExpressionList(handler);
+		List<Expression> processExpressionList = ProcessFormHandler.getExpressionList(handler);
 		if(CollectionUtils.isEmpty(processExpressionList)) {
 			return null;
 		}
 		expressionList = new ArrayList<>();
-		for(ProcessExpression processExpression : processExpressionList) {
+		for(Expression processExpression : processExpressionList) {
 			expressionList.add(new ProcessExpressionVo(processExpression));
 		}
 		return expressionList;

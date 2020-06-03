@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.process.constvalue.ProcessExpression;
+import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.dto.condition.ConditionVo;
 import codedriver.framework.util.TimeUtil;
@@ -33,7 +33,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 			if(StringUtils.isNotBlank(value.toString())) {
 				value = String.format("'%s'",  value);
 			}
-			where = String.format(ProcessExpression.getExpressionEs(condition.getExpression()),ProcessWorkcenterField.getConditionValue(condition.getName()),value);
+			where = String.format(Expression.getExpressionEs(condition.getExpression()),ProcessWorkcenterField.getConditionValue(condition.getName()),value);
 			
 		}
 		return where;
@@ -61,12 +61,12 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 				endTime = TimeUtil.timeNow();
 			}
 			if(StringUtils.isEmpty(startTime)) {
-				expression = ProcessExpression.LESSTHAN.getExpression();
+				expression = Expression.LESSTHAN.getExpression();
 				startTime = endTime;
 			}else if(StringUtils.isEmpty(endTime)) {
-				expression = ProcessExpression.GREATERTHAN.getExpression();
+				expression = Expression.GREATERTHAN.getExpression();
 			}
-			where = String.format(ProcessExpression.getExpressionEs(expression),ProcessWorkcenterField.getConditionValue(condition.getName()),startTime,endTime);
+			where = String.format(Expression.getExpressionEs(expression),ProcessWorkcenterField.getConditionValue(condition.getName()),startTime,endTime);
 			
 		}
 		return where;
