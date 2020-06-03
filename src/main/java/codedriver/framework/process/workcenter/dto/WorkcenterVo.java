@@ -43,10 +43,14 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	private List<AuthorityVo> authorityList;
 	@EntityField(name = "角色列表", type = ApiParamType.JSONARRAY)
 	private List<String> valueList;
-	@EntityField(name = "是否拥有编辑权限", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "是否拥有编辑权限", type = ApiParamType.INTEGER)
 	private Integer isCanEdit;
-	@EntityField(name = "是否拥有授权权限", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "是否拥有授权权限", type = ApiParamType.INTEGER)
 	private Integer isCanRole;
+	@EntityField(name = "是否附加待我处理条件", type = ApiParamType.INTEGER)
+	private Integer isMeWillDo = 0;
+	@EntityField(name = "附加待我处理的数量", type = ApiParamType.INTEGER)
+	private String meWillDoCount;
 	
 	//params
 	private List<String> channelUuidList;
@@ -60,6 +64,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	
 	public WorkcenterVo(JSONObject jsonObj) {
 		super(jsonObj);
+		this.isMeWillDo = jsonObj.getInteger("isMeWillDo")!=null?jsonObj.getInteger("isMeWillDo"):0;
 		uuid = jsonObj.getString("uuid");
 		this.setCurrentPage(jsonObj.getInteger("currentPage"));
 		this.setPageSize(jsonObj.getInteger("pageSize"));
@@ -185,4 +190,22 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	public void setChannelUuidList(List<String> channelUuidList) {
 		this.channelUuidList = channelUuidList;
 	}
+
+	public Integer getIsMeWillDo() {
+		return isMeWillDo;
+	}
+
+	public void setIsMeWillDo(Integer isMeWillDo) {
+		this.isMeWillDo = isMeWillDo;
+	}
+
+	public String getMeWillDoCount() {
+		return meWillDoCount;
+	}
+
+	public void setMeWillDoCount(String meWillDoCount) {
+		this.meWillDoCount = meWillDoCount;
+	}
+	
+	
 }
