@@ -562,7 +562,11 @@
 	</delete>
 
 	<delete id="deleteProcessDraft" parameterType="codedriver.framework.process.dto.ProcessDraftVo">
-		DELETE FROM `process_draft` WHERE `process_uuid` = #{processUuid} AND `fcu` = #{fcu}
+		DELETE FROM `process_draft` 
+		WHERE `process_uuid` = #{processUuid} 
+		<if test="fcu != null and fcu != ''">
+		AND `fcu` = #{fcu}
+		</if>
 	</delete>
 
 	<delete id="deleteProcessDraftByUuid" parameterType="java.lang.String">
