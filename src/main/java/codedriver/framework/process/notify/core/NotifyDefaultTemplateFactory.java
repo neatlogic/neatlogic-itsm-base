@@ -4,7 +4,7 @@ public class NotifyDefaultTemplateFactory {
 	
 //	private static List<NotifyTemplateVo> defaultTemplateList = new ArrayList<>();	
 //
-	private static int number;
+	private static int number ;
     public static synchronized long nextNum() {
         return number++;
     }
