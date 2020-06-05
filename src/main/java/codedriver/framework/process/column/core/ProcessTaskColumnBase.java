@@ -1,11 +1,11 @@
-package codedriver.framework.process.workcenter.column.core;
+package codedriver.framework.process.column.core;
 
 import org.apache.commons.collections.CollectionUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
 
-public abstract class WorkcenterColumnBase implements IWorkcenterColumn {
+public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 
 	@Override
 	public Object getValue(MultiAttrsObject el) throws RuntimeException {
@@ -21,12 +21,21 @@ public abstract class WorkcenterColumnBase implements IWorkcenterColumn {
 	}
 	
 	@Override
-	public JSONObject getValueText(MultiAttrsObject el) throws RuntimeException{
+	public Object getValueText(MultiAttrsObject el) throws RuntimeException{
 		JSONObject commonJson = (JSONObject) el.getJSON(this.getType());
 		return getMyValueText(commonJson);
 	}
 	
-	public JSONObject getMyValueText(JSONObject json) {
+	public Object getMyValueText(JSONObject json) {
 		return null;
+	}
+	
+	@Override
+	public Boolean getIsShow() {
+		return getMyIsShow();
+	}
+	
+	public Boolean getMyIsShow() {
+		return true;
 	}
 }

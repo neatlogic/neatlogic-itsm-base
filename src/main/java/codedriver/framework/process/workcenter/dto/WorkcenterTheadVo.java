@@ -5,8 +5,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
+import codedriver.framework.process.column.core.IProcessTaskColumn;
 import codedriver.framework.process.constvalue.ProcessFieldType;
-import codedriver.framework.process.workcenter.column.core.IWorkcenterColumn;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class WorkcenterTheadVo {
@@ -43,7 +43,7 @@ public class WorkcenterTheadVo {
 		this.className = obj.getString("className");
 	}
 	
-	public WorkcenterTheadVo(IWorkcenterColumn column) {
+	public WorkcenterTheadVo(IProcessTaskColumn column) {
 		this.name = column.getName();
 		this.userUuid = UserContext.get().getUserUuid();
 		this.displayName = column.getDisplayName();
