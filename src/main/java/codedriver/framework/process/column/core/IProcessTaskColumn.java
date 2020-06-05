@@ -1,9 +1,8 @@
-package codedriver.framework.process.workcenter.column.core;
+package codedriver.framework.process.column.core;
 
-import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
 
-public interface IWorkcenterColumn {
+public interface IProcessTaskColumn {
 	
 	/**
 	 * @Description: 字段英文名
@@ -43,7 +42,7 @@ public interface IWorkcenterColumn {
 	 * @return: java.lang.Object
 	 * @Date: 2020/2/2
 	 */
-	public JSONObject getValueText(MultiAttrsObject el) throws RuntimeException;
+	public Object getValueText(MultiAttrsObject el) throws RuntimeException;
 	
 	/**
 	 * @Description: 获取类型
@@ -68,5 +67,14 @@ public interface IWorkcenterColumn {
 	 * @Date: 2020/3/27
 	 */
 	public Integer getSort();
+	
+
+	/**
+	 * @Description: 是否显示该字段
+	 * @Param:
+	 * @return: java.lang.String
+	 * @Date: 2020/6/5
+	 */
+	public Boolean getIsShow();
 
 }
