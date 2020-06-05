@@ -19,7 +19,8 @@ public enum ProcessFormHandler {
 	FORMSTATICLIST("formstaticList","静态列表",null,null,null),
 	FORMCASCADELIST("formcascadeList","级联下拉",null,null,null),
 	FORMDYNAMICLIST("formdynamicList","动态列表",null,null,null),
-	FORMDIVIDER("formdivider","分割线",null,null,null)
+	FORMDIVIDER("formdivider","分割线",null,null,null),
+	FORMUSERSELECT("formuserselect", "用户选择器", null, BasicType.ARRAY, String.class.getSimpleName().toLowerCase())
 	;
 	
 	private String handler;
