@@ -16,9 +16,9 @@ public enum ProcessFormHandler {
 	FORMCHECKBOX("formcheckbox","复选框",FormHandlerType.CHECKBOX,BasicType.ARRAY,List.class.getSimpleName().toLowerCase()),
 	FORMDATE("formdate","日期",FormHandlerType.DATE,BasicType.DATE,String.class.getSimpleName().toLowerCase()),
 	FORMTIME("formtime","时间",FormHandlerType.TIME,BasicType.DATE,String.class.getSimpleName().toLowerCase()),
-	FORMSTATICLIST("formstaticList","静态列表",null,null,null),
-	FORMCASCADELIST("formcascadeList","级联下拉",null,null,null),
-	FORMDYNAMICLIST("formdynamicList","动态列表",null,null,null),
+	FORMSTATICLIST("formstaticlist","静态列表",null,null,null),
+	FORMCASCADELIST("formcascadelist","级联下拉",null,null,null),
+	FORMDYNAMICLIST("formdynamiclist","动态列表",null,null,null),
 	FORMDIVIDER("formdivider","分割线",null,null,null),
 	FORMUSERSELECT("formuserselect", "用户选择器", null, BasicType.ARRAY, String.class.getSimpleName().toLowerCase()),
 	FORMLINK("formlink", "链接", null, BasicType.STRING, String.class.getSimpleName().toLowerCase());
