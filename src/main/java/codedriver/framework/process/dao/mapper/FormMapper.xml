@@ -209,6 +209,9 @@
 	
 	<update id="updateForm" parameterType="codedriver.framework.process.dto.FormVo">
 	UPDATE `form` SET 
+	<if test="isActive != null">
+	`is_active` = #{isActive},
+	</if>
 	<if test="name != null and name != ''">
 	`name`=#{name}, 
 	</if>
