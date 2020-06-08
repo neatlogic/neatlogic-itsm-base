@@ -54,6 +54,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	
 	//params
 	private List<String> channelUuidList;
+	private JSONArray resultColumnList;
 	
 	public WorkcenterVo() {
 	}
@@ -65,9 +66,10 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	public WorkcenterVo(JSONObject jsonObj) {
 		super(jsonObj);
 		this.isMeWillDo = jsonObj.getInteger("isMeWillDo")!=null?jsonObj.getInteger("isMeWillDo"):0;
-		uuid = jsonObj.getString("uuid");
+		this.uuid = jsonObj.getString("uuid");
 		this.setCurrentPage(jsonObj.getInteger("currentPage"));
 		this.setPageSize(jsonObj.getInteger("pageSize"));
+		this.resultColumnList = jsonObj.getJSONArray("resultColumnList");
 		JSONArray conditionGroupArray = jsonObj.getJSONArray("conditionGroupList");
 		if(CollectionUtils.isNotEmpty(conditionGroupArray)) {
 			channelUuidList = new ArrayList<String>();
@@ -205,6 +207,14 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 
 	public void setMeWillDoCount(String meWillDoCount) {
 		this.meWillDoCount = meWillDoCount;
+	}
+
+	public JSONArray getResultColumnList() {
+		return resultColumnList;
+	}
+
+	public void setResultColumnList(JSONArray resultColumnList) {
+		this.resultColumnList = resultColumnList;
 	}
 	
 	
