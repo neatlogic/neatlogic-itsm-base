@@ -1703,6 +1703,27 @@
 	    #{fcu}
 	  ) 
 	</insert>
+
+	<insert id="replaceProcessTaskStepNotifyPolicyConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">
+	REPLACE INTO `processtask_step_notify_policy_config` (`hash`, `config`) 
+	VALUES (#{policyConfigHash}, #{policyConfig})
+	</insert>
+
+	<insert id="insertProcessTaskStepNotifyPolicy" parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">
+	INSERT INTO `processtask_step_notify_policy` (
+	  `processtask_step_id`,
+	  `policy_id`,
+	  `policy_name`,
+	  `policy_config_hash`
+	) 
+	VALUES
+	  (
+	    #{processTaskStepId},
+	    #{policyId},
+	    #policyName},
+	    #{policyConfigHash}
+	  ) 
+	</insert>
 	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE

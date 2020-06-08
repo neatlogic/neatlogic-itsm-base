@@ -113,7 +113,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	protected static ProcessTaskStepTimeAuditMapper processTaskStepTimeAuditMapper;
 	private static WorktimeMapper worktimeMapper;
 	protected static ChannelMapper channelMapper;
-	private static NotifyMapper notifyMapper;
+	protected static NotifyMapper notifyMapper;
 	protected static FileMapper fileMapper;
 	protected static TeamMapper teamMapper;
 	protected static ProcessStepHandlerMapper processStepHandlerMapper;
