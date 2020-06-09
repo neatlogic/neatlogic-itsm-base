@@ -27,6 +27,8 @@ import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dto.UserVo;
+import codedriver.framework.notify.dto.NotifyPolicyInvokerVo;
+import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.process.constvalue.ProcessStepHandler;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
@@ -47,6 +49,7 @@ import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
+import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
@@ -1062,7 +1065,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					processTaskMapper.replaceProcessTaskFormContent(processTaskFormVo);
 				}
 			}
-
+			
 			Map<String, Long> stepIdMap = new HashMap<>();
 			/** 写入所有步骤信息 **/
 			List<ProcessStepVo> processStepList = processMapper.getProcessStepDetailByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
@@ -1111,6 +1114,39 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					/** 找到开始节点 **/
 					if (stepVo.getType().equals(ProcessStepType.START.getValue())) {
 						currentProcessTaskStepVo.setId(ptStepVo.getId());
+					}
+				}
+			}
+			
+			Map<Long, NotifyPolicyVo> notifyPolicyMap = new HashMap<>();
+			NotifyPolicyInvokerVo notifyPolicyInvokerVo = new NotifyPolicyInvokerVo();
+			notifyPolicyInvokerVo.setInvoker(currentProcessTaskStepVo.getProcessUuid());
+			notifyPolicyInvokerVo.setNeedPage(false);
+			List<NotifyPolicyInvokerVo> notifyPolicyInvokerList = notifyMapper.getNotifyPolicyInvokerList(notifyPolicyInvokerVo);
+			for(NotifyPolicyInvokerVo notifyPolicyInvoker : notifyPolicyInvokerList) {
+				JSONObject config = notifyPolicyInvoker.getConfig();
+				if(MapUtils.isNotEmpty(config)) {
+					String processStepUuid = config.getString("processStepUuid");
+					if(StringUtils.isNotBlank(processStepUuid)) {
+						Long stepId = stepIdMap.get(processStepUuid);
+						if(stepId != null) {
+							NotifyPolicyVo notifyPolicyVo = notifyPolicyMap.get(notifyPolicyInvoker.getPolicyId());
+							if(notifyPolicyVo == null) {
+								notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyInvoker.getPolicyId());
+								if(notifyPolicyVo == null) {
+									continue;
+								}else {
+									notifyPolicyMap.put(notifyPolicyVo.getId(), notifyPolicyVo);
+								}
+							}
+							ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
+							processTaskStepNotifyPolicyVo.setProcessTaskStepId(stepId);
+							processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyInvoker.getPolicyId());
+							processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
+							processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
+							processTaskMapper.replaceProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
+							processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
+						}
 					}
 				}
 			}
