@@ -1436,7 +1436,7 @@
 		(
 		#{id},
 		#{processTaskId},
-		#{name,typeHandler=XssHandler},
+		#{name},
 		#{processStepUuid},
 		#{status},
 		#{type},

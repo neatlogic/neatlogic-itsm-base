@@ -14,7 +14,7 @@ import codedriver.framework.scheduler.dto.JobObject;
 public class ProcessTaskAutomaticCallbackJob extends JobBase {
 	@Override
 	public String getGroupName() {
-		return TenantContext.get().getTenantUuid() + "-PROCESSTASK-AUTOMATIC-";
+		return TenantContext.get().getTenantUuid() + "-PROCESSTASK-AUTOMATIC-CALLBACK";
 	}
 
 	@Override
@@ -24,17 +24,17 @@ public class ProcessTaskAutomaticCallbackJob extends JobBase {
 
 	@Override
 	public void reloadJob(JobObject jobObject) {
-		JobObject.Builder newJobObjectBuilder = new JobObject.Builder("1111111111111111", this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(new Date()).withIntervalInSeconds(5).addData("automaticId", "11111");
-		JobObject newJobObject = newJobObjectBuilder.build();
-		Date triggerDate = schedulerManager.loadJob(newJobObject);
+		//JobObject.Builder newJobObjectBuilder = new JobObject.Builder("1111111111111111", this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(new Date()).withIntervalInSeconds(5).addData("automaticId", "11111");
+		//JobObject newJobObject = newJobObjectBuilder.build();
+		//Date triggerDate = schedulerManager.loadJob(newJobObject);
 		//System.out.println(triggerDate);
 	}
 
 	@Override
 	public void initJob(String tenantUuid) {
-		JobObject.Builder jobObjectBuilder = new JobObject.Builder("1111111111111111", this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).addData("automaticId", "11111");
-		JobObject jobObject = jobObjectBuilder.build();
-		this.reloadJob(jobObject);
+		//JobObject.Builder jobObjectBuilder = new JobObject.Builder("1111111111111111", this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).addData("automaticId", "11111");
+		//JobObject jobObject = jobObjectBuilder.build();
+		//this.reloadJob(jobObject);
 		
 	}
 
