@@ -4,12 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Objects;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.UserType;
+import codedriver.framework.notify.dto.ParamMappingVo;
 import codedriver.framework.process.condition.core.IProcessTaskCondition;
 import codedriver.framework.process.condition.core.ProcessTaskConditionFactory;
 import codedriver.framework.process.constvalue.ProcessFieldType;
@@ -29,11 +34,17 @@ public class ConditionVo implements Serializable{
 	private String expression;
 	private List<String> valueList;
 	
+	private List<ParamMappingVo> paramMappingList;
+	
 	public ConditionVo() {
 		super();
 	}
 	
 	public ConditionVo(JSONObject jsonObj) {
+		JSONArray paramMappingArray = jsonObj.getJSONArray("paramMappingList");
+		if(CollectionUtils.isNotEmpty(paramMappingArray)) {
+			paramMappingList = JSON.parseArray(paramMappingArray.toJSONString(), ParamMappingVo.class);
+		}
 		this.uuid = jsonObj.getString("uuid");
 		this.name = jsonObj.getString("name");
 		this.type = jsonObj.getString("type");
@@ -133,11 +144,33 @@ public class ConditionVo implements Serializable{
 		this.valueList = valueList;
 	}
 
+	public List<ParamMappingVo> getParamMappingList() {
+		return paramMappingList;
+	}
+
+	public void setParamMappingList(List<ParamMappingVo> paramMappingList) {
+		this.paramMappingList = paramMappingList;
+	}
+
 	public boolean predicate(ProcessTaskStepVo currentProcessTaskStepVo) {
 		IProcessTaskCondition workcenterCondition = null;
+		if(ProcessFieldType.CUSTOM.getValue().equals(this.type)) {
+			if(CollectionUtils.isNotEmpty(paramMappingList)) {
+				for(ParamMappingVo paramMappingVo : paramMappingList) {
+					if(Objects.equal(this.name, paramMappingVo.getName())) {
+						this.type = paramMappingVo.getType();
+						this.name = paramMappingVo.getValue();
+					}
+				}
+			}else {
+				
+			}
+		}
 		if(ProcessFieldType.COMMON.getValue().equals(this.type)) {
 			workcenterCondition = ProcessTaskConditionFactory.getHandler(this.name);
 		}else if(ProcessFieldType.FORM.getValue().equals(this.type)) {
+			workcenterCondition = ProcessTaskConditionFactory.getHandler(this.type);
+		}else if(ProcessFieldType.CONSTANT.getValue().equals(this.type)) {
 			workcenterCondition = ProcessTaskConditionFactory.getHandler(this.type);
 		}
 		if(workcenterCondition != null) {

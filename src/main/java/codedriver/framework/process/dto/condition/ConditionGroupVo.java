@@ -8,10 +8,12 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.exception.type.ParamIrregularException;
+import codedriver.framework.notify.dto.ParamMappingVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 
 public class ConditionGroupVo implements Serializable{
@@ -22,7 +24,8 @@ public class ConditionGroupVo implements Serializable{
 	private Map<String, ConditionVo> conditionMap;
 	private List<ConditionRelVo> conditionRelList;
 	private List<String> channelUuidList;
-	
+
+	private List<ParamMappingVo> paramMappingList;
 	
 	
 	public ConditionGroupVo() {
@@ -39,10 +42,16 @@ public class ConditionGroupVo implements Serializable{
 		if(CollectionUtils.isNotEmpty(channelArray)) {
 			channelUuidList = JSONObject.parseArray(channelArray.toJSONString(),String.class);
 		}
+		JSONArray paramMappingArray = jsonObj.getJSONArray("paramMappingList");
+		if(CollectionUtils.isNotEmpty(paramMappingArray)) {
+			paramMappingList = JSON.parseArray(paramMappingArray.toJSONString(), ParamMappingVo.class);
+		}
 		conditionList = new ArrayList<ConditionVo>();
 		conditionMap = new HashMap<String, ConditionVo>();
-		for(Object condition:conditionArray) {
-			ConditionVo conditionVo = new ConditionVo((JSONObject) JSONObject.toJSON(condition));
+		for(int i = 0; i < conditionArray.size(); i++) {
+			JSONObject condition = conditionArray.getJSONObject(i);
+			condition.put("paramMappingList", paramMappingArray);
+			ConditionVo conditionVo = new ConditionVo(condition);
 			/*if(CollectionUtils.isEmpty(conditionVo.getValueList())){
 				throw new ParamIrregularException("'conditionList.valueList'参数不能为空数组");
 			}*/
@@ -52,8 +61,9 @@ public class ConditionGroupVo implements Serializable{
 		JSONArray conditionRelArray = jsonObj.getJSONArray("conditionRelList");
 		if(CollectionUtils.isNotEmpty(conditionRelArray)) {
 			conditionRelList = new ArrayList<ConditionRelVo>();
-			for(Object conditionRel:conditionRelArray) {
-				conditionRelList.add(new ConditionRelVo((JSONObject) JSONObject.toJSON(conditionRel)));
+			for(int i = 0; i < conditionRelArray.size(); i++) {
+				JSONObject conditionRel = conditionRelArray.getJSONObject(i);
+				conditionRelList.add(new ConditionRelVo(conditionRel));
 			}
 		}
 		
@@ -92,6 +102,14 @@ public class ConditionGroupVo implements Serializable{
 
 	public void setChannelUuidList(List<String> channelUuidList) {
 		this.channelUuidList = channelUuidList;
+	}
+
+	public List<ParamMappingVo> getParamMappingList() {
+		return paramMappingList;
+	}
+
+	public void setParamMappingList(List<ParamMappingVo> paramMappingList) {
+		this.paramMappingList = paramMappingList;
 	}
 
 	public String buildScript(ProcessTaskStepVo currentProcessTaskStepVo) {	

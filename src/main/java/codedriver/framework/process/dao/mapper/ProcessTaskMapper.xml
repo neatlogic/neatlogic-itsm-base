@@ -1110,6 +1110,19 @@
 	</foreach>
 	</select>
 	
+	<select id="getProcessTaskStepNotifyPolicy" parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo" resultType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">
+	SELECT 
+	  a.`processtask_step_id` AS processTaskStepId,
+	  a.`policy_id` AS policyId,
+	  a.`policy_name` AS policyName,
+	  a.`policy_config_hash` AS policyConfigHash,
+	  b.`config` AS policyConfig
+	FROM `processtask_step_notify_policy` a
+	JOIN `processtask_step_notify_policy_config` b ON b.`hash` = a.`policy_config_hash`
+	WHERE a.`processtask_step_id` = #{processTaskStepId} 
+	AND a.`policy_id` = #{policyId}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}

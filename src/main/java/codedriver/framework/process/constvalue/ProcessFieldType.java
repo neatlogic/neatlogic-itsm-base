@@ -1,7 +1,7 @@
 package codedriver.framework.process.constvalue;
 
 public enum ProcessFieldType {
-	COMMON("common", "工单固有属性"), FORM("form", "表单属性");
+	COMMON("common", "工单固有属性"), FORM("form", "表单属性"), CUSTOM("custom", "自定义属性"), CONSTANT("constant", "常量属性");
 	private String value;
 	private String name;
 

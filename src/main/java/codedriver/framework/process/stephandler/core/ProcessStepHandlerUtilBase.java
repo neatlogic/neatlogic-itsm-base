@@ -38,14 +38,19 @@ import codedriver.framework.asynchronization.threadpool.CommonThreadPool;
 import codedriver.framework.common.config.Config;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.UserType;
+import codedriver.framework.common.util.RunScriptUtil;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.file.dao.mapper.FileMapper;
 import codedriver.framework.notify.core.INotifyHandler;
 import codedriver.framework.notify.core.NotifyHandlerFactory;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
+import codedriver.framework.notify.dto.NotifyPolicyParamVo;
 import codedriver.framework.notify.dto.NotifyTemplateVo;
 import codedriver.framework.notify.dto.NotifyVo;
+import codedriver.framework.notify.dto.ParamMappingVo;
+import codedriver.framework.process.constvalue.ProcessField;
+import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
@@ -75,6 +80,7 @@ import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
+import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepSubtaskVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
@@ -83,6 +89,7 @@ import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.WorktimeRangeVo;
+import codedriver.framework.process.dto.condition.ConditionConfigVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.notify.NotifyHandlerNotFoundException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
@@ -223,15 +230,16 @@ public abstract class ProcessStepHandlerUtilBase {
 			try {
 				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
+				processTaskVo.setCurrentProcessTaskStep(stepVo);
 				ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
 				ChannelTypeVo channelTypeVo = channelMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid());
 				processTaskVo.setChannelType(channelTypeVo);
-				List<ProcessTaskStepUserVo> processTaskUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
-				if(CollectionUtils.isNotEmpty(processTaskUserList)) {
-					stepVo.setMajorUser(processTaskUserList.get(0));
-				}else {
-					stepVo.setWorkerList(processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(currentProcessTaskStepVo.getId()));
-				}
+//				List<ProcessTaskStepUserVo> processTaskUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+//				if(CollectionUtils.isNotEmpty(processTaskUserList)) {
+//					stepVo.setMajorUser(processTaskUserList.get(0));
+//				}else {
+//					stepVo.setWorkerList(processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(currentProcessTaskStepVo.getId()));
+//				}
 				String content = null;
 				ProcessTaskStepSubtaskVo subtask = null;
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
@@ -252,6 +260,160 @@ public abstract class ProcessStepHandlerUtilBase {
 				}
 				List<ProcessTaskStepWorkerVo> workerList = null;
 				//TODO linbq暂时屏蔽发通知逻辑，待通知策略功能完成后再补上
+				String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
+				stepVo.setConfig(stepConfig);
+				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+				stepVo.setGlobalConfig(processStepHandlerVo.getConfig());
+				JSONObject notifyPolicyConfig = stepVo.getNotifyPolicyConfig();
+				if(MapUtils.isNotEmpty(notifyPolicyConfig)) {
+					Long policyId = notifyPolicyConfig.getLong("policyId");
+					List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
+					if(policyId != null) {
+						ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
+						processTaskStepNotifyPolicyVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+						processTaskStepNotifyPolicyVo.setPolicyId(policyId);
+						processTaskStepNotifyPolicyVo = processTaskMapper.getProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
+						JSONObject policyConfig = JSON.parseObject(processTaskStepNotifyPolicyVo.getPolicyConfig());
+						JSONArray triggerList = policyConfig.getJSONArray("triggerList");
+						for(int i = 0; i < triggerList.size(); i++) {
+							JSONObject triggerObj = triggerList.getJSONObject(i);
+							if(notifyTriggerType.getTrigger().equalsIgnoreCase(triggerObj.getString("trigger"))) {
+								JSONArray notifyList = triggerObj.getJSONArray("notifyList");
+								if(CollectionUtils.isNotEmpty(notifyList)) {
+									List<NotifyPolicyParamVo> paramList = JSON.parseArray(policyConfig.getJSONArray("paramList").toJSONString(), NotifyPolicyParamVo.class);
+									Map<Long, NotifyTemplateVo> templateMap = new HashMap<>(); 
+									List<NotifyTemplateVo> templateList = JSON.parseArray(policyConfig.getJSONArray("templateList").toJSONString(), NotifyTemplateVo.class);
+									for(NotifyTemplateVo notifyTemplateVo : templateList) {
+										templateMap.put(notifyTemplateVo.getId(), notifyTemplateVo);
+									}
+									for(int j = 0; j < notifyList.size(); j++) {
+										JSONObject notifyObj = notifyList.getJSONObject(j);
+										JSONObject conditionConfig = notifyObj.getJSONObject("conditionConfig");
+										if(MapUtils.isNotEmpty(conditionConfig)) {
+											JSONArray conditionGroupList = conditionConfig.getJSONArray("conditionGroupList");
+											if (CollectionUtils.isNotEmpty(conditionGroupList)) {
+												conditionConfig.put("paramMappingList", paramMappingList);
+												ConditionConfigVo conditionConfigVo = new ConditionConfigVo(conditionConfig);
+												String script = conditionConfigVo.buildScript(currentProcessTaskStepVo);
+												try {
+													if (!RunScriptUtil.runScript(script)) {
+														continue;
+													}
+												} catch (NoSuchMethodException e) {
+													logger.error(e.getMessage(), e);
+												} catch (ScriptException e) {
+													logger.error(e.getMessage(), e);
+												}
+											}
+										}
+										JSONArray actionList = notifyObj.getJSONArray("actionList");
+										for(int k = 0; k < actionList.size(); k++) {
+											JSONObject actionObj = actionList.getJSONObject(k);
+											List<String> receiverList = JSON.parseArray(actionObj.getJSONArray("receiverList").toJSONString(), String.class);
+											if (CollectionUtils.isNotEmpty(receiverList)) {
+												String notifyHandler = actionObj.getString("notifyHandler");
+												INotifyHandler handler = NotifyHandlerFactory.getHandler(notifyHandler);
+												if(handler == null) {
+													throw new NotifyHandlerNotFoundException(notifyHandler);
+												}
+												NotifyVo.Builder notifyBuilder = new NotifyVo.Builder();
+												Long templateId = actionObj.getLong("templateId");
+												if(templateId != null) {
+													NotifyTemplateVo notifyTemplateVo = templateMap.get(templateId);
+													if (notifyTemplateVo != null) {
+														notifyBuilder.withContentTemplate(notifyTemplateVo.getContent());
+														notifyBuilder.withTitleTemplate(notifyTemplateVo.getTitle());
+													}
+												}
+												/** 注入流程作业信息 不够将来再补充 **/
+												JSONObject processFieldData = getProcessFieldData(processTaskVo);
+												for(ProcessField processField : ProcessField.values()) {
+													Object processFieldValue = processFieldData.get(processField.getValue());
+													if(processFieldValue != null) {
+														notifyBuilder.addData(processField.getValue(), processFieldValue);
+													}else {
+														//TODO linbq 打印日志或抛异常
+													}
+												}
+												//参数映射
+												if(CollectionUtils.isNotEmpty(paramMappingList)) {
+													for(ParamMappingVo paramMappingVo : paramMappingList) {
+														if(ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
+															notifyBuilder.addData(paramMappingVo.getName(), paramMappingVo.getValue());
+														}else if(Objects.equals(paramMappingVo.getName(), paramMappingVo.getValue())) {
+															if(!processFieldData.containsKey(paramMappingVo.getValue())) {
+																//TODO linbq 打印日志或抛异常
+															}
+														}else {
+															Object processFieldValue = processFieldData.get(paramMappingVo.getValue());
+															if(processFieldValue != null) {
+																notifyBuilder.addData(paramMappingVo.getName(), processFieldValue);
+															}else {
+																//TODO linbq 打印日志或抛异常
+															}
+														}
+													}													
+												}
+												/** 注入结束 **/
+												for(String receiver : receiverList) {
+													String[] split = receiver.split("#");
+													if(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
+														if(ProcessUserType.MAJOR.getValue().equals(split[1])) {
+															List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+															for(ProcessTaskStepUserVo processTaskStepUserVo : majorUserList) {
+																notifyBuilder.addUserUuid(processTaskStepUserVo.getUserUuid());
+															}
+														}else if(ProcessUserType.MINOR.getValue().equals(split[1])) {
+															List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MINOR.getValue());
+															for(ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
+																notifyBuilder.addUserUuid(processTaskStepUserVo.getUserUuid());
+															}
+														}else if(ProcessUserType.AGENT.getValue().equals(split[1])) {
+															List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.AGENT.getValue());
+															for(ProcessTaskStepUserVo processTaskStepUserVo : agentUserList) {
+																notifyBuilder.addUserUuid(processTaskStepUserVo.getUserUuid());
+															}
+														}else if(ProcessUserType.OWNER.getValue().equals(split[1])) {
+															notifyBuilder.addUserUuid(processTaskVo.getOwner());
+														}else if(ProcessUserType.REPORTER.getValue().equals(split[1])) {
+															notifyBuilder.addUserUuid(processTaskVo.getReporter());
+														}else if(ProcessUserType.WORKER.getValue().equals(split[1])) {
+															if (workerList == null) {
+																workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(currentProcessTaskStepVo.getId());
+															}
+															for (ProcessTaskStepWorkerVo workerVo : workerList) {
+																if(GroupSearch.USER.getValue().equals(workerVo.getType())) {
+																	notifyBuilder.addUserUuid(workerVo.getUuid());
+																}else if(GroupSearch.TEAM.getValue().equals(workerVo.getType())) {
+																	notifyBuilder.addTeamId(workerVo.getUuid());
+																}else if(GroupSearch.ROLE.getValue().equals(workerVo.getType())) {
+																	notifyBuilder.addRoleUuid(workerVo.getUuid());
+																}
+															}
+														}
+													}else if(GroupSearch.USER.getValue().equals(split[0])) {
+														notifyBuilder.addUserUuid(split[1]);
+													}else if(GroupSearch.TEAM.getValue().equals(split[0])) {
+														notifyBuilder.addTeamId(split[1]);
+													}else if(GroupSearch.ROLE.getValue().equals(split[0])) {
+														notifyBuilder.addRoleUuid(split[1]);
+													}
+												}
+												List<String> adminUserUuidList = JSON.parseArray(policyConfig.getJSONArray("adminUserUuidList").toJSONString(), String.class);
+												if(CollectionUtils.isNotEmpty(adminUserUuidList)) {
+													notifyBuilder.setExceptionNotifyUserUuidList(adminUserUuidList);
+												}
+												NotifyVo notifyVo = notifyBuilder.build();
+												handler.execute(notifyVo);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
 //				if (StringUtils.isNotBlank(stepVo.getConfigHash())) {
 //					String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
 //					JSONObject stepConfigObj = JSONObject.parseObject(stepConfig);
@@ -356,6 +518,22 @@ public abstract class ProcessStepHandlerUtilBase {
 			} catch (Exception ex) {
 				logger.error("通知失败：" + ex.getMessage(), ex);
 			}
+		}
+		
+		private JSONObject getProcessFieldData(ProcessTaskVo processTaskVo) {
+			JSONObject resultObj = new JSONObject();
+			resultObj.put(ProcessField.ID.getValue(), processTaskVo.getId());
+			resultObj.put(ProcessField.TITLE.getValue(), processTaskVo.getTitle());
+			resultObj.put(ProcessField.CHANNELTYPE.getValue(), processTaskVo.getChannelType().getName());
+			resultObj.put(ProcessField.CONTENT.getValue(), processTaskVo.getStartProcessTaskStep().getComment().getContent());
+			resultObj.put(ProcessField.ENDTIME.getValue(), processTaskVo.getEndTime());
+			resultObj.put(ProcessField.STARTTIME.getValue(), processTaskVo.getStartTime());
+			resultObj.put(ProcessField.EXPIREDTIME.getValue(), processTaskVo.getExpireTime());
+			resultObj.put(ProcessField.OWNER.getValue(), processTaskVo.getOwnerName());
+			resultObj.put(ProcessField.REPORTER.getValue(), processTaskVo.getReporterName());
+			resultObj.put(ProcessField.PRIORITY.getValue(), processTaskVo.getPriority().getName());
+			resultObj.put(ProcessField.STATUS.getValue(), processTaskVo.getStatusVo().getText());
+			return resultObj;
 		}
 	}
 
