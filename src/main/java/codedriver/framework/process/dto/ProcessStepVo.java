@@ -33,15 +33,17 @@ public class ProcessStepVo implements Serializable {
 	private List<ProcessStepTimeoutPolicyVo> timeoutPolicyList;
 	private List<ProcessStepFormAttributeVo> formAttributeList;
 
-	private List<String> templateUuidList;
+//	private List<String> templateUuidList;
 	
-	public List<String> getTemplateUuidList() {
-		return templateUuidList;
-	}
-
-	public void setTemplateUuidList(List<String> templateUuidList) {
-		this.templateUuidList = templateUuidList;
-	}
+	private transient Long notifyPolicyId;
+	
+//	public List<String> getTemplateUuidList() {
+//		return templateUuidList;
+//	}
+//
+//	public void setTemplateUuidList(List<String> templateUuidList) {
+//		this.templateUuidList = templateUuidList;
+//	}
 
 	@Override
 	public boolean equals(Object other) {
@@ -214,6 +216,14 @@ public class ProcessStepVo implements Serializable {
 
 	public void setFormUuid(String formUuid) {
 		this.formUuid = formUuid;
+	}
+
+	public Long getNotifyPolicyId() {
+		return notifyPolicyId;
+	}
+
+	public void setNotifyPolicyId(Long notifyPolicyId) {
+		this.notifyPolicyId = notifyPolicyId;
 	}
 
 }
