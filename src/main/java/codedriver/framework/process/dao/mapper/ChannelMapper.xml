@@ -291,6 +291,13 @@
 		</where>
 	</select>
 	
+	<select id="getAllAncestorNameListByParentUuid" parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT a.`name` FROM `catalog` a
+	WHERE a.`lft` &lt;= (SELECT b.`lft` FROM `catalog` b WHERE b.`uuid` = #{parentUuid}) 
+	AND a.`uuid` != 0
+	ORDER BY a.`lft`
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
