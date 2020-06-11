@@ -3,8 +3,8 @@ package codedriver.framework.process.workcenter.dto;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
-import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
+import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.process.column.core.IProcessTaskColumn;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.restful.annotation.EntityField;

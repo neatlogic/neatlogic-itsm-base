@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.common.constvalue.BasicType;
+import codedriver.framework.common.constvalue.ParamType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.condition.ConditionVo;
 
@@ -64,7 +64,7 @@ public interface IProcessTaskCondition {
 	 * @return: java.lang.Integer
 	 * @Date: 2020/2/11
 	 */
-	public BasicType getBasicType();
+	public ParamType getBasicType();
 
 	/**
 	 * @Description: 判断条件是否成立
