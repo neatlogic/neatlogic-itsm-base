@@ -20,7 +20,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 
 	public final static String ROOT_UUID = "0";
 	public final static String ROOT_PARENTUUID = "-1";
-	
+	public final static String UNCATEGORIZED_CATALOG_UUID = "1";
 	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
 	private String uuid;
 	
@@ -332,7 +332,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 
 	@Override
 	public int compareTo(CatalogVo other) {
-		List<Integer> sortList1 = getSortList();
+		List<Integer> sortList1 = this.getSortList();
 		List<Integer> sortList2 = other.getSortList();
 		int size1 = sortList1.size();
 		int size2 = sortList2.size();
@@ -346,10 +346,12 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 			resultDefault = -1;
 		}
 		for(int i = 0; i < minIndex; i++) {
-			if(sortList1.get(i).equals(sortList2.get(i))) {
+			if(Objects.equal(sortList1.get(i), sortList2.get(i))) {
 				continue;
 			}else {
-				return sortList1.get(i) - sortList2.get(i);
+				int sort1 = sortList1.get(i) == null ? 0 : sortList1.get(i);
+				int sort2 = sortList2.get(i) == null ? 0 : sortList2.get(i);
+				return sort1 - sort2;
 			}
 		}
 		return resultDefault;
