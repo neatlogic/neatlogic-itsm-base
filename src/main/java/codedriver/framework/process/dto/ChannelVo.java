@@ -39,9 +39,6 @@ public class ChannelVo extends BasePageVo {
 	@EntityField(name = "是否收藏，0：未收藏，1：已收藏", type = ApiParamType.INTEGER)
 	private Integer isFavorite;
 
-//	@EntityField(name = "是否已选中，false：未选中，true：已选中", type = ApiParamType.BOOLEAN)
-//	private boolean selected = false;
-
 	@EntityField(name = "类型", type = ApiParamType.STRING)
 	private String type = "channel";
 
@@ -82,10 +79,6 @@ public class ChannelVo extends BasePageVo {
 	private transient Integer sort;
 
 	private transient String userUuid;
-
-//	private transient List<Integer> sortList;
-
-//	private transient List<String> nameList;
 	
 	private transient List<String> authorizedUuidList;
 
@@ -156,14 +149,6 @@ public class ChannelVo extends BasePageVo {
 		this.isFavorite = isFavorite;
 	}
 
-//	public boolean isSelected() {
-//		return selected;
-//	}
-//
-//	public void setSelected(boolean selected) {
-//		this.selected = selected;
-//	}
-
 	public String getUserUuid() {
 		return userUuid;
 	}
@@ -188,19 +173,6 @@ public class ChannelVo extends BasePageVo {
 		this.parent = parent;
 		parent.addChildChannel(this);
 	}
-
-//	public void setOpenCascade(boolean open) {
-//		if (parent != null) {
-//			parent.setOpenCascade(open);
-//		}
-//	}
-//
-//	public void setSelectedCascade(boolean selected) {
-//		this.selected = selected;
-//		if (parent != null) {
-//			parent.setSelectedCascade(selected);
-//		}
-//	}
 
 	public String getType() {
 		return type;
@@ -314,50 +286,6 @@ public class ChannelVo extends BasePageVo {
 	public void setChannelTypeUuid(String channelTypeUuid) {
 		this.channelTypeUuid = channelTypeUuid;
 	}
-
-//	public List<Integer> getSortList() {
-//		if (sortList != null) {
-//			return sortList;
-//		}
-//		if (parent != null) {
-//			sortList = new ArrayList<>(parent.getSortList());
-//		} else {
-//			sortList = new ArrayList<>();
-//		}
-//		sortList.add(sort);
-//		return sortList;
-//	}
-//
-//	public void setSortList(List<Integer> sortList) {
-//		this.sortList = sortList;
-//	}
-
-//	public List<String> getNameList() {
-//		if (nameList != null) {
-//			return nameList;
-//		}
-//		if (parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
-//			nameList = new ArrayList<>(parent.getNameList());
-//		} else {
-//			nameList = new ArrayList<>();
-//		}
-//		nameList.add(name);
-//		return nameList;
-//	}
-//
-//	public void setNameList(List<String> nameList) {
-//		this.nameList = nameList;
-//	}
-
-//	public boolean isAncestorOrSelf(String uuid) {
-//		if (this.uuid.equals(uuid)) {
-//			return true;
-//		}
-//		if (parent == null) {
-//			return false;
-//		}
-//		return parent.isAncestorOrSelf(uuid);
-//	}
 
 	public List<String> getAuthorizedUuidList() {
 		return authorizedUuidList;

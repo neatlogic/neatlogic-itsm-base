@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Objects;
+
 import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
@@ -40,12 +42,6 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String desc;
 	
-//	@EntityField(name = "是否打开，false：未选中，true：已选中", type = ApiParamType.BOOLEAN)
-//	private boolean open = false;
-//	
-//	@EntityField(name = "是否已选中，false：未选中，true：已选中", type = ApiParamType.BOOLEAN)
-//	private boolean selected = false;
-	
 	@EntityField(name = "子目录或通道", type = ApiParamType.JSONARRAY)
 	private List<Object> children = new ArrayList<>();
 	
@@ -62,6 +58,8 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 
 	@EntityField(name = "子节点数", type = ApiParamType.INTEGER)
 	private int childrenCount = 0;
+	
+	private transient boolean isAuthority = false;
 	
 	private transient List<AuthorityVo> authorityVoList;
 	
@@ -141,22 +139,6 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 		this.desc = desc;
 	}
 
-//	public boolean isOpen() {
-//		return open;
-//	}
-//
-//	public void setOpen(boolean open) {
-//		this.open = open;
-//	}
-//
-//	public boolean isSelected() {
-//		return selected;
-//	}
-//
-//	public void setSelected(boolean selected) {
-//		this.selected = selected;
-//	}
-
 	public List<Object> getChildren() {
 		children.clear();
 		children.addAll(childCatalogList);
@@ -168,6 +150,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 		if(childCatalogList.contains(catalogVo)) {
 			return false;
 		}
+		childrenCount++;
 		return childCatalogList.add(catalogVo);
 	}
 	public boolean removeChildCatalog(CatalogVo catalogVo) {
@@ -176,6 +159,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 			while(iterator.hasNext()) {
 				if(iterator.next().equals(catalogVo)) {
 					iterator.remove();
+					childrenCount--;
 					return true;
 				}
 			}
@@ -187,6 +171,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 		if(childChannelList.contains(channelVo)) {
 			return false;
 		}
+		childrenCount++;
 		return childChannelList.add(channelVo);
 	}
 	public boolean removeChildChannel(ChannelVo channelVo) {
@@ -195,6 +180,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 			while(iterator.hasNext()) {
 				if(iterator.next().equals(channelVo)) {
 					iterator.remove();
+					childrenCount--;
 					return true;
 				}
 			}
@@ -210,20 +196,6 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 		this.parent = parent;
 		parent.addChildCatalog(this);
 	}
-
-//	public void setOpenCascade(boolean open) {
-//		this.open = open;
-//		if(parent != null) {
-//			parent.setOpenCascade(open);
-//		}
-//	}
-//
-//	public void setSelectedCascade(boolean selected) {
-//		this.selected = selected;
-//		if(parent != null) {
-//			parent.setSelectedCascade(selected);
-//		}
-//	}
 
 	public String getType() {
 		return type;
@@ -270,8 +242,11 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 	}
 
 	public int getChildrenCount() {
-		childrenCount = childCatalogList.size() + childChannelList.size();
 		return childrenCount;
+	}
+
+	public void setChildrenCount(int childrenCount) {
+		this.childrenCount = childrenCount;
 	}
 
 	public List<Integer> getSortList() {
@@ -287,10 +262,6 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 		return sortList;
 	}
 
-	public void setSortList(List<Integer> sortList) {
-		this.sortList = sortList;
-	}
-
 	public List<String> getNameList() {
 		if(nameList != null) {
 			return nameList;
@@ -302,20 +273,6 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 		}
 		nameList.add(name);
 		return nameList;
-	}
-
-	public void setNameList(List<String> nameList) {
-		this.nameList = nameList;		
-	}
-
-	public boolean isAncestorOrSelf(String uuid) {
-		if(this.uuid.equals(uuid)) {
-			return true;
-		}
-		if(parent == null) {
-			return false;
-		}	
-		return parent.isAncestorOrSelf(uuid);
 	}
 
 	@Override
@@ -357,6 +314,20 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 
 	public void setRht(Integer rht) {
 		this.rht = rht;
+	}
+
+	public boolean isAuthority() {
+		if(Objects.equal(isActive, 1) && isAuthority) {
+			if(parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
+				return parent.isAuthority();
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public void setAuthority(boolean isAuthority) {
+		this.isAuthority = isAuthority;
 	}
 
 	@Override

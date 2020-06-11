@@ -19,7 +19,7 @@ public interface CatalogMapper {
 
 	public int checkCatalogNameIsRepeat(CatalogVo catalogVo);
 
-	public List<CatalogVo> getCatalogListForTree(Integer isActive);
+	public List<CatalogVo> getCatalogListForTree(@Param("lft") Integer lft, @Param("rht") Integer rht);
 
 	public List<AuthorityVo> getCatalogAuthorityListByCatalogUuid(String uuid);
 	
