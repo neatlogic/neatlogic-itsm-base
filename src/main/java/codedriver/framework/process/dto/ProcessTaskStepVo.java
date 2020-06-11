@@ -97,6 +97,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
 	private transient String aliasName;
 	private transient Boolean isAutoGenerateId = true;
+	
+	private transient JSONObject notifyPolicyConfig;
+	
 	public ProcessTaskStepVo() {
 
 	}
@@ -611,6 +614,20 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
 		this.isAutoGenerateId = isAutoGenerateId;
+	}
+
+	public JSONObject getNotifyPolicyConfig() {
+		if(notifyPolicyConfig == null && MapUtils.isNotEmpty(getConfigObj())) {
+			notifyPolicyConfig = getConfigObj().getJSONObject("notifyPolicyConfig");
+		}
+		if(MapUtils.isEmpty(notifyPolicyConfig) && MapUtils.isNotEmpty(getGlobalConfigObj())) {
+			notifyPolicyConfig = getGlobalConfigObj().getJSONObject("notifyPolicyConfig");
+		}
+		return notifyPolicyConfig;
+	}
+
+	public void setNotifyPolicyConfig(JSONObject notifyPolicyConfig) {
+		this.notifyPolicyConfig = notifyPolicyConfig;
 	}
 
 }
