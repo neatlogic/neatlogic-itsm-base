@@ -66,6 +66,7 @@
 		<id column="uuid" property="uuid"/>
 		<result column="name" property="name"/>
 		<result column="parent_uuid" property="parentUuid"/>
+		<result column="is_active" property="isActive"/>
 		<result column="lft" property="lft"/>
 	</resultMap>
 	
@@ -74,12 +75,12 @@
 	  `uuid`,
 	  `name`,
 	  `parent_uuid`,
+	  `is_active`,
 	  `lft`
 	FROM `catalog` 
-	 <if test="isActive != null">
-	 WHERE `is_active` = #{isActive}
-	 </if>
-	 ORDER BY `parent_uuid`,`lft`
+	WHERE `lft` &gt;= #{lft} 
+	AND `rht` &lt;= #{rht}
+	ORDER BY `parent_uuid`,`lft`
 	</select>
 	
 	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.dto.AuthorityVo" useCache="false">
@@ -141,7 +142,7 @@
 	 </where>
 	</select>
 	
-	<select id="getCatalogByParentUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo">
+	<select id="getCatalogListByParentUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo">
 	SELECT 
 	  a.`uuid`,
 	  a.`name`,

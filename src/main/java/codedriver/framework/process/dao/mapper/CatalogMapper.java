@@ -19,7 +19,7 @@ public interface CatalogMapper {
 
 	public int checkCatalogNameIsRepeat(CatalogVo catalogVo);
 
-	public List<CatalogVo> getCatalogListForTree(Integer isActive);
+	public List<CatalogVo> getCatalogListForTree(@Param("lft") Integer lft, @Param("rht") Integer rht);
 
 	public List<AuthorityVo> getCatalogAuthorityListByCatalogUuid(String uuid);
 	
@@ -32,7 +32,7 @@ public interface CatalogMapper {
 
 	public String getCatalogLockByUuid(String uuid);
 
-	public List<CatalogVo> getCatalogByParentUuid(String parentUuid);
+	public List<CatalogVo> getCatalogListByParentUuid(String parentUuid);
 
 	public int checkCatalogIsExistsByLeftRightCode(@Param("uuid")String uuid, @Param("lft") Integer lft, @Param("rht") Integer rht);
 
