@@ -141,7 +141,7 @@
 	 </where>
 	</select>
 	
-	<select id="getCatalogByParentUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo">
+	<select id="getCatalogListByParentUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo">
 	SELECT 
 	  a.`uuid`,
 	  a.`name`,

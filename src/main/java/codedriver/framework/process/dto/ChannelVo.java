@@ -11,10 +11,9 @@ import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.AuthorityVo;
-import codedriver.framework.process.exception.channel.ChannelUnsupportedOperationException;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ChannelVo extends BasePageVo implements ITree {
+public class ChannelVo extends BasePageVo {
 
 	@EntityField(name = "服务通道uuid", type = ApiParamType.STRING)
 	private String uuid;
@@ -40,8 +39,8 @@ public class ChannelVo extends BasePageVo implements ITree {
 	@EntityField(name = "是否收藏，0：未收藏，1：已收藏", type = ApiParamType.INTEGER)
 	private Integer isFavorite;
 
-	@EntityField(name = "是否已选中，false：未选中，true：已选中", type = ApiParamType.BOOLEAN)
-	private boolean selected = false;
+//	@EntityField(name = "是否已选中，false：未选中，true：已选中", type = ApiParamType.BOOLEAN)
+//	private boolean selected = false;
 
 	@EntityField(name = "类型", type = ApiParamType.STRING)
 	private String type = "channel";
@@ -78,23 +77,18 @@ public class ChannelVo extends BasePageVo implements ITree {
 	
 	private transient List<AuthorityVo> authorityVoList;
 	
-	private transient ITree parent;
+	private transient CatalogVo parent;
 
 	private transient Integer sort;
 
-	private transient String keyword;
-
 	private transient String userUuid;
 
-	private transient int childrenCount = 0;
+//	private transient List<Integer> sortList;
 
-	private transient List<Integer> sortList;
-
-	private transient List<String> nameList;
+//	private transient List<String> nameList;
 	
 	private transient List<String> authorizedUuidList;
 
-	@Override
 	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
@@ -102,17 +96,14 @@ public class ChannelVo extends BasePageVo implements ITree {
 		return uuid;
 	}
 
-	@Override
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -149,12 +140,10 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.color = color;
 	}
 
-	@Override
 	public String getParentUuid() {
 		return parentUuid;
 	}
 
-	@Override
 	public void setParentUuid(String parentUuid) {
 		this.parentUuid = parentUuid;
 	}
@@ -167,23 +156,13 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.isFavorite = isFavorite;
 	}
 
-	@Override
-	public boolean isSelected() {
-		return selected;
-	}
-
-	@Override
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
-
-	public String getKeyword() {
-		return keyword;
-	}
-
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
+//	public boolean isSelected() {
+//		return selected;
+//	}
+//
+//	public void setSelected(boolean selected) {
+//		this.selected = selected;
+//	}
 
 	public String getUserUuid() {
 		return userUuid;
@@ -201,43 +180,28 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.sort = sort;
 	}
 
-	@Override
-	public List<ITree> getChildren() {
-		return null;
-	}
-
-	@Override
-	public void setChildren(List<ITree> children) {
-		throw new ChannelUnsupportedOperationException(this.uuid, "设置子节点");
-	}
-
-	@Override
-	public ITree getParent() {
+	public CatalogVo getParent() {
 		return parent;
 	}
 
-	@Override
-	public void setParent(ITree parent) {
+	public void setParent(CatalogVo parent) {
 		this.parent = parent;
-		parent.addChild(this);
+		parent.addChildChannel(this);
 	}
 
-	@Override
-	public void setOpenCascade(boolean open) {
-		if (parent != null) {
-			parent.setOpenCascade(open);
-		}
-	}
+//	public void setOpenCascade(boolean open) {
+//		if (parent != null) {
+//			parent.setOpenCascade(open);
+//		}
+//	}
+//
+//	public void setSelectedCascade(boolean selected) {
+//		this.selected = selected;
+//		if (parent != null) {
+//			parent.setSelectedCascade(selected);
+//		}
+//	}
 
-	@Override
-	public void setSelectedCascade(boolean selected) {
-		this.selected = selected;
-		if (parent != null) {
-			parent.setSelectedCascade(selected);
-		}
-	}
-
-	@Override
 	public String getType() {
 		return type;
 	}
@@ -351,74 +315,49 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.channelTypeUuid = channelTypeUuid;
 	}
 
-	@Override
-	public int getChildrenCount() {
-		return childrenCount;
-	}
+//	public List<Integer> getSortList() {
+//		if (sortList != null) {
+//			return sortList;
+//		}
+//		if (parent != null) {
+//			sortList = new ArrayList<>(parent.getSortList());
+//		} else {
+//			sortList = new ArrayList<>();
+//		}
+//		sortList.add(sort);
+//		return sortList;
+//	}
+//
+//	public void setSortList(List<Integer> sortList) {
+//		this.sortList = sortList;
+//	}
 
-	@Override
-	public void setChildrenCount(int count) {
-		throw new ChannelUnsupportedOperationException(this.uuid, "设置子节点个数");
-	}
+//	public List<String> getNameList() {
+//		if (nameList != null) {
+//			return nameList;
+//		}
+//		if (parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
+//			nameList = new ArrayList<>(parent.getNameList());
+//		} else {
+//			nameList = new ArrayList<>();
+//		}
+//		nameList.add(name);
+//		return nameList;
+//	}
+//
+//	public void setNameList(List<String> nameList) {
+//		this.nameList = nameList;
+//	}
 
-	@Override
-	public List<Integer> getSortList() {
-		if (sortList != null) {
-			return sortList;
-		}
-		if (parent != null) {
-			sortList = new ArrayList<>(parent.getSortList());
-		} else {
-			sortList = new ArrayList<>();
-		}
-		sortList.add(sort);
-		return sortList;
-	}
-
-	@Override
-	public void setSortList(List<Integer> sortList) {
-		this.sortList = sortList;
-	}
-
-	@Override
-	public boolean addChild(ITree child) {
-		throw new ChannelUnsupportedOperationException(this.uuid, "添加子节点");
-	}
-
-	@Override
-	public boolean removeChild(ITree child) {
-		throw new ChannelUnsupportedOperationException(this.uuid, "删除子节点");
-	}
-
-	@Override
-	public List<String> getNameList() {
-		if (nameList != null) {
-			return nameList;
-		}
-		if (parent != null && !ITree.ROOT_UUID.equals(parent.getUuid())) {
-			nameList = new ArrayList<>(parent.getNameList());
-		} else {
-			nameList = new ArrayList<>();
-		}
-		nameList.add(name);
-		return nameList;
-	}
-
-	@Override
-	public void setNameList(List<String> nameList) {
-		this.nameList = nameList;
-	}
-
-	@Override
-	public boolean isAncestorOrSelf(String uuid) {
-		if (this.uuid.equals(uuid)) {
-			return true;
-		}
-		if (parent == null) {
-			return false;
-		}
-		return parent.isAncestorOrSelf(uuid);
-	}
+//	public boolean isAncestorOrSelf(String uuid) {
+//		if (this.uuid.equals(uuid)) {
+//			return true;
+//		}
+//		if (parent == null) {
+//			return false;
+//		}
+//		return parent.isAncestorOrSelf(uuid);
+//	}
 
 	public List<String> getAuthorizedUuidList() {
 		return authorizedUuidList;

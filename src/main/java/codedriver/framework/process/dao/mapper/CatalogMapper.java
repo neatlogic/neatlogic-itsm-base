@@ -32,7 +32,7 @@ public interface CatalogMapper {
 
 	public String getCatalogLockByUuid(String uuid);
 
-	public List<CatalogVo> getCatalogByParentUuid(String parentUuid);
+	public List<CatalogVo> getCatalogListByParentUuid(String parentUuid);
 
 	public int checkCatalogIsExistsByLeftRightCode(@Param("uuid")String uuid, @Param("lft") Integer lft, @Param("rht") Integer rht);
 

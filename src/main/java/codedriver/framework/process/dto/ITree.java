@@ -3,8 +3,6 @@ package codedriver.framework.process.dto;
 import java.util.List;
 
 public interface ITree extends Comparable<ITree> {
-	public final static String ROOT_UUID = "0";
-	public final static String ROOT_PARENTUUID = "-1";
 	
 	public String getUuid();
 	public void setUuid(String uuid);
