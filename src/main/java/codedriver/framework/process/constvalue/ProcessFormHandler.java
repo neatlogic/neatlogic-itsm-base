@@ -26,14 +26,14 @@ public enum ProcessFormHandler {
 	private String handler;
 	private String handlerName;
 	private FormHandlerType type;
-	private ParamType basicType;
+	private ParamType paramType;
 	private String dataType;
 	
-	private ProcessFormHandler(String _handler,String _handlerName,FormHandlerType _type,ParamType _basicType,String _dataType) {
+	private ProcessFormHandler(String _handler,String _handlerName,FormHandlerType _type,ParamType _paramType,String _dataType) {
 		this.handler = _handler;
 		this.handlerName = _handlerName;
 		this.type = _type;
-		this.basicType = _basicType;
+		this.paramType = _paramType;
 		this.dataType = _dataType;
 	}
 	
@@ -97,7 +97,7 @@ public enum ProcessFormHandler {
 	}
 	
 	public List<Expression> getExpressionList() {
-		return this.basicType.getExpressionList();
+		return this.paramType.getExpressionList();
 	}
 
 	public String getHandler() {
@@ -115,9 +115,21 @@ public enum ProcessFormHandler {
 	}
 
 	public Expression getExpression() {
-		return this.basicType.getDefaultExpression();
+		return this.paramType.getDefaultExpression();
+	}
+
+
+	public ParamType getParamType() {
+		return paramType;
 	}
 	
-	
+	public static ParamType getParamType(String _handler) {
+		for (ProcessFormHandler s : ProcessFormHandler.values()) {
+			if (s.getHandler().equals(_handler)) {
+				return s.getParamType();
+			}
+		}
+		return null;
+	}
 
 }
