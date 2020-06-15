@@ -163,6 +163,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 					valueList.add(GroupSearch.ROLE.getValuePlugin() + workcenterAuthorityVo.getUuid());
 				}else if(workcenterAuthorityVo.getType().equals(GroupSearch.USER.getValue())){
 					valueList.add(GroupSearch.USER.getValuePlugin() + workcenterAuthorityVo.getUuid());
+				}if(workcenterAuthorityVo.getType().equals(GroupSearch.COMMON.getValue())){
+					valueList.add(GroupSearch.COMMON.getValuePlugin() + workcenterAuthorityVo.getUuid());
 				}
 			}
 		}
