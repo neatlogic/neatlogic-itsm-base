@@ -64,7 +64,7 @@ public interface IProcessTaskCondition {
 	 * @return: java.lang.Integer
 	 * @Date: 2020/2/11
 	 */
-	public ParamType getBasicType();
+	public ParamType getParamType();
 
 	/**
 	 * @Description: 判断条件是否成立
