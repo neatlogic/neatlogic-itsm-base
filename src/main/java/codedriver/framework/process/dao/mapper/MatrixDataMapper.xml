@@ -98,7 +98,7 @@
 		`${column}` IS NOT NULL
 		</foreach>
 		<if test="uuidList != null and uuidList.size() > 0">
-		`uuid` IN
+		AND `uuid` IN
 		<foreach collection="uuidList" item="uuid" open="(" close=")" separator=",">
 		#{uuid}
 		</foreach>
