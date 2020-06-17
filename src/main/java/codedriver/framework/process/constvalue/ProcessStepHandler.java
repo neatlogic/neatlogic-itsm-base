@@ -7,7 +7,8 @@ public enum ProcessStepHandler {
 	CONDITION("condition", "converge", "条件"),
 	DISTRIBUTARY("distributary", "converge", "分流"),
 	OCTOPUS("octopus","process","自动化"),
-	AUTOMATIC("automatic", "process", "自动处理");
+	AUTOMATIC("automatic", "auto", "自动处理")
+	;
 
 	private String handler;
 	private String name;
