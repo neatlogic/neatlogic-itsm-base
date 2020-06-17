@@ -121,6 +121,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	private static final ThreadLocal<List<AuditHandler>> AUDIT_HANDLERS = new ThreadLocal<>();
 	private static final ThreadLocal<List<SlaHandler>> SLA_HANDLERS = new ThreadLocal<>();
 	private static final ThreadLocal<List<NotifyHandler>> NOTIFY_HANDLERS = new ThreadLocal<>();
+	private static final ThreadLocal<List<ActionHandler>> ACTION_HANDLERS = new ThreadLocal<>();
 	protected static ProcessMapper processMapper;
 	protected static ProcessTaskMapper processTaskMapper;
 	protected static FormMapper formMapper;
@@ -198,6 +199,54 @@ public abstract class ProcessStepHandlerUtilBase {
 	@Autowired
 	public void setPriorityMapper(PriorityMapper _priorityMapper) {
 		priorityMapper = _priorityMapper;
+	}
+	protected static class ActionHandler extends CodeDriverThread {
+
+		private ProcessTaskStepVo currentProcessTaskStepVo;
+		private NotifyTriggerType triggerType;
+		
+		public ActionHandler(ProcessTaskStepVo _currentProcessTaskStepVo, NotifyTriggerType _trigger) {
+			currentProcessTaskStepVo = _currentProcessTaskStepVo;
+			triggerType = _trigger;
+			if(_currentProcessTaskStepVo != null) {
+				this.setThreadName("PROCESSTASK-ACTION-" + _currentProcessTaskStepVo.getId());
+			}
+		}
+		protected static void action(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
+			if(!TransactionSynchronizationManager.isSynchronizationActive()) {
+				CachedThreadPool.execute(new ActionHandler(currentProcessTaskStepVo, trigger));
+			}else {
+				List<ActionHandler> handlerList = ACTION_HANDLERS.get();
+				if(handlerList == null) {
+					handlerList = new ArrayList<>();
+					ACTION_HANDLERS.set(handlerList);
+					TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+						@Override
+						public void afterCommit() {
+							List<ActionHandler> handlerList = ACTION_HANDLERS.get();
+							for(ActionHandler handler : handlerList) {
+								CachedThreadPool.execute(handler);
+							}
+						}
+						
+						@Override
+						public void afterCompletion(int status) {
+							ACTION_HANDLERS.remove();
+						}
+					});
+				}
+				handlerList.add(new ActionHandler(currentProcessTaskStepVo, trigger));
+			}
+		}
+		@Override
+		protected void execute() {
+			try {
+				
+			}catch(Exception ex) {
+				logger.error("动作执行失败：" + ex.getMessage(), ex);
+			}			
+		}
+		
 	}
 	protected static class NotifyHandler extends CodeDriverThread {
 		private ProcessTaskStepVo currentProcessTaskStepVo;
