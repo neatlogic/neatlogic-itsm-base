@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public enum CallbackType {
+    NONE("none", "无需回调"), 
     WAIT("wait", "等待回调"), 
     INTERVAL("interval", "定时回调")
     ;
@@ -45,10 +46,12 @@ public enum CallbackType {
     public static JSONArray getJSONArray() {
     	JSONArray array = new JSONArray();
     	for (CallbackType s : CallbackType.values()) {
-    		JSONObject json = new JSONObject();
-    		json.put("value", s.getValue());
-    		json.put("text", s.getText());
-    		array.add(json);
+    		if(!s.getValue().equals(CallbackType.NONE.getValue())) {
+	    		JSONObject json = new JSONObject();
+	    		json.put("value", s.getValue());
+	    		json.put("text", s.getText());
+	    		array.add(json);
+    		}
         }
     	return array;
     }
