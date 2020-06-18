@@ -3,8 +3,6 @@ package codedriver.framework.process.dto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
-import codedriver.framework.asynchronization.threadlocal.UserContext;
-
 public class ProcessTaskContentVo {
 	private String hash;
 	private String content;
