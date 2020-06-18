@@ -15,7 +15,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dto.AuthorityVo;
-import codedriver.framework.process.dto.condition.ConditionConfigVo;
+import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class WorkcenterVo extends ConditionConfigVo implements Serializable{

@@ -61,7 +61,8 @@ public enum ProcessTaskStepAction {
 	 * 被授权的对象可在该步骤处于‘待处理’或‘进行中’时催办，如果同时有多个“待处理”或‘进行中’的步骤，则将每个步骤中配置的授权对象取并集，配置的对象都有权限进行催办操作，无论是查看页面还是处理页面，处理人还是非处理人，有权限的用户就能看到该按钮，否则按钮不显示；
 	 * 催办时会生成一条活动，并在对应的步骤中记录；如果配置了催办的通知设置，还会根据配置进行通知；
 	 */
-	URGE("urge","催办");
+	URGE("urge","催办"),
+	RESTFULACTION("restfulaction", "RESTFUL动作");
 	private String status;
 	private String text;
 

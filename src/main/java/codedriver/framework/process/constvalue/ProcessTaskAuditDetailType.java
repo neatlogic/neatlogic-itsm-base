@@ -10,7 +10,8 @@ public enum ProcessTaskAuditDetailType {
 	//DATE("date", "期望时间", "targetTime", "oldTargetTime", 6),
 	SUBTASK("subtask", "子任务", "subtask", "oldSubtask", 6),
 	FILE("file", "上传文件", "fileUuidList", "oldFileUuidList", 7),
-	TASKSTEP("taskstep", "工单步骤", "nextStepId", "oldNextStepId", 8);
+	TASKSTEP("taskstep", "工单步骤", "nextStepId", "oldNextStepId", 8),
+	RESTFULACTION("restfulaction", "RESTFUL动作", "restfulAction", "oldRestfulAction", 9);
 	
 	private String value;
 	private String text;

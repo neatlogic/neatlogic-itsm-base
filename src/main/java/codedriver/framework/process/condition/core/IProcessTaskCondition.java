@@ -5,8 +5,7 @@ import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.ParamType;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.condition.ConditionVo;
+import codedriver.framework.dto.condition.ConditionVo;
 
 public interface IProcessTaskCondition { 
 	/**
@@ -65,14 +64,6 @@ public interface IProcessTaskCondition {
 	 * @Date: 2020/2/11
 	 */
 	public ParamType getParamType();
-
-	/**
-	 * @Description: 判断条件是否成立
-	 * @Param: 
-	 * @return: boolean
-	 * @Date: 2020/2/11
-	 */
-	public boolean predicate(ProcessTaskStepVo currentProcessTaskStepVo, ConditionVo conditionVo);
 	
 	/**
 	 * @Description: 拼接ES where条件

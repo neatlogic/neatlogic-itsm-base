@@ -100,6 +100,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	
 	private transient JSONObject notifyPolicyConfig;
 	
+	private transient JSONArray actionList;
+	
 	public ProcessTaskStepVo() {
 
 	}
@@ -628,6 +630,16 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setNotifyPolicyConfig(JSONObject notifyPolicyConfig) {
 		this.notifyPolicyConfig = notifyPolicyConfig;
+	}
+
+	public JSONArray getActionList() {
+		if(actionList == null && MapUtils.isNotEmpty(getConfigObj())) {
+			actionList = getConfigObj().getJSONArray("actionList");
+		}
+		if(CollectionUtils.isEmpty(actionList) && MapUtils.isNotEmpty(getGlobalConfigObj())) {
+			actionList = getGlobalConfigObj().getJSONArray("actionList");
+		}
+		return actionList;
 	}
 
 }
