@@ -456,7 +456,7 @@ public abstract class ProcessStepHandlerUtilBase {
 													ConditionConfigVo conditionConfigVo = new ConditionConfigVo(conditionConfig);
 													String script = conditionConfigVo.buildScript();
 													ConditionParamContext.get().release();
-													System.out.println(script);
+													//System.out.println(script);
 													try {
 														if (!RunScriptUtil.runScript(script)) {
 															continue;
