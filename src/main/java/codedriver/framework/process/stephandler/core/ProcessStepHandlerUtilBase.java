@@ -452,12 +452,12 @@ public abstract class ProcessStepHandlerUtilBase {
 															}
 														}													
 													}
-													ConditionParamContext.init(processFieldData);
-													ConditionConfigVo conditionConfigVo = new ConditionConfigVo(conditionConfig);
-													String script = conditionConfigVo.buildScript();
-													ConditionParamContext.get().release();
-													//System.out.println(script);
+												
 													try {
+														ConditionParamContext.init(processFieldData);
+														ConditionConfigVo conditionConfigVo = new ConditionConfigVo(conditionConfig);
+														String script = conditionConfigVo.buildScript();
+														//System.out.println(script);
 														if (!RunScriptUtil.runScript(script)) {
 															continue;
 														}
@@ -465,6 +465,10 @@ public abstract class ProcessStepHandlerUtilBase {
 														logger.error(e.getMessage(), e);
 													} catch (ScriptException e) {
 														logger.error(e.getMessage(), e);
+													} catch(Exception e) {
+														logger.error(e.getMessage(), e);
+													} finally {
+														ConditionParamContext.get().release();
 													}
 												}
 											}
