@@ -77,6 +77,7 @@ import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
+import codedriver.framework.process.dto.ActionVo;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
@@ -119,6 +120,7 @@ import codedriver.framework.scheduler.core.IJob;
 import codedriver.framework.scheduler.core.SchedulerManager;
 import codedriver.framework.scheduler.dto.JobObject;
 import codedriver.framework.scheduler.exception.ScheduleHandlerNotFoundException;
+import codedriver.framework.util.ConditionUtil;
 import codedriver.framework.util.RunScriptUtil;
 
 public abstract class ProcessStepHandlerUtilBase {
@@ -261,8 +263,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				if(CollectionUtils.isNotEmpty(actionList)) {
 					for(int i = 0; i < actionList.size(); i++) {
 						JSONObject actionObj = actionList.getJSONObject(i);
-						String trigger = actionObj.getString("trigger");
-						if(triggerType.getTrigger().equals(trigger)) {
+						if(triggerType.getTrigger().equals(actionObj.getString("trigger"))) {
 							String integrationUuid = actionObj.getString("integrationUuid");
 							IntegrationVo integrationVo = integrationMapper.getIntegrationByUuid(integrationUuid);
 							if(integrationVo == null) {
@@ -289,7 +290,7 @@ public abstract class ProcessStepHandlerUtilBase {
 									}
 								}
 							}
-							boolean successflag = false;
+							boolean isSucceed = false;
 							IntegrationResultVo integrationResultVo = iIntegrationHandler.sendRequest(integrationVo);
 							if(StringUtils.isNotBlank(integrationResultVo.getError())) {
 								logger.error(integrationResultVo.getError());
@@ -317,79 +318,28 @@ public abstract class ProcessStepHandlerUtilBase {
 										}
 									}
 									if(resultValue != null) {
+										List<String> curentValueList = new ArrayList<>();
+										curentValueList.add(resultValue);
 										String value = successConditionObj.getString("value");
+										List<String> targetValueList = new ArrayList<>();
+										targetValueList.add(value);
 										String expression = successConditionObj.getString("expression");
-										Expression processExpression = Expression.getProcessExpression(expression);
-//										switch(processExpression) {
-//											case LIKE:
-//												successflag = resultValue.contains(value);
-//											case EQUAL: 
-//												if(CollectionUtils.isEmpty(valueList) || CollectionUtils.isEmpty(dataList)) {
-//													return false;
-//												}
-//												return dataList.get(0).equals(valueList.get(0));
-//											case UNEQUAL: 
-//												if(CollectionUtils.isEmpty(valueList) || CollectionUtils.isEmpty(dataList)) {
-//													return false;
-//												}
-//												return !dataList.get(0).equals(valueList.get(0));
-//											case INCLUDE: 
-//												return valueList.removeAll(dataList);
-//											case EXCLUDE: 
-//												return !valueList.removeAll(dataList);
-//											case BETWEEN: 
-//												if(CollectionUtils.isEmpty(valueList) || CollectionUtils.isEmpty(dataList)) {
-//													return false;
-//												}
-//												String dataStr = dataList.get(0);
-//												boolean result = false;
-//												String left = valueList.get(0);
-//												if(dataStr.length() > left.length()) {
-//													result = true;
-//												}else if(dataStr.length() < left.length()) {
-//													result = false;
-//												}else {
-//													result = dataStr.compareTo(left) >= 0 ? true : false;
-//												}
-//												if(result && valueList.size() == 2) {
-//													String right = valueList.get(1);
-//													if(dataStr.length() > right.length()) {
-//														result = false;
-//													}else if(dataStr.length() < right.length()) {
-//														result = true;
-//													}else {
-//														result = dataStr.compareTo(right) <= 0 ? true : false;
-//													}
-//												}
-//												return result;
-//											case GREATERTHAN: 
-//												if(CollectionUtils.isEmpty(valueList) || CollectionUtils.isEmpty(dataList)) {
-//													return false;
-//												}
-//												if(dataList.get(0).length() > valueList.get(0).length()) {
-//													return true;
-//												}else if(dataList.get(0).length() < valueList.get(0).length()) {
-//													return false;
-//												}else {
-//													return dataList.get(0).compareTo(valueList.get(0)) > 0 ? true : false;
-//												}
-//											case LESSTHAN: 
-//												if(CollectionUtils.isEmpty(valueList) || CollectionUtils.isEmpty(dataList)) {
-//													return false;
-//												}
-//												if(dataList.get(0).length() > valueList.get(0).length()) {
-//													return false;
-//												}else if(dataList.get(0).length() < valueList.get(0).length()) {
-//													return true;
-//												}else {
-//													return dataList.get(0).compareTo(valueList.get(0)) < 0 ? true : false;
-//												}
-//											default : 
-//												return false;
-//										}
+										isSucceed = ConditionUtil.predicate(curentValueList, expression, targetValueList);
 									}
 								}
 							}
+							ActionVo actionVo = new ActionVo();
+							actionVo.setProcessTaskStepId(stepVo.getId());
+							actionVo.setProcessTaskStepName(stepVo.getName());
+							actionVo.setIntegrationUuid(integrationUuid);
+							actionVo.setIntegrationName(integrationVo.getName());
+							actionVo.setTrigger(triggerType.getTrigger());
+							actionVo.setTriggerText(triggerType.getText());
+							actionVo.setSucceed(isSucceed);
+							JSONObject paramObj = new JSONObject();
+							paramObj.put(ProcessTaskAuditDetailType.RESTFULACTION.getParamName(), actionVo);
+							stepVo.setParamObj(paramObj);
+							AuditHandler.audit(stepVo, ProcessTaskStepAction.RESTFULACTION);
 						}
 					}
 				}
