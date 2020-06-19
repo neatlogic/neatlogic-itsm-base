@@ -43,6 +43,7 @@ import codedriver.framework.process.dto.ProcessSlaVo;
 import codedriver.framework.process.dto.ProcessStepRelVo;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
+import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskConvergeVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
@@ -512,6 +513,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
 						}
 					}
+					//组件联动导致隐藏的属性uuid列表
+					List<String> hidecomponentList = processTaskMapper.getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId(currentProcessTaskStepVo.getId());
 					//获取旧表单数据
 					List<ProcessTaskFormAttributeDataVo> oldProcessTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 					if(CollectionUtils.isNotEmpty(oldProcessTaskFormAttributeDataList)) {
@@ -519,12 +522,16 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						while(iterator.hasNext()) {
 							ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo = iterator.next();
 							String attributeUuid = processTaskFormAttributeDataVo.getAttributeUuid();
-							if(formAttributeActionMap.get(attributeUuid) != null) {//只读或隐藏
+							if(formAttributeActionMap.containsKey(attributeUuid)) {//只读或隐藏
+								iterator.remove();
+							}
+							if(hidecomponentList.contains(attributeUuid)) {
 								iterator.remove();
 							}
 						}
 						oldProcessTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
-						paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), JSON.toJSONString(oldProcessTaskFormAttributeDataList));
+						ProcessTaskContentVo processTaskContentVo = new ProcessTaskContentVo(JSON.toJSONString(oldProcessTaskFormAttributeDataList));
+						paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), processTaskContentVo.getHash());
 					}
 					//写入新表单数据
 					Object formAttributeDataList = paramObj.get(ProcessTaskAuditDetailType.FORM.getParamName());

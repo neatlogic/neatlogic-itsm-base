@@ -1558,10 +1558,16 @@ public abstract class ProcessStepHandlerUtilBase {
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				if(MapUtils.isNotEmpty(paramObj)) {
 					for(ProcessTaskAuditDetailType auditDetailType : ProcessTaskAuditDetailType.values()) {
-						String newData = paramObj.getString(auditDetailType.getParamName());
-						String oldData = paramObj.getString(auditDetailType.getOldDataParamName());
-						if(!Objects.equals(oldData, newData)) {
-							processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), auditDetailType.getValue(), oldData, newData));
+						String newDataHash = null;
+						String newData = paramObj.getString(auditDetailType.getParamName());						
+						if(StringUtils.isNotBlank(newData)) {
+							ProcessTaskContentVo contentVo = new ProcessTaskContentVo(newData);
+							processTaskMapper.replaceProcessTaskContent(contentVo);
+							newDataHash = contentVo.getHash();
+						}
+						String oldDataHash = paramObj.getString(auditDetailType.getOldDataParamName());
+						if(!Objects.equals(oldDataHash, newDataHash)) {							
+							processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), auditDetailType.getValue(), oldDataHash, newDataHash));
 						}
 					}
 				}
