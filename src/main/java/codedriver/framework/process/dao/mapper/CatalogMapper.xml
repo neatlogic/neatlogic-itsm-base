@@ -1,212 +1,211 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.CatalogMapper">
-	<cache type="codedriver.framework.dao.cache.CodeDriverCache" flushInterval="300000" size="1024" readOnly="true"></cache>
 	<select id="getCatalogList" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
-	SELECT 
-	  `uuid`,
-	  `name`,
-	  `parent_uuid` AS `parentUuid`,
-	  `is_active` AS `isActive`,
-	  `icon`,
-	  `color`,
-	  `desc`,
-	  `lft`,
-	  `rht` 
-	FROM `catalog`
-	 <where>
-	 <if test="isActive != null">
-	 	AND `is_active` = #{isActive}
-	 </if>
-	 <if test="parentUuid != null and parentUuid != ''">
-	 	AND `parent_uuid` = #{parentUuid}
-	 </if>
-	 </where>
-	 ORDER BY `lft`
+		SELECT
+		`uuid`,
+		`name`,
+		`parent_uuid` AS `parentUuid`,
+		`is_active` AS `isActive`,
+		`icon`,
+		`color`,
+		`desc`,
+		`lft`,
+		`rht`
+		FROM `catalog`
+		<where>
+			<if test="isActive != null">
+				AND `is_active` = #{isActive}
+			</if>
+			<if test="parentUuid != null and parentUuid != ''">
+				AND `parent_uuid` = #{parentUuid}
+			</if>
+		</where>
+		ORDER BY `lft`
 	</select>
-	
-	<select id="getCatalogByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo" useCache="true">
-	SELECT 
-	  `uuid`,
-	  `name`,
-	  `parent_uuid` AS `parentUuid`,
-	  `is_active` AS `isActive`,
-	  `icon`,
-	  `color`,
-	  `desc`,
-	  `lft`,
-	  `rht`  
-	FROM
-	  `catalog`
-	 where `uuid` = #{uuid}
+
+	<select id="getCatalogByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
+		SELECT
+		`uuid`,
+		`name`,
+		`parent_uuid` AS `parentUuid`,
+		`is_active` AS `isActive`,
+		`icon`,
+		`color`,
+		`desc`,
+		`lft`,
+		`rht`
+		FROM
+		`catalog`
+		where `uuid` = #{uuid}
 	</select>
-	
+
 	<select id="checkCatalogIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
-	SELECT COUNT(`uuid`) FROM `catalog` where `uuid`=#{uuid}
+		SELECT COUNT(`uuid`) FROM `catalog` where `uuid`=#{uuid}
 	</select>
-	
+
 	<select id="getHasActiveChannelCatalogUuidList" resultType="java.lang.String" useCache="false">
-	SELECT 
-	DISTINCT `parent_uuid` 
-	FROM `channel`  
-	WHERE `is_active` = 1
-	<if test="list != null and list.size() > 0">
-	AND `uuid` IN 
-		<foreach collection="list" item="channelUuid" open="(" separator=","  close=")">
-			#{channelUuid}
-		</foreach>
-	</if>
+		SELECT
+		DISTINCT `parent_uuid`
+		FROM `channel`
+		WHERE `is_active` = 1
+		<if test="list != null and list.size() > 0">
+			AND `uuid` IN
+			<foreach collection="list" item="channelUuid" open="(" separator="," close=")">
+				#{channelUuid}
+			</foreach>
+		</if>
 	</select>
-	
+
 	<select id="checkCatalogNameIsRepeat" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int" useCache="false">
-	SELECT COUNT(1) FROM `catalog` where `parent_uuid`=#{parentUuid} AND `name`=#{name} AND `uuid`!=#{uuid}
+		SELECT COUNT(1) FROM `catalog` where `parent_uuid`=#{parentUuid} AND `name`=#{name} AND `uuid`!=#{uuid}
 	</select>
-	
+
 	<resultMap type="codedriver.framework.process.dto.CatalogVo" id="catalogMap">
-		<id column="uuid" property="uuid"/>
-		<result column="name" property="name"/>
-		<result column="parent_uuid" property="parentUuid"/>
-		<result column="is_active" property="isActive"/>
-		<result column="lft" property="lft"/>
+		<id column="uuid" property="uuid" />
+		<result column="name" property="name" />
+		<result column="parent_uuid" property="parentUuid" />
+		<result column="is_active" property="isActive" />
+		<result column="lft" property="lft" />
 	</resultMap>
-	
+
 	<select id="getCatalogListForTree" parameterType="java.lang.Integer" resultMap="catalogMap" useCache="false">
-	SELECT 
-	  `uuid`,
-	  `name`,
-	  `parent_uuid`,
-	  `is_active`,
-	  `lft`
-	FROM `catalog` 
-	WHERE `lft` &gt;= #{lft} 
-	AND `rht` &lt;= #{rht}
-	ORDER BY `parent_uuid`,`lft`
+		SELECT
+		`uuid`,
+		`name`,
+		`parent_uuid`,
+		`is_active`,
+		`lft`
+		FROM `catalog`
+		WHERE `lft` &gt;= #{lft}
+		AND `rht` &lt;= #{rht}
+		ORDER BY `parent_uuid`,`lft`
 	</select>
-	
+
 	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.dto.AuthorityVo" useCache="false">
-	SELECT 
-	  `catalog_uuid` AS catalogUuid,
-	  `type`,
-	  `uuid`
-	FROM `catalog_authority` 
-	WHERE `catalog_uuid` = #{catalogUuid}
+		SELECT
+		`catalog_uuid` AS catalogUuid,
+		`type`,
+		`uuid`
+		FROM `catalog_authority`
+		WHERE `catalog_uuid` = #{catalogUuid}
 	</select>
-	
-	<select id="getAuthorizedCatalogUuidList" resultType="java.lang.String">
-	SELECT 
-	  DISTINCT `catalog_uuid`
-	FROM `catalog_authority` 
-	<where>
-		<if test="catalogUuid != null and catalogUuid != ''">
-		`catalog_uuid` = #{catalogUuid} AND (
-		</if>
-		(type = 'common' AND `uuid` = 'alluser')
-		<if test="userUuid != null and userUuid != ''">
-		OR (type = 'user' AND `uuid` = #{userUuid})
-		</if>
-		<if test="teamUuidList != null and teamUuidList.size() > 0">
-		OR (type = 'team' AND `uuid` IN 
-			<foreach collection="teamUuidList" item="teamUuid" open="(" separator=","  close=")">
-			#{teamUuid}
-			</foreach>
-			)
-		</if>
-		<if test="roleUuidList != null and roleUuidList.size() > 0">
-		OR (type = 'role' AND `uuid` IN 
-			<foreach collection="roleUuidList" item="roleUuid" open="(" separator=","  close=")">
-				#{roleUuid}
-			</foreach>
-			)
-		</if>
-		<if test="catalogUuid != null and catalogUuid != ''">
-		)
-		</if>
-	</where>
+
+	<select id="getAuthorizedCatalogUuidList" resultType="java.lang.String" useCache="false">
+		SELECT
+		DISTINCT `catalog_uuid`
+		FROM `catalog_authority`
+		<where>
+			<if test="catalogUuid != null and catalogUuid != ''">
+				`catalog_uuid` = #{catalogUuid} AND (
+			</if>
+			(type = 'common' AND `uuid` = 'alluser')
+			<if test="userUuid != null and userUuid != ''">
+				OR (type = 'user' AND `uuid` = #{userUuid})
+			</if>
+			<if test="teamUuidList != null and teamUuidList.size() > 0">
+				OR (type = 'team' AND `uuid` IN
+				<foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
+					#{teamUuid}
+				</foreach>
+				)
+			</if>
+			<if test="roleUuidList != null and roleUuidList.size() > 0">
+				OR (type = 'role' AND `uuid` IN
+				<foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
+					#{roleUuid}
+				</foreach>
+				)
+			</if>
+			<if test="catalogUuid != null and catalogUuid != ''">
+				)
+			</if>
+		</where>
 	</select>
-	
-	<select id="getCatalogLockByUuid" parameterType="java.lang.String" resultType="java.lang.String">
-	SELECT `uuid` FROM `catalog` WHERE `uuid` = #{uuid} FOR UPDATE
+
+	<select id="getCatalogLockByUuid" parameterType="java.lang.String" resultType="java.lang.String" useCache="false">
+		SELECT `uuid` FROM `catalog` WHERE `uuid` = #{uuid} FOR UPDATE
 	</select>
-	
-	<select id="getCatalogCount" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int">
-	SELECT 
-	  COUNT(1)
-	FROM `catalog`
-	 <where>
-	 <if test="isActive != null">
-	 	AND `is_active` = #{isActive}
-	 </if>
-	 <if test="parentUuid != null and parentUuid != ''">
-	 	AND `parent_uuid` = #{parentUuid}
-	 </if>
-	 </where>
+
+	<select id="getCatalogCount" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int" useCache="false">
+		SELECT
+		COUNT(1)
+		FROM `catalog`
+		<where>
+			<if test="isActive != null">
+				AND `is_active` = #{isActive}
+			</if>
+			<if test="parentUuid != null and parentUuid != ''">
+				AND `parent_uuid` = #{parentUuid}
+			</if>
+		</where>
 	</select>
-	
-	<select id="getCatalogListByParentUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo">
-	SELECT 
-	  a.`uuid`,
-	  a.`name`,
-	  a.`parent_uuid` AS `parentUuid`,
-	  a.`is_active` AS `isActive`,
-	  a.`icon`,
-	  a.`color`,
-	  a.`desc`,
-	  a.`lft`,
-	  a.`rht`,
-	  (SELECT COUNT(1) FROM `catalog` b WHERE b.`parent_uuid` = a.`uuid`) AS childrenCount 
-	FROM `catalog` a
-	WHERE a.`parent_uuid` = #{parentUuid}
-	ORDER BY a.`lft`
+
+	<select id="getCatalogListByParentUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
+		SELECT
+		a.`uuid`,
+		a.`name`,
+		a.`parent_uuid` AS `parentUuid`,
+		a.`is_active` AS `isActive`,
+		a.`icon`,
+		a.`color`,
+		a.`desc`,
+		a.`lft`,
+		a.`rht`,
+		(SELECT COUNT(1) FROM `catalog` b WHERE b.`parent_uuid` = a.`uuid`) AS childrenCount
+		FROM `catalog` a
+		WHERE a.`parent_uuid` = #{parentUuid}
+		ORDER BY a.`lft`
 	</select>
-	
-	<select id="checkCatalogIsExistsByLeftRightCode" resultType="int">
-	SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
+
+	<select id="checkCatalogIsExistsByLeftRightCode" resultType="int" useCache="false">
+		SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
 	</select>
-	
+
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
-	REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` ) 
-	VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})
+		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
+		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})
 	</insert>
-	
+
 	<insert id="insertCatalogAuthority">
-	INSERT INTO `catalog_authority` (
-	  `catalog_uuid`,
-	  `type`,
-	  `uuid`
-	) 
-	VALUES
-	  (
-	    #{catalogUuid},
-	    #{authorityVo.type},
-	    #{authorityVo.uuid}
-	  )
+		INSERT INTO `catalog_authority` (
+		`catalog_uuid`,
+		`type`,
+		`uuid`
+		)
+		VALUES
+		(
+		#{catalogUuid},
+		#{authorityVo.type},
+		#{authorityVo.uuid}
+		)
 	</insert>
-	
+
 	<update id="updateCatalogParentUuidByUuid" parameterType="codedriver.framework.process.dto.CatalogVo">
-	UPDATE `catalog` SET `parent_uuid` = #{parentUuid} WHERE `uuid` = #{uuid}
+		UPDATE `catalog` SET `parent_uuid` = #{parentUuid} WHERE `uuid` = #{uuid}
 	</update>
-	
+
 	<update id="updateCatalogLeftRightCode">
-	UPDATE `catalog` SET `lft` = #{lft}, `rht` = #{rht} WHERE `uuid` = #{uuid}
+		UPDATE `catalog` SET `lft` = #{lft}, `rht` = #{rht} WHERE `uuid` = #{uuid}
 	</update>
-	
+
 	<update id="batchUpdateCatalogLeftRightCodeByLeftRightCode">
-	UPDATE `catalog` SET `lft` = `lft` + #{step}, `rht` = `rht` + #{step} WHERE `lft` &gt;= #{lft} AND `rht` &lt;= #{rht}	
+		UPDATE `catalog` SET `lft` = `lft` + #{step}, `rht` = `rht` + #{step} WHERE `lft` &gt;= #{lft} AND `rht` &lt;= #{rht}
 	</update>
-	
+
 	<update id="batchUpdateCatalogLeftCode">
-	UPDATE `catalog` set `lft` = `lft` + #{step} WHERE `lft` &gt;= #{minCode}	
+		UPDATE `catalog` set `lft` = `lft` + #{step} WHERE `lft` &gt;= #{minCode}
 	</update>
-	
+
 	<update id="batchUpdateCatalogRightCode">
-	UPDATE `catalog` set `rht` = `rht` + #{step} WHERE `rht` &gt;= #{minCode}
+		UPDATE `catalog` set `rht` = `rht` + #{step} WHERE `rht` &gt;= #{minCode}
 	</update>
-	
+
 	<delete id="deleteCatalogByUuid" parameterType="java.lang.String">
-	DELETE FROM `catalog` WHERE `uuid` = #{uuid}
+		DELETE FROM `catalog` WHERE `uuid` = #{uuid}
 	</delete>
-	
+
 	<delete id="deleteCatalogAuthorityByCatalogUuid" parameterType="java.lang.String">
-	DELETE FROM `catalog_authority` WHERE `catalog_uuid` = #{catalogUuid}
+		DELETE FROM `catalog_authority` WHERE `catalog_uuid` = #{catalogUuid}
 	</delete>
 </mapper>
