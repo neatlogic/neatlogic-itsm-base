@@ -102,6 +102,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	
 	private transient JSONArray actionList;
 	
+	@EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
+	private JSONObject processTaskStepData;
+	
 	public ProcessTaskStepVo() {
 
 	}
@@ -640,6 +643,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 			actionList = getGlobalConfigObj().getJSONArray("actionList");
 		}
 		return actionList;
+	}
+
+	public JSONObject getProcessTaskStepData() {
+		return processTaskStepData;
+	}
+
+	public void setProcessTaskStepData(JSONObject processTaskStepData) {
+		this.processTaskStepData = processTaskStepData;
 	}
 
 }

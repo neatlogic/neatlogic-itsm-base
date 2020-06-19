@@ -16,6 +16,9 @@
 			<if test="processTaskStepId != null and processTaskStepId != ''">
 			   and `processtask_step_id` = #{processTaskStepId}
 			</if>
+			<if test="type != null and type != ''">
+			   and `type` = #{type}
+			</if>
 		 </where> 
 	</select>
 	
@@ -33,6 +36,9 @@
 			</if>
 			<if test="processTaskStepId != null and processTaskStepId != ''">
 			   and `processtask_step_id` = #{processTaskStepId}
+			</if>
+			<if test="type != null and type != ''">
+			  and `type` = #{type}
 			</if>
 		 </where> 
 	</select>

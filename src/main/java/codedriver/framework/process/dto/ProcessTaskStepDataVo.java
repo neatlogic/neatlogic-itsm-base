@@ -12,9 +12,10 @@ public class ProcessTaskStepDataVo {
 	public ProcessTaskStepDataVo() {
 
 	}
-	public ProcessTaskStepDataVo(Long processTaskId, Long processTaskStepId) {
-		this.processTaskId = processTaskId;
-		this.processTaskStepId = processTaskStepId;
+	public ProcessTaskStepDataVo(Long _processTaskId, Long _processTaskStepId,String _type) {
+		this.processTaskId = _processTaskId;
+		this.processTaskStepId = _processTaskStepId;
+		this.type = _type;
 	}
 	public Long getProcessTaskId() {
 		return processTaskId;
