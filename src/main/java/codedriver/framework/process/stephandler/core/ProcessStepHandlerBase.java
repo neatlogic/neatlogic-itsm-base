@@ -534,9 +534,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), processTaskContentVo.getHash());
 					}
 					//写入新表单数据
-					Object formAttributeDataList = paramObj.get(ProcessTaskAuditDetailType.FORM.getParamName());
+					JSONArray formAttributeDataList = paramObj.getJSONArray(ProcessTaskAuditDetailType.FORM.getParamName());
 					if(formAttributeDataList != null) {
-						List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = JSON.parseArray(formAttributeDataList.toString(), ProcessTaskFormAttributeDataVo.class);
+						List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = JSON.parseArray(JSON.toJSONString(formAttributeDataList), ProcessTaskFormAttributeDataVo.class);
 						if(CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
 							for(ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo : processTaskFormAttributeDataList) {
 								processTaskMapper.replaceProcessTaskFormAttributeData(processTaskFromAttributeDataVo);

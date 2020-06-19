@@ -449,6 +449,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public JSONObject getParamObj() {
+		if(paramObj == null) {
+			paramObj = new JSONObject();
+		}
 		return paramObj;
 	}
 
