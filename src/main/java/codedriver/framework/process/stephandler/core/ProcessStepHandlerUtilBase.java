@@ -1129,78 +1129,77 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(processTaskStepId != null) {
 				//获取步骤信息
 				ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
-				if(processTaskStepVo == null) {
-					System.out.println("processTaskStepId:"+processTaskStepId);
-				}
-				List<String> currentUserProcessUserTypeList = new ArrayList<>();
-				List<String> actionList = new ArrayList<>();
-				actionList.add(ProcessTaskStepAction.VIEW.getValue());
-				actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
-				if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
-					actionList = new ArrayList<>();
+				if(processTaskStepVo != null) {
+					List<String> currentUserProcessUserTypeList = new ArrayList<>();
+					List<String> actionList = new ArrayList<>();
 					actionList.add(ProcessTaskStepAction.VIEW.getValue());
 					actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
-					if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
-						currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
-					}
-					List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStepVo, actionList, currentUserProcessUserTypeList);
-					//根据流程设置和步骤状态判断当前用户权限
-					for(String action : configActionList) {
-						if(ProcessTaskStepAction.VIEW.getValue().equals(action)) {
-							resultList.add(action);
-						}else if(ProcessTaskStepAction.TRANSFER.getValue().equals(action)) {
-							//步骤状态为已激活的才能转交
-							if(processTaskStepVo.getIsActive() == 1) {
-								resultList.add(action);
-							}
-						}
-					}
-					if(UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
-						resultList.add(ProcessTaskStepAction.VIEW.getValue());
-					}else if(UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
-						resultList.add(ProcessTaskStepAction.VIEW.getValue());
-					}else if(processTaskMapper.checkIsProcessTaskStepUser(processTaskId, processTaskStepId, UserContext.get().getUserUuid(true)) > 0) {
-						resultList.add(ProcessTaskStepAction.VIEW.getValue());
-					}
-				}
-				
-				actionList = new ArrayList<>();
-				actionList.add(ProcessTaskStepAction.COMPLETE.getValue());
-				actionList.add(ProcessTaskStepAction.SAVE.getValue());
-				actionList.add(ProcessTaskStepAction.COMMENT.getValue());
-				actionList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
-				actionList.add(ProcessTaskStepAction.ACCEPT.getValue());
-				actionList.add(ProcessTaskStepAction.START.getValue());
-				actionList.add(ProcessTaskStepAction.BACK.getValue());
-				if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
-					if(processTaskStepVo.getIsActive() == 1) {
+					if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
+						actionList = new ArrayList<>();
+						actionList.add(ProcessTaskStepAction.VIEW.getValue());
+						actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
 						if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
 							currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
 						}
-						if(currentUserProcessUserTypeList.contains(ProcessUserType.WORKER.getValue())) {
-							if(ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus()) 
-									|| ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus())) {
-								//完成complete 暂存save 评论comment 创建子任务createsubtask
-								if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
-									List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getToProcessTaskStepByFromId(processTaskStepId);
-									for(ProcessTaskStepVo processTaskStep : processTaskStepList) {
-										if(processTaskStep.getIsActive() != null) {
-											if(ProcessFlowDirection.FORWARD.getValue().equals(processTaskStep.getFlowDirection())) {
-												resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
-											}else if(ProcessFlowDirection.BACKWARD.getValue().equals(processTaskStep.getFlowDirection()) && processTaskStep.getIsActive().intValue() != 0){
-												resultList.add(ProcessTaskStepAction.BACK.getValue());
+						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStepVo, actionList, currentUserProcessUserTypeList);
+						//根据流程设置和步骤状态判断当前用户权限
+						for(String action : configActionList) {
+							if(ProcessTaskStepAction.VIEW.getValue().equals(action)) {
+								resultList.add(action);
+							}else if(ProcessTaskStepAction.TRANSFER.getValue().equals(action)) {
+								//步骤状态为已激活的才能转交
+								if(processTaskStepVo.getIsActive() == 1) {
+									resultList.add(action);
+								}
+							}
+						}
+						if(UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
+							resultList.add(ProcessTaskStepAction.VIEW.getValue());
+						}else if(UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
+							resultList.add(ProcessTaskStepAction.VIEW.getValue());
+						}else if(processTaskMapper.checkIsProcessTaskStepUser(processTaskId, processTaskStepId, UserContext.get().getUserUuid(true)) > 0) {
+							resultList.add(ProcessTaskStepAction.VIEW.getValue());
+						}
+					}
+					
+					actionList = new ArrayList<>();
+					actionList.add(ProcessTaskStepAction.COMPLETE.getValue());
+					actionList.add(ProcessTaskStepAction.SAVE.getValue());
+					actionList.add(ProcessTaskStepAction.COMMENT.getValue());
+					actionList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
+					actionList.add(ProcessTaskStepAction.ACCEPT.getValue());
+					actionList.add(ProcessTaskStepAction.START.getValue());
+					actionList.add(ProcessTaskStepAction.BACK.getValue());
+					if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
+						if(processTaskStepVo.getIsActive() == 1) {
+							if(CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
+								currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
+							}
+							if(currentUserProcessUserTypeList.contains(ProcessUserType.WORKER.getValue())) {
+								if(ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus()) 
+										|| ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus())) {
+									//完成complete 暂存save 评论comment 创建子任务createsubtask
+									if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
+										List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getToProcessTaskStepByFromId(processTaskStepId);
+										for(ProcessTaskStepVo processTaskStep : processTaskStepList) {
+											if(processTaskStep.getIsActive() != null) {
+												if(ProcessFlowDirection.FORWARD.getValue().equals(processTaskStep.getFlowDirection())) {
+													resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
+												}else if(ProcessFlowDirection.BACKWARD.getValue().equals(processTaskStep.getFlowDirection()) && processTaskStep.getIsActive().intValue() != 0){
+													resultList.add(ProcessTaskStepAction.BACK.getValue());
+												}
 											}
 										}
+										resultList.add(ProcessTaskStepAction.SAVE.getValue());
+										resultList.add(ProcessTaskStepAction.COMMENT.getValue());
+										resultList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
 									}
-									resultList.add(ProcessTaskStepAction.SAVE.getValue());
-									resultList.add(ProcessTaskStepAction.COMMENT.getValue());
-									resultList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
-								}
-							}else if(ProcessTaskStatus.PENDING.getValue().equals(processTaskStepVo.getStatus())) {//已激活未处理
-								if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue())) {
-									resultList.add(ProcessTaskStepAction.START.getValue());
-								}else {//没有主处理人时是accept
-									resultList.add(ProcessTaskStepAction.ACCEPT.getValue());
+								}else if(ProcessTaskStatus.PENDING.getValue().equals(processTaskStepVo.getStatus())) {//已激活未处理
+									if(currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue())) {
+										resultList.add(ProcessTaskStepAction.START.getValue());
+									}else {//没有主处理人时是accept
+										resultList.add(ProcessTaskStepAction.ACCEPT.getValue());
+									}
 								}
 							}
 						}
@@ -1346,9 +1345,7 @@ public abstract class ProcessStepHandlerUtilBase {
 		* @return List<String>
 		 */
 		private static List<String> getProcessTaskStepConfigActionList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, List<String> actionList, List<String> currentUserProcessUserTypeList){
-			System.out.println("-----1" + processTaskStepVo);
 			String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
-			System.out.println("-----2" + processTaskStepVo);
 			JSONObject stepConfigObj = JSON.parseObject(stepConfig);
 			JSONArray authorityList = stepConfigObj.getJSONArray("authorityList");
 			//如果步骤自定义权限设置为空，则用组件的全局权限设置
