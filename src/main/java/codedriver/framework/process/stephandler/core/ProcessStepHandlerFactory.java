@@ -76,6 +76,7 @@ public class ProcessStepHandlerFactory implements ApplicationListener<ContextRef
 				processStepHandlerVo.setChartConfig(component.getChartConfig());
 				processStepHandlerVo.setModuleId(context.getId());
 				processStepHandlerVo.setIsActive(1);
+				processStepHandlerVo.setIsAllowStart((component.isAllowStart()!=null&&component.isAllowStart())?1:0);
 				processStepHandlerList.add(processStepHandlerVo);
 			}
 		}

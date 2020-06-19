@@ -18,6 +18,8 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	@EntityField(name = "是否激活", type = ApiParamType.STRING)
 	private Integer isActive;
 	@EntityField(name = "图标", type = ApiParamType.STRING)
+	private Integer isAllowStart;
+	@EntityField(name = "是否允许作为开始节点", type = ApiParamType.STRING)
 	private String icon;
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
@@ -101,6 +103,14 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 
 	public void setChartConfig(JSONObject chartConfig) {
 		this.chartConfig = chartConfig;
+	}
+
+	public Integer getIsAllowStart() {
+		return isAllowStart;
+	}
+
+	public void setIsAllowStart(Integer isAllowStart) {
+		this.isAllowStart = isAllowStart;
 	}
 
 }
