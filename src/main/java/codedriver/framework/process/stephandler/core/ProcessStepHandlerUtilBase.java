@@ -1129,6 +1129,9 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(processTaskStepId != null) {
 				//获取步骤信息
 				ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
+				if(processTaskStepVo == null) {
+					System.out.println("processTaskStepId:"+processTaskStepId);
+				}
 				List<String> currentUserProcessUserTypeList = new ArrayList<>();
 				List<String> actionList = new ArrayList<>();
 				actionList.add(ProcessTaskStepAction.VIEW.getValue());
@@ -1343,8 +1346,9 @@ public abstract class ProcessStepHandlerUtilBase {
 		* @return List<String>
 		 */
 		private static List<String> getProcessTaskStepConfigActionList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, List<String> actionList, List<String> currentUserProcessUserTypeList){
-			
+			System.out.println("-----1" + processTaskStepVo);
 			String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+			System.out.println("-----2" + processTaskStepVo);
 			JSONObject stepConfigObj = JSON.parseObject(stepConfig);
 			JSONArray authorityList = stepConfigObj.getJSONArray("authorityList");
 			//如果步骤自定义权限设置为空，则用组件的全局权限设置
