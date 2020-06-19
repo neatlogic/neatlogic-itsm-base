@@ -3,6 +3,8 @@ package codedriver.framework.process.constvalue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+
 import codedriver.framework.common.dto.ValueTextVo;
 
 public enum ProcessTaskStatus {
@@ -64,6 +66,19 @@ public enum ProcessTaskStatus {
 			}
 		}
 		return "";
+	}
+	
+	public static JSONObject getJson(String _status) {
+		JSONObject statusJson = new JSONObject();
+		for (ProcessTaskStatus s : ProcessTaskStatus.values()) {
+			if (s.getValue().equals(_status)) {
+				statusJson.put("value", s.getValue());
+				statusJson.put("color", s.getColor());
+				statusJson.put("text", s.getText());
+				break;
+			}
+		}
+		return statusJson;
 	}
 
 	public static List<ValueTextVo> getProcessTaskStatusList(){

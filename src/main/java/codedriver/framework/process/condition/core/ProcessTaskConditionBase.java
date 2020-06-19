@@ -12,8 +12,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.Expression;
+import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
-import codedriver.framework.process.dto.condition.ConditionVo;
 import codedriver.framework.util.TimeUtil;
 
 public abstract class ProcessTaskConditionBase implements IProcessTaskCondition {

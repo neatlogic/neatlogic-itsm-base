@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.ProcessTaskStepDataMapper">
+	<select id="getProcessTaskStepData" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo" resultType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
+		SELECT 
+		  `processtask_id` as processTaskId,
+		  `processtask_step_id` as processTaskStepId,
+		  `data`,
+		  `type` 
+		FROM
+		  `processtask_step_data` 
+		<where>
+			<if test="processTaskId != null and processTaskId != ''">
+			  `processtask_id` = #{processTaskId}
+			</if>
+			<if test="processTaskStepId != null and processTaskStepId != ''">
+			   and `processtask_step_id` = #{processTaskStepId}
+			</if>
+		 </where> 
+	</select>
+	
+	<select id="searchProcessTaskStepData" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo" resultType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
+		SELECT 
+		  `processtask_id` as processTaskId,
+		  `processtask_step_id` as processTaskStepId,
+		  `data`,
+		  `type` 
+		FROM
+		  `processtask_step_data` 
+		<where>
+			<if test="processTaskId != null and processTaskId != ''">
+			  `processtask_id` = #{processTaskId}
+			</if>
+			<if test="processTaskStepId != null and processTaskStepId != ''">
+			   and `processtask_step_id` = #{processTaskStepId}
+			</if>
+		 </where> 
+	</select>
+	
+	<insert id="replaceProcessTaskStepData" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
+		REPLACE INTO `processtask_step_data` (
+		  `processtask_id`,
+		  `processtask_step_id`,
+		  `data`,
+		  `type`
+		) 
+		VALUES
+		  (
+		    #{processTaskId},
+		    #{processTaskStepId},
+		    #{dataStr},
+		    #{type}
+		  ) 
+	</insert>
+</mapper>

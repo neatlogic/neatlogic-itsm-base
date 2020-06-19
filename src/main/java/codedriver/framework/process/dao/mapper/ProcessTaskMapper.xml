@@ -1733,7 +1733,7 @@
 	  (
 	    #{processTaskStepId},
 	    #{policyId},
-	    #policyName},
+	    #{policyName},
 	    #{policyConfigHash}
 	  ) 
 	</insert>
