@@ -3,39 +3,57 @@
 <mapper namespace="codedriver.framework.process.dao.mapper.ProcessTaskStepDataMapper">
 	<select id="getProcessTaskStepData" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo" resultType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
 		SELECT 
+		  `id`,
 		  `processtask_id` as processTaskId,
 		  `processtask_step_id` as processTaskStepId,
 		  `data`,
-		  `type` 
+		  `type`,
+		  `fcu` 
 		FROM
-		  `processtask_step_data` 
+		  `processtask_step_data`  
 		<where>
 			<if test="processTaskId != null and processTaskId != ''">
-			  `processtask_id` = #{processTaskId}
+			  AND `processtask_id` = #{processTaskId}
 			</if>
 			<if test="processTaskStepId != null and processTaskStepId != ''">
-			   and `processtask_step_id` = #{processTaskStepId}
+			  AND `processtask_step_id` = #{processTaskStepId}
+			</if>
+			<if test="type != null and type != ''">
+			  AND `type` = #{type} 
+			</if>
+			<if test="fcu != null and fcu != ''">
+			  AND `fcu` = #{fcu} 
 			</if>
 			<if test="type != null and type != ''">
 			   and `type` = #{type}
 			</if>
 		 </where> 
+		 ORDER BY `id` DESC
+		 LIMIT 1
 	</select>
 	
 	<select id="searchProcessTaskStepData" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo" resultType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
 		SELECT 
+		  `id`,
 		  `processtask_id` as processTaskId,
 		  `processtask_step_id` as processTaskStepId,
 		  `data`,
-		  `type` 
+		  `type`,
+		  `fcu`  
 		FROM
 		  `processtask_step_data` 
 		<where>
 			<if test="processTaskId != null and processTaskId != ''">
-			  `processtask_id` = #{processTaskId}
+			  AND `processtask_id` = #{processTaskId}
 			</if>
 			<if test="processTaskStepId != null and processTaskStepId != ''">
-			   and `processtask_step_id` = #{processTaskStepId}
+			  AND `processtask_step_id` = #{processTaskStepId}
+			</if>
+			<if test="type != null and type != ''">
+			  AND `type` = #{type} 
+			</if>
+			<if test="fcu != null and fcu != ''">
+			  AND `fcu` = #{fcu} 
 			</if>
 			<if test="type != null and type != ''">
 			  and `type` = #{type}
@@ -45,17 +63,43 @@
 	
 	<insert id="replaceProcessTaskStepData" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
 		REPLACE INTO `processtask_step_data` (
+		  `id`,
 		  `processtask_id`,
 		  `processtask_step_id`,
 		  `data`,
-		  `type`
+		  `type`,
+		  `fcu`
 		) 
 		VALUES
 		  (
+		    #{id},
 		    #{processTaskId},
 		    #{processTaskStepId},
 		    #{dataStr},
-		    #{type}
+		    #{type},
+		    #{fcu}
 		  ) 
 	</insert>
+	
+	<delete id="deleteProcessTaskStepData" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
+	DELETE FROM `processtask_step_data` 
+	<where>
+		<if test="processTaskId != null">
+		AND `processtask_id` = #{processTaskId} 
+		</if>
+		<if test="processTaskStepId != null">
+		AND `processtask_step_id` = #{processTaskStepId} 
+		</if>
+		<if test="type != null and type != ''">
+		AND `type` = #{type} 
+		</if>
+		<if test="fcu != null and fcu != ''">
+		AND `fcu` = #{fcu} 
+		</if>
+	</where>
+	</delete>
+	
+	<delete id="deleteProcessTaskStepDataById" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
+	DELETE FROM `processtask_step_data` WHERE `id` = #{id}
+	</delete>
 </mapper>

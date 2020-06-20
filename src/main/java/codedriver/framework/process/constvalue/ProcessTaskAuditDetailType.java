@@ -2,7 +2,7 @@ package codedriver.framework.process.constvalue;
 
 public enum ProcessTaskAuditDetailType {
 
-	CONTENT("content", "内容", "contentHash", "oldContentHash", 1),
+	CONTENT("content", "内容", "content", "oldContent", 1),
 	TITLE("title", "标题", "title", "oldTitle", 2),
 	PRIORITY("priority", "优先级", "priorityUuid", "oldPriorityUuid", 3),
 	FORM("form", "表单", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 4),
