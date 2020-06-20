@@ -1077,9 +1077,12 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected static boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action) {
 			List<String> verifyActionList = new ArrayList<>();
 			verifyActionList.add(action.getValue());
-			List<String> actionList = getProcessTaskStepActionList(processTaskId, processTaskStepId, verifyActionList);
-			if(!actionList.contains(action.getValue())) {
-				throw new ProcessTaskNoPermissionException(action.getText());
+			//TODO 临时跳过 作业无用户，后续再修改
+			if(UserContext.get().getUserUuid() != null) {
+				List<String> actionList = getProcessTaskStepActionList(processTaskId, processTaskStepId, verifyActionList);
+				if(!actionList.contains(action.getValue())) {
+					throw new ProcessTaskNoPermissionException(action.getText());
+				}
 			}
 			return true;
 		}
@@ -1551,7 +1554,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				processTaskStepAuditVo.setAction(action.getValue());
 				processTaskStepAuditVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskStepAuditVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-				processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid(true));
+				processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid());//兼容automatic作业无用户
 				processTaskMapper.insertProcessTaskStepAudit(processTaskStepAuditVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				if(MapUtils.isNotEmpty(paramObj)) {
@@ -1834,11 +1837,11 @@ public abstract class ProcessStepHandlerUtilBase {
 			processTaskStepAuditVo.setProcessTaskId(processTaskStepVo.getProcessTaskId());
 			processTaskStepAuditVo.setProcessTaskStepId(processTaskStepId);
 			processTaskStepAuditVo.setAction(ProcessTaskStepAction.SAVE.getValue());
-			processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid(true));
-			List<ProcessTaskStepAuditVo> processTaskStepAuditList = processTaskMapper.getProcessTaskStepAuditList(processTaskStepAuditVo);
-			if(CollectionUtils.isNotEmpty(processTaskStepAuditList)) {
-				ProcessTaskStepAuditVo processTaskStepAudit = processTaskStepAuditList.get(processTaskStepAuditList.size() - 1);
-				processTaskStepVo.setComment(new ProcessTaskStepCommentVo(processTaskStepAudit));
+//			processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid(true));
+//			List<ProcessTaskStepAuditVo> processTaskStepAuditList = processTaskMapper.getProcessTaskStepAuditList(processTaskStepAuditVo);
+//			if(CollectionUtils.isNotEmpty(processTaskStepAuditList)) {
+//				ProcessTaskStepAuditVo processTaskStepAudit = processTaskStepAuditList.get(processTaskStepAuditList.size() - 1);
+//				processTaskStepVo.setComment(new ProcessTaskStepCommentVo(processTaskStepAudit));
 //				for(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo : processTaskStepAudit.getAuditDetailList()) {
 //					if(ProcessTaskAuditDetailType.FORM.getValue().equals(processTaskStepAuditDetailVo.getType())) {
 //						List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = JSON.parseArray(processTaskStepAuditDetailVo.getNewContent(), ProcessTaskFormAttributeDataVo.class);
@@ -1851,7 +1854,7 @@ public abstract class ProcessStepHandlerUtilBase {
 //						}
 //					}
 //				}
-			}
+//			}
 			
 			//步骤评论列表
 //			List<ProcessTaskStepCommentVo> processTaskStepCommentList = processTaskMapper.getProcessTaskStepCommentListByProcessTaskStepId(processTaskStepId);
