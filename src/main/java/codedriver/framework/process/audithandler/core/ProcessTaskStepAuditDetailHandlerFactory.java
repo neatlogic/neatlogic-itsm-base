@@ -9,13 +9,18 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.common.RootComponent;
+import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 @RootComponent
 public class ProcessTaskStepAuditDetailHandlerFactory extends ApplicationListenerBase{
 
 	private static Map<String, IProcessTaskStepAuditDetailHandler> handlerMap = new HashMap<>();
 	
 	public static IProcessTaskStepAuditDetailHandler getHandler(String type) {
-		return handlerMap.get(type);
+		IProcessTaskStepAuditDetailHandler handler = handlerMap.get(type);
+		if(handler == null) {
+			handler = handlerMap.get(ProcessTaskAuditDetailType.CONTENT.getValue());
+		}
+		return handler;
 	}
 	
 	@Override

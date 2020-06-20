@@ -34,7 +34,7 @@ public enum CallbackType {
         return null;
     }
 
-    public static String getName(String _value) {
+    public static String getText(String _value) {
         for (CallbackType s : CallbackType.values()) {
             if (s.getValue().equals(_value)) {
                 return s.getText();

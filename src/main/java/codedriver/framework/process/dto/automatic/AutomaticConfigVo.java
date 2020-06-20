@@ -39,7 +39,7 @@ public class AutomaticConfigVo {
 			callbackConfig =callbackConfig.getJSONObject("config");
 			this.callbackIntegrationUuid = callbackConfig.getString("integrationUuid");
 			this.callbackParamList = callbackConfig.getJSONArray("paramList");
-			this.callbackInterval = callbackConfig.getInteger("interval")*60;
+			this.callbackInterval = callbackConfig.getInteger("interval");
 			this.callbackResultTemplate = callbackConfig.getString("resultTemplate");
 			this.callbackSuccessConfig = callbackConfig.getJSONObject("successConfig");
 			this.callbackFailConfig = callbackConfig.getJSONObject("failConfig");
