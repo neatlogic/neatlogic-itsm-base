@@ -10,4 +10,8 @@ public interface ProcessTaskStepDataMapper {
 	public List<ProcessTaskStepDataVo> searchProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
 
 	public int replaceProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
+	
+	public int deleteProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
+	
+	public int deleteProcessTaskStepDataById(Long id);
 }

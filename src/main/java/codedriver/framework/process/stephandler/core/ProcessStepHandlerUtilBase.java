@@ -75,6 +75,7 @@ import codedriver.framework.process.dao.mapper.PriorityMapper;
 import codedriver.framework.process.dao.mapper.ProcessMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskStepDataMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
 import codedriver.framework.process.dto.ActionVo;
@@ -143,12 +144,12 @@ public abstract class ProcessStepHandlerUtilBase {
 	protected static ProcessStepHandlerMapper processStepHandlerMapper;
 	private static PriorityMapper priorityMapper;
 	private static IntegrationMapper integrationMapper;
-	// private static SchedulerManager schedulerManager;
+	protected static ProcessTaskStepDataMapper processTaskStepDataMapper;
 
-	// @Autowired
-	// public void setSchedulerManager(SchedulerManager _schedulerManager) {
-	// schedulerManager = _schedulerManager;
-	// }
+	@Autowired
+	public void setProcessTaskStepDataMapperr(ProcessTaskStepDataMapper _processTaskStepDataMapper) {
+		processTaskStepDataMapper = _processTaskStepDataMapper;
+	}
 
 	@Autowired
 	public void setProcessMapper(ProcessMapper _processMapper) {
@@ -1839,28 +1840,6 @@ public abstract class ProcessStepHandlerUtilBase {
 			List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepId);
 			processTaskStepVo.setWorkerList(workerList);
 			//回复框内容和附件暂存回显
-			ProcessTaskStepAuditVo processTaskStepAuditVo = new ProcessTaskStepAuditVo();
-			processTaskStepAuditVo.setProcessTaskId(processTaskStepVo.getProcessTaskId());
-			processTaskStepAuditVo.setProcessTaskStepId(processTaskStepId);
-			processTaskStepAuditVo.setAction(ProcessTaskStepAction.SAVE.getValue());
-			processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid(true));
-			List<ProcessTaskStepAuditVo> processTaskStepAuditList = processTaskMapper.getProcessTaskStepAuditList(processTaskStepAuditVo);
-			if(CollectionUtils.isNotEmpty(processTaskStepAuditList)) {
-				ProcessTaskStepAuditVo processTaskStepAudit = processTaskStepAuditList.get(processTaskStepAuditList.size() - 1);
-				processTaskStepVo.setComment(new ProcessTaskStepCommentVo(processTaskStepAudit));
-//				for(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo : processTaskStepAudit.getAuditDetailList()) {
-//					if(ProcessTaskAuditDetailType.FORM.getValue().equals(processTaskStepAuditDetailVo.getType())) {
-//						List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = JSON.parseArray(processTaskStepAuditDetailVo.getNewContent(), ProcessTaskFormAttributeDataVo.class);
-//						if(CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
-//							Map<String, Object> formAttributeDataMap = new HashMap<>();
-//							for(ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
-//								formAttributeDataMap.put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
-//							}
-//							processTaskVo.setFormAttributeDataMap(formAttributeDataMap);
-//						}
-//					}
-//				}
-			}
 			
 			//步骤评论列表
 //			List<ProcessTaskStepCommentVo> processTaskStepCommentList = processTaskMapper.getProcessTaskStepCommentListByProcessTaskStepId(processTaskStepId);
