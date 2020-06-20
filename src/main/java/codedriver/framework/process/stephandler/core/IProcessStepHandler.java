@@ -78,6 +78,9 @@ public interface IProcessStepHandler {
 	 * @return Boolean
 	 */
 	public Boolean isAllowStart();
+	
+	
+	
 
 	/**
 	 * 
