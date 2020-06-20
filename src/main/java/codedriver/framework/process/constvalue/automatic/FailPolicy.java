@@ -35,7 +35,7 @@ public enum FailPolicy {
         return null;
     }
 
-    public static String getName(String _value) {
+    public static String getText(String _value) {
         for (FailPolicy s : FailPolicy.values()) {
             if (s.getValue().equals(_value)) {
                 return s.getText();
