@@ -16,6 +16,7 @@ public class ProcessTaskStepDataVo {
 	public ProcessTaskStepDataVo() {
 
 	}
+
 	public ProcessTaskStepDataVo(boolean _isAutoGenerateId) {
 		this.isAutoGenerateId = _isAutoGenerateId;
 	}

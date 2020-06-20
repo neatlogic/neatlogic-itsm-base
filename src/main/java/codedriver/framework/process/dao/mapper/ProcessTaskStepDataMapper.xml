@@ -24,6 +24,9 @@
 			<if test="fcu != null and fcu != ''">
 			  AND `fcu` = #{fcu} 
 			</if>
+			<if test="type != null and type != ''">
+			   and `type` = #{type}
+			</if>
 		 </where> 
 		 ORDER BY `id` DESC
 		 LIMIT 1
@@ -51,6 +54,9 @@
 			</if>
 			<if test="fcu != null and fcu != ''">
 			  AND `fcu` = #{fcu} 
+			</if>
+			<if test="type != null and type != ''">
+			  and `type` = #{type}
 			</if>
 		 </where> 
 	</select>
