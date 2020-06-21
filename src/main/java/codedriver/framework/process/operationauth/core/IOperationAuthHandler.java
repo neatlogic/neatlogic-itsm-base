@@ -1,11 +1,11 @@
-package codedriver.framework.process.operate.core;
+package codedriver.framework.process.operationauth.core;
 
 import java.util.Set;
 
 import org.springframework.util.ClassUtils;
 
-public interface IProcessOperateHandler {
-	public OperateHandlerType getHandler();
+public interface IOperationAuthHandler {
+	public IOperationAuthHandlerType getHandler();
 
 	public Set<String> getFinalOperateList(Long processTaskId, Long processTaskStepId);
 }

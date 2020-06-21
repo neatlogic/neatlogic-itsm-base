@@ -1,4 +1,4 @@
-package codedriver.framework.process.operate.core;
+package codedriver.framework.process.operationauth.core;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,19 +17,19 @@ import codedriver.framework.common.RootComponent;
  * @Description: 操作处理器工厂，根据当前节点状态返回操作列表，控制前端显示的操作按钮
  */
 @RootComponent
-public class ProcessOperateHandlerFactory implements ApplicationListener<ContextRefreshedEvent> {
-	private static Map<OperateHandlerType, ProcessOperateHandlerBase> componentMap = new HashMap<>();
+public class OperationAuthHandlerFactory implements ApplicationListener<ContextRefreshedEvent> {
+	private static Map<IOperationAuthHandlerType, OperationAuthHandlerBase> componentMap = new HashMap<>();
 
-	public static ProcessOperateHandlerBase getHandler(OperateHandlerType handler) {
+	public static OperationAuthHandlerBase getHandler(IOperationAuthHandlerType handler) {
 		return componentMap.get(handler);
 	}
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		ApplicationContext context = event.getApplicationContext();
-		Map<String, ProcessOperateHandlerBase> myMap = context.getBeansOfType(ProcessOperateHandlerBase.class);
-		for (Map.Entry<String, ProcessOperateHandlerBase> entry : myMap.entrySet()) {
-			ProcessOperateHandlerBase component = entry.getValue();
+		Map<String, OperationAuthHandlerBase> myMap = context.getBeansOfType(OperationAuthHandlerBase.class);
+		for (Map.Entry<String, OperationAuthHandlerBase> entry : myMap.entrySet()) {
+			OperationAuthHandlerBase component = entry.getValue();
 			if (component.getHandler() != null) {
 				if (componentMap.containsKey(component.getHandler())) {
 					throw new RuntimeException("操作处理器：" + component.getHandler() + "已存在，请修改代码");

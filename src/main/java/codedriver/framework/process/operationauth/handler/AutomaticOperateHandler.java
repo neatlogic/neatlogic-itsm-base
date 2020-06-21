@@ -1,4 +1,4 @@
-package codedriver.framework.process.operate.handler;
+package codedriver.framework.process.operationauth.handler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.operate.core.OperateHandlerType;
-import codedriver.framework.process.operate.core.ProcessOperateHandlerBase;
+import codedriver.framework.process.operationauth.core.OperationAuthHandlerBase;
+import codedriver.framework.process.operationauth.core.OperationAuthHandlerType;
 
 @Component
-public class AutomaticOperateHandler extends ProcessOperateHandlerBase {
+public class AutomaticOperateHandler extends OperationAuthHandlerBase {
 
 	@Autowired
 	private ProcessTaskMapper processTaskMapper;
@@ -29,8 +29,8 @@ public class AutomaticOperateHandler extends ProcessOperateHandlerBase {
 	}
 
 	@Override
-	public OperateHandlerType getHandler() {
-		return OperateHandlerType.AUTOMATIC;
+	public OperationAuthHandlerType getHandler() {
+		return OperationAuthHandlerType.AUTOMATIC;
 	}
 
 }

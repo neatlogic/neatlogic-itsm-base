@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.process.constvalue.OperationType;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.dto.ProcessStepVo;
@@ -78,9 +79,6 @@ public interface IProcessStepHandler {
 	 * @return Boolean
 	 */
 	public Boolean isAllowStart();
-	
-	
-	
 
 	/**
 	 * 
@@ -281,83 +279,96 @@ public interface IProcessStepHandler {
 	 * @return void
 	 */
 	public void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj);
-	
+
 	/**
 	 * 
-	* @Description: 子任务状态发生变化后，对子任务处理人的在 processtask_step_worker表和processtask_step_user表的数据做对应的变化
-	* @param currentProcessTaskStepVo
-	* @return void
+	 * @Description: 子任务状态发生变化后，对子任务处理人的在
+	 *               processtask_step_worker表和processtask_step_user表的数据做对应的变化
+	 * @param currentProcessTaskStepVo
+	 * @return void
 	 */
 	public void updateProcessTaskStepUserAndWorker(List<ProcessTaskStepWorkerVo> workerList, List<ProcessTaskStepUserVo> userList);
-	
+
 	/**
 	 * 
-	* @Description: 活动审计 
-	* @param currentProcessTaskStepVo
-	* @param action 
-	* @return void
+	 * @Description: 活动审计
+	 * @param currentProcessTaskStepVo
+	 * @param action
+	 * @return void
 	 */
 	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action);
-	
+
 	/**
 	 * 
-	* @Time:2020年3月30日
-	* @Description: 获取当前用户对当前步骤的所有操作权限列表 
-	* @param processTaskId
-	* @param processTaskStepId 
-	* @return List<String>
+	 * @Time:2020年3月30日
+	 * @Description: 获取当前用户对当前步骤的所有操作权限列表
+	 * @param processTaskId
+	 * @param processTaskStepId
+	 * @return List<String>
 	 */
 	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId);
-	
+
 	/**
 	 * 
-	* @Author: 14378
-	* @Time:2020年4月1日
-	* @Description: 获取当前用户对当前步骤的部分操作权限列表（verifyActionList包含的那部分）
-	* @param processTaskId
-	* @param processTaskStepId
-	* @param verifyActionList
-	* @return List<String>
+	 * @Author: 14378
+	 * @Time:2020年4月1日
+	 * @Description: 获取当前用户对当前步骤的部分操作权限列表（verifyActionList包含的那部分）
+	 * @param processTaskId
+	 * @param processTaskStepId
+	 * @param verifyActionList
+	 * @return List<String>
 	 */
 	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList);
-	
+
 	/**
 	 * 
-	* @Time:2020年3月30日
-	* @Description: 判断当前用户对当前步骤的某个操作是否有权限 
-	* @param processTaskId
-	* @param processTaskStepId
-	* @param action
-	* @return boolean
+	 * @Time:2020年3月30日
+	 * @Description: 判断当前用户对当前步骤的某个操作是否有权限
+	 * @param processTaskId
+	 * @param processTaskStepId
+	 * @param action
+	 * @return boolean
 	 */
 	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action);
-	
+
 	/**
 	 * 
-	* @Time:2020年3月30日
-	* @Description: 当前用户可撤回的步骤列表
-	* @param processTaskId
-	* @return Set<ProcessTaskStepVo>
+	 * @Time:2020年3月30日
+	 * @Description: 当前用户可撤回的步骤列表
+	 * @param processTaskId
+	 * @return Set<ProcessTaskStepVo>
 	 */
 	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId);
-	
+
 	/**
 	 * 
-	* @Time:2020年3月30日
-	* @Description: 当前用户可处理的步骤列表
-	* @param processTaskId
-	* @return List<ProcessTaskStepVo>
+	 * @Time:2020年3月30日
+	 * @Description: 当前用户可处理的步骤列表
+	 * @param processTaskId
+	 * @return List<ProcessTaskStepVo>
 	 */
 	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId);
-	
+
 	/**
 	 * 
-	* @Time:2020年4月18日
-	* @Description: 获取工单中当前用户能催办的步骤列表
-	* @param processTaskId
-	* @return List<ProcessTaskStepVo>
+	 * @Time:2020年4月18日
+	 * @Description: 获取工单中当前用户能催办的步骤列表
+	 * @param processTaskId
+	 * @return List<ProcessTaskStepVo>
 	 */
 	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId);
-	
+
+//???????????????谁建的补充说明
 	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger);
+
+	/**
+	 * 
+	 * @Time:2020年3月30日
+	 * @Description: 判断当前用户对当前步骤的某个操作是否有权限
+	 * @param processTaskId
+	 * @param processTaskStepId
+	 * @param action
+	 * @return boolean
+	 */
+	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation);
 }
