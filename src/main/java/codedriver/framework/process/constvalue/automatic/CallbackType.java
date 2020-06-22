@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 public enum CallbackType {
     NONE("none", "无需回调"), 
     WAIT("wait", "等待回调"), 
-    INTERVAL("interval", "定时回调")
+    INTERVAL("interval", "轮询")
     ;
 
     private String value;
