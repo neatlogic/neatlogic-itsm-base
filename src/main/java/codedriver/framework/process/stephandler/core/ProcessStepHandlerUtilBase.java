@@ -112,6 +112,7 @@ import codedriver.framework.process.exception.processtask.ProcessTaskNotFoundExc
 import codedriver.framework.process.exception.worktime.WorktimeNotFoundException;
 import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
 import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
+import codedriver.framework.process.integration.handler.ProcessRequestFrom;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
@@ -290,7 +291,7 @@ public abstract class ProcessStepHandlerUtilBase {
 								}
 							}
 							boolean isSucceed = false;
-							IntegrationResultVo integrationResultVo = iIntegrationHandler.sendRequest(integrationVo);
+							IntegrationResultVo integrationResultVo = iIntegrationHandler.sendRequest(integrationVo,ProcessRequestFrom.PROCESS);
 							if(StringUtils.isNotBlank(integrationResultVo.getError())) {
 								logger.error(integrationResultVo.getError());
 								throw new IntegrationSendRequestException(integrationVo.getUuid());
