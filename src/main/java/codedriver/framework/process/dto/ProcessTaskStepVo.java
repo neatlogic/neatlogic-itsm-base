@@ -96,17 +96,21 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
 	private transient String aliasName;
-	private transient Boolean isAutoGenerateId = true;
+	private transient Boolean isAutoGenerateId = false;
 	
 	private transient JSONObject notifyPolicyConfig;
 	
 	private transient JSONArray actionList;
+	
+	@EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
+	private JSONObject processTaskStepData;
 	
 	public ProcessTaskStepVo() {
 
 	}
 
 	public ProcessTaskStepVo(ProcessStepVo processStepVo) {
+		this.isAutoGenerateId = true;
 		this.setProcessUuid(processStepVo.getProcessUuid());
 		this.setProcessStepUuid(processStepVo.getUuid());
 		this.setName(processStepVo.getName());
@@ -448,6 +452,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public JSONObject getParamObj() {
+		if(paramObj == null) {
+			paramObj = new JSONObject();
+		}
 		return paramObj;
 	}
 
@@ -640,6 +647,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 			actionList = getGlobalConfigObj().getJSONArray("actionList");
 		}
 		return actionList;
+	}
+
+	public JSONObject getProcessTaskStepData() {
+		return processTaskStepData;
+	}
+
+	public void setProcessTaskStepData(JSONObject processTaskStepData) {
+		this.processTaskStepData = processTaskStepData;
 	}
 
 }
