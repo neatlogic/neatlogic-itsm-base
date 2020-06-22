@@ -157,7 +157,7 @@ public interface ProcessTaskMapper {
 
 	public ProcessTaskStepVo getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuid(@Param("processTaskId") Long processTaskId, @Param("processStepUuid") String processStepUuid);
 
-	public List<String> getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId(Long processTaskStepId);
+//	public List<String> getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId(Long processTaskStepId);
 
 	public List<ProcessTaskStepCommentVo> getProcessTaskStepCommentListByProcessTaskStepId(Long processTaskStepId);
 
@@ -237,7 +237,7 @@ public interface ProcessTaskMapper {
 	
 	public int insertProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
-	public int insertProcessTaskStepDynamicHideFormAttribute(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
+//	public int insertProcessTaskStepDynamicHideFormAttribute(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
 
 	public int insertProcessTaskStepComment(ProcessTaskStepCommentVo processTaskStepCommentVo);
 
@@ -296,7 +296,7 @@ public interface ProcessTaskMapper {
 
 	public int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
-	public int deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId(Long processTaskStepId);
+//	public int deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId(Long processTaskStepId);
 
 	public int deleteProcessTaskStepCommentById(Long id);
 }

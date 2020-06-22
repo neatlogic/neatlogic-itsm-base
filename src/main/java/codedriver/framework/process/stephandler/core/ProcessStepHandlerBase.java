@@ -50,6 +50,7 @@ import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
+import codedriver.framework.process.dto.ProcessTaskStepDataVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
@@ -1235,15 +1236,24 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		try {
 
 			// 组件联动导致隐藏的属性uuid列表
-			processTaskMapper.deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
+			ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
+			processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+			processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+			processTaskStepDataVo.setType("stepDraftSave");
+			processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
+			processTaskStepDataMapper.deleteProcessTaskStepData(processTaskStepDataVo);
+			processTaskStepDataVo.setData(paramObj.toJSONString());
+			processTaskStepDataVo.setIsAutoGenerateId(true);
+			processTaskStepDataMapper.replaceProcessTaskStepData(processTaskStepDataVo);
+//			processTaskMapper.deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
 			List<String> hidecomponentList = JSON.parseArray(paramObj.getString("hidecomponentList"), String.class);
-			for (String attributeUuid : hidecomponentList) {
-				ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo = new ProcessTaskStepFormAttributeVo();
-				processTaskStepFormAttributeVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-				processTaskStepFormAttributeVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-				processTaskStepFormAttributeVo.setAttributeUuid(attributeUuid);
-				processTaskMapper.insertProcessTaskStepDynamicHideFormAttribute(processTaskStepFormAttributeVo);
-			}
+//			for (String attributeUuid : hidecomponentList) {
+//				ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo = new ProcessTaskStepFormAttributeVo();
+//				processTaskStepFormAttributeVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+//				processTaskStepFormAttributeVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+//				processTaskStepFormAttributeVo.setAttributeUuid(attributeUuid);
+//				processTaskMapper.insertProcessTaskStepDynamicHideFormAttribute(processTaskStepFormAttributeVo);
+//			}
 			/** 写入当前步骤的表单属性值 **/
 			JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
 			if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
