@@ -1245,15 +1245,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskStepDataVo.setData(paramObj.toJSONString());
 			processTaskStepDataVo.setIsAutoGenerateId(true);
 			processTaskStepDataMapper.replaceProcessTaskStepData(processTaskStepDataVo);
-//			processTaskMapper.deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
+
 			List<String> hidecomponentList = JSON.parseArray(paramObj.getString("hidecomponentList"), String.class);
-//			for (String attributeUuid : hidecomponentList) {
-//				ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo = new ProcessTaskStepFormAttributeVo();
-//				processTaskStepFormAttributeVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-//				processTaskStepFormAttributeVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-//				processTaskStepFormAttributeVo.setAttributeUuid(attributeUuid);
-//				processTaskMapper.insertProcessTaskStepDynamicHideFormAttribute(processTaskStepFormAttributeVo);
-//			}
+
 			/** 写入当前步骤的表单属性值 **/
 			JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
 			if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
