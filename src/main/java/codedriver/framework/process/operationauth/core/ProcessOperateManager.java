@@ -1,20 +1,20 @@
-package codedriver.framework.process.operate.core;
+package codedriver.framework.process.operationauth.core;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class ProcessOperateManager {
-	private ProcessOperateHandlerBase handler;
+	private OperationAuthHandlerBase handler;
 
 	public static class Builder {
-		private ProcessOperateHandlerBase handler;
+		private OperationAuthHandlerBase handler;
 
-		public Builder setNext(OperateHandlerType type) {
+		public Builder setNext(IOperationAuthHandlerType type) {
 			if (handler == null) {
-				handler = ProcessOperateHandlerFactory.getHandler(type);
+				handler = OperationAuthHandlerFactory.getHandler(type);
 			} else {
-				handler.setNext(ProcessOperateHandlerFactory.getHandler(type));
+				handler.setNext(OperationAuthHandlerFactory.getHandler(type));
 			}
 			return this;
 		}

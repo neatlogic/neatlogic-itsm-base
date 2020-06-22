@@ -1,31 +1,31 @@
-package codedriver.framework.process.operate.core;
+package codedriver.framework.process.operationauth.core;
 
 import java.util.Set;
 
-public abstract class ProcessOperateHandlerBase implements IProcessOperateHandler {
+public abstract class OperationAuthHandlerBase implements IOperationAuthHandler {
 
-	private ProcessOperateHandlerBase nextHandler;
-	private ProcessOperateHandlerBase prevHandler;
+	private OperationAuthHandlerBase nextHandler;
+	private OperationAuthHandlerBase prevHandler;
 
-	public ProcessOperateHandlerBase setNext(ProcessOperateHandlerBase next) {
+	public OperationAuthHandlerBase setNext(OperationAuthHandlerBase next) {
 		if (next != null) {
-			ProcessOperateHandlerBase temp = moveToLast();
+			OperationAuthHandlerBase temp = moveToLast();
 			temp.nextHandler = next;
 			next.prevHandler = temp;
 		}
 		return next;
 	}
 
-	public ProcessOperateHandlerBase moveToLast() {
-		ProcessOperateHandlerBase firstHandler = this;
+	public OperationAuthHandlerBase moveToLast() {
+		OperationAuthHandlerBase firstHandler = this;
 		while (firstHandler.nextHandler != null) {
 			firstHandler = firstHandler.nextHandler;
 		}
 		return firstHandler;
 	}
 
-	public ProcessOperateHandlerBase moveToFirst() {
-		ProcessOperateHandlerBase firstHandler = this;
+	public OperationAuthHandlerBase moveToFirst() {
+		OperationAuthHandlerBase firstHandler = this;
 		while (firstHandler.prevHandler != null) {
 			firstHandler = firstHandler.prevHandler;
 		}
