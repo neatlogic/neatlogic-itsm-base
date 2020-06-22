@@ -1,6 +1,5 @@
 package codedriver.framework.process.stephandler.core;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -58,6 +57,7 @@ import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.notify.dto.NotifyTemplateVo;
 import codedriver.framework.notify.dto.NotifyVo;
 import codedriver.framework.notify.dto.ParamMappingVo;
+import codedriver.framework.process.column.core.ProcessTaskUtil;
 import codedriver.framework.process.constvalue.ProcessField;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
@@ -256,8 +256,8 @@ public abstract class ProcessStepHandlerUtilBase {
 		@Override
 		protected void execute() {
 			try {
-				ProcessTaskStepVo stepVo = ProcessTaskUtil.getProcessTaskStepDetailInfoById(currentProcessTaskStepVo.getId());
-				ProcessTaskVo processTaskVo = ProcessTaskUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
+				ProcessTaskStepVo stepVo = ProcessTaskHandlerUtil.getProcessTaskStepDetailInfoById(currentProcessTaskStepVo.getId());
+				ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskVo.setCurrentProcessTaskStep(stepVo);
 				
 				JSONArray actionList = stepVo.getActionList();
@@ -277,7 +277,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							//参数映射
 							List<ParamMappingVo> paramMappingList = JSON.parseArray(actionObj.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
 							if(CollectionUtils.isNotEmpty(paramMappingList)) {
-								JSONObject processFieldData = ProcessTaskUtil.getProcessFieldDataForConditionParam(processTaskVo);
+								JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo,true);
 								for(ParamMappingVo paramMappingVo : paramMappingList) {
 									if(ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
 										integrationVo.getParamObj().put(paramMappingVo.getName(), paramMappingVo.getValue());
@@ -392,8 +392,8 @@ public abstract class ProcessStepHandlerUtilBase {
 		@Override
 		protected void execute() {
 			try {
-				ProcessTaskStepVo stepVo = ProcessTaskUtil.getProcessTaskStepDetailInfoById(currentProcessTaskStepVo.getId());
-				ProcessTaskVo processTaskVo = ProcessTaskUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
+				ProcessTaskStepVo stepVo = ProcessTaskHandlerUtil.getProcessTaskStepDetailInfoById(currentProcessTaskStepVo.getId());
+				ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskVo.setCurrentProcessTaskStep(stepVo);
 
 				JSONObject notifyPolicyConfig = stepVo.getNotifyPolicyConfig();
@@ -433,7 +433,7 @@ public abstract class ProcessStepHandlerUtilBase {
 											if(MapUtils.isNotEmpty(conditionConfig)) {
 												JSONArray conditionGroupList = conditionConfig.getJSONArray("conditionGroupList");
 												if (CollectionUtils.isNotEmpty(conditionGroupList)) {
-													JSONObject processFieldData = ProcessTaskUtil.getProcessFieldDataForConditionParam(processTaskVo);
+													JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo,true);
 													//参数映射
 													if(CollectionUtils.isNotEmpty(paramMappingList)) {
 														for(ParamMappingVo paramMappingVo : paramMappingList) {
@@ -489,7 +489,7 @@ public abstract class ProcessStepHandlerUtilBase {
 														}
 													}
 													/** 注入流程作业信息 不够将来再补充 **/
-													JSONObject processFieldData = ProcessTaskUtil.getProcessFieldDataForFreeMarker(processTaskVo);
+													JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo,false);
 													for(ProcessField processField : ProcessField.values()) {
 														Object processFieldValue = processFieldData.get(processField.getValue());
 														if(processFieldValue != null) {
@@ -1000,9 +1000,9 @@ public abstract class ProcessStepHandlerUtilBase {
 	}
 
 	protected static class TimeAuditHandler {
+		@SuppressWarnings("incomplete-switch")
 		protected static void audit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action) {
 			ProcessTaskStepTimeAuditVo processTaskStepTimeAuditVo = processTaskStepTimeAuditMapper.getLastProcessTaskStepTimeAuditByStepId(currentProcessTaskStepVo.getId());
-			boolean needNewAuduit = false;
 			ProcessTaskStepTimeAuditVo newAuditVo = new ProcessTaskStepTimeAuditVo();
 			newAuditVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 			switch (action) {
@@ -1653,94 +1653,7 @@ public abstract class ProcessStepHandlerUtilBase {
 		}
 	}
 	
-	protected static class ProcessTaskUtil {
-		public static JSONObject getProcessFieldDataForFreeMarker(ProcessTaskVo processTaskVo) {
-			JSONObject resultObj = new JSONObject();
-			resultObj.put(ProcessField.ID.getValue(), processTaskVo.getId());
-			resultObj.put(ProcessField.TITLE.getValue(), processTaskVo.getTitle());
-			resultObj.put(ProcessField.CHANNELTYPE.getValue(), processTaskVo.getChannelType().getName());
-
-			resultObj.put(ProcessField.OWNER.getValue(), processTaskVo.getOwnerName());
-			resultObj.put(ProcessField.REPORTER.getValue(), processTaskVo.getReporterName());
-			resultObj.put(ProcessField.PRIORITY.getValue(), processTaskVo.getPriority().getName());
-			resultObj.put(ProcessField.STATUS.getValue(), processTaskVo.getStatusVo().getText());
-			
-			ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
-			ProcessTaskStepCommentVo comment = startProcessTaskStep.getComment();
-			if(comment != null && StringUtils.isNotBlank(comment.getContent())) {
-				resultObj.put(ProcessField.CONTENT.getValue(), comment.getContent());
-			}else {
-				resultObj.put(ProcessField.CONTENT.getValue(), "");
-			}
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date endTime = processTaskVo.getEndTime();
-			if(endTime != null) {
-				resultObj.put(ProcessField.ENDTIME.getValue(), sdf.format(endTime));
-			}else {
-				resultObj.put(ProcessField.ENDTIME.getValue(), "");
-			}
-			Date startTime = processTaskVo.getStartTime();
-			if(startTime != null) {
-				resultObj.put(ProcessField.STARTTIME.getValue(), sdf.format(startTime));
-			}else {
-				resultObj.put(ProcessField.STARTTIME.getValue(), "");
-			}
-			Date expireTime = processTaskVo.getExpireTime();
-			if(expireTime != null) {
-				resultObj.put(ProcessField.EXPIREDTIME.getValue(), sdf.format(expireTime));
-			}else {
-				resultObj.put(ProcessField.EXPIREDTIME.getValue(), "");
-			}
-			
-			Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
-			if(MapUtils.isNotEmpty(formAttributeDataMap)) {
-				resultObj.putAll(formAttributeDataMap);
-			}
-			
-			return resultObj;
-		}
-		
-		public static JSONObject getProcessFieldDataForConditionParam(ProcessTaskVo processTaskVo) {
-			JSONObject resultObj = new JSONObject();
-			resultObj.put(ProcessField.ID.getValue(), processTaskVo.getId());
-			resultObj.put(ProcessField.TITLE.getValue(), processTaskVo.getTitle());
-			resultObj.put(ProcessField.CHANNELTYPE.getValue(), processTaskVo.getChannelType().getUuid());
-
-			resultObj.put(ProcessField.OWNER.getValue(), processTaskVo.getOwner());
-			resultObj.put(ProcessField.REPORTER.getValue(), processTaskVo.getReporter());
-			resultObj.put(ProcessField.PRIORITY.getValue(), processTaskVo.getPriority().getUuid());
-			resultObj.put(ProcessField.STATUS.getValue(), processTaskVo.getStatusVo().getStatus());
-			
-			ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
-			ProcessTaskStepCommentVo comment = startProcessTaskStep.getComment();
-			if(comment != null && StringUtils.isNotBlank(comment.getContent())) {
-				resultObj.put(ProcessField.CONTENT.getValue(), comment.getContent());
-			}else {
-				resultObj.put(ProcessField.CONTENT.getValue(), "");
-			}
-
-			Date endTime = processTaskVo.getEndTime();
-			if(endTime != null) {
-				resultObj.put(ProcessField.ENDTIME.getValue(), endTime.getTime());
-			}
-			Date startTime = processTaskVo.getStartTime();
-			if(startTime != null) {
-				resultObj.put(ProcessField.STARTTIME.getValue(), startTime.getTime());
-			}
-			Date expireTime = processTaskVo.getExpireTime();
-			if(expireTime != null) {
-				resultObj.put(ProcessField.EXPIREDTIME.getValue(), expireTime.getTime());
-			}else {
-				resultObj.put(ProcessField.EXPIREDTIME.getValue(), "");
-			}
-			
-			Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
-			if(MapUtils.isNotEmpty(formAttributeDataMap)) {
-				resultObj.putAll(formAttributeDataMap);
-			}
-			return resultObj;
-		}
-		
+	protected static class ProcessTaskHandlerUtil {
 		public static ProcessTaskVo getProcessTaskDetailInfoById(Long processTaskId) {
 			//获取工单基本信息(title、channel_uuid、config_hash、priority_uuid、status、start_time、end_time、expire_time、owner、ownerName、reporter、reporterName)
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);

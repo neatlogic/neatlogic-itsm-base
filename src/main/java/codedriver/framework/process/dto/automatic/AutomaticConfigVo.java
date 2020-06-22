@@ -3,6 +3,7 @@ package codedriver.framework.process.dto.automatic;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.process.constvalue.automatic.CallbackType;
 
 public class AutomaticConfigVo {
@@ -79,6 +80,9 @@ public class AutomaticConfigVo {
 	}
 
 	public JSONObject getBaseSuccessConfig() {
+		if(baseSuccessConfig != null && baseSuccessConfig.containsKey("expression")) {
+			baseSuccessConfig.put("expressionName", Expression.getExpressionName(baseSuccessConfig.getString("expression")));
+		}
 		return baseSuccessConfig;
 	}
 
@@ -135,6 +139,9 @@ public class AutomaticConfigVo {
 	}
 
 	public JSONObject getCallbackSuccessConfig() {
+		if(callbackSuccessConfig != null && callbackSuccessConfig.containsKey("expression")) {
+			callbackSuccessConfig.put("expressionName", Expression.getExpressionName(callbackSuccessConfig.getString("expression")));
+		}
 		return callbackSuccessConfig;
 	}
 
@@ -143,6 +150,9 @@ public class AutomaticConfigVo {
 	}
 
 	public JSONObject getCallbackFailConfig() {
+		if(callbackFailConfig != null && callbackFailConfig.containsKey("expression")) {
+			callbackFailConfig.put("expressionName", Expression.getExpressionName(callbackFailConfig.getString("expression")));
+		}
 		return callbackFailConfig;
 	}
 
