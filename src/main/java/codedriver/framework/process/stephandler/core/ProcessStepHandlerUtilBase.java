@@ -479,7 +479,7 @@ public abstract class ProcessStepHandlerUtilBase {
 													if(handler == null) {
 														throw new NotifyHandlerNotFoundException(notifyHandler);
 													}
-													NotifyVo.Builder notifyBuilder = new NotifyVo.Builder();
+													NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(notifyTriggerType);
 													Long templateId = actionObj.getLong("templateId");
 													if(templateId != null) {
 														NotifyTemplateVo notifyTemplateVo = templateMap.get(templateId);
