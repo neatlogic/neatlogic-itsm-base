@@ -479,7 +479,7 @@ public abstract class ProcessStepHandlerUtilBase {
 													if(handler == null) {
 														throw new NotifyHandlerNotFoundException(notifyHandler);
 													}
-													NotifyVo.Builder notifyBuilder = new NotifyVo.Builder();
+													NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(notifyTriggerType);
 													Long templateId = actionObj.getLong("templateId");
 													if(templateId != null) {
 														NotifyTemplateVo notifyTemplateVo = templateMap.get(templateId);
@@ -1218,7 +1218,9 @@ public abstract class ProcessStepHandlerUtilBase {
 			actionList.add(ProcessTaskStepAction.URGE.getValue());
 			if(CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
 				//终止/恢复流程abort、修改上报内容update取工单当前所有正在处理的节点权限配置的并集
+				List<ProcessTaskStepVo> startProcessTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.START.getValue());
 				List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.PROCESS.getValue());
+				processTaskStepList.addAll(startProcessTaskStepList);
 				for(ProcessTaskStepVo processTaskStep : processTaskStepList) {
 					if(processTaskStep.getIsActive().intValue() == 1) {
 						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());

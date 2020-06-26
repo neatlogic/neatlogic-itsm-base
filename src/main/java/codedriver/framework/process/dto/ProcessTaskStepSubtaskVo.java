@@ -48,6 +48,8 @@ public class ProcessTaskStepSubtaskVo {
 	private String contentHash;
 	@EntityField(name = "回复内容列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepSubtaskContentVo> contentList;
+	@EntityField(name = "步骤主处理人", type = ApiParamType.STRING)
+	private String majorUser;
 	
 	@EntityField(name = "是否可编辑", type = ApiParamType.INTEGER)
 	private Integer isEditable;
@@ -184,10 +186,16 @@ public class ProcessTaskStepSubtaskVo {
 	public void setContentList(List<ProcessTaskStepSubtaskContentVo> contentList) {
 		this.contentList = contentList;
 	}
+	public String getMajorUser() {
+		return majorUser;
+	}
+	public void setMajorUser(String majorUser) {
+		this.majorUser = majorUser;
+	}
 	public Integer getIsEditable() {
 		if(isEditable == null) {
 			String currentUser = UserContext.get().getUserUuid();
-			if(currentUser != null && currentUser.equals(this.owner) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
+			if(currentUser != null && currentUser.equals(this.majorUser) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
 				isEditable = 1;
 			}else {
 				isEditable = 0;
@@ -201,7 +209,7 @@ public class ProcessTaskStepSubtaskVo {
 	public Integer getIsAbortable() {
 		if(isAbortable == null) {
 			String currentUser = UserContext.get().getUserUuid();
-			if(currentUser != null && currentUser.equals(this.owner) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
+			if(currentUser != null && currentUser.equals(this.majorUser) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
 				isAbortable = 1;
 			}else {
 				isAbortable = 0;
@@ -215,7 +223,7 @@ public class ProcessTaskStepSubtaskVo {
 	public Integer getIsRedoable() {
 		if(isRedoable == null) {
 			String currentUser = UserContext.get().getUserUuid();
-			if(currentUser != null && currentUser.equals(this.owner) && ProcessTaskStatus.SUCCEED.getValue().equals(this.status)) {
+			if(currentUser != null && currentUser.equals(this.majorUser) && ProcessTaskStatus.SUCCEED.getValue().equals(this.status)) {
 				isRedoable = 1;
 			}else {
 				isRedoable = 0;
@@ -243,7 +251,7 @@ public class ProcessTaskStepSubtaskVo {
 	public Integer getIsCommentable() {
 		if(isCommentable == null) {
 			String currentUser = UserContext.get().getUserUuid();
-			if(currentUser != null && (currentUser.equals(this.userUuid) || currentUser.equals(this.owner)) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
+			if(currentUser != null && (currentUser.equals(this.userUuid) || currentUser.equals(this.majorUser)) && ProcessTaskStatus.RUNNING.getValue().equals(this.status)) {
 				isCommentable = 1;
 			}else {
 				isCommentable = 0;
