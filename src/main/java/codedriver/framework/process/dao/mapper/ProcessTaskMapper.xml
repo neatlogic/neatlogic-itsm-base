@@ -817,7 +817,7 @@
 		)
 	</if>
 	<if test="roleUuidList != null and roleUuidList.size() > 0">
-	OR (`type` = 'team' AND `uuid` in 
+	OR (`type` = 'role' AND `uuid` in 
 		<foreach collection="roleUuidList" item="roleUuid" open="(" separator=","  close=")">
 			#{roleUuid}
 		</foreach>
