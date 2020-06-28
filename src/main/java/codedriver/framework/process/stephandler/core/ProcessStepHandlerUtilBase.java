@@ -328,6 +328,11 @@ public abstract class ProcessStepHandlerUtilBase {
 										isSucceed = ConditionUtil.predicate(curentValueList, expression, targetValueList);
 									}
 								}
+							}else {
+								String statusCode = String.valueOf(integrationResultVo.getStatusCode());
+								if(statusCode.startsWith("2") || statusCode.startsWith("3")) {
+									isSucceed = true;
+								}
 							}
 							ActionVo actionVo = new ActionVo();
 							actionVo.setProcessTaskStepId(stepVo.getId());
@@ -338,7 +343,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							actionVo.setTriggerText(triggerType.getText());
 							actionVo.setSucceed(isSucceed);
 							JSONObject paramObj = new JSONObject();
-							paramObj.put(ProcessTaskAuditDetailType.RESTFULACTION.getParamName(), actionVo);
+							paramObj.put(ProcessTaskAuditDetailType.RESTFULACTION.getParamName(), JSON.toJSONString(actionVo));
 							stepVo.setParamObj(paramObj);
 							AuditHandler.audit(stepVo, ProcessTaskStepAction.RESTFULACTION);
 						}
