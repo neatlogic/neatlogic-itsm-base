@@ -23,6 +23,8 @@ public abstract class ProcessTaskStepAuditDetailHandlerBase implements IProcessT
 			ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(oldContent);
 			if(processTaskContentVo != null) {
 				processTaskStepAuditDetailVo.setOldContent(processTaskContentVo.getContent());
+			}else {
+				processTaskStepAuditDetailVo.setOldContent(null);
 			}
 		}
 		String newContent = processTaskStepAuditDetailVo.getNewContent();
@@ -30,6 +32,8 @@ public abstract class ProcessTaskStepAuditDetailHandlerBase implements IProcessT
 			ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(newContent);
 			if(processTaskContentVo != null) {
 				processTaskStepAuditDetailVo.setNewContent(processTaskContentVo.getContent());
+			}else {
+				processTaskStepAuditDetailVo.setNewContent(null);
 			}
 		}
 		myHandle(processTaskStepAuditDetailVo);		

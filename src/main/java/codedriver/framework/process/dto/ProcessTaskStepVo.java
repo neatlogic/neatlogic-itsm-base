@@ -104,6 +104,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	
 	@EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
 	private JSONObject processTaskStepData;
+	//@EntityField(name = "当前子任务Id", type = ApiParamType.LONG)
+	private transient Long currentSubtaskId;
 	
 	public ProcessTaskStepVo() {
 
@@ -655,6 +657,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setProcessTaskStepData(JSONObject processTaskStepData) {
 		this.processTaskStepData = processTaskStepData;
+	}
+
+	public Long getCurrentSubtaskId() {
+		return currentSubtaskId;
+	}
+
+	public void setCurrentSubtaskId(Long currentSubtaskId) {
+		this.currentSubtaskId = currentSubtaskId;
 	}
 
 }

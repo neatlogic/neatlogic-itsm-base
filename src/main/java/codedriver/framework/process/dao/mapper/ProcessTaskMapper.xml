@@ -859,20 +859,22 @@
 	
 	<select id="getProcessTaskStepSubtaskById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
 	SELECT 
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `id`,
-	  `owner`,
-	  `status`,
-	  `user_uuid` AS userUuid,
-	  `target_time` AS targetTime,
-	  `create_time` AS createTime,
-	  `start_time` AS startTime,
-	  `end_time` AS endTime,
-	  `cancel_user` AS cancelUser,
-	  `cancel_time` AS cancelTime
-	FROM `processtask_step_subtask` 
-	WHERE `id` = #{id}
+	  a.`processtask_id` AS processTaskId,
+	  a.`processtask_step_id` AS processTaskStepId,
+	  a.`id`,
+	  a.`owner`,
+	  a.`status`,
+	  a.`user_uuid` AS userUuid,
+	  a.`target_time` AS targetTime,
+	  a.`create_time` AS createTime,
+	  a.`start_time` AS startTime,
+	  a.`end_time` AS endTime,
+	  a.`cancel_user` AS cancelUser,
+	  a.`cancel_time` AS cancelTime,
+	  b.`user_uuid` AS majorUser
+	FROM `processtask_step_subtask` a
+	JOIN `processtask_step_user` b ON b.`processtask_step_id`=a.`processtask_step_id` AND b.`user_type`='major'
+	WHERE a.`id` = #{id}
 	</select>
 	
 	<select id="getProcessTaskStepSubtaskList" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
@@ -890,8 +892,10 @@
 	  a.`start_time` AS startTime,
 	  a.`end_time` AS endTime,
 	  a.`cancel_user` AS cancelUser,
-	  a.`cancel_time` AS cancelTime
+	  a.`cancel_time` AS cancelTime,
+	  b.`user_uuid` AS majorUser
 	FROM `processtask_step_subtask` a
+	JOIN `processtask_step_user` b ON b.`processtask_step_id`=a.`processtask_step_id` AND b.`user_type`='major'
 	<where>
 		<if test="id != null">
 		AND a.`id` = #{id}
@@ -1003,10 +1007,6 @@
 		FROM `processtask_step`
 		WHERE `processtask_id` = #{processTaskId} 
 		AND `process_step_uuid` = #{processStepUuid}
-	</select>
-	
-	<select id="getProcessTaskStepDynamicHideFormAttributeUuidListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.String">
-	SELECT `attribute_uuid` FROM `processtask_step_dynamic_hide_formattribute` WHERE `processtask_step_id` = #{processTaskStepId}
 	</select>
 	
 	<select id="getProcessTaskStepCommentListByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
@@ -1680,20 +1680,6 @@
 	  ) 
 	</insert>
 	
-	<insert id="insertProcessTaskStepDynamicHideFormAttribute" parameterType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
-	INSERT INTO `processtask_step_dynamic_hide_formattribute` (
-	  `processtask_id`,
-	  `processtask_step_id`,
-	  `attribute_uuid`
-	) 
-	VALUES
-	  (
-	    #{processTaskId},
-	    #{processTaskStepId},
-	    #{attributeUuid}
-	  ) 
-	</insert>
-	
 	<insert id="insertProcessTaskStepComment" parameterType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
 	<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
 		select LAST_INSERT_ID() AS id
@@ -1936,10 +1922,6 @@
 	DELETE FROM`processtask_assignworker` 
 	WHERE `processtask_step_id` = #{processTaskStepId}
 	AND `from_processtask_step_id` = #{fromProcessTaskStepId}
-	</delete>
-	
-	<delete id="deleteProcessTaskStepDynamicHideFormAttributeByProcessTaskStepId" parameterType="java.lang.Long">
-	DELETE FROM `processtask_step_dynamic_hide_formattribute` WHERE `processtask_step_id` = #{processTaskStepId}
 	</delete>
 	
 	<delete id="deleteProcessTaskStepCommentById" parameterType="java.lang.Long">

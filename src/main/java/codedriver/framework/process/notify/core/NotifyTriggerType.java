@@ -1,6 +1,8 @@
 package codedriver.framework.process.notify.core;
 
-public enum NotifyTriggerType {
+import codedriver.framework.notify.core.INotifyTriggerType;
+
+public enum NotifyTriggerType implements INotifyTriggerType {
 	ACTIVE("active", "步骤激活", "流程步骤已激活", "流程步骤已激活"),
 	ASSIGN("assign", "步骤分配处理人", "流程步骤已分配", "流程步骤已分配"),
 	START("start", "步骤开始", "流程步骤已开始", "流程步骤已开始"),
@@ -42,11 +44,11 @@ public enum NotifyTriggerType {
 	public String getContentTemplate() {
 		return contentTemplate;
 	}
-
+	@Override
 	public String getTrigger() {
 		return trigger;
 	}
-
+	@Override
 	public String getText() {
 		return text;
 	}
