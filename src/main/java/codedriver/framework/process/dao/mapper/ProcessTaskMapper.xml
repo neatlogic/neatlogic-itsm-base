@@ -865,6 +865,7 @@
 	  a.`owner`,
 	  a.`status`,
 	  a.`user_uuid` AS userUuid,
+	  (SELECT `user_name` FROM `user` WHERE `uuid` = a.`user_uuid`) AS userName,
 	  a.`target_time` AS targetTime,
 	  a.`create_time` AS createTime,
 	  a.`start_time` AS startTime,
@@ -1825,7 +1826,17 @@
 	SET `content_hash` = #{contentHash},
 	  `lcd` = NOW(3),
 	  `lcu` = #{lcu}
-	WHERE `id` = #{id}
+	<where>
+		<if test="id != null">
+		AND `id` = #{id}
+		</if>
+		<if test="processTaskStepSubtaskId != null">
+		AND `processtask_step_subtask_id` = #{processTaskStepSubtaskId}
+		</if>
+		<if test="action != null and action != ''">
+		AND `action` = #{action}
+		</if>
+	</where>
 	</update>
 	
 	<update id="updateProcessTaskStepCommentById" parameterType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
