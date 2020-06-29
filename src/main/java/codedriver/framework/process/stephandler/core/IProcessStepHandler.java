@@ -371,4 +371,6 @@ public interface IProcessStepHandler {
 	 * @return boolean
 	 */
 	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation);
+	
+	public JSONObject makeupConfig(JSONObject configObj);
 }
