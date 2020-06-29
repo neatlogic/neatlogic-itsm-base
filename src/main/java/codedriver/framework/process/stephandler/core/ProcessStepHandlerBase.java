@@ -50,6 +50,7 @@ import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
+import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepDataVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
@@ -516,8 +517,26 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 		if (canComplete) {
 			try {
-				myComplete(currentProcessTaskStepVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+				ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
+				processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+				processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+				processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
+				processTaskStepDataVo.setType("stepDraftSave");
+				ProcessTaskStepDataVo stepDraftSaveData = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
+				if(stepDraftSaveData != null) {
+					JSONObject dataObj = stepDraftSaveData.getData();
+					if(MapUtils.isNotEmpty(dataObj)) {
+						paramObj.putAll(dataObj);
+					}
+				}
+				/** 保存描述内容 **/
+				String content = paramObj.getString("content");
+				if (StringUtils.isNotBlank(content)) {
+					ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
+					processTaskMapper.replaceProcessTaskStepContent(new ProcessTaskStepContentVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), contentVo.getHash()));
+				}
+				myComplete(currentProcessTaskStepVo);
 				if (MapUtils.isNotEmpty(paramObj)) {
 					// 表单属性显示控制
 					Map<String, String> formAttributeActionMap = new HashMap<>();
