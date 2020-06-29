@@ -281,7 +281,7 @@ public abstract class ProcessStepHandlerUtilBase {
 								for(ParamMappingVo paramMappingVo : paramMappingList) {
 									if(ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
 										integrationVo.getParamObj().put(paramMappingVo.getName(), paramMappingVo.getValue());
-									}else {
+									}else if(StringUtils.isNotBlank(paramMappingVo.getType())){
 										Object processFieldValue = processFieldData.get(paramMappingVo.getValue());
 										if(processFieldValue != null) {
 											integrationVo.getParamObj().put(paramMappingVo.getName(), processFieldValue);
