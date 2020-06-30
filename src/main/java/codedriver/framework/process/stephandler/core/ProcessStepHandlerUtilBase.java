@@ -67,6 +67,7 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
+import codedriver.framework.process.constvalue.ProcessTaskStepDataType;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.FormMapper;
@@ -1631,7 +1632,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
 			processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 			processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-			processTaskStepDataVo.setType("stepDraftSave");
+			processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
 			processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
 			processTaskStepDataVo = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
 			List<String> hidecomponentList = new ArrayList<>();
