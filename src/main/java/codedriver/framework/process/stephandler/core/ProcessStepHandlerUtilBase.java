@@ -858,13 +858,14 @@ public abstract class ProcessStepHandlerUtilBase {
 				long now = System.currentTimeMillis();
 				String worktimeUuid = null;
 				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-				if (processTaskVo != null) {
-					if (StringUtils.isNotBlank(processTaskVo.getChannelUuid())) {
-						ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
-						if (channelVo != null && StringUtils.isNotBlank(channelVo.getWorktimeUuid())) {
-							worktimeUuid = channelVo.getWorktimeUuid();
-						}
-					}
+				if (processTaskVo != null && StringUtils.isNotBlank(processTaskVo.getWorktimeUuid())) {
+					worktimeUuid = processTaskVo.getWorktimeUuid();
+//					if (StringUtils.isNotBlank(processTaskVo.getChannelUuid())) {
+//						ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
+//						if (channelVo != null && StringUtils.isNotBlank(channelVo.getWorktimeUuid())) {
+//							worktimeUuid = channelVo.getWorktimeUuid();
+//						}
+//					}
 				}
 				for (ProcessTaskSlaVo slaVo : slaList) {
 					/** 如果没有超时时间，证明第一次进入SLA标签范围，开始计算超时时间 **/
