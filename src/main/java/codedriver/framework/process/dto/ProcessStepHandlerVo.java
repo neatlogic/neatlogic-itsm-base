@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.ApiParamType;
@@ -24,16 +26,31 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
 	@EntityField(name = "配置信息", type = ApiParamType.STRING)
-	private String config;
+	private JSONObject config;
 	@EntityField(name = "前端配置信息", type = ApiParamType.JSONOBJECT)
 	private JSONObject chartConfig;
 
-	public String getConfig() {
+	private transient String configStr;
+	
+	public ProcessStepHandlerVo() {
+	}
+
+	public ProcessStepHandlerVo(String handler, String name, JSONObject config) {
+		this.handler = handler;
+		this.name = name;
+		this.config = config;
+	}
+
+	public JSONObject getConfig() {
 		return config;
 	}
 
 	public void setConfig(String config) {
-		this.config = config;
+		try {
+			this.config = JSON.parseObject(config);
+		}catch(JSONException e) {
+			
+		}		
 	}
 
 	public String getIcon() {
@@ -113,4 +130,10 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 		this.isAllowStart = isAllowStart;
 	}
 
+	public String getConfigStr() {
+		if(configStr != null && this.config != null) {
+			configStr = this.config.toJSONString();
+		}
+		return configStr;
+	}
 }
