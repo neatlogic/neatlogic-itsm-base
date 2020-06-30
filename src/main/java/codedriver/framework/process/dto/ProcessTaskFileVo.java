@@ -4,30 +4,38 @@ public class ProcessTaskFileVo {
 
 	private Long processTaskId;
 	private Long processTaskStepId;
-	private String fileUuid;
-	
-	public ProcessTaskFileVo() {}
-	public ProcessTaskFileVo(Long processTaskId, Long processTaskStepId, String fileUuid) {
+	private Long fileId;
+
+	public ProcessTaskFileVo() {
+	}
+
+	public ProcessTaskFileVo(Long processTaskId, Long processTaskStepId, Long fileId) {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
-		this.fileUuid = fileUuid;
+		this.fileId = fileId;
 	}
+
 	public Long getProcessTaskId() {
 		return processTaskId;
 	}
+
 	public void setProcessTaskId(Long processTaskId) {
 		this.processTaskId = processTaskId;
 	}
+
 	public Long getProcessTaskStepId() {
 		return processTaskStepId;
 	}
+
 	public void setProcessTaskStepId(Long processTaskStepId) {
 		this.processTaskStepId = processTaskStepId;
 	}
-	public String getFileUuid() {
-		return fileUuid;
+
+	public Long getFileId() {
+		return fileId;
 	}
-	public void setFileUuid(String fileUuid) {
-		this.fileUuid = fileUuid;
+
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
 	}
 }
