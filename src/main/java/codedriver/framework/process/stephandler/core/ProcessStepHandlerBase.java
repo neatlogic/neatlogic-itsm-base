@@ -36,6 +36,7 @@ import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
+import codedriver.framework.process.constvalue.ProcessTaskStepDataType;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dto.ChannelVo;
@@ -522,7 +523,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 				processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
-				processTaskStepDataVo.setType("stepDraftSave");
+				processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
 				ProcessTaskStepDataVo stepDraftSaveData = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
 				if(stepDraftSaveData != null) {
 					JSONObject dataObj = stepDraftSaveData.getData();
@@ -1292,7 +1293,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
 			processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 			processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-			processTaskStepDataVo.setType("stepDraftSave");
+			processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
 			processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
 			processTaskStepDataMapper.deleteProcessTaskStepData(processTaskStepDataVo);
 			processTaskStepDataVo.setData(paramObj.toJSONString());
