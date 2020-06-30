@@ -1369,8 +1369,8 @@ public abstract class ProcessStepHandlerUtilBase {
 			// 如果步骤自定义权限设置为空，则用组件的全局权限设置
 			if (CollectionUtils.isEmpty(authorityList)) {
 				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
-				if (processStepHandlerVo != null) {
-					JSONObject handlerConfigObj = JSON.parseObject(processStepHandlerVo.getConfig());
+				if(processStepHandlerVo != null) {
+					JSONObject handlerConfigObj = processStepHandlerVo.getConfig();
 					authorityList = handlerConfigObj.getJSONArray("authorityList");
 				}
 			}
@@ -1693,8 +1693,8 @@ public abstract class ProcessStepHandlerUtilBase {
 			String startStepConfig = processTaskMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
 			startProcessTaskStepVo.setConfig(startStepConfig);
 			ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
-			if (processStepHandlerConfig != null) {
-				startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());
+			if(processStepHandlerConfig != null && processStepHandlerConfig.getConfig() != null) {
+				startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig().toJSONString());					
 			}
 			Long startProcessTaskStepId = startProcessTaskStepVo.getId();
 			ProcessTaskStepCommentVo comment = new ProcessTaskStepCommentVo();
@@ -1769,8 +1769,8 @@ public abstract class ProcessStepHandlerUtilBase {
 			String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
 			processTaskStepVo.setConfig(stepConfig);
 			ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
-			if (processStepHandlerVo != null) {
-				processTaskStepVo.setGlobalConfig(processStepHandlerVo.getConfig());
+			if(processStepHandlerVo != null && processStepHandlerVo.getConfig() != null) {
+				processTaskStepVo.setGlobalConfig(processStepHandlerVo.getConfig().toJSONString());					
 			}
 			// 处理人列表
 			List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MAJOR.getValue());

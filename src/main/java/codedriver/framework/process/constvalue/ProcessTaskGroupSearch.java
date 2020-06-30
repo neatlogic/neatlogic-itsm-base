@@ -12,6 +12,10 @@ public enum ProcessTaskGroupSearch {
 	public String getValue() {
 		return value;
 	}
+	
+	public String getValuePlugin() {
+		return value + "#";
+	}
 
 	public String getText() {
 		return text;
