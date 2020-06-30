@@ -372,5 +372,12 @@ public interface IProcessStepHandler {
 	 */
 	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation);
 	
+	/**
+	 * 
+	* @Time:2020年6月30日
+	* @Description: 构造节点管理配置数据
+	* @param configObj
+	* @return JSONObject
+	 */
 	public JSONObject makeupConfig(JSONObject configObj);
 }
