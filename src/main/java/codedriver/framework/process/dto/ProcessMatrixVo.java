@@ -1,13 +1,12 @@
 package codedriver.framework.process.dto;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.common.constvalue.ApiParamType;
-import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.process.constvalue.ProcessMatrixType;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -16,7 +15,7 @@ import codedriver.framework.restful.annotation.EntityField;
  * @description:
  * @create: 2020-03-26 18:59
  **/
-public class ProcessMatrixVo extends BasePageVo {
+public class ProcessMatrixVo extends BaseEditorVo {
     private String keyword;
     @EntityField( name = "自增ID", type = ApiParamType.LONG)
     private Long id;
@@ -28,14 +27,14 @@ public class ProcessMatrixVo extends BasePageVo {
     private String type;
     @EntityField( name = "类型名称", type = ApiParamType.STRING)
     private String typeName;
-    @EntityField( name = "创建人",  type = ApiParamType.STRING)
-    private String fcu;
-    @EntityField( name = "创建时间",  type = ApiParamType.LONG)
-    private Date fcd;
-    @EntityField( name = "修改人",  type = ApiParamType.STRING)
-    private String lcu;
-    @EntityField(name = "修改时间", type = ApiParamType.LONG)
-    private Date lcd;
+//    @EntityField( name = "创建人",  type = ApiParamType.STRING)
+//    private String fcu;
+//    @EntityField( name = "创建时间",  type = ApiParamType.LONG)
+//    private Date fcd;
+//    @EntityField( name = "修改人",  type = ApiParamType.STRING)
+//    private String lcu;
+//    @EntityField(name = "修改时间", type = ApiParamType.LONG)
+//    private Date lcd;
     @EntityField(name = "引用次数", type = ApiParamType.INTEGER)
     private int usedCount;
 
@@ -82,37 +81,37 @@ public class ProcessMatrixVo extends BasePageVo {
         this.type = type;
     }
 
-    public String getFcu() {
-        return fcu;
-    }
-
-    public void setFcu(String fcu) {
-        this.fcu = fcu;
-    }
-
-    public Date getFcd() {
-		return fcd;
-	}
-
-	public void setFcd(Date fcd) {
-		this.fcd = fcd;
-	}
-
-	public Date getLcd() {
-		return lcd;
-	}
-
-	public void setLcd(Date lcd) {
-		this.lcd = lcd;
-	}
-
-	public String getLcu() {
-        return lcu;
-    }
-
-    public void setLcu(String lcu) {
-        this.lcu = lcu;
-    }
+//    public String getFcu() {
+//        return fcu;
+//    }
+//
+//    public void setFcu(String fcu) {
+//        this.fcu = fcu;
+//    }
+//
+//    public Date getFcd() {
+//		return fcd;
+//	}
+//
+//	public void setFcd(Date fcd) {
+//		this.fcd = fcd;
+//	}
+//
+//	public Date getLcd() {
+//		return lcd;
+//	}
+//
+//	public void setLcd(Date lcd) {
+//		this.lcd = lcd;
+//	}
+//
+//	public String getLcu() {
+//        return lcu;
+//    }
+//
+//    public void setLcu(String lcu) {
+//        this.lcu = lcu;
+//    }
 
     public List<ProcessMatrixDispatcherVo> getDispatcherVoList() {
         return dispatcherVoList;
