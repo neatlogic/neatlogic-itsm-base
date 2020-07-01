@@ -693,7 +693,7 @@
 	SELECT 
 	  `processtask_id` AS processTaskId,
 	  `processtask_step_id` AS processTaskStepId,
-	  `file_uuid` AS fileUuid 
+	  `file_id` AS fileId 
 	FROM `processtask_file` 
 	WHERE `processtask_id` = #{processTaskId} 
 	AND `processtask_step_id` = #{processTaskStepId}
@@ -1016,7 +1016,7 @@
 	  `processtask_id` AS processTaskId,
 	  `processtask_step_id` AS processTaskStepId,
 	  `content_hash` AS contentHash,
-	  `file_uuid_list_hash` fileUuidListHash,
+	  `file_id_list_hash` fileIdListHash,
 	  `fcd`,
 	  `fcu`,
 	  `lcd`,
@@ -1032,7 +1032,7 @@
 	  `processtask_id` AS processTaskId,
 	  `processtask_step_id` AS processTaskStepId,
 	  `content_hash` AS contentHash,
-	  `file_uuid_list_hash` fileUuidListHash,
+	  `file_id_list_hash` fileIdListHash,
 	  `fcd`,
 	  `fcu`,
 	  `lcd`,
@@ -1600,13 +1600,13 @@
 	INSERT INTO `processtask_file` (
 	  `processtask_id`,
 	  `processtask_step_id`,
-	  `file_uuid`
+	  `file_id`
 	) 
 	VALUES
 	  (
 	    #{processTaskId},
 	    #{processTaskStepId},
-	    #{fileUuid}
+	    #{fileId}
 	  ) 
 	</insert>
 	
@@ -1689,7 +1689,7 @@
 	  `processtask_id`,
 	  `processtask_step_id`,
 	  `content_hash`,
-	  `file_uuid_list_hash`,
+	  `file_id_list_hash`,
 	  `fcd`,
 	  `fcu`
 	) 
@@ -1698,7 +1698,7 @@
 	    #{processTaskId},
 	    #{processTaskStepId},
 	    #{contentHash},
-	    #{fileUuidListHash},
+	    #{fileIdListHash},
 	    NOW(3),
 	    #{fcu}
 	  ) 
@@ -1843,7 +1843,7 @@
 	UPDATE  `processtask_step_comment` 
 	SET
 	  `content_hash` = #{contentHash},
-	  `file_uuid_list_hash` = #{fileUuidListHash},
+	  `file_id_list_hash` = #{fileIdListHash},
 	  `lcd` = NOW(3),
 	  `lcu` = #{lcu} 
 	WHERE `id` = #{id}
