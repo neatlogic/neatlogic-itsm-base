@@ -37,10 +37,14 @@ public interface CatalogMapper {
 	public int checkCatalogIsExistsByLeftRightCode(@Param("uuid")String uuid, @Param("lft") Integer lft, @Param("rht") Integer rht);
 
 	public int getCatalogCount(CatalogVo catalogVo);
-	
+
+	public int getMaxRhtCode();
+
 	public int replaceCatalog(CatalogVo catalogVo);
 
 	public int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
+
+	public int insertRootCatalog();
 
 	public int updateCatalogParentUuidByUuid(CatalogVo catalogVo);
 
