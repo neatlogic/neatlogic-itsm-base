@@ -38,7 +38,7 @@ public interface CatalogMapper {
 
 	public int getCatalogCount(CatalogVo catalogVo);
 
-	public int getMaxRhtCode();
+	public CatalogVo getMaxRhtCode();
 
 	public int replaceCatalog(CatalogVo catalogVo);
 

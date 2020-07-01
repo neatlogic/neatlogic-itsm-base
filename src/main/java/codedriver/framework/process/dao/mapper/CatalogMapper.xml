@@ -162,8 +162,8 @@
 		SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
 	</select>
 
-	<select id="getMaxRhtCode" resultType="int" useCache="false">
-		SELECT max(rht) FROM `catalog`
+	<select id="getMaxRhtCode" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
+		SELECT max(rht) as `rht` FROM `catalog`
 	</select>
 
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
