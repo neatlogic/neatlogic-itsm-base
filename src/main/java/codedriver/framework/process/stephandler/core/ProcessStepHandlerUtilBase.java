@@ -1713,10 +1713,8 @@ public abstract class ProcessStepHandlerUtilBase {
 			List<ProcessTaskFileVo> processTaskFileList = processTaskMapper.searchProcessTaskFile(processTaskFileVo);
 
 			if (processTaskFileList.size() > 0) {
-				// List<Long> fileIdList = new ArrayList<>();
 				List<FileVo> fileList = new ArrayList<>();
 				for (ProcessTaskFileVo processTaskFile : processTaskFileList) {
-					// fileIdList.add(processTaskFile.getFileId());
 					FileVo fileVo = fileMapper.getFileById(processTaskFile.getFileId());
 					fileList.add(fileVo);
 				}

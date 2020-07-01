@@ -40,7 +40,7 @@ public class ProcessTaskStepCommentVo {
 
 	private transient List<Long> fileIdList;
 	private transient String contentHash;
-	private transient String fileUuidListHash;
+	private transient String fileIdListHash;
 	
 	public ProcessTaskStepCommentVo() {
 	}
@@ -123,11 +123,11 @@ public class ProcessTaskStepCommentVo {
 	public void setContentHash(String contentHash) {
 		this.contentHash = contentHash;
 	}
-	public String getFileUuidListHash() {
-		return fileUuidListHash;
+	public String getFileIdListHash() {
+		return fileIdListHash;
 	}
-	public void setFileUuidListHash(String fileUuidListHash) {
-		this.fileUuidListHash = fileUuidListHash;
+	public void setFileIdListHash(String fileIdListHash) {
+		this.fileIdListHash = fileIdListHash;
 	}
 	public Integer getIsEditable() {
 		if(isEditable == null) {
