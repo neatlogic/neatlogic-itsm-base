@@ -36,6 +36,7 @@ import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.asynchronization.threadpool.CommonThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
@@ -1115,6 +1116,9 @@ public abstract class ProcessStepHandlerUtilBase {
 		 * @return List<String>
 		 */
 		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
+			if(SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid())) {
+				return verifyActionList;
+			}
 			Set<String> resultList = new HashSet<>();
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
 			// 工单信息查看权限，有本工单对应服务的上报权限或者工单干系人，才有该工单信息查看权限;

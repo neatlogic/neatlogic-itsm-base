@@ -17,9 +17,14 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.constvalue.SystemUser;
+import codedriver.framework.dao.mapper.RoleMapper;
+import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
-import codedriver.framework.dto.UserVo;
+import codedriver.framework.exception.role.RoleNotFoundException;
+import codedriver.framework.exception.team.TeamNotFoundException;
 import codedriver.framework.exception.user.UserNotFoundException;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
@@ -37,12 +42,20 @@ import codedriver.framework.scheduler.dto.JobObject;
 @Component
 public class ProcessTaskSlaTransferJob extends JobBase {
 	static Logger logger = LoggerFactory.getLogger(ProcessTaskSlaTransferJob.class);
-
+	
+	private final static Integer INTERVAL_IN_SECONDS = 60 * 60;
+	
 	@Autowired
 	private ProcessTaskMapper processTaskMapper;
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private TeamMapper teamMapper;
+	
+	@Autowired
+	private RoleMapper roleMapper;
 
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
@@ -93,7 +106,7 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 						System.out.println(time + unit);
 						JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
 								.withBeginTime(transferDate.getTime())
-								.withIntervalInSeconds(120)
+								.withIntervalInSeconds(INTERVAL_IN_SECONDS)
 								.addData("slaTransferId", processTaskSlaTransferVo.getId());
 						JobObject newJobObject = newJobObjectBuilder.build();
 						Date triggerDate = schedulerManager.loadJob(newJobObject);
@@ -139,25 +152,43 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 				if (processTaskSlaVo != null && processTaskSlaTimeVo != null && processTaskSlaTransferVo.getConfigObj() != null) {
 					JSONObject policyObj = processTaskSlaTransferVo.getConfigObj();
 					String transferTo = policyObj.getString("transferTo");
-					if (StringUtils.isNotBlank(transferTo)) {
-						UserVo userVo = userMapper.getUserBaseInfoByUuid(transferTo);
-						ProcessTaskStepWorkerVo workerVo = null;
-						if (userVo != null) {
-							List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
+					if (StringUtils.isNotBlank(transferTo) && transferTo.contains("#")) {
+						boolean transferToIsExists = true;//转交对象是否存在、合法
+						String[] split = transferTo.split("#");
+						if(GroupSearch.USER.getValue().equals(split[0])) {
+							if(userMapper.checkUserIsExists(split[1]) == 0) {
+								throw new UserNotFoundException(split[1]);
+							}
+						}else if(GroupSearch.TEAM.getValue().equals(split[0])) {
+							if(teamMapper.checkTeamIsExists(split[1]) == 0) {
+								throw new TeamNotFoundException(split[1]);
+							}
+						}else if(GroupSearch.ROLE.getValue().equals(split[0])) {
+							if(roleMapper.checkRoleIsExists(split[1]) == 0) {
+								throw new RoleNotFoundException(split[1]);
+							}
+						}else {
+							transferToIsExists = false;
+						}
+						if (transferToIsExists) {
+							ProcessTaskStepWorkerVo workerVo = new ProcessTaskStepWorkerVo();
+							workerVo.setProcessTaskId(processTaskSlaVo.getProcessTaskId());
+							workerVo.setType(split[0]);
+							workerVo.setUuid(split[1]);
 							for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
 								// 未处理、处理中和挂起的步骤才需要转交
 								if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
-									if (workerVo == null) {
-										workerList.add(new ProcessTaskStepWorkerVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), GroupSearch.USER.getValue(), transferTo));
-									}
+									List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
+									workerVo.setProcessTaskStepId(processTaskStepVo.getId());
+									workerList.add(workerVo);
 									IProcessStepHandler stepHandler = ProcessStepHandlerFactory.getHandler(processTaskStepVo.getHandler());
 									if (stepHandler != null) {
+										UserContext.init(SystemUser.SYSTEM.getConfig(), null, SystemUser.SYSTEM.getTimezone(), null, null);
 										stepHandler.transfer(processTaskStepVo, workerList);
+										System.out.println("转交成功：" + processTaskStepVo.getId());
 									}
 								}
 							}
-						} else {
-							throw new UserNotFoundException(transferTo);
 						}
 					}
 				}
