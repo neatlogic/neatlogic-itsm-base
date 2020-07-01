@@ -888,11 +888,12 @@ public abstract class ProcessStepHandlerUtilBase {
 									JSONArray priorityList = policyObj.getJSONArray("priorityList");
 									JSONArray ruleList = policyObj.getJSONArray("ruleList");
 									boolean isHit = false;
-									if (ruleList != null && ruleList.size() > 0) {
-										isHit = validateRule(ruleList, connectionType);
-									} else {// 如果没有规则，则无需判断
-										isHit = true;
-									}
+//									if (ruleList != null && ruleList.size() > 0) {
+//										isHit = validateRule(ruleList, connectionType);
+//									} else {// 如果没有规则，则无需判断
+//										isHit = true;
+//									}
+									isHit = true;
 									if (isHit) {
 										slaTimeVo = new ProcessTaskSlaTimeVo();
 										if (enablePriority == 0) {
@@ -904,7 +905,7 @@ public abstract class ProcessStepHandlerUtilBase {
 											if (priorityList != null && priorityList.size() > 0) {
 												for (int p = 0; p < priorityList.size(); p++) {
 													JSONObject priorityObj = priorityList.getJSONObject(p);
-													if (priorityObj.getString("priority").equals(processTaskVo.getPriorityUuid())) {
+													if (priorityObj.getString("uuid").equals(processTaskVo.getPriorityUuid())) {
 														long timecost = getRealtime(priorityObj.getIntValue("time"), priorityObj.getString("unit"));
 														slaTimeVo.setTimeSum(timecost);
 														slaTimeVo.setRealTimeLeft(timecost);

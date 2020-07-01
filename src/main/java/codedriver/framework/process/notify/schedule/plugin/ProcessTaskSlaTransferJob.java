@@ -79,12 +79,13 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 							time = -time;
 						}
 						if (StringUtils.isNotBlank(unit) && time != 0) {
+							System.out.println("time:" + time);
 							if (unit.equalsIgnoreCase("day")) {
-								transferDate.add(time, Calendar.DAY_OF_MONTH);
+								transferDate.add(Calendar.DAY_OF_MONTH, time);
 							} else if (unit.equalsIgnoreCase("hour")) {
-								transferDate.add(time, Calendar.HOUR);
+								transferDate.add(Calendar.HOUR, time);
 							} else {
-								transferDate.add(time, Calendar.MINUTE);
+								transferDate.add(Calendar.MINUTE, time);
 							}
 						}
 						JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(transferDate.getTime()).addData("slaTransferId", processTaskSlaTransferVo.getId());
