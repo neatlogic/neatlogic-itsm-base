@@ -905,8 +905,8 @@ public abstract class ProcessStepHandlerUtilBase {
 											if (priorityList != null && priorityList.size() > 0) {
 												for (int p = 0; p < priorityList.size(); p++) {
 													JSONObject priorityObj = priorityList.getJSONObject(p);
-													if (priorityObj.getString("uuid").equals(processTaskVo.getPriorityUuid())) {
-														long timecost = getRealtime(priorityObj.getIntValue("time"), priorityObj.getString("unit"));
+													if (priorityObj.getString("uuid").equals(processTaskVo.getPriorityUuid())) {//TODO linbq这里要uuid改成priorityUuid
+														long timecost = getRealtime(priorityObj.getIntValue("value"), priorityObj.getString("unit"));//TODO linbq这里要value改成time
 														slaTimeVo.setTimeSum(timecost);
 														slaTimeVo.setRealTimeLeft(timecost);
 														slaTimeVo.setTimeLeft(timecost);

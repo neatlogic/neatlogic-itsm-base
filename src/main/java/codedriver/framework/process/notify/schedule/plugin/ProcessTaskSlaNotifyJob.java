@@ -69,7 +69,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 			ProcessTaskSlaTimeVo slaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(processTaskSlaNotifyVo.getSlaId());
 			if (slaTimeVo != null) {
 				if (processTaskSlaNotifyVo != null && processTaskSlaNotifyVo.getConfigObj() != null) {
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					JSONObject policyObj = processTaskSlaNotifyVo.getConfigObj();
 					String expression = policyObj.getString("expression");
 					int time = policyObj.getIntValue("time");
@@ -106,6 +105,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 						Date triggerDate = schedulerManager.loadJob(newJobObject);
 						if (triggerDate != null) {
 							// 更新通知记录时间
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 							processTaskSlaNotifyVo.setTriggerTime(sdf.format(triggerDate));
 							processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
 							isJobLoaded = true;
