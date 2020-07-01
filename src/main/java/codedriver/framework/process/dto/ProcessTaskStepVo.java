@@ -54,8 +54,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
 	private transient String config;
 	private transient JSONObject configObj;
-	private transient String globalConfig;
-	private transient JSONObject globalConfigObj;
+//	private transient String globalConfig;
+	private transient JSONObject globalConfig;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
@@ -225,8 +225,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 					}
 				}
 			}
-			if(statusVo == null && MapUtils.isNotEmpty(getGlobalConfigObj())) {
-				JSONArray customStatusList = getGlobalConfigObj().getJSONArray("customStatusList");
+			if(statusVo == null && MapUtils.isNotEmpty(globalConfig)) {
+				JSONArray customStatusList = globalConfig.getJSONArray("customStatusList");
 				if(CollectionUtils.isNotEmpty(customStatusList)) {
 					for(int i = 0; i < customStatusList.size(); i++) {
 						JSONObject customStatus = customStatusList.getJSONObject(i);							
@@ -297,29 +297,21 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.configObj = configObj;
 	}
 
-	public String getGlobalConfig() {
+	public JSONObject getGlobalConfig() {
+//		if(globalConfigObj == null && StringUtils.isNotBlank(globalConfig)) {
+//			try {
+//				globalConfigObj = JSONObject.parseObject(globalConfig);
+//			} catch (Exception ex) {
+//				if(StringUtils.isNotBlank(handler)) {
+//					logger.error("handler为" + handler + "的process_step_handler内容不是合法的JSON格式", ex);					
+//				}
+//			}
+//		}
 		return globalConfig;
 	}
 
-	public void setGlobalConfig(String globalConfig) {
+	public void setGlobalConfig(JSONObject globalConfig) {
 		this.globalConfig = globalConfig;
-	}
-
-	public JSONObject getGlobalConfigObj() {
-		if(globalConfigObj == null && StringUtils.isNotBlank(globalConfig)) {
-			try {
-				globalConfigObj = JSONObject.parseObject(globalConfig);
-			} catch (Exception ex) {
-				if(StringUtils.isNotBlank(handler)) {
-					logger.error("handler为" + handler + "的process_step_handler内容不是合法的JSON格式", ex);					
-				}
-			}
-		}
-		return globalConfigObj;
-	}
-
-	public void setGlobalConfigObj(JSONObject globalConfigObj) {
-		this.globalConfigObj = globalConfigObj;
 	}
 
 	public List<ProcessTaskStepUserVo> getUserList() {
@@ -631,8 +623,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 		if(notifyPolicyConfig == null && MapUtils.isNotEmpty(getConfigObj())) {
 			notifyPolicyConfig = getConfigObj().getJSONObject("notifyPolicyConfig");
 		}
-		if(MapUtils.isEmpty(notifyPolicyConfig) && MapUtils.isNotEmpty(getGlobalConfigObj())) {
-			notifyPolicyConfig = getGlobalConfigObj().getJSONObject("notifyPolicyConfig");
+		if(MapUtils.isEmpty(notifyPolicyConfig) && MapUtils.isNotEmpty(globalConfig)) {
+			notifyPolicyConfig = globalConfig.getJSONObject("notifyPolicyConfig");
 		}
 		return notifyPolicyConfig;
 	}
@@ -645,8 +637,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 		if(actionList == null && MapUtils.isNotEmpty(getConfigObj())) {
 			actionList = getConfigObj().getJSONArray("actionList");
 		}
-		if(CollectionUtils.isEmpty(actionList) && MapUtils.isNotEmpty(getGlobalConfigObj())) {
-			actionList = getGlobalConfigObj().getJSONArray("actionList");
+		if(CollectionUtils.isEmpty(actionList) && MapUtils.isNotEmpty(globalConfig)) {
+			actionList = globalConfig.getJSONArray("actionList");
 		}
 		return actionList;
 	}
