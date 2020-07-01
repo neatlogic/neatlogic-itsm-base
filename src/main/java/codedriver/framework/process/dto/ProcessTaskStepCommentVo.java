@@ -38,9 +38,9 @@ public class ProcessTaskStepCommentVo {
 	@EntityField(name = "是否可删除", type = ApiParamType.INTEGER)
 	private Integer isDeletable;
 
-	private transient List<String> fileUuidList;
+	private transient List<Long> fileIdList;
 	private transient String contentHash;
-	private transient String fileUuidListHash;
+	private transient String fileIdListHash;
 	
 	public ProcessTaskStepCommentVo() {
 	}
@@ -111,11 +111,11 @@ public class ProcessTaskStepCommentVo {
 	public void setLcd(Date lcd) {
 		this.lcd = lcd;
 	}
-	public List<String> getFileUuidList() {
-		return fileUuidList;
+	public List<Long> getFileIdList() {
+		return fileIdList;
 	}
-	public void setFileUuidList(List<String> fileUuidList) {
-		this.fileUuidList = fileUuidList;
+	public void setFileIdList(List<Long> fileIdList) {
+		this.fileIdList = fileIdList;
 	}
 	public String getContentHash() {
 		return contentHash;
@@ -123,11 +123,11 @@ public class ProcessTaskStepCommentVo {
 	public void setContentHash(String contentHash) {
 		this.contentHash = contentHash;
 	}
-	public String getFileUuidListHash() {
-		return fileUuidListHash;
+	public String getFileIdListHash() {
+		return fileIdListHash;
 	}
-	public void setFileUuidListHash(String fileUuidListHash) {
-		this.fileUuidListHash = fileUuidListHash;
+	public void setFileIdListHash(String fileIdListHash) {
+		this.fileIdListHash = fileIdListHash;
 	}
 	public Integer getIsEditable() {
 		if(isEditable == null) {

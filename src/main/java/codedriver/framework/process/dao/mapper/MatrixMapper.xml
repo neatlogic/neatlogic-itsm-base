@@ -9,6 +9,7 @@
 		<result property="fcu" column="fcu"/>
 		<result property="fcd" column="fcd"/>
 		<result property="lcu" column="lcu"/>
+		<result property="lcuName" column="lcuName"/>
 		<result property="lcd" column="lcd"/>
 		<collection property="componentVoList"  ofType="codedriver.framework.process.dto.ProcessMatrixFormComponentVo">
 			<result property="formVersionUuid" column="formVersionUuid"/>
@@ -111,6 +112,7 @@
 		a.`fcu`,
 		a.`fcd`,
 		a.`lcu`,
+		(SELECT u.`user_name` from `user` u WHERE u.`uuid` = a.`lcu`) AS lcuName,
 		a.`lcd`,
 		c.`name` as `processName`,
 		b.`process_uuid` as `processUuid`,
