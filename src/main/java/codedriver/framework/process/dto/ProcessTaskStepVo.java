@@ -54,7 +54,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
 	private transient String config;
 	private transient JSONObject configObj;
-//	private transient String globalConfig;
 	private transient JSONObject globalConfig;
 	private Long expireTimeLong;
 	private String error;
@@ -298,15 +297,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public JSONObject getGlobalConfig() {
-//		if(globalConfigObj == null && StringUtils.isNotBlank(globalConfig)) {
-//			try {
-//				globalConfigObj = JSONObject.parseObject(globalConfig);
-//			} catch (Exception ex) {
-//				if(StringUtils.isNotBlank(handler)) {
-//					logger.error("handler为" + handler + "的process_step_handler内容不是合法的JSON格式", ex);					
-//				}
-//			}
-//		}
 		return globalConfig;
 	}
 
