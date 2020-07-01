@@ -146,6 +146,13 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 		return children;
 	}
 
+	public List<Object> getChildren(List childCatalogList,List childChannelList) {
+		children.clear();
+		children.addAll(childCatalogList);
+		children.addAll(childChannelList);
+		return children;
+	}
+
 	public boolean addChildCatalog(CatalogVo catalogVo) {
 		if(childCatalogList.contains(catalogVo)) {
 			return false;
