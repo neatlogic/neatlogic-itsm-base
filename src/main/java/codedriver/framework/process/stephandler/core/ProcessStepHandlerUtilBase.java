@@ -427,6 +427,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							}
 						}
 						if (MapUtils.isNotEmpty(policyConfig)) {
+							List<String> adminUserUuidList = JSON.parseArray(policyConfig.getJSONArray("adminUserUuidList").toJSONString(), String.class);
 							JSONArray triggerList = policyConfig.getJSONArray("triggerList");
 							for (int i = 0; i < triggerList.size(); i++) {
 								JSONObject triggerObj = triggerList.getJSONObject(i);
@@ -491,6 +492,9 @@ public abstract class ProcessStepHandlerUtilBase {
 														throw new NotifyHandlerNotFoundException(notifyHandler);
 													}
 													NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(notifyTriggerType);
+													if (CollectionUtils.isNotEmpty(adminUserUuidList)) {
+														notifyBuilder.setExceptionNotifyUserUuidList(adminUserUuidList);
+													}
 													Long templateId = actionObj.getLong("templateId");
 													if (templateId != null) {
 														NotifyTemplateVo notifyTemplateVo = templateMap.get(templateId);
@@ -570,10 +574,6 @@ public abstract class ProcessStepHandlerUtilBase {
 														} else if (GroupSearch.ROLE.getValue().equals(split[0])) {
 															notifyBuilder.addRoleUuid(split[1]);
 														}
-													}
-													List<String> adminUserUuidList = JSON.parseArray(policyConfig.getJSONArray("adminUserUuidList").toJSONString(), String.class);
-													if (CollectionUtils.isNotEmpty(adminUserUuidList)) {
-														notifyBuilder.setExceptionNotifyUserUuidList(adminUserUuidList);
 													}
 													NotifyVo notifyVo = notifyBuilder.build();
 													handler.execute(notifyVo);
