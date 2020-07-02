@@ -874,7 +874,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					if (slaTimeVo == null) {
 						if (slaVo.getConfigObj() != null) {
 							JSONArray policyList = slaVo.getConfigObj().getJSONArray("calculatePolicyList");
-							if (policyList != null && policyList.size() > 0) {
+							if (CollectionUtils.isNotEmpty(policyList)) {
 								POLICY: for (int i = 0; i < policyList.size(); i++) {
 									JSONObject policyObj = policyList.getJSONObject(i);
 									String connectionType = policyObj.getString("connectType");
@@ -883,13 +883,10 @@ public abstract class ProcessStepHandlerUtilBase {
 									String unit = policyObj.getString("unit");
 									JSONArray priorityList = policyObj.getJSONArray("priorityList");
 									JSONArray ruleList = policyObj.getJSONArray("ruleList");
-									boolean isHit = false;
-//									if (ruleList != null && ruleList.size() > 0) {
-//										isHit = validateRule(ruleList, connectionType);
-//									} else {// 如果没有规则，则无需判断
-//										isHit = true;
-//									}
-									isHit = true;
+									boolean isHit = true;
+									if (CollectionUtils.isNotEmpty(ruleList)) {
+										isHit = validateRule(ruleList, connectionType);
+									}
 									if (isHit) {
 										slaTimeVo = new ProcessTaskSlaTimeVo();
 										if (enablePriority == 0) {
@@ -898,7 +895,7 @@ public abstract class ProcessStepHandlerUtilBase {
 											slaTimeVo.setRealTimeLeft(timecost);
 											slaTimeVo.setTimeLeft(timecost);
 										} else {
-											if (priorityList != null && priorityList.size() > 0) {
+											if (CollectionUtils.isNotEmpty(priorityList)) {
 												for (int p = 0; p < priorityList.size(); p++) {
 													JSONObject priorityObj = priorityList.getJSONObject(p);
 													if (priorityObj.getString("priorityUuid").equals(processTaskVo.getPriorityUuid())) {
@@ -957,7 +954,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						if (!isSlaTimeExists && slaTimeVo.getExpireTime() != null && slaVo.getConfigObj() != null) {
 							// 加载定时作业，执行超时通知操作
 							JSONArray notifyPolicyList = slaVo.getConfigObj().getJSONArray("notifyPolicyList");
-							if (notifyPolicyList != null && notifyPolicyList.size() > 0) {
+							if (CollectionUtils.isNotEmpty(notifyPolicyList)) {
 								for (int i = 0; i < notifyPolicyList.size(); i++) {
 									JSONObject notifyPolicyObj = notifyPolicyList.getJSONObject(i);
 									ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = new ProcessTaskSlaNotifyVo();
@@ -979,7 +976,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							}
 							// 加载定时作业，执行超时转交操作
 							JSONArray transferPolicyList = slaVo.getConfigObj().getJSONArray("transferPolicyList");
-							if (transferPolicyList != null && transferPolicyList.size() > 0) {
+							if (CollectionUtils.isNotEmpty(transferPolicyList)) {
 								for (int i = 0; i < transferPolicyList.size(); i++) {
 									JSONObject transferPolicyObj = transferPolicyList.getJSONObject(i);
 									ProcessTaskSlaTransferVo processTaskSlaTransferVo = new ProcessTaskSlaTransferVo();
