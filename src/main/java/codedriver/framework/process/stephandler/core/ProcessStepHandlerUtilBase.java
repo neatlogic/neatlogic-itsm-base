@@ -41,6 +41,7 @@ import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.dto.condition.ConditionConfigVo;
+import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.exception.integration.IntegrationHandlerNotFoundException;
 import codedriver.framework.exception.integration.IntegrationNotFoundException;
 import codedriver.framework.exception.integration.IntegrationSendRequestException;
@@ -793,57 +794,23 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-		private static final ScriptEngineManager sem = new ScriptEngineManager();
-
 		private boolean validateRule(JSONArray ruleList, String connectionType) {
-			if (ruleList != null && ruleList.size() > 0) {
-				ScriptEngine se = sem.getEngineByName("nashorn");
-
-				JSONObject paramObj = new JSONObject();
-				List<ProcessTaskFormAttributeDataVo> formAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-				String script = "";
-				for (int i = 0; i < ruleList.size(); i++) {
-					JSONObject ruleObj = ruleList.getJSONObject(i);
-					String key = ruleObj.getString("key");
-					String value = null;
-					String compareValue = ruleObj.getString("value");
-					String expression = ruleObj.getString("expression");
-					if (key.startsWith("form.")) {
-						for (ProcessTaskFormAttributeDataVo attributeData : formAttributeDataList) {
-							if (attributeData.getAttributeUuid().equals(key.substring(5))) {
-								IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(attributeData.getType());
-								if (handler != null) {
-									// configObj是表单属性配置，暂时用空JSONObject对象代替
-									JSONObject configObj = new JSONObject();
-									value = handler.getValue(attributeData, configObj);
-								}
-								break;
-							}
-						}
+			boolean result = false;
+			for (int i = 0; i < ruleList.size(); i++) {
+				JSONObject ruleObj = ruleList.getJSONObject(i);
+				ConditionVo conditionVo = new ConditionVo(ruleObj);
+				result = conditionVo.predicate();
+				if(result) {
+					if(connectionType.equalsIgnoreCase("or")) {
+						return true;
 					}
-					if (StringUtils.isNotBlank(value)) {
-						paramObj.put(key, value);
-					} else {
-						paramObj.put(key, "");
+				}else {
+					if(connectionType.equalsIgnoreCase("and")) {
+						return false;
 					}
-					if (StringUtils.isNotBlank(script)) {
-						if (connectionType.equalsIgnoreCase("and")) {
-							script += " && ";
-						} else {
-							script += " || ";
-						}
-					}
-					script += "json['" + key + "'] " + expression + " '" + compareValue + "'";
-				}
-				se.put("json", paramObj);
-				try {
-					return Boolean.parseBoolean(se.eval(script).toString());
-				} catch (ScriptException e) {
-					logger.error(e.getMessage(), e);
-					return false;
 				}
 			}
-			return false;
+			return result;
 		}
 
 		private static long getRealtime(int time, String unit) {
@@ -860,13 +827,9 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected void execute() {
 			List<ProcessTaskSlaVo> slaList = processTaskMapper.getProcessTaskSlaByProcessTaskStepId(currentProcessTaskStepVo.getId());
 			if (slaList != null && slaList.size() > 0) {
-//				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				long now = System.currentTimeMillis();
-				String worktimeUuid = null;
-				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-				if (processTaskVo != null) {
-					worktimeUuid = processTaskVo.getWorktimeUuid();
-				}
+				ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
+				String worktimeUuid = processTaskVo.getWorktimeUuid();
 				for (ProcessTaskSlaVo slaVo : slaList) {
 					/** 如果没有超时时间，证明第一次进入SLA标签范围，开始计算超时时间 **/
 					ProcessTaskSlaTimeVo slaTimeVo = slaVo.getSlaTimeVo();
@@ -885,7 +848,10 @@ public abstract class ProcessStepHandlerUtilBase {
 									JSONArray ruleList = policyObj.getJSONArray("ruleList");
 									boolean isHit = true;
 									if (CollectionUtils.isNotEmpty(ruleList)) {
+										JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
+										ConditionParamContext.init(conditionParamData);
 										isHit = validateRule(ruleList, connectionType);
+										ConditionParamContext.get().release();
 									}
 									if (isHit) {
 										slaTimeVo = new ProcessTaskSlaTimeVo();
