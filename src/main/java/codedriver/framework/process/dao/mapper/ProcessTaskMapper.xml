@@ -7,7 +7,7 @@
 		`id`,
 		`sla_id` AS slaId,
 		`hash`,
-		DATE_FORMAT(`trigger_time`, '%Y-%m-%d %H:%i:%s') as triggerTime,
+		`trigger_time` as triggerTime,
 		`config`
 		FROM
 		`processtask_sla_transfer`
@@ -18,7 +18,7 @@
 		`id`,
 		`sla_id` AS slaId,
 		`hash`,
-		DATE_FORMAT(`trigger_time`, '%Y-%m-%d %H:%i:%s') as triggerTime,
+		`trigger_time` as triggerTime,
 		`config`
 		FROM
 		`processtask_sla_transfer`
@@ -31,7 +31,7 @@
 		id,
 		`sla_id` AS slaId,
 		`hash`,
-		DATE_FORMAT(`trigger_time`, '%Y-%m-%d %H:%i:%s') as triggerTime,
+		`trigger_time` as triggerTime,
 		`config`
 		FROM
 		`processtask_sla_notify`
@@ -54,7 +54,7 @@
 		id,
 		`sla_id` AS slaId,
 		`hash`,
-		DATE_FORMAT(`trigger_time`, '%Y-%m-%d %H:%i:%s') as triggerTime,
+		`trigger_time` as triggerTime,
 		`config`
 		FROM
 		`processtask_sla_notify`

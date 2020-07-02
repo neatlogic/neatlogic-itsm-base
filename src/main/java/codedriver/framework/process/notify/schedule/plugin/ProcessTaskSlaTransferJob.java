@@ -28,7 +28,6 @@ import codedriver.framework.exception.team.TeamNotFoundException;
 import codedriver.framework.exception.user.UserNotFoundException;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
 import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
 import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
@@ -113,7 +112,7 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 						System.out.println("triggerDate：" + triggerDate);
 						if (triggerDate != null) {
 							// 更新通知记录时间
-							processTaskSlaTransferVo.setTriggerTime(sdf.format(triggerDate));
+							processTaskSlaTransferVo.setTriggerTime(triggerDate);
 							processTaskMapper.updateProcessTaskSlaTransfer(processTaskSlaTransferVo);
 							isJobLoaded = true;
 						}
@@ -130,9 +129,9 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 
 	@Override
 	public void initJob(String tenantUuid) {
-		List<ProcessTaskSlaNotifyVo> slaNotifyList = processTaskMapper.getAllProcessTaskSlaNotify();
-		for (ProcessTaskSlaNotifyVo processTaskSlaNotifyVo : slaNotifyList) {
-			JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getSlaId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).addData("slaNotifyId", processTaskSlaNotifyVo.getId());
+		List<ProcessTaskSlaTransferVo> slaTransferList = processTaskMapper.getAllProcessTaskSlaTransfer();
+		for (ProcessTaskSlaTransferVo processTaskSlaTransferVo : slaTransferList) {
+			JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getSlaId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).addData("slaTransferId", processTaskSlaTransferVo.getId());
 			JobObject jobObject = jobObjectBuilder.build();
 			this.reloadJob(jobObject);
 		}

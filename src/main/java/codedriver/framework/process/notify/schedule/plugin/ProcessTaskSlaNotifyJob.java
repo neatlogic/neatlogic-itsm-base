@@ -60,6 +60,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 
 	@Override
 	public void reloadJob(JobObject jobObject) {
+		System.out.println(this.getClassName() + "::reloadJob");
 		String tenantUuid = jobObject.getTenantUuid();
 		TenantContext.get().switchTenant(tenantUuid);
 		Long slaNotifyId = (Long) jobObject.getData("slaNotifyId");
@@ -69,6 +70,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 			ProcessTaskSlaTimeVo slaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(processTaskSlaNotifyVo.getSlaId());
 			if (slaTimeVo != null) {
 				if (processTaskSlaNotifyVo != null && processTaskSlaNotifyVo.getConfigObj() != null) {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					JSONObject policyObj = processTaskSlaNotifyVo.getConfigObj();
 					String expression = policyObj.getString("expression");
 					int time = policyObj.getIntValue("time");
@@ -77,13 +79,13 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 					String executeType = policyObj.getString("executeType");
 					int intervalTime = policyObj.getIntValue("intervalTime");
 					String intervalUnit = policyObj.getString("intervalUnit");
-					Integer repeatCount = policyObj.getInteger("repeatCount");
+					Integer repeatCount = null;
 //					JSONArray receiverList = policyObj.getJSONArray("receiverList");
 					if ("loop".equals(executeType) && intervalTime > 0) {
 						if (intervalUnit.equalsIgnoreCase("day")) {
 							intervalTime = intervalTime * 24 * 60 * 60;
 						} else {
-							intervalTime = intervalTime * 60 * 60;
+							intervalTime = intervalTime * 60;// * 60
 						}
 					}else {
 						repeatCount = 0;
@@ -103,6 +105,11 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 							notifyDate.add(Calendar.MINUTE, time);
 						}
 					}
+					System.out.println("now: " + sdf.format(new Date()));
+					System.out.println("notifyDate: " + sdf.format(notifyDate.getTime()));
+					System.out.println(time + unit);
+					System.out.println("intervalTime: " + intervalTime);
+					System.out.println("repeatCount: " + repeatCount);
 					JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
 							.withBeginTime(notifyDate.getTime())
 							.withIntervalInSeconds(intervalTime)
@@ -110,10 +117,10 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 							.addData("slaNotifyId", processTaskSlaNotifyVo.getId());
 					JobObject newJobObject = newJobObjectBuilder.build();
 					Date triggerDate = schedulerManager.loadJob(newJobObject);
+					System.out.println("triggerDate：" + triggerDate);
 					if (triggerDate != null) {
 						// 更新通知记录时间
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						processTaskSlaNotifyVo.setTriggerTime(sdf.format(triggerDate));
+						processTaskSlaNotifyVo.setTriggerTime(triggerDate);
 						processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
 						isJobLoaded = true;
 					}

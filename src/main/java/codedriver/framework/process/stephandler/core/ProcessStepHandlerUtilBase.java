@@ -906,8 +906,8 @@ public abstract class ProcessStepHandlerUtilBase {
 											if (priorityList != null && priorityList.size() > 0) {
 												for (int p = 0; p < priorityList.size(); p++) {
 													JSONObject priorityObj = priorityList.getJSONObject(p);
-													if (priorityObj.getString("uuid").equals(processTaskVo.getPriorityUuid())) {//TODO linbq这里要uuid改成priorityUuid
-														long timecost = getRealtime(priorityObj.getIntValue("value"), priorityObj.getString("unit"));//TODO linbq这里要value改成time
+													if (priorityObj.getString("priorityUuid").equals(processTaskVo.getPriorityUuid())) {
+														long timecost = getRealtime(priorityObj.getIntValue("time"), priorityObj.getString("unit"));
 														slaTimeVo.setTimeSum(timecost);
 														slaTimeVo.setRealTimeLeft(timecost);
 														slaTimeVo.setTimeLeft(timecost);
@@ -970,7 +970,7 @@ public abstract class ProcessStepHandlerUtilBase {
 									processTaskSlaNotifyVo.setConfig(notifyPolicyObj.toJSONString());
 									// 需要发通知时写入数据，执行完毕后清除
 									processTaskMapper.insertProcessTaskSlaNotify(processTaskSlaNotifyVo);
-
+									System.out.println("插入通知数据：" + slaVo.getId());
 									IJob jobHandler = SchedulerManager.getHandler(ProcessTaskSlaNotifyJob.class.getName());
 									if (jobHandler != null) {
 										JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("slaNotifyId", processTaskSlaNotifyVo.getId());
