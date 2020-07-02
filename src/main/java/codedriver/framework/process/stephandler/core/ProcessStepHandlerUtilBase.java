@@ -863,7 +863,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				long now = System.currentTimeMillis();
 				String worktimeUuid = null;
 				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-				if (processTaskVo != null && StringUtils.isNotBlank(processTaskVo.getWorktimeUuid())) {
+				if (processTaskVo != null) {
 					worktimeUuid = processTaskVo.getWorktimeUuid();
 //					if (StringUtils.isNotBlank(processTaskVo.getChannelUuid())) {
 //						ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
@@ -1116,6 +1116,7 @@ public abstract class ProcessStepHandlerUtilBase {
 		 * @return List<String>
 		 */
 		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
+			//系统用户拥有所有权限
 			if(SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid())) {
 				return verifyActionList;
 			}

@@ -73,43 +73,49 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 					String expression = policyObj.getString("expression");
 					int time = policyObj.getIntValue("time");
 					String unit = policyObj.getString("unit");
-					JSONArray notifyPluginList = policyObj.getJSONArray("pluginList");
+//					JSONArray notifyPluginList = policyObj.getJSONArray("pluginList");
 					String executeType = policyObj.getString("executeType");
 					int intervalTime = policyObj.getIntValue("intervalTime");
 					String intervalUnit = policyObj.getString("intervalUnit");
-					JSONArray receiverList = policyObj.getJSONArray("receiverList");
-					if (executeType.equals("loop") && intervalTime > 0) {
+					Integer repeatCount = policyObj.getInteger("repeatCount");
+//					JSONArray receiverList = policyObj.getJSONArray("receiverList");
+					if ("loop".equals(executeType) && intervalTime > 0) {
 						if (intervalUnit.equalsIgnoreCase("day")) {
 							intervalTime = intervalTime * 24 * 60 * 60;
 						} else {
 							intervalTime = intervalTime * 60 * 60;
 						}
+					}else {
+						repeatCount = 0;
+						intervalTime = 60 * 60;
 					}
-					if (StringUtils.isNotBlank(expression) && receiverList != null && receiverList.size() > 0 && notifyPluginList != null && notifyPluginList.size() > 0) {
-						Calendar notifyDate = Calendar.getInstance();
-						notifyDate.setTime(slaTimeVo.getExpireTime());
-						if (expression.equalsIgnoreCase("before")) {
-							time = -time;
+					Calendar notifyDate = Calendar.getInstance();
+					notifyDate.setTime(slaTimeVo.getExpireTime());
+					if (expression.equalsIgnoreCase("before")) {
+						time = -time;
+					}
+					if (StringUtils.isNotBlank(unit) && time != 0) {
+						if (unit.equalsIgnoreCase("day")) {
+							notifyDate.add(Calendar.DAY_OF_MONTH, time);
+						} else if (unit.equalsIgnoreCase("hour")) {
+							notifyDate.add(Calendar.HOUR, time);
+						} else {
+							notifyDate.add(Calendar.MINUTE, time);
 						}
-						if (StringUtils.isNotBlank(unit) && time != 0) {
-							if (unit.equalsIgnoreCase("day")) {
-								notifyDate.add(time, Calendar.DAY_OF_MONTH);
-							} else if (unit.equalsIgnoreCase("hour")) {
-								notifyDate.add(time, Calendar.HOUR);
-							} else {
-								notifyDate.add(time, Calendar.MINUTE);
-							}
-						}
-						JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(notifyDate.getTime()).withIntervalInSeconds(intervalTime).addData("slaNotifyId", processTaskSlaNotifyVo.getId());
-						JobObject newJobObject = newJobObjectBuilder.build();
-						Date triggerDate = schedulerManager.loadJob(newJobObject);
-						if (triggerDate != null) {
-							// 更新通知记录时间
-							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							processTaskSlaNotifyVo.setTriggerTime(sdf.format(triggerDate));
-							processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
-							isJobLoaded = true;
-						}
+					}
+					JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
+							.withBeginTime(notifyDate.getTime())
+							.withIntervalInSeconds(intervalTime)
+							.withRepeatCount(repeatCount)
+							.addData("slaNotifyId", processTaskSlaNotifyVo.getId());
+					JobObject newJobObject = newJobObjectBuilder.build();
+					Date triggerDate = schedulerManager.loadJob(newJobObject);
+					if (triggerDate != null) {
+						// 更新通知记录时间
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						processTaskSlaNotifyVo.setTriggerTime(sdf.format(triggerDate));
+						processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
+						isJobLoaded = true;
 					}
 				}
 			}
@@ -132,6 +138,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 
 	@Override
 	public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {//TODO linbq暂时屏蔽发通知逻辑，待通知策略功能完成后再补上
+		System.out.println("时效通知...");
 //		Long slaNotifyId = (Long) jobObject.getData("slaNotifyId");
 //		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskNotifyById(slaNotifyId);
 //		if (processTaskSlaNotifyVo != null) {
