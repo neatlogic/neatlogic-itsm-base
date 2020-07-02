@@ -195,216 +195,216 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 
 	@Override
 	public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
-		System.out.println("时效通知...");
-//		Long slaNotifyId = (Long) jobObject.getData("slaNotifyId");
-//		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskNotifyById(slaNotifyId);
-//		if (processTaskSlaNotifyVo != null) {
-//			Long slaId = processTaskSlaNotifyVo.getSlaId();
-//			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoBySlaId(slaId);
-//			Iterator<ProcessTaskStepVo> it = processTaskStepList.iterator();
-//			while (it.hasNext()) {
-//				ProcessTaskStepVo processTaskStepVo = it.next();
-//				// 未处理、处理中和挂起的步骤才需要计算SLA
-//				if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
-//					// 找到所有未完成步骤的处理人
-//				} else {
-//					it.remove();
-//				}
-//			}
-//			ProcessTaskSlaTimeVo processTaskSlaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(slaId);
-//			ProcessTaskSlaVo processTaskSlaVo = processTaskMapper.getProcessTaskSlaById(slaId);
-//			/** 存在未完成步骤才发超时通知，否则清除通知作业 **/
-//			if (processTaskSlaVo != null && processTaskSlaTimeVo != null && processTaskSlaNotifyVo.getConfigObj() != null && processTaskStepList.size() > 0) {
-//				ProcessTaskVo processTaskVo = getProcessTaskDetailInfoById(processTaskSlaVo.getProcessTaskId());
-//				JSONObject policyObj = processTaskSlaNotifyVo.getConfigObj();
-//				JSONObject notifyPolicyConfig = policyObj.getJSONObject("notifyPolicyConfig");
-//				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
-//					Long policyId = notifyPolicyConfig.getLong("policyId");
-//					NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(policyId);
-//					List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
-//					if (notifyPolicyVo != null) {
-//						JSONObject policyConfig = notifyPolicyVo.getConfig();
-//						if (MapUtils.isNotEmpty(policyConfig)) {
-//							List<String> adminUserUuidList = JSON.parseArray(policyConfig.getJSONArray("adminUserUuidList").toJSONString(), String.class);
-//							JSONArray triggerList = policyConfig.getJSONArray("triggerList");
-//							for (int i = 0; i < triggerList.size(); i++) {
-//								JSONObject triggerObj = triggerList.getJSONObject(i);
-//								if (NotifyTriggerType.TIMEOUT.getTrigger().equalsIgnoreCase(triggerObj.getString("trigger"))) {
-//									JSONArray notifyList = triggerObj.getJSONArray("notifyList");
-//									if (CollectionUtils.isNotEmpty(notifyList)) {
-//										Map<Long, NotifyTemplateVo> templateMap = new HashMap<>();
-//										List<NotifyTemplateVo> templateList = JSON.parseArray(policyConfig.getJSONArray("templateList").toJSONString(), NotifyTemplateVo.class);
-//										for (NotifyTemplateVo notifyTemplateVo : templateList) {
-//											templateMap.put(notifyTemplateVo.getId(), notifyTemplateVo);
-//										}
-//										for (int j = 0; j < notifyList.size(); j++) {
-//											JSONObject notifyObj = notifyList.getJSONObject(j);
-//											JSONObject conditionConfig = notifyObj.getJSONObject("conditionConfig");
-//											if (MapUtils.isNotEmpty(conditionConfig)) {
-//												JSONArray conditionGroupList = conditionConfig.getJSONArray("conditionGroupList");
-//												if (CollectionUtils.isNotEmpty(conditionGroupList)) {
-//													JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
-//													// 参数映射
-//													if (CollectionUtils.isNotEmpty(paramMappingList)) {
-//														for (ParamMappingVo paramMappingVo : paramMappingList) {
-//															if (ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
-//																processFieldData.put(paramMappingVo.getName(), paramMappingVo.getValue());
-//															} else if (Objects.equals(paramMappingVo.getName(), paramMappingVo.getValue())) {
-//																if (!processFieldData.containsKey(paramMappingVo.getValue())) {
-//																	logger.error("没有找到工单参数'" + paramMappingVo.getValue() + "'信息");
-//																}
-//															} else {
-//																Object processFieldValue = processFieldData.get(paramMappingVo.getValue());
-//																if (processFieldValue != null) {
-//																	processFieldData.put(paramMappingVo.getName(), processFieldValue);
-//																} else {
-//																	logger.error("没有找到参数'" + paramMappingVo.getValue() + "'信息");
-//																}
-//															}
-//														}
-//													}
-//
-//													try {
-//														ConditionParamContext.init(processFieldData);
-//														ConditionConfigVo conditionConfigVo = new ConditionConfigVo(conditionConfig);
-//														String script = conditionConfigVo.buildScript();
-//														// System.out.println(script);
-//														if (!RunScriptUtil.runScript(script)) {
-//															continue;
-//														}
-//													} catch (Exception e) {
-//														logger.error(e.getMessage(), e);
-//													} finally {
-//														ConditionParamContext.get().release();
-//													}
-//												}
-//											}
-//											JSONArray actionList = notifyObj.getJSONArray("actionList");
-//											for (int k = 0; k < actionList.size(); k++) {
-//												JSONObject actionObj = actionList.getJSONObject(k);
-//												List<String> receiverList = JSON.parseArray(actionObj.getJSONArray("receiverList").toJSONString(), String.class);
-//												if (CollectionUtils.isNotEmpty(receiverList)) {
-//													String notifyHandler = actionObj.getString("notifyHandler");
-//													INotifyHandler handler = NotifyHandlerFactory.getHandler(notifyHandler);
-//													if (handler == null) {
-//														throw new NotifyHandlerNotFoundException(notifyHandler);
-//													}
-//													NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(NotifyTriggerType.TIMEOUT);
-//													if (CollectionUtils.isNotEmpty(adminUserUuidList)) {
-//														notifyBuilder.setExceptionNotifyUserUuidList(adminUserUuidList);
-//													}
-//													Long templateId = actionObj.getLong("templateId");
-//													if (templateId != null) {
-//														NotifyTemplateVo notifyTemplateVo = templateMap.get(templateId);
-//														if (notifyTemplateVo != null) {
-//															notifyBuilder.withContentTemplate(notifyTemplateVo.getContent());
-//															notifyBuilder.withTitleTemplate(notifyTemplateVo.getTitle());
-//														}
-//													}
-//													/** 注入流程作业信息 不够将来再补充 **/
-//													JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
-//													for (ProcessField processField : ProcessField.values()) {
-//														Object processFieldValue = processFieldData.get(processField.getValue());
-//														if (processFieldValue != null) {
-//															notifyBuilder.addData(processField.getValue(), processFieldValue);
-//														} else {
-//															logger.error("没有找到工单参数'" + processField.getValue() + "'信息");
-//														}
-//													}
-//													// 参数映射
-//													if (CollectionUtils.isNotEmpty(paramMappingList)) {
-//														for (ParamMappingVo paramMappingVo : paramMappingList) {
-//															if (ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
-//																notifyBuilder.addData(paramMappingVo.getName(), paramMappingVo.getValue());
-//															} else if (Objects.equals(paramMappingVo.getName(), paramMappingVo.getValue())) {
-//																if (!processFieldData.containsKey(paramMappingVo.getValue())) {
-//																	logger.error("没有找到工单参数'" + paramMappingVo.getValue() + "'信息");
-//																}
-//															} else {
-//																Object processFieldValue = processFieldData.get(paramMappingVo.getValue());
-//																if (processFieldValue != null) {
-//																	notifyBuilder.addData(paramMappingVo.getName(), processFieldValue);
-//																} else {
-//																	logger.error("没有找到参数'" + paramMappingVo.getValue() + "'信息");
-//																}
-//															}
-//														}
-//													}
-//													/** 注入结束 **/
-//													for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
-//														ProcessTaskStepVo stepVo = getProcessTaskStepDetailInfoById(processTaskStepVo.getId());
-//														for (String receiver : receiverList) {
-//															String[] split = receiver.split("#");
-//															if (ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
-//																if (ProcessUserType.MAJOR.getValue().equals(split[1])) {
-//																	ProcessTaskStepUserVo majorUser = stepVo.getMajorUser();
-//																	if (majorUser != null) {
-//																		notifyBuilder.addUserUuid(majorUser.getUserUuid());
-//																	}
-//																} else if (ProcessUserType.MINOR.getValue().equals(split[1])) {
-//																	List<ProcessTaskStepUserVo> minorUserList = stepVo.getMinorUserList();
-//																	for (ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
-//																		notifyBuilder.addUserUuid(processTaskStepUserVo.getUserUuid());
-//																	}
-//																} else if (ProcessUserType.AGENT.getValue().equals(split[1])) {
-//																	List<ProcessTaskStepUserVo> agentUserList = stepVo.getAgentUserList();
-//																	for (ProcessTaskStepUserVo processTaskStepUserVo : agentUserList) {
-//																		notifyBuilder.addUserUuid(processTaskStepUserVo.getUserUuid());
-//																	}
-//																} else if (ProcessUserType.OWNER.getValue().equals(split[1])) {
-//																	notifyBuilder.addUserUuid(processTaskVo.getOwner());
-//																} else if (ProcessUserType.REPORTER.getValue().equals(split[1])) {
-//																	notifyBuilder.addUserUuid(processTaskVo.getReporter());
-//																} else if (ProcessUserType.WORKER.getValue().equals(split[1])) {
-//																	List<ProcessTaskStepWorkerVo> workerList = stepVo.getWorkerList();
-//																	for (ProcessTaskStepWorkerVo workerVo : workerList) {
-//																		if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
-//																			notifyBuilder.addUserUuid(workerVo.getUuid());
-//																		} else if (GroupSearch.TEAM.getValue().equals(workerVo.getType())) {
-//																			notifyBuilder.addTeamId(workerVo.getUuid());
-//																		} else if (GroupSearch.ROLE.getValue().equals(workerVo.getType())) {
-//																			notifyBuilder.addRoleUuid(workerVo.getUuid());
-//																		}
-//																	}
-//																}
-//															} else if (GroupSearch.USER.getValue().equals(split[0])) {
-//																notifyBuilder.addUserUuid(split[1]);
-//															} else if (GroupSearch.TEAM.getValue().equals(split[0])) {
-//																notifyBuilder.addTeamId(split[1]);
-//															} else if (GroupSearch.ROLE.getValue().equals(split[0])) {
-//																notifyBuilder.addRoleUuid(split[1]);
-//															}
-//														}
-//														NotifyVo notifyVo = notifyBuilder.build();
-//														handler.execute(notifyVo);
-//													}
-//												}
-//											}
-//										}
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//				Date nextFireTime = context.getNextFireTime();
-//				if (nextFireTime != null) {
-//					processTaskSlaNotifyVo.setTriggerTime(nextFireTime);
-//					processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
-//				} else {
-//					// 删除通知记录
-//					processTaskMapper.deleteProcessTaskSlaNotifyById(processTaskSlaNotifyVo.getId());
-//				}
-//			} else {
-//				schedulerManager.unloadJob(jobObject);
-//				if (processTaskSlaNotifyVo != null) {
-//					// 删除通知记录
-//					processTaskMapper.deleteProcessTaskSlaNotifyById(processTaskSlaNotifyVo.getId());
-//				}
-//			}
-//		} else {
-//			schedulerManager.unloadJob(jobObject);
-//		}
+		System.out.println(new Date() + ":时效通知...");
+		Long slaNotifyId = (Long) jobObject.getData("slaNotifyId");
+		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskNotifyById(slaNotifyId);
+		if (processTaskSlaNotifyVo != null) {
+			Long slaId = processTaskSlaNotifyVo.getSlaId();
+			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoBySlaId(slaId);
+			Iterator<ProcessTaskStepVo> it = processTaskStepList.iterator();
+			while (it.hasNext()) {
+				ProcessTaskStepVo processTaskStepVo = it.next();
+				// 未处理、处理中和挂起的步骤才需要计算SLA
+				if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
+					// 找到所有未完成步骤的处理人
+				} else {
+					it.remove();
+				}
+			}
+			ProcessTaskSlaTimeVo processTaskSlaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(slaId);
+			ProcessTaskSlaVo processTaskSlaVo = processTaskMapper.getProcessTaskSlaById(slaId);
+			/** 存在未完成步骤才发超时通知，否则清除通知作业 **/
+			if (processTaskSlaVo != null && processTaskSlaTimeVo != null && processTaskSlaNotifyVo.getConfigObj() != null && processTaskStepList.size() > 0) {
+				ProcessTaskVo processTaskVo = getProcessTaskDetailInfoById(processTaskSlaVo.getProcessTaskId());
+				JSONObject policyObj = processTaskSlaNotifyVo.getConfigObj();
+				JSONObject notifyPolicyConfig = policyObj.getJSONObject("notifyPolicyConfig");
+				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
+					Long policyId = notifyPolicyConfig.getLong("policyId");
+					NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(policyId);
+					List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
+					if (notifyPolicyVo != null) {
+						JSONObject policyConfig = notifyPolicyVo.getConfig();
+						if (MapUtils.isNotEmpty(policyConfig)) {
+							List<String> adminUserUuidList = JSON.parseArray(policyConfig.getJSONArray("adminUserUuidList").toJSONString(), String.class);
+							JSONArray triggerList = policyConfig.getJSONArray("triggerList");
+							for (int i = 0; i < triggerList.size(); i++) {
+								JSONObject triggerObj = triggerList.getJSONObject(i);
+								if (NotifyTriggerType.TIMEOUT.getTrigger().equalsIgnoreCase(triggerObj.getString("trigger"))) {
+									JSONArray notifyList = triggerObj.getJSONArray("notifyList");
+									if (CollectionUtils.isNotEmpty(notifyList)) {
+										Map<Long, NotifyTemplateVo> templateMap = new HashMap<>();
+										List<NotifyTemplateVo> templateList = JSON.parseArray(policyConfig.getJSONArray("templateList").toJSONString(), NotifyTemplateVo.class);
+										for (NotifyTemplateVo notifyTemplateVo : templateList) {
+											templateMap.put(notifyTemplateVo.getId(), notifyTemplateVo);
+										}
+										for (int j = 0; j < notifyList.size(); j++) {
+											JSONObject notifyObj = notifyList.getJSONObject(j);
+											JSONObject conditionConfig = notifyObj.getJSONObject("conditionConfig");
+											if (MapUtils.isNotEmpty(conditionConfig)) {
+												JSONArray conditionGroupList = conditionConfig.getJSONArray("conditionGroupList");
+												if (CollectionUtils.isNotEmpty(conditionGroupList)) {
+													JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
+													// 参数映射
+													if (CollectionUtils.isNotEmpty(paramMappingList)) {
+														for (ParamMappingVo paramMappingVo : paramMappingList) {
+															if (ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
+																processFieldData.put(paramMappingVo.getName(), paramMappingVo.getValue());
+															} else if (Objects.equals(paramMappingVo.getName(), paramMappingVo.getValue())) {
+																if (!processFieldData.containsKey(paramMappingVo.getValue())) {
+																	logger.error("没有找到工单参数'" + paramMappingVo.getValue() + "'信息");
+																}
+															} else {
+																Object processFieldValue = processFieldData.get(paramMappingVo.getValue());
+																if (processFieldValue != null) {
+																	processFieldData.put(paramMappingVo.getName(), processFieldValue);
+																} else {
+																	logger.error("没有找到参数'" + paramMappingVo.getValue() + "'信息");
+																}
+															}
+														}
+													}
+
+													try {
+														ConditionParamContext.init(processFieldData);
+														ConditionConfigVo conditionConfigVo = new ConditionConfigVo(conditionConfig);
+														String script = conditionConfigVo.buildScript();
+														// System.out.println(script);
+														if (!RunScriptUtil.runScript(script)) {
+															continue;
+														}
+													} catch (Exception e) {
+														logger.error(e.getMessage(), e);
+													} finally {
+														ConditionParamContext.get().release();
+													}
+												}
+											}
+											JSONArray actionList = notifyObj.getJSONArray("actionList");
+											for (int k = 0; k < actionList.size(); k++) {
+												JSONObject actionObj = actionList.getJSONObject(k);
+												List<String> receiverList = JSON.parseArray(actionObj.getJSONArray("receiverList").toJSONString(), String.class);
+												if (CollectionUtils.isNotEmpty(receiverList)) {
+													String notifyHandler = actionObj.getString("notifyHandler");
+													INotifyHandler handler = NotifyHandlerFactory.getHandler(notifyHandler);
+													if (handler == null) {
+														throw new NotifyHandlerNotFoundException(notifyHandler);
+													}
+													NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(NotifyTriggerType.TIMEOUT);
+													if (CollectionUtils.isNotEmpty(adminUserUuidList)) {
+														notifyBuilder.setExceptionNotifyUserUuidList(adminUserUuidList);
+													}
+													Long templateId = actionObj.getLong("templateId");
+													if (templateId != null) {
+														NotifyTemplateVo notifyTemplateVo = templateMap.get(templateId);
+														if (notifyTemplateVo != null) {
+															notifyBuilder.withContentTemplate(notifyTemplateVo.getContent());
+															notifyBuilder.withTitleTemplate(notifyTemplateVo.getTitle());
+														}
+													}
+													/** 注入流程作业信息 不够将来再补充 **/
+													JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
+													for (ProcessField processField : ProcessField.values()) {
+														Object processFieldValue = processFieldData.get(processField.getValue());
+														if (processFieldValue != null) {
+															notifyBuilder.addData(processField.getValue(), processFieldValue);
+														} else {
+															logger.error("没有找到工单参数'" + processField.getValue() + "'信息");
+														}
+													}
+													// 参数映射
+													if (CollectionUtils.isNotEmpty(paramMappingList)) {
+														for (ParamMappingVo paramMappingVo : paramMappingList) {
+															if (ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
+																notifyBuilder.addData(paramMappingVo.getName(), paramMappingVo.getValue());
+															} else if (Objects.equals(paramMappingVo.getName(), paramMappingVo.getValue())) {
+																if (!processFieldData.containsKey(paramMappingVo.getValue())) {
+																	logger.error("没有找到工单参数'" + paramMappingVo.getValue() + "'信息");
+																}
+															} else {
+																Object processFieldValue = processFieldData.get(paramMappingVo.getValue());
+																if (processFieldValue != null) {
+																	notifyBuilder.addData(paramMappingVo.getName(), processFieldValue);
+																} else {
+																	logger.error("没有找到参数'" + paramMappingVo.getValue() + "'信息");
+																}
+															}
+														}
+													}
+													/** 注入结束 **/
+													for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
+														ProcessTaskStepVo stepVo = getProcessTaskStepDetailInfoById(processTaskStepVo.getId());
+														for (String receiver : receiverList) {
+															String[] split = receiver.split("#");
+															if (ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
+																if (ProcessUserType.MAJOR.getValue().equals(split[1])) {
+																	ProcessTaskStepUserVo majorUser = stepVo.getMajorUser();
+																	if (majorUser != null) {
+																		notifyBuilder.addUserUuid(majorUser.getUserUuid());
+																	}
+																} else if (ProcessUserType.MINOR.getValue().equals(split[1])) {
+																	List<ProcessTaskStepUserVo> minorUserList = stepVo.getMinorUserList();
+																	for (ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
+																		notifyBuilder.addUserUuid(processTaskStepUserVo.getUserUuid());
+																	}
+																} else if (ProcessUserType.AGENT.getValue().equals(split[1])) {
+																	List<ProcessTaskStepUserVo> agentUserList = stepVo.getAgentUserList();
+																	for (ProcessTaskStepUserVo processTaskStepUserVo : agentUserList) {
+																		notifyBuilder.addUserUuid(processTaskStepUserVo.getUserUuid());
+																	}
+																} else if (ProcessUserType.OWNER.getValue().equals(split[1])) {
+																	notifyBuilder.addUserUuid(processTaskVo.getOwner());
+																} else if (ProcessUserType.REPORTER.getValue().equals(split[1])) {
+																	notifyBuilder.addUserUuid(processTaskVo.getReporter());
+																} else if (ProcessUserType.WORKER.getValue().equals(split[1])) {
+																	List<ProcessTaskStepWorkerVo> workerList = stepVo.getWorkerList();
+																	for (ProcessTaskStepWorkerVo workerVo : workerList) {
+																		if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
+																			notifyBuilder.addUserUuid(workerVo.getUuid());
+																		} else if (GroupSearch.TEAM.getValue().equals(workerVo.getType())) {
+																			notifyBuilder.addTeamId(workerVo.getUuid());
+																		} else if (GroupSearch.ROLE.getValue().equals(workerVo.getType())) {
+																			notifyBuilder.addRoleUuid(workerVo.getUuid());
+																		}
+																	}
+																}
+															} else if (GroupSearch.USER.getValue().equals(split[0])) {
+																notifyBuilder.addUserUuid(split[1]);
+															} else if (GroupSearch.TEAM.getValue().equals(split[0])) {
+																notifyBuilder.addTeamId(split[1]);
+															} else if (GroupSearch.ROLE.getValue().equals(split[0])) {
+																notifyBuilder.addRoleUuid(split[1]);
+															}
+														}
+														NotifyVo notifyVo = notifyBuilder.build();
+														handler.execute(notifyVo);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				Date nextFireTime = context.getNextFireTime();
+				if (nextFireTime != null) {
+					processTaskSlaNotifyVo.setTriggerTime(nextFireTime);
+					processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
+				} else {
+					// 删除通知记录
+					processTaskMapper.deleteProcessTaskSlaNotifyById(processTaskSlaNotifyVo.getId());
+				}
+			} else {
+				schedulerManager.unloadJob(jobObject);
+				if (processTaskSlaNotifyVo != null) {
+					// 删除通知记录
+					processTaskMapper.deleteProcessTaskSlaNotifyById(processTaskSlaNotifyVo.getId());
+				}
+			}
+		} else {
+			schedulerManager.unloadJob(jobObject);
+		}
 	}
 
 	@Override

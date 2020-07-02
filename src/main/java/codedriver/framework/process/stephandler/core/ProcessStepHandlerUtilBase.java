@@ -959,7 +959,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							processTaskMapper.insertProcessTaskSlaTime(slaTimeVo);
 						}
 
-						if (slaTimeVo.getExpireTime() != null && slaVo.getConfigObj() != null) {
+						if (!isSlaTimeExists && slaTimeVo.getExpireTime() != null && slaVo.getConfigObj() != null) {
 							// 加载定时作业，执行超时通知操作
 							JSONArray notifyPolicyList = slaVo.getConfigObj().getJSONArray("notifyPolicyList");
 							if (notifyPolicyList != null && notifyPolicyList.size() > 0) {
