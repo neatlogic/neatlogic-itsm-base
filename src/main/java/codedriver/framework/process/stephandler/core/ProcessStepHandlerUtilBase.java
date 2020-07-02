@@ -55,6 +55,7 @@ import codedriver.framework.notify.core.INotifyHandler;
 import codedriver.framework.notify.core.NotifyHandlerFactory;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
+import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.notify.dto.NotifyTemplateVo;
 import codedriver.framework.notify.dto.NotifyVo;
 import codedriver.framework.notify.dto.ParamMappingVo;
@@ -1874,6 +1875,42 @@ public abstract class ProcessStepHandlerUtilBase {
 //				}
 //			}
 			return processTaskStepVo;
+		}
+		
+		private Map<String, List<NotifyReceiverVo>> getReceiverMapByProcessTaskStepId(Long processTaskStepId) {
+			Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
+
+			List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MAJOR.getValue());
+			if (CollectionUtils.isNotEmpty(majorUserList)) {
+				List<NotifyReceiverVo> notifyReceiverList = new ArrayList<>();
+				notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), majorUserList.get(0).getUserUuid()));
+				receiverMap.put(ProcessUserType.MAJOR.getValue(), notifyReceiverList);
+			}
+			List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
+			if(CollectionUtils.isNotEmpty(minorUserList)) {
+				for(ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
+					List<NotifyReceiverVo> notifyReceiverList = new ArrayList<>();
+					notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
+					receiverMap.put(ProcessUserType.MINOR.getValue(), notifyReceiverList);
+				}
+			}
+			List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.AGENT.getValue());
+			if(CollectionUtils.isNotEmpty(agentUserList)) {
+				for(ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
+					List<NotifyReceiverVo> notifyReceiverList = new ArrayList<>();
+					notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
+					receiverMap.put(ProcessUserType.AGENT.getValue(), notifyReceiverList);
+				}
+			}
+			List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepId);
+			if(CollectionUtils.isNotEmpty(workerList)) {
+				for(ProcessTaskStepWorkerVo processTaskStepWorkerVo : workerList) {
+					List<NotifyReceiverVo> notifyReceiverList = new ArrayList<>();
+					notifyReceiverList.add(new NotifyReceiverVo(processTaskStepWorkerVo.getType(), processTaskStepWorkerVo.getUuid()));
+					receiverMap.put(ProcessUserType.WORKER.getValue(), notifyReceiverList);
+				}
+			}
+			return receiverMap;
 		}
 	}
 }
