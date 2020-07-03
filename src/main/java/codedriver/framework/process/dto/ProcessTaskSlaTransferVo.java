@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
@@ -8,7 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 public class ProcessTaskSlaTransferVo {
 	private Long id;
 	private Long slaId;
-	private String triggerTime;
+	private Date triggerTime;
 	private String hash;
 	private String config;
 	private JSONObject configObj;
@@ -21,11 +23,11 @@ public class ProcessTaskSlaTransferVo {
 		this.slaId = slaId;
 	}
 
-	public String getTriggerTime() {
+	public Date getTriggerTime() {
 		return triggerTime;
 	}
 
-	public void setTriggerTime(String triggerTime) {
+	public void setTriggerTime(Date triggerTime) {
 		this.triggerTime = triggerTime;
 	}
 
