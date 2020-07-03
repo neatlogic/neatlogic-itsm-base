@@ -131,7 +131,7 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	}
 
 	public String getConfigStr() {
-		if(configStr != null && this.config != null) {
+		if(configStr == null && this.config != null) {
 			configStr = this.config.toJSONString();
 		}
 		return configStr;
