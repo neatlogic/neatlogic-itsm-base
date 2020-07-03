@@ -2,6 +2,7 @@ package codedriver.framework.process.column.core;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
@@ -10,9 +11,14 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.constvalue.ProcessField;
+import codedriver.framework.process.dto.AttributeDataVo;
+import codedriver.framework.process.dto.FormAttributeVo;
+import codedriver.framework.process.dto.FormVersionVo;
 import codedriver.framework.process.dto.ProcessTaskStepCommentVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
+import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
 
 public class ProcessTaskUtil {
 	public static JSONObject getProcessFieldData(ProcessTaskVo processTaskVo,Boolean isValue) {
@@ -54,7 +60,30 @@ public class ProcessTaskUtil {
 		
 		Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
 		if(MapUtils.isNotEmpty(formAttributeDataMap)) {
-			resultObj.putAll(formAttributeDataMap);
+			if(isValue) {
+				resultObj.putAll(formAttributeDataMap);
+			}else {
+				if(StringUtils.isNotBlank(processTaskVo.getFormConfig())) {
+					FormVersionVo formVersionVo = new FormVersionVo();
+					formVersionVo.setFormConfig(processTaskVo.getFormConfig());
+					List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
+					for(FormAttributeVo formAttribute : formAttributeList) {
+						Object attributeValue = formAttributeDataMap.get(formAttribute.getUuid());
+						if(attributeValue != null) {
+							IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
+							if(handler != null) {
+								AttributeDataVo attributeDataVo = new AttributeDataVo();
+								attributeDataVo.setAttributeUuid(formAttribute.getUuid());
+								attributeDataVo.setData(attributeValue.toString());
+								String value = handler.getValue(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+								resultObj.put(formAttribute.getUuid(), value);
+							}else {
+								resultObj.put(formAttribute.getUuid(), attributeValue);
+							}
+						}
+					}
+				}
+			}
 		}
 		
 		return resultObj;
