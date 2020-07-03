@@ -208,7 +208,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 						JSONObject templateParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
 						Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
 						for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
-							getReceiverMapByProcessTaskStepId(processTaskStepVo.getId(), receiverMap);							
+							getReceiverMap(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), receiverMap);							
 						}
 						NotifyPolicyUtil.execute(policyConfig, paramMappingList, NotifyTriggerType.TIMEOUT, templateParamData, conditionParamData, receiverMap);
 					}
@@ -327,9 +327,39 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 		}
 		return processTaskVo;
 	}
-
-	private void getReceiverMapByProcessTaskStepId(Long processTaskStepId, Map<String, List<NotifyReceiverVo>> receiverMap) {
-
+	/**
+	 * 
+	* @Author: 14378
+	* @Time:2020年7月3日
+	* @Description: 获取所有工单干系人信息，用于通知接收人
+	* @param processTaskId 工单id
+	* @param processTaskStepId 步骤id
+	* @param receiverMap 工单干系人信息
+	* @return void
+	 */
+	private void getReceiverMap(Long processTaskId, Long processTaskStepId, Map<String, List<NotifyReceiverVo>> receiverMap) {
+		ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
+		if (processTaskVo != null) {
+			/** 上报人 **/
+			if(StringUtils.isNotBlank(processTaskVo.getOwner())) {
+				List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.OWNER.getValue());
+				if(notifyReceiverList == null) {
+					notifyReceiverList = new ArrayList<>();
+					receiverMap.put(ProcessUserType.OWNER.getValue(), notifyReceiverList);
+				}
+				notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskVo.getOwner()));
+			}
+			/** 代报人 **/
+			if(StringUtils.isNotBlank(processTaskVo.getReporter())) {
+				List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.REPORTER.getValue());
+				if(notifyReceiverList == null) {
+					notifyReceiverList = new ArrayList<>();
+					receiverMap.put(ProcessUserType.REPORTER.getValue(), notifyReceiverList);
+				}
+				notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskVo.getReporter()));
+			}
+		}
+		/** 主处理人 **/
 		List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MAJOR.getValue());
 		if (CollectionUtils.isNotEmpty(majorUserList)) {
 			List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.MAJOR.getValue());
@@ -339,6 +369,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 			}
 			notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), majorUserList.get(0).getUserUuid()));
 		}
+		/** 子任务处理人 **/
 		List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
 		if(CollectionUtils.isNotEmpty(minorUserList)) {
 			List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.MINOR.getValue());
@@ -350,6 +381,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 				notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
 			}
 		}
+		/** 待办人 **/
 		List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.AGENT.getValue());
 		if(CollectionUtils.isNotEmpty(agentUserList)) {
 			List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.AGENT.getValue());
@@ -361,6 +393,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 				notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
 			}
 		}
+		/** 待处理人 **/
 		List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepId);
 		if(CollectionUtils.isNotEmpty(workerList)) {
 			List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.WORKER.getValue());
