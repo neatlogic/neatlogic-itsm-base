@@ -117,13 +117,13 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 					int intervalTime = policyObj.getIntValue("intervalTime");
 					String intervalUnit = policyObj.getString("intervalUnit");
 					Integer repeatCount = null;
-					if ("loop".equals(executeType) && intervalTime > 0) {
+					if ("loop".equals(executeType) && intervalTime > 0) {//周期执行
 						if (intervalUnit.equalsIgnoreCase("day")) {
 							intervalTime = intervalTime * 24 * 60 * 60;
 						} else {
 							intervalTime = intervalTime * 60 * 60;
 						}
-					}else {
+					}else {//单次执行
 						repeatCount = 0;
 						intervalTime = 60 * 60;
 					}
@@ -186,7 +186,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 				ProcessTaskStepVo processTaskStepVo = it.next();
 				// 未处理、处理中和挂起的步骤才需要计算SLA
 				if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
-					// 找到所有未完成步骤的处理人
 				} else {
 					it.remove();
 				}
