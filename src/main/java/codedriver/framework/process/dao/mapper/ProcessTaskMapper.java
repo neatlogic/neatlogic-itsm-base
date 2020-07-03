@@ -168,6 +168,8 @@ public interface ProcessTaskMapper {
 	public List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 
 	public ProcessTaskStepNotifyPolicyVo getProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
+
+	public String getMinWorkloadUserUuidByTeamUuid(String string);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 

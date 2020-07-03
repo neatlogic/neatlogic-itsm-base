@@ -1124,6 +1124,18 @@
 	AND a.`policy_id` = #{policyId}
 	</select>
 	
+	<select id="getMinWorkloadUserUuidByTeamUuid" parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT 
+	  c.`user_uuid`
+	FROM `user_team` a
+	JOIN `user` b ON b.`uuid`=a.`user_uuid`
+	JOIN `processtask_step_user` c ON c.`user_uuid`=b.`uuid` AND c.`user_type`='major'
+	WHERE a.`team_uuid` = #{value}
+	GROUP BY c.`user_uuid`
+	ORDER BY COUNT(c.`user_uuid`) ASC
+	LIMIT 1
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
