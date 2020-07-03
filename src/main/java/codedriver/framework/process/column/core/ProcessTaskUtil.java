@@ -21,8 +21,17 @@ import codedriver.framework.process.formattribute.core.FormAttributeHandlerFacto
 import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
 
 public class ProcessTaskUtil {
+	/**
+	 * 
+	* @Time:2020年7月3日
+	* @Description: 获取工单信息及表单信息数据
+	* @param processTaskVo 工单信息
+	* @param isValue isValue=true时获取对应value值，用于条件判断，isValue=false时获取对应text值，用于模板替换
+	* @return JSONObject
+	 */
 	public static JSONObject getProcessFieldData(ProcessTaskVo processTaskVo,Boolean isValue) {
 		JSONObject resultObj = new JSONObject();
+		/** 工单信息数据 **/
 		resultObj.put(ProcessField.ID.getValue(), processTaskVo.getId());
 		resultObj.put(ProcessField.TITLE.getValue(), processTaskVo.getTitle());
 		resultObj.put(ProcessField.CHANNELTYPE.getValue(), isValue?processTaskVo.getChannelType().getUuid():processTaskVo.getChannelType().getName());
@@ -58,6 +67,7 @@ public class ProcessTaskUtil {
 			resultObj.put(ProcessField.EXPIREDTIME.getValue(), "");
 		}
 		
+		/** 表单信息数据 **/
 		Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
 		if(MapUtils.isNotEmpty(formAttributeDataMap)) {
 			if(isValue) {

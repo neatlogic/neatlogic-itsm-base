@@ -1,6 +1,5 @@
 package codedriver.framework.process.notify.schedule.plugin;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,7 +67,6 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 
 	@Override
 	public void reloadJob(JobObject jobObject) {
-		System.out.println(this.getClassName() + "::reloadJob");
 		String tenantUuid = jobObject.getTenantUuid();
 		TenantContext.get().switchTenant(tenantUuid);
 		Long slaTransferId = (Long) jobObject.getData("slaTransferId");
@@ -78,7 +76,6 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 			ProcessTaskSlaTimeVo slaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(processTaskSlaTransferVo.getSlaId());
 			if (slaTimeVo != null) {
 				if (processTaskSlaTransferVo != null && processTaskSlaTransferVo.getConfigObj() != null) {
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					JSONObject policyObj = processTaskSlaTransferVo.getConfigObj();
 					String expression = policyObj.getString("expression");
 					int time = policyObj.getIntValue("time");
@@ -99,16 +96,12 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 								transferDate.add(Calendar.MINUTE, time);
 							}
 						}
-						System.out.println("now: " + sdf.format(new Date()));
-						System.out.println("transferDate: " + sdf.format(transferDate.getTime()));
-						System.out.println(time + unit);
 						JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
 								.withBeginTime(transferDate.getTime())
 								.withIntervalInSeconds(INTERVAL_IN_SECONDS)
 								.addData("slaTransferId", processTaskSlaTransferVo.getId());
 						JobObject newJobObject = newJobObjectBuilder.build();
 						Date triggerDate = schedulerManager.loadJob(newJobObject);
-						System.out.println("triggerDate：" + triggerDate);
 						if (triggerDate != null) {
 							// 更新通知记录时间
 							processTaskSlaTransferVo.setTriggerTime(triggerDate);
@@ -121,7 +114,6 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 		}
 		if (!isJobLoaded) {
 			// 没有加载到作业，则删除通知记录
-			System.out.println("删除转交数据：" + slaTransferId);
 			processTaskMapper.deleteProcessTaskSlaTransferById(slaTransferId);
 		}
 	}
@@ -138,7 +130,6 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 
 	@Override
 	public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
-		System.out.println(this.getClassName()+"::executeInternal");
 		Long slaTransferId = (Long) jobObject.getData("slaTransferId");
 		ProcessTaskSlaTransferVo processTaskSlaTransferVo = processTaskMapper.getProcessTaskSlaTransferById(slaTransferId);
 		try {
@@ -181,9 +172,9 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 									workerList.add(workerVo);
 									IProcessStepHandler stepHandler = ProcessStepHandlerFactory.getHandler(processTaskStepVo.getHandler());
 									if (stepHandler != null) {
+										/** 执行转交前，设置当前用户为system,用于权限校验 **/
 										UserContext.init(SystemUser.SYSTEM.getConfig(), null, SystemUser.SYSTEM.getTimezone(), null, null);
 										stepHandler.transfer(processTaskStepVo, workerList);
-										System.out.println("转交成功：" + processTaskStepVo.getId());
 									}
 								}
 							}
