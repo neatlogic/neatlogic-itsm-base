@@ -709,6 +709,7 @@ public abstract class ProcessStepHandlerUtilBase {
 									String unit = policyObj.getString("unit");
 									JSONArray priorityList = policyObj.getJSONArray("priorityList");
 									JSONArray ruleList = policyObj.getJSONArray("ruleList");
+									/** 如果没有规则，则默认生效，如果有规则，以规则计算结果判断是否生效 **/
 									boolean isHit = true;
 									if (CollectionUtils.isNotEmpty(ruleList)) {
 										try {
@@ -728,7 +729,7 @@ public abstract class ProcessStepHandlerUtilBase {
 											slaTimeVo.setTimeSum(timecost);
 											slaTimeVo.setRealTimeLeft(timecost);
 											slaTimeVo.setTimeLeft(timecost);
-										} else {
+										} else {//关联优先级
 											if (CollectionUtils.isNotEmpty(priorityList)) {
 												for (int p = 0; p < priorityList.size(); p++) {
 													JSONObject priorityObj = priorityList.getJSONObject(p);
@@ -784,7 +785,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						} else {
 							processTaskMapper.insertProcessTaskSlaTime(slaTimeVo);
 						}
-
+						/** 第一次进入时需要加载定时作业 **/
 						if (!isSlaTimeExists && slaTimeVo.getExpireTime() != null && slaVo.getConfigObj() != null) {
 							// 加载定时作业，执行超时通知操作
 							JSONArray notifyPolicyList = slaVo.getConfigObj().getJSONArray("notifyPolicyList");
@@ -796,7 +797,6 @@ public abstract class ProcessStepHandlerUtilBase {
 									processTaskSlaNotifyVo.setConfig(notifyPolicyObj.toJSONString());
 									// 需要发通知时写入数据，执行完毕后清除
 									processTaskMapper.insertProcessTaskSlaNotify(processTaskSlaNotifyVo);
-									System.out.println("插入通知数据：" + slaVo.getId());
 									IJob jobHandler = SchedulerManager.getHandler(ProcessTaskSlaNotifyJob.class.getName());
 									if (jobHandler != null) {
 										JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("slaNotifyId", processTaskSlaNotifyVo.getId());
@@ -818,7 +818,6 @@ public abstract class ProcessStepHandlerUtilBase {
 									processTaskSlaTransferVo.setConfig(transferPolicyObj.toJSONString());
 									// 需要转交时写入数据，执行完毕后清除
 									processTaskMapper.insertProcessTaskSlaTransfer(processTaskSlaTransferVo);
-									System.out.println("插入转交数据：" + slaVo.getId());
 									IJob jobHandler = SchedulerManager.getHandler(ProcessTaskSlaTransferJob.class.getName());
 									if (jobHandler != null) {
 										JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("slaTransferId", processTaskSlaTransferVo.getId());
