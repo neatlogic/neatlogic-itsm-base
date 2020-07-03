@@ -237,20 +237,28 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 	public String getGroupName() {
 		return TenantContext.get().getTenantUuid() + "-PROCESSTASK-SLA-NOTIFY";
 	}
-	
+	/**
+	 * 
+	* @Author: 14378
+	* @Time:2020年7月3日
+	* @Description: 获取工单详细信息
+	* @param processTaskId
+	* @return ProcessTaskVo
+	 */
 	private ProcessTaskVo getProcessTaskDetailInfoById(Long processTaskId) {
+		/** 工单基本信息 **/
 		ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
 		if (processTaskVo == null) {
 			throw new ProcessTaskNotFoundException(processTaskId.toString());
 		}
 
-		// 获取工单流程图信息
+		/** 工单流程图信息 **/
 		ProcessTaskConfigVo processTaskConfig = processTaskMapper.getProcessTaskConfigByHash(processTaskVo.getConfigHash());
 		if (processTaskConfig == null) {
 			throw new ProcessTaskRuntimeException("没有找到工单：'" + processTaskId + "'的流程图配置信息");
 		}
 		processTaskVo.setConfig(processTaskConfig.getConfig());
-		// 获取开始步骤id
+		/** 开始步骤信息 **/
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.START.getValue());
 		if (processTaskStepList.size() != 1) {
 			throw new ProcessTaskRuntimeException("工单：'" + processTaskId + "'有" + processTaskStepList.size() + "个开始步骤");
@@ -265,7 +273,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 		}
 		Long startProcessTaskStepId = startProcessTaskStepVo.getId();
 		ProcessTaskStepCommentVo comment = new ProcessTaskStepCommentVo();
-		// 获取上报描述内容
+		/** 上报内容 **/
 		List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentProcessTaskStepId(startProcessTaskStepId);
 		if (!processTaskStepContentList.isEmpty()) {
 			ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(processTaskStepContentList.get(0).getContentHash());
@@ -273,7 +281,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 				comment.setContent(processTaskContentVo.getContent());
 			}
 		}
-		// 附件
+		/** 附件 **/
 		ProcessTaskFileVo processTaskFileVo = new ProcessTaskFileVo();
 		processTaskFileVo.setProcessTaskId(processTaskId);
 		processTaskFileVo.setProcessTaskStepId(startProcessTaskStepId);
@@ -290,10 +298,10 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 		startProcessTaskStepVo.setComment(comment);
 		processTaskVo.setStartProcessTaskStep(startProcessTaskStepVo);
 
-		// 优先级
+		/** 优先级 **/
 		PriorityVo priorityVo = priorityMapper.getPriorityByUuid(processTaskVo.getPriorityUuid());
 		processTaskVo.setPriority(priorityVo);
-		// 上报服务路径
+		/** 上报服务路径 **/
 		ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
 		if (channelVo != null) {
 			StringBuilder channelPath = new StringBuilder();
@@ -306,13 +314,13 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 			processTaskVo.setChannelPath(channelPath.toString());
 			processTaskVo.setChannelType(channelMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid()));
 		}
-		// 耗时
+		/** 计算耗时 **/ 
 		if (processTaskVo.getEndTime() != null) {
 			long timeCost = worktimeMapper.calculateCostTime(processTaskVo.getWorktimeUuid(), processTaskVo.getStartTime().getTime(), processTaskVo.getEndTime().getTime());
 			processTaskVo.setTimeCost(timeCost);
 		}
 
-		// 获取工单表单信息
+		/** 表单数据 **/
 		ProcessTaskFormVo processTaskFormVo = processTaskMapper.getProcessTaskFormByProcessTaskId(processTaskId);
 		if (processTaskFormVo != null && StringUtils.isNotBlank(processTaskFormVo.getFormContent())) {
 			processTaskVo.setFormConfig(processTaskFormVo.getFormContent());

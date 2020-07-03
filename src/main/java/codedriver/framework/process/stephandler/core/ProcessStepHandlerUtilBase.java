@@ -264,9 +264,13 @@ public abstract class ProcessStepHandlerUtilBase {
 		@Override
 		protected void execute() {
 			try {
-				ProcessTaskStepVo stepVo = ProcessTaskHandlerUtil.getProcessTaskStepDetailInfoById(currentProcessTaskStepVo.getId());
-				ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
-				processTaskVo.setCurrentProcessTaskStep(stepVo);
+				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+				String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
+				stepVo.setConfig(stepConfig);
+				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+				if(processStepHandlerVo != null) {
+					stepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
+				}
 
 				JSONArray actionList = stepVo.getActionList();
 				if (CollectionUtils.isNotEmpty(actionList)) {
@@ -285,6 +289,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							// 参数映射
 							List<ParamMappingVo> paramMappingList = JSON.parseArray(actionObj.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
 							if (CollectionUtils.isNotEmpty(paramMappingList)) {
+								ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
 								JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 								for (ParamMappingVo paramMappingVo : paramMappingList) {
 									if (ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
@@ -406,9 +411,13 @@ public abstract class ProcessStepHandlerUtilBase {
 		@Override
 		protected void execute() {
 			try {
-				ProcessTaskStepVo stepVo = ProcessTaskHandlerUtil.getProcessTaskStepDetailInfoById(currentProcessTaskStepVo.getId());
-				ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
-				processTaskVo.setCurrentProcessTaskStep(stepVo);
+				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+				String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
+				stepVo.setConfig(stepConfig);
+				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+				if(processStepHandlerVo != null) {
+					stepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
+				}
 
 				JSONObject notifyPolicyConfig = stepVo.getNotifyPolicyConfig();
 				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
@@ -429,6 +438,8 @@ public abstract class ProcessStepHandlerUtilBase {
 								policyConfig = notifyPolicyVo.getConfig();
 							}
 						}
+
+						ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
 						JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 						JSONObject templateParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
 						Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
@@ -1491,19 +1502,19 @@ public abstract class ProcessStepHandlerUtilBase {
 
 	protected static class ProcessTaskHandlerUtil {
 		public static ProcessTaskVo getProcessTaskDetailInfoById(Long processTaskId) {
-			// 获取工单基本信息(title、channel_uuid、config_hash、priority_uuid、status、start_time、end_time、expire_time、owner、ownerName、reporter、reporterName)
+			/** 工单基本信息 **/
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
 			if (processTaskVo == null) {
 				throw new ProcessTaskNotFoundException(processTaskId.toString());
 			}
 
-			// 获取工单流程图信息
+			/** 工单流程图信息 **/
 			ProcessTaskConfigVo processTaskConfig = processTaskMapper.getProcessTaskConfigByHash(processTaskVo.getConfigHash());
 			if (processTaskConfig == null) {
 				throw new ProcessTaskRuntimeException("没有找到工单：'" + processTaskId + "'的流程图配置信息");
 			}
 			processTaskVo.setConfig(processTaskConfig.getConfig());
-			// 获取开始步骤id
+			/** 开始步骤信息 **/
 			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.START.getValue());
 			if (processTaskStepList.size() != 1) {
 				throw new ProcessTaskRuntimeException("工单：'" + processTaskId + "'有" + processTaskStepList.size() + "个开始步骤");
@@ -1518,7 +1529,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 			Long startProcessTaskStepId = startProcessTaskStepVo.getId();
 			ProcessTaskStepCommentVo comment = new ProcessTaskStepCommentVo();
-			// 获取上报描述内容
+			/** 上报内容 **/
 			List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentProcessTaskStepId(startProcessTaskStepId);
 			if (!processTaskStepContentList.isEmpty()) {
 				ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(processTaskStepContentList.get(0).getContentHash());
@@ -1526,7 +1537,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					comment.setContent(processTaskContentVo.getContent());
 				}
 			}
-			// 附件
+			/** 附件 **/
 			ProcessTaskFileVo processTaskFileVo = new ProcessTaskFileVo();
 			processTaskFileVo.setProcessTaskId(processTaskId);
 			processTaskFileVo.setProcessTaskStepId(startProcessTaskStepId);
@@ -1543,10 +1554,10 @@ public abstract class ProcessStepHandlerUtilBase {
 			startProcessTaskStepVo.setComment(comment);
 			processTaskVo.setStartProcessTaskStep(startProcessTaskStepVo);
 
-			// 优先级
+			/** 优先级 **/
 			PriorityVo priorityVo = priorityMapper.getPriorityByUuid(processTaskVo.getPriorityUuid());
 			processTaskVo.setPriority(priorityVo);
-			// 上报服务路径
+			/** 上报服务路径 **/
 			ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
 			if (channelVo != null) {
 				StringBuilder channelPath = new StringBuilder();
@@ -1559,13 +1570,13 @@ public abstract class ProcessStepHandlerUtilBase {
 				processTaskVo.setChannelPath(channelPath.toString());
 				processTaskVo.setChannelType(channelMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid()));
 			}
-			// 耗时
+			/** 计算耗时 **/ 
 			if (processTaskVo.getEndTime() != null) {
 				long timeCost = worktimeMapper.calculateCostTime(processTaskVo.getWorktimeUuid(), processTaskVo.getStartTime().getTime(), processTaskVo.getEndTime().getTime());
 				processTaskVo.setTimeCost(timeCost);
 			}
 
-			// 获取工单表单信息
+			/** 表单数据 **/
 			ProcessTaskFormVo processTaskFormVo = processTaskMapper.getProcessTaskFormByProcessTaskId(processTaskId);
 			if (processTaskFormVo != null && StringUtils.isNotBlank(processTaskFormVo.getFormContent())) {
 				processTaskVo.setFormConfig(processTaskFormVo.getFormContent());
@@ -1579,112 +1590,6 @@ public abstract class ProcessStepHandlerUtilBase {
 				}
 			}
 			return processTaskVo;
-		}
-
-		public static ProcessTaskStepVo getProcessTaskStepDetailInfoById(Long processTaskStepId) {
-			// 获取步骤信息
-			ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
-			String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
-			processTaskStepVo.setConfig(stepConfig);
-			ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
-			if(processStepHandlerVo != null) {
-				processTaskStepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
-			}
-			// 处理人列表
-			List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MAJOR.getValue());
-			if (CollectionUtils.isNotEmpty(majorUserList)) {
-				processTaskStepVo.setMajorUser(majorUserList.get(0));
-			}
-			List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
-			processTaskStepVo.setMinorUserList(minorUserList);
-
-			List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.AGENT.getValue());
-			processTaskStepVo.setAgentUserList(agentUserList);
-
-			List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepId);
-			processTaskStepVo.setWorkerList(workerList);
-			// 回复框内容和附件暂存回显
-
-			// 步骤评论列表
-//			List<ProcessTaskStepCommentVo> processTaskStepCommentList = processTaskMapper.getProcessTaskStepCommentListByProcessTaskStepId(processTaskStepId);
-//			for(ProcessTaskStepCommentVo processTaskStepComment : processTaskStepCommentList) {
-//				processTaskService.parseProcessTaskStepComment(processTaskStepComment);
-//			}
-//			processTaskStepVo.setCommentList(processTaskStepCommentList);
-			// 获取当前用户有权限的所有子任务
-			// 子任务列表
-//			if(processTaskStepVo.getIsActive().intValue() == 1 && ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus())) {
-//				List<ProcessTaskStepSubtaskVo> subtaskList = new ArrayList<>();
-//				ProcessTaskStepSubtaskVo processTaskStepSubtaskVo = new ProcessTaskStepSubtaskVo();
-//				processTaskStepSubtaskVo.setProcessTaskId(processTaskStepVo.getProcessTaskId());
-//				processTaskStepSubtaskVo.setProcessTaskStepId(processTaskStepId);
-//				List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = processTaskMapper.getProcessTaskStepSubtaskList(processTaskStepSubtaskVo);
-//				for(ProcessTaskStepSubtaskVo processTaskStepSubtask : processTaskStepSubtaskList) {
-//					String currentUser = UserContext.get().getUserUuid(true);
-//					if((currentUser.equals(processTaskStepSubtask.getOwner()) && !ProcessTaskStatus.ABORTED.getValue().equals(processTaskStepSubtask.getStatus()))
-//							|| (currentUser.equals(processTaskStepSubtask.getUserUuid()) && ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepSubtask.getStatus()))) {
-//						List<ProcessTaskStepSubtaskContentVo> processTaskStepSubtaskContentList = processTaskMapper.getProcessTaskStepSubtaskContentBySubtaskId(processTaskStepSubtask.getId());
-//						Iterator<ProcessTaskStepSubtaskContentVo> iterator = processTaskStepSubtaskContentList.iterator();
-//						while(iterator.hasNext()) {
-//							ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo = iterator.next();
-//							if(processTaskStepSubtaskContentVo != null && processTaskStepSubtaskContentVo.getContentHash() != null) {
-//								if(ProcessTaskStepAction.CREATESUBTASK.getValue().equals(processTaskStepSubtaskContentVo.getAction())) {
-//									processTaskStepSubtask.setContent(processTaskStepSubtaskContentVo.getContent());
-//									iterator.remove();
-//								}
-//							}
-//						}
-//						processTaskStepSubtask.setContentList(processTaskStepSubtaskContentList);
-//						subtaskList.add(processTaskStepSubtask);
-//					}
-//				}
-//				processTaskStepVo.setProcessTaskStepSubtaskList(subtaskList);
-//			}
-
-			// 获取可分配处理人的步骤列表
-//			ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo = new ProcessTaskStepWorkerPolicyVo();
-//			processTaskStepWorkerPolicyVo.setProcessTaskId(processTaskId);
-//			List<ProcessTaskStepWorkerPolicyVo> processTaskStepWorkerPolicyList = processTaskMapper.getProcessTaskStepWorkerPolicy(processTaskStepWorkerPolicyVo);
-//			if(CollectionUtils.isNotEmpty(processTaskStepWorkerPolicyList)) {
-//				List<ProcessTaskStepVo> assignableWorkerStepList = new ArrayList<>();
-//				for(ProcessTaskStepWorkerPolicyVo workerPolicyVo : processTaskStepWorkerPolicyList) {
-//					if(WorkerPolicy.PRESTEPASSIGN.getValue().equals(workerPolicyVo.getPolicy())) {
-//						List<String> processStepUuidList = JSON.parseArray(workerPolicyVo.getConfigObj().getString("processStepUuidList"), String.class);
-//						for(String processStepUuid : processStepUuidList) {
-//							if(processTaskStepVo.getProcessStepUuid().equals(processStepUuid)) {
-//								List<ProcessTaskStepUserVo> majorList = processTaskMapper.getProcessTaskStepUserByStepId(workerPolicyVo.getProcessTaskStepId(), ProcessUserType.MAJOR.getValue());
-//								if(CollectionUtils.isEmpty(majorList)) {
-//									ProcessTaskStepVo assignableWorkerStep = processTaskMapper.getProcessTaskStepBaseInfoById(workerPolicyVo.getProcessTaskStepId());
-//									assignableWorkerStep.setIsRequired(workerPolicyVo.getConfigObj().getInteger("isRequired"));
-//									assignableWorkerStepList.add(assignableWorkerStep);
-//								}
-//							}
-//						}
-//					}
-//				}
-//				processTaskStepVo.setAssignableWorkerStepList(assignableWorkerStepList);
-//			}
-
-			// 时效列表
-//			List<ProcessTaskSlaVo> processTaskSlaList = processTaskMapper.getProcessTaskSlaByProcessTaskStepId(processTaskStepId);
-//			for(ProcessTaskSlaVo processTaskSlaVo : processTaskSlaList) {
-//				ProcessTaskSlaTimeVo processTaskSlaTimeVo = processTaskSlaVo.getSlaTimeVo();
-//				if(processTaskSlaTimeVo != null) {
-//					processTaskSlaTimeVo.setName(processTaskSlaVo.getName());
-//					if(processTaskSlaTimeVo.getExpireTime() != null) {
-//						long timeLeft = worktimeMapper.calculateCostTime(processTaskVo.getWorktimeUuid(), System.currentTimeMillis(), processTaskSlaTimeVo.getExpireTime().getTime());
-//						processTaskSlaTimeVo.setTimeLeft(timeLeft);
-//						processTaskSlaTimeVo.setTimeLeftDesc(conversionTimeUnit(timeLeft));
-//					}
-//					if(processTaskSlaTimeVo.getRealExpireTime() != null) {
-//						long realTimeLeft = processTaskSlaTimeVo.getExpireTime().getTime() - System.currentTimeMillis();
-//						processTaskSlaTimeVo.setRealTimeLeft(realTimeLeft);
-//						processTaskSlaTimeVo.setRealTimeLeftDesc(conversionTimeUnit(realTimeLeft));
-//					}
-//					processTaskStepVo.getSlaTimeList().add(processTaskSlaTimeVo);
-//				}
-//			}
-			return processTaskStepVo;
 		}
 		
 		/**
