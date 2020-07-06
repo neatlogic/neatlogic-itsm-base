@@ -162,6 +162,22 @@
 		SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
 	</select>
 
+	<select id="getAncestorsAndSelfUuidByLftRht" resultType="codedriver.framework.process.dto.CatalogVo">
+	SELECT
+	a.`uuid`,
+	a.`name`,
+	a.`parent_uuid` AS `parentUuid`,
+	a.`is_active` AS `isActive`,
+	a.`icon`,
+	a.`color`,
+	a.`desc`,
+	a.`lft`,
+	a.`rht`
+	FROM `catalog` a
+	WHERE a.`lft` &lt;= #{lft} AND a.`rht` &gt;= #{rht}
+	ORDER BY `lft` ASC
+	</select>
+	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
 		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})

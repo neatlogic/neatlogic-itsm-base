@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Objects;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
@@ -71,6 +73,8 @@ public class ChannelVo extends BasePageVo {
 	
 	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
 	private String channelTypeUuid;
+	
+	private transient boolean isAuthority = false;
 	
 	private transient List<AuthorityVo> authorityVoList;
 	
@@ -293,6 +297,20 @@ public class ChannelVo extends BasePageVo {
 
 	public void setAuthorizedUuidList(List<String> authorizedUuidList) {
 		this.authorizedUuidList = authorizedUuidList;
+	}
+
+	public boolean isAuthority() {
+		if(Objects.equal(isActive, 1) && isAuthority) {
+			if(parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
+				return parent.isAuthority();
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public void setAuthority(boolean isAuthority) {
+		this.isAuthority = isAuthority;
 	}
 
 	@Override
