@@ -1456,14 +1456,16 @@ public abstract class ProcessStepHandlerUtilBase {
 			processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
 			processTaskStepDataVo = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
 			List<String> hidecomponentList = new ArrayList<>();
-			JSONObject dataObj = processTaskStepDataVo.getData();
-			if (MapUtils.isNotEmpty(dataObj)) {
-				JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
-				if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
-					hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
+			if(processTaskStepDataVo != null) {
+				JSONObject dataObj = processTaskStepDataVo.getData();
+				if (MapUtils.isNotEmpty(dataObj)) {
+					JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
+					if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
+						hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
+					}
 				}
 			}
-
+			
 			for (FormAttributeVo formAttributeVo : formAttributeList) {
 				if (!formAttributeVo.isRequired()) {
 					continue;

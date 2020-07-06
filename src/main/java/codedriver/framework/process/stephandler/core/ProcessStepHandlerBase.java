@@ -559,7 +559,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							if (formAttributeActionMap.containsKey(attributeUuid)) {// 只读或隐藏
 								iterator.remove();
 							}
-							if (hidecomponentList.contains(attributeUuid)) {
+							if (CollectionUtils.isNotEmpty(hidecomponentList)&&hidecomponentList.contains(attributeUuid)) {
 								iterator.remove();
 							}
 						}
@@ -587,7 +587,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							if (formAttributeActionMap.containsKey(attributeUuid)) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
 								continue;
 							}
-							if (hidecomponentList.contains(attributeUuid)) {
+							if (CollectionUtils.isNotEmpty(hidecomponentList)&&hidecomponentList.contains(attributeUuid)) {
 								continue;
 							}
 							ProcessTaskFormAttributeDataVo attributeData = new ProcessTaskFormAttributeDataVo();
