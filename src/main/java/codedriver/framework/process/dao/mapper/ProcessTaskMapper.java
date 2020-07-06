@@ -169,7 +169,7 @@ public interface ProcessTaskMapper {
 
 	public ProcessTaskStepNotifyPolicyVo getProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 
-	public String getMinWorkloadUserUuidByTeamUuid(String string);
+	public List<Map<String, Object>> getWorkloadByTeamUuid(String teamUuid);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 

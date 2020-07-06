@@ -14,6 +14,7 @@ public class ProcessTaskStepWorkerVo {
 	private String type;
 	private String uuid;
 	private String name;
+	private String userType;
 
 	public ProcessTaskStepWorkerVo() {
 
@@ -23,11 +24,12 @@ public class ProcessTaskStepWorkerVo {
 		this.processTaskStepId = processTaskStepId;
 	}
 
-	public ProcessTaskStepWorkerVo(Long processTaskId, Long processTaskStepId, String type, String uuid) {
+	public ProcessTaskStepWorkerVo(Long processTaskId, Long processTaskStepId, String type, String uuid, String userType) {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
 		this.type = type;
 		this.uuid = uuid;
+		this.userType = userType;
 	}
 
 	@Override
@@ -119,5 +121,13 @@ public class ProcessTaskStepWorkerVo {
 			return groupSearch.getValuePlugin() + this.uuid;
 		}
 		return null;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 }

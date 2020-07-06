@@ -372,7 +372,8 @@
 		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` = ptsw.`uuid`) 
 		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`) 
 		WHEN 'role' THEN (SELECT r.`name` FROM `role` r WHERE r.`uuid` = ptsw.`uuid`) 
-		ELSE NULL END AS `name`
+		ELSE NULL END AS `name`,
+		ptsw.`user_type` AS userType
 		FROM `processtask_step_worker` ptsw
 		WHERE ptsw.processtask_step_id = #{value}
 	</select>
@@ -1124,16 +1125,16 @@
 	AND a.`policy_id` = #{policyId}
 	</select>
 	
-	<select id="getMinWorkloadUserUuidByTeamUuid" parameterType="java.lang.String" resultType="java.lang.String">
+	<select id="getWorkloadByTeamUuid" parameterType="java.lang.String" resultType="java.util.HashMap">
 	SELECT 
-	  c.`user_uuid`
+	  c.`uuid` AS userUuid,
+	  COUNT(c.`uuid`) AS count
 	FROM `user_team` a
 	JOIN `user` b ON b.`uuid`=a.`user_uuid`
-	JOIN `processtask_step_user` c ON c.`user_uuid`=b.`uuid` AND c.`user_type`='major'
+	JOIN `processtask_step_worker` c ON c.`uuid`=b.`uuid` AND c.`type` = 'user' AND c.`user_type`='major'
 	WHERE a.`team_uuid` = #{value}
-	GROUP BY c.`user_uuid`
-	ORDER BY COUNT(c.`user_uuid`) ASC
-	LIMIT 1
+	GROUP BY c.`uuid`
+	ORDER BY COUNT(c.`uuid`) ASC
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
@@ -1377,14 +1378,16 @@
 		`processtask_id`,
 		`processtask_step_id`,
 		`type`,
-		`uuid`
+		`uuid`,
+		`user_type`
 		)
 		VALUES
 		(
 		#{processTaskId},
 		#{processTaskStepId},
 		#{type},
-		#{uuid}
+		#{uuid},
+		#{userType}
 		)
 	</insert>
 

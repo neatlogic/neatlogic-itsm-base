@@ -855,7 +855,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
 			if (oldUserList.size() > 0) {
 				for (ProcessTaskStepUserVo oldUserVo : oldUserList) {
-					processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid()));
+					processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(), ProcessUserType.MAJOR.getValue()));
 				}
 			} else {
 				/** 分配处理人 **/
@@ -922,7 +922,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 清空worker表，只留下当前处理人 **/
 
 				processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
-				processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true)));
+				processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue()));
 
 				/** 删除user表主处理人，更换为当前处理人 **/
 				ProcessTaskStepUserVo processTaskStepUser = new ProcessTaskStepUserVo();
@@ -1276,7 +1276,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserUuid(true));
 			processTaskStepUserVo.setUserName(UserContext.get().getUserName());
 			processTaskMapper.insertProcessTaskStepUser(processTaskStepUserVo);
-			processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true)));
+			processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue()));
 
 		} else {
 			/** 锁定当前流程 **/
