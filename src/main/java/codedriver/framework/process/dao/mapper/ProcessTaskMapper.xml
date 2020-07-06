@@ -7,7 +7,7 @@
 		`id`,
 		`sla_id` AS slaId,
 		`hash`,
-		DATE_FORMAT(`trigger_time`, '%Y-%m-%d %H:%i:%s') as triggerTime,
+		`trigger_time` as triggerTime,
 		`config`
 		FROM
 		`processtask_sla_transfer`
@@ -18,7 +18,7 @@
 		`id`,
 		`sla_id` AS slaId,
 		`hash`,
-		DATE_FORMAT(`trigger_time`, '%Y-%m-%d %H:%i:%s') as triggerTime,
+		`trigger_time` as triggerTime,
 		`config`
 		FROM
 		`processtask_sla_transfer`
@@ -31,7 +31,7 @@
 		id,
 		`sla_id` AS slaId,
 		`hash`,
-		DATE_FORMAT(`trigger_time`, '%Y-%m-%d %H:%i:%s') as triggerTime,
+		`trigger_time` as triggerTime,
 		`config`
 		FROM
 		`processtask_sla_notify`
@@ -54,7 +54,7 @@
 		id,
 		`sla_id` AS slaId,
 		`hash`,
-		DATE_FORMAT(`trigger_time`, '%Y-%m-%d %H:%i:%s') as triggerTime,
+		`trigger_time` as triggerTime,
 		`config`
 		FROM
 		`processtask_sla_notify`
@@ -157,8 +157,8 @@
 	<select id="getProcessTaskSlaTimeBySlaId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
 		SELECT
 		`sla_id` as slaId,
-		DATE_FORMAT(`expire_time`, '%Y-%m-%d %H:%i:%s') as expireTime,
-		DATE_FORMAT(`realexpire_time`, '%Y-%m-%d %H:%i:%s') AS realExpireTime,
+		`expire_time` AS expireTime,
+		`realexpire_time` AS realExpireTime,
 		`time_left` as timeLeft,
 		`realtime_left` as realTimeLeft,
 		`time_sum` as timeSum
