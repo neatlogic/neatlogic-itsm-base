@@ -25,6 +25,7 @@ import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.exception.role.RoleNotFoundException;
 import codedriver.framework.exception.team.TeamNotFoundException;
 import codedriver.framework.exception.user.UserNotFoundException;
+import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
 import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
@@ -164,6 +165,7 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 							workerVo.setProcessTaskId(processTaskSlaVo.getProcessTaskId());
 							workerVo.setType(split[0]);
 							workerVo.setUuid(split[1]);
+							workerVo.setUserType(ProcessUserType.MAJOR.getValue());
 							for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
 								// 激活步骤才需要转交
 								if (processTaskStepVo.getIsActive().equals(1)) {
