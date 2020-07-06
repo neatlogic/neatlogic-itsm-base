@@ -87,8 +87,10 @@
 	</select>
 	
 	<select id="getDynamicTableDataByColumnList2" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
+	select 
+		DISTINCT a.*	
+	from (
 		SELECT
-		DISTINCT 
 		<foreach collection="columnList" item="column" separator=",">
 			`${column}`
 		</foreach>
@@ -129,6 +131,7 @@
 		</if>
 		</where>
 		ORDER BY `id`
+	) a
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
