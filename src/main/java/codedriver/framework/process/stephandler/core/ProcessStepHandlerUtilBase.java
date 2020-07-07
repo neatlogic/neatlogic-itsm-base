@@ -36,7 +36,7 @@ import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
-import codedriver.framework.dto.condition.ConditionVo;
+import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.exception.integration.IntegrationHandlerNotFoundException;
 import codedriver.framework.exception.integration.IntegrationNotFoundException;
 import codedriver.framework.exception.integration.IntegrationSendRequestException;
@@ -114,6 +114,7 @@ import codedriver.framework.scheduler.dto.JobObject;
 import codedriver.framework.scheduler.exception.ScheduleHandlerNotFoundException;
 import codedriver.framework.util.ConditionUtil;
 import codedriver.framework.util.NotifyPolicyUtil;
+import codedriver.framework.util.RunScriptUtil;
 
 public abstract class ProcessStepHandlerUtilBase {
 	static Logger logger = LoggerFactory.getLogger(ProcessStepHandlerUtilBase.class);
@@ -643,25 +644,6 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-		private boolean validateRule(JSONArray ruleList, String connectionType) {
-			boolean result = false;
-			for (int i = 0; i < ruleList.size(); i++) {
-				JSONObject ruleObj = ruleList.getJSONObject(i);
-				ConditionVo conditionVo = new ConditionVo(ruleObj);
-				result = conditionVo.predicate();
-				if(result) {
-					if(connectionType.equalsIgnoreCase("or")) {
-						return true;
-					}
-				}else {
-					if(connectionType.equalsIgnoreCase("and")) {
-						return false;
-					}
-				}
-			}
-			return result;
-		}
-
 		private static long getRealtime(int time, String unit) {
 			if ("hour".equals(unit)) {
 				return time * 60 * 60 * 1000;
@@ -689,19 +671,21 @@ public abstract class ProcessStepHandlerUtilBase {
 							if (CollectionUtils.isNotEmpty(policyList)) {
 								POLICY: for (int i = 0; i < policyList.size(); i++) {
 									JSONObject policyObj = policyList.getJSONObject(i);
-									String connectionType = policyObj.getString("connectType");
 									int enablePriority = policyObj.getIntValue("enablePriority");
 									int time = policyObj.getIntValue("time");
 									String unit = policyObj.getString("unit");
 									JSONArray priorityList = policyObj.getJSONArray("priorityList");
-									JSONArray ruleList = policyObj.getJSONArray("ruleList");
+									JSONArray conditionGroupList = policyObj.getJSONArray("conditionGroupList");
 									/** 如果没有规则，则默认生效，如果有规则，以规则计算结果判断是否生效 **/
 									boolean isHit = true;
-									if (CollectionUtils.isNotEmpty(ruleList)) {
+									if (CollectionUtils.isNotEmpty(conditionGroupList)) {
 										try {
 										JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 										ConditionParamContext.init(conditionParamData);
-										isHit = validateRule(ruleList, connectionType);
+										ConditionConfigVo conditionConfigVo = new ConditionConfigVo(policyObj);
+										String script = conditionConfigVo.buildScript();
+										// ((false || true) || (true && false) || (true || false))
+										isHit = RunScriptUtil.runScript(script); 
 										}catch(Exception e) {
 											logger.error(e.getMessage(), e);
 										}finally {
