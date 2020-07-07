@@ -1,6 +1,7 @@
 package codedriver.framework.process.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -24,26 +25,15 @@ public class ProcessStepVo implements Serializable {
 	private String description;
 	private JSONObject configObj;
 	private Boolean isWorkerPolicyListSorted = false;
-//	private Boolean isAttributeListSorted = false;
 	private Boolean isTimeoutPolicyListSorted = false;
-//	private List<ProcessStepUserVo> userList;
 	private List<ProcessStepRelVo> relList;
 	private List<ProcessStepTeamVo> teamList;
 	private List<ProcessStepWorkerPolicyVo> workerPolicyList;
 	private List<ProcessStepTimeoutPolicyVo> timeoutPolicyList;
 	private List<ProcessStepFormAttributeVo> formAttributeList;
-
-//	private List<String> templateUuidList;
 	
 	private transient Long notifyPolicyId;
-	
-//	public List<String> getTemplateUuidList() {
-//		return templateUuidList;
-//	}
-//
-//	public void setTemplateUuidList(List<String> templateUuidList) {
-//		this.templateUuidList = templateUuidList;
-//	}
+	private transient List<String> integrationUuidList = new ArrayList<>();
 
 	@Override
 	public boolean equals(Object other) {
@@ -138,14 +128,6 @@ public class ProcessStepVo implements Serializable {
 		this.configObj = configObj;
 	}
 
-//	public List<ProcessStepUserVo> getUserList() {
-//		return userList;
-//	}
-//
-//	public void setUserList(List<ProcessStepUserVo> userList) {
-//		this.userList = userList;
-//	}
-
 	public List<ProcessStepRelVo> getRelList() {
 		return relList;
 	}
@@ -224,6 +206,14 @@ public class ProcessStepVo implements Serializable {
 
 	public void setNotifyPolicyId(Long notifyPolicyId) {
 		this.notifyPolicyId = notifyPolicyId;
+	}
+
+	public List<String> getIntegrationUuidList() {
+		return integrationUuidList;
+	}
+
+	public void setIntegrationUuidList(List<String> integrationUuidList) {
+		this.integrationUuidList = integrationUuidList;
 	}
 
 }

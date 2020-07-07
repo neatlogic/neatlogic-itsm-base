@@ -37,6 +37,15 @@ public interface CatalogMapper {
 	public int checkCatalogIsExistsByLeftRightCode(@Param("uuid")String uuid, @Param("lft") Integer lft, @Param("rht") Integer rht);
 
 	public int getCatalogCount(CatalogVo catalogVo);
+	/**
+	 * 
+	* @Time:2020年7月7日
+	* @Description: 根据左右编码查出目录及所有上级目录
+	* @param lft 左编码
+	* @param rht 右编码
+	* @return List<CatalogVo>
+	 */
+	public List<CatalogVo> getAncestorsAndSelfUuidByLftRht(@Param("lft") Integer lft, @Param("rht") Integer rht);
 	
 	public int replaceCatalog(CatalogVo catalogVo);
 
