@@ -165,13 +165,15 @@
 		<result column="name" property="name" />
 		<result column="parent_uuid" property="parentUuid" />
 		<result column="sort" property="sort" />
+		<result column="is_active" property="isActive" />
 	</resultMap>
 	<select id="getChannelListForTree" parameterType="java.lang.Integer" resultMap="simpleChannelMap" useCache="false">
 		SELECT
 		c.`uuid`,
 		c.`name`,
 		c.`parent_uuid`,
-		c.`sort`
+		c.`sort`,
+		c.`is_active`
 		FROM
 		`channel` c
 		<if test="isActive != null">
