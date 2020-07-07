@@ -35,7 +35,7 @@
 				</foreach>
 			</if>
 		</where>
-		ORDER BY `id`
+		ORDER BY `id` DESC
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
@@ -80,15 +80,17 @@
 				</foreach>
 			</if>
 		</where>
-		ORDER BY `id`
+		ORDER BY `id` DESC
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
 	</select>
 	
 	<select id="getDynamicTableDataByColumnList2" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">
+	select 
+		DISTINCT a.*	
+	from (
 		SELECT
-		DISTINCT 
 		<foreach collection="columnList" item="column" separator=",">
 			`${column}`
 		</foreach>
@@ -128,10 +130,11 @@
 			</foreach>
 		</if>
 		</where>
-		ORDER BY `id`
-		<if test="needPage == true">
-			LIMIT #{startNum}, #{pageSize}
-		</if>
+		ORDER BY `id` DESC
+	) a
+	<if test="needPage == true">
+		LIMIT #{startNum}, #{pageSize}
+	</if>
 	</select>
 	
 	<select id="getDynamicTableDataByUuidList" parameterType="codedriver.framework.process.dto.ProcessMatrixDataVo" resultType="java.util.LinkedHashMap">

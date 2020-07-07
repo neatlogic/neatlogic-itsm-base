@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Objects;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
@@ -71,6 +73,8 @@ public class ChannelVo extends BasePageVo {
 	
 	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
 	private String channelTypeUuid;
+	
+	private transient boolean isAuthority = false;
 	
 	private transient List<AuthorityVo> authorityVoList;
 	
@@ -293,6 +297,25 @@ public class ChannelVo extends BasePageVo {
 
 	public void setAuthorizedUuidList(List<String> authorizedUuidList) {
 		this.authorizedUuidList = authorizedUuidList;
+	}
+	/**
+	 * 
+	* @Time:2020年7月7日
+	* @Description: 判断服务是否最终授权，服务状态为激活，拥有服务权限及所有上级目录权限才是最终授权
+	* @return boolean
+	 */
+	public boolean isAuthority() {
+		if(Objects.equal(isActive, 1) && isAuthority) {
+			if(parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
+				return parent.isAuthority();
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public void setAuthority(boolean isAuthority) {
+		this.isAuthority = isAuthority;
 	}
 
 	@Override

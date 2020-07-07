@@ -12,10 +12,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +37,6 @@ import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.dto.condition.ConditionConfigVo;
-import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.exception.integration.IntegrationHandlerNotFoundException;
 import codedriver.framework.exception.integration.IntegrationNotFoundException;
 import codedriver.framework.exception.integration.IntegrationSendRequestException;
@@ -52,16 +47,11 @@ import codedriver.framework.integration.core.IntegrationHandlerFactory;
 import codedriver.framework.integration.dao.mapper.IntegrationMapper;
 import codedriver.framework.integration.dto.IntegrationResultVo;
 import codedriver.framework.integration.dto.IntegrationVo;
-import codedriver.framework.notify.core.INotifyHandler;
-import codedriver.framework.notify.core.NotifyHandlerFactory;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
-import codedriver.framework.notify.dto.NotifyTemplateVo;
-import codedriver.framework.notify.dto.NotifyVo;
 import codedriver.framework.notify.dto.ParamMappingVo;
 import codedriver.framework.process.column.core.ProcessTaskUtil;
-import codedriver.framework.process.constvalue.ProcessField;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepMode;
@@ -110,13 +100,10 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.WorktimeRangeVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
-import codedriver.framework.process.exception.notify.NotifyHandlerNotFoundException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNotFoundException;
 import codedriver.framework.process.exception.worktime.WorktimeNotFoundException;
-import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
-import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
 import codedriver.framework.process.integration.handler.ProcessRequestFrom;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
@@ -657,25 +644,6 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-		private boolean validateRule(JSONArray ruleList, String connectionType) {
-			boolean result = false;
-			for (int i = 0; i < ruleList.size(); i++) {
-				JSONObject ruleObj = ruleList.getJSONObject(i);
-				ConditionVo conditionVo = new ConditionVo(ruleObj);
-				result = conditionVo.predicate();
-				if(result) {
-					if(connectionType.equalsIgnoreCase("or")) {
-						return true;
-					}
-				}else {
-					if(connectionType.equalsIgnoreCase("and")) {
-						return false;
-					}
-				}
-			}
-			return result;
-		}
-
 		private static long getRealtime(int time, String unit) {
 			if ("hour".equals(unit)) {
 				return time * 60 * 60 * 1000;
@@ -703,19 +671,21 @@ public abstract class ProcessStepHandlerUtilBase {
 							if (CollectionUtils.isNotEmpty(policyList)) {
 								POLICY: for (int i = 0; i < policyList.size(); i++) {
 									JSONObject policyObj = policyList.getJSONObject(i);
-									String connectionType = policyObj.getString("connectType");
 									int enablePriority = policyObj.getIntValue("enablePriority");
 									int time = policyObj.getIntValue("time");
 									String unit = policyObj.getString("unit");
 									JSONArray priorityList = policyObj.getJSONArray("priorityList");
-									JSONArray ruleList = policyObj.getJSONArray("ruleList");
+									JSONArray conditionGroupList = policyObj.getJSONArray("conditionGroupList");
 									/** 如果没有规则，则默认生效，如果有规则，以规则计算结果判断是否生效 **/
 									boolean isHit = true;
-									if (CollectionUtils.isNotEmpty(ruleList)) {
+									if (CollectionUtils.isNotEmpty(conditionGroupList)) {
 										try {
 										JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 										ConditionParamContext.init(conditionParamData);
-										isHit = validateRule(ruleList, connectionType);
+										ConditionConfigVo conditionConfigVo = new ConditionConfigVo(policyObj);
+										String script = conditionConfigVo.buildScript();
+										// ((false || true) || (true && false) || (true || false))
+										isHit = RunScriptUtil.runScript(script); 
 										}catch(Exception e) {
 											logger.error(e.getMessage(), e);
 										}finally {
@@ -1026,7 +996,7 @@ public abstract class ProcessStepHandlerUtilBase {
 								if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus()) || ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus())) {
 									// 完成complete 暂存save 评论comment 创建子任务createsubtask
 									if (currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
-										List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getToProcessTaskStepByFromId(processTaskStepId);
+										List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getToProcessTaskStepByFromIdAndType(processTaskStepId,null);
 										for (ProcessTaskStepVo processTaskStep : processTaskStepList) {
 											if (processTaskStep.getIsActive() != null) {
 												if (ProcessFlowDirection.FORWARD.getValue().equals(processTaskStep.getFlowDirection())) {
@@ -1470,14 +1440,16 @@ public abstract class ProcessStepHandlerUtilBase {
 			processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
 			processTaskStepDataVo = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
 			List<String> hidecomponentList = new ArrayList<>();
-			JSONObject dataObj = processTaskStepDataVo.getData();
-			if (MapUtils.isNotEmpty(dataObj)) {
-				JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
-				if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
-					hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
+			if(processTaskStepDataVo != null) {
+				JSONObject dataObj = processTaskStepDataVo.getData();
+				if (MapUtils.isNotEmpty(dataObj)) {
+					JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
+					if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
+						hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
+					}
 				}
 			}
-
+			
 			for (FormAttributeVo formAttributeVo : formAttributeList) {
 				if (!formAttributeVo.isRequired()) {
 					continue;

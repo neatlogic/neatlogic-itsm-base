@@ -162,6 +162,22 @@
 		SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
 	</select>
 
+	<select id="getAncestorsAndSelfUuidByLftRht" resultType="codedriver.framework.process.dto.CatalogVo">
+	SELECT
+	a.`uuid`,
+	a.`name`,
+	a.`parent_uuid` AS `parentUuid`,
+	a.`is_active` AS `isActive`,
+	a.`icon`,
+	a.`color`,
+	a.`desc`,
+	a.`lft`,
+	a.`rht`
+	FROM `catalog` a
+	WHERE a.`lft` &lt;= #{lft} AND a.`rht` &gt;= #{rht}
+	ORDER BY `lft` ASC
+	</select>
+
 	<select id="getMaxRhtCode" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
 		SELECT max(rht) as `rht` FROM `catalog`
 	</select>
