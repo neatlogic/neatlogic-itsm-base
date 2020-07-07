@@ -298,7 +298,12 @@ public class ChannelVo extends BasePageVo {
 	public void setAuthorizedUuidList(List<String> authorizedUuidList) {
 		this.authorizedUuidList = authorizedUuidList;
 	}
-
+	/**
+	 * 
+	* @Time:2020年7月7日
+	* @Description: 判断服务是否最终授权，服务状态为激活，拥有服务权限及所有上级目录权限才是最终授权
+	* @return boolean
+	 */
 	public boolean isAuthority() {
 		if(Objects.equal(isActive, 1) && isAuthority) {
 			if(parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
