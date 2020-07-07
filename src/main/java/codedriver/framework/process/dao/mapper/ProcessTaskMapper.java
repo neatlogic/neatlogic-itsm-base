@@ -93,7 +93,7 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepVo> getFromProcessTaskStepByToId(Long toProcessTaskStepId);
 
-	public List<ProcessTaskStepVo> getToProcessTaskStepByFromId(Long fromProcessTaskStepId);
+	public List<ProcessTaskStepVo> getToProcessTaskStepByFromIdAndType(@Param("fromProcessTaskStepId")Long fromProcessTaskStepId,@Param("type") String type);
 
 	public List<ProcessTaskStepVo> getProcessTaskStepByConvergeId(Long convergeId);
 

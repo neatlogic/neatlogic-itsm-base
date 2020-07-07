@@ -1465,7 +1465,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			List<Long> tmpRouteStepList = new ArrayList<>(routeStepList);
 			if (!processTaskStepId.equals(endStepVo.getId())) {
 				List<ProcessTaskStepVo> convergeStepList = processTaskMapper.getProcessTaskStepByConvergeId(processTaskStepId);
-				List<ProcessTaskStepVo> toProcessTaskStepList = processTaskMapper.getToProcessTaskStepByFromId(processTaskStepId);
+				List<ProcessTaskStepVo> toProcessTaskStepList = processTaskMapper.getToProcessTaskStepByFromIdAndType(processTaskStepId,null);
 				for (int i = 0; i < toProcessTaskStepList.size(); i++) {
 					ProcessTaskStepVo toProcessTaskStepVo = toProcessTaskStepList.get(i);
 					/** 当前节点不是别人的汇聚节点时，才记录进路由，这是为了避免因为出现打回路径而产生错误的汇聚数据 **/

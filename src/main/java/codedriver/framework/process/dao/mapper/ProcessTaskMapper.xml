@@ -427,7 +427,7 @@
 		SELECT id FROM processtask WHERE id = #{value} FOR UPDATE
 	</select>
 
-	<select id="getToProcessTaskStepByFromId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+	<select id="getToProcessTaskStepByFromIdAndType" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
 		SELECT
 		a.`id`,
 		a.`processtask_id` AS processTaskId,
@@ -446,7 +446,10 @@
 		FROM
 		`processtask_step` a JOIN `processtask_step_rel` b ON a.`id` = b.`to_processtask_step_id`
 		WHERE
-		b.`from_processtask_step_id` = #{value}
+		b.`from_processtask_step_id` = #{fromProcessTaskStepId}
+		<if test="type != null and type != ''">
+			and b.`type` = #{type}
+		</if>
 	</select>
 
 	<select id="checkProcessTaskConvergeIsExists" parameterType="codedriver.framework.process.dto.ProcessTaskConvergeVo" resultType="int">
