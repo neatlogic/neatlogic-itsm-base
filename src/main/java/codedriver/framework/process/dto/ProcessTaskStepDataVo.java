@@ -1,11 +1,15 @@
 package codedriver.framework.process.dto;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskStepDataVo {
+	static Logger logger = LoggerFactory.getLogger(ProcessTaskStepDataVo.class);
 	private Long id;
 	private Long processTaskId;
 	private Long processTaskStepId;
@@ -61,7 +65,7 @@ public class ProcessTaskStepDataVo {
 		try {
 			this.data = JSONObject.parseObject(data);
 		} catch (Exception ex) {
-
+			logger.error(ex.getMessage(),ex);
 		}
 	}
 	
