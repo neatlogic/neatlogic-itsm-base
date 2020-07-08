@@ -37,6 +37,8 @@ public interface CatalogMapper {
 	public int checkCatalogIsExistsByLeftRightCode(@Param("uuid")String uuid, @Param("lft") Integer lft, @Param("rht") Integer rht);
 
 	public int getCatalogCount(CatalogVo catalogVo);
+
+	public int getCatalogCountOnLock();
 	/**
 	 *
 	* @Time:2020年7月7日
