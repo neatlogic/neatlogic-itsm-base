@@ -37,7 +37,7 @@
 		<if test="isActive != null">
 			AND p.`is_active` = #{isActive}
 		</if>
-		ORDER BY p.`sort` DESC
+		ORDER BY p.`sort` ASC
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
 		</if>
@@ -87,12 +87,12 @@
 	
 	<update id="updateSortIncrement">
 	update `priority` SET `sort` = `sort` + 1
-	WHERE `sort` &lt;= #{fromSort} AND `sort` &gt;= #{toSort}
+	WHERE `sort` &gt;= #{fromSort} AND `sort` &lt;= #{toSort}
 	</update>
 	
 	<update id="updateSortDecrement">
 	update `priority` SET `sort` = `sort` - 1
-	WHERE `sort` &lt;= #{fromSort} AND `sort` &gt;= #{toSort}
+	WHERE `sort` &gt;= #{fromSort} AND `sort` &lt;= #{toSort}
 	</update>
 	
 	<delete id="deletePriorityByUuid" parameterType="java.lang.String">
