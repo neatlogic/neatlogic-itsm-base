@@ -3,6 +3,8 @@ package codedriver.framework.process.dto;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -30,6 +32,10 @@ public class ProcessTaskStepAuditVo {
 	private Long nextStepId;
 	@EntityField(name = "目标步骤名称", type = ApiParamType.STRING)
 	private String nextStepName;
+	@EntityField(name = "步骤状态", type = ApiParamType.STRING)
+	private String stepStatus;
+	@EntityField(name = "步骤状态信息", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStatusVo stepStatusVo;
 	
 	public ProcessTaskStepAuditVo() { 
 	}
@@ -132,6 +138,25 @@ public class ProcessTaskStepAuditVo {
 
 	public void setNextStepName(String nextStepName) {
 		this.nextStepName = nextStepName;
+	}
+
+	public String getStepStatus() {
+		return stepStatus;
+	}
+
+	public void setStepStatus(String stepStatus) {
+		this.stepStatus = stepStatus;
+	}
+
+	public ProcessTaskStatusVo getStepStatusVo() {
+		if(stepStatusVo == null && StringUtils.isNotBlank(stepStatus)) {
+			stepStatusVo = new ProcessTaskStatusVo(stepStatus);
+		}
+		return stepStatusVo;
+	}
+
+	public void setStepStatusVo(ProcessTaskStatusVo stepStatusVo) {
+		this.stepStatusVo = stepStatusVo;
 	}
 
 }

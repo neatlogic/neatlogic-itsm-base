@@ -72,6 +72,7 @@ import codedriver.framework.process.dao.mapper.ProcessTaskStepDataMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
 import codedriver.framework.process.dto.ActionVo;
+import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
@@ -1379,6 +1380,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				processTaskStepAuditVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskStepAuditVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 				processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid());// 兼容automatic作业无用户
+				processTaskStepAuditVo.setStepStatus(currentProcessTaskStepVo.getStatus());
 				processTaskMapper.insertProcessTaskStepAudit(processTaskStepAuditVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				if (MapUtils.isNotEmpty(paramObj)) {
@@ -1531,6 +1533,11 @@ public abstract class ProcessStepHandlerUtilBase {
 
 			/** 优先级 **/
 			PriorityVo priorityVo = priorityMapper.getPriorityByUuid(processTaskVo.getPriorityUuid());
+			if(priorityVo == null) {
+				priorityVo = new PriorityVo();
+				priorityVo.setUuid(processTaskVo.getPriorityUuid());
+				priorityVo.setName(processTaskVo.getPriorityUuid());
+			}
 			processTaskVo.setPriority(priorityVo);
 			/** 上报服务路径 **/
 			ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
@@ -1543,7 +1550,13 @@ public abstract class ProcessStepHandlerUtilBase {
 				}
 				channelPath.append(channelVo.getName());
 				processTaskVo.setChannelPath(channelPath.toString());
-				processTaskVo.setChannelType(channelMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid()));
+				ChannelTypeVo channelTypeVo = channelMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid());
+				if(channelTypeVo == null) {
+					channelTypeVo = new ChannelTypeVo();
+					channelTypeVo.setUuid(channelVo.getChannelTypeUuid());
+					channelTypeVo.setName(channelVo.getChannelTypeUuid());
+				}
+				processTaskVo.setChannelType(channelTypeVo);
 			}
 			/** 计算耗时 **/ 
 			if (processTaskVo.getEndTime() != null) {
