@@ -46,6 +46,7 @@
 		c.`uuid`,
 		c.`name`,
 		c.`parent_uuid`,
+		(SELECT GROUP_CONCAT(NAME  ORDER BY lft) FROM catalog  WHERE lft &lt; (SELECT lft FROM `catalog` WHERE UUID = c.`parent_uuid`) AND rht > (SELECT rht FROM `catalog` WHERE UUID = c.`parent_uuid`)) AS parentNames,
 		c.`is_active`,
 		c.`icon`,
 		c.`color`,
