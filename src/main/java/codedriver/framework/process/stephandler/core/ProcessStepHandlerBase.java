@@ -657,6 +657,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 执行动作 **/
 				ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
 			} finally {
+				if(StringUtils.isNotBlank(currentProcessTaskStepVo.getError())) {
+					currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CAUSE.getParamName(), currentProcessTaskStepVo.getError());
+				}
+				/** 处理历史记录 **/
+				AuditHandler.audit(currentProcessTaskStepVo, processTaskStepAction);
 				if (ProcessTaskStatus.FAILED.getValue().equals(currentProcessTaskStepVo.getStatus())) {
 					/**
 					 * 发生异常不能完成当前步骤，执行当前步骤的回退操作
@@ -671,8 +676,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				}
 			}
 			if (this.getMode().equals(ProcessStepMode.MT)) {
-				/** 处理历史记录 **/
-				AuditHandler.audit(currentProcessTaskStepVo, processTaskStepAction);
 				/** 写入时间审计 **/
 				TimeAuditHandler.audit(currentProcessTaskStepVo, processTaskStepAction);
 				/** 计算SLA **/
