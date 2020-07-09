@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -106,23 +105,23 @@ public class ProcessTaskUtil {
 	* @param formConfig 表单配置信息
 	* @return JSONObject
 	 */
-	public static JSONObject getConditionParamNameData(String formConfig) {
-		JSONObject resultObj = new JSONObject();
-		/** 工单固定字段 **/
-		for(ProcessField field : ProcessField.values()) {
-			resultObj.put(field.getValue(), field.getName());
-		}
-		/** 表单属性 **/
-		if(StringUtils.isNotBlank(formConfig)) {
-			FormVersionVo formVersionVo = new FormVersionVo();
-			formVersionVo.setFormConfig(formConfig);
-			List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
-			if(CollectionUtils.isNotEmpty(formAttributeList)) {
-				for(FormAttributeVo formAttribute : formAttributeList) {
-					resultObj.put(formAttribute.getUuid(), formAttribute.getLabel());
-				}
-			}
-		}
-		return resultObj;
-	}
+//	public static JSONObject getConditionParamNameData(String formConfig) {
+//		JSONObject resultObj = new JSONObject();
+//		/** 工单固定字段 **/
+//		for(ProcessField field : ProcessField.values()) {
+//			resultObj.put(field.getValue(), field.getName());
+//		}
+//		/** 表单属性 **/
+//		if(StringUtils.isNotBlank(formConfig)) {
+//			FormVersionVo formVersionVo = new FormVersionVo();
+//			formVersionVo.setFormConfig(formConfig);
+//			List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
+//			if(CollectionUtils.isNotEmpty(formAttributeList)) {
+//				for(FormAttributeVo formAttribute : formAttributeList) {
+//					resultObj.put(formAttribute.getUuid(), formAttribute.getLabel());
+//				}
+//			}
+//		}
+//		return resultObj;
+//	}
 }
