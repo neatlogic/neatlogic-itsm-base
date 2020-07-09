@@ -85,7 +85,7 @@ public class ProcessTaskUtil {
 								AttributeDataVo attributeDataVo = new AttributeDataVo();
 								attributeDataVo.setAttributeUuid(formAttribute.getUuid());
 								attributeDataVo.setData(attributeValue.toString());
-								String value = handler.getValue(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+								Object value = handler.getValue(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
 								resultObj.put(formAttribute.getUuid(), value);
 							}else {
 								resultObj.put(formAttribute.getUuid(), attributeValue);

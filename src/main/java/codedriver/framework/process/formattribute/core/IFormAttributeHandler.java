@@ -10,5 +10,5 @@ public interface IFormAttributeHandler {
 
 	public boolean valid(AttributeDataVo attributeDataVo, JSONObject configObj) throws AttributeValidException;
 
-	public String getValue(AttributeDataVo attributeDataVo, JSONObject configObj);
+	public Object getValue(AttributeDataVo attributeDataVo, JSONObject configObj);
 }
