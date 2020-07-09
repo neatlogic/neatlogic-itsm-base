@@ -17,7 +17,7 @@ public class ProcessTaskStepAuditFormAttributeDataVo {
 		//this.processTaskStepId = data.getProcessTaskStepId();
 		this.attributeUuid = data.getAttributeUuid();
 		//this.formUuid = data.getFormUuid();
-		this.data = data.getData();
+		//this.data = data.getData();
 	}
 
 	public Long getProcessTaskStepId() {

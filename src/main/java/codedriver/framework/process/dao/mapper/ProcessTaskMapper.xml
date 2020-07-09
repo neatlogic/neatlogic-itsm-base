@@ -1530,7 +1530,7 @@
 		)
 	</insert>
 
-	<insert id="insertProcessTaskStepAuditFormAttributeData" parameterType="codedriver.framework.process.dto.ProcessTaskStepAuditFormAttributeDataVo">
+	<!-- <insert id="insertProcessTaskStepAuditFormAttributeData" parameterType="codedriver.framework.process.dto.ProcessTaskStepAuditFormAttributeDataVo">
 		INSERT INTO `processtask_step_audit_formattribute_data` (
 		`audit_id`,
 		`form_uuid`,
@@ -1546,7 +1546,7 @@
 		#{attributeUuid},
 		#{data}
 		)
-	</insert>
+	</insert> -->
 
 	<insert id="insertProcessTaskStepUser" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 		INSERT INTO `processtask_step_user` (
