@@ -93,7 +93,7 @@ public class ProcessTaskUtil {
 								}else if(attributeValue instanceof JSONObject) {
 									attributeDataVo.setData(JSON.toJSONString(attributeValue));
 								}
-								Object value = handler.getValue(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+								Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
 								resultObj.put(formAttribute.getUuid(), value);
 							}else {
 								resultObj.put(formAttribute.getUuid(), attributeValue);
