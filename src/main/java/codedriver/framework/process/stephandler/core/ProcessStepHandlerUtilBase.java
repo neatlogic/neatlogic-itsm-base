@@ -1425,10 +1425,10 @@ public abstract class ProcessStepHandlerUtilBase {
 			if (formAttributeList == null || formAttributeList.isEmpty()) {
 				return true;
 			}
-			Map<String, String> formAttributeDataMap = new HashMap<>();
+			Map<String, Object> formAttributeDataMap = new HashMap<>();
 			List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 			for (ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
-				formAttributeDataMap.put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getData());
+				formAttributeDataMap.put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
 			}
 			Map<String, String> formAttributeActionMap = new HashMap<>();
 			List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
@@ -1462,15 +1462,23 @@ public abstract class ProcessStepHandlerUtilBase {
 				if (hidecomponentList.contains(formAttributeVo.getUuid())) {
 					continue;
 				}
-				String data = formAttributeDataMap.get(formAttributeVo.getUuid());
-				if (StringUtils.isBlank(data)) {
-					throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-				}
-				if (data.startsWith("[") && data.endsWith("]")) {
-					JSONArray jsonArray = JSON.parseArray(data);
-					if (jsonArray == null || jsonArray.isEmpty()) {
-						throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+				Object data = formAttributeDataMap.get(formAttributeVo.getUuid());
+				if(data != null) {
+					if(data instanceof String) {
+						if (StringUtils.isBlank(data.toString())) {
+							throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+						}
+					}else if(data instanceof JSONArray) {
+						if(CollectionUtils.isEmpty((JSONArray) data)){
+							throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+						}
+					}else if(data instanceof JSONObject) {
+						if(MapUtils.isEmpty((JSONObject) data)) {
+							throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+						}
 					}
+				}else {
+					throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
 				}
 			}
 			return true;
