@@ -106,30 +106,4 @@ public class ProcessTaskUtil {
 		
 		return resultObj;
 	}
-	/**
-	 * 
-	* @Time:2020年7月8日
-	* @Description: 获取条件参数名称数据
-	* @param formConfig 表单配置信息
-	* @return JSONObject
-	 */
-//	public static JSONObject getConditionParamNameData(String formConfig) {
-//		JSONObject resultObj = new JSONObject();
-//		/** 工单固定字段 **/
-//		for(ProcessField field : ProcessField.values()) {
-//			resultObj.put(field.getValue(), field.getName());
-//		}
-//		/** 表单属性 **/
-//		if(StringUtils.isNotBlank(formConfig)) {
-//			FormVersionVo formVersionVo = new FormVersionVo();
-//			formVersionVo.setFormConfig(formConfig);
-//			List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
-//			if(CollectionUtils.isNotEmpty(formAttributeList)) {
-//				for(FormAttributeVo formAttribute : formAttributeList) {
-//					resultObj.put(formAttribute.getUuid(), formAttribute.getLabel());
-//				}
-//			}
-//		}
-//		return resultObj;
-//	}
 }
