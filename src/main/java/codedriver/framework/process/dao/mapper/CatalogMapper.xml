@@ -186,7 +186,7 @@
 	</select>
 
 	<select id="getMaxRhtCode" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
-		SELECT max(rht) as `rht` FROM `catalog`
+		SELECT max(rht) as `rht` FROM `catalog` FOR UPDATE
 	</select>
 
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
