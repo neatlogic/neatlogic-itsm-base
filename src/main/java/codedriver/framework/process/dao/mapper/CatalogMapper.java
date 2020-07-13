@@ -52,7 +52,13 @@ public interface CatalogMapper {
 	 * @param uuid
 	 * @return List<CatalogVo>
 	 */
-	public List<CatalogVo> getAuthorizedCatalogList(CatalogVo catalogVo);
+	public List<CatalogVo> getAuthorizedCatalogList(
+			@Param("userUuid")String userUuid, 
+			@Param("teamUuidList")List<String> teamUuidList, 
+			@Param("roleUuidList")List<String> roleUuidList, 
+			@Param("parentUuid") String parentUuid, 
+			@Param("uuid") String uuid
+			);
 	
 	public int replaceCatalog(CatalogVo catalogVo);
 

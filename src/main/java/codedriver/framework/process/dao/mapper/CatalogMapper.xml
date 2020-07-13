@@ -180,11 +180,12 @@
 	
 	<select id="getAuthorizedCatalogList" resultType="codedriver.framework.process.dto.CatalogVo">
 	    SELECT
-		DISTINCT a.`catalog_uuid`,b.`name`,b.`icon`,b.`desc`,b.`parent_uuid`
+		DISTINCT b.`uuid`,b.`name`,b.`icon`,b.`desc`,b.`parent_uuid` AS parentUuid
 		FROM `catalog_authority` a 
 		JOIN `catalog` b ON a.`catalog_uuid` = b.`uuid`
 		<where>
-			(a.type = 'common' AND a.`uuid` = 'alluser')
+			b.`is_active` =1
+			and ((a.type = 'common' AND a.`uuid` = 'alluser')
 			<if test="userUuid != null and userUuid != ''">
 				OR (a.type = 'user' AND a.`uuid` = #{userUuid})
 			</if>
@@ -202,12 +203,16 @@
 				</foreach>
 				)
 			</if>
+			)
 			<if test="parentUuid != null and parentUuid != ''">
-				b.`parent_uuid` = #{parentUuid}
+				and b.`parent_uuid` = #{parentUuid}
+			</if>
+			<if test="uuid != null and uuid != ''">
+				and b.`uuid` = #{uuid}
 			</if>
 		</where>
 	</select>
-	
+		
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
 		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})
