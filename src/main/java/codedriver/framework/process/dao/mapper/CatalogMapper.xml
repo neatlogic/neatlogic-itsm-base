@@ -178,6 +178,36 @@
 	ORDER BY `lft` ASC
 	</select>
 	
+	<select id="getAuthorizedCatalogList" resultType="codedriver.framework.process.dto.CatalogVo">
+	    SELECT
+		DISTINCT a.`catalog_uuid`,b.`name`,b.`icon`,b.`desc`,b.`parent_uuid`
+		FROM `catalog_authority` a 
+		JOIN `catalog` b ON a.`catalog_uuid` = b.`uuid`
+		<where>
+			(a.type = 'common' AND a.`uuid` = 'alluser')
+			<if test="userUuid != null and userUuid != ''">
+				OR (a.type = 'user' AND a.`uuid` = #{userUuid})
+			</if>
+			<if test="teamUuidList != null and teamUuidList.size() > 0">
+				OR (a.type = 'team' AND a.`uuid` IN
+				<foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
+					#{teamUuid}
+				</foreach>
+				)
+			</if>
+			<if test="roleUuidList != null and roleUuidList.size() > 0">
+				OR (a.type = 'role' AND a.`uuid` IN
+				<foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
+					#{roleUuid}
+				</foreach>
+				)
+			</if>
+			<if test="parentUuid != null and parentUuid != ''">
+				b.`parent_uuid` = #{parentUuid}
+			</if>
+		</where>
+	</select>
+	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
 		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})

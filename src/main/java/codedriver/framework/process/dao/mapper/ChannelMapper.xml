@@ -60,6 +60,9 @@
 			LEFT
 		</if>
 		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.`user_uuid` = #{userUuid}
+		<if test="catalogUuid != null and catalogUuid != ''">
+			LEFT JOIN  catalog ca ON c.`parent_uuid` = ca.`uuid`
+		</if>
 		WHERE 1=1
 		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
 			AND c.`uuid` IN
@@ -75,6 +78,9 @@
 		</if>
 		<if test="isActive != null">
 			AND c.`is_active` = #{isActive}
+		</if>
+		<if test="catalogUuid != null and catalogUuid != ''">
+			AND ca.lft  >= (SELECT lft FROM `catalog` WHERE UUID = "0") AND ca.rht &lt;= (SELECT rht FROM `catalog` WHERE UUID = "0")
 		</if>
 		<choose>
 			<when test="isFavorite == 1">
