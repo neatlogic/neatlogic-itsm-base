@@ -38,6 +38,7 @@ import codedriver.framework.process.dao.mapper.PriorityMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
+import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.PriorityVo;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
@@ -299,6 +300,11 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 
 		/** 优先级 **/
 		PriorityVo priorityVo = priorityMapper.getPriorityByUuid(processTaskVo.getPriorityUuid());
+		if(priorityVo == null) {
+			priorityVo = new PriorityVo();
+			priorityVo.setUuid(processTaskVo.getPriorityUuid());
+			priorityVo.setName(processTaskVo.getPriorityUuid());
+		}
 		processTaskVo.setPriority(priorityVo);
 		/** 上报服务路径 **/
 		ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
@@ -311,7 +317,13 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 			}
 			channelPath.append(channelVo.getName());
 			processTaskVo.setChannelPath(channelPath.toString());
-			processTaskVo.setChannelType(channelMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid()));
+			ChannelTypeVo channelTypeVo = channelMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid());
+			if(channelTypeVo == null) {
+				channelTypeVo = new ChannelTypeVo();
+				channelTypeVo.setUuid(channelVo.getChannelTypeUuid());
+				channelTypeVo.setName(channelVo.getChannelTypeUuid());
+			}
+			processTaskVo.setChannelType(channelTypeVo);
 		}
 		/** 计算耗时 **/ 
 		if (processTaskVo.getEndTime() != null) {

@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
@@ -31,7 +33,7 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	private JSONObject chartConfig;
 
 	private transient String configStr;
-	
+
 	public ProcessStepHandlerVo() {
 	}
 
@@ -46,11 +48,13 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	}
 
 	public void setConfig(String config) {
-		try {
-			this.config = JSON.parseObject(config);
-		}catch(JSONException e) {
-			
-		}		
+		if (StringUtils.isNotBlank(config)) {
+			try {
+				this.config = JSON.parseObject(config);
+			} catch (JSONException e) {
+
+			}
+		}
 	}
 
 	public String getIcon() {
@@ -131,7 +135,7 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	}
 
 	public String getConfigStr() {
-		if(configStr == null && this.config != null) {
+		if (configStr == null && this.config != null) {
 			configStr = this.config.toJSONString();
 		}
 		return configStr;

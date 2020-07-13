@@ -40,7 +40,7 @@ public interface CatalogMapper {
 
 	public int getCatalogCountOnLock();
 	/**
-	 *
+	 * 
 	* @Time:2020年7月7日
 	* @Description: 根据左右编码查出目录及所有上级目录
 	* @param lft 左编码
@@ -49,8 +49,14 @@ public interface CatalogMapper {
 	 */
 	public List<CatalogVo> getAncestorsAndSelfUuidByLftRht(@Param("lft") Integer lft, @Param("rht") Integer rht);
 
+	/**
+	 * 根据父uuid获取授权的子服务目录列表
+	 * @param uuid
+	 * @return List<CatalogVo>
+	 */
+	public List<CatalogVo> getAuthorizedCatalogList(CatalogVo catalogVo);
 
-	public CatalogVo getMaxRhtCode();
+    public CatalogVo getMaxRhtCode();
 
 	public int replaceCatalog(CatalogVo catalogVo);
 

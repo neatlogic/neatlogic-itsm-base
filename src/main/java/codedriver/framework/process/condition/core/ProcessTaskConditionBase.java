@@ -24,11 +24,11 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 		String where = getMyEsWhere(index,conditionList);
 		if(StringUtils.isBlank(where)) {
 			Object value = StringUtils.EMPTY;
-			if(CollectionUtils.isNotEmpty(condition.getValueList())) {
-				value = condition.getValueList().get(0);
-			}
-			if(condition.getValueList().size()>1) {
-				value = String.join("','",condition.getValueList());
+			if(condition.getValueList() instanceof String) {
+				value = condition.getValueList();
+			}else if(condition.getValueList() instanceof List) {
+				List<String> values = JSON.parseArray(JSON.toJSONString(condition.getValueList()), String.class);
+				value = String.join("','", values);
 			}
 			if(StringUtils.isNotBlank(value.toString())) {
 				value = String.format("'%s'",  value);
