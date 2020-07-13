@@ -9,6 +9,13 @@ public interface IFormAttributeHandler {
 	public String getType();
 
 	public boolean valid(AttributeDataVo attributeDataVo, JSONObject configObj) throws AttributeValidException;
-
-	public String getValue(AttributeDataVo attributeDataVo, JSONObject configObj);
+	/**
+	 * 
+	* @Time:2020年7月10日
+	* @Description: 将表单属性值转换成对应的text
+	* @param attributeDataVo
+	* @param configObj
+	* @return Object
+	 */
+	public Object valueConversionText(AttributeDataVo attributeDataVo, JSONObject configObj);
 }
