@@ -37,6 +37,9 @@ public class ChannelVo extends BasePageVo {
 
 	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
 	private String parentUuid;
+	
+	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
+	private String parentNames;
 
 	@EntityField(name = "是否收藏，0：未收藏，1：已收藏", type = ApiParamType.INTEGER)
 	private Integer isFavorite;
@@ -298,6 +301,15 @@ public class ChannelVo extends BasePageVo {
 	public void setAuthorizedUuidList(List<String> authorizedUuidList) {
 		this.authorizedUuidList = authorizedUuidList;
 	}
+
+	public String getParentNames() {
+		return parentNames;
+	}
+
+	public void setParentNames(String parentNames) {
+		this.parentNames = parentNames;
+	}
+
 	/**
 	 * 
 	* @Time:2020年7月7日

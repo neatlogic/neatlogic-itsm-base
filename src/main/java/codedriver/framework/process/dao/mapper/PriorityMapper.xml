@@ -65,7 +65,7 @@
 	</select>
 
 	<select id="getMaxSort" resultType="java.lang.Integer" useCache="false">
-		SELECT MAX(`sort`) FROM `priority`
+		SELECT MAX(`sort`) FROM `priority` FOR UPDATE
 	</select>
 
 	<insert id="insertPriority" parameterType="codedriver.framework.process.dto.PriorityVo">
@@ -73,17 +73,34 @@
 		VALUES(#{uuid}, #{name}, #{isActive}, #{desc}, #{icon}, #{color}, #{sort})
 	</insert>
 
-	<update id="updatePriority">
+	<update id="updatePriority" parameterType="codedriver.framework.process.dto.PriorityVo">
 		UPDATE `priority`
 		SET
 		`name` = #{name},
 		`is_active` = #{isActive},
 		`desc` = #{desc},
 		`icon` = #{icon},
-		`color` = #{color}
+		`color` = #{color},
+		`sort` = #{sort}
 		WHERE `uuid` = #{uuid}
 	</update>
-
+	
+	<update id="updateSortIncrement">
+	update `priority` SET `sort` = `sort` + 1
+	WHERE `sort` &gt;= #{fromSort} 
+	<if test="toSort != null">	
+	AND `sort` &lt;= #{toSort}
+	</if>
+	</update>
+	
+	<update id="updateSortDecrement">
+	update `priority` SET `sort` = `sort` - 1
+	WHERE `sort` &gt;= #{fromSort} 
+	<if test="toSort != null">
+	AND `sort` &lt;= #{toSort}
+	</if>
+	</update>
+	
 	<delete id="deletePriorityByUuid" parameterType="java.lang.String">
 		DELETE FROM `priority` WHERE `uuid` = #{uuid}
 	</delete>

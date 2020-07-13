@@ -23,7 +23,10 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	@Override
 	public Object getValueText(MultiAttrsObject el) throws RuntimeException{
 		JSONObject commonJson = (JSONObject) el.getJSON(this.getType());
-		return getMyValueText(commonJson);
+		if(commonJson != null) {
+			return getMyValueText(commonJson);
+		}
+		return null;
 	}
 	
 	public Object getMyValueText(JSONObject json) {

@@ -782,6 +782,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		/** 更新流程作业状态 **/
 		updateProcessTaskStatus(currentProcessTaskVo.getId());
 
+		/** 处理历史记录 **/
+		ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
+		processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
+		AuditHandler.audit(processTaskStepVo, ProcessTaskStepAction.ABORT);
+
 		return 1;
 	}
 
@@ -796,9 +801,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		/** 修改步骤状态 **/
 		currentProcessTaskStepVo.setIsActive(-1);
 		processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
-
-		/** 处理历史记录 **/
-		AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.ABORT);
 
 		/** 写入时间审计 **/
 		TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.ABORT);
@@ -837,6 +839,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 		/** 更新流程作业状态 **/
 		updateProcessTaskStatus(currentProcessTaskVo.getId());
+
+		/** 处理历史记录 **/
+		ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
+		processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
+		AuditHandler.audit(processTaskStepVo, ProcessTaskStepAction.RECOVER);
 		return 1;
 	}
 
@@ -870,9 +877,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 			/** 修改步骤状态 **/
 			processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
-
-			/** 处理历史记录 **/
-			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.RECOVER);
 
 			/** 写入时间审计 **/
 			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.RECOVER);
