@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepAuditVo {
@@ -93,6 +94,12 @@ public class ProcessTaskStepAuditVo {
 	}
 
 	public String getUserName() {
+		if(StringUtils.isBlank(userName) && StringUtils.isNotBlank(userUuid)) {
+			userName = SystemUser.getUserName(userUuid);
+			if(StringUtils.isBlank(userName)) {
+				userName = userUuid;
+			}
+		}
 		return userName;
 	}
 
