@@ -27,7 +27,9 @@ public class AttributeDataVo {
 			return null;
 		}
 		if(data.startsWith("[") && data.endsWith("]")) {
-			return JSON.parseArray(data, String.class);
+			return JSON.parseArray(data);
+		}else if(data.startsWith("{") && data.endsWith("}")){
+			return JSON.parseObject(data);
 		}else {
 			return data;
 		}

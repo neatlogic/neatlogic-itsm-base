@@ -17,10 +17,10 @@ public enum ProcessFormHandler {
 	FORMDATE("formdate","日期",FormHandlerType.DATE,ParamType.DATE,String.class.getSimpleName().toLowerCase()),
 	FORMTIME("formtime","时间",FormHandlerType.TIME,ParamType.DATE,String.class.getSimpleName().toLowerCase()),
 	FORMSTATICLIST("formstaticlist","静态列表",null,null,null),
-	FORMCASCADELIST("formcascadelist","级联下拉",null,null,null),
+	FORMCASCADELIST("formcascadelist","级联下拉",FormHandlerType.CASCADELIST,ParamType.STRING,String.class.getSimpleName().toLowerCase()),
 	FORMDYNAMICLIST("formdynamiclist","动态列表",null,null,null),
 	FORMDIVIDER("formdivider","分割线",null,null,null),
-	FORMUSERSELECT("formuserselect", "用户选择器", null, ParamType.ARRAY, String.class.getSimpleName().toLowerCase()),
+	FORMUSERSELECT("formuserselect", "用户选择器", FormHandlerType.USERSELECT, ParamType.ARRAY, String.class.getSimpleName().toLowerCase()),
 	FORMLINK("formlink", "链接", null, ParamType.STRING, String.class.getSimpleName().toLowerCase());
 	
 	private String handler;

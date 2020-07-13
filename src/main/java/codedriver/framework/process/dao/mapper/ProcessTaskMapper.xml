@@ -722,6 +722,7 @@
 		<result column="userName" property="userName"/>
 		<result column="action_time" property="actionTime"/>
 		<result column="action" property="action"/>
+		<result column="step_status" property="stepStatus"/>
 		<collection property="auditDetailList" ofType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
 			<result column="audit_id" property="auditId"/>
 			<result column="type" property="type"/>
@@ -739,6 +740,7 @@
 	  (SELECT user_name FROM `user` x WHERE x.uuid = psa.`user_uuid`) AS userName,
 	  psa.`action_time`,
 	  psa.`action`, 
+	  psa.`step_status`, 
 	  psad.`audit_id`,
 	  psad.`type`,
 	  psad.`old_content`,
@@ -766,7 +768,8 @@
 	  `processtask_step_id` AS processTaskStepId,
 	  `user_uuid` AS userUuid,
 	  `action_time` AS actionTime,
-	  `action` 
+	  `action`,
+	  `step_status` AS stepStatus 
 	FROM `processtask_step_audit`
 	WHERE `id` = #{id}
 	</select>
@@ -1051,7 +1054,8 @@
 		`processtask_step_id` as processTaskStepId,
 		`user_uuid` as userUuid,
 		`action_time` as actionTime,
-		`action`
+		`action`,
+		`step_status` as stepStatus
 		FROM
 		  `processtask_step_audit`
 		WHERE 1=1
@@ -1268,7 +1272,8 @@
 		`processtask_step_id`,
 		`user_uuid`,
 		`action_time`,
-		`action`
+		`action`,
+		`step_status`
 		)
 		VALUES
 		(
@@ -1276,7 +1281,8 @@
 		#{processTaskStepId},
 		#{userUuid},
 		NOW(3),
-		#{action}
+		#{action},
+		#{stepStatus}
 		)
 	</insert>
 
@@ -1524,7 +1530,7 @@
 		)
 	</insert>
 
-	<insert id="insertProcessTaskStepAuditFormAttributeData" parameterType="codedriver.framework.process.dto.ProcessTaskStepAuditFormAttributeDataVo">
+	<!-- <insert id="insertProcessTaskStepAuditFormAttributeData" parameterType="codedriver.framework.process.dto.ProcessTaskStepAuditFormAttributeDataVo">
 		INSERT INTO `processtask_step_audit_formattribute_data` (
 		`audit_id`,
 		`form_uuid`,
@@ -1540,7 +1546,7 @@
 		#{attributeUuid},
 		#{data}
 		)
-	</insert>
+	</insert> -->
 
 	<insert id="insertProcessTaskStepUser" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 		INSERT INTO `processtask_step_user` (

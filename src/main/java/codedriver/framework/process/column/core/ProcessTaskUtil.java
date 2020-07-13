@@ -8,6 +8,8 @@ import java.util.Map;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.constvalue.ProcessField;
@@ -84,8 +86,14 @@ public class ProcessTaskUtil {
 							if(handler != null) {
 								AttributeDataVo attributeDataVo = new AttributeDataVo();
 								attributeDataVo.setAttributeUuid(formAttribute.getUuid());
-								attributeDataVo.setData(attributeValue.toString());
-								String value = handler.getValue(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+								if(attributeValue instanceof String) {
+									attributeDataVo.setData((String)attributeValue);
+								}else if(attributeValue instanceof JSONArray){
+									attributeDataVo.setData(JSON.toJSONString(attributeValue));
+								}else if(attributeValue instanceof JSONObject) {
+									attributeDataVo.setData(JSON.toJSONString(attributeValue));
+								}
+								Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
 								resultObj.put(formAttribute.getUuid(), value);
 							}else {
 								resultObj.put(formAttribute.getUuid(), attributeValue);
