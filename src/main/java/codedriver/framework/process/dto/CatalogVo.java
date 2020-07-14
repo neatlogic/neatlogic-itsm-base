@@ -72,13 +72,6 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 	private transient List<CatalogVo> childCatalogList = new ArrayList<>();
 	
 	private transient List<ChannelVo> childChannelList = new ArrayList<>();
-	
-	//授权参数
-	private transient String userUuid;
-
-	private transient List<String> teamUuidList;
-
-	private transient List<String> roleUuidList;
 
 	public CatalogVo() {
 	}
@@ -368,30 +361,6 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 			}
 		}
 		return resultDefault;
-	}
-
-	public String getUserUuid() {
-		return userUuid;
-	}
-
-	public void setUserUuid(String userUuid) {
-		this.userUuid = userUuid;
-	}
-
-	public List<String> getTeamUuidList() {
-		return teamUuidList;
-	}
-
-	public void setTeamUuidList(List<String> teamUuidList) {
-		this.teamUuidList = teamUuidList;
-	}
-
-	public List<String> getRoleUuidList() {
-		return roleUuidList;
-	}
-
-	public void setRoleUuidList(List<String> roleUuidList) {
-		this.roleUuidList = roleUuidList;
 	}
 
 }

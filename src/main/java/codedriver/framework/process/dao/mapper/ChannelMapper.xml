@@ -292,6 +292,48 @@
 			</if>
 		</where>
 	</select>
+	
+	<select id="getAuthorizedChannelListByParentUuid" resultType="codedriver.framework.process.dto.ChannelVo">
+		SELECT 
+		c.`uuid`,
+		c.`name`,
+		c.`is_active` AS isActive,
+		c.`icon`,
+		c.`color`,
+		c.`desc`,
+		c.`sort`,
+		c.`channel_type_uuid` AS channelTypeUuid,
+		CASE WHEN cu.`user_uuid` IS NULL THEN 0 ELSE 1 END AS `isFavorite`
+		FROM `channel_authority` ca
+		JOIN channel c ON ca.channel_uuid = c.uuid
+		LEFT JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` 
+		<where>
+			c.`is_active` =1
+			and
+			((ca.type = 'common' AND ca.`uuid` = 'alluser')
+			<if test="userUuid != null and userUuid != ''">
+				OR (ca.type = 'user' AND ca.`uuid` = #{userUuid})
+			</if>
+			<if test="teamUuidList != null and teamUuidList.size() > 0">
+				OR (ca.type = 'team' AND ca.`uuid` IN
+				<foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
+					#{teamUuid}
+				</foreach>
+				)
+			</if>
+			<if test="roleUuidList != null and roleUuidList.size() > 0">
+				OR (ca.type = 'role' AND ca.`uuid` IN
+				<foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
+					#{roleUuid}
+				</foreach>
+				)
+			</if>
+			)
+			<if test="parentUuid != null and parentUuid != ''">
+				and c.parent_uuid = #{parentUuid}
+			</if>
+		</where>
+	</select>
 
 	<select id="getAllAncestorNameListByParentUuid" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT a.`name` FROM `catalog` a

@@ -52,6 +52,13 @@ public interface ChannelMapper {
 			@Param("channelUuid") String channelUuid
 			);
 	
+	public List<ChannelVo> getAuthorizedChannelListByParentUuid(
+			@Param("userUuid")String userUuid, 
+			@Param("teamUuidList")List<String> teamUuidList, 
+			@Param("roleUuidList")List<String> roleUuidList,
+			@Param("parentUuid") String parentUuid
+			);
+	
 	public List<String> getAllAncestorNameListByParentUuid(String parentUuid);
 	
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
