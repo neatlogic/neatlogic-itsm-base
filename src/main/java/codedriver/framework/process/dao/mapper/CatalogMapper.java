@@ -68,8 +68,6 @@ public interface CatalogMapper {
 
 	public int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
 
-	public int insertRootCatalog();
-
 	public int updateCatalogParentUuidByUuid(CatalogVo catalogVo);
 
 	public int updateCatalogLeftRightCode(@Param("uuid") String uuid, @Param("lft") int lft, @Param("rht") int rht);
