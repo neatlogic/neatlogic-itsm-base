@@ -72,7 +72,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 	private transient List<CatalogVo> childCatalogList = new ArrayList<>();
 	
 	private transient List<ChannelVo> childChannelList = new ArrayList<>();
-	
+
 	public CatalogVo() {
 	}
 	

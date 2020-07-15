@@ -141,6 +141,13 @@
 		</where>
 	</select>
 
+	<select id="getCatalogCountOnLock" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int" useCache="false">
+		SELECT
+		COUNT(1)
+		FROM `catalog`
+		FOR UPDATE
+	</select>
+
 	<select id="getCatalogListByParentUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
 		SELECT
 		a.`uuid`,
@@ -212,7 +219,11 @@
 			</if>
 		</where>
 	</select>
-		
+
+    <select id="getMaxRhtCode" resultType="java.lang.Integer" useCache="false">
+        SELECT max(rht) FROM `catalog` FOR UPDATE
+    </select>
+	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
 		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})

@@ -37,6 +37,8 @@ public interface CatalogMapper {
 	public int checkCatalogIsExistsByLeftRightCode(@Param("uuid")String uuid, @Param("lft") Integer lft, @Param("rht") Integer rht);
 
 	public int getCatalogCount(CatalogVo catalogVo);
+
+	public int getCatalogCountOnLock();
 	/**
 	 * 
 	* @Time:2020年7月7日
@@ -52,13 +54,15 @@ public interface CatalogMapper {
 	 * @param uuid
 	 * @return List<CatalogVo>
 	 */
-	public List<CatalogVo> getAuthorizedCatalogList(
-			@Param("userUuid")String userUuid, 
-			@Param("teamUuidList")List<String> teamUuidList, 
-			@Param("roleUuidList")List<String> roleUuidList, 
-			@Param("parentUuid") String parentUuid, 
-			@Param("uuid") String uuid
-			);
+    public List<CatalogVo> getAuthorizedCatalogList(
+            @Param("userUuid")String userUuid,
+            @Param("teamUuidList")List<String> teamUuidList,
+            @Param("roleUuidList")List<String> roleUuidList,
+            @Param("parentUuid") String parentUuid,
+            @Param("uuid") String uuid
+    );
+
+    public Integer getMaxRhtCode();
 	
 	public int replaceCatalog(CatalogVo catalogVo);
 
