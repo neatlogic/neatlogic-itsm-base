@@ -62,7 +62,7 @@ public interface CatalogMapper {
             @Param("uuid") String uuid
     );
 
-    public CatalogVo getMaxRhtCode();
+    public Integer getMaxRhtCode();
 	
 	public int replaceCatalog(CatalogVo catalogVo);
 
