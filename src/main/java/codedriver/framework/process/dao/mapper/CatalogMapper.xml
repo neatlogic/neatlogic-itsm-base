@@ -221,7 +221,7 @@
 	</select>
 
     <select id="getMaxRhtCode" resultType="java.lang.Integer" useCache="false">
-        SELECT max(rht) FROM `catalog` FOR UPDATE
+        SELECT max(`rht`) FROM `catalog`
     </select>
 	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
