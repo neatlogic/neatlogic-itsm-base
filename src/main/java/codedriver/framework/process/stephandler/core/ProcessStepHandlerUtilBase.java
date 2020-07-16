@@ -1317,7 +1317,9 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected static List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId) {
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
 			List<ProcessTaskStepVo> resultList = new ArrayList<>();
+			List<ProcessTaskStepVo> startProcessTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.START.getValue());
 			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.PROCESS.getValue());
+			processTaskStepList.addAll(startProcessTaskStepList);
 			for (ProcessTaskStepVo processTaskStep : processTaskStepList) {
 				if (processTaskStep.getIsActive().intValue() == 1) {
 					List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
