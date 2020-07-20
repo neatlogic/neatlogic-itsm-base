@@ -224,6 +224,21 @@
         SELECT max(`rht`) FROM `catalog`
     </select>
 	
+	<select id="checkLeftRightCodeIsWrong" resultType="int">
+	SELECT COUNT(a.`uuid`) FROM (
+		SELECT `uuid` FROM `catalog`  WHERE `lft` IS NULL OR `rht` IS NULL
+		UNION
+		SELECT `uuid` FROM `catalog`  WHERE `lft` &lt; 2 OR `rht` &lt; 3
+		UNION
+		SELECT parent.`uuid` FROM `catalog` parent
+		JOIN `catalog` child ON child.`parent_uuid`=parent.`uuid` AND (child.`lft` &lt;= parent.`lft` OR child.`rht` &gt;= parent.`rht`)
+		UNION
+		SELECT parent.`uuid` FROM `catalog` parent
+		LEFT JOIN `catalog` child ON child.`parent_uuid` = parent.`uuid` 
+		WHERE child.uuid IS NULL AND parent.`rht` - parent.`lft` != 1
+	) a
+	</select>
+	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
 		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})
