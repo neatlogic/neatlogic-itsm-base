@@ -228,6 +228,8 @@
 	SELECT COUNT(a.`uuid`) FROM (
 		SELECT `uuid` FROM `catalog`  WHERE `lft` IS NULL OR `rht` IS NULL
 		UNION
+		SELECT `uuid` FROM `catalog`  WHERE `lft` &lt; 2 OR `rht` &lt; 3
+		UNION
 		SELECT parent.`uuid` FROM `catalog` parent
 		JOIN `catalog` child ON child.`parent_uuid`=parent.`uuid` AND (child.`lft` &lt;= parent.`lft` OR child.`rht` &gt;= parent.`rht`)
 		UNION
