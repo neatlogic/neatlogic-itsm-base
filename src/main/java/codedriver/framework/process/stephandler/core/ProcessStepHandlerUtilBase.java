@@ -33,9 +33,11 @@ import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.asynchronization.threadpool.CommonThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.SystemUser;
+import codedriver.framework.common.constvalue.TeamLevel;
 import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
+import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.exception.integration.IntegrationHandlerNotFoundException;
 import codedriver.framework.exception.integration.IntegrationNotFoundException;
@@ -1587,6 +1589,19 @@ public abstract class ProcessStepHandlerUtilBase {
 					processTaskVo.setFormAttributeDataMap(formAttributeDataMap);
 				}
 			}
+			
+			/** 上报人公司列表 **/
+			List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(processTaskVo.getOwner());
+			if(CollectionUtils.isNotEmpty(teamUuidList)) {
+				List<TeamVo> teamList = teamMapper.getTeamByUuidList(teamUuidList);
+				for(TeamVo teamVo : teamList) {
+					List<TeamVo> companyList = teamMapper.getAncestorsAndSelfByLftRht(teamVo.getLft(), teamVo.getRht(), TeamLevel.COMPANY.getValue());
+					if(CollectionUtils.isNotEmpty(companyList)) {
+						processTaskVo.getOwnerCompanyList().addAll(companyList);
+					}
+				}
+			}
+			
 			return processTaskVo;
 		}
 		
