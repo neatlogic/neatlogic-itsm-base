@@ -53,6 +53,8 @@ public interface ProcessTaskMapper {
 	public ProcessTaskConfigVo getProcessTaskConfigByHash(String hash);
 
 	public List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskStepId(Long processTaskStepId);
+	
+	public List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskId(Long processTaskId);
 
 	public List<ProcessTaskSlaTimeVo> getProcessTaskSlaTimeByProcessTaskStepIdList(List<Long> processTaskStepIdList);
 
@@ -221,6 +223,7 @@ public interface ProcessTaskMapper {
 
 	public int insertProcessTaskSla(ProcessTaskSlaVo processTaskSlaVo);
 
+	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskSlaTimeVo.class)
 	public int insertProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
 
 	public int insertProcessTaskStepSla(@Param("processTaskStepId") Long processTaskStepId, @Param("slaId") Long slaId);
@@ -253,6 +256,7 @@ public interface ProcessTaskMapper {
 
 	public int updateProcessTaskSlaNotify(ProcessTaskSlaNotifyVo processTaskNotifyVo);
 
+	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskSlaTimeVo.class)
 	public int updateProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
 
 	public int updateProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
