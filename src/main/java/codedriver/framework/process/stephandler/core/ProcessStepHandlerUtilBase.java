@@ -753,6 +753,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							}
 						}
 						slaTimeVo.setSlaId(slaVo.getId());
+						slaTimeVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 						if (isSlaTimeExists) {
 							processTaskMapper.updateProcessTaskSlaTime(slaTimeVo);
 						} else {
