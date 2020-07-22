@@ -23,6 +23,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.constvalue.TeamLevel;
+import codedriver.framework.dao.mapper.TeamMapper;
+import codedriver.framework.dto.TeamVo;
 import codedriver.framework.file.dao.mapper.FileMapper;
 import codedriver.framework.file.dto.FileVo;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
@@ -87,6 +90,9 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 	
 	@Autowired
 	private WorktimeMapper worktimeMapper;
+	
+	@Autowired
+	private TeamMapper teamMapper;
 	
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
@@ -342,6 +348,18 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 					formAttributeDataMap.put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
 				}
 				processTaskVo.setFormAttributeDataMap(formAttributeDataMap);
+			}
+		}
+		
+		/** 上报人公司列表 **/
+		List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(processTaskVo.getOwner());
+		if(CollectionUtils.isNotEmpty(teamUuidList)) {
+			List<TeamVo> teamList = teamMapper.getTeamByUuidList(teamUuidList);
+			for(TeamVo teamVo : teamList) {
+				List<TeamVo> companyList = teamMapper.getAncestorsAndSelfByLftRht(teamVo.getLft(), teamVo.getRht(), TeamLevel.COMPANY.getValue());
+				if(CollectionUtils.isNotEmpty(companyList)) {
+					processTaskVo.getOwnerCompanyList().addAll(companyList);
+				}
 			}
 		}
 		return processTaskVo;

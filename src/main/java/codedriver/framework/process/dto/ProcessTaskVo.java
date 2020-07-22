@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.dto.TeamVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
@@ -74,6 +76,9 @@ public class ProcessTaskVo {
 	ProcessTaskStepVo startProcessTaskStep;
 	@EntityField(name = "工单当前步骤信息", type = ApiParamType.JSONOBJECT)
 	ProcessTaskStepVo currentProcessTaskStep;
+	
+	@EntityField(name = "上报人公司列表", type = ApiParamType.JSONARRAY)
+	private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
 	
 	private transient Boolean isAutoGenerateId = true;
 	
@@ -350,6 +355,14 @@ public class ProcessTaskVo {
 
 	public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
 		this.isAutoGenerateId = isAutoGenerateId;
+	}
+
+	public List<TeamVo> getOwnerCompanyList() {
+		return ownerCompanyList;
+	}
+
+	public void setOwnerCompanyList(List<TeamVo> ownerCompanyList) {
+		this.ownerCompanyList = ownerCompanyList;
 	}
 
 }
