@@ -157,6 +157,9 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setExpiredTime(List<ProcessTaskSlaVo> processTaskSlaList) {
+		for(ProcessTaskSlaVo processTaskSlaVo:processTaskSlaList) {
+			processTaskSlaVo.setConfig(null); //es 同一个key 不支持存储不同类型的value
+		}
 		dataJson.put(ProcessWorkcenterField.EXPIRED_TIME.getValue(), JSONArray.toJSON(processTaskSlaList));
 		return this;
 	}
