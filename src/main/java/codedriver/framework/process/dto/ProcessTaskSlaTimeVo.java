@@ -25,10 +25,10 @@ public class ProcessTaskSlaTimeVo {
 	@EntityField(name = "剩余时间（不考虑工作日历），单位：毫秒", type = ApiParamType.LONG)
 	private Long realTimeLeft;
 
-	@EntityField(name = "剩余时间描述（根据工作日历计算）", type = ApiParamType.STRING)
-	private String timeLeftDesc;
-	@EntityField(name = "剩余时间描述（不考虑工作日历）", type = ApiParamType.STRING)
-	private String realTimeLeftDesc;
+//	@EntityField(name = "剩余时间描述（根据工作日历计算）", type = ApiParamType.STRING)
+//	private String timeLeftDesc;
+//	@EntityField(name = "剩余时间描述（不考虑工作日历）", type = ApiParamType.STRING)
+//	private String realTimeLeftDesc;
 	
 	public Long getProcessTaskId() {
 		return processTaskId;
@@ -102,19 +102,19 @@ public class ProcessTaskSlaTimeVo {
 		this.realTimeLeft = realTimeLeft;
 	}
 
-	public String getTimeLeftDesc() {
-		return timeLeftDesc;
-	}
-
-	public void setTimeLeftDesc(String timeLeftDesc) {
-		this.timeLeftDesc = timeLeftDesc;
-	}
-
-	public String getRealTimeLeftDesc() {
-		return realTimeLeftDesc;
-	}
-
-	public void setRealTimeLeftDesc(String realTimeLeftDesc) {
-		this.realTimeLeftDesc = realTimeLeftDesc;
-	}
+//	public String getTimeLeftDesc() {
+//		return timeLeftDesc;
+//	}
+//
+//	public void setTimeLeftDesc(String timeLeftDesc) {
+//		this.timeLeftDesc = timeLeftDesc;
+//	}
+//
+//	public String getRealTimeLeftDesc() {
+//		return realTimeLeftDesc;
+//	}
+//
+//	public void setRealTimeLeftDesc(String realTimeLeftDesc) {
+//		this.realTimeLeftDesc = realTimeLeftDesc;
+//	}
 }
