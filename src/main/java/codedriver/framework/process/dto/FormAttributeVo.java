@@ -4,16 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.common.constvalue.FormHandlerType;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.Expression;
-import codedriver.framework.process.constvalue.ProcessFormHandler;
+import codedriver.framework.common.constvalue.FormHandlerType;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
+import codedriver.framework.process.constvalue.ProcessFormHandler;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class FormAttributeVo implements Serializable {
