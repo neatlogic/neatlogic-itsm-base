@@ -16,6 +16,7 @@ import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
+import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
@@ -155,8 +156,11 @@ public class WorkcenterFieldBuilder {
 		dataJson.put(ProcessWorkcenterField.WOKRTIME.getValue(), worktime);
 		return this;
 	}
-	public WorkcenterFieldBuilder setExpiredTime(Date expiredTime) {
-		dataJson.put(ProcessWorkcenterField.EXPIRED_TIME.getValue(), expiredTime == null?"":sdf.format(expiredTime));
+	public WorkcenterFieldBuilder setExpiredTime(List<ProcessTaskSlaVo> processTaskSlaList) {
+		for(ProcessTaskSlaVo processTaskSlaVo:processTaskSlaList) {
+			processTaskSlaVo.setConfig(null); //es 同一个key 不支持存储不同类型的value
+		}
+		dataJson.put(ProcessWorkcenterField.EXPIRED_TIME.getValue(), JSONArray.toJSON(processTaskSlaList));
 		return this;
 	}
 }
