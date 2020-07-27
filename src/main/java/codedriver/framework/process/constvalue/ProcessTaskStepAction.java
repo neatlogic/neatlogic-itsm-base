@@ -48,14 +48,14 @@ public enum ProcessTaskStepAction {
 	EDITCOMMENT("editcomment", "编辑回复"),
 	DELETECOMMENT("deletecomment", "删除回复"),
 	CREATESUBTASK("createsubtask", "创建子任务"),
-	EDITSUBTASK("editsubtask", "编辑子任务"),
-	ABORTSUBTASK("abortsubtask", "取消子任务"),
-	REDOSUBTASK("redosubtask", "打回重做子任务"),
-	COMPLETESUBTASK("completesubtask", "完成子任务"),
+	EDITSUBTASK("editsubtask", "编辑"),
+	ABORTSUBTASK("abortsubtask", "取消"),
+	REDOSUBTASK("redosubtask", "重做"),
+	COMPLETESUBTASK("completesubtask", "完成"),
 	/**
 	 * 只有子任务创建人和处理人有回复子任务权限
 	 */
-	COMMENTSUBTASK("commentsubtask", "回复子任务"),
+	COMMENTSUBTASK("commentsubtask", "评论"),
 	/**
 	 * 催办
 	 * 被授权的对象可在该步骤处于‘待处理’或‘进行中’时催办，如果同时有多个“待处理”或‘进行中’的步骤，则将每个步骤中配置的授权对象取并集，配置的对象都有权限进行催办操作，无论是查看页面还是处理页面，处理人还是非处理人，有权限的用户就能看到该按钮，否则按钮不显示；
