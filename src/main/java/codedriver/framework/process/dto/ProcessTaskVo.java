@@ -82,6 +82,8 @@ public class ProcessTaskVo {
 	
 	private transient Boolean isAutoGenerateId = true;
 	
+	private Object handlerStepInfo;
+	
 	public ProcessTaskVo() {
 
 	}
@@ -363,6 +365,14 @@ public class ProcessTaskVo {
 
 	public void setOwnerCompanyList(List<TeamVo> ownerCompanyList) {
 		this.ownerCompanyList = ownerCompanyList;
+	}
+
+	public Object getHandlerStepInfo() {
+		return handlerStepInfo;
+	}
+
+	public void setHandlerStepInfo(Object handlerStepInfo) {
+		this.handlerStepInfo = handlerStepInfo;
 	}
 
 }
