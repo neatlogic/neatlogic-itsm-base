@@ -1371,6 +1371,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskStepAction.STARTPROCESS);
 			DataValid.formAttributeDataValid(currentProcessTaskStepVo);
 			DataValid.baseInfoValid(currentProcessTaskStepVo);
+			DataValid.assignWorkerValid(currentProcessTaskStepVo);
 			myStartProcess(currentProcessTaskStepVo);
 			// 获取表单数据
 			List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());

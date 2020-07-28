@@ -1418,7 +1418,13 @@ public abstract class ProcessStepHandlerUtilBase {
 	}
 
 	protected static class DataValid {
-
+		/**
+		 * 
+		* @Time:2020年7月28日
+		* @Description: 验证表单数据是否合法
+		* @param currentProcessTaskStepVo
+		* @return boolean
+		 */
 		public static boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo) {
 
 			ProcessTaskFormVo processTaskFormVo = processTaskMapper.getProcessTaskFormByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
@@ -1493,7 +1499,13 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 			return true;
 		}
-		
+		/**
+		 * 
+		* @Time:2020年7月28日
+		* @Description: 验证基本信息数据是否合法
+		* @param currentProcessTaskStepVo
+		* @return boolean
+		 */
 		public static boolean baseInfoValid(ProcessTaskStepVo currentProcessTaskStepVo) {
 			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
@@ -1549,7 +1561,13 @@ public abstract class ProcessStepHandlerUtilBase {
 			currentProcessTaskStepVo.setParamObj(paramObj);
 			return true;
 		}
-		
+		/**
+		 * 
+		* @Time:2020年7月28日
+		* @Description: 验证前置步骤指派处理人是否合法
+		* @param currentProcessTaskStepVo
+		* @return boolean
+		 */
 		public static boolean assignWorkerValid(ProcessTaskStepVo currentProcessTaskStepVo) {
 			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 			//前置步骤指派处理人
