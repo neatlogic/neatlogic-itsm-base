@@ -106,6 +106,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	//@EntityField(name = "当前子任务Id", type = ApiParamType.LONG)
 	private transient Long currentSubtaskId;
 	
+	private Object handlerStepInfo;
+	
 	public ProcessTaskStepVo() {
 
 	}
@@ -647,6 +649,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setCurrentSubtaskId(Long currentSubtaskId) {
 		this.currentSubtaskId = currentSubtaskId;
+	}
+
+	public Object getHandlerStepInfo() {
+		return handlerStepInfo;
+	}
+
+	public void setHandlerStepInfo(Object handlerStepInfo) {
+		this.handlerStepInfo = handlerStepInfo;
 	}
 
 }

@@ -46,6 +46,7 @@ import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskConvergeVo;
+import codedriver.framework.process.dto.ProcessTaskFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
@@ -1273,6 +1274,36 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		}
 		try {
 
+			/** 更新工单信息 **/
+			ProcessTaskVo processTaskVo = new ProcessTaskVo();
+			processTaskVo.setId(currentProcessTaskStepVo.getProcessTaskId());
+			processTaskVo.setTitle(paramObj.getString("title"));
+			processTaskVo.setOwner(paramObj.getString("owner"));
+			processTaskVo.setPriorityUuid(paramObj.getString("priorityUuid"));
+			processTaskMapper.updateProcessTaskTitleOwnerPriorityUuid(processTaskVo);
+
+			/** 保存描述内容 **/
+			String content = paramObj.getString("content");
+			if (StringUtils.isNotBlank(content)) {
+				ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
+				processTaskMapper.replaceProcessTaskContent(contentVo);
+				processTaskMapper.replaceProcessTaskStepContent(new ProcessTaskStepContentVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), contentVo.getHash()));
+			}
+
+			/** 保存附件uuid **/
+			ProcessTaskFileVo processTaskFileVo = new ProcessTaskFileVo();
+			processTaskFileVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+			processTaskFileVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+			processTaskMapper.deleteProcessTaskFile(processTaskFileVo);
+			
+			List<Long> fileIdList = JSON.parseArray(JSON.toJSONString(paramObj.getJSONArray("fileIdList")), Long.class);
+			if(CollectionUtils.isNotEmpty(fileIdList)) {
+				for (Long fileId : fileIdList) {
+					processTaskFileVo.setFileId(fileId);
+					processTaskMapper.insertProcessTaskFile(processTaskFileVo);
+				}
+			}
+			
 			// 组件联动导致隐藏的属性uuid列表
 			ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
 			processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());

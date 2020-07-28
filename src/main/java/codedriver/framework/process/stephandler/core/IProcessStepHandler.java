@@ -387,5 +387,5 @@ public interface IProcessStepHandler {
 	* @param @return 
 	* @return Object
 	 */
-	public Object handlerStepInfo(Long processTaskStepId);
+	public Object getHandlerStepInfo(Long processTaskStepId);
 }
