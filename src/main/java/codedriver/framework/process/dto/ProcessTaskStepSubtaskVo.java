@@ -53,15 +53,15 @@ public class ProcessTaskStepSubtaskVo {
 	@EntityField(name = "步骤主处理人", type = ApiParamType.STRING)
 	private String majorUser;
 	
-//	@EntityField(name = "是否可编辑", type = ApiParamType.INTEGER)
+	@EntityField(name = "是否可编辑", type = ApiParamType.INTEGER)
 	private Integer isEditable;
-//	@EntityField(name = "是否可取消", type = ApiParamType.INTEGER)
+	@EntityField(name = "是否可取消", type = ApiParamType.INTEGER)
 	private Integer isAbortable;
-//	@EntityField(name = "是否可打回重做", type = ApiParamType.INTEGER)
+	@EntityField(name = "是否可打回重做", type = ApiParamType.INTEGER)
 	private Integer isRedoable;
-//	@EntityField(name = "是否可完成", type = ApiParamType.INTEGER)
+	@EntityField(name = "是否可完成", type = ApiParamType.INTEGER)
 	private Integer isCompletable;
-//	@EntityField(name = "是否可回复", type = ApiParamType.INTEGER)
+	@EntityField(name = "是否可回复", type = ApiParamType.INTEGER)
 	private Integer isCommentable;
 	
 	@EntityField(name = "超时时长", type = ApiParamType.LONG)
