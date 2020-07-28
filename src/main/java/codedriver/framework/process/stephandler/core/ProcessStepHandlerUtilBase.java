@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -74,6 +75,7 @@ import codedriver.framework.process.dao.mapper.ProcessTaskStepDataMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
 import codedriver.framework.process.dto.ActionVo;
+import codedriver.framework.process.dto.ChannelPriorityVo;
 import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.FormAttributeVo;
@@ -1486,6 +1488,62 @@ public abstract class ProcessStepHandlerUtilBase {
 					throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
 				}
 			}
+			return true;
+		}
+		
+		public static boolean baseInfoValid(ProcessTaskStepVo currentProcessTaskStepVo) {
+			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
+			if(processTaskVo.getTitle() == null) {
+				throw new ProcessTaskRuntimeException("工单标题格式不能为空");
+			}
+			Pattern titlePattern = Pattern.compile("^[A-Za-z_\\d\\u4e00-\\u9fa5]+$");
+			if (!titlePattern.matcher(processTaskVo.getTitle()).matches()) {
+				throw new ProcessTaskRuntimeException("工单标题格式不对");
+			}
+			paramObj.put(ProcessTaskAuditDetailType.TITLE.getParamName(), processTaskVo.getTitle());
+			if (StringUtils.isBlank(processTaskVo.getOwner())) {
+				throw new ProcessTaskRuntimeException("工单请求人不能为空");
+			}
+			if (userMapper.getUserBaseInfoByUuid(processTaskVo.getOwner()) == null) {
+				throw new ProcessTaskRuntimeException("工单请求人账号:'" + processTaskVo.getOwner() + "'不存在");
+			}
+			if (StringUtils.isBlank(processTaskVo.getPriorityUuid())) {
+				throw new ProcessTaskRuntimeException("工单优先级不能为空");
+			}
+			List<ChannelPriorityVo> channelPriorityList = channelMapper.getChannelPriorityListByChannelUuid(processTaskVo.getChannelUuid());
+			List<String> priorityUuidlist = new ArrayList<>(channelPriorityList.size());
+			for (ChannelPriorityVo channelPriorityVo : channelPriorityList) {
+				priorityUuidlist.add(channelPriorityVo.getPriorityUuid());
+			}
+			if (!priorityUuidlist.contains(processTaskVo.getPriorityUuid())) {
+				throw new ProcessTaskRuntimeException("工单优先级与服务优先级级不匹配");
+			}
+			paramObj.put(ProcessTaskAuditDetailType.PRIORITY.getParamName(), processTaskVo.getPriorityUuid());
+
+			// 获取上报描述内容
+			List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentProcessTaskStepId(currentProcessTaskStepVo.getId());
+			if (CollectionUtils.isNotEmpty(processTaskStepContentList)) {
+				ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(processTaskStepContentList.get(0).getContentHash());
+				if(processTaskContentVo != null) {
+					paramObj.put(ProcessTaskAuditDetailType.CONTENT.getParamName(), processTaskContentVo.getContent());
+				}
+			}
+			ProcessTaskFileVo processTaskFileVo = new ProcessTaskFileVo();
+			processTaskFileVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+			processTaskFileVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+			List<ProcessTaskFileVo> processTaskFileList = processTaskMapper.searchProcessTaskFile(processTaskFileVo);
+			if (processTaskFileList.size() > 0) {
+				List<Long> fileIdList = new ArrayList<>();
+				for (ProcessTaskFileVo processTaskFile : processTaskFileList) {
+					if (fileMapper.getFileById(processTaskFile.getFileId()) == null) {
+						throw new ProcessTaskRuntimeException("上传附件uuid:'" + processTaskFile.getFileId() + "'不存在");
+					}
+					fileIdList.add(processTaskFile.getFileId());
+				}
+				paramObj.put(ProcessTaskAuditDetailType.FILE.getParamName(), JSON.toJSONString(fileIdList));
+			}
+			currentProcessTaskStepVo.setParamObj(paramObj);
 			return true;
 		}
 	}
