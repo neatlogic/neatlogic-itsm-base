@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -66,6 +68,9 @@ public class ProcessTaskStepSubtaskVo {
 	private Long timeout;
 	@EntityField(name = "超时时长描述", type = ApiParamType.STRING)
 	private String timeoutDesc;
+	
+	@EntityField(name = "权限操作按钮列表", type = ApiParamType.JSONARRAY)
+	private List<ValueTextVo> actionList = new ArrayList<>();
 	
 	private transient JSONObject paramObj;
 	
@@ -311,6 +316,14 @@ public class ProcessTaskStepSubtaskVo {
 	public void setTimeoutDesc(String timeoutDesc) {
 		this.timeoutDesc = timeoutDesc;
 	}
+	
+	public List<ValueTextVo> getActionList() {
+		return actionList;
+	}
+	public void setActionList(List<ValueTextVo> actionList) {
+		this.actionList = actionList;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
