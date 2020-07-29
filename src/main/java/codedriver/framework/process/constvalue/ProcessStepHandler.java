@@ -9,7 +9,7 @@ public enum ProcessStepHandler {
 	OCTOPUS("octopus","process","自动化"),
 	AUTOMATIC("automatic", "process", "自动处理"),
 	CHANGECREATE("changecreate", "process", "变更创建"),
-	CHANGEHANDLE("changehandle", "process", "变更处理")
+	CHANGEHANDLE("changehandle", "process", "变更处理") 
 	;
 
 	private String handler;
