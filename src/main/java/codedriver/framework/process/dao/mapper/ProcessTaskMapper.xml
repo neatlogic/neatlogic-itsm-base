@@ -1924,6 +1924,9 @@
 			<if test="uuid != null and uuid != ''">
 			AND `uuid` = #{uuid}
 			</if>
+			<if test="userType != null and userType != ''">
+			AND `user_type` = #{userType}
+			</if>
 		</where>
 	</delete>
 

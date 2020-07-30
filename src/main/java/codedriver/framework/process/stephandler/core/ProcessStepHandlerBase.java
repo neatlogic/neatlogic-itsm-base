@@ -892,15 +892,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			myRecover(currentProcessTaskStepVo);
 			currentProcessTaskStepVo.setIsActive(1);
 			/** 如果已经存在过处理人，则继续使用旧处理人，否则重新分派 **/
+			List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 			List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
 			if (oldUserList.size() > 0) {
-				for (ProcessTaskStepUserVo oldUserVo : oldUserList) {
-					processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(), ProcessUserType.MAJOR.getValue()));
-				}
-			} else {
-				/** 分配处理人 **/
+				ProcessTaskStepUserVo oldUserVo = oldUserList.get(0);
+				workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(), ProcessUserType.MAJOR.getValue()));
+			}else {
 				try {
-					assign(currentProcessTaskStepVo);
+					myAssign(currentProcessTaskStepVo, workerList);
 				} catch (ProcessTaskException e) {
 					logger.error(e.getMessage(), e);
 					currentProcessTaskStepVo.setIsActive(-1);
@@ -908,6 +907,26 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					currentProcessTaskStepVo.setError(e.getMessage());
 				}
 			}
+			for(ProcessTaskStepWorkerVo worker : workerList) {
+				processTaskMapper.insertProcessTaskStepWorker(worker);
+			}
+			
+//			List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+//			if (oldUserList.size() > 0) {
+//				for (ProcessTaskStepUserVo oldUserVo : oldUserList) {
+//					processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(), ProcessUserType.MAJOR.getValue()));
+//				}
+//			} else {
+//				/** 分配处理人 **/
+//				try {
+//					assign(currentProcessTaskStepVo);
+//				} catch (ProcessTaskException e) {
+//					logger.error(e.getMessage(), e);
+//					currentProcessTaskStepVo.setIsActive(-1);
+//					currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
+//					currentProcessTaskStepVo.setError(e.getMessage());
+//				}
+//			}
 
 			/** 修改步骤状态 **/
 			processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
