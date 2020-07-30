@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.notify.dto.NotifyPolicyInvokerVo;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.process.constvalue.OperationType;
@@ -255,12 +256,17 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	@Override
 	public final int assign(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException {
 		/** 清空处理人 **/
-		List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
-		List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-		myAssign(currentProcessTaskStepVo, workerList, userList);
+		List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();		
+		/** 如果已经存在过处理人，则继续使用旧处理人，否则启用分派 **/
+		List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+		if (oldUserList.size() > 0) {
+			ProcessTaskStepUserVo oldUserVo = oldUserList.get(0);
+			workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(), ProcessUserType.MAJOR.getValue()));
+		}
+		int autoStart = myAssign(currentProcessTaskStepVo, workerList);
 
 		processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
-		if (workerList.size() > 0) {
+		if (CollectionUtils.isNotEmpty(workerList)) {
 			for (ProcessTaskStepWorkerVo workerVo : workerList) {
 				processTaskMapper.insertProcessTaskStepWorker(workerVo);
 			}
@@ -272,9 +278,21 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		processTaskStepUserVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 		processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());// 只删除主处理人人
 		processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
-		if (userList.size() > 0) {
-			for (ProcessTaskStepUserVo userVo : userList) {
+		
+		/** 当只分配到一个用户时，自动设置为处理人，不需要抢单 **/
+		if (workerList.size() == 1) {
+			if (StringUtils.isNotBlank(workerList.get(0).getUuid()) && GroupSearch.USER.getValue().equals(workerList.get(0).getType())) {
+				ProcessTaskStepUserVo userVo = new ProcessTaskStepUserVo();
+				userVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+				userVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+				userVo.setUserUuid(workerList.get(0).getUuid());
+				UserVo user = userMapper.getUserBaseInfoByUuid(workerList.get(0).getUuid());
+				userVo.setUserName(user.getUserName());
 				processTaskMapper.insertProcessTaskStepUser(userVo);
+				/** 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
+				if (autoStart == 1) {
+					currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
+				}			
 			}
 		}
 		/** 触发通知 **/
@@ -284,8 +302,16 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.ASSIGN);
 		return 1;
 	}
-
-	protected abstract int myAssign(ProcessTaskStepVo currentProcessTaskStepVo, List<ProcessTaskStepWorkerVo> workerList, List<ProcessTaskStepUserVo> userList) throws ProcessTaskException;
+	/**
+	 * 
+	* @Time:2020年7月29日
+	* @Description: 子类分配处理人
+	* @param currentProcessTaskStepVo
+	* @param workerList
+	* @throws ProcessTaskException 
+	* @return int 返回值为1时代表配置了自动开始处理，0时代表配置了不自动开始处理
+	 */
+	protected abstract int myAssign(ProcessTaskStepVo currentProcessTaskStepVo, List<ProcessTaskStepWorkerVo> workerList) throws ProcessTaskException;
 
 	/**
 	 * hang操作原则上不允许出现任何异常，所有异常都必须解决以便流程可以顺利挂起，否则流程可能会卡死在某个节点不能前进或后退
