@@ -13,7 +13,6 @@ import codedriver.framework.process.constvalue.OperationType;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.dto.ProcessStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -284,10 +283,11 @@ public interface IProcessStepHandler {
 	 * 
 	 * @Description: 子任务状态发生变化后，对子任务处理人的在
 	 *               processtask_step_worker表和processtask_step_user表的数据做对应的变化
-	 * @param currentProcessTaskStepVo
+	 * @param processTaskId
+	 * @param processTaskStepId
 	 * @return void
 	 */
-	public void updateProcessTaskStepUserAndWorker(List<ProcessTaskStepWorkerVo> workerList, List<ProcessTaskStepUserVo> userList);
+	public void updateProcessTaskStepUserAndWorker(Long processTaskId, Long processTaskStepId);
 
 	/**
 	 * 

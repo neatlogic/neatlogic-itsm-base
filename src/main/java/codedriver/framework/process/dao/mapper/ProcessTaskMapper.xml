@@ -304,7 +304,7 @@
 		`processtask_step_id` as processTaskStepId,
 		`user_uuid` as userUuid,
 		`user_type` as userType,
-		`user_name` as userName,
+		(SELECT `user_name` from `user` WHERE `uuid` = `user_uuid`) as userName,
 		`status` as status,
 		`action`,
 		`start_time` AS startTime,
@@ -1923,6 +1923,9 @@
 			</if>
 			<if test="uuid != null and uuid != ''">
 			AND `uuid` = #{uuid}
+			</if>
+			<if test="userType != null and userType != ''">
+			AND `user_type` = #{userType}
 			</if>
 		</where>
 	</delete>
