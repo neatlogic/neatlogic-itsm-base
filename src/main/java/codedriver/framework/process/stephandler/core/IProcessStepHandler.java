@@ -288,7 +288,6 @@ public interface IProcessStepHandler {
 	 * @return void
 	 */
 	public void updateProcessTaskStepUserAndWorker(Long processTaskId, Long processTaskStepId);
-//	public void updateProcessTaskStepUserAndWorker(List<ProcessTaskStepWorkerVo> workerList, List<ProcessTaskStepUserVo> userList);
 
 	/**
 	 * 
