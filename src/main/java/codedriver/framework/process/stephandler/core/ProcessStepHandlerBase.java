@@ -910,7 +910,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			for(ProcessTaskStepWorkerVo worker : workerList) {
 				processTaskMapper.insertProcessTaskStepWorker(worker);
 			}
-			
+			updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
 //			List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
 //			if (oldUserList.size() > 0) {
 //				for (ProcessTaskStepUserVo oldUserVo : oldUserList) {
