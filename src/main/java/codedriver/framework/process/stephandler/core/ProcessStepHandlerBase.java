@@ -652,7 +652,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
 				/** 流转到下一步 **/
-				List<ProcessTaskStepVo> nextStepList = getNext(currentProcessTaskStepVo);
+				Set<ProcessTaskStepVo> nextStepList = getNext(currentProcessTaskStepVo);
 				if (nextStepList.size() > 0) {
 					for (ProcessTaskStepVo nextStep : nextStepList) {
 						IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
@@ -1451,7 +1451,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 			
 			/** 流转到下一步 **/
-			List<ProcessTaskStepVo> nextStepList = getNext(currentProcessTaskStepVo);
+			Set<ProcessTaskStepVo> nextStepList = getNext(currentProcessTaskStepVo);
 			for (ProcessTaskStepVo nextStep : nextStepList) {
 				IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
 				nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
@@ -1482,17 +1482,18 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	protected abstract int myStartProcess(ProcessTaskStepVo processTaskStepVo) throws ProcessTaskException;
 
 	@Override
-	public final List<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo) {
+	public final Set<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo) {
 		List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
 		// 重置所有关系状态为-1
 		for (ProcessTaskStepRelVo rel : relList) {
 			processTaskMapper.updateProcessTaskStepRelIsHit(rel.getFromProcessTaskStepId(), rel.getToProcessTaskStepId(), -1);
 		}
 		currentProcessTaskStepVo.setRelList(relList);
-
-		List<ProcessTaskStepVo> nextStepList = null;
+		Long nextStepId = currentProcessTaskStepVo.getParamObj().getLong("nextStepId");
+		List<ProcessTaskStepVo> nextStepList = processTaskMapper.getToProcessTaskStepByFromIdAndType(currentProcessTaskStepVo.getId(),null);
+		Set<ProcessTaskStepVo> nextStepSet = null;
 		try {
-			nextStepList = myGetNext(currentProcessTaskStepVo);
+			nextStepSet = myGetNext(currentProcessTaskStepVo, nextStepList, nextStepId);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 			if (ex.getMessage() != null && !ex.getMessage().equals("")) {
@@ -1502,26 +1503,26 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 		}
-		if (nextStepList != null && nextStepList.size() > 0) {
-			Iterator<ProcessTaskStepVo> stepIter = nextStepList.iterator();
-			Set<Long> checkSet = new HashSet<Long>();
-			while (stepIter.hasNext()) {// 去掉重复的路径
-				ProcessTaskStepVo step = stepIter.next();
-				if (!checkSet.contains(step.getId())) {
-					checkSet.add(step.getId());
-				} else {
-					stepIter.remove();
-				}
-			}
-		}
+//		if (nextStepList != null && nextStepList.size() > 0) {
+//			Iterator<ProcessTaskStepVo> stepIter = nextStepList.iterator();
+//			Set<Long> checkSet = new HashSet<Long>();
+//			while (stepIter.hasNext()) {// 去掉重复的路径
+//				ProcessTaskStepVo step = stepIter.next();
+//				if (!checkSet.contains(step.getId())) {
+//					checkSet.add(step.getId());
+//				} else {
+//					stepIter.remove();
+//				}
+//			}
+//		}
 		/** 更新路径isHit=1，在active方法里需要根据isHit状态判断路径是否经通过 **/
-		if (nextStepList == null) {
-			nextStepList = new ArrayList<>();
+		if (nextStepSet == null) {
+			nextStepSet = new HashSet<>();
 		}
-		for (ProcessTaskStepVo stepVo : nextStepList) {
+		for (ProcessTaskStepVo stepVo : nextStepSet) {
 			processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), stepVo.getId(), 1);
 		}
-		return nextStepList;
+		return nextStepSet;
 	}
 
 	private void resetConvergeInfo(ProcessTaskStepVo nextStepVo) {
@@ -1586,7 +1587,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		}
 	}
 
-	protected abstract List<ProcessTaskStepVo> myGetNext(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
+	protected abstract Set<ProcessTaskStepVo> myGetNext(ProcessTaskStepVo currentProcessTaskStepVo, List<ProcessTaskStepVo> nextStepList, Long nextStepId) throws ProcessTaskException;
 
 	protected synchronized static void doNext(ProcessStepThread thread) {
 		if (!TransactionSynchronizationManager.isSynchronizationActive()) {
