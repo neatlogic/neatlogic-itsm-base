@@ -778,7 +778,7 @@
 	<if test="userUuid != null and userUuid != ''">
 	AND psa.`user_uuid` = #{userUuid} 
 	</if>
-	ORDER BY psa.`id` ASC
+	ORDER BY psa.`id` DESC
 	</select>
 	
 	<select id="getProcessTaskStepAuditById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
