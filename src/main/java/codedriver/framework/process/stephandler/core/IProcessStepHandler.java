@@ -234,9 +234,9 @@ public interface IProcessStepHandler {
 	 * @Time:Aug 5, 2019
 	 * @Description: 获取当前步骤满足流转条件的后置步骤
 	 * @param @return
-	 * @return List<ProcessTaskStepVo>
+	 * @return Set<ProcessTaskStepVo>
 	 */
-	public List<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo);
+	public Set<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo);
 
 	/**
 	 * @Author:

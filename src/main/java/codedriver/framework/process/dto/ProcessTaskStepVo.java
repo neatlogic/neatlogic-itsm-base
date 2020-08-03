@@ -167,10 +167,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public int hashCode() {
 		int result = 0;
 		if (getId() != null) {
-			result += getId().hashCode() * 7;
-		}
-		if (getProcessStepUuid() != null) {
-			result += getProcessStepUuid().hashCode() * 11;
+			result += getId().hashCode() * 37;
 		}
 		return result;
 	}
