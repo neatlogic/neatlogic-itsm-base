@@ -121,6 +121,7 @@ public class WorkcenterFieldBuilder {
 			 stepJson.put("name", step.getName());
 			 stepJson.put("status", step.getStatus());
 			 stepJson.put("type", step.getType());
+			 stepJson.put("handler", step.getHandler());
 			 stepJson.put("isactive", step.getIsActive());
 			 stepJson.put("usertypelist", userTypeArray);
 			 //已激活未开始
