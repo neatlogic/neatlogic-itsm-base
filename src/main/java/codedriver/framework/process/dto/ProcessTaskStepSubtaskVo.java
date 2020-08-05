@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
@@ -71,6 +72,9 @@ public class ProcessTaskStepSubtaskVo {
 	
 	@EntityField(name = "权限操作按钮列表", type = ApiParamType.JSONARRAY)
 	private List<ValueTextVo> actionList = new ArrayList<>();
+	
+	@EntityField(name = "处理人", type = ApiParamType.STRING)
+	private String workerList;
 	
 	private transient JSONObject paramObj;
 	
@@ -324,6 +328,15 @@ public class ProcessTaskStepSubtaskVo {
 		this.actionList = actionList;
 	}
 	
+	public String getWorkerList() {
+		if(StringUtils.isBlank(workerList) && StringUtils.isNotBlank(userUuid)) {
+			workerList = GroupSearch.USER.getValuePlugin() + userUuid;
+		}
+		return workerList;
+	}
+	public void setWorkerList(String workerList) {
+		this.workerList = workerList;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
