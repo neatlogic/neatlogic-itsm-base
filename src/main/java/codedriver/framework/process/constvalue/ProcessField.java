@@ -2,6 +2,7 @@ package codedriver.framework.process.constvalue;
 
 public enum ProcessField {
 	ID("id", "工单号"),
+	STEPID("stepid", "步骤id"),
 	TITLE("title", "标题"),
 	CHANNELTYPE("channeltype", "服务类型"),
 	CONTENT("content", "上报内容"),

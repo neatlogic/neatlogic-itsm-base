@@ -286,6 +286,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							List<ParamMappingVo> paramMappingList = JSON.parseArray(actionObj.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
 							if (CollectionUtils.isNotEmpty(paramMappingList)) {
 								ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
+								processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 								JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 								for (ParamMappingVo paramMappingVo : paramMappingList) {
 									if (ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
@@ -438,6 +439,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						}
 						if(MapUtils.isNotEmpty(policyConfig)) {
 							ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
+							processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 							JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 							JSONObject templateParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
 							Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
@@ -668,6 +670,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			if (slaList != null && slaList.size() > 0) {
 				long now = System.currentTimeMillis();
 				ProcessTaskVo processTaskVo = ProcessTaskHandlerUtil.getProcessTaskDetailInfoById(currentProcessTaskStepVo.getProcessTaskId());
+				processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 				String worktimeUuid = processTaskVo.getWorktimeUuid();
 				for (ProcessTaskSlaVo slaVo : slaList) {
 					/** 如果没有超时时间，证明第一次进入SLA标签范围，开始计算超时时间 **/
