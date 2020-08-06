@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -159,7 +160,24 @@ public class WorkcenterFieldBuilder {
 	}
 	public WorkcenterFieldBuilder setExpiredTime(List<ProcessTaskSlaVo> processTaskSlaList) {
 		for(ProcessTaskSlaVo processTaskSlaVo:processTaskSlaList) {
-			processTaskSlaVo.setConfig(null); //es 同一个key 不支持存储不同类型的value
+			JSONObject configJson = processTaskSlaVo.getConfigObj();
+			JSONObject expireTimeConifg = new JSONObject();
+			if(configJson.containsKey("notifyPolicyList")&&CollectionUtils.isNotEmpty(configJson.getJSONArray("notifyPolicyList"))) {
+				JSONArray notifyPolicyList = configJson.getJSONArray("notifyPolicyList");
+				Integer time = -1;
+				for(int i =0;i<notifyPolicyList.size();i++) {
+					JSONObject notifyPolicyJson = notifyPolicyList.getJSONObject(i);
+					if(notifyPolicyJson.getString("expression").equals("before")) {
+						if(time == -1|| time > notifyPolicyJson.getIntValue("time")) {
+							time = notifyPolicyJson.getIntValue("time");
+						}
+					}
+				}
+				expireTimeConifg.put("willOverTimeRule", time);
+			}
+			processTaskSlaVo.setConfig(expireTimeConifg.toJSONString()); //es 同一个key 不支持存储不同类型的value,所以存处理过的数据结构
+			processTaskSlaVo.setConfigObj(expireTimeConifg); //es 同一个key 不支持存储不同类型的value,所以存处理过的数据结构
+			
 		}
 		dataJson.put(ProcessWorkcenterField.EXPIRED_TIME.getValue(), JSONArray.toJSON(processTaskSlaList));
 		return this;
