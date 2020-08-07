@@ -2,6 +2,7 @@ package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.dto.AuthorityVo;
@@ -14,6 +15,8 @@ public interface ChannelMapper {
 	public int searchChannelCount(ChannelVo channelVo);
 
 	public List<ChannelVo> searchChannelList(ChannelVo channelVo);
+
+	public List<ValueTextVo> searchChannelListForSelect(ChannelVo channelVo);
 
 	public ChannelVo getChannelByUuid(String channelUuid);
 	
