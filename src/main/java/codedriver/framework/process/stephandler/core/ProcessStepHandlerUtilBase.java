@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -1515,10 +1514,11 @@ public abstract class ProcessStepHandlerUtilBase {
 			if(processTaskVo.getTitle() == null) {
 				throw new ProcessTaskRuntimeException("工单标题格式不能为空");
 			}
-			Pattern titlePattern = Pattern.compile("^[A-Za-z_\\d\\u4e00-\\u9fa5]+$");
-			if (!titlePattern.matcher(processTaskVo.getTitle()).matches()) {
-				throw new ProcessTaskRuntimeException("工单标题格式不对");
-			}
+			/* 标题不限制输入
+			 * Pattern titlePattern = Pattern.compile("^[A-Za-z_\\d\\u4e00-\\u9fa5]+$"); if
+			 * (!titlePattern.matcher(processTaskVo.getTitle()).matches()) { throw new
+			 * ProcessTaskRuntimeException("工单标题格式不对"); }
+			 */
 			paramObj.put(ProcessTaskAuditDetailType.TITLE.getParamName(), processTaskVo.getTitle());
 			if (StringUtils.isBlank(processTaskVo.getOwner())) {
 				throw new ProcessTaskRuntimeException("工单请求人不能为空");
