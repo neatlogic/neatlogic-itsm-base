@@ -157,10 +157,8 @@
 
 	<select id="searchMatrixForSelect" parameterType="codedriver.framework.process.dto.ProcessMatrixVo" resultType="codedriver.framework.common.dto.ValueTextVo">
 		SELECT
-		a.`uuid` as `value`,
-		a.`name` as `text`
-		FROM (
-		SELECT `id`,`uuid`,`name`
+		`uuid` as `value`,
+		`name` as `text`
 		FROM `process_matrix`
 		<where>
 			<if test="type != null and type != ''">
@@ -170,12 +168,10 @@
 				AND `name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
-		ORDER BY `id` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
-		) a
-		ORDER BY a.`id` DESC
+		ORDER BY `id` DESC
 	</select>
 
 	<select id="getMatrixDispatcherByMatrixUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessMatrixDispatcherVo">
