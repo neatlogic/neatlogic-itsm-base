@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import com.alibaba.fastjson.JSONObject;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.restful.annotation.EntityField;
@@ -13,6 +15,8 @@ public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepA
 	private String oldContent;
 	@EntityField(name = "新内容", type = ApiParamType.STRING)
 	private String newContent;
+	
+	private transient JSONObject paramObj = new JSONObject();
 
 	public ProcessTaskStepAuditDetailVo() {
 
@@ -60,6 +64,14 @@ public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepA
 	@Override
 	public int compareTo(ProcessTaskStepAuditDetailVo auditDetail) {
 		return Integer.compare(ProcessTaskAuditDetailType.getSort(type), ProcessTaskAuditDetailType.getSort(auditDetail.getType()));
+	}
+
+	public JSONObject getParamObj() {
+		return paramObj;
+	}
+
+	public void setParamObj(JSONObject paramObj) {
+		this.paramObj = paramObj;
 	}
 
 }

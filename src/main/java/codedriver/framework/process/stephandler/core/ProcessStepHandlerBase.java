@@ -700,11 +700,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						}
 					});
 				}
-				if(StringUtils.isNotBlank(currentProcessTaskStepVo.getError())) {
-					currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CAUSE.getParamName(), currentProcessTaskStepVo.getError());
-				}
-				/** 处理历史记录 **/
-				AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.getProcessTaskAuditType(processTaskStepAction.getValue()));
+				
+				myCompleteAudit(currentProcessTaskStepVo);
 			}
 			if (this.getMode().equals(ProcessStepMode.MT)) {
 				/** 写入时间审计 **/
@@ -719,6 +716,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 	protected abstract int myComplete(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
 
+	protected abstract int myCompleteAudit(ProcessTaskStepVo currentProcessTaskStepVo);
+	
 	@Override
 	public final int retreat(ProcessTaskStepVo currentProcessTaskStepVo) {
 		try {

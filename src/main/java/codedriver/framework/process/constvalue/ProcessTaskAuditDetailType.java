@@ -13,7 +13,13 @@ public enum ProcessTaskAuditDetailType {
 	TASKSTEP("taskstep", "工单步骤", "nextStepId", "oldNextStepId", 8),
 	RESTFULACTION("restfulaction", "RESTFUL动作", "restfulAction", "oldRestfulAction", 9),
 	CAUSE("cause", "原因", "cause", "oldCause", 10),
-	RULE("rule", "流转规则", "rule", "oldRule", 11)
+	RULE("rule", "流转规则", "rule", "oldRule", 11),
+//	PLANSTARTENDTIME("planstartendtime", "计划起止时间", "planStartEndTime", "oldPlanStartEndTime", 12),
+//	PLANSTARTDATE("planstartdate", "计划开始日期", "planStartDate", "oldPlanStartDate", 13),
+//	TIMEWINDOW("timewindow", "时间窗口", "timeWindow", "oldTimeWindow", 14),
+//	CHANGEOWNER("changeowner", "变更经理", "changeOwner", "oldChangeOwner", 15)
+	CHANGE("change", "变更", "change", "oldChange", 12),
+	CHANGESTEP("changestep", "变更步骤", "changestep", "oldChangestep", 13)
 	;
 	
 	private String value;
