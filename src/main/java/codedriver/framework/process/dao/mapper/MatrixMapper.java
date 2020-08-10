@@ -1,5 +1,6 @@
 package codedriver.framework.process.dao.mapper;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.dto.ProcessMatrixDispatcherVo;
 import codedriver.framework.process.dto.ProcessMatrixFormComponentVo;
 import codedriver.framework.process.dto.ProcessMatrixVo;
@@ -17,7 +18,11 @@ public interface MatrixMapper {
 
     public ProcessMatrixVo getMatrixByUuid(String uuid);
 
+    public ValueTextVo getMatrixByUuidForSelect(String uuid);
+
     public List<ProcessMatrixVo> searchMatrix(ProcessMatrixVo matrixVo);
+
+    public List<ValueTextVo> searchMatrixForSelect(ProcessMatrixVo matrixVo);
 
 	public List<ProcessMatrixDispatcherVo> getMatrixDispatcherByMatrixUuid(String matrixUuid);
 
