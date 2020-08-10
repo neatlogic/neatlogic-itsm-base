@@ -274,6 +274,25 @@
 		</if>
 	</select>
 
+	<select id="searchChannelTypeListForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
+		SELECT
+		`uuid` as `value`,
+		`name` as `text`
+		FROM `channel_type`
+		<where>
+			<if test="keyword != null and keyword != ''">
+				AND `name` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="isActive != null">
+				AND `is_active` = #{isActive}
+			</if>
+		</where>
+		ORDER BY `sort` desc
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+
 	<select id="getChannelTypeByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelTypeVo" useCache="true">
 		SELECT
 		`uuid`,

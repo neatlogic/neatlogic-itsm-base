@@ -43,6 +43,27 @@
 		</if>
 	</select>
 
+	<select id="searchPriorityListForSelect" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
+		SELECT
+		p.`uuid` as `value`,
+		p.`name` as `text`
+		FROM `priority` p
+		<if test="channelUuid != null and channelUuid != ''">
+			JOIN `channel_priority` cp ON cp.`priority_uuid` = p.`uuid` AND cp.`channel_uuid` = #{channelUuid}
+		</if>
+		WHERE 1=1
+		<if test="keyword != null">
+			AND p.`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+			AND p.`is_active` = #{isActive}
+		</if>
+		ORDER BY p.`sort` DESC
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+
 	<select id="checkPriorityIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
 		SELECT COUNT(`uuid`) FROM `priority` WHERE `uuid`=#{uuid}
 	</select>

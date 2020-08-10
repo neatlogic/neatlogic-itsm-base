@@ -39,7 +39,9 @@ public interface ChannelMapper {
 	public int searchChannelTypeCount(ChannelTypeVo channelTypeVo);
 
 	public List<ChannelTypeVo> searchChannelTypeList(ChannelTypeVo channelTypeVo);
-	
+
+	public List<ValueTextVo> searchChannelTypeListForSelect(ChannelTypeVo channelTypeVo);
+
 	public ChannelTypeVo getChannelTypeByUuid(String uuid);
 
 	public int checkChannelTypeIsExists(String uuid);

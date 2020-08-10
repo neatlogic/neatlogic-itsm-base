@@ -2,6 +2,7 @@ package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.process.dto.PriorityVo;
@@ -11,6 +12,8 @@ public interface PriorityMapper {
 	public int searchPriorityCount(PriorityVo priorityVo);
 
 	public List<PriorityVo> searchPriorityList(PriorityVo priorityVo);
+
+	public List<ValueTextVo> searchPriorityListForSelect(PriorityVo priorityVo);
 
 	public int checkPriorityIsExists(String uuid);
 
