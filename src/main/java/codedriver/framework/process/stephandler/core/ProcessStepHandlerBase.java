@@ -28,11 +28,13 @@ import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.notify.dto.NotifyPolicyInvokerVo;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
+import codedriver.framework.process.constvalue.IProcessTaskAuditType;
 import codedriver.framework.process.constvalue.OperationType;
 import codedriver.framework.process.constvalue.ProcessStepHandler;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
+import codedriver.framework.process.constvalue.ProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.constvalue.ProcessTaskStepDataType;
@@ -512,7 +514,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		} finally {
 			/** 处理历史记录 **/
-			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.START);			
+			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.START);			
 		}
 		return 0;
 	}
@@ -702,7 +704,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CAUSE.getParamName(), currentProcessTaskStepVo.getError());
 				}
 				/** 处理历史记录 **/
-				AuditHandler.audit(currentProcessTaskStepVo, processTaskStepAction);
+				AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.getProcessTaskAuditType(processTaskStepAction.getValue()));
 			}
 			if (this.getMode().equals(ProcessStepMode.MT)) {
 				/** 写入时间审计 **/
@@ -785,7 +787,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		}finally{			
 			/** 处理历史记录 **/
-			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.RETREAT);		
+			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.RETREAT);		
 		}
 		return 1;
 	}
@@ -818,7 +820,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		/** 处理历史记录 **/
 		ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
 		processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
-		AuditHandler.audit(processTaskStepVo, ProcessTaskStepAction.ABORT);
+		AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.ABORT);
 
 		return 1;
 	}
@@ -876,7 +878,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		/** 处理历史记录 **/
 		ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
 		processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
-		AuditHandler.audit(processTaskStepVo, ProcessTaskStepAction.RECOVER);
+		AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.RECOVER);
 		return 1;
 	}
 
@@ -1081,7 +1083,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			updateProcessTaskStepStatus(processTaskStepVo);
 		} finally {
 			/** 处理历史记录 **/
-			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.TRANSFER);
+			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.TRANSFER);
 		}
 
 		return 0;
@@ -1473,7 +1475,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		} finally {
 			/** 处理历史记录 **/
-			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.STARTPROCESS);
+			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.STARTPROCESS);
 			
 		}
 		return 0;
@@ -1618,7 +1620,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	}
 
 	@Override
-	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action) {
+	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, IProcessTaskAuditType action) {
 		AuditHandler.audit(currentProcessTaskStepVo, action);
 	}
 
