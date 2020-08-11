@@ -1,25 +1,18 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessTaskAuditDetailType {
+public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 
 	CONTENT("content", "内容", "content", "oldContent", 1),
 	TITLE("title", "标题", "title", "oldTitle", 2),
 	PRIORITY("priority", "优先级", "priorityUuid", "oldPriorityUuid", 3),
 	FORM("form", "表单", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 4),
 	WORKER("worker", "处理人", "workerList", "oldWorkerList", 5),
-	//DATE("date", "期望时间", "targetTime", "oldTargetTime", 6),
 	SUBTASK("subtask", "子任务", "subtask", "oldSubtask", 6),
 	FILE("file", "上传文件", "fileIdList", "oldFileIdList", 7),
 	TASKSTEP("taskstep", "工单步骤", "nextStepId", "oldNextStepId", 8),
 	RESTFULACTION("restfulaction", "RESTFUL动作", "restfulAction", "oldRestfulAction", 9),
 	CAUSE("cause", "原因", "cause", "oldCause", 10),
-	RULE("rule", "流转规则", "rule", "oldRule", 11),
-//	PLANSTARTENDTIME("planstartendtime", "计划起止时间", "planStartEndTime", "oldPlanStartEndTime", 12),
-//	PLANSTARTDATE("planstartdate", "计划开始日期", "planStartDate", "oldPlanStartDate", 13),
-//	TIMEWINDOW("timewindow", "时间窗口", "timeWindow", "oldTimeWindow", 14),
-//	CHANGEOWNER("changeowner", "变更经理", "changeOwner", "oldChangeOwner", 15)
-	CHANGE("change", "变更", "change", "oldChange", 12),
-	CHANGESTEP("changestep", "变更步骤", "changestep", "oldChangestep", 13)
+	RULE("rule", "流转规则", "rule", "oldRule", 11)
 	;
 	
 	private String value;
@@ -56,44 +49,18 @@ public enum ProcessTaskAuditDetailType {
 		return sort;
 	}
 
-	public static String getValue(String _value) {
-		for (ProcessTaskAuditDetailType s : ProcessTaskAuditDetailType.values()) {
-			if (s.getValue().equals(_value)) {
-				return s.getValue();
-			}
-		}
-		return null;
-	}
 
 	public static String getText(String _value) {
-		for (ProcessTaskAuditDetailType s : ProcessTaskAuditDetailType.values()) {
+		for (ProcessTaskAuditDetailType s : values()) {
 			if (s.getValue().equals(_value)) {
 				return s.getText();
 			}
 		}
 		return "";
 	}
-	
-	public static String getParamName(String _value) {
-		for (ProcessTaskAuditDetailType s : ProcessTaskAuditDetailType.values()) {
-			if (s.getValue().equals(_value)) {
-				return s.getParamName();
-			}
-		}
-		return "";
-	}
-	
-	public static String getOldDataParamName(String _value) {
-		for (ProcessTaskAuditDetailType s : ProcessTaskAuditDetailType.values()) {
-			if (s.getValue().equals(_value)) {
-				return s.getOldDataParamName();
-			}
-		}
-		return "";
-	}
-	
+
 	public static int getSort(String _value) {
-		for (ProcessTaskAuditDetailType s : ProcessTaskAuditDetailType.values()) {
+		for (ProcessTaskAuditDetailType s : values()) {
 			if (s.getValue().equals(_value)) {
 				return s.getSort();
 			}

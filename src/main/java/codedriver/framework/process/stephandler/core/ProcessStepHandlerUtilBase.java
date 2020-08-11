@@ -53,7 +53,9 @@ import codedriver.framework.notify.dao.mapper.NotifyMapper;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.notify.dto.ParamMappingVo;
+import codedriver.framework.process.audithandler.core.ProcessTaskAuditDetailTypeFactory;
 import codedriver.framework.process.column.core.ProcessTaskUtil;
+import codedriver.framework.process.constvalue.IProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.IProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
@@ -1398,7 +1400,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				processTaskMapper.insertProcessTaskStepAudit(processTaskStepAuditVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				if (MapUtils.isNotEmpty(paramObj)) {
-					for (ProcessTaskAuditDetailType auditDetailType : ProcessTaskAuditDetailType.values()) {
+					for (IProcessTaskAuditDetailType auditDetailType : ProcessTaskAuditDetailTypeFactory.getAuditDetailTypeList()) {
 						String newDataHash = null;
 						String newData = paramObj.getString(auditDetailType.getParamName());
 						if (StringUtils.isNotBlank(newData)) {
