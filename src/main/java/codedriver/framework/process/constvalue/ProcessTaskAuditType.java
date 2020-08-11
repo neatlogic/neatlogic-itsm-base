@@ -1,5 +1,7 @@
 package codedriver.framework.process.constvalue;
 
+import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
+
 public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	COMMENT("comment", "回复", "回复【${DATA.processTaskStepName}】"),
 	EDITCOMMENT("editcomment", "编辑回复", "编辑回复【${DATA.processTaskStepName}】"),
@@ -13,7 +15,6 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	ABORTSUBTASK("abortsubtask", "取消子任务", "取消子任务【${DATA.processTaskStepName}】"),
 	REDOSUBTASK("redosubtask", "重做子任务", "重做子任务【${DATA.processTaskStepName}】"),
 	COMPLETESUBTASK("completesubtask", "完成子任务", "完成子任务【${DATA.processTaskStepName}】"),
-//	COMMENTSUBTASK("commentsubtask", "回复子任务", "回复子任务【${DATA.processTaskStepName}】"),
 	START("start", "开始", "开始【${DATA.processTaskStepName}】"),
 	RETREAT("retreat", "撤回", "撤回【${DATA.processTaskStepName}】"),
 	ABORT("abort", "取消", "取消工单"),
@@ -58,13 +59,5 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 		}
 		return null;
 	}
-//	
-//	public static String getDescription(String _value) {
-//		for(ProcessTaskAuditType type : values()) {
-//			if(type.getValue().equals(_value)) {
-//				return type.getDescription();
-//			}
-//		}
-//		return "";
-//	}
+
 }

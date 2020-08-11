@@ -1,5 +1,7 @@
 package codedriver.framework.process.constvalue;
 
+import codedriver.framework.process.audithandler.core.IProcessTaskAuditDetailType;
+
 public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 
 	CONTENT("content", "内容", "content", "oldContent", 1),
@@ -49,22 +51,4 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 		return sort;
 	}
 
-
-	public static String getText(String _value) {
-		for (ProcessTaskAuditDetailType s : values()) {
-			if (s.getValue().equals(_value)) {
-				return s.getText();
-			}
-		}
-		return "";
-	}
-
-	public static int getSort(String _value) {
-		for (ProcessTaskAuditDetailType s : values()) {
-			if (s.getValue().equals(_value)) {
-				return s.getSort();
-			}
-		}
-		return 0;
-	}
 }

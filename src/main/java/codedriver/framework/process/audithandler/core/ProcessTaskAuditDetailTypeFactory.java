@@ -5,19 +5,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.reflections.Reflections;
-
-import codedriver.framework.process.constvalue.IProcessTaskAuditDetailType;
-
+/**
+ * 
+* @Time:2020年8月11日
+* @ClassName: ProcessTaskAuditDetailTypeFactory 
+* @Description: 工单活动内容类型工厂类
+ */
 public class ProcessTaskAuditDetailTypeFactory {
-
-	private static volatile boolean isUnloaded = true;
+	/** 标记是否未初始化数据，只初始化一次 **/
+	private static volatile boolean isUninitialized = true;
 	
 	private static Set<IProcessTaskAuditDetailType> set = new HashSet<>();
 	
 	public static Set<IProcessTaskAuditDetailType> getAuditDetailTypeList(){		
-		if(isUnloaded) {
+		if(isUninitialized) {
 			synchronized(ProcessTaskAuditDetailTypeFactory.class) {
-				if(isUnloaded) {
+				if(isUninitialized) {
 					Reflections reflections = new Reflections("codedriver");
 					Set<Class<? extends IProcessTaskAuditDetailType>> classSet = reflections.getSubTypesOf(IProcessTaskAuditDetailType.class);
 					for (Class<? extends IProcessTaskAuditDetailType> c : classSet) {
@@ -31,7 +34,7 @@ public class ProcessTaskAuditDetailTypeFactory {
 							
 						}		
 					}
-					isUnloaded = false;
+					isUninitialized = false;
 				}
 			}
 		}
