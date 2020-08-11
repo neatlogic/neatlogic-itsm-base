@@ -6,7 +6,7 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	TITLE("title", "标题", "title", "oldTitle", 2),
 	PRIORITY("priority", "优先级", "priorityUuid", "oldPriorityUuid", 3),
 	FORM("form", "表单", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 4),
-	WORKER("worker", "处理人", "workerList", "oldWorkerList", 5),
+	WORKERLIST("workerlist", "处理人", "workerList", "oldWorkerList", 5),
 	SUBTASK("subtask", "子任务", "subtask", "oldSubtask", 6),
 	FILE("file", "上传文件", "fileIdList", "oldFileIdList", 7),
 	TASKSTEP("taskstep", "工单步骤", "nextStepId", "oldNextStepId", 8),
