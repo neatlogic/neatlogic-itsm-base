@@ -17,7 +17,7 @@ public abstract class ProcessTaskStepAuditDetailHandlerBase implements IProcessT
 	}
 
 	@Override
-	public void handle(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo) {
+	public int handle(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo) {
 		String oldContent = processTaskStepAuditDetailVo.getOldContent();
 		if(StringUtils.isNotBlank(oldContent)) {
 			ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(oldContent);
@@ -36,8 +36,8 @@ public abstract class ProcessTaskStepAuditDetailHandlerBase implements IProcessT
 				processTaskStepAuditDetailVo.setNewContent(null);
 			}
 		}
-		myHandle(processTaskStepAuditDetailVo);		
+		return myHandle(processTaskStepAuditDetailVo);		
 	}
 
-	protected abstract void myHandle(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo);
+	protected abstract int myHandle(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo);
 }
