@@ -23,6 +23,7 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	RESTFULACTION("restfulaction", "RESTFUL动作","【${DATA.processTaskStepName}】"),
 	COMPLETE("complete", "流转", "完成【${DATA.processTaskStepName}】"),
 	BACK("back", "回退", "完成【${DATA.processTaskStepName}】至【${DATA.nextStepName}】"),
+	CONDITION("condition", "条件", "条件 ${DATA.stepStatus}"),
 	;
 	private String value;
 	private String text;
