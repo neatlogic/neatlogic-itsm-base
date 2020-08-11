@@ -2,6 +2,7 @@ package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.process.dto.WorktimeRangeVo;
@@ -18,6 +19,8 @@ public interface WorktimeMapper {
 	public int searchWorktimeCount(WorktimeVo worktimeVo);
 
 	public List<WorktimeVo> searchWorktimeList(WorktimeVo worktimeVo);
+
+	public List<ValueTextVo> searchWorktimeListForSelect(WorktimeVo worktimeVo);
 
 	public List<WorktimeRangeVo> getWorktimeRangeListByWorktimeUuid(String worktimeUuid);
 

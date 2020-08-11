@@ -89,6 +89,45 @@
 		</if>
 	</select>
 
+	<select id="searchChannelListForSelect" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
+		SELECT
+		c.`uuid` as `value`,
+		c.`name` as `text`
+		FROM
+		`channel` c
+		<if test="isFavorite != 1">
+			LEFT
+		</if>
+		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.`user_uuid` = #{userUuid}
+		WHERE 1=1
+		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
+			AND c.`uuid` IN
+			<foreach collection="authorizedUuidList" item="authorizedUuid" open="(" separator="," close=")">
+				#{authorizedUuid}
+			</foreach>
+		</if>
+		<if test="parentUuid != null">
+			AND c.`parent_uuid` = #{parentUuid}
+		</if>
+		<if test="keyword != null and keyword != ''">
+			AND c.`name` LIKE CONCAT('%',#{keyword},'%')
+		</if>
+		<if test="isActive != null">
+			AND c.`is_active` = #{isActive}
+		</if>
+		<choose>
+			<when test="isFavorite == 1">
+				ORDER BY cu.`insert_time` DESC
+			</when>
+			<otherwise>
+				ORDER BY c.`parent_uuid`, c.`sort`
+			</otherwise>
+		</choose>
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+
 	<select id="getChannelByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelVo" useCache="false">
 		SELECT
 		c.`uuid`,
@@ -220,6 +259,25 @@
 		`description`,
 		`sort`,
 		`prefix`
+		FROM `channel_type`
+		<where>
+			<if test="keyword != null and keyword != ''">
+				AND `name` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="isActive != null">
+				AND `is_active` = #{isActive}
+			</if>
+		</where>
+		ORDER BY `sort` desc
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="searchChannelTypeListForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
+		SELECT
+		`uuid` as `value`,
+		`name` as `text`
 		FROM `channel_type`
 		<where>
 			<if test="keyword != null and keyword != ''">
