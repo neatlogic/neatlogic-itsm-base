@@ -25,7 +25,6 @@ public class ProcessTaskAuditDetailTypeFactory {
 							Method m = c.getMethod("values");
 							IProcessTaskAuditDetailType[] result = (IProcessTaskAuditDetailType[]) m.invoke(null);
 							for(IProcessTaskAuditDetailType type : result) {
-								System.out.println("IProcessTaskAuditDetailType:" + type);
 								set.add(type);
 							}
 						}catch(Exception e) {

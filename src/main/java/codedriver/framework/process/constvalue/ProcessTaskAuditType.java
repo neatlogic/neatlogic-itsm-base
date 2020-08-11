@@ -33,7 +33,6 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 		this.value = value;
 		this.text = text;
 		this.description = description;
-		IProcessTaskAuditType.AUDIT_TYPE_LIST.add(this);
 	}
 
 	@Override
@@ -59,13 +58,13 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 		}
 		return null;
 	}
-	
-	public static String getDescription(String _value) {
-		for(ProcessTaskAuditType type : values()) {
-			if(type.getValue().equals(_value)) {
-				return type.getDescription();
-			}
-		}
-		return "";
-	}
+//	
+//	public static String getDescription(String _value) {
+//		for(ProcessTaskAuditType type : values()) {
+//			if(type.getValue().equals(_value)) {
+//				return type.getDescription();
+//			}
+//		}
+//		return "";
+//	}
 }
