@@ -53,12 +53,16 @@ import codedriver.framework.notify.dao.mapper.NotifyMapper;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.notify.dto.ParamMappingVo;
+import codedriver.framework.process.audithandler.core.IProcessTaskAuditDetailType;
+import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
+import codedriver.framework.process.audithandler.core.ProcessTaskAuditDetailTypeFactory;
 import codedriver.framework.process.column.core.ProcessTaskUtil;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
+import codedriver.framework.process.constvalue.ProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
@@ -354,7 +358,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							JSONObject paramObj = new JSONObject();
 							paramObj.put(ProcessTaskAuditDetailType.RESTFULACTION.getParamName(), JSON.toJSONString(actionVo));
 							stepVo.setParamObj(paramObj);
-							AuditHandler.audit(stepVo, ProcessTaskStepAction.RESTFULACTION);
+							AuditHandler.audit(stepVo, ProcessTaskAuditType.RESTFULACTION);
 						}
 					}
 				}
@@ -1347,14 +1351,14 @@ public abstract class ProcessStepHandlerUtilBase {
 
 	protected static class AuditHandler extends CodeDriverThread {
 		private ProcessTaskStepVo currentProcessTaskStepVo;
-		private ProcessTaskStepAction action;
+		private IProcessTaskAuditType action;
 
-		public AuditHandler(ProcessTaskStepVo _currentProcessTaskStepVo, ProcessTaskStepAction _action) {
+		public AuditHandler(ProcessTaskStepVo _currentProcessTaskStepVo, IProcessTaskAuditType _action) {
 			currentProcessTaskStepVo = _currentProcessTaskStepVo;
 			action = _action;
 		}
 
-		protected static synchronized void audit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action) {
+		public static synchronized void audit(ProcessTaskStepVo currentProcessTaskStepVo, IProcessTaskAuditType action) {
 			if (!TransactionSynchronizationManager.isSynchronizationActive()) {
 				AuditHandler handler = new AuditHandler(currentProcessTaskStepVo, action);
 				CommonThreadPool.execute(handler);
@@ -1396,7 +1400,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				processTaskMapper.insertProcessTaskStepAudit(processTaskStepAuditVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				if (MapUtils.isNotEmpty(paramObj)) {
-					for (ProcessTaskAuditDetailType auditDetailType : ProcessTaskAuditDetailType.values()) {
+					for (IProcessTaskAuditDetailType auditDetailType : ProcessTaskAuditDetailTypeFactory.getAuditDetailTypeList()) {
 						String newDataHash = null;
 						String newData = paramObj.getString(auditDetailType.getParamName());
 						if (StringUtils.isNotBlank(newData)) {
