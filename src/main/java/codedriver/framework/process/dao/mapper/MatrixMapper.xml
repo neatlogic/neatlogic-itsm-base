@@ -103,6 +103,14 @@
 		WHERE `uuid` = #{uuid}
 	</select>
 
+	<select id="getMatrixByUuidForSelect" parameterType="String" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT
+		`uuid` as `value`,
+		`name` as `text`
+		FROM `process_matrix`
+		WHERE `uuid` = #{uuid}
+	</select>
+
 	<select id="searchMatrix" parameterType="codedriver.framework.process.dto.ProcessMatrixVo" resultMap="matrixMap">
 		SELECT
 		a.`id`,
@@ -145,6 +153,25 @@
 		LEFT JOIN `form_version` e ON d.`form_version_uuid` = e.`uuid`
 		LEFT JOIN `form` f ON e.`form_uuid` = f. `uuid`
 		ORDER BY a.`id` DESC
+	</select>
+
+	<select id="searchMatrixForSelect" parameterType="codedriver.framework.process.dto.ProcessMatrixVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT
+		`uuid` as `value`,
+		`name` as `text`
+		FROM `process_matrix`
+		<where>
+			<if test="type != null and type != ''">
+				AND `type` = #{type}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND `name` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+		ORDER BY `id` DESC
 	</select>
 
 	<select id="getMatrixDispatcherByMatrixUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessMatrixDispatcherVo">

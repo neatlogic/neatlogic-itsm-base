@@ -2,6 +2,7 @@ package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.process.dto.ChannelProcessVo;
@@ -46,6 +47,8 @@ public interface ProcessMapper {
 	public int searchProcessCount(ProcessVo processVo);
 
 	public List<ProcessVo> searchProcessList(ProcessVo processVo);
+
+	public List<ValueTextVo> searchProcessListForSelect(ProcessVo processVo);
 
 	public int getProcessReferenceCount(String processUuid);
 

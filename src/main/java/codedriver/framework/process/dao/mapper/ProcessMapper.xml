@@ -224,6 +224,27 @@
 		</if>
 	</select>
 
+	<select id="searchProcessListForSelect" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT
+		`uuid` as `value`,
+		`name` as `text`
+		FROM `process`
+		WHERE 1=1
+		<if test="keyword != null and keyword != ''">
+			AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+			AND `is_Active` = #{isActive}
+		</if>
+		<if test="fcu != null">
+			AND `fcu` = #{fcu}
+		</if>
+		ORDER BY `fcd` DESC
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+
 	<select id="getProcessReferenceCount" parameterType="java.lang.String" resultType="int">
 		SELECT COUNT(c.`uuid`)
 		FROM `channel` c

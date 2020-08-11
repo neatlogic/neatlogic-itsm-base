@@ -40,6 +40,24 @@
 		</if>
 	</select>
 
+	<select id="searchFormListForSelect" parameterType="codedriver.framework.process.dto.FormVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT
+		f.`uuid` as `value`,
+		f.`name` as `text`
+		FROM `form` f
+		WHERE 1=1
+		<if test="isActive != null">
+			AND f.`is_active` = #{isActive}
+		</if>
+		<if test="keyword != null and keyword != ''">
+			AND f.`name` LIKE CONCAT('%', #{keyword},'%')
+		</if>
+		ORDER BY f.`fcd` DESC
+		<if test="needPage">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+	</select>
+
 	<select id="searchFormCount" parameterType="codedriver.framework.process.dto.FormVo" resultType="int">
 		SELECT
 		COUNT(f.`uuid`)
