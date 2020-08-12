@@ -21,4 +21,12 @@ public interface IProcessStepUtilHandler {
 	* @return Object
 	 */
 	public Object getHandlerStepInfo(Long processTaskStepId);
+	/**
+	 * 
+	* @Time:2020年8月12日
+	* @Description: 处理器特有的步骤初始化信息
+	* @param @return 
+	* @return Object
+	 */
+	public Object getHandlerStepInitInfo(Long processTaskStepId);
 }
