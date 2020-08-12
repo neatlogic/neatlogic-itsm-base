@@ -3,7 +3,9 @@ package codedriver.framework.process.workcenter.dto;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -89,35 +91,35 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setTransferFromUserList(List<ProcessTaskStepAuditVo> transferAuditList) {
-		 List<String> transferUserUuidList = new ArrayList<String>();
-		 for(ProcessTaskStepAuditVo auditVo : transferAuditList) {
+		List<String> transferUserUuidList = new ArrayList<String>();
+		for(ProcessTaskStepAuditVo auditVo : transferAuditList) {
 			 transferUserUuidList.add(auditVo.getUserUuid());
-		 }
-		 dataJson.put(ProcessWorkcenterField.TRANSFER_FROM_USER.getValue(), transferUserUuidList);
-		 return this;
+		}
+		dataJson.put(ProcessWorkcenterField.TRANSFER_FROM_USER.getValue(), transferUserUuidList);
+		return this;
 	}
 	
-	private JSONObject getUserType(String userType, String userTypeName, JSONArray stepUserArray) {
-		 JSONObject userTypeJson = new JSONObject();
-		 userTypeJson.put("usertype", userType);
-		 userTypeJson.put("usertypename", userTypeName);
-		 userTypeJson.put("userlist", stepUserArray);
-		 return userTypeJson;
+	private void getUserType(Map<String,JSONObject> userTypeMap,JSONArray userTypeArray) {
+		
+		for (ProcessUserType s : ProcessUserType.values()) {
+			List<String> userlist = new ArrayList<String>();
+			JSONObject userTypeJson = new JSONObject();
+			userTypeJson.put("usertype", s.getValue());
+			userTypeJson.put("usertypename", s.getText());
+			userTypeJson.put("userlist", userlist);
+			userTypeJson.put("list", new JSONArray());
+			userTypeMap.put(s.getValue(), userTypeJson);
+			userTypeArray.add(userTypeJson);
+		}
 	}
 	
 	public WorkcenterFieldBuilder setStepList( List<ProcessTaskStepVo>  processTaskStepList) {
 		JSONArray stepList = new JSONArray();
 		 for(ProcessTaskStepVo step : processTaskStepList) {
+			 Map<String,JSONObject> userTypeMap = new HashMap<String, JSONObject>();
 			 JSONObject stepJson = new JSONObject();
 			 JSONArray userTypeArray = new JSONArray();
-			 JSONArray majorUserTypeArray = new JSONArray();
-			 JSONArray minorUserTypeArray = new JSONArray();
-			 JSONArray agentUserTypeArray = new JSONArray();
-			 JSONArray pendingUserTypeArray = new JSONArray();
-			 userTypeArray.add(getUserType(ProcessUserType.MAJOR.getValue(),ProcessUserType.MAJOR.getText(),majorUserTypeArray));
-			 userTypeArray.add(getUserType(ProcessUserType.MINOR.getValue(),ProcessUserType.MINOR.getText(),minorUserTypeArray));
-			 userTypeArray.add(getUserType(ProcessUserType.AGENT.getValue(),ProcessUserType.AGENT.getText(),agentUserTypeArray));
-			 userTypeArray.add(getUserType(ProcessTaskStatus.PENDING.getValue(),ProcessTaskStatus.PENDING.getText(),pendingUserTypeArray));
+			 getUserType(userTypeMap,userTypeArray);
 			 stepJson.put("id", step.getId());
 			 stepJson.put("name", step.getName());
 			 stepJson.put("status", step.getStatus());
@@ -128,20 +130,22 @@ public class WorkcenterFieldBuilder {
 			 //已激活未开始
 			 if(step.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) && step.getIsActive() == 1) {
 				 for(ProcessTaskStepWorkerVo worker : step.getWorkerList()) {
-					 pendingUserTypeArray.add(worker.getWorkerValue());
+					 JSONObject userTypeJson = userTypeMap.get(ProcessUserType.WORKER.getValue());
+					 userTypeJson.getJSONArray("userlist").add(worker.getWorkerValue());
+					 JSONObject userStatusJson = new JSONObject();
+					 userStatusJson.put("value", worker.getWorkerValue());
+					 userStatusJson.put("status", ProcessTaskStatus.PENDING.getValue());
+					 userTypeJson.getJSONArray("list").add(userStatusJson);
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
 					 String user = String.format("%s%s", GroupSearch.USER.getValuePlugin(),userVo.getUserUuid());
-					 if(ProcessUserType.MAJOR.getValue().equals( userVo.getUserType())) {
-						 majorUserTypeArray.add(user);
-					 }
-					 if(ProcessUserType.MINOR.getValue().equals( userVo.getUserType())) {
-						 minorUserTypeArray.add(user);
-					 }
-					 if(ProcessUserType.AGENT.getValue().equals( userVo.getUserType())) {
-						 agentUserTypeArray.add(user);
-					 }
+					 JSONObject userTypeJson = userTypeMap.get(userVo.getUserType());
+					 userTypeJson.getJSONArray("userlist").add(user);
+					 JSONObject userStatusJson = new JSONObject();
+					 userStatusJson.put("value", user);
+					 userStatusJson.put("status", userVo.getStatus());
+					 userTypeJson.getJSONArray("list").add(userStatusJson);
 				 }
 			 }
 			//过滤上报节点

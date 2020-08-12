@@ -21,6 +21,7 @@ public enum ProcessWorkcenterField {
 	CURRENT_STEP("currentstep","当前步骤"),
 	WOKRTIME("worktime","时间窗口"),
 	TRANSFER_FROM_USER("transferfromuser","转交人","transferfromuser"),
+	ABOUTME("aboutme","与我相关"),
 	ACTION("action", "操作栏");
 	private String value;
 	private String name;
