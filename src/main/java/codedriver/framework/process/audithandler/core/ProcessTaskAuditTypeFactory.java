@@ -1,6 +1,5 @@
 package codedriver.framework.process.audithandler.core;
 
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,9 +24,7 @@ public class ProcessTaskAuditTypeFactory {
 					Set<Class<? extends IProcessTaskAuditType>> classSet = reflections.getSubTypesOf(IProcessTaskAuditType.class);
 					for (Class<? extends IProcessTaskAuditType> c : classSet) {
 						try {
-							Method m = c.getMethod("values");
-							IProcessTaskAuditType[] result = (IProcessTaskAuditType[]) m.invoke(null);
-							for(IProcessTaskAuditType type : result) {
+							for(IProcessTaskAuditType type : c.getEnumConstants()) {
 								set.add(type);
 							}
 						}catch(Exception e) {
