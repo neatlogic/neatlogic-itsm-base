@@ -1,13 +1,8 @@
 package codedriver.framework.process.stephandler.core;
 
-import codedriver.framework.process.constvalue.ProcessTaskStepAction;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-
 public interface IProcessStepUtilHandler {
 
 	public String getHandler();
-	
-	public String getName();
 	
 	/**
 	 * 
@@ -16,5 +11,22 @@ public interface IProcessStepUtilHandler {
 	 * @param action
 	 * @return void
 	 */
-	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action);
+	//public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action);
+
+	/**
+	 * 
+	* @Time:2020年7月27日
+	* @Description: 处理器特有的步骤信息
+	* @param @return 
+	* @return Object
+	 */
+	public Object getHandlerStepInfo(Long processTaskStepId);
+	/**
+	 * 
+	* @Time:2020年8月12日
+	* @Description: 处理器特有的步骤初始化信息
+	* @param @return 
+	* @return Object
+	 */
+	public Object getHandlerStepInitInfo(Long processTaskStepId);
 }
