@@ -16,9 +16,6 @@ public class ProcessStepUtilHandlerFactory implements ApplicationListener<Contex
 	private static Map<String, IProcessStepUtilHandler> componentMap = new HashMap<String, IProcessStepUtilHandler>();
 
 	public static IProcessStepUtilHandler getHandler(String handler) {
-//		if (!componentMap.containsKey(handler) || componentMap.get(handler) == null) {
-//			throw new ProcessStepUtilHandlerNotFoundException(handler);
-//		}
 		return componentMap.get(handler);
 	}
 
