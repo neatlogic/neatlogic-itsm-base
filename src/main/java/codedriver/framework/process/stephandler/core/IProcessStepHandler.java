@@ -381,12 +381,4 @@ public interface IProcessStepHandler {
 	* @return JSONObject
 	 */
 	public JSONObject makeupConfig(JSONObject configObj);
-	/**
-	 * 
-	* @Time:2020年7月27日
-	* @Description: 处理器特有的步骤信息
-	* @param @return 
-	* @return Object
-	 */
-	public Object getHandlerStepInfo(Long processTaskStepId);
 }
