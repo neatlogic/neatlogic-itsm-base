@@ -167,8 +167,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 设置当前步骤状态为未开始 **/
 				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 
-				myActive(currentProcessTaskStepVo);
-
 				/** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
 				resetConvergeInfo(currentProcessTaskStepVo);
 
@@ -211,6 +209,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						}
 					});
 				}
+
+				myActive(currentProcessTaskStepVo);
 				currentProcessTaskStepVo.setIsActive(1);
 				updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
