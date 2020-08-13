@@ -18,8 +18,8 @@ import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepHandler;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
-import codedriver.framework.process.stephandler.core.IProcessStepHandler;
-import codedriver.framework.process.stephandler.core.ProcessStepHandlerFactory;
+import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
+import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessVo extends BasePageVo implements Serializable {
@@ -207,11 +207,11 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				if (StringUtils.isNotBlank(handler)) {
 					processStepVo.setHandler(handler);
 					processStepVo.setType(ProcessStepHandler.getType(handler));
-					IProcessStepHandler procssStepHandler = ProcessStepHandlerFactory.getHandler(handler);
-					if (procssStepHandler != null) {
+					IProcessStepUtilHandler procssStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(handler);
+					if (procssStepUtilHandler != null) {
 						JSONObject stepConfigObj = stepObj.getJSONObject("stepConfig");
 						if(stepConfigObj != null) {
-							procssStepHandler.makeupProcessStep(processStepVo, stepConfigObj);
+							procssStepUtilHandler.makeupProcessStep(processStepVo, stepConfigObj);
 						}
 					} else {
 						throw new ProcessStepHandlerNotFoundException(handler);

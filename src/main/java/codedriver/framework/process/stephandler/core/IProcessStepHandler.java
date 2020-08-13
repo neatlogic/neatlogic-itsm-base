@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.constvalue.ProcessStepMode;
-import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -265,16 +264,6 @@ public interface IProcessStepHandler {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public int back(ProcessTaskStepVo currentProcessTaskStepVo);
-
-	/**
-	 * @Author: chenqiwei
-	 * @Time:Feb 10, 2020
-	 * @Description: 组装步骤节点信息
-	 * @param @param processStepVo
-	 * @param @param stepConfigObj
-	 * @return void
-	 */
-	public void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj);
 
 	
 }

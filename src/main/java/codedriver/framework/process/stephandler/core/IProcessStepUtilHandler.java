@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
 import codedriver.framework.process.constvalue.OperationType;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
+import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 
@@ -31,6 +32,16 @@ public interface IProcessStepUtilHandler {
 	* @return Object
 	 */
 	public Object getHandlerStepInitInfo(Long processTaskStepId);
+
+	/**
+	 * @Author: chenqiwei
+	 * @Time:Feb 10, 2020
+	 * @Description: 组装步骤节点信息
+	 * @param @param processStepVo
+	 * @param @param stepConfigObj
+	 * @return void
+	 */
+	public void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj);
 	
 	/**
 	 * 
