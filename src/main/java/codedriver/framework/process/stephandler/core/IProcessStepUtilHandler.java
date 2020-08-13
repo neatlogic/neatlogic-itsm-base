@@ -14,15 +14,6 @@ import codedriver.framework.process.notify.core.NotifyTriggerType;
 public interface IProcessStepUtilHandler {
 
 	public String getHandler();
-	
-	/**
-	 * 
-	 * @Description: 活动审计
-	 * @param currentProcessTaskStepVo
-	 * @param action
-	 * @return void
-	 */
-	//public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action);
 
 	/**
 	 * 
