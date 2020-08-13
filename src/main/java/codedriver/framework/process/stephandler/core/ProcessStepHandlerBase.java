@@ -28,8 +28,6 @@ import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.notify.dto.NotifyPolicyInvokerVo;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
-import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
-import codedriver.framework.process.constvalue.OperationType;
 import codedriver.framework.process.constvalue.ProcessStepHandler;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
@@ -495,7 +493,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 更新工单步骤状态为 “进行中” **/
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
-			updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+			IProcessStepUtilHandler  processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(this.getHandler());
+			if(processStepUtilHandler != null) {			
+				processStepUtilHandler.updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+			}
 			/** 写入时间审计 **/
 			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.START);
 
@@ -910,7 +911,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			for(ProcessTaskStepWorkerVo worker : workerList) {
 				processTaskMapper.insertProcessTaskStepWorker(worker);
 			}
-			updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+			IProcessStepUtilHandler  processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(this.getHandler());
+			if(processStepUtilHandler != null) {			
+				processStepUtilHandler.updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+			}
 //			List<ProcessTaskStepUserVo> oldUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
 //			if (oldUserList.size() > 0) {
 //				for (ProcessTaskStepUserVo oldUserVo : oldUserList) {
@@ -1616,50 +1620,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 			runableActionList.add(thread);
 		}
-	}
-
-	@Override
-	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, IProcessTaskAuditType action) {
-		AuditHandler.audit(currentProcessTaskStepVo, action);
-	}
-
-	@Override
-	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId) {
-		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId);
-	}
-
-	@Override
-	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
-		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId, verifyActionList);
-	}
-
-	@Override
-	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action) {
-		return ActionRoleChecker.verifyActionAuthoriy(processTaskId, processTaskStepId, action);
-	}
-
-	@Override
-	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId) {
-		return ActionRoleChecker.getProcessableStepList(processTaskId);
-	}
-
-	@Override
-	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId) {
-		return ActionRoleChecker.getRetractableStepListByProcessTaskId(processTaskId);
-	}
-
-	@Override
-	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId) {
-		return ActionRoleChecker.getUrgeableStepList(processTaskId);
-	}
-
-	@Override
-	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
-		NotifyHandler.notify(currentProcessTaskStepVo, trigger);
-	}
-
-	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation) {
-		return true;
 	}
 
 }
