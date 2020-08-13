@@ -1,7 +1,7 @@
 package codedriver.framework.process.constvalue;
 
 public enum ProcessUserType {
-	MAJOR("major", "处理人"), MINOR("minor", "协助处理人"),AGENT("agent","代办人"),OWNER("owner","上报人"),REPORTER("reporter","代报人"),WORKER("woker", "待处理人");
+	MAJOR("major", "处理人"), MINOR("minor", "协助处理人"),AGENT("agent","代办人"),OWNER("owner","上报人"),REPORTER("reporter","代报人"),WORKER("worker", "待处理人");
 
 	private String status;
 	private String text;
