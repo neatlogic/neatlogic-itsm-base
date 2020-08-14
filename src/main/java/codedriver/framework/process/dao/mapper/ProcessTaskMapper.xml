@@ -1109,13 +1109,23 @@
 	  `worktime_uuid` AS worktimeUuid,
 	  `error` 
 	FROM `processtask` 
-	WHERE `id` IN 
-	<foreach collection="processTaskIdList" item="id" open="(" separator="," close=")">
-	#{id}
-	</foreach>	
-	<if test="keyword != null and keyword != ''">
-	AND (`title` LIKE CONCAT('%', #{keyword}, '%') OR `id` LIKE CONCAT('%', #{keyword}, '%'))
-	</if>
+	<where> 
+		<if test="processTaskIdList != null and processTaskIdList.size() >0">
+			`id` IN 
+			<foreach collection="processTaskIdList" item="id" open="(" separator="," close=")">
+			#{id}
+			</foreach>	
+		</if>
+		<if test="keyword != null and keyword != ''">
+			AND (`title` LIKE CONCAT('%', #{keyword}, '%') OR `id` LIKE CONCAT('%', #{keyword}, '%'))
+		</if>
+		<if test="fromDate != null and fromDate != ''">
+			AND `start_time` >= #{fromDate}
+		</if>
+		<if test="toDate != null and toDate != ''">
+			AND `start_time` &lt;= #{fromDate}
+		</if>
+	</where>
 	</select>
 	
 	<select id="getProcessTaskStepListByIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">

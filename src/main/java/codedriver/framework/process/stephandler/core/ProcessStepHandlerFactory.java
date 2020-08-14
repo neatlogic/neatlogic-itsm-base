@@ -1,10 +1,11 @@
 package codedriver.framework.process.stephandler.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -56,8 +57,7 @@ public class ProcessStepHandlerFactory implements ApplicationListener<ContextRef
 				}
 			}
 		}
-		Collections.sort(returnProcessStepHandlerList);
-		return returnProcessStepHandlerList;
+		return returnProcessStepHandlerList.stream().sorted(Comparator.comparing(ProcessStepHandlerVo::getSort)).collect(Collectors.toList());
 	}
 
 	@Override
