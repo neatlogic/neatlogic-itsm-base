@@ -107,6 +107,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private transient Long currentSubtaskId;
 	@EntityField(name = "处理器特有的步骤信息", type = ApiParamType.JSONOBJECT)
 	private Object handlerStepInfo;
+	@EntityField(name = "向前步骤列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepVo> forwardNextStepList = new ArrayList<>();
+	@EntityField(name = "向后步骤列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepVo> backwardNextStepList = new ArrayList<>();
 	
 	public ProcessTaskStepVo() {
 
@@ -654,6 +658,22 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setHandlerStepInfo(Object handlerStepInfo) {
 		this.handlerStepInfo = handlerStepInfo;
+	}
+
+	public List<ProcessTaskStepVo> getForwardNextStepList() {
+		return forwardNextStepList;
+	}
+
+	public void setForwardNextStepList(List<ProcessTaskStepVo> forwardNextStepList) {
+		this.forwardNextStepList = forwardNextStepList;
+	}
+
+	public List<ProcessTaskStepVo> getBackwardNextStepList() {
+		return backwardNextStepList;
+	}
+
+	public void setBackwardNextStepList(List<ProcessTaskStepVo> backwardNextStepList) {
+		this.backwardNextStepList = backwardNextStepList;
 	}
 
 }
