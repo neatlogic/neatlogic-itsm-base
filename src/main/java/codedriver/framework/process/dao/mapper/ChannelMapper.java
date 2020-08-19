@@ -65,6 +65,8 @@ public interface ChannelMapper {
 			);
 	
 	public List<String> getAllAncestorNameListByParentUuid(String parentUuid);
+
+    public int checkChannelIsFavorite(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
 	
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
