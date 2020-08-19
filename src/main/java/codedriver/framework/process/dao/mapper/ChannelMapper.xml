@@ -400,6 +400,10 @@
 		ORDER BY a.`lft`
 	</select>
 
+	<select id="checkChannelIsFavorite" resultType="int">
+	SELECT COUNT(1) FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
