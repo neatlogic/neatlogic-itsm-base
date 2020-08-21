@@ -80,6 +80,19 @@
 		FROM `priority`
 		WHERE `uuid` = #{uuid}
 	</select>
+	
+	<select id="getPriorityByName" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.PriorityVo" useCache="false">
+		SELECT
+		`uuid`,
+		`name`,
+		`is_active` AS isActive,
+		`desc`,
+		`icon`,
+		`color`,
+		`sort`
+		FROM `priority`
+		WHERE `name` = #{value}
+	</select>
 
 	<select id="checkPriorityNameIsRepeat" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="int" useCache="false">
 		SELECT COUNT(1) FROM `priority` WHERE `name` = #{name} AND `uuid` != #{uuid}

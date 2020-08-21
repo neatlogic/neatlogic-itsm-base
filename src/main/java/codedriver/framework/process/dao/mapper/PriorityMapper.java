@@ -18,6 +18,8 @@ public interface PriorityMapper {
 	public int checkPriorityIsExists(String uuid);
 
 	public PriorityVo getPriorityByUuid(String uuid);
+	
+    public PriorityVo getPriorityByName(String objValue);
 
 	public int checkPriorityNameIsRepeat(PriorityVo priorityVo);
 
@@ -46,4 +48,5 @@ public interface PriorityMapper {
 	public int updateSortDecrement(@Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 
 	public int deletePriorityByUuid(String uuid);
+
 }

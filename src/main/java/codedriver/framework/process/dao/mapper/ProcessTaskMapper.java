@@ -171,10 +171,14 @@ public interface ProcessTaskMapper {
 	public List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 
 	public ProcessTaskStepNotifyPolicyVo getProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
+	
+	public Map<String,String> getProcessTaskOldFormAndPropByTaskId(Long processTaskId);
 
 	public List<Map<String, Object>> getWorkloadByTeamUuid(String teamUuid);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
+	
+	public int replaceProcessTaskOldFormProp(@Param("processTaskId")Long processTaskId,@Param("form")String form,@Param("prop")String prop);
 
 	public int insertProcessTaskForm(ProcessTaskFormVo processTaskFormVo);
 	
@@ -183,11 +187,16 @@ public interface ProcessTaskMapper {
 
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskVo.class)
 	public int insertProcessTask(ProcessTaskVo processTaskVo);
+	
+	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskVo.class)
+    public int replaceProcessTask(ProcessTaskVo processTaskVo);
 
 	public int replaceProcessTaskContent(ProcessTaskContentVo processTaskContentVo);
 
 	public int insertProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
-
+	
+	public int replaceProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
+	
 	public int insertProcessTaskSlaNotify(ProcessTaskSlaNotifyVo processTaskSlaNotifyVo);
 
 	public int insertProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);

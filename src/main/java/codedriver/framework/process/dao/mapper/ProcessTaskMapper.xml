@@ -1170,6 +1170,10 @@
 	AND a.`policy_id` = #{policyId}
 	</select>
 	
+	<select id="getProcessTaskOldFormAndPropByTaskId" parameterType="java.lang.Long" resultType="java.util.HashMap">
+		select form,prop from processtask_old_form_prop where processtask_id = #{value}
+	</select>
+	
 	<select id="getWorkloadByTeamUuid" parameterType="java.lang.String" resultType="java.util.HashMap">
 	SELECT 
 	  c.`uuid` AS userUuid,
@@ -1508,12 +1512,80 @@
 		#{configHash}
 		)
 	</insert>
+	
+	<insert id="replaceProcessTaskStep" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
+		<!-- <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+			select LAST_INSERT_ID() as id
+		</selectKey> -->
+		REPLACE INTO `processtask_step` (
+		`id`,
+		`processtask_id`,
+		`name`,
+		`process_step_uuid`,
+		`status`,
+		`type`,
+		`handler`,
+		`is_active`,
+		`start_time`,
+		`end_time`,
+		`config_hash`
+		)
+		VALUES
+		(
+		#{id},
+		#{processTaskId},
+		#{name},
+		#{processStepUuid},
+		#{status},
+		#{type},
+		#{handler},
+		#{isActive},
+		#{startTime},
+		#{endTime},
+		#{configHash}
+		)
+	</insert>
 
 	<insert id="insertProcessTask" parameterType="codedriver.framework.process.dto.ProcessTaskVo">
 		<!-- <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
 			select LAST_INSERT_ID() as id
 		</selectKey> -->
 		INSERT INTO `processtask` (
+		`id`,
+		`title`,
+		`process_uuid`,
+		`channel_uuid`,
+		`config_hash`,
+		`priority_uuid`,
+		`status`,
+		`start_time`,
+		`owner`,
+		`reporter`,
+		`expire_time`,
+		`worktime_uuid`
+		)
+		VALUES
+		(
+		#{id},
+		#{title},
+		#{processUuid},
+		#{channelUuid},
+		#{configHash},
+		#{priorityUuid},
+		#{status},
+		NOW(3),
+		#{owner},
+		#{reporter},
+		#{expireTime},
+		#{worktimeUuid}
+		)
+	</insert>
+	
+	<insert id="replaceProcessTask" parameterType="codedriver.framework.process.dto.ProcessTaskVo">
+		<!-- <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+			select LAST_INSERT_ID() as id
+		</selectKey> -->
+		REPLACE INTO `processtask` (
 		`id`,
 		`title`,
 		`process_uuid`,
@@ -1785,6 +1857,12 @@
 	    #{policyName},
 	    #{policyConfigHash}
 	  ) 
+	</insert>
+	
+	<insert id="replaceProcessTaskOldFormProp">
+	REPLACE INTO `processtask_old_form_prop` (`processtask_id`, `form`, `prop`) 
+	VALUES
+	  (#{processTaskId}, #{form}, #{prop}) 
 	</insert>
 	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">

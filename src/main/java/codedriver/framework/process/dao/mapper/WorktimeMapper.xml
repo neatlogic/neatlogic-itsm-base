@@ -12,6 +12,18 @@
 		FROM `worktime` wt
 		WHERE wt.`uuid` = #{uuid}
 	</select>
+	
+	<select id="getWorktimeByName" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.WorktimeVo" useCache="true">
+		SELECT
+		wt.`uuid`,
+		wt.`name`,
+		wt.`is_active` AS isActive,
+		wt.`lcu`,
+		wt.`lcd`,
+		wt.`config`
+		FROM `worktime` wt
+		WHERE wt.`name` = #{value}
+	</select>
 
 	<select id="checkWorktimeNameIsRepeat" parameterType="codedriver.framework.process.dto.WorktimeVo" resultType="int" useCache="false">
 		SELECT COUNT(1) FROM `worktime` WHERE `name` = #{name} AND `uuid` != #{uuid}

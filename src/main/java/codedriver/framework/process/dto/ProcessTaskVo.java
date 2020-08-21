@@ -65,6 +65,8 @@ public class ProcessTaskVo {
 	private PriorityVo priority;
 	@EntityField(name = "工单表单信息", type = ApiParamType.STRING)
 	private String formConfig;
+	@EntityField(name = "是否存在旧工单表单信息", type = ApiParamType.STRING)
+    private int isHasOldFormProp = 0;
 	@EntityField(name = "工单表单属性值", type = ApiParamType.JSONOBJECT)
 	private Map<String, Object> formAttributeDataMap = new HashMap<>();
 	@EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
@@ -365,5 +367,13 @@ public class ProcessTaskVo {
 	public void setOwnerCompanyList(List<TeamVo> ownerCompanyList) {
 		this.ownerCompanyList = ownerCompanyList;
 	}
+
+    public int getIsHasOldFormProp() {
+        return isHasOldFormProp;
+    }
+
+    public void setIsHasOldFormProp(int isHasOldFormProp) {
+        this.isHasOldFormProp = isHasOldFormProp;
+    }
 
 }
