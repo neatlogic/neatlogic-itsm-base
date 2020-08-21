@@ -2,6 +2,7 @@ package codedriver.framework.process.dto;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class ProcessTaskVo {
 	@EntityField(name = "是否存在旧工单表单信息", type = ApiParamType.STRING)
     private int isHasOldFormProp = 0;
 	@EntityField(name = "工单表单属性值", type = ApiParamType.JSONOBJECT)
-	Map<String, Object> formAttributeDataMap;
+	private Map<String, Object> formAttributeDataMap = new HashMap<>();
 	@EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
 	private String worktimeUuid;
 

@@ -266,9 +266,10 @@
 		`hash` = #{value}
 	</select>
 
-	<select id="getProcessTaskStepContentProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
+	<select id="getProcessTaskStepContentByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
 		SELECT
 		`id`,
+		`processtask_id` AS processTaskId,
 		`processtask_step_id` AS processTaskStepId,
 		`content_hash` AS contentHash,
 		`fcd`,
@@ -282,9 +283,14 @@
 		ORDER BY id DESC
 	</select>
 	
+	<select id="getProcessTaskStepContentHashByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT `content_hash` FROM `processtask_step_content` WHERE processtask_step_id = #{value}
+	</select>
+	
 	<select id="getProcessTaskStepContentProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
 		SELECT
 		`id`,
+		`processtask_id` AS processTaskId,
 		`processtask_step_id` AS processTaskStepId,
 		`content_hash` AS contentHash,
 		`fcd`,

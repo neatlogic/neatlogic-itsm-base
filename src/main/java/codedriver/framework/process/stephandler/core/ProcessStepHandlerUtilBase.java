@@ -99,7 +99,6 @@ import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepCommentVo;
-import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepDataVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
@@ -1544,9 +1543,9 @@ public abstract class ProcessStepHandlerUtilBase {
 			paramObj.put(ProcessTaskAuditDetailType.PRIORITY.getParamName(), processTaskVo.getPriorityUuid());
 
 			// 获取上报描述内容
-			List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentProcessTaskStepId(currentProcessTaskStepVo.getId());
-			if (CollectionUtils.isNotEmpty(processTaskStepContentList)) {
-				ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(processTaskStepContentList.get(0).getContentHash());
+			String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(currentProcessTaskStepVo.getId());
+			if (StringUtils.isNotBlank(processTaskStepContentHash)) {
+				ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(processTaskStepContentHash);
 				if(processTaskContentVo != null) {
 					paramObj.put(ProcessTaskAuditDetailType.CONTENT.getParamName(), processTaskContentVo.getContent());
 				}
@@ -1683,9 +1682,9 @@ public abstract class ProcessStepHandlerUtilBase {
 			Long startProcessTaskStepId = startProcessTaskStepVo.getId();
 			ProcessTaskStepCommentVo comment = new ProcessTaskStepCommentVo();
 			/** 上报内容 **/
-			List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentProcessTaskStepId(startProcessTaskStepId);
-			if (!processTaskStepContentList.isEmpty()) {
-				ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(processTaskStepContentList.get(0).getContentHash());
+			String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(startProcessTaskStepId);
+			if (StringUtils.isNotBlank(processTaskStepContentHash)) {
+				ProcessTaskContentVo processTaskContentVo = processTaskMapper.getProcessTaskContentByHash(processTaskStepContentHash);
 				if (processTaskContentVo != null) {
 					comment.setContent(processTaskContentVo.getContent());
 				}

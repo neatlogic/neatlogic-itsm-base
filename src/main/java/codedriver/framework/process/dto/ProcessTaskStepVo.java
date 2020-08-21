@@ -112,6 +112,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "向后步骤列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepVo> backwardNextStepList = new ArrayList<>();
 	
+	private transient Map<String, Object> formAttributeDataMap;
+	
 	public ProcessTaskStepVo() {
 
 	}
@@ -675,5 +677,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public void setBackwardNextStepList(List<ProcessTaskStepVo> backwardNextStepList) {
 		this.backwardNextStepList = backwardNextStepList;
 	}
+
+    public Map<String, Object> getFormAttributeDataMap() {
+        return formAttributeDataMap;
+    }
+
+    public void setFormAttributeDataMap(Map<String, Object> formAttributeDataMap) {
+        this.formAttributeDataMap = formAttributeDataMap;
+    }
 
 }

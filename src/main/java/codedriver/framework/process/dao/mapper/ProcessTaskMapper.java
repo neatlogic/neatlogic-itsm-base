@@ -74,7 +74,9 @@ public interface ProcessTaskMapper {
 
 	public List<ProcessTaskStepContentVo> getProcessTaskStepContentProcessTaskId(Long processTaskId);
 
-	public List<ProcessTaskStepContentVo> getProcessTaskStepContentProcessTaskStepId(Long processTaskStepId);
+	public ProcessTaskStepContentVo getProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
+	
+	public String getProcessTaskStepContentHashByProcessTaskStepId(Long processTaskStepId);
 
 	public ProcessTaskContentVo getProcessTaskContentByHash(String hash);
 
