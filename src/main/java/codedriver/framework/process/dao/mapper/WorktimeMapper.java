@@ -11,6 +11,8 @@ import codedriver.framework.process.dto.WorktimeVo;
 public interface WorktimeMapper {
 
 	public WorktimeVo getWorktimeByUuid(String uuid);
+	
+	public WorktimeVo getWorktimeByName(String name);
 
 	public int checkWorktimeNameIsRepeat(WorktimeVo worktimeVo);
 
@@ -48,4 +50,5 @@ public interface WorktimeMapper {
 	public int deleteWorktimeByUuid(String uuid);
 
 	public int deleteWorktimeRange(WorktimeRangeVo worktimeRangeVo);
+
 }

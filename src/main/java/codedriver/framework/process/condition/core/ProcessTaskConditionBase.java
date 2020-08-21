@@ -49,7 +49,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 		String where = StringUtils.EMPTY;
 		if(CollectionUtils.isNotEmpty(dateJSONArray)) {
 			JSONObject dateValue = JSONObject.parseObject(dateJSONArray.get(0).toString());
-			SimpleDateFormat format = new SimpleDateFormat(TimeUtil.TIME_FORMAT);
+			SimpleDateFormat format = new SimpleDateFormat(TimeUtil.YYYY_MM_DD_HH_MM_SS);
 			String startTime = StringUtils.EMPTY;
 			String endTime = StringUtils.EMPTY;
 			String expression = condition.getExpression();

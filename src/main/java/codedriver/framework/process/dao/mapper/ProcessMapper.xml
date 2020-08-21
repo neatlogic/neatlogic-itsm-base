@@ -144,6 +144,20 @@
 		WHERE
 		a.uuid = #{value}
 	</select>
+	
+	<select id="getProcessByName" parameterType="java.lang.String" resultMap="processDetailMap">
+		SELECT
+		a.`uuid`,
+		a.`name`,
+		a.`is_active` AS isActive,
+		a.`config`,
+		d.`form_uuid` AS formUuid
+		FROM
+		`process` a
+		LEFT JOIN `process_form` d ON a.`uuid` = d.`process_uuid`
+		WHERE
+		a.name = #{value}
+	</select>
 
 	<select id="getProcessBaseInfoByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessVo">
 		SELECT
