@@ -47,7 +47,7 @@ public interface CatalogMapper {
 	* @param rht 右编码
 	* @return List<CatalogVo>
 	 */
-	public List<CatalogVo> getAncestorsAndSelfUuidByLftRht(@Param("lft") Integer lft, @Param("rht") Integer rht);
+	public List<CatalogVo> getAncestorsAndSelfByLftRht(@Param("lft") Integer lft, @Param("rht") Integer rht);
 	
 	/**
 	 * 根据父uuid获取授权的子服务目录列表
