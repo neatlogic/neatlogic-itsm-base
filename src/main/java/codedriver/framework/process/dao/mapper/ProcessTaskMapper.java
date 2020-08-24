@@ -79,6 +79,8 @@ public interface ProcessTaskMapper {
 	public String getProcessTaskStepContentHashByProcessTaskStepId(Long processTaskStepId);
 
 	public ProcessTaskContentVo getProcessTaskContentByHash(String hash);
+	
+	public String getProcessTaskContentStringByHash(String hash);
 
 	public List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(@Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
 
@@ -115,8 +117,6 @@ public interface ProcessTaskMapper {
 	public ProcessTaskStepVo getProcessTaskStepBaseInfoById(Long processTaskStepId);
 
 	public ProcessTaskVo getProcessTaskById(Long id);
-	
-	public List<ProcessTaskFileVo> searchProcessTaskFile(ProcessTaskFileVo processTaskFileVo);
 
 	public List<ProcessTaskStepFormAttributeVo> getProcessTaskStepFormAttributeByProcessTaskStepId(Long processTaskStepId);
 
@@ -175,6 +175,8 @@ public interface ProcessTaskMapper {
 	public Map<String,String> getProcessTaskOldFormAndPropByTaskId(Long processTaskId);
 
 	public List<Map<String, Object>> getWorkloadByTeamUuid(String teamUuid);
+
+    public List<Long> getFileIdListByProcessTaskStepId(Long processTaskStepId);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	

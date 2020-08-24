@@ -265,6 +265,10 @@
 		WHERE
 		`hash` = #{value}
 	</select>
+	
+	<select id="getProcessTaskContentStringByHash" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `content` FROM `processtask_content` WHERE `hash` = #{value}
+	</select>
 
 	<select id="getProcessTaskStepContentByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
 		SELECT
@@ -721,16 +725,6 @@
 	WHERE `id`= #{id}
 	</select>
 	
-	<select id="searchProcessTaskFile" parameterType="codedriver.framework.process.dto.ProcessTaskFileVo" resultType="codedriver.framework.process.dto.ProcessTaskFileVo">
-	SELECT 
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `file_id` AS fileId 
-	FROM `processtask_file` 
-	WHERE `processtask_id` = #{processTaskId} 
-	AND `processtask_step_id` = #{processTaskStepId}
-	</select>
-	
 	<select id="getProcessTaskStepFormAttributeByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
 	SELECT 
 	  `processtask_id` AS processTaskId,
@@ -1184,6 +1178,10 @@
 	WHERE a.`team_uuid` = #{value}
 	GROUP BY c.`uuid`
 	ORDER BY COUNT(c.`uuid`) ASC
+	</select>
+	
+	<select id="getFileIdListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `file_id` FROM `processtask_file` WHERE `processtask_step_id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">

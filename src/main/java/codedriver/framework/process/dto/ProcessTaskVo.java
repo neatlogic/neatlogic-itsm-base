@@ -52,7 +52,7 @@ public class ProcessTaskVo {
 	private Date startTime;
 	@EntityField(name = "结束时间", type = ApiParamType.LONG)
 	private Date endTime;
-	@EntityField(name = "耗时(秒)", type = ApiParamType.LONG)
+	@EntityField(name = "耗时", type = ApiParamType.LONG)
 	private Long timeCost;
 	private String timeCostStr;
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)

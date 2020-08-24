@@ -1,15 +1,18 @@
 package codedriver.framework.process.stephandler.core;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
 import codedriver.framework.process.constvalue.OperationType;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 
 public interface IProcessStepUtilHandler {
@@ -151,4 +154,24 @@ public interface IProcessStepUtilHandler {
 	* @return JSONObject
 	 */
 	public JSONObject makeupConfig(JSONObject configObj);
+	/**
+     * 
+    * @Author: linbq
+    * @Time:2020年8月21日
+    * @Description: 获取工单信息 
+    * @param processTaskId 工单id
+    * @return ProcessTaskVo
+     */
+    public ProcessTaskVo getProcessTaskDetailById(Long processTaskId);   
+    /**
+     * 
+    * @Author: 14378
+    * @Time:2020年7月3日
+    * @Description: 获取所有工单干系人信息，用于通知接收人
+    * @param processTaskId 工单id
+    * @param processTaskStepId 步骤id
+    * @param receiverMap 工单干系人信息
+    * @return void
+     */
+    public void getReceiverMap(Long processTaskId, Long processTaskStepId, Map<String, List<NotifyReceiverVo>> receiverMap);
 }
