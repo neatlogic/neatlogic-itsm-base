@@ -725,16 +725,6 @@
 	WHERE `id`= #{id}
 	</select>
 	
-	<select id="searchProcessTaskFile" parameterType="codedriver.framework.process.dto.ProcessTaskFileVo" resultType="codedriver.framework.process.dto.ProcessTaskFileVo">
-	SELECT 
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `file_id` AS fileId 
-	FROM `processtask_file` 
-	WHERE `processtask_id` = #{processTaskId} 
-	AND `processtask_step_id` = #{processTaskStepId}
-	</select>
-	
 	<select id="getProcessTaskStepFormAttributeByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
 	SELECT 
 	  `processtask_id` AS processTaskId,
