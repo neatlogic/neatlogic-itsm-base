@@ -14,6 +14,11 @@ public class ProcessTaskContentVo {
 	public ProcessTaskContentVo(String content) {
 		this.content = content;
 	}
+	
+	public ProcessTaskContentVo(String hash,String content) {
+        this.content = content;
+        this.hash = hash;
+    }
 
 	public String getContent() {
 		return content;
