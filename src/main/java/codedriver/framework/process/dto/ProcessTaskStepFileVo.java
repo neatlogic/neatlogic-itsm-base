@@ -1,18 +1,20 @@
 package codedriver.framework.process.dto;
 
-public class ProcessTaskFileVo {
+public class ProcessTaskStepFileVo {
 
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private Long fileId;
+	private Long contentId;
 
-	public ProcessTaskFileVo() {
+	public ProcessTaskStepFileVo() {
 	}
 
-	public ProcessTaskFileVo(Long processTaskId, Long processTaskStepId, Long fileId) {
+	public ProcessTaskStepFileVo(Long processTaskId, Long processTaskStepId, Long fileId, Long contentId) {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
 		this.fileId = fileId;
+		this.contentId = contentId;
 	}
 
 	public Long getProcessTaskId() {
@@ -38,4 +40,12 @@ public class ProcessTaskFileVo {
 	public void setFileId(Long fileId) {
 		this.fileId = fileId;
 	}
+
+    public Long getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(Long contentId) {
+        this.contentId = contentId;
+    }
 }

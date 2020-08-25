@@ -91,6 +91,7 @@ import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
+import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepDataVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
@@ -1540,11 +1541,19 @@ public abstract class ProcessStepHandlerUtilBase {
 			paramObj.put(ProcessTaskAuditDetailType.PRIORITY.getParamName(), processTaskVo.getPriorityUuid());
 
 			// 获取上报描述内容
-			String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(currentProcessTaskStepVo.getId());
-			if (StringUtils.isNotBlank(processTaskStepContentHash)) {
-				paramObj.put(ProcessTaskAuditDetailType.CONTENT.getParamName(), processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContentHash));
-			}
-			List<Long> fileIdList = processTaskMapper.getFileIdListByProcessTaskStepId(currentProcessTaskStepVo.getId());
+			List<Long> fileIdList = new ArrayList<>();
+			List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentByProcessTaskStepId(currentProcessTaskStepVo.getId());
+            for(ProcessTaskStepContentVo processTaskStepContent : processTaskStepContentList) {
+                if (ProcessTaskStepAction.STARTPROCESS.getValue().equals(processTaskStepContent.getType())) {
+                    paramObj.put(ProcessTaskAuditDetailType.CONTENT.getParamName(), processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
+                    fileIdList = processTaskMapper.getFileIdListByContentId(processTaskStepContent.getId());
+                    break;
+                }
+            }
+//			String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(currentProcessTaskStepVo.getId());
+//			if (StringUtils.isNotBlank(processTaskStepContentHash)) {
+//				paramObj.put(ProcessTaskAuditDetailType.CONTENT.getParamName(), processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContentHash));
+//			}
 			if (CollectionUtils.isNotEmpty(fileIdList)) {
 				for (Long fileId : fileIdList) {
 					if (fileMapper.getFileById(fileId) == null) {

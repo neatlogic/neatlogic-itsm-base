@@ -29,7 +29,8 @@ import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
-import codedriver.framework.process.dto.ProcessTaskStepCommentVo;
+import codedriver.framework.process.dto.ProcessTaskStepReplyVo;
+import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
@@ -202,14 +203,22 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());                    
         }
 
-        ProcessTaskStepCommentVo comment = new ProcessTaskStepCommentVo();
+        ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo();
         //获取上报描述内容
-        String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(startProcessTaskStepVo.getId());
-        if(StringUtils.isNotBlank(processTaskStepContentHash)) {
-            comment.setContent(processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContentHash));
+//        String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(startProcessTaskStepVo.getId());
+//        if(StringUtils.isNotBlank(processTaskStepContentHash)) {
+//            comment.setContent(processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContentHash));
+//        }
+        List<Long> fileIdList = new ArrayList<>();
+        List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentByProcessTaskStepId(startProcessTaskStepVo.getId());
+        for(ProcessTaskStepContentVo processTaskStepContent : processTaskStepContentList) {
+            if (ProcessTaskStepAction.STARTPROCESS.getValue().equals(processTaskStepContent.getType())) {
+                fileIdList = processTaskMapper.getFileIdListByContentId(processTaskStepContent.getId());
+                comment.setContent(processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
+                break;
+            }
         }
-        //附件
-        List<Long> fileIdList = processTaskMapper.getFileIdListByProcessTaskStepId(startProcessTaskStepVo.getId());      
+        //附件       
         if(CollectionUtils.isNotEmpty(fileIdList)) {
             comment.setFileList(fileMapper.getFileListByIdList(fileIdList));
         }

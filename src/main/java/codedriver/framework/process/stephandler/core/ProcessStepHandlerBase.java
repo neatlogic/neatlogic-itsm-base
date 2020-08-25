@@ -46,7 +46,7 @@ import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskConvergeVo;
-import codedriver.framework.process.dto.ProcessTaskFileVo;
+import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
@@ -112,17 +112,40 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	/**
 	 * 
 	* @Time:2020年7月28日
-	* @Description: 保存描述内容
+	* @Description: 保存描述内容和附件
 	* @param currentProcessTaskStepVo 
 	* @return void
 	 */
-	private void saveContent(ProcessTaskStepVo currentProcessTaskStepVo) {		
-		String content = currentProcessTaskStepVo.getParamObj().getString("content");
+	private void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action) {
+	    JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+		String content = paramObj.getString("content");        
+        List<Long> fileIdList = JSON.parseArray(JSON.toJSONString(paramObj.getJSONArray("fileIdList")), Long.class);
+        if(StringUtils.isBlank(content) && CollectionUtils.isEmpty(fileIdList)) {
+            return;
+        }
+
+        ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo();
+        processTaskStepContentVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+        processTaskStepContentVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+        processTaskStepContentVo.setType(action.getValue());
 		if (StringUtils.isNotBlank(content)) {
 			ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
 			processTaskMapper.replaceProcessTaskContent(contentVo);
-			processTaskMapper.replaceProcessTaskStepContent(new ProcessTaskStepContentVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), contentVo.getHash()));
+			processTaskStepContentVo.setContentHash(contentVo.getHash());
 		}
+        processTaskMapper.insertProcessTaskStepContent(processTaskStepContentVo);
+
+        /** 保存附件uuid **/
+        ProcessTaskStepFileVo processTaskStepFileVo = new ProcessTaskStepFileVo();
+        processTaskStepFileVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+        processTaskStepFileVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+        processTaskStepFileVo.setContentId(processTaskStepContentVo.getId());
+        if(CollectionUtils.isNotEmpty(fileIdList)) {
+            for (Long fileId : fileIdList) {
+                processTaskStepFileVo.setFileId(fileId);
+                processTaskMapper.insertProcessTaskStepFile(processTaskStepFileVo);
+            }
+        }
 	}
 	
 	@Override
@@ -576,7 +599,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					}
 				}
 				/** 保存描述内容 **/
-				saveContent(currentProcessTaskStepVo);
+				saveContentAndFile(currentProcessTaskStepVo, processTaskStepAction);
 				myComplete(currentProcessTaskStepVo);			
 
 				if (this.getMode().equals(ProcessStepMode.MT)) {
@@ -728,7 +751,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 设置当前步骤状态为未开始 **/
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 			/** 保存撤回原因 **/
-			saveContent(currentProcessTaskStepVo);
+			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskStepAction.RETREAT);
 			myRetreat(currentProcessTaskStepVo);
 
 			/** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
@@ -1036,7 +1059,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 默认状态设为pending，但子类可以选择置为start **/
 //			processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 			/** 保存描述内容 **/
-			saveContent(currentProcessTaskStepVo);
+			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskStepAction.TRANSFER);
 			
 			/** 根据子类需要把最终处理人放进来，引擎将自动写入数据库，也可能为空，例如一些特殊的流程节点 **/
 //			List<ProcessTaskStepUserVo> userList = new ArrayList<>();
@@ -1340,6 +1363,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			if (!ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
 				throw new ProcessTaskRuntimeException("工单非草稿状态，不能进行上报暂存操作");
 			}
+			processTaskMapper.deleteProcessTaskStepContentByProcessTaskStepId(currentProcessTaskStepVo.getId());
+	        processTaskMapper.deleteProcessTaskStepFileByProcessTaskStepId(currentProcessTaskStepVo.getId());
+	        processTaskMapper.deleteProcessTaskFormAttributeValueByProcessTaskId(processTaskId);
 		}
 		try {
 
@@ -1351,22 +1377,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskVo.setPriorityUuid(paramObj.getString("priorityUuid"));
 			processTaskMapper.updateProcessTaskTitleOwnerPriorityUuid(processTaskVo);
 
-			/** 保存描述内容 **/
-			saveContent(currentProcessTaskStepVo);
-
-			/** 保存附件uuid **/
-			ProcessTaskFileVo processTaskFileVo = new ProcessTaskFileVo();
-			processTaskFileVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-			processTaskFileVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-			processTaskMapper.deleteProcessTaskFile(processTaskFileVo);
-			
-			List<Long> fileIdList = JSON.parseArray(JSON.toJSONString(paramObj.getJSONArray("fileIdList")), Long.class);
-			if(CollectionUtils.isNotEmpty(fileIdList)) {
-				for (Long fileId : fileIdList) {
-					processTaskFileVo.setFileId(fileId);
-					processTaskMapper.insertProcessTaskFile(processTaskFileVo);
-				}
-			}
+			/** 保存描述内容和附件 **/
+			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskStepAction.STARTPROCESS);
 			
 			// 组件联动导致隐藏的属性uuid列表
 			ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
