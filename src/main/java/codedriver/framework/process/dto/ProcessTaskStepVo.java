@@ -79,9 +79,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> agentUserList = new ArrayList<>();
 	@EntityField(name = "暂存评论附件或上报描述附件", type = ApiParamType.JSONOBJECT)
-	private ProcessTaskStepCommentVo comment;
+	private ProcessTaskStepReplyVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepCommentVo> commentList = new ArrayList<>();
+	private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
@@ -542,19 +542,19 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.agentUserList = agentUserList;
 	}
 
-	public ProcessTaskStepCommentVo getComment() {
+	public ProcessTaskStepReplyVo getComment() {
 		return comment;
 	}
 
-	public void setComment(ProcessTaskStepCommentVo comment) {
+	public void setComment(ProcessTaskStepReplyVo comment) {
 		this.comment = comment;
 	}
 
-	public List<ProcessTaskStepCommentVo> getCommentList() {
+	public List<ProcessTaskStepReplyVo> getCommentList() {
 		return commentList;
 	}
 
-	public void setCommentList(List<ProcessTaskStepCommentVo> commentList) {
+	public void setCommentList(List<ProcessTaskStepReplyVo> commentList) {
 		this.commentList = commentList;
 	}
 
