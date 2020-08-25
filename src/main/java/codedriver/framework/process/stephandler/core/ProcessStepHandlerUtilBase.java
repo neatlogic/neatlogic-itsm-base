@@ -1,18 +1,18 @@
 package codedriver.framework.process.stephandler.core;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,27 +26,62 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.thread.CodeDriverThread;
+import codedriver.framework.asynchronization.threadlocal.ConditionParamContext;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.asynchronization.threadpool.CommonThreadPool;
+import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.constvalue.SystemUser;
+import codedriver.framework.common.constvalue.UserType;
+import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
+import codedriver.framework.dto.condition.ConditionConfigVo;
+import codedriver.framework.exception.integration.IntegrationHandlerNotFoundException;
+import codedriver.framework.exception.integration.IntegrationNotFoundException;
+import codedriver.framework.exception.integration.IntegrationSendRequestException;
 import codedriver.framework.file.dao.mapper.FileMapper;
+import codedriver.framework.integration.core.IIntegrationHandler;
+import codedriver.framework.integration.core.IntegrationHandlerFactory;
+import codedriver.framework.integration.dao.mapper.IntegrationMapper;
+import codedriver.framework.integration.dto.IntegrationResultVo;
+import codedriver.framework.integration.dto.IntegrationVo;
+import codedriver.framework.notify.dao.mapper.NotifyMapper;
+import codedriver.framework.notify.dto.NotifyPolicyVo;
+import codedriver.framework.notify.dto.NotifyReceiverVo;
+import codedriver.framework.notify.dto.ParamMappingVo;
+import codedriver.framework.process.audithandler.core.IProcessTaskAuditDetailType;
+import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
+import codedriver.framework.process.audithandler.core.ProcessTaskAuditDetailTypeFactory;
+import codedriver.framework.process.column.core.ProcessTaskUtil;
+import codedriver.framework.process.constvalue.ProcessFieldType;
+import codedriver.framework.process.constvalue.ProcessFlowDirection;
+import codedriver.framework.process.constvalue.ProcessStepMode;
+import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
+import codedriver.framework.process.constvalue.ProcessTaskAuditType;
+import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
-import codedriver.framework.process.constvalue.UserType;
+import codedriver.framework.process.constvalue.ProcessTaskStepDataType;
+import codedriver.framework.process.constvalue.ProcessUserType;
+import codedriver.framework.process.constvalue.WorkerPolicy;
+import codedriver.framework.process.dao.mapper.CatalogMapper;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.FormMapper;
+import codedriver.framework.process.dao.mapper.PriorityMapper;
 import codedriver.framework.process.dao.mapper.ProcessMapper;
-import codedriver.framework.process.dao.mapper.ProcessTaskAuditMapper;
+import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskStepDataMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
-import codedriver.framework.process.dao.mapper.notify.NotifyMapper;
-import codedriver.framework.process.dto.ChannelVo;
+import codedriver.framework.process.dto.ActionVo;
+import codedriver.framework.process.dto.ChannelPriorityVo;
 import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
+import codedriver.framework.process.dto.ProcessStepHandlerVo;
+import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
@@ -56,30 +91,31 @@ import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
-import codedriver.framework.process.dto.ProcessTaskStepContentVo;
+import codedriver.framework.process.dto.ProcessTaskStepDataVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
+import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.WorktimeRangeVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
-import codedriver.framework.process.exception.notify.NotifyHandlerNotFoundException;
+import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
+import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 import codedriver.framework.process.exception.worktime.WorktimeNotFoundException;
-import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
-import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
-import codedriver.framework.process.notify.core.INotifyHandler;
-import codedriver.framework.process.notify.core.NotifyHandlerFactory;
+import codedriver.framework.process.integration.handler.ProcessRequestFrom;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
-import codedriver.framework.process.notify.dto.NotifyTemplateVo;
-import codedriver.framework.process.notify.dto.NotifyVo;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
 import codedriver.framework.scheduler.core.IJob;
 import codedriver.framework.scheduler.core.SchedulerManager;
 import codedriver.framework.scheduler.dto.JobObject;
 import codedriver.framework.scheduler.exception.ScheduleHandlerNotFoundException;
+import codedriver.framework.util.ConditionUtil;
+import codedriver.framework.util.NotifyPolicyUtil;
+import codedriver.framework.util.RunScriptUtil;
 
 public abstract class ProcessStepHandlerUtilBase {
 	static Logger logger = LoggerFactory.getLogger(ProcessStepHandlerUtilBase.class);
@@ -87,22 +123,26 @@ public abstract class ProcessStepHandlerUtilBase {
 	private static final ThreadLocal<List<AuditHandler>> AUDIT_HANDLERS = new ThreadLocal<>();
 	private static final ThreadLocal<List<SlaHandler>> SLA_HANDLERS = new ThreadLocal<>();
 	private static final ThreadLocal<List<NotifyHandler>> NOTIFY_HANDLERS = new ThreadLocal<>();
+	private static final ThreadLocal<List<ActionHandler>> ACTION_HANDLERS = new ThreadLocal<>();
 	protected static ProcessMapper processMapper;
 	protected static ProcessTaskMapper processTaskMapper;
-	protected static ProcessTaskAuditMapper processTaskAuditMapper;
 	protected static FormMapper formMapper;
 	protected static UserMapper userMapper;
 	protected static ProcessTaskStepTimeAuditMapper processTaskStepTimeAuditMapper;
-	private static WorktimeMapper worktimeMapper;
+	protected static WorktimeMapper worktimeMapper;
 	protected static ChannelMapper channelMapper;
-	private static NotifyMapper notifyMapper;
+	protected static NotifyMapper notifyMapper;
 	protected static FileMapper fileMapper;
-	// private static SchedulerManager schedulerManager;
-
-	// @Autowired
-	// public void setSchedulerManager(SchedulerManager _schedulerManager) {
-	// schedulerManager = _schedulerManager;
-	// }
+	protected static TeamMapper teamMapper;
+	protected static ProcessStepHandlerMapper processStepHandlerMapper;
+	protected static PriorityMapper priorityMapper;
+	private static IntegrationMapper integrationMapper;
+	protected static ProcessTaskStepDataMapper processTaskStepDataMapper;
+    protected static CatalogMapper catalogMapper;
+	@Autowired
+	public void setProcessTaskStepDataMapperr(ProcessTaskStepDataMapper _processTaskStepDataMapper) {
+		processTaskStepDataMapper = _processTaskStepDataMapper;
+	}
 
 	@Autowired
 	public void setProcessMapper(ProcessMapper _processMapper) {
@@ -112,11 +152,6 @@ public abstract class ProcessStepHandlerUtilBase {
 	@Autowired
 	public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
 		processTaskMapper = _processTaskMapper;
-	}
-
-	@Autowired
-	public void setProcessTaskAuditMapper(ProcessTaskAuditMapper _processTaskAuditMapper) {
-		processTaskAuditMapper = _processTaskAuditMapper;
 	}
 
 	@Autowired
@@ -147,6 +182,186 @@ public abstract class ProcessStepHandlerUtilBase {
 	@Autowired
 	public void setNotifyMapper(NotifyMapper _notifyMapper) {
 		notifyMapper = _notifyMapper;
+	}
+
+	@Autowired
+	public void setFileMapper(FileMapper _fileMapper) {
+		fileMapper = _fileMapper;
+	}
+
+	@Autowired
+	public void setTeamMapper(TeamMapper _teamMapper) {
+		teamMapper = _teamMapper;
+	}
+
+	@Autowired
+	public void setProcessStepHandlerMapper(ProcessStepHandlerMapper _processStepHandlerMapper) {
+		processStepHandlerMapper = _processStepHandlerMapper;
+	}
+
+	@Autowired
+	public void setPriorityMapper(PriorityMapper _priorityMapper) {
+		priorityMapper = _priorityMapper;
+	}
+
+	@Autowired
+	public void setIntegrationMapper(IntegrationMapper _integrationMapper) {
+		integrationMapper = _integrationMapper;
+	}
+	
+	@Autowired
+    public void setCatalogMapper(CatalogMapper _catalogMapper) {
+	    catalogMapper = _catalogMapper;
+    }
+
+	protected static class ActionHandler extends CodeDriverThread {
+
+		private ProcessTaskStepVo currentProcessTaskStepVo;
+		private NotifyTriggerType triggerType;
+
+		public ActionHandler(ProcessTaskStepVo _currentProcessTaskStepVo, NotifyTriggerType _trigger) {
+			currentProcessTaskStepVo = _currentProcessTaskStepVo;
+			triggerType = _trigger;
+			if (_currentProcessTaskStepVo != null) {
+				this.setThreadName("PROCESSTASK-ACTION-" + _currentProcessTaskStepVo.getId());
+			}
+		}
+
+		protected static void action(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
+			if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+				CachedThreadPool.execute(new ActionHandler(currentProcessTaskStepVo, trigger));
+			} else {
+				List<ActionHandler> handlerList = ACTION_HANDLERS.get();
+				if (handlerList == null) {
+					handlerList = new ArrayList<>();
+					ACTION_HANDLERS.set(handlerList);
+					TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+						@Override
+						public void afterCommit() {
+							List<ActionHandler> handlerList = ACTION_HANDLERS.get();
+							for (ActionHandler handler : handlerList) {
+								CachedThreadPool.execute(handler);
+							}
+						}
+
+						@Override
+						public void afterCompletion(int status) {
+							ACTION_HANDLERS.remove();
+						}
+					});
+				}
+				handlerList.add(new ActionHandler(currentProcessTaskStepVo, trigger));
+			}
+		}
+
+		@Override
+		protected void execute() {
+			try {
+				/** 获取步骤配置信息 **/
+				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+				String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
+				stepVo.setConfig(stepConfig);
+				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+				if(processStepHandlerVo != null) {
+					stepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
+				}
+				/** 从步骤配置信息中获取动作列表 **/
+				JSONArray actionList = stepVo.getActionList();
+				if (CollectionUtils.isNotEmpty(actionList)) {
+					for (int i = 0; i < actionList.size(); i++) {
+						JSONObject actionObj = actionList.getJSONObject(i);
+						if (triggerType.getTrigger().equals(actionObj.getString("trigger"))) {
+							String integrationUuid = actionObj.getString("integrationUuid");
+							IntegrationVo integrationVo = integrationMapper.getIntegrationByUuid(integrationUuid);
+							if (integrationVo == null) {
+								throw new IntegrationNotFoundException(integrationUuid);
+							}
+							IIntegrationHandler iIntegrationHandler = IntegrationHandlerFactory.getHandler(integrationVo.getHandler());
+							if (iIntegrationHandler == null) {
+								throw new IntegrationHandlerNotFoundException(integrationVo.getHandler());
+							}
+							/** 参数映射 **/
+							List<ParamMappingVo> paramMappingList = JSON.parseArray(actionObj.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
+							if (CollectionUtils.isNotEmpty(paramMappingList)) {
+								ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+								processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
+								JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
+								for (ParamMappingVo paramMappingVo : paramMappingList) {
+									if (ProcessFieldType.CONSTANT.getValue().equals(paramMappingVo.getType())) {
+										integrationVo.getParamObj().put(paramMappingVo.getName(), paramMappingVo.getValue());
+									} else if (StringUtils.isNotBlank(paramMappingVo.getType())) {
+										Object processFieldValue = processFieldData.get(paramMappingVo.getValue());
+										if (processFieldValue != null) {
+											integrationVo.getParamObj().put(paramMappingVo.getName(), processFieldValue);
+										} else {
+											logger.error("没有找到参数'" + paramMappingVo.getValue() + "'信息");
+										}
+									}
+								}
+							}
+							boolean isSucceed = false;
+							IntegrationResultVo integrationResultVo = iIntegrationHandler.sendRequest(integrationVo, ProcessRequestFrom.PROCESS);
+							if (StringUtils.isNotBlank(integrationResultVo.getError())) {
+								logger.error(integrationResultVo.getError());
+								throw new IntegrationSendRequestException(integrationVo.getUuid());
+							}
+							JSONObject successConditionObj = actionObj.getJSONObject("successCondition");
+							if (MapUtils.isNotEmpty(successConditionObj)) {
+								String name = successConditionObj.getString("name");
+								if (StringUtils.isNotBlank(name)) {
+									String resultValue = null;
+									String transformedResult = integrationResultVo.getTransformedResult();
+									if (StringUtils.isNotBlank(transformedResult)) {
+										JSONObject transformedResultObj = JSON.parseObject(transformedResult);
+										if (MapUtils.isNotEmpty(transformedResultObj)) {
+											resultValue = transformedResultObj.getString(name);
+										}
+									}
+									if (resultValue == null) {
+										String rawResult = integrationResultVo.getRawResult();
+										if (StringUtils.isNotEmpty(rawResult)) {
+											JSONObject rawResultObj = JSON.parseObject(rawResult);
+											if (MapUtils.isNotEmpty(rawResultObj)) {
+												resultValue = rawResultObj.getString(name);
+											}
+										}
+									}
+									if (resultValue != null) {
+										List<String> curentValueList = new ArrayList<>();
+										curentValueList.add(resultValue);
+										String value = successConditionObj.getString("value");
+										List<String> targetValueList = new ArrayList<>();
+										targetValueList.add(value);
+										String expression = successConditionObj.getString("expression");
+										isSucceed = ConditionUtil.predicate(curentValueList, expression, targetValueList);
+									}
+								}
+							} else {
+								String statusCode = String.valueOf(integrationResultVo.getStatusCode());
+								if (statusCode.startsWith("2") || statusCode.startsWith("3")) {
+									isSucceed = true;
+								}
+							}
+							ActionVo actionVo = new ActionVo();
+							actionVo.setProcessTaskStepId(stepVo.getId());
+							actionVo.setProcessTaskStepName(stepVo.getName());
+							actionVo.setIntegrationUuid(integrationUuid);
+							actionVo.setIntegrationName(integrationVo.getName());
+							actionVo.setTrigger(triggerType.getTrigger());
+							actionVo.setTriggerText(triggerType.getText());
+							actionVo.setSucceed(isSucceed);
+							JSONObject paramObj = new JSONObject();
+							paramObj.put(ProcessTaskAuditDetailType.RESTFULACTION.getParamName(), JSON.toJSONString(actionVo));
+							stepVo.setParamObj(paramObj);
+							AuditHandler.audit(stepVo, ProcessTaskAuditType.RESTFULACTION);
+						}
+					}
+				}
+			} catch (Exception ex) {
+				logger.error("动作执行失败：" + ex.getMessage(), ex);
+			}
+		}
+
 	}
 
 	protected static class NotifyHandler extends CodeDriverThread {
@@ -191,68 +406,44 @@ public abstract class ProcessStepHandlerUtilBase {
 		@Override
 		protected void execute() {
 			try {
+				/** 获取步骤配置信息 **/
 				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
-				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-				List<ProcessTaskStepWorkerVo> workerList = null;
-				if (StringUtils.isNotBlank(stepVo.getConfigHash())) {
-					String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
-					JSONObject stepConfigObj = null;
-					stepConfigObj = JSONObject.parseObject(stepConfig);
+				String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
+				stepVo.setConfig(stepConfig);
+				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+				if(processStepHandlerVo != null) {
+					stepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
+				}
+				/** 从步骤配置信息中获取通知策略信息 **/
+				JSONObject notifyPolicyConfig = stepVo.getNotifyPolicyConfig();
+				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
+					Long policyId = notifyPolicyConfig.getLong("policyId");
+					/** 参数映射列表**/
+					List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
+					if (policyId != null) {
+						JSONObject policyConfig = null;
+						ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
+						processTaskStepNotifyPolicyVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+						processTaskStepNotifyPolicyVo.setPolicyId(policyId);
+						processTaskStepNotifyPolicyVo = processTaskMapper.getProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
+						if (processTaskStepNotifyPolicyVo != null) {
+							policyConfig = JSON.parseObject(processTaskStepNotifyPolicyVo.getPolicyConfig());
 
-					if (stepConfigObj != null && stepConfigObj.containsKey("notifyList")) {
-						JSONArray notifyList = stepConfigObj.getJSONArray("notifyList");
-						for (int i = 0; i < notifyList.size(); i++) {
-							JSONObject notifyObj = notifyList.getJSONObject(i);
-							String trigger = notifyObj.getString("trigger");
-							String type = notifyObj.getString("type");
-							String templateUuid = notifyObj.getString("template");
-							JSONArray receiverList = notifyObj.getJSONArray("receiverList");
-							if (receiverList != null && receiverList.size() > 0 && notifyTriggerType.getTrigger().equalsIgnoreCase(trigger)) {
-								INotifyHandler handler = NotifyHandlerFactory.getHandler(type);
-								if (handler != null) {
-									NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(notifyTriggerType);
-									if (StringUtils.isNotBlank(templateUuid)) {
-										NotifyTemplateVo notifyTemplateVo = notifyMapper.getNotifyTemplateByUuid(templateUuid);
-										if (notifyTemplateVo != null) {
-											notifyBuilder.withContentTemplate(notifyTemplateVo.getContent());
-											notifyBuilder.withTitleTemplate(notifyTemplateVo.getTitle());
-										}
-									}
-
-									/** 注入流程作业信息 不够将来再补充 **/
-									notifyBuilder.addData("task", processTaskVo).addData("step", stepVo);
-									/** 注入结束 **/
-
-									for (int u = 0; u < receiverList.size(); u++) {
-										String worker = receiverList.getString(u);
-										if (worker.startsWith("common.")) {
-											worker = worker.substring(7);
-											if (workerList == null) {
-												workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(currentProcessTaskStepVo.getId());
-											}
-											if (worker.equalsIgnoreCase("reporter")) {
-												notifyBuilder.addUserId(processTaskVo.getReporter());
-											} else if (worker.equalsIgnoreCase("owner")) {
-												notifyBuilder.addUserId(processTaskVo.getOwner());
-											} else if (worker.equalsIgnoreCase("worker")) {
-												for (ProcessTaskStepWorkerVo workerVo : workerList) {
-													notifyBuilder.addUserId(workerVo.getUserId());
-												}
-											}
-										} else if (worker.startsWith("user.")) {
-											worker = worker.substring(5);
-											notifyBuilder.addUserId(worker);
-										} else if (worker.startsWith("team.")) {
-											worker = worker.substring(5);
-											notifyBuilder.addTeamId(worker);
-										}
-									}
-									NotifyVo notifyVo = notifyBuilder.build();
-									handler.execute(notifyVo);
-								} else {
-									throw new NotifyHandlerNotFoundException(type);
-								}
+						} else {
+							NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(policyId);
+							if (notifyPolicyVo != null) {
+								policyConfig = notifyPolicyVo.getConfig();
 							}
+						}
+						if(MapUtils.isNotEmpty(policyConfig)) {
+			                IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+							ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+							processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
+							JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
+							JSONObject templateParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
+							Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
+							processStepUtilHandler.getReceiverMap(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), receiverMap);
+							NotifyPolicyUtil.execute(policyConfig, paramMappingList, notifyTriggerType, templateParamData, conditionParamData, receiverMap);						
 						}
 					}
 				}
@@ -260,6 +451,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				logger.error("通知失败：" + ex.getMessage(), ex);
 			}
 		}
+
 	}
 
 	protected static class SlaHandler extends CodeDriverThread {
@@ -461,57 +653,6 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-		private static final ScriptEngineManager sem = new ScriptEngineManager();
-
-		private boolean validateRule(JSONArray ruleList, String connectionType) {
-			if (ruleList != null && ruleList.size() > 0) {
-				ScriptEngine se = sem.getEngineByName("nashorn");
-
-				JSONObject paramObj = new JSONObject();
-				List<ProcessTaskFormAttributeDataVo> formAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-				String script = "";
-				for (int i = 0; i < ruleList.size(); i++) {
-					JSONObject ruleObj = ruleList.getJSONObject(i);
-					String key = ruleObj.getString("key");
-					String value = null;
-					String compareValue = ruleObj.getString("value");
-					String expression = ruleObj.getString("expression");
-					if (key.startsWith("form.")) {
-						for (ProcessTaskFormAttributeDataVo attributeData : formAttributeDataList) {
-							if (attributeData.getAttributeUuid().equals(key.substring(5))) {
-								IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(attributeData.getType());
-								if (handler != null) {
-									value = handler.getValue(attributeData);
-								}
-								break;
-							}
-						}
-					}
-					if (StringUtils.isNotBlank(value)) {
-						paramObj.put(key, value);
-					} else {
-						paramObj.put(key, "");
-					}
-					if (StringUtils.isNotBlank(script)) {
-						if (connectionType.equalsIgnoreCase("and")) {
-							script += " && ";
-						} else {
-							script += " || ";
-						}
-					}
-					script += "json['" + key + "'] " + expression + " '" + compareValue + "'";
-				}
-				se.put("json", paramObj);
-				try {
-					return Boolean.parseBoolean(se.eval(script).toString());
-				} catch (ScriptException e) {
-					logger.error(e.getMessage(), e);
-					return false;
-				}
-			}
-			return false;
-		}
-
 		private static long getRealtime(int time, String unit) {
 			if ("hour".equals(unit)) {
 				return time * 60 * 60 * 1000;
@@ -526,18 +667,10 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected void execute() {
 			List<ProcessTaskSlaVo> slaList = processTaskMapper.getProcessTaskSlaByProcessTaskStepId(currentProcessTaskStepVo.getId());
 			if (slaList != null && slaList.size() > 0) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				long now = System.currentTimeMillis();
-				String worktimeUuid = null;
-				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-				if (processTaskVo != null) {
-					if (StringUtils.isNotBlank(processTaskVo.getChannelUuid())) {
-						ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
-						if (channelVo != null && StringUtils.isNotBlank(channelVo.getWorktimeUuid())) {
-							worktimeUuid = channelVo.getWorktimeUuid();
-						}
-					}
-				}
+				ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+				processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
+				String worktimeUuid = processTaskVo.getWorktimeUuid();
 				for (ProcessTaskSlaVo slaVo : slaList) {
 					/** 如果没有超时时间，证明第一次进入SLA标签范围，开始计算超时时间 **/
 					ProcessTaskSlaTimeVo slaTimeVo = slaVo.getSlaTimeVo();
@@ -545,20 +678,29 @@ public abstract class ProcessStepHandlerUtilBase {
 					if (slaTimeVo == null) {
 						if (slaVo.getConfigObj() != null) {
 							JSONArray policyList = slaVo.getConfigObj().getJSONArray("calculatePolicyList");
-							if (policyList != null && policyList.size() > 0) {
+							if (CollectionUtils.isNotEmpty(policyList)) {
 								POLICY: for (int i = 0; i < policyList.size(); i++) {
 									JSONObject policyObj = policyList.getJSONObject(i);
-									String connectionType = policyObj.getString("connectType");
 									int enablePriority = policyObj.getIntValue("enablePriority");
 									int time = policyObj.getIntValue("time");
 									String unit = policyObj.getString("unit");
 									JSONArray priorityList = policyObj.getJSONArray("priorityList");
-									JSONArray ruleList = policyObj.getJSONArray("ruleList");
-									boolean isHit = false;
-									if (ruleList != null && ruleList.size() > 0) {
-										isHit = validateRule(ruleList, connectionType);
-									} else {// 如果没有规则，则无需判断
-										isHit = true;
+									JSONArray conditionGroupList = policyObj.getJSONArray("conditionGroupList");
+									/** 如果没有规则，则默认生效，如果有规则，以规则计算结果判断是否生效 **/
+									boolean isHit = true;
+									if (CollectionUtils.isNotEmpty(conditionGroupList)) {
+										try {
+										JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
+										ConditionParamContext.init(conditionParamData);
+										ConditionConfigVo conditionConfigVo = new ConditionConfigVo(policyObj);
+										String script = conditionConfigVo.buildScript();
+										// ((false || true) || (true && false) || (true || false))
+										isHit = RunScriptUtil.runScript(script); 
+										}catch(Exception e) {
+											logger.error(e.getMessage(), e);
+										}finally {
+											ConditionParamContext.get().release();											
+										}
 									}
 									if (isHit) {
 										slaTimeVo = new ProcessTaskSlaTimeVo();
@@ -567,11 +709,11 @@ public abstract class ProcessStepHandlerUtilBase {
 											slaTimeVo.setTimeSum(timecost);
 											slaTimeVo.setRealTimeLeft(timecost);
 											slaTimeVo.setTimeLeft(timecost);
-										} else {
-											if (priorityList != null && priorityList.size() > 0) {
+										} else {//关联优先级
+											if (CollectionUtils.isNotEmpty(priorityList)) {
 												for (int p = 0; p < priorityList.size(); p++) {
 													JSONObject priorityObj = priorityList.getJSONObject(p);
-													if (priorityObj.getString("priority").equals(processTaskVo.getPriorityUuid())) {
+													if (priorityObj.getString("priorityUuid").equals(processTaskVo.getPriorityUuid())) {
 														long timecost = getRealtime(priorityObj.getIntValue("time"), priorityObj.getString("unit"));
 														slaTimeVo.setTimeSum(timecost);
 														slaTimeVo.setRealTimeLeft(timecost);
@@ -602,32 +744,33 @@ public abstract class ProcessStepHandlerUtilBase {
 
 					// 修正最终超时日期
 					if (slaTimeVo != null) {
-						slaTimeVo.setRealExpireTime(sdf.format(new Date(now + slaTimeVo.getRealTimeLeft())));
+						slaTimeVo.setRealExpireTime(new Date(now + slaTimeVo.getRealTimeLeft()));
 						if (StringUtils.isNotBlank(worktimeUuid)) {
 							if (slaTimeVo.getTimeLeft() != null) {
 								long expireTime = calculateExpireTime(now, slaTimeVo.getTimeLeft(), worktimeUuid);
-								slaTimeVo.setExpireTime(sdf.format(new Date(expireTime)));
+								slaTimeVo.setExpireTime(new Date(expireTime));
 							} else {
 								throw new RuntimeException("计算剩余时间失败");
 							}
 						} else {
 							if (slaTimeVo.getTimeLeft() != null) {
-								slaTimeVo.setExpireTime(sdf.format(new Date(now + slaTimeVo.getTimeLeft())));
+								slaTimeVo.setExpireTime(new Date(now + slaTimeVo.getTimeLeft()));
 							} else {
 								throw new RuntimeException("计算剩余时间失败");
 							}
 						}
 						slaTimeVo.setSlaId(slaVo.getId());
+						slaTimeVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 						if (isSlaTimeExists) {
 							processTaskMapper.updateProcessTaskSlaTime(slaTimeVo);
 						} else {
 							processTaskMapper.insertProcessTaskSlaTime(slaTimeVo);
 						}
-
-						if (StringUtils.isNotBlank(slaTimeVo.getExpireTime()) && slaVo.getConfigObj() != null) {
+						/** 第一次进入时需要加载定时作业 **/
+						if (!isSlaTimeExists && slaTimeVo.getExpireTime() != null && slaVo.getConfigObj() != null) {
 							// 加载定时作业，执行超时通知操作
 							JSONArray notifyPolicyList = slaVo.getConfigObj().getJSONArray("notifyPolicyList");
-							if (notifyPolicyList != null && notifyPolicyList.size() > 0) {
+							if (CollectionUtils.isNotEmpty(notifyPolicyList)) {
 								for (int i = 0; i < notifyPolicyList.size(); i++) {
 									JSONObject notifyPolicyObj = notifyPolicyList.getJSONObject(i);
 									ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = new ProcessTaskSlaNotifyVo();
@@ -635,7 +778,6 @@ public abstract class ProcessStepHandlerUtilBase {
 									processTaskSlaNotifyVo.setConfig(notifyPolicyObj.toJSONString());
 									// 需要发通知时写入数据，执行完毕后清除
 									processTaskMapper.insertProcessTaskSlaNotify(processTaskSlaNotifyVo);
-
 									IJob jobHandler = SchedulerManager.getHandler(ProcessTaskSlaNotifyJob.class.getName());
 									if (jobHandler != null) {
 										JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("slaNotifyId", processTaskSlaNotifyVo.getId());
@@ -649,7 +791,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							}
 							// 加载定时作业，执行超时转交操作
 							JSONArray transferPolicyList = slaVo.getConfigObj().getJSONArray("transferPolicyList");
-							if (transferPolicyList != null && transferPolicyList.size() > 0) {
+							if (CollectionUtils.isNotEmpty(transferPolicyList)) {
 								for (int i = 0; i < transferPolicyList.size(); i++) {
 									JSONObject transferPolicyObj = transferPolicyList.getJSONObject(i);
 									ProcessTaskSlaTransferVo processTaskSlaTransferVo = new ProcessTaskSlaTransferVo();
@@ -657,7 +799,6 @@ public abstract class ProcessStepHandlerUtilBase {
 									processTaskSlaTransferVo.setConfig(transferPolicyObj.toJSONString());
 									// 需要转交时写入数据，执行完毕后清除
 									processTaskMapper.insertProcessTaskSlaTransfer(processTaskSlaTransferVo);
-
 									IJob jobHandler = SchedulerManager.getHandler(ProcessTaskSlaTransferJob.class.getName());
 									if (jobHandler != null) {
 										JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("slaTransferId", processTaskSlaTransferVo.getId());
@@ -677,9 +818,9 @@ public abstract class ProcessStepHandlerUtilBase {
 	}
 
 	protected static class TimeAuditHandler {
+		@SuppressWarnings("incomplete-switch")
 		protected static void audit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action) {
 			ProcessTaskStepTimeAuditVo processTaskStepTimeAuditVo = processTaskStepTimeAuditMapper.getLastProcessTaskStepTimeAuditByStepId(currentProcessTaskStepVo.getId());
-			boolean needNewAuduit = false;
 			ProcessTaskStepTimeAuditVo newAuditVo = new ProcessTaskStepTimeAuditVo();
 			newAuditVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 			switch (action) {
@@ -749,55 +890,471 @@ public abstract class ProcessStepHandlerUtilBase {
 	}
 
 	protected static class ActionRoleChecker {
-		protected static boolean isWorker(ProcessTaskStepVo currentProcessTaskStepVo) {
-			List<ProcessTaskStepUserVo> userList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), UserType.MAJOR.getValue());
-			boolean hasRight = false;
-			if (userList.size() > 0) {
-				for (ProcessTaskStepUserVo userVo : userList) {
-					if (userVo.getUserId().equals(UserContext.get().getUserId())) {
-						hasRight = true;
+
+		protected static boolean verifyActionAuthoriy(Long processTaskId, ProcessTaskStepAction action) {
+			return verifyActionAuthoriy(processTaskId, null, action);
+		}
+
+		protected static boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action) {
+			List<String> verifyActionList = new ArrayList<>();
+			verifyActionList.add(action.getValue());
+			// TODO 临时跳过 作业无用户，后续再修改
+			if (UserContext.get().getUserUuid() != null) {
+				List<String> actionList = getProcessTaskStepActionList(processTaskId, processTaskStepId, verifyActionList);
+				if (!actionList.contains(action.getValue())) {
+					throw new ProcessTaskNoPermissionException(action.getText());
+				}
+			}
+			return true;
+		}
+
+		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId) {
+			return getProcessTaskStepActionList(processTaskId, processTaskStepId, new ArrayList<>());
+		}
+
+		/**
+		 * 
+		 * @Time:2020年4月3日
+		 * @Description: 获取当前用户对当前步骤的部分操作权限列表（verifyActionList包含的那部分）
+		 * @param processTaskId
+		 * @param processTaskStepId
+		 * @param verifyActionList
+		 * @return List<String>
+		 */
+		protected static List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
+			//系统用户拥有所有权限
+			if(SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid())) {
+				return verifyActionList;
+			}
+			Set<String> resultList = new HashSet<>();
+			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
+			// 工单信息查看权限，有本工单对应服务的上报权限或者工单干系人，才有该工单信息查看权限;
+			if (CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.POCESSTASKVIEW.getValue())) {
+				if (UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
+					resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+				} else if (UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
+					resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+				} else {
+					List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
+					List<String> channelList = channelMapper.getAuthorizedChannelUuidList(UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleUuidList(), processTaskVo.getChannelUuid());
+					if (channelList.contains(processTaskVo.getChannelUuid())) {
+						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+					} else if (processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleUuidList()) > 0) {
+						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+					} else if (processTaskMapper.checkIsProcessTaskStepUser(processTaskId, null, UserContext.get().getUserUuid(true)) > 0) {
+						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
+					}
+				}
+			}
+			// 上报提交
+			if (CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.STARTPROCESS.getValue())) {
+				if (ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
+					if (UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner()) || UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
+						resultList.add(ProcessTaskStepAction.STARTPROCESS.getValue());
+					}
+				}
+			}
+			if (processTaskStepId != null) {
+				// 获取步骤信息
+				ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
+				if (processTaskStepVo != null) {
+					List<String> currentUserProcessUserTypeList = new ArrayList<>();
+					List<String> actionList = new ArrayList<>();
+					actionList.add(ProcessTaskStepAction.VIEW.getValue());
+					actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
+					if (CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
+						actionList = new ArrayList<>();
+						actionList.add(ProcessTaskStepAction.VIEW.getValue());
+						actionList.add(ProcessTaskStepAction.TRANSFER.getValue());
+						if (CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
+							currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
+						}
+						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStepVo, actionList, currentUserProcessUserTypeList);
+						// 根据流程设置和步骤状态判断当前用户权限
+						for (String action : configActionList) {
+							if (ProcessTaskStepAction.VIEW.getValue().equals(action)) {
+								resultList.add(action);
+							} else if (ProcessTaskStepAction.TRANSFER.getValue().equals(action)) {
+								// 步骤状态为已激活的才能转交
+								if (processTaskStepVo.getIsActive() == 1) {
+									resultList.add(action);
+								}
+							}
+						}
+						if (UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
+							resultList.add(ProcessTaskStepAction.VIEW.getValue());
+						} else if (UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
+							resultList.add(ProcessTaskStepAction.VIEW.getValue());
+						} else if (processTaskMapper.checkIsProcessTaskStepUser(processTaskId, processTaskStepId, UserContext.get().getUserUuid(true)) > 0) {
+							resultList.add(ProcessTaskStepAction.VIEW.getValue());
+						}
+					}
+
+					actionList = new ArrayList<>();
+					actionList.add(ProcessTaskStepAction.COMPLETE.getValue());
+					actionList.add(ProcessTaskStepAction.SAVE.getValue());
+					actionList.add(ProcessTaskStepAction.COMMENT.getValue());
+					actionList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
+					actionList.add(ProcessTaskStepAction.ACCEPT.getValue());
+					actionList.add(ProcessTaskStepAction.START.getValue());
+					actionList.add(ProcessTaskStepAction.BACK.getValue());
+					if (CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
+						if (processTaskStepVo.getIsActive() == 1) {
+							if (CollectionUtils.isEmpty(currentUserProcessUserTypeList)) {
+								currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStepId);
+							}
+							if (currentUserProcessUserTypeList.contains(ProcessUserType.WORKER.getValue())) {
+								if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepVo.getStatus()) || ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus())) {
+									// 完成complete 暂存save 评论comment 创建子任务createsubtask
+									if (currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue()) || currentUserProcessUserTypeList.contains(ProcessUserType.AGENT.getValue())) {
+										List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getToProcessTaskStepByFromIdAndType(processTaskStepId,null);
+										for (ProcessTaskStepVo processTaskStep : processTaskStepList) {
+											if (processTaskStep.getIsActive() != null) {
+												if (ProcessFlowDirection.FORWARD.getValue().equals(processTaskStep.getFlowDirection())) {
+													resultList.add(ProcessTaskStepAction.COMPLETE.getValue());
+												} else if (ProcessFlowDirection.BACKWARD.getValue().equals(processTaskStep.getFlowDirection()) && processTaskStep.getIsActive().intValue() != 0) {
+													resultList.add(ProcessTaskStepAction.BACK.getValue());
+												}
+											}
+										}
+										resultList.add(ProcessTaskStepAction.SAVE.getValue());
+										resultList.add(ProcessTaskStepAction.COMMENT.getValue());
+										resultList.add(ProcessTaskStepAction.CREATESUBTASK.getValue());
+									}
+								} else if (ProcessTaskStatus.PENDING.getValue().equals(processTaskStepVo.getStatus())) {// 已激活未处理
+									if (currentUserProcessUserTypeList.contains(ProcessUserType.MAJOR.getValue())) {
+										resultList.add(ProcessTaskStepAction.START.getValue());
+									} else {// 没有主处理人时是accept
+										resultList.add(ProcessTaskStepAction.ACCEPT.getValue());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			List<String> actionList = new ArrayList<>();
+			actionList.add(ProcessTaskStepAction.ABORT.getValue());
+			actionList.add(ProcessTaskStepAction.RECOVER.getValue());
+			actionList.add(ProcessTaskStepAction.UPDATE.getValue());
+			actionList.add(ProcessTaskStepAction.URGE.getValue());
+			if (CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
+				// 终止/恢复流程abort、修改上报内容update取工单当前所有正在处理的节点权限配置的并集
+				List<ProcessTaskStepVo> startProcessTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.START.getValue());
+				List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.PROCESS.getValue());
+				processTaskStepList.addAll(startProcessTaskStepList);
+				for (ProcessTaskStepVo processTaskStep : processTaskStepList) {
+					if (processTaskStep.getIsActive().intValue() == 1) {
+						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
+						actionList = new ArrayList<>();
+						actionList.add(ProcessTaskStepAction.ABORT.getValue());
+						actionList.add(ProcessTaskStepAction.UPDATE.getValue());
+						actionList.add(ProcessTaskStepAction.URGE.getValue());
+						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
+						// 根据流程设置和步骤状态判断当前用户权限
+						for (String action : configActionList) {
+							if (ProcessTaskStepAction.ABORT.getValue().equals(action)) {
+								// 工单状态为进行中的才能终止
+								if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskVo.getStatus())) {
+									resultList.add(action);
+								}
+							} else if (ProcessTaskStepAction.UPDATE.getValue().equals(action)) {
+								resultList.add(action);
+							} else if (ProcessTaskStepAction.URGE.getValue().equals(action)) {
+								resultList.add(action);
+							}
+						}
+					} else if (processTaskStep.getIsActive().intValue() == -1) {
+						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
+						actionList = new ArrayList<>();
+						actionList.add(ProcessTaskStepAction.ABORT.getValue());
+						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
+						if (configActionList.contains(ProcessTaskStepAction.ABORT.getValue())) {
+							configActionList.add(ProcessTaskStepAction.RECOVER.getValue());
+						}
+						// 根据流程设置和步骤状态判断当前用户权限
+						for (String action : configActionList) {
+							if (ProcessTaskStepAction.RECOVER.getValue().equals(action)) {
+								// 工单状态为已终止的才能恢复
+								if (ProcessTaskStatus.ABORTED.getValue().equals(processTaskVo.getStatus())) {
+									resultList.add(action);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.WORK.getValue())) {
+				List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
+				// 有可处理步骤work
+				if (processTaskMapper.checkIsWorker(processTaskId, processTaskStepId, UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleUuidList()) > 0) {
+					resultList.add(ProcessTaskStepAction.WORK.getValue());
+				}
+			}
+
+			if (CollectionUtils.isEmpty(verifyActionList) || verifyActionList.contains(ProcessTaskStepAction.RETREAT.getValue())) {
+				// 撤销权限retreat
+				Set<ProcessTaskStepVo> retractableStepSet = getRetractableStepListByProcessTaskId(processTaskId);
+				if (CollectionUtils.isNotEmpty(retractableStepSet)) {
+					if (processTaskStepId != null && verifyActionList.contains(ProcessTaskStepAction.RETREAT.getValue())) {
+						for (ProcessTaskStepVo processTaskStepVo : retractableStepSet) {
+							if (processTaskStepId.equals(processTaskStepVo.getId())) {
+								resultList.add(ProcessTaskStepAction.RETREAT.getValue());
+							}
+						}
+					} else {
+						resultList.add(ProcessTaskStepAction.RETREAT.getValue());
+					}
+				}
+			}
+
+			return new ArrayList<String>(resultList);
+		}
+
+		/**
+		 * 
+		 * @Time:2020年4月3日
+		 * @Description: 获取当前用户在当前步骤中工单干系人列表
+		 * @param processTaskVo     工单信息
+		 * @param processTaskStepId 步骤id
+		 * @return List<String>
+		 */
+		private static List<String> getCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, Long processTaskStepId) {
+			List<String> currentUserProcessUserTypeList = new ArrayList<>();
+			currentUserProcessUserTypeList.add(UserType.ALL.getValue());
+			if (UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
+				currentUserProcessUserTypeList.add(ProcessUserType.OWNER.getValue());
+			}
+			if (UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
+				currentUserProcessUserTypeList.add(ProcessUserType.REPORTER.getValue());
+			}
+			List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MAJOR.getValue());
+			List<String> majorUserUuidList = majorUserList.stream().map(ProcessTaskStepUserVo::getUserUuid).collect(Collectors.toList());
+			if (majorUserUuidList.contains(UserContext.get().getUserUuid(true))) {
+				currentUserProcessUserTypeList.add(ProcessUserType.MAJOR.getValue());
+			}
+			List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
+			List<String> minorUserUuidList = minorUserList.stream().map(ProcessTaskStepUserVo::getUserUuid).collect(Collectors.toList());
+			if (minorUserUuidList.contains(UserContext.get().getUserUuid(true))) {
+				currentUserProcessUserTypeList.add(ProcessUserType.MINOR.getValue());
+			}
+			List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.AGENT.getValue());
+			List<String> agentUserUuidList = agentUserList.stream().map(ProcessTaskStepUserVo::getUserUuid).collect(Collectors.toList());
+			if (agentUserUuidList.contains(UserContext.get().getUserUuid(true))) {
+				currentUserProcessUserTypeList.add(ProcessUserType.AGENT.getValue());
+			}
+			List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepId);
+			if (CollectionUtils.isNotEmpty(workerList)) {
+				List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
+				for (ProcessTaskStepWorkerVo worker : workerList) {
+					if (GroupSearch.USER.getValue().equals(worker.getType()) && UserContext.get().getUserUuid(true).equals(worker.getUuid())) {
+						currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
+						break;
+					} else if (GroupSearch.TEAM.getValue().equals(worker.getType()) && currentUserTeamList.contains(worker.getUuid())) {
+						currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
+						break;
+					} else if (GroupSearch.ROLE.getValue().equals(worker.getType()) && UserContext.get().getRoleUuidList().contains(worker.getUuid())) {
+						currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
 						break;
 					}
 				}
 			}
-			return hasRight;
+
+			return currentUserProcessUserTypeList;
 		}
 
-		protected static boolean start(ProcessTaskStepVo currentProcessTaskStepVo) {
-			boolean isWorker = isWorker(currentProcessTaskStepVo);
-			if (!isWorker) {
-				throw new ProcessTaskRuntimeException("您不是当前步骤处理人");
+		/**
+		 * 
+		 * @Time:2020年4月2日
+		 * @Description: 获取流程节点配置中的当前用户的拥有的权限
+		 * @param processTaskVo
+		 * @param processTaskStepVo
+		 * @param actionList                     要获取的权限集合
+		 * @param currentUserProcessUserTypeList 当前用户工单干系人列表
+		 * @return List<String>
+		 */
+		private static List<String> getProcessTaskStepConfigActionList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, List<String> actionList, List<String> currentUserProcessUserTypeList) {
+			String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+			JSONObject stepConfigObj = JSON.parseObject(stepConfig);
+			JSONArray authorityList = stepConfigObj.getJSONArray("authorityList");
+			// 如果步骤自定义权限设置为空，则用组件的全局权限设置
+			if (CollectionUtils.isEmpty(authorityList)) {
+				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
+				if(processStepHandlerVo != null) {
+					JSONObject handlerConfigObj = processStepHandlerVo.getConfig();
+					if(MapUtils.isNotEmpty(handlerConfigObj)) {
+						authorityList = handlerConfigObj.getJSONArray("authorityList");
+					}
+				}
 			}
-			return isWorker;
-		}
-
-		protected static boolean abortProcessTask(ProcessTaskVo currentProcessTaskVo) {
-			return true;
-		}
-
-		protected static boolean recoverProcessTask(ProcessTaskVo currentProcessTaskVo) {
-			return true;
-		}
-
-		protected static boolean transfer(ProcessTaskStepVo currentProcessTaskStepVo) {
-			boolean isWorker = isWorker(currentProcessTaskStepVo);
-			if (!isWorker) {
-				throw new ProcessTaskRuntimeException("您不是当前步骤处理人");
+			List<String> configActionList = new ArrayList<>();
+			if (CollectionUtils.isNotEmpty(authorityList)) {
+				List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
+				for (int i = 0; i < authorityList.size(); i++) {
+					JSONObject authorityObj = authorityList.getJSONObject(i);
+					JSONArray acceptList = authorityObj.getJSONArray("acceptList");
+					if (CollectionUtils.isNotEmpty(acceptList)) {
+						for (int j = 0; j < acceptList.size(); j++) {
+							String accept = acceptList.getString(j);
+							String[] split = accept.split("#");
+							if (GroupSearch.COMMON.getValue().equals(split[0])) {
+								if (currentUserProcessUserTypeList.contains(split[1])) {
+									configActionList.add(authorityObj.getString("action"));
+									break;
+								}
+							} else if (ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue().equals(split[0])) {
+								if (currentUserProcessUserTypeList.contains(split[1])) {
+									configActionList.add(authorityObj.getString("action"));
+									break;
+								}
+							} else if (GroupSearch.USER.getValue().equals(split[0])) {
+								if (UserContext.get().getUserUuid(true).equals(split[1])) {
+									configActionList.add(authorityObj.getString("action"));
+									break;
+								}
+							} else if (GroupSearch.TEAM.getValue().equals(split[0])) {
+								if (currentUserTeamList.contains(split[1])) {
+									configActionList.add(authorityObj.getString("action"));
+									break;
+								}
+							} else if (GroupSearch.ROLE.getValue().equals(split[0])) {
+								if (UserContext.get().getRoleUuidList().contains(split[1])) {
+									configActionList.add(authorityObj.getString("action"));
+									break;
+								}
+							}
+						}
+					}
+				}
+				configActionList.retainAll(actionList);
 			}
-			return isWorker;
+			return configActionList;
+		}
+
+		/**
+		 * 
+		 * @Time:2020年4月3日
+		 * @Description: 获取工单中当前用户能撤回的步骤列表
+		 * @param processTaskId
+		 * @return Set<ProcessTaskStepVo>
+		 */
+		protected static Set<ProcessTaskStepVo> getRetractableStepListByProcessTaskId(Long processTaskId) {
+			Set<ProcessTaskStepVo> resultSet = new HashSet<>();
+			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
+			for (ProcessTaskStepVo stepVo : processTaskStepList) {
+				/** 找到所有已激活步骤 **/
+				if (stepVo.getIsActive().equals(1)) {
+					resultSet.addAll(getRetractableStepListByProcessTaskStepId(stepVo.getId()));
+				}
+			}
+			return resultSet;
+		}
+
+		/**
+		 * 
+		 * @Author: 14378
+		 * @Time:2020年4月3日
+		 * @Description: 获取当前步骤的前置步骤列表中处理人是当前用户的步骤列表
+		 * @param processTaskStepId 已激活的步骤id
+		 * @return List<ProcessTaskStepVo>
+		 */
+		private static List<ProcessTaskStepVo> getRetractableStepListByProcessTaskStepId(Long processTaskStepId) {
+			List<ProcessTaskStepVo> resultList = new ArrayList<>();
+			/** 所有前置步骤 **/
+			List<ProcessTaskStepVo> fromStepList = processTaskMapper.getFromProcessTaskStepByToId(processTaskStepId);
+			/** 找到所有已完成步骤 **/
+			for (ProcessTaskStepVo fromStep : fromStepList) {
+				IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(fromStep.getHandler());
+				if (handler != null) {
+					if (ProcessStepMode.MT == handler.getMode()) {// 手动处理节点
+						// 获取步骤处理人
+						List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(fromStep.getId(), ProcessUserType.MAJOR.getValue());
+						List<String> majorUserUuidList = majorUserList.stream().map(ProcessTaskStepUserVo::getUserUuid).collect(Collectors.toList());
+						if (majorUserUuidList.contains(UserContext.get().getUserUuid(true))) {
+							resultList.add(fromStep);
+						}
+					} else {// 自动处理节点，继续找前置节点
+						resultList.addAll(getRetractableStepListByProcessTaskStepId(fromStep.getId()));
+					}
+				} else {
+					throw new ProcessStepHandlerNotFoundException(fromStep.getHandler());
+				}
+			}
+			return resultList;
+		}
+
+		/**
+		 * 
+		 * @Time:2020年4月3日
+		 * @Description: 获取工单中当前用户能处理的步骤列表
+		 * @param processTaskId
+		 * @return List<ProcessTaskStepVo>
+		 */
+		protected static List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId) {
+			List<ProcessTaskStepVo> resultList = new ArrayList<>();
+			List<String> currentUserTeamList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
+			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
+			for (ProcessTaskStepVo stepVo : processTaskStepList) {
+				/** 找到所有已激活未处理的步骤 **/
+				if (stepVo.getIsActive().equals(1)) {
+					List<ProcessTaskStepWorkerVo> processTaskStepWorkerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(stepVo.getId());
+					for (ProcessTaskStepWorkerVo processTaskStepWorkerVo : processTaskStepWorkerList) {
+						if (GroupSearch.USER.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getUserUuid(true).equals(processTaskStepWorkerVo.getUuid())) {
+							resultList.add(stepVo);
+							break;
+						} else if (GroupSearch.TEAM.getValue().equals(processTaskStepWorkerVo.getType()) && currentUserTeamList.contains(processTaskStepWorkerVo.getUuid())) {
+							resultList.add(stepVo);
+							break;
+						} else if (GroupSearch.ROLE.getValue().equals(processTaskStepWorkerVo.getType()) && UserContext.get().getRoleUuidList().contains(processTaskStepWorkerVo.getUuid())) {
+							resultList.add(stepVo);
+							break;
+						}
+					}
+				}
+			}
+			return resultList;
+		}
+
+		/**
+		 * 
+		 * @Time:2020年4月18日
+		 * @Description: 获取工单中当前用户能催办的步骤列表
+		 * @param processTaskId
+		 * @return List<ProcessTaskStepVo>
+		 */
+		protected static List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId) {
+			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
+			List<ProcessTaskStepVo> resultList = new ArrayList<>();
+			List<ProcessTaskStepVo> startProcessTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.START.getValue());
+			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskId, ProcessStepType.PROCESS.getValue());
+			processTaskStepList.addAll(startProcessTaskStepList);
+			for (ProcessTaskStepVo processTaskStep : processTaskStepList) {
+				if (processTaskStep.getIsActive().intValue() == 1) {
+					List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
+					List<String> actionList = new ArrayList<>();
+					actionList.add(ProcessTaskStepAction.URGE.getValue());
+					List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
+					if (configActionList.contains(ProcessTaskStepAction.URGE.getValue())) {
+						resultList.add(processTaskStep);
+					}
+				}
+			}
+			return resultList;
 		}
 	}
 
 	protected static class AuditHandler extends CodeDriverThread {
 		private ProcessTaskStepVo currentProcessTaskStepVo;
-		private ProcessTaskStepAction action;
+		private IProcessTaskAuditType action;
 
-		public AuditHandler(ProcessTaskStepVo _currentProcessTaskStepVo, ProcessTaskStepAction _action) {
+		public AuditHandler(ProcessTaskStepVo _currentProcessTaskStepVo, IProcessTaskAuditType _action) {
 			currentProcessTaskStepVo = _currentProcessTaskStepVo;
 			action = _action;
 		}
 
-		protected static synchronized void audit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action) {
+		public static synchronized void audit(ProcessTaskStepVo currentProcessTaskStepVo, IProcessTaskAuditType action) {
 			if (!TransactionSynchronizationManager.isSynchronizationActive()) {
 				AuditHandler handler = new AuditHandler(currentProcessTaskStepVo, action);
 				CommonThreadPool.execute(handler);
@@ -825,16 +1382,6 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-//		private void saveAuditDetail(ProcessTaskStepAuditVo processTaskStepAuditVo, ProcessTaskStepAuditDetailVo oldAudit, ProcessTaskAuditDetailType detailType, String newValue) {
-//			if (oldAudit == null) {
-//				if (StringUtils.isNotBlank(newValue)) {
-//					processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), detailType.getValue(), null, newValue));
-//				}
-//			} else if ((StringUtils.isBlank(oldAudit.getNewContent()) && StringUtils.isNotBlank(newValue)) || !oldAudit.getNewContent().equals(newValue)) {
-//				processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), detailType.getValue(), oldAudit.getNewContent(), newValue));
-//			}
-//		}
-		
 		@Override
 		public void execute() {
 			String oldName = Thread.currentThread().getName();
@@ -844,81 +1391,25 @@ public abstract class ProcessStepHandlerUtilBase {
 				processTaskStepAuditVo.setAction(action.getValue());
 				processTaskStepAuditVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskStepAuditVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-				processTaskStepAuditVo.setUserId(UserContext.get().getUserId(true));
+				processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid());// 兼容automatic作业无用户
+				processTaskStepAuditVo.setStepStatus(currentProcessTaskStepVo.getStatus());
 				processTaskMapper.insertProcessTaskStepAudit(processTaskStepAuditVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
-				if(MapUtils.isNotEmpty(paramObj)) {
-					String title = paramObj.getString(ProcessTaskAuditDetailType.TITLE.getParamName());
-					if(StringUtils.isNotBlank(title)) {
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.TITLE.getValue(), null, title));
-					}
-					String content = paramObj.getString(ProcessTaskAuditDetailType.CONTENT.getParamName());
-					if(StringUtils.isNotBlank(content)) {
-						ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
-						processTaskMapper.replaceProcessTaskContent(contentVo);
-						processTaskMapper.replaceProcessTaskStepContent(new ProcessTaskStepContentVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), contentVo.getHash()));
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.CONTENT.getValue(), null, contentVo.getHash()));
-					}
-					String priorityUuid = paramObj.getString(ProcessTaskAuditDetailType.PRIORITY.getParamName());
-					if(StringUtils.isNotBlank(priorityUuid)) {
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.PRIORITY.getValue(), null, priorityUuid));
-					}
-					String fileUuidList = paramObj.getString(ProcessTaskAuditDetailType.FILE.getParamName());
-					if(StringUtils.isNotBlank(fileUuidList)) {
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.FILE.getValue(), null, fileUuidList));
-					}
-					String workerList = paramObj.getString(ProcessTaskAuditDetailType.WORKER.getParamName());
-					if(StringUtils.isNotBlank(workerList)) {
-						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.WORKER.getValue(), null, workerList));
+				if (MapUtils.isNotEmpty(paramObj)) {
+					for (IProcessTaskAuditDetailType auditDetailType : ProcessTaskAuditDetailTypeFactory.getAuditDetailTypeList()) {
+						String newDataHash = null;
+						String newData = paramObj.getString(auditDetailType.getParamName());
+						if (StringUtils.isNotBlank(newData)) {
+							ProcessTaskContentVo contentVo = new ProcessTaskContentVo(newData);
+							processTaskMapper.replaceProcessTaskContent(contentVo);
+							newDataHash = contentVo.getHash();
+						}
+						String oldDataHash = paramObj.getString(auditDetailType.getOldDataParamName());
+						if (!Objects.equals(oldDataHash, newDataHash)) {
+							processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), auditDetailType.getValue(), oldDataHash, newDataHash));
+						}
 					}
 				}
-//				/** 获取作业信息 **/
-//				ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-//				/** 获取开始节点内容信息 **/
-//				ProcessTaskContentVo startContentVo = null;
-//				List<ProcessTaskStepVo> stepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(currentProcessTaskStepVo.getProcessTaskId(), ProcessStepType.START.getValue());
-//				if (stepList.size() == 1) {
-//					ProcessTaskStepVo startStepVo = stepList.get(0);
-//					List<ProcessTaskStepContentVo> contentList = processTaskMapper.getProcessTaskStepContentProcessTaskStepId(startStepVo.getId());
-//					if (contentList.size() > 0) {
-//						ProcessTaskStepContentVo contentVo = contentList.get(0);
-//						startContentVo = processTaskMapper.getProcessTaskContentByHash(contentVo.getContentHash());
-//					}
-//				}
-//				/** 标题修改审计 **/
-//				ProcessTaskStepAuditDetailVo titleAudit = processTaskMapper.getProcessTaskStepAuditDetail(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskAuditDetailType.TITLE.getValue());
-//				saveAuditDetail(processTaskStepAuditVo, titleAudit, ProcessTaskAuditDetailType.TITLE, processTaskVo.getTitle());
-//
-//				/** 内容修改审计 **/
-//				if (startContentVo != null) {
-//					ProcessTaskStepAuditDetailVo contentAudit = processTaskMapper.getProcessTaskStepAuditDetail(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskAuditDetailType.CONTENT.getValue());
-//					saveAuditDetail(processTaskStepAuditVo, contentAudit, ProcessTaskAuditDetailType.CONTENT, startContentVo.getHash());
-//				}
-//				/** 优先级修改审计 **/
-//				ProcessTaskStepAuditDetailVo urgencyAudit = processTaskMapper.getProcessTaskStepAuditDetail(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskAuditDetailType.PRIORITY.getValue());
-//				saveAuditDetail(processTaskStepAuditVo, urgencyAudit, ProcessTaskAuditDetailType.PRIORITY, processTaskVo.getPriorityUuid());
-//
-//				/** 表单修改审计 **/
-//				ProcessTaskStepAuditDetailVo formAudit = processTaskMapper.getProcessTaskStepAuditDetail(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskAuditDetailType.FORM.getValue());
-//
-//				List<ProcessTaskFormAttributeDataVo> formAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-//				JSONObject newFormObj = new JSONObject();
-//				for (ProcessTaskFormAttributeDataVo attributeData : formAttributeDataList) {
-//					newFormObj.put(attributeData.getAttributeUuid(), attributeData.getData());
-//				}
-//
-//				if (formAudit == null) {
-//					if (!newFormObj.isEmpty()) {
-//						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.FORM.getValue(), null, newFormObj.toJSONString()));
-//					}
-//				} else {
-//					Javers javers = JaversBuilder.javers().build();
-//					JSONObject oldFormObj = JSONObject.parseObject(formAudit.getNewContent());
-//					Diff diff = javers.compare(newFormObj, oldFormObj);
-//					if (diff.hasChanges()) {
-//						processTaskMapper.insertProcessTaskStepAuditDetail(new ProcessTaskStepAuditDetailVo(processTaskStepAuditVo.getId(), ProcessTaskAuditDetailType.FORM.getValue(), formAudit.getNewContent(), newFormObj.toJSONString()));
-//					}
-//				}
 
 			} catch (Exception ex) {
 				logger.error(ex.getMessage(), ex);
@@ -929,53 +1420,225 @@ public abstract class ProcessStepHandlerUtilBase {
 	}
 
 	protected static class DataValid {
-		
+		/**
+		 * 
+		* @Time:2020年7月28日
+		* @Description: 验证表单数据是否合法
+		* @param currentProcessTaskStepVo
+		* @return boolean
+		 */
 		public static boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo) {
-			
+
 			ProcessTaskFormVo processTaskFormVo = processTaskMapper.getProcessTaskFormByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-			if(processTaskFormVo == null) {
+			if (processTaskFormVo == null) {
 				return true;
 			}
-			if(StringUtils.isBlank(processTaskFormVo.getFormContent())) {
+			if (StringUtils.isBlank(processTaskFormVo.getFormContent())) {
 				return true;
 			}
 			FormVersionVo formVersionVo = new FormVersionVo();
 			formVersionVo.setFormConfig(processTaskFormVo.getFormContent());
 			formVersionVo.setFormUuid(processTaskFormVo.getFormUuid());
-			List<FormAttributeVo> formAttributeList =formVersionVo.getFormAttributeList();
-			if(formAttributeList == null || formAttributeList.isEmpty()) {
+			List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
+			if (formAttributeList == null || formAttributeList.isEmpty()) {
 				return true;
 			}
-			Map<String, String> formAttributeDataMap = new HashMap<>();
+			Map<String, Object> formAttributeDataMap = new HashMap<>();
 			List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-			for(ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
-				formAttributeDataMap.put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getData());
+			for (ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
+				formAttributeDataMap.put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
 			}
 			Map<String, String> formAttributeActionMap = new HashMap<>();
 			List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
-			for(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
+			for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
 				formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
 			}
+			ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
+			processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+			processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+			processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
+			processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
+			processTaskStepDataVo = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
+			List<String> hidecomponentList = new ArrayList<>();
+			if(processTaskStepDataVo != null) {
+				JSONObject dataObj = processTaskStepDataVo.getData();
+				if (MapUtils.isNotEmpty(dataObj)) {
+					JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
+					if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
+						hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
+					}
+				}
+			}
 			
-			for(FormAttributeVo formAttributeVo : formAttributeList) {
-				if(!formAttributeVo.isRequired()) {
+			for (FormAttributeVo formAttributeVo : formAttributeList) {
+				if (!formAttributeVo.isRequired()) {
 					continue;
 				}
-				if(formAttributeActionMap.containsKey(formAttributeVo.getUuid())) {
+				if (formAttributeActionMap.containsKey(formAttributeVo.getUuid())) {
 					continue;
 				}
-				String data = formAttributeDataMap.get(formAttributeVo.getUuid());
-				if(StringUtils.isBlank(data)) {
-					throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel()+ "'不能为空");
+				if (hidecomponentList.contains(formAttributeVo.getUuid())) {
+					continue;
 				}
-				if(data.startsWith("[") && data.endsWith("]")) {
-					JSONArray jsonArray = JSON.parseArray(data);
-					if(jsonArray == null || jsonArray.isEmpty()) {
-						throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel()+ "'不能为空");
+				Object data = formAttributeDataMap.get(formAttributeVo.getUuid());
+				if(data != null) {
+					if(data instanceof String) {
+						if (StringUtils.isBlank(data.toString())) {
+							throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+						}
+					}else if(data instanceof JSONArray) {
+						if(CollectionUtils.isEmpty((JSONArray) data)){
+							throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+						}
+					}else if(data instanceof JSONObject) {
+						if(MapUtils.isEmpty((JSONObject) data)) {
+							throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+						}
+					}
+				}else {
+					throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+				}
+			}
+			return true;
+		}
+		/**
+		 * 
+		* @Time:2020年7月28日
+		* @Description: 验证基本信息数据是否合法
+		* @param currentProcessTaskStepVo
+		* @return boolean
+		 */
+		public static boolean baseInfoValid(ProcessTaskStepVo currentProcessTaskStepVo) {
+			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
+			if(processTaskVo.getTitle() == null) {
+				throw new ProcessTaskRuntimeException("工单标题格式不能为空");
+			}
+			/* 标题不限制输入
+			 * Pattern titlePattern = Pattern.compile("^[A-Za-z_\\d\\u4e00-\\u9fa5]+$"); if
+			 * (!titlePattern.matcher(processTaskVo.getTitle()).matches()) { throw new
+			 * ProcessTaskRuntimeException("工单标题格式不对"); }
+			 */
+			paramObj.put(ProcessTaskAuditDetailType.TITLE.getParamName(), processTaskVo.getTitle());
+			if (StringUtils.isBlank(processTaskVo.getOwner())) {
+				throw new ProcessTaskRuntimeException("工单请求人不能为空");
+			}
+			if (userMapper.getUserBaseInfoByUuid(processTaskVo.getOwner()) == null) {
+				throw new ProcessTaskRuntimeException("工单请求人账号:'" + processTaskVo.getOwner() + "'不存在");
+			}
+			if (StringUtils.isBlank(processTaskVo.getPriorityUuid())) {
+				throw new ProcessTaskRuntimeException("工单优先级不能为空");
+			}
+			List<ChannelPriorityVo> channelPriorityList = channelMapper.getChannelPriorityListByChannelUuid(processTaskVo.getChannelUuid());
+			List<String> priorityUuidlist = new ArrayList<>(channelPriorityList.size());
+			for (ChannelPriorityVo channelPriorityVo : channelPriorityList) {
+				priorityUuidlist.add(channelPriorityVo.getPriorityUuid());
+			}
+			if (!priorityUuidlist.contains(processTaskVo.getPriorityUuid())) {
+				throw new ProcessTaskRuntimeException("工单优先级与服务优先级级不匹配");
+			}
+			paramObj.put(ProcessTaskAuditDetailType.PRIORITY.getParamName(), processTaskVo.getPriorityUuid());
+
+			// 获取上报描述内容
+			String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(currentProcessTaskStepVo.getId());
+			if (StringUtils.isNotBlank(processTaskStepContentHash)) {
+				paramObj.put(ProcessTaskAuditDetailType.CONTENT.getParamName(), processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContentHash));
+			}
+			List<Long> fileIdList = processTaskMapper.getFileIdListByProcessTaskStepId(currentProcessTaskStepVo.getId());
+			if (CollectionUtils.isNotEmpty(fileIdList)) {
+				for (Long fileId : fileIdList) {
+					if (fileMapper.getFileById(fileId) == null) {
+						throw new ProcessTaskRuntimeException("上传附件uuid:'" + fileId + "'不存在");
+					}
+				}
+				paramObj.put(ProcessTaskAuditDetailType.FILE.getParamName(), JSON.toJSONString(fileIdList));
+			}
+			currentProcessTaskStepVo.setParamObj(paramObj);
+			return true;
+		}
+		/**
+		 * 
+		* @Time:2020年7月28日
+		* @Description: 验证前置步骤指派处理人是否合法
+		* @param currentProcessTaskStepVo
+		* @return boolean
+		 */
+		public static boolean assignWorkerValid(ProcessTaskStepVo currentProcessTaskStepVo) {
+			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+			//前置步骤指派处理人
+//			"assignWorkerList": [
+//			             		{
+//			             			"processTaskStepId": 1,
+//									"processStepUuid": "abc",
+//			             			"workerList": [
+//			             				"user#xxx",
+//			             				"team#xxx",
+//			             				"role#xxx"
+//			             			]
+//			             		}
+//			             	]
+			Map<Long, List<String>> assignWorkerMap = new HashMap<>();
+			JSONArray assignWorkerList = paramObj.getJSONArray("assignWorkerList");
+			if(CollectionUtils.isNotEmpty(assignWorkerList)) {
+				for(int i = 0; i < assignWorkerList.size(); i++) {
+					JSONObject assignWorker = assignWorkerList.getJSONObject(i);
+					Long processTaskStepId = assignWorker.getLong("processTaskStepId");
+					if(processTaskStepId == null) {
+						String processStepUuid = assignWorker.getString("processStepUuid");
+						if(processStepUuid != null) {
+							ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuid(currentProcessTaskStepVo.getProcessTaskId(), processStepUuid);
+							if(processTaskStepVo != null) {
+								processTaskStepId = processTaskStepVo.getId();
+							}
+						}
+					}
+					if(processTaskStepId != null) {
+						assignWorkerMap.put(processTaskStepId, JSON.parseArray(assignWorker.getString("workerList"), String.class));					
+					}
+				}
+			}
+			
+			//获取可分配处理人的步骤列表				
+			ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo = new ProcessTaskStepWorkerPolicyVo();
+			processTaskStepWorkerPolicyVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+			List<ProcessTaskStepWorkerPolicyVo> processTaskStepWorkerPolicyList = processTaskMapper.getProcessTaskStepWorkerPolicy(processTaskStepWorkerPolicyVo);
+			if(CollectionUtils.isNotEmpty(processTaskStepWorkerPolicyList)) {
+				for(ProcessTaskStepWorkerPolicyVo workerPolicyVo : processTaskStepWorkerPolicyList) {
+					if(WorkerPolicy.PRESTEPASSIGN.getValue().equals(workerPolicyVo.getPolicy())) {
+						List<String> processStepUuidList = JSON.parseArray(workerPolicyVo.getConfigObj().getString("processStepUuidList"), String.class);
+						for(String processStepUuid : processStepUuidList) {
+							if(currentProcessTaskStepVo.getProcessStepUuid().equals(processStepUuid)) {
+								List<ProcessTaskStepUserVo> majorList = processTaskMapper.getProcessTaskStepUserByStepId(workerPolicyVo.getProcessTaskStepId(), ProcessUserType.MAJOR.getValue());
+								if(CollectionUtils.isEmpty(majorList)) {
+									ProcessTaskAssignWorkerVo assignWorkerVo = new ProcessTaskAssignWorkerVo();
+									assignWorkerVo.setProcessTaskId(workerPolicyVo.getProcessTaskId());
+									assignWorkerVo.setProcessTaskStepId(workerPolicyVo.getProcessTaskStepId());
+									assignWorkerVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+									assignWorkerVo.setFromProcessStepUuid(currentProcessTaskStepVo.getProcessStepUuid());
+									processTaskMapper.deleteProcessTaskAssignWorker(assignWorkerVo);
+									List<String> workerList = assignWorkerMap.get(workerPolicyVo.getProcessTaskStepId());
+									if(CollectionUtils.isNotEmpty(workerList)) {
+										for(String worker : workerList) {
+											String[] split = worker.split("#");
+											assignWorkerVo.setType(split[0]);
+											assignWorkerVo.setUuid(split[1]);
+											processTaskMapper.insertProcessTaskAssignWorker(assignWorkerVo);
+										}
+									}else {
+										Integer isRequired = workerPolicyVo.getConfigObj().getInteger("isRequired");
+										if(isRequired != null && isRequired.intValue() == 1) {
+											ProcessTaskStepVo assignableWorkerStep = processTaskMapper.getProcessTaskStepBaseInfoById(workerPolicyVo.getProcessTaskStepId());
+											throw new ProcessTaskRuntimeException("指派：" + assignableWorkerStep.getName() + "步骤处理人是必填");
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 			return true;
 		}
 	}
+
 }

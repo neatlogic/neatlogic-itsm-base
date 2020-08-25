@@ -2,7 +2,9 @@ package codedriver.framework.process.dto;
 
 import java.util.UUID;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import org.apache.commons.lang3.StringUtils;
+
+import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -23,10 +25,11 @@ public class PriorityVo extends BasePageVo {
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
 	
+	private transient String channelUuid;
 	private transient String keyword;
 	
-	public String getUuid() {
-		if(uuid == null) {
+	public synchronized String getUuid() {
+		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
 		return uuid;
@@ -90,6 +93,14 @@ public class PriorityVo extends BasePageVo {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public String getChannelUuid() {
+		return channelUuid;
+	}
+
+	public void setChannelUuid(String channelUuid) {
+		this.channelUuid = channelUuid;
 	}
 
 }

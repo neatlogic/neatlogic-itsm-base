@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.base.Objects;
+
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.process.exception.channel.ChannelUnsupportedOperationException;
+import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ChannelVo extends BasePageVo implements ITree {
+public class ChannelVo extends BasePageVo {
 
 	@EntityField(name = "服务通道uuid", type = ApiParamType.STRING)
 	private String uuid;
@@ -31,12 +37,12 @@ public class ChannelVo extends BasePageVo implements ITree {
 
 	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
 	private String parentUuid;
+	
+	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
+	private String parentNames;
 
 	@EntityField(name = "是否收藏，0：未收藏，1：已收藏", type = ApiParamType.INTEGER)
 	private Integer isFavorite;
-
-	@EntityField(name = "是否已选中，false：未选中，true：已选中", type = ApiParamType.BOOLEAN)
-	private boolean selected = false;
 
 	@EntityField(name = "类型", type = ApiParamType.STRING)
 	private String type = "channel";
@@ -65,39 +71,39 @@ public class ChannelVo extends BasePageVo implements ITree {
 	@EntityField(name = "时效", type = ApiParamType.INTEGER)
 	private Integer sla;
 	
-	private transient ITree parent;
+	@EntityField(name = "授权对象", type = ApiParamType.JSONARRAY)
+	private List<String> authorityList;
+	
+	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+	private String channelTypeUuid;
+	
+	private transient boolean isAuthority = false;
+	
+	private transient List<AuthorityVo> authorityVoList;
+	
+	private transient CatalogVo parent;
 
 	private transient Integer sort;
 
-	private transient String keyword;
+	private transient String userUuid;
+	
+	private transient List<String> authorizedUuidList;
 
-	private transient String userId;
-
-	private transient int childrenCount = 0;
-
-	private transient List<Integer> sortList;
-
-	private transient List<String> nameList;
-
-	@Override
-	public String getUuid() {
-		if (uuid == null) {
+	public synchronized String getUuid() {
+		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
 		return uuid;
 	}
 
-	@Override
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -134,12 +140,10 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.color = color;
 	}
 
-	@Override
 	public String getParentUuid() {
 		return parentUuid;
 	}
 
-	@Override
 	public void setParentUuid(String parentUuid) {
 		this.parentUuid = parentUuid;
 	}
@@ -152,79 +156,31 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.isFavorite = isFavorite;
 	}
 
-	@Override
-	public boolean isSelected() {
-		return selected;
+	public String getUserUuid() {
+		return userUuid;
 	}
 
-	@Override
-	public void setSelected(boolean selected) {
-		this.selected = selected;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 
-	public String getKeyword() {
-		return keyword;
-	}
-
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	@Override
 	public Integer getSort() {
 		return sort;
 	}
 
-	@Override
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 
-	@Override
-	public List<ITree> getChildren() {
-		return null;
-	}
-
-	@Override
-	public void setChildren(List<ITree> children) {
-		throw new ChannelUnsupportedOperationException(this.uuid, "设置子节点");
-	}
-
-	@Override
-	public ITree getParent() {
+	public CatalogVo getParent() {
 		return parent;
 	}
 
-	@Override
-	public void setParent(ITree parent) {
+	public void setParent(CatalogVo parent) {
 		this.parent = parent;
-		parent.addChild(this);
+		parent.addChildChannel(this);
 	}
 
-	@Override
-	public void setOpenCascade(boolean open) {
-		if (parent != null) {
-			parent.setOpenCascade(open);
-		}
-	}
-
-	@Override
-	public void setSelectedCascade(boolean selected) {
-		this.selected = selected;
-		if (parent != null) {
-			parent.setSelectedCascade(selected);
-		}
-	}
-
-	@Override
 	public String getType() {
 		return type;
 	}
@@ -293,73 +249,109 @@ public class ChannelVo extends BasePageVo implements ITree {
 		this.sla = sla;
 	}
 
-	@Override
-	public int getChildrenCount() {
-		return childrenCount;
-	}
-
-	@Override
-	public void setChildrenCount(int count) {
-		throw new ChannelUnsupportedOperationException(this.uuid, "设置子节点个数");
-	}
-
-	@Override
-	public List<Integer> getSortList() {
-		if (sortList != null) {
-			return sortList;
+	public List<String> getAuthorityList() {
+		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
+			authorityList = new ArrayList<>();
+			for(AuthorityVo authorityVo : authorityVoList) {
+				GroupSearch groupSearch = GroupSearch.getGroupSearch(authorityVo.getType());
+				if(groupSearch != null) {
+					authorityList.add(groupSearch.getValuePlugin() + authorityVo.getUuid());
+				}
+			}
 		}
-		if (parent != null) {
-			sortList = new ArrayList<>(parent.getSortList());
-		} else {
-			sortList = new ArrayList<>();
+		return authorityList;
+	}
+
+	public void setAuthorityList(List<String> authorityList) {
+		this.authorityList = authorityList;
+	}
+
+	public List<AuthorityVo> getAuthorityVoList() {
+		if(authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
+			authorityVoList = new ArrayList<>();
+			for(String authority : authorityList) {
+				String[] split = authority.split("#");
+				if(GroupSearch.getGroupSearch(split[0]) != null) {
+					AuthorityVo authorityVo = new AuthorityVo();
+					authorityVo.setType(split[0]);
+					authorityVo.setUuid(split[1]);
+					authorityVoList.add(authorityVo);
+				}
+			}
 		}
-		sortList.add(sort);
-		return sortList;
+		return authorityVoList;
 	}
 
-	@Override
-	public void setSortList(List<Integer> sortList) {
-		this.sortList = sortList;
-
+	public void setAuthorityVoList(List<AuthorityVo> authorityVoList) {
+		this.authorityVoList = authorityVoList;
 	}
 
-	@Override
-	public boolean addChild(ITree child) {
-		throw new ChannelUnsupportedOperationException(this.uuid, "添加子节点");
+	public String getChannelTypeUuid() {
+		return channelTypeUuid;
 	}
 
-	@Override
-	public boolean removeChild(ITree child) {
-		throw new ChannelUnsupportedOperationException(this.uuid, "删除子节点");
+	public void setChannelTypeUuid(String channelTypeUuid) {
+		this.channelTypeUuid = channelTypeUuid;
 	}
 
-	@Override
-	public List<String> getNameList() {
-		if (nameList != null) {
-			return nameList;
-		}
-		if (parent != null && !ITree.ROOT_UUID.equals(parent.getUuid())) {
-			nameList = new ArrayList<>(parent.getNameList());
-		} else {
-			nameList = new ArrayList<>();
-		}
-		nameList.add(name);
-		return nameList;
+	public List<String> getAuthorizedUuidList() {
+		return authorizedUuidList;
 	}
 
-	@Override
-	public void setNameList(List<String> nameList) {
-		this.nameList = nameList;
+	public void setAuthorizedUuidList(List<String> authorizedUuidList) {
+		this.authorizedUuidList = authorizedUuidList;
 	}
 
-	@Override
-	public boolean isAncestorOrSelf(String uuid) {
-		if (this.uuid.equals(uuid)) {
+	public String getParentNames() {
+		return parentNames;
+	}
+
+	public void setParentNames(String parentNames) {
+		this.parentNames = parentNames;
+	}
+
+	/**
+	 * 
+	* @Time:2020年7月7日
+	* @Description: 判断服务是否最终授权，服务状态为激活，拥有服务权限及所有上级目录权限才是最终授权
+	* @return boolean
+	 */
+	public boolean isAuthority() {
+		if(Objects.equal(isActive, 1) && isAuthority) {
+			if(parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
+				return parent.isAuthority();
+			}
 			return true;
 		}
-		if (parent == null) {
+		return false;
+	}
+
+	public void setAuthority(boolean isAuthority) {
+		this.isAuthority = isAuthority;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		}
-		return parent.isAncestorOrSelf(uuid);
+		if (getClass() != obj.getClass())
+			return false;
+		ChannelVo other = (ChannelVo) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
 	}
 }

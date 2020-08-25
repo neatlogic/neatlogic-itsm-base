@@ -2,6 +2,7 @@ package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,8 @@ public interface FormMapper {
 	public FormVersionVo getActionFormVersionByFormUuid(String formUuid);
 
 	public List<FormVo> searchFormList(FormVo formVo);
+
+	public List<ValueTextVo> searchFormListForSelect(FormVo formVo);
 
 	public int searchFormCount(FormVo formVo);
 
@@ -63,5 +66,7 @@ public interface FormMapper {
 
 	public int deleteProcessFormByFormUuid(String formUuid);
 
-	public void deleteFormVersionByUuid(String uuid);
+	public int deleteFormVersionByUuid(String uuid);
+
+	public int deleteProcessMatrixFormComponentByFormVersionUuid(String formVersionUuid);
 }

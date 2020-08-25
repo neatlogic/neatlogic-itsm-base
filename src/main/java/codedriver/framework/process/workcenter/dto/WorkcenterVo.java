@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
-import codedriver.framework.apiparam.core.ApiParamType;
-import codedriver.framework.process.dto.condition.ConditionConfigVo;
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.dto.AuthorityVo;
+import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class WorkcenterVo extends ConditionConfigVo implements Serializable{
@@ -31,26 +33,28 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
 	@EntityField(name = "数量", type = ApiParamType.INTEGER)
-	private Integer count;
-	@JSONField(serialize = false)
+	private String count;
 	@EntityField(name = "过滤条件", type = ApiParamType.STRING)
 	private String conditionConfig;
 	@JSONField(serialize = false)
 	@EntityField(name = "显示的字段", type = ApiParamType.JSONARRAY)
 	private JSONArray headerList;
 	@JSONField(serialize = false)
-	private List<WorkcenterRoleVo> workcenterRoleList;
+	private List<AuthorityVo> authorityList;
 	@EntityField(name = "角色列表", type = ApiParamType.JSONARRAY)
 	private List<String> valueList;
-	@EntityField(name = "是否拥有编辑权限", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "是否拥有编辑权限", type = ApiParamType.INTEGER)
 	private Integer isCanEdit;
-	@EntityField(name = "是否拥有授权权限", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "是否拥有授权权限", type = ApiParamType.INTEGER)
 	private Integer isCanRole;
+	@EntityField(name = "是否附加待我处理条件", type = ApiParamType.INTEGER)
+	private Integer isMeWillDo = 0;
+	@EntityField(name = "附加待我处理的数量", type = ApiParamType.INTEGER)
+	private String meWillDoCount;
 	
 	//params
-	private String userId;
-	private List<String> roleNameList;
 	private List<String> channelUuidList;
+	private JSONArray resultColumnList;
 	
 	public WorkcenterVo() {
 	}
@@ -59,17 +63,13 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 		this.name =_name;
 	}
 	
-	public WorkcenterVo(String _userId,List<String> _roleNameList,String _owner) {
-		this.userId = _userId;
-		this.roleNameList = _roleNameList;
-		this.owner = _owner;
-	}
-	
 	public WorkcenterVo(JSONObject jsonObj) {
 		super(jsonObj);
-		uuid = jsonObj.getString("uuid");
+		this.isMeWillDo = jsonObj.getInteger("isMeWillDo")!=null?jsonObj.getInteger("isMeWillDo"):0;
+		this.uuid = jsonObj.getString("uuid");
 		this.setCurrentPage(jsonObj.getInteger("currentPage"));
 		this.setPageSize(jsonObj.getInteger("pageSize"));
+		this.resultColumnList = jsonObj.getJSONArray("resultColumnList");
 		JSONArray conditionGroupArray = jsonObj.getJSONArray("conditionGroupList");
 		if(CollectionUtils.isNotEmpty(conditionGroupArray)) {
 			channelUuidList = new ArrayList<String>();
@@ -103,14 +103,14 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 		this.name = name;
 	}
 	
-	public List<WorkcenterRoleVo> getWorkcenterRoleList() {
-		return workcenterRoleList;
+	public List<AuthorityVo> getAuthorityList() {
+		return authorityList;
 	}
 
-	public void setWorkcenterRoleList(List<WorkcenterRoleVo> workcenterRoleList) {
-		this.workcenterRoleList = workcenterRoleList;
+	public void setAuthorityList(List<AuthorityVo> authorityList) {
+		this.authorityList = authorityList;
 	}
-	
+
 	public String getOwner() {
 		return owner;
 	}
@@ -147,22 +147,24 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 		this.headerList = headerArray;
 	}
 
-	public Integer getCount() {
+	public String getCount() {
 		return count;
 	}
 
-	public void setCount(Integer count) {
+	public void setCount(String count) {
 		this.count = count;
 	}
 
 	public List<String> getValueList() {
 		if(valueList == null) {
 			valueList = new ArrayList<String>();
-			for(WorkcenterRoleVo workcenterRoleVo : this.workcenterRoleList) {
-				if(workcenterRoleVo.getRoleName() !=null) {
-					valueList.add("role#" + workcenterRoleVo.getRoleName());
-				}else if(workcenterRoleVo.getUserId() !=null){
-					valueList.add("user#" + workcenterRoleVo.getUserId());
+			for(AuthorityVo workcenterAuthorityVo : this.authorityList) {
+				if(workcenterAuthorityVo.getType().equals(GroupSearch.ROLE.getValue())) {
+					valueList.add(GroupSearch.ROLE.getValuePlugin() + workcenterAuthorityVo.getUuid());
+				}else if(workcenterAuthorityVo.getType().equals(GroupSearch.USER.getValue())){
+					valueList.add(GroupSearch.USER.getValuePlugin() + workcenterAuthorityVo.getUuid());
+				}if(workcenterAuthorityVo.getType().equals(GroupSearch.COMMON.getValue())){
+					valueList.add(GroupSearch.COMMON.getValuePlugin() + workcenterAuthorityVo.getUuid());
 				}
 			}
 		}
@@ -185,22 +187,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 		this.isCanRole = isCanRole;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public List<String> getRoleNameList() {
-		return roleNameList;
-	}
-
-	public void setRoleNameList(List<String> roleNameList) {
-		this.roleNameList = roleNameList;
-	}
-
 	public List<String> getChannelUuidList() {
 		return channelUuidList;
 	}
@@ -208,4 +194,30 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	public void setChannelUuidList(List<String> channelUuidList) {
 		this.channelUuidList = channelUuidList;
 	}
+
+	public Integer getIsMeWillDo() {
+		return isMeWillDo;
+	}
+
+	public void setIsMeWillDo(Integer isMeWillDo) {
+		this.isMeWillDo = isMeWillDo;
+	}
+
+	public String getMeWillDoCount() {
+		return meWillDoCount;
+	}
+
+	public void setMeWillDoCount(String meWillDoCount) {
+		this.meWillDoCount = meWillDoCount;
+	}
+
+	public JSONArray getResultColumnList() {
+		return resultColumnList;
+	}
+
+	public void setResultColumnList(JSONArray resultColumnList) {
+		this.resultColumnList = resultColumnList;
+	}
+	
+	
 }

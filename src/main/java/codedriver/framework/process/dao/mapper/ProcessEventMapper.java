@@ -4,7 +4,6 @@ import java.util.List;
 
 import codedriver.framework.process.dto.ProcessStepRelVo;
 import codedriver.framework.process.dto.ProcessStepTeamVo;
-import codedriver.framework.process.dto.ProcessStepUserVo;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessVo;
@@ -27,8 +26,6 @@ public interface ProcessEventMapper {
 	public int insertProcessStep(ProcessStepVo processStepVo);
 
 	public int insertProcessStepRel(ProcessStepRelVo processStepRelVo);
-
-	public int insertProcessStepUser(ProcessStepUserVo processStepUserVo);
 
 	public int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
 

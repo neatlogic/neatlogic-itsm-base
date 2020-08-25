@@ -5,12 +5,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.base.Objects;
+
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class CatalogVo extends BasePageVo implements ITree{
-	
+public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
+
+	public final static String ROOT_UUID = "0";
+	public final static String ROOT_PARENTUUID = "-1";
+	public final static String UNCATEGORIZED_CATALOG_UUID = "1";
 	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
 	private String uuid;
 	
@@ -32,60 +42,67 @@ public class CatalogVo extends BasePageVo implements ITree{
 	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String desc;
 	
-	@EntityField(name = "是否打开，false：未选中，true：已选中", type = ApiParamType.BOOLEAN)
-	private boolean open = false;
-	
-	@EntityField(name = "是否已选中，false：未选中，true：已选中", type = ApiParamType.BOOLEAN)
-	private boolean selected = false;
-	
 	@EntityField(name = "子目录或通道", type = ApiParamType.JSONARRAY)
-	private List<ITree> children;
+	private List<Object> children = new ArrayList<>();
 	
 	@EntityField(name = "类型", type = ApiParamType.STRING)
 	private String type = "catalog";
 	
-	private List<String> roleNameList;
+	@EntityField(name = "授权对象", type = ApiParamType.JSONARRAY)
+	private List<String> authorityList;
 	
-	private transient ITree parent;
+	@EntityField(name = "左编码", type = ApiParamType.INTEGER)
+	private Integer lft;
+	@EntityField(name = "右编码", type = ApiParamType.INTEGER)
+	private Integer rht;
+
+	@EntityField(name = "子节点数", type = ApiParamType.INTEGER)
+	private int childrenCount = 0;
 	
-	private transient Integer sort;
+	private transient boolean isAuthority = false;
 	
-	private transient int childrenCount = 0;
+	private transient List<AuthorityVo> authorityVoList;
+	
+	private transient CatalogVo parent;
 	
 	private transient List<Integer> sortList;
 	
 	private transient List<String> nameList;
 	
+	private transient List<CatalogVo> childCatalogList = new ArrayList<>();
+	
+	private transient List<ChannelVo> childChannelList = new ArrayList<>();
+
 	public CatalogVo() {
 	}
 	
 	public CatalogVo(String uuid) {
 		this.uuid = uuid;
 	}
-	@Override
-	public String getUuid() {
-		if(uuid == null) {
+	
+	public synchronized String getUuid() {
+		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
 		return uuid;
 	}
-	@Override
+
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-	@Override
+
 	public String getName() {
 		return name;
 	}
-	@Override
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	@Override
+
 	public String getParentUuid() {
 		return parentUuid;
 	}
-	@Override
+
 	public void setParentUuid(String parentUuid) {
 		this.parentUuid = parentUuid;
 	}
@@ -122,114 +139,116 @@ public class CatalogVo extends BasePageVo implements ITree{
 		this.desc = desc;
 	}
 
-	public boolean isOpen() {
-		return open;
-	}
-
-	public void setOpen(boolean open) {
-		this.open = open;
-	}
-	@Override
-	public boolean isSelected() {
-		return selected;
-	}
-	@Override
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
-	@Override
-	public List<ITree> getChildren() {
+	public List<Object> getChildren() {
+		children.clear();
+		children.addAll(childCatalogList);
+		children.addAll(childChannelList);
 		return children;
 	}
-	@Override
-	public void setChildren(List<ITree> children) {
-		this.children = children;
-	}
-	@Override
-	public boolean addChild(ITree child) {
-		if(children == null) {
-			children = new ArrayList<>();
-		}
-		if(children.add(child)) {
-			childrenCount++;
-			return true;
-		}else {
-			return false;
-		}		
-	}
-	@Override
-	public boolean removeChild(ITree child) {
-		if(children == null || children.isEmpty()) {
+
+	public boolean addChildCatalog(CatalogVo catalogVo) {
+		if(childCatalogList.contains(catalogVo)) {
 			return false;
 		}
-		Iterator<ITree> iterator = children.iterator();
-		while(iterator.hasNext()) {
-			ITree iTree = iterator.next();
-			if(iTree.getUuid().equals(child.getUuid())) {
-				iterator.remove();
-				childrenCount--;
-				return true;
+		childrenCount++;
+		return childCatalogList.add(catalogVo);
+	}
+	public boolean removeChildCatalog(CatalogVo catalogVo) {
+		if(CollectionUtils.isNotEmpty(childCatalogList)) {
+			Iterator<CatalogVo> iterator = childCatalogList.iterator();
+			while(iterator.hasNext()) {
+				if(iterator.next().equals(catalogVo)) {
+					iterator.remove();
+					childrenCount--;
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 	
-	@Override
-	public ITree getParent() {
+	public boolean addChildChannel(ChannelVo channelVo) {
+		if(childChannelList.contains(channelVo)) {
+			return false;
+		}
+		childrenCount++;
+		return childChannelList.add(channelVo);
+	}
+	public boolean removeChildChannel(ChannelVo channelVo) {
+		if(CollectionUtils.isNotEmpty(childChannelList)) {
+			Iterator<ChannelVo> iterator = childChannelList.iterator();
+			while(iterator.hasNext()) {
+				if(iterator.next().equals(channelVo)) {
+					iterator.remove();
+					childrenCount--;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public CatalogVo getParent() {
 		return parent;
 	}
-	@Override
-	public void setParent(ITree parent) {
+
+	public void setParent(CatalogVo parent) {
 		this.parent = parent;
-		parent.addChild(this);
-	}
-	
-	@Override
-	public void setOpenCascade(boolean open) {
-		this.open = open;
-		if(parent != null) {
-			parent.setOpenCascade(open);
-		}
-	}
-	@Override
-	public void setSelectedCascade(boolean selected) {
-		this.selected = selected;
-		if(parent != null) {
-			parent.setSelectedCascade(selected);
-		}
+		parent.addChildCatalog(this);
 	}
 
-	@Override
-	public Integer getSort() {
-		return sort;
-	}
-
-	@Override
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
-
-	@Override
 	public String getType() {
 		return type;
 	}
 
-	public List<String> getRoleNameList() {
-		return roleNameList;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public void setRoleNameList(List<String> roleNameList) {
-		this.roleNameList = roleNameList;
+	public List<String> getAuthorityList() {
+		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
+			authorityList = new ArrayList<>();
+			for(AuthorityVo authorityVo : authorityVoList) {
+				GroupSearch groupSearch = GroupSearch.getGroupSearch(authorityVo.getType());
+				if(groupSearch != null) {
+					authorityList.add(groupSearch.getValuePlugin() + authorityVo.getUuid());
+				}
+			}
+		}
+		return authorityList;
 	}
-	@Override
+
+	public void setAuthorityList(List<String> authorityList) {
+		this.authorityList = authorityList;
+	}
+
+	public List<AuthorityVo> getAuthorityVoList() {
+		if(authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
+			authorityVoList = new ArrayList<>();
+			for(String authority : authorityList) {
+				String[] split = authority.split("#");
+				if(GroupSearch.getGroupSearch(split[0]) != null) {
+					AuthorityVo authorityVo = new AuthorityVo();
+					authorityVo.setType(split[0]);
+					authorityVo.setUuid(split[1]);
+					authorityVoList.add(authorityVo);
+				}
+			}
+		}
+		return authorityVoList;
+	}
+	public void setAuthorityVoList(List<AuthorityVo> authorityVoList) {
+		this.authorityVoList = authorityVoList;
+	}
+
 	public int getChildrenCount() {
 		return childrenCount;
 	}
-	@Override
+
 	public void setChildrenCount(int childrenCount) {
 		this.childrenCount = childrenCount;
 	}
-	@Override
+
 	public List<Integer> getSortList() {
 		if(sortList != null) {
 			return sortList;
@@ -239,25 +258,15 @@ public class CatalogVo extends BasePageVo implements ITree{
 		}else {
 			sortList = new ArrayList<>();
 		}		
-		sortList.add(sort);
+		sortList.add(lft);
 		return sortList;
 	}
-	@Override
-	public void setSortList(List<Integer> sortList) {
-		this.sortList = sortList;
-	}
 
-	@Override
-	public String toString() {
-		return "CatalogVo [uuid=" + uuid + ", name=" + name + ", parentUuid=" + parentUuid + ", sort=" + sort + ", sortList=" + sortList + "]";
-	}
-
-	@Override
 	public List<String> getNameList() {
 		if(nameList != null) {
 			return nameList;
 		}
-		if(parent != null && !ITree.ROOT_UUID.equals(parent.getUuid())) {
+		if(parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
 			nameList = new ArrayList<>(parent.getNameList());
 		}else {
 			nameList = new ArrayList<>();
@@ -267,21 +276,91 @@ public class CatalogVo extends BasePageVo implements ITree{
 	}
 
 	@Override
-	public void setNameList(List<String> nameList) {
-		this.nameList = nameList;		
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
 	}
 
 	@Override
-	public boolean isAncestorOrSelf(String uuid) {
-		if(this.uuid.equals(uuid)) {
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}
-		if(parent == null) {
+		if (obj == null)
 			return false;
-		}	
-		return parent.isAncestorOrSelf(uuid);
+		if (getClass() != obj.getClass())
+			return false;
+		CatalogVo other = (CatalogVo) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
 	}
 
-	
+	public Integer getLft() {
+		return lft;
+	}
+
+	public void setLft(Integer lft) {
+		this.lft = lft;
+	}
+
+	public Integer getRht() {
+		return rht;
+	}
+
+	public void setRht(Integer rht) {
+		this.rht = rht;
+	}
+
+	/**
+	 * 
+	* @Time:2020年7月7日
+	* @Description: 判断目录是否最终授权，目录状态为激活，拥有目录权限及所有上级目录权限才是最终授权
+	* @return boolean
+	 */
+	public boolean isAuthority() {
+		if(Objects.equal(isActive, 1) && isAuthority) {
+			if(parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
+				return parent.isAuthority();
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public void setAuthority(boolean isAuthority) {
+		this.isAuthority = isAuthority;
+	}
+
+	@Override
+	public int compareTo(CatalogVo other) {
+		List<Integer> sortList1 = this.getSortList();
+		List<Integer> sortList2 = other.getSortList();
+		int size1 = sortList1.size();
+		int size2 = sortList2.size();
+		int minIndex = 0;
+		int resultDefault = 0;
+		if(size1 > size2) {
+			minIndex = size2;
+			resultDefault = 1;
+		}else {
+			minIndex = size1;
+			resultDefault = -1;
+		}
+		for(int i = 0; i < minIndex; i++) {
+			if(Objects.equal(sortList1.get(i), sortList2.get(i))) {
+				continue;
+			}else {
+				int sort1 = sortList1.get(i) == null ? 0 : sortList1.get(i);
+				int sort2 = sortList2.get(i) == null ? 0 : sortList2.get(i);
+				return sort1 - sort2;
+			}
+		}
+		return resultDefault;
+	}
 
 }

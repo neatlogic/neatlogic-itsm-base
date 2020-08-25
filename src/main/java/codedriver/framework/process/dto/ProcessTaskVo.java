@@ -1,14 +1,19 @@
 package codedriver.framework.process.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.apiparam.core.ApiParamType;
-import codedriver.framework.process.constvalue.ProcessTaskStatus;
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.dto.TeamVo;
 import codedriver.framework.restful.annotation.EntityField;
+import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskVo {
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
@@ -33,13 +38,13 @@ public class ProcessTaskVo {
 	private JSONObject configObj;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
-	@EntityField(name = "状态名", type = ApiParamType.STRING)
-	private String statusText;
-	@EntityField(name = "上报人userId", type = ApiParamType.STRING)
+	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStatusVo statusVo;
+	@EntityField(name = "上报人userUuid", type = ApiParamType.STRING)
 	private String owner;
 	@EntityField(name = "上报人", type = ApiParamType.STRING)
 	private String ownerName;
-	@EntityField(name = "代报人userId", type = ApiParamType.STRING)
+	@EntityField(name = "代报人userUuid", type = ApiParamType.STRING)
 	private String reporter;
 	@EntityField(name = "代报人", type = ApiParamType.STRING)
 	private String reporterName;
@@ -47,26 +52,38 @@ public class ProcessTaskVo {
 	private Date startTime;
 	@EntityField(name = "结束时间", type = ApiParamType.LONG)
 	private Date endTime;
-	@EntityField(name = "耗时(秒)", type = ApiParamType.LONG)
+	@EntityField(name = "耗时", type = ApiParamType.LONG)
 	private Long timeCost;
 	private String timeCostStr;
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
 	private String configHash;
-//	private String urgency;
-//	private String urgencyText;
+
 	private List<ProcessTaskStepVo> stepList;
 	
-	@EntityField(name = "描述内容", type = ApiParamType.STRING)
-	private String content;
 	@EntityField(name = "优先级信息", type = ApiParamType.JSONOBJECT)
 	private PriorityVo priority;
 	@EntityField(name = "工单表单信息", type = ApiParamType.STRING)
 	private String formConfig;
+	@EntityField(name = "是否存在旧工单表单信息", type = ApiParamType.STRING)
+    private int isHasOldFormProp = 0;
 	@EntityField(name = "工单表单属性值", type = ApiParamType.JSONOBJECT)
-	Map<String, Object> formAttributeDataMap;
+	private Map<String, Object> formAttributeDataMap = new HashMap<>();
 	@EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
 	private String worktimeUuid;
+
+	@EntityField(name = "服务类型信息", type = ApiParamType.JSONOBJECT)
+	private ChannelTypeVo channelType;
+
+	@EntityField(name = "工单开始步骤信息", type = ApiParamType.JSONOBJECT)
+	ProcessTaskStepVo startProcessTaskStep;
+	@EntityField(name = "工单当前步骤信息", type = ApiParamType.JSONOBJECT)
+	ProcessTaskStepVo currentProcessTaskStep;
+	
+	@EntityField(name = "上报人公司列表", type = ApiParamType.JSONARRAY)
+	private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
+	
+	private transient Boolean isAutoGenerateId = true;
 	
 	public ProcessTaskVo() {
 
@@ -81,7 +98,10 @@ public class ProcessTaskVo {
 		this.id = _id;
 	}
 
-	public Long getId() {
+	public synchronized Long getId() {
+		if(id == null && isAutoGenerateId) {
+			id = SnowflakeUtil.uniqueLong();
+		}
 		return id;
 	}
 
@@ -209,19 +229,15 @@ public class ProcessTaskVo {
 		this.status = status;
 	}
 
-	public String getStatusText() {
-		if(status == null) {
-			return null;
+	public ProcessTaskStatusVo getStatusVo() {
+		if(statusVo == null && StringUtils.isNotBlank(status)) {
+			statusVo = new ProcessTaskStatusVo(status);
 		}
-		if(statusText != null) {
-			return statusText;
-		}
-		statusText = ProcessTaskStatus.getText(status);
-		return statusText;
+		return statusVo;
 	}
 
-	public void setStatusText(String statusText) {
-		this.statusText = statusText;
+	public void setStatusVo(ProcessTaskStatusVo statusVo) {
+		this.statusVo = statusVo;
 	}
 
 	public Date getExpireTime() {
@@ -256,22 +272,6 @@ public class ProcessTaskVo {
 		this.configHash = configHash;
 	}
 
-//	public String getUrgency() {
-//		return urgency;
-//	}
-//
-//	public void setUrgency(String urgency) {
-//		this.urgency = urgency;
-//	}
-//
-//	public String getUrgencyText() {
-//		return urgencyText;
-//	}
-//
-//	public void setUrgencyText(String urgencyText) {
-//		this.urgencyText = urgencyText;
-//	}
-
 	public String getPriorityUuid() {
 		return priorityUuid;
 	}
@@ -286,14 +286,6 @@ public class ProcessTaskVo {
 
 	public void setPriorityName(String priorityName) {
 		this.priorityName = priorityName;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 
 	public Long getParentId() {
@@ -335,5 +327,53 @@ public class ProcessTaskVo {
 	public void setWorktimeUuid(String worktimeUuid) {
 		this.worktimeUuid = worktimeUuid;
 	}
+
+	public ChannelTypeVo getChannelType() {
+		return channelType;
+	}
+
+	public void setChannelType(ChannelTypeVo channelType) {
+		this.channelType = channelType;
+	}
+
+	public ProcessTaskStepVo getStartProcessTaskStep() {
+		return startProcessTaskStep;
+	}
+
+	public void setStartProcessTaskStep(ProcessTaskStepVo startProcessTaskStepVo) {
+		this.startProcessTaskStep = startProcessTaskStepVo;
+	}
+
+	public ProcessTaskStepVo getCurrentProcessTaskStep() {
+		return currentProcessTaskStep;
+	}
+
+	public void setCurrentProcessTaskStep(ProcessTaskStepVo currentProcessTaskStepVo) {
+		this.currentProcessTaskStep = currentProcessTaskStepVo;
+	}
+
+	public Boolean getIsAutoGenerateId() {
+		return isAutoGenerateId;
+	}
+
+	public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
+		this.isAutoGenerateId = isAutoGenerateId;
+	}
+
+	public List<TeamVo> getOwnerCompanyList() {
+		return ownerCompanyList;
+	}
+
+	public void setOwnerCompanyList(List<TeamVo> ownerCompanyList) {
+		this.ownerCompanyList = ownerCompanyList;
+	}
+
+    public int getIsHasOldFormProp() {
+        return isHasOldFormProp;
+    }
+
+    public void setIsHasOldFormProp(int isHasOldFormProp) {
+        this.isHasOldFormProp = isHasOldFormProp;
+    }
 
 }

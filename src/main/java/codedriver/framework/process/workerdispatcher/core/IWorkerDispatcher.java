@@ -2,20 +2,14 @@ package codedriver.framework.process.workerdispatcher.core;
 
 import java.util.List;
 
+import org.springframework.util.ClassUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 
 public interface IWorkerDispatcher {
-	/**
-	 * @Author: chenqiwei
-	 * @Time:Jun 30, 2019
-	 * @Description: 返回类名
-	 * @param @return
-	 * @return String
-	 */
-	public String getHandler();
 
 	/**
 	 * @Author: chenqiwei
@@ -53,4 +47,15 @@ public interface IWorkerDispatcher {
 	 * @return String
 	 */
 	public List<String> getWorker(ProcessTaskStepVo processTaskStepVo, JSONObject configObj);
+	
+	/**
+	 * @Author: 
+	 * @Time:
+	 * @Description: 返回类名
+	 * @param @return
+	 * @return String
+	 */
+	public default String getClassName() {
+		return ClassUtils.getUserClass(this.getClass()).getName();
+	}
 }

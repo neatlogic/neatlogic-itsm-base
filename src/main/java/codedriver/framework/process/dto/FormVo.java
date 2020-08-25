@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -19,7 +19,7 @@ public class FormVo extends BasePageVo implements Serializable {
 	@EntityField(name = "表单名称", type = ApiParamType.STRING)
 	private String name;
 	@EntityField(name = "是否激活", type = ApiParamType.INTEGER)
-	private Integer isActive = 1;
+	private Integer isActive;
 	@EntityField(name = "当前版本", type = ApiParamType.INTEGER)
 	private Integer currentVersion;
 	@EntityField(name = "当前版本uuid", type = ApiParamType.STRING)
@@ -34,7 +34,7 @@ public class FormVo extends BasePageVo implements Serializable {
 	private List<FormVersionVo> versionList;
 	private transient String keyword;
 	
-	public String getUuid() {
+	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}

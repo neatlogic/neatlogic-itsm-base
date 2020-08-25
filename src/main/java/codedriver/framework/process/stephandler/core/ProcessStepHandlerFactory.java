@@ -1,10 +1,11 @@
 package codedriver.framework.process.stephandler.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -14,7 +15,7 @@ import org.springframework.core.annotation.Order;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.RootComponent;
 import codedriver.framework.dto.ModuleVo;
-import codedriver.framework.process.constvalue.ProcessStepHandler;
+import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
 
 @RootComponent
@@ -46,7 +47,7 @@ public class ProcessStepHandlerFactory implements ApplicationListener<ContextRef
 		List<ProcessStepHandlerVo> returnProcessStepHandlerList = new ArrayList<>();
 		for (ProcessStepHandlerVo processStepHandler : processStepHandlerList) {
 			//开始和结束组件不用返回给前端
-			if(processStepHandler.getType().equals(ProcessStepHandler.END.getHandler()) || processStepHandler.getType().equals(ProcessStepHandler.START.getHandler())) {
+			if(processStepHandler.getType().equals(ProcessStepType.END.getValue()) || processStepHandler.getType().equals(ProcessStepType.START.getValue())) {
 				continue;
 			}
 			for (ModuleVo moduleVo : moduleList) {
@@ -56,8 +57,7 @@ public class ProcessStepHandlerFactory implements ApplicationListener<ContextRef
 				}
 			}
 		}
-		Collections.sort(returnProcessStepHandlerList);
-		return returnProcessStepHandlerList;
+		return returnProcessStepHandlerList.stream().sorted(Comparator.comparing(ProcessStepHandlerVo::getSort)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -72,10 +72,11 @@ public class ProcessStepHandlerFactory implements ApplicationListener<ContextRef
 				processStepHandlerVo.setType(component.getType());
 				processStepHandlerVo.setHandler(component.getHandler());
 				processStepHandlerVo.setName(component.getName());
-				processStepHandlerVo.setIcon(component.getIcon());
 				processStepHandlerVo.setSort(component.getSort());
+				processStepHandlerVo.setChartConfig(component.getChartConfig());
 				processStepHandlerVo.setModuleId(context.getId());
 				processStepHandlerVo.setIsActive(1);
+				processStepHandlerVo.setIsAllowStart((component.isAllowStart()!=null&&component.isAllowStart())?1:0);
 				processStepHandlerList.add(processStepHandlerVo);
 			}
 		}

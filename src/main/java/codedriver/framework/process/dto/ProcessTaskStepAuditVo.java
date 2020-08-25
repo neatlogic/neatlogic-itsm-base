@@ -3,7 +3,10 @@ package codedriver.framework.process.dto;
 import java.util.Date;
 import java.util.List;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import org.apache.commons.lang3.StringUtils;
+
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepAuditVo {
@@ -15,8 +18,8 @@ public class ProcessTaskStepAuditVo {
 	private Long processTaskStepId;
 	@EntityField(name = "步骤名称", type = ApiParamType.STRING)
 	private String processTaskStepName;
-	@EntityField(name = "用户userId", type = ApiParamType.STRING)
-	private String userId;
+	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
+	private String userUuid;
 	@EntityField(name = "用户名", type = ApiParamType.STRING)
 	private String userName;
 	@EntityField(name = "创建时间", type = ApiParamType.LONG)
@@ -25,7 +28,18 @@ public class ProcessTaskStepAuditVo {
 	private String action;
 	//@EntityField(name = "活动详情列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepAuditDetailVo> auditDetailList;
-
+	
+	@EntityField(name = "目标步骤id", type = ApiParamType.LONG)
+	private Long nextStepId;
+	@EntityField(name = "目标步骤名称", type = ApiParamType.STRING)
+	private String nextStepName;
+	@EntityField(name = "步骤状态", type = ApiParamType.STRING)
+	private String stepStatus;
+	@EntityField(name = "步骤状态信息", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStatusVo stepStatusVo;
+	@EntityField(name = "描述", type = ApiParamType.STRING)
+	private String description;
+	
 	public ProcessTaskStepAuditVo() { 
 	}
 	
@@ -34,10 +48,10 @@ public class ProcessTaskStepAuditVo {
 		this.action = _action;
 	}
 
-	public ProcessTaskStepAuditVo(Long processTaskId, Long processTaskStepId, String userId, String action) {
+	public ProcessTaskStepAuditVo(Long processTaskId, Long processTaskStepId, String userUuid, String action) {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
-		this.userId = userId;
+		this.userUuid = userUuid;
 		this.action = action;
 	}
 
@@ -73,18 +87,21 @@ public class ProcessTaskStepAuditVo {
 		this.processTaskStepName = processTaskStepName;
 	}
 
-	public String getUserId() {
-//		if (StringUtils.isBlank(userId)) {
-//			userId = UserContext.get().getUserId();
-//		}
-		return userId;
+	public String getUserUuid() {
+		return userUuid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 
 	public String getUserName() {
+		if(StringUtils.isBlank(userName) && StringUtils.isNotBlank(userUuid)) {
+			userName = SystemUser.getUserName(userUuid);
+			if(StringUtils.isBlank(userName)) {
+				userName = userUuid;
+			}
+		}
 		return userName;
 	}
 
@@ -114,6 +131,49 @@ public class ProcessTaskStepAuditVo {
 
 	public void setAuditDetailList(List<ProcessTaskStepAuditDetailVo> auditDetailList) {
 		this.auditDetailList = auditDetailList;
+	}
+
+	public Long getNextStepId() {
+		return nextStepId;
+	}
+
+	public void setNextStepId(Long nextStepId) {
+		this.nextStepId = nextStepId;
+	}
+
+	public String getNextStepName() {
+		return nextStepName;
+	}
+
+	public void setNextStepName(String nextStepName) {
+		this.nextStepName = nextStepName;
+	}
+
+	public String getStepStatus() {
+		return stepStatus;
+	}
+
+	public void setStepStatus(String stepStatus) {
+		this.stepStatus = stepStatus;
+	}
+
+	public ProcessTaskStatusVo getStepStatusVo() {
+		if(stepStatusVo == null && StringUtils.isNotBlank(stepStatus)) {
+			stepStatusVo = new ProcessTaskStatusVo(stepStatus);
+		}
+		return stepStatusVo;
+	}
+
+	public void setStepStatusVo(ProcessTaskStatusVo stepStatusVo) {
+		this.stepStatusVo = stepStatusVo;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

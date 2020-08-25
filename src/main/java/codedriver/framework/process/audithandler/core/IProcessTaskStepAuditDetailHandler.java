@@ -6,5 +6,5 @@ public interface IProcessTaskStepAuditDetailHandler {
 
 	public String getType();
 	
-	public void handle(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo);
+	public int handle(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo);
 }

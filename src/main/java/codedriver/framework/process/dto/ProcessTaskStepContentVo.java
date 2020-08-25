@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
@@ -9,9 +11,9 @@ public class ProcessTaskStepContentVo {
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String contentHash;
-	private String fcd;
+	private Date fcd;
 	private String fcu;
-	private String lcd;
+	private Date lcd;
 	private String lcu;
 
 	public ProcessTaskStepContentVo() {
@@ -48,17 +50,17 @@ public class ProcessTaskStepContentVo {
 		this.contentHash = contentHash;
 	}
 
-	public String getFcd() {
+	public Date getFcd() {
 		return fcd;
 	}
 
-	public void setFcd(String fcd) {
+	public void setFcd(Date fcd) {
 		this.fcd = fcd;
 	}
 
 	public String getFcu() {
 		if (StringUtils.isBlank(fcu)) {
-			fcu = UserContext.get().getUserId();
+			fcu = UserContext.get().getUserUuid();
 		}
 		return fcu;
 	}
@@ -67,17 +69,17 @@ public class ProcessTaskStepContentVo {
 		this.fcu = fcu;
 	}
 
-	public String getLcd() {
+	public Date getLcd() {
 		return lcd;
 	}
 
-	public void setLcd(String lcd) {
+	public void setLcd(Date lcd) {
 		this.lcd = lcd;
 	}
 
 	public String getLcu() {
 		if (StringUtils.isBlank(lcu)) {
-			lcu = UserContext.get().getUserId();
+			lcu = UserContext.get().getUserUuid();
 		}
 		return lcu;
 	}

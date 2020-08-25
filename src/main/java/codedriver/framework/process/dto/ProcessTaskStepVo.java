@@ -6,15 +6,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.process.constvalue.ProcessTaskFlowDirection;
-import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
+import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskStepVo extends BasePageVo {
+
+	private final static Logger logger = LoggerFactory.getLogger(ProcessTaskStepVo.class);
+	
 	@EntityField(name = "工单步骤id", type = ApiParamType.LONG)
 	private Long id;
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
@@ -27,8 +36,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String name;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
-	@EntityField(name = "状态名", type = ApiParamType.STRING)
-	private String statusText;
+	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStatusVo statusVo;
 	@EntityField(name = "步骤处理器", type = ApiParamType.STRING)
 	private String handler;
 	@EntityField(name = "步骤类型", type = ApiParamType.STRING)
@@ -43,49 +52,74 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
 	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
-	private String config;
+	private transient String config;
+	private transient JSONObject configObj;
+	private transient JSONObject globalConfig;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
 	private String configHash;
-	private JSONObject configObj;
 	private Boolean isAllDone = false;
 	private Boolean isCurrentUserDone = false;
 	private Boolean isWorkerPolicyListSorted = false;
-	private Boolean isAttributeListSorted = false;
-	private Boolean isTimeoutPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> userList;
-	//@EntityField(name = "处理组列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepTeamVo> teamList;
-	private List<ProcessTaskStepRelVo> relList;
+	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
+	private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepWorkerVo> workerList;
-	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList;
-	private List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList;
-	private List<ProcessTaskStepFormAttributeVo> formAttributeList;
+	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
+	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
+	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
 	private JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
 	private Map<String, String> formAttributeActionMap;
-	@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> majorUserList;
+	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStepUserVo majorUser;
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> minorUserList;
+	private List<ProcessTaskStepUserVo> minorUserList = new ArrayList<>();
 	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> agentUserList;
+	private List<ProcessTaskStepUserVo> agentUserList = new ArrayList<>();
 	@EntityField(name = "暂存评论附件或上报描述附件", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepCommentVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepAuditVo> processTaskStepAuditList;
+	private List<ProcessTaskStepCommentVo> commentList = new ArrayList<>();
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
 	private String flowDirection;
+	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
+	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
+	private Integer isView;
+	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepVo> assignableWorkerStepList = new ArrayList<>();
+	@EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
+	private transient String aliasName;
+	private transient Boolean isAutoGenerateId = false;
+	
+	private transient JSONObject notifyPolicyConfig;
+	
+	private transient JSONArray actionList;
+	
+	@EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
+	private JSONObject processTaskStepData;
+	//@EntityField(name = "当前子任务Id", type = ApiParamType.LONG)
+	private transient Long currentSubtaskId;
+	@EntityField(name = "处理器特有的步骤信息", type = ApiParamType.JSONOBJECT)
+	private Object handlerStepInfo;
+	@EntityField(name = "向前步骤列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepVo> forwardNextStepList = new ArrayList<>();
+	@EntityField(name = "向后步骤列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepVo> backwardNextStepList = new ArrayList<>();
+	
+	private transient Map<String, Object> formAttributeDataMap;
+	
 	public ProcessTaskStepVo() {
 
 	}
 
 	public ProcessTaskStepVo(ProcessStepVo processStepVo) {
+		this.isAutoGenerateId = true;
 		this.setProcessUuid(processStepVo.getProcessUuid());
 		this.setProcessStepUuid(processStepVo.getUuid());
 		this.setName(processStepVo.getName());
@@ -93,22 +127,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.setType(processStepVo.getType());
 		this.setConfig(processStepVo.getConfig());
 		this.setFormUuid(processStepVo.getFormUuid());
-		if (processStepVo.getUserList() != null && processStepVo.getUserList().size() > 0) {
-			List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-			for (ProcessStepUserVo userVo : processStepVo.getUserList()) {
-				ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(userVo);
-				userList.add(processTaskStepUserVo);
-			}
-			this.setUserList(userList);
-		}
-		if (processStepVo.getTeamList() != null && processStepVo.getTeamList().size() > 0) {
-			List<ProcessTaskStepTeamVo> teamList = new ArrayList<>();
-			for (ProcessStepTeamVo teamVo : processStepVo.getTeamList()) {
-				ProcessTaskStepTeamVo processTaskStepTeamVo = new ProcessTaskStepTeamVo(teamVo);
-				teamList.add(processTaskStepTeamVo);
-			}
-			this.setTeamList(teamList);
-		}
+
 		if (processStepVo.getFormAttributeList() != null && processStepVo.getFormAttributeList().size() > 0) {
 			List<ProcessTaskStepFormAttributeVo> attributeList = new ArrayList<>();
 			for (ProcessStepFormAttributeVo attributeVo : processStepVo.getFormAttributeList()) {
@@ -127,15 +146,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 			}
 			this.setWorkerPolicyList(policyList);
 		}
-		if (processStepVo.getTimeoutPolicyList() != null && processStepVo.getTimeoutPolicyList().size() > 0) {
-			List<ProcessTaskStepTimeoutPolicyVo> timeoutList = new ArrayList<>();
-			for (ProcessStepTimeoutPolicyVo policyVo : processStepVo.getTimeoutPolicyList()) {
-				policyVo.setProcessStepUuid(processStepVo.getUuid());
-				ProcessTaskStepTimeoutPolicyVo processTaskStepTimeoutPolicyVo = new ProcessTaskStepTimeoutPolicyVo(policyVo);
-				timeoutList.add(processTaskStepTimeoutPolicyVo);
-			}
-			this.setTimeoutPolicyList(timeoutList);
-		}
+
 	}
 
 	@Override
@@ -162,15 +173,15 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public int hashCode() {
 		int result = 0;
 		if (getId() != null) {
-			result += getId().hashCode() * 7;
-		}
-		if (getProcessStepUuid() != null) {
-			result += getProcessStepUuid().hashCode() * 11;
+			result += getId().hashCode() * 37;
 		}
 		return result;
 	}
 
-	public Long getId() {
+	public synchronized Long getId() {
+		if(id == null && isAutoGenerateId) {
+			id = SnowflakeUtil.uniqueLong();
+		}
 		return id;
 	}
 
@@ -202,19 +213,43 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.status = status;
 	}
 
-	public String getStatusText() {
-		if(status == null) {
-			return null;
+	public ProcessTaskStatusVo getStatusVo() {
+		if(statusVo == null && StringUtils.isNotBlank(status)) {
+			if (MapUtils.isNotEmpty(getConfigObj())) {
+				JSONArray customStatusList = getConfigObj().getJSONArray("customStatusList");
+				if(CollectionUtils.isNotEmpty(customStatusList)) {
+					for(int i = 0; i < customStatusList.size(); i++) {
+						JSONObject customStatus = customStatusList.getJSONObject(i);							
+						if(status.equals(customStatus.getString("name"))) {
+							String value = customStatus.getString("value");
+							if(StringUtils.isNotBlank(value)) {
+								statusVo = new ProcessTaskStatusVo(status, value);
+							}
+						}
+					}
+				}
+			}
+			if(statusVo == null && MapUtils.isNotEmpty(globalConfig)) {
+				JSONArray customStatusList = globalConfig.getJSONArray("customStatusList");
+				if(CollectionUtils.isNotEmpty(customStatusList)) {
+					for(int i = 0; i < customStatusList.size(); i++) {
+						JSONObject customStatus = customStatusList.getJSONObject(i);							
+						if(status.equals(customStatus.getString("name"))) {
+							String value = customStatus.getString("value");
+							if(StringUtils.isNotBlank(value)) {
+								statusVo = new ProcessTaskStatusVo(status, value);
+							}
+						}
+					}
+				}
+			}
+			statusVo = new ProcessTaskStatusVo(status);
 		}
-		if(statusText != null) {
-			return statusText;
-		}
-		statusText = ProcessTaskStatus.getText(status);
-		return statusText;
+		return statusVo;
 	}
 
-	public void setStatusText(String statusText) {
-		this.statusText = statusText;
+	public void setStatusVo(ProcessTaskStatusVo statusVo) {
+		this.statusVo = statusVo;
 	}
 
 	public Integer getIsActive() {
@@ -250,11 +285,28 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public JSONObject getConfigObj() {
+		if(configObj == null && StringUtils.isNotBlank(config)) {
+			try {
+				configObj = JSONObject.parseObject(config);
+			} catch (Exception ex) {
+				if(StringUtils.isNotBlank(configHash)) {
+					logger.error("hash为" + configHash + "的processtask_step_config内容不是合法的JSON格式", ex);					
+				}
+			}
+		}
 		return configObj;
 	}
 
 	public void setConfigObj(JSONObject configObj) {
 		this.configObj = configObj;
+	}
+
+	public JSONObject getGlobalConfig() {
+		return globalConfig;
+	}
+
+	public void setGlobalConfig(JSONObject globalConfig) {
+		this.globalConfig = globalConfig;
 	}
 
 	public List<ProcessTaskStepUserVo> getUserList() {
@@ -265,15 +317,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.userList = userList;
 	}
 
-	public List<ProcessTaskStepTeamVo> getTeamList() {
-		return teamList;
-	}
-
-	public void setTeamList(List<ProcessTaskStepTeamVo> teamList) {
-		this.teamList = teamList;
-	}
-
 	public Integer getIsRequired() {
+		if(isRequired == null && MapUtils.isNotEmpty(getConfigObj())) {
+			JSONObject workerPolicyConfig = getConfigObj().getJSONObject("workerPolicyConfig");
+			if (MapUtils.isNotEmpty(workerPolicyConfig)) {
+				isRequired = workerPolicyConfig.getInteger("isRequired");
+			}
+		}
 		return isRequired;
 	}
 
@@ -282,13 +332,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public String getFlowDirection() {
-		if(this.isActive != null) {
-			if(this.isActive.intValue() == 2) {
-				flowDirection = ProcessTaskFlowDirection.BACKWARD.getText();
-			}else {
-				flowDirection = ProcessTaskFlowDirection.FORWARD.getText();
-			}
-		}
 		return flowDirection;
 	}
 
@@ -398,6 +441,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public JSONObject getParamObj() {
+		if(paramObj == null) {
+			paramObj = new JSONObject();
+		}
 		return paramObj;
 	}
 
@@ -422,18 +468,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setIsCurrentUserDone(Boolean isCurrentUserDone) {
 		this.isCurrentUserDone = isCurrentUserDone;
-	}
-
-	public List<ProcessTaskStepTimeoutPolicyVo> getTimeoutPolicyList() {
-		if (!isTimeoutPolicyListSorted && timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
-			Collections.sort(timeoutPolicyList);
-			isTimeoutPolicyListSorted = true;
-		}
-		return timeoutPolicyList;
-	}
-
-	public void setTimeoutPolicyList(List<ProcessTaskStepTimeoutPolicyVo> timeoutPolicyList) {
-		this.timeoutPolicyList = timeoutPolicyList;
 	}
 
 	public Date getExpireTime() {
@@ -492,14 +526,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.formAttributeActionMap = formAttributeActionMap;
 	}
 
-	public List<ProcessTaskStepUserVo> getMajorUserList() {
-		return majorUserList;
-	}
-
-	public void setMajorUserList(List<ProcessTaskStepUserVo> majorUserList) {
-		this.majorUserList = majorUserList;
-	}
-
 	public List<ProcessTaskStepUserVo> getMinorUserList() {
 		return minorUserList;
 	}
@@ -524,12 +550,140 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.comment = comment;
 	}
 
-	public List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList() {
-		return processTaskStepAuditList;
+	public List<ProcessTaskStepCommentVo> getCommentList() {
+		return commentList;
 	}
 
-	public void setProcessTaskStepAuditList(List<ProcessTaskStepAuditVo> processTaskStepAuditList) {
-		this.processTaskStepAuditList = processTaskStepAuditList;
+	public void setCommentList(List<ProcessTaskStepCommentVo> commentList) {
+		this.commentList = commentList;
 	}
+
+	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList() {
+		return processTaskStepSubtaskList;
+	}
+
+	public void setProcessTaskStepSubtaskList(List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList) {
+		this.processTaskStepSubtaskList = processTaskStepSubtaskList;
+	}
+
+	public Integer getIsView() {
+		return isView;
+	}
+
+	public void setIsView(Integer isView) {
+		this.isView = isView;
+	}
+
+	public String getAliasName() {
+		return aliasName;
+	}
+
+	public void setAliasName(String aliasName) {
+		this.aliasName = aliasName;
+	}
+
+	public List<ProcessTaskStepVo> getAssignableWorkerStepList() {
+		return assignableWorkerStepList;
+	}
+
+	public void setAssignableWorkerStepList(List<ProcessTaskStepVo> assignableWorkerStepList) {
+		this.assignableWorkerStepList = assignableWorkerStepList;
+	}
+
+	public ProcessTaskStepUserVo getMajorUser() {
+		return majorUser;
+	}
+
+	public void setMajorUser(ProcessTaskStepUserVo majorUser) {
+		this.majorUser = majorUser;
+	}
+
+	public List<ProcessTaskSlaTimeVo> getSlaTimeList() {
+		return slaTimeList;
+	}
+
+	public void setSlaTimeList(List<ProcessTaskSlaTimeVo> slaTimeList) {
+		this.slaTimeList = slaTimeList;
+	}
+
+	public Boolean getIsAutoGenerateId() {
+		return isAutoGenerateId;
+	}
+
+	public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
+		this.isAutoGenerateId = isAutoGenerateId;
+	}
+
+	public JSONObject getNotifyPolicyConfig() {
+		if(notifyPolicyConfig == null && MapUtils.isNotEmpty(getConfigObj())) {
+			notifyPolicyConfig = getConfigObj().getJSONObject("notifyPolicyConfig");
+		}
+		if(MapUtils.isEmpty(notifyPolicyConfig) && MapUtils.isNotEmpty(globalConfig)) {
+			notifyPolicyConfig = globalConfig.getJSONObject("notifyPolicyConfig");
+		}
+		return notifyPolicyConfig;
+	}
+
+	public void setNotifyPolicyConfig(JSONObject notifyPolicyConfig) {
+		this.notifyPolicyConfig = notifyPolicyConfig;
+	}
+
+	public JSONArray getActionList() {
+		if(actionList == null && MapUtils.isNotEmpty(getConfigObj())) {
+			actionList = getConfigObj().getJSONArray("actionList");
+		}
+		if(CollectionUtils.isEmpty(actionList) && MapUtils.isNotEmpty(globalConfig)) {
+			actionList = globalConfig.getJSONArray("actionList");
+		}
+		return actionList;
+	}
+
+	public JSONObject getProcessTaskStepData() {
+		return processTaskStepData;
+	}
+
+	public void setProcessTaskStepData(JSONObject processTaskStepData) {
+		this.processTaskStepData = processTaskStepData;
+	}
+
+	public Long getCurrentSubtaskId() {
+		return currentSubtaskId;
+	}
+
+	public void setCurrentSubtaskId(Long currentSubtaskId) {
+		this.currentSubtaskId = currentSubtaskId;
+	}
+
+	public Object getHandlerStepInfo() {
+		return handlerStepInfo;
+	}
+
+	public void setHandlerStepInfo(Object handlerStepInfo) {
+		this.handlerStepInfo = handlerStepInfo;
+	}
+
+	public List<ProcessTaskStepVo> getForwardNextStepList() {
+		return forwardNextStepList;
+	}
+
+	public void setForwardNextStepList(List<ProcessTaskStepVo> forwardNextStepList) {
+		this.forwardNextStepList = forwardNextStepList;
+	}
+
+	public List<ProcessTaskStepVo> getBackwardNextStepList() {
+		return backwardNextStepList;
+	}
+
+	public void setBackwardNextStepList(List<ProcessTaskStepVo> backwardNextStepList) {
+		this.backwardNextStepList = backwardNextStepList;
+	}
+
+    public Map<String, Object> getFormAttributeDataMap() {
+        return formAttributeDataMap;
+    }
+
+    public void setFormAttributeDataMap(Map<String, Object> formAttributeDataMap) {
+        this.formAttributeDataMap = formAttributeDataMap;
+    }
 
 }

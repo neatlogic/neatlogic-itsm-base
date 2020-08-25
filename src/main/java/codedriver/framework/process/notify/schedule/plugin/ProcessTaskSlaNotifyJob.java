@@ -1,13 +1,13 @@
 package codedriver.framework.process.notify.schedule.plugin;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -16,26 +16,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
+import codedriver.framework.notify.dao.mapper.NotifyMapper;
+import codedriver.framework.notify.dto.NotifyPolicyVo;
+import codedriver.framework.notify.dto.NotifyReceiverVo;
+import codedriver.framework.notify.dto.ParamMappingVo;
+import codedriver.framework.process.column.core.ProcessTaskUtil;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.dao.mapper.notify.NotifyMapper;
 import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
 import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.notify.core.INotifyHandler;
-import codedriver.framework.process.notify.core.NotifyHandlerFactory;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
-import codedriver.framework.process.notify.dto.NotifyTemplateVo;
-import codedriver.framework.process.notify.dto.NotifyVo;
+import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
+import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 import codedriver.framework.scheduler.core.JobBase;
 import codedriver.framework.scheduler.dto.JobObject;
+import codedriver.framework.util.NotifyPolicyUtil;
 
 @Component
 public class ProcessTaskSlaNotifyJob extends JobBase {
@@ -43,10 +45,10 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 
 	@Autowired
 	private ProcessTaskMapper processTaskMapper;
-
+	
 	@Autowired
 	private NotifyMapper notifyMapper;
-
+	
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
 		Long slaTransferId = (Long) jobObject.getData("slaNotifyId");
@@ -69,52 +71,51 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 			ProcessTaskSlaTimeVo slaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(processTaskSlaNotifyVo.getSlaId());
 			if (slaTimeVo != null) {
 				if (processTaskSlaNotifyVo != null && processTaskSlaNotifyVo.getConfigObj() != null) {
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					JSONObject policyObj = processTaskSlaNotifyVo.getConfigObj();
 					String expression = policyObj.getString("expression");
 					int time = policyObj.getIntValue("time");
 					String unit = policyObj.getString("unit");
-					JSONArray notifyPluginList = policyObj.getJSONArray("pluginList");
 					String executeType = policyObj.getString("executeType");
 					int intervalTime = policyObj.getIntValue("intervalTime");
 					String intervalUnit = policyObj.getString("intervalUnit");
-					JSONArray receiverList = policyObj.getJSONArray("receiverList");
-					if (executeType.equals("loop") && intervalTime > 0) {
+					Integer repeatCount = null;
+					if ("loop".equals(executeType) && intervalTime > 0) {//周期执行
 						if (intervalUnit.equalsIgnoreCase("day")) {
 							intervalTime = intervalTime * 24 * 60 * 60;
 						} else {
 							intervalTime = intervalTime * 60 * 60;
 						}
+					}else {//单次执行
+						repeatCount = 0;
+						intervalTime = 60 * 60;
 					}
-					if (StringUtils.isNotBlank(expression) && receiverList != null && receiverList.size() > 0 && notifyPluginList != null && notifyPluginList.size() > 0) {
-						try {
-							Date etdate = sdf.parse(slaTimeVo.getExpireTime());
-							Calendar notifyDate = Calendar.getInstance();
-							notifyDate.setTime(etdate);
-							if (expression.equalsIgnoreCase("before")) {
-								time = -time;
-							}
-							if (StringUtils.isNotBlank(unit) && time != 0) {
-								if (unit.equalsIgnoreCase("day")) {
-									notifyDate.add(time, Calendar.DAY_OF_MONTH);
-								} else if (unit.equalsIgnoreCase("hour")) {
-									notifyDate.add(time, Calendar.HOUR);
-								} else {
-									notifyDate.add(time, Calendar.MINUTE);
-								}
-							}
-							JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).withBeginTime(notifyDate.getTime()).withIntervalInSeconds(intervalTime).addData("slaNotifyId", processTaskSlaNotifyVo.getId());
-							JobObject newJobObject = newJobObjectBuilder.build();
-							Date triggerDate = schedulerManager.loadJob(newJobObject);
-							if (triggerDate != null) {
-								// 更新通知记录时间
-								processTaskSlaNotifyVo.setTriggerTime(sdf.format(triggerDate));
-								processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
-								isJobLoaded = true;
-							}
-						} catch (ParseException e) {
-							logger.error(e.getMessage(), e);
+					Calendar notifyDate = Calendar.getInstance();
+					notifyDate.setTime(slaTimeVo.getExpireTime());
+					if (expression.equalsIgnoreCase("before")) {
+						time = -time;
+					}
+					if (StringUtils.isNotBlank(unit) && time != 0) {
+						if (unit.equalsIgnoreCase("day")) {
+							notifyDate.add(Calendar.DAY_OF_MONTH, time);
+						} else if (unit.equalsIgnoreCase("hour")) {
+							notifyDate.add(Calendar.HOUR, time);
+						} else {
+							notifyDate.add(Calendar.MINUTE, time);
 						}
+					}
+
+					JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
+							.withBeginTime(notifyDate.getTime())
+							.withIntervalInSeconds(intervalTime)
+							.withRepeatCount(repeatCount)
+							.addData("slaNotifyId", processTaskSlaNotifyVo.getId());
+					JobObject newJobObject = newJobObjectBuilder.build();
+					Date triggerDate = schedulerManager.loadJob(newJobObject);
+					if (triggerDate != null) {
+						// 更新通知记录时间
+						processTaskSlaNotifyVo.setTriggerTime(triggerDate);
+						processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
+						isJobLoaded = true;
 					}
 				}
 			}
@@ -141,88 +142,46 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskNotifyById(slaNotifyId);
 		if (processTaskSlaNotifyVo != null) {
 			Long slaId = processTaskSlaNotifyVo.getSlaId();
-			ProcessTaskSlaTimeVo processTaskSlaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(slaId);
 			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoBySlaId(slaId);
+			Iterator<ProcessTaskStepVo> it = processTaskStepList.iterator();
+			while (it.hasNext()) {
+				ProcessTaskStepVo processTaskStepVo = it.next();
+				// 未处理、处理中和挂起的步骤才需要计算SLA
+				if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
+				} else {
+					it.remove();
+				}
+			}
+			ProcessTaskSlaTimeVo processTaskSlaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(slaId);
 			ProcessTaskSlaVo processTaskSlaVo = processTaskMapper.getProcessTaskSlaById(slaId);
-			if (processTaskSlaVo != null && processTaskSlaTimeVo != null && processTaskSlaNotifyVo.getConfigObj() != null) {
+			/** 存在未完成步骤才发超时通知，否则清除通知作业 **/
+			if (processTaskSlaVo != null && processTaskSlaTimeVo != null && MapUtils.isNotEmpty(processTaskSlaNotifyVo.getConfigObj()) && processTaskStepList.size() > 0) {
 				JSONObject policyObj = processTaskSlaNotifyVo.getConfigObj();
-				JSONArray notifyPluginList = policyObj.getJSONArray("pluginList");
-				JSONArray receiverList = policyObj.getJSONArray("receiverList");
-				String templateUuid = policyObj.getString("template");
-				NotifyVo.Builder notifyBuilder = new NotifyVo.Builder(NotifyTriggerType.TIMEOUT);
-				if (notifyPluginList != null && notifyPluginList.size() > 0 && receiverList != null && receiverList.size() > 0) {
-					NotifyTemplateVo templateVo = notifyMapper.getNotifyTemplateByUuid(templateUuid);
-					if (templateVo != null) {
-						notifyBuilder.withTitleTemplate(templateVo.getTitle());
-						notifyBuilder.withContentTemplate(templateVo.getContent());
+				JSONObject notifyPolicyConfig = policyObj.getJSONObject("notifyPolicyConfig");
+				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
+					Long policyId = notifyPolicyConfig.getLong("policyId");
+					NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(policyId);
+					if (notifyPolicyVo != null) {
+						JSONObject policyConfig = notifyPolicyVo.getConfig();
+						List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
+						IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+						ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(processTaskSlaVo.getProcessTaskId());
+						JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
+						JSONObject templateParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
+						Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
+						for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
+						    processStepUtilHandler.getReceiverMap(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), receiverMap);							
+						}
+						NotifyPolicyUtil.execute(policyConfig, paramMappingList, NotifyTriggerType.TIMEOUT, templateParamData, conditionParamData, receiverMap);
 					}
-					/** 补充通知信息，将来有需要再补充 **/
-					notifyBuilder.addData("sla", processTaskSlaVo).addData("slaTime", processTaskSlaTimeVo);
-					Iterator<ProcessTaskStepVo> it = processTaskStepList.iterator();
-					ProcessTaskVo processTaskVo = null;
-					List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
-					while (it.hasNext()) {
-						ProcessTaskStepVo processTaskStepVo = it.next();
-						if (processTaskVo == null) {
-							processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskStepVo.getProcessTaskId());
-						}
-						// 未处理、处理中和挂起的步骤才需要计算SLA
-						if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue()) || processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
-							// 找到所有未完成步骤的处理人
-							workerList.addAll(processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepVo.getId()));
-						} else {
-							it.remove();
-						}
-					}
-					/** 存在未完成步骤才发超时通知，否则清除通知作业 **/
-					if (processTaskStepList.size() > 0) {
-						notifyBuilder.addData("stepList", processTaskStepList);
-						if (receiverList != null && receiverList.size() > 0) {
-							for (int r = 0; r < receiverList.size(); r++) {
-								String receiver = receiverList.getString(r);
-								if (receiver.startsWith("common.")) {
-									receiver = receiver.substring(7);
-									if (receiver.equalsIgnoreCase("reporter")) {
-										notifyBuilder.addUserId(processTaskVo.getReporter());
-									} else if (receiver.equalsIgnoreCase("owner")) {
-										notifyBuilder.addUserId(processTaskVo.getOwner());
-									} else if (receiver.equalsIgnoreCase("worker")) {
-										for (ProcessTaskStepWorkerVo workerVo : workerList) {
-											notifyBuilder.addUserId(workerVo.getUserId());
-										}
-									}
-								} else if (receiver.startsWith("user.")) {
-									receiver = receiver.substring(5);
-									notifyBuilder.addUserId(receiver);
-								} else if (receiver.startsWith("team.")) {
-									receiver = receiver.substring(5);
-									notifyBuilder.addTeamId(receiver);
-								}
-							}
-						}
-
-						NotifyVo notifyVo = notifyBuilder.build();
-						for (int i = 0; i < notifyPluginList.size(); i++) {
-							String handler = notifyPluginList.getString(i);
-							INotifyHandler notifyHandler = NotifyHandlerFactory.getHandler(handler);
-							if (notifyHandler != null) {
-								notifyHandler.execute(notifyVo);
-							}
-						}
-						Date nextFireTime = context.getNextFireTime();
-						if (nextFireTime != null) {
-							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							processTaskSlaNotifyVo.setTriggerTime(sdf.format(nextFireTime));
-							processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
-						} else {
-							// 删除通知记录
-							processTaskMapper.deleteProcessTaskSlaNotifyById(processTaskSlaNotifyVo.getId());
-						}
-					} else {
-						schedulerManager.unloadJob(jobObject);
-						// 删除通知记录
-						processTaskMapper.deleteProcessTaskSlaNotifyById(processTaskSlaNotifyVo.getId());
-					}
+				}
+				Date nextFireTime = context.getNextFireTime();
+				if (nextFireTime != null) {
+					processTaskSlaNotifyVo.setTriggerTime(nextFireTime);
+					processTaskMapper.updateProcessTaskSlaNotify(processTaskSlaNotifyVo);
+				} else {
+					// 删除通知记录
+					processTaskMapper.deleteProcessTaskSlaNotifyById(processTaskSlaNotifyVo.getId());
 				}
 			} else {
 				schedulerManager.unloadJob(jobObject);

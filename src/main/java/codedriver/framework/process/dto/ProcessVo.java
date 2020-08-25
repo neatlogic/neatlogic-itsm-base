@@ -12,12 +12,14 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepHandler;
+import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
-import codedriver.framework.process.stephandler.core.IProcessStepHandler;
-import codedriver.framework.process.stephandler.core.ProcessStepHandlerFactory;
+import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
+import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessVo extends BasePageVo implements Serializable {
@@ -176,15 +178,19 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				}
 			}
 		}
-		
+		String virtualStartStepUuid = "";//虚拟开始节点uuid
+		Map<String, ProcessStepVo> stepMap = new HashMap<>();
 		JSONArray stepList = processObj.getJSONArray("stepList");
 		if (stepList != null && stepList.size() > 0) {
 			this.stepList = new ArrayList<>();
 			for (int i = 0; i < stepList.size(); i++) {
 				JSONObject stepObj = stepList.getJSONObject(i);
-				
+				String handler = stepObj.getString("handler");
+				if(ProcessStepHandler.START.getHandler().equals(handler)) {//找到虚拟开始节点uuid,虚拟开始节点不写入process_step表
+					virtualStartStepUuid = stepObj.getString("uuid");
+					continue;
+				}
 				ProcessStepVo processStepVo = new ProcessStepVo();
-				this.stepList.add(processStepVo);
 				processStepVo.setProcessUuid(this.getUuid());
 				processStepVo.setConfig(stepObj.getString("stepConfig"));
 
@@ -197,20 +203,22 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				if (StringUtils.isNotBlank(name)) {
 					processStepVo.setName(name);
 				}
-				String handler = stepObj.getString("handler");
+				
 				if (StringUtils.isNotBlank(handler)) {
 					processStepVo.setHandler(handler);
 					processStepVo.setType(ProcessStepHandler.getType(handler));
-					IProcessStepHandler procssStepHandler = ProcessStepHandlerFactory.getHandler(handler);
-					if (procssStepHandler != null) {
+					IProcessStepUtilHandler procssStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(handler);
+					if (procssStepUtilHandler != null) {
 						JSONObject stepConfigObj = stepObj.getJSONObject("stepConfig");
 						if(stepConfigObj != null) {
-							procssStepHandler.makeupProcessStep(processStepVo, stepConfigObj);
+							procssStepUtilHandler.makeupProcessStep(processStepVo, stepConfigObj);
 						}
 					} else {
 						throw new ProcessStepHandlerNotFoundException(handler);
 					}
 				}
+				this.stepList.add(processStepVo);
+				stepMap.put(processStepVo.getUuid(), processStepVo);
 			}
 		}
 		
@@ -219,12 +227,27 @@ public class ProcessVo extends BasePageVo implements Serializable {
 			this.stepRelList = new ArrayList<>();
 			for (int i = 0; i < relList.size(); i++) {
 				JSONObject relObj = relList.getJSONObject(i);
+				String fromStepUuid = relObj.getString("fromStepUuid");
+				String toStepUuid = relObj.getString("toStepUuid");
+				if(virtualStartStepUuid.equals(fromStepUuid)) {//通过虚拟开始节点连线找到真正的开始步骤
+					ProcessStepVo startStep = stepMap.get(toStepUuid);
+					if(startStep != null) {
+						startStep.setType(ProcessStepType.START.getValue());
+					}
+					continue;
+				}
 				ProcessStepRelVo processStepRelVo = new ProcessStepRelVo();
-				processStepRelVo.setFromStepUuid(relObj.getString("fromStepUuid"));
-				processStepRelVo.setToStepUuid(relObj.getString("toStepUuid"));
+				processStepRelVo.setFromStepUuid(fromStepUuid);
+				processStepRelVo.setToStepUuid(toStepUuid);
 				processStepRelVo.setUuid(relObj.getString("uuid"));
 				processStepRelVo.setProcessUuid(this.getUuid());
 				processStepRelVo.setCondition(relObj.getString("conditionConfig"));
+				processStepRelVo.setName(relObj.getString("name"));
+				String type = relObj.getString("type");
+				if(!ProcessFlowDirection.BACKWARD.getValue().equals(type)) {
+					type = ProcessFlowDirection.FORWARD.getValue();
+				}
+				processStepRelVo.setType(type);
 				stepRelList.add(processStepRelVo);
 			}
 		}

@@ -1,6 +1,7 @@
 package codedriver.framework.process.stephandler.core;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -9,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.process.constvalue.ProcessStepMode;
-import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -25,7 +25,16 @@ public interface IProcessStepHandler {
 	 * @return String
 	 */
 	public String getHandler();
-	
+
+	/**
+	 * @Author: chenqiwei
+	 * @Time:Mar 25, 2020
+	 * @Description: 前端canvas配置
+	 * @param @return
+	 * @return JSONObject
+	 */
+	public JSONObject getChartConfig();
+
 	/**
 	 * @Author: chenqiwei
 	 * @Time:Jan 20, 2020
@@ -43,8 +52,6 @@ public interface IProcessStepHandler {
 	 * @return String
 	 */
 	public ProcessStepMode getMode();
-
-	public String getIcon();
 
 	public String getName();
 
@@ -223,12 +230,12 @@ public interface IProcessStepHandler {
 	 * @Time:Aug 5, 2019
 	 * @Description: 获取当前步骤满足流转条件的后置步骤
 	 * @param @return
-	 * @return List<ProcessTaskStepVo>
+	 * @return Set<ProcessTaskStepVo>
 	 */
-	public List<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo);
-	
+	public Set<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo);
+
 	/**
-	 * @Author: 
+	 * @Author:
 	 * @Time:
 	 * @Description: 保存工单草稿，将会创建一个工单，工单状态为草稿状态
 	 * @param @return
@@ -236,7 +243,7 @@ public interface IProcessStepHandler {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public int saveDraft(ProcessTaskStepVo currentProcessTaskStepVo);
-	
+
 	/**
 	 * @Author: chenqiwei
 	 * @Time:Aug 7, 2019
@@ -258,13 +265,5 @@ public interface IProcessStepHandler {
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public int back(ProcessTaskStepVo currentProcessTaskStepVo);
 
-	/**
-	 * @Author: chenqiwei
-	 * @Time:Feb 10, 2020
-	 * @Description: 组装步骤节点信息
-	 * @param @param processStepVo
-	 * @param @param stepConfigObj
-	 * @return void
-	 */
-	public void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj);
+	
 }

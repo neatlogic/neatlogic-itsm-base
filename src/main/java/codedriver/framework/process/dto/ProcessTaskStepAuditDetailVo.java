@@ -1,17 +1,26 @@
 package codedriver.framework.process.dto;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSONObject;
+
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.process.audithandler.core.ProcessTaskAuditDetailTypeFactory;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ProcessTaskStepAuditDetailVo {
+public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepAuditDetailVo>{
 	@EntityField(name = "活动id", type = ApiParamType.LONG)
 	private Long auditId;
 	@EntityField(name = "详情类型，title(标题)、priority(优先级)、content(内容)、worker(处理人)、file(上传文件)", type = ApiParamType.STRING)
 	private String type;
+	@EntityField(name = "详情类型名称", type = ApiParamType.STRING)
+	private String typeName;
 	@EntityField(name = "旧内容", type = ApiParamType.STRING)
 	private String oldContent;
 	@EntityField(name = "新内容", type = ApiParamType.STRING)
 	private String newContent;
+	
+	private transient JSONObject paramObj = new JSONObject();
 
 	public ProcessTaskStepAuditDetailVo() {
 
@@ -54,6 +63,30 @@ public class ProcessTaskStepAuditDetailVo {
 
 	public void setNewContent(String newContent) {
 		this.newContent = newContent;
+	}
+
+	@Override
+	public int compareTo(ProcessTaskStepAuditDetailVo auditDetail) {
+		return Integer.compare(ProcessTaskAuditDetailTypeFactory.getSort(type), ProcessTaskAuditDetailTypeFactory.getSort(auditDetail.getType()));
+	}
+
+	public JSONObject getParamObj() {
+		return paramObj;
+	}
+
+	public void setParamObj(JSONObject paramObj) {
+		this.paramObj = paramObj;
+	}
+
+	public String getTypeName() {
+		if(StringUtils.isBlank(typeName) && StringUtils.isNotBlank(type)) {
+			typeName = ProcessTaskAuditDetailTypeFactory.getText(type);
+		}
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 }

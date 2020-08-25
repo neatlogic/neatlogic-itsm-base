@@ -5,13 +5,20 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import codedriver.framework.process.workcenter.dto.WorkcenterRoleVo;
+import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterTheadVo;
+import codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 
 public interface WorkcenterMapper {
 	
-	public List<WorkcenterVo> getWorkcenter(WorkcenterVo workcenterVo);
+	public List<String> getAuthorizedWorkcenterUuidList(
+			@Param("userUuid")String userUuid, 
+			@Param("teamUuidList")List<String> teamUuidList,
+			@Param("roleUuidList")List<String> roleUuidList
+			);
+	
+	public List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);
 	
 	public Integer checkWorkcenterNameIsRepeat(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
 	
@@ -21,9 +28,13 @@ public interface WorkcenterMapper {
 	
 	public List<WorkcenterTheadVo> getWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
 	
+	public WorkcenterUserProfileVo getWorkcenterUserProfileByUserUuid(String userUuid);
+	
+	public Integer deleteWorkcenterUserProfileByUserUuid(String userUuid);
+	
 	public Integer deleteWorkcenterByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
-	public Integer deleteWorkcenterRoleByUuid(@Param("workcenterUuid")String workcenterUuid);
+	public Integer deleteWorkcenterAuthorityByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
 	public Integer deleteWorkcenterOwnerByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
@@ -31,11 +42,16 @@ public interface WorkcenterMapper {
 	
 	public Integer insertWorkcenter(WorkcenterVo workcenterVo);
 	
-	public Integer insertWorkcenterRole(WorkcenterRoleVo workcenterRoleVo); 
+	public Integer insertWorkcenterAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("workcenterUuid") String workcenterUuid); 
 	
-	public Integer insertWorkcenterOwner(@Param("userId")String owner,@Param("uuid")String workcenterUuid); 
+	public Integer insertWorkcenterOwner(@Param("userUuid")String owner,@Param("uuid")String workcenterUuid); 
 	
 	public Integer insertWorkcenterThead(WorkcenterTheadVo workcenterTheadVo); 
 	
+	public Integer insertWorkcenterUserProfile(WorkcenterUserProfileVo workcenterUserProfileVo);
+	
 	public Integer updateWorkcenter(WorkcenterVo workcenterVo);
+	
+	public Integer updateWorkcenterCondition(WorkcenterVo workcenterVo);
+	
 }

@@ -1,7 +1,5 @@
 package codedriver.framework.process.dto;
 
-import org.apache.commons.lang3.StringUtils;
-
 import codedriver.framework.common.constvalue.GroupSearch;
 
 /**
@@ -13,86 +11,68 @@ import codedriver.framework.common.constvalue.GroupSearch;
 public class ProcessTaskStepWorkerVo {
 	private Long processTaskId;
 	private Long processTaskStepId;
-	private String userId;
-	private String userName;
-	private String teamUuid;
-	private String roleName;
-	private String action = "handle";
-
-	@Override
-	public boolean equals(Object other) {
-		if (this == other)
-			return true;
-		if (other == null)
-			return false;
-		if (!(other instanceof ProcessTaskStepWorkerVo))
-			return false;
-
-		final ProcessTaskStepWorkerVo user = (ProcessTaskStepWorkerVo) other;
-		try {
-			if (getProcessTaskId().equals(user.getProcessTaskId()) && getProcessTaskStepId().equals(user.getProcessTaskStepId()) && ((getUserId() != null && getUserId().equals(user.getUserId())) || (getTeamUuid() != null && getTeamUuid().equals(user.getTeamUuid()))) || (getRoleName() != null && getRoleName().equals(user.getRoleName()))) {
-				return true;
-			}
-		} catch (Exception ex) {
-			return false;
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		int result = getProcessTaskId().hashCode() * 7 + getProcessTaskStepId().hashCode() * 11;
-		if (StringUtils.isNotBlank(getUserId())) {
-			result += getUserId().hashCode() * 37;
-		} else if (StringUtils.isNotBlank(getRoleName())) {
-			result += getRoleName().hashCode() * 37;
-		} else if (getTeamUuid() != null) {
-			result += getTeamUuid().hashCode() * 37;
-		}
-		return result;
-	}
+	private String type;
+	private String uuid;
+	private String name;
+	private String userType;
 
 	public ProcessTaskStepWorkerVo() {
 
 	}
 
-	public ProcessTaskStepWorkerVo(Long _processTaskStepId, String _userId) {
-		this.processTaskStepId = _processTaskStepId;
-		this.userId = _userId;
+	public ProcessTaskStepWorkerVo(Long processTaskStepId) {
+		this.processTaskStepId = processTaskStepId;
 	}
 
-	public ProcessTaskStepWorkerVo(Long _processTaskStepId) {
-		this.processTaskStepId = _processTaskStepId;
-	}
-
-	public ProcessTaskStepWorkerVo(Long _processTaskId, Long _processTaskStepId, String _userId) {
-		this.processTaskId = _processTaskId;
-		this.processTaskStepId = _processTaskStepId;
-		this.userId = _userId;
-	}
-	
-	public ProcessTaskStepWorkerVo(Long _processTaskId, Long _processTaskStepId, String _userId,String _action) {
-		this.processTaskId = _processTaskId;
-		this.processTaskStepId = _processTaskStepId;
-		this.userId = _userId;
-		this.action = _action;
-	}
-	
-	public ProcessTaskStepWorkerVo(Long _processTaskId, Long _processTaskStepId, String _userId,String _teamUuid,String _action) {
-		this.processTaskId = _processTaskId;
-		this.processTaskStepId = _processTaskStepId;
-		this.userId = _userId;
-		this.teamUuid = _teamUuid;
-		this.action = _action;
-	}
-
-	public ProcessTaskStepWorkerVo(Long processTaskId, Long processTaskStepId, String userId, String teamUuid, String roleName, String action) {
+	public ProcessTaskStepWorkerVo(Long processTaskId, Long processTaskStepId, String type, String uuid, String userType) {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
-		this.userId = userId;
-		this.teamUuid = teamUuid;
-		this.roleName = roleName;
-		this.action = action;
+		this.type = type;
+		this.uuid = uuid;
+		this.userType = userType;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((processTaskId == null) ? 0 : processTaskId.hashCode());
+		result = prime * result + ((processTaskStepId == null) ? 0 : processTaskStepId.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProcessTaskStepWorkerVo other = (ProcessTaskStepWorkerVo) obj;
+		if (processTaskId == null) {
+			if (other.processTaskId != null)
+				return false;
+		} else if (!processTaskId.equals(other.processTaskId))
+			return false;
+		if (processTaskStepId == null) {
+			if (other.processTaskStepId != null)
+				return false;
+		} else if (!processTaskStepId.equals(other.processTaskStepId))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
 	}
 
 	public Long getProcessTaskId() {
@@ -111,57 +91,43 @@ public class ProcessTaskStepWorkerVo {
 		this.processTaskStepId = processTaskStepId;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getType() {
+		return type;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUuid() {
+		return uuid;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
-	public String getAction() {
-		return action;
+	public String getName() {
+		return name;
 	}
 
-	public void setAction(String action) {
-		this.action = action;
-	}
-
-	public String getRoleName() {
-		return roleName;
-	}
-
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
-
-	public String getTeamUuid() {
-		return teamUuid;
-	}
-
-	public void setTeamUuid(String teamUuid) {
-		this.teamUuid = teamUuid;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getWorkerValue() {
-		String stepWorkerValue = null;
-		 if(!StringUtils.isBlank(this.getTeamUuid())) {
-			 stepWorkerValue =  String.format("%s#%s",GroupSearch.TEAM.getValue(),this.getTeamUuid());
-		 }
-		 if(!StringUtils.isBlank(this.getUserId())) {
-			 stepWorkerValue =  String.format("%s#%s",GroupSearch.USER.getValue(),this.getUserId());
-		 }
-		 if(!StringUtils.isBlank(this.getRoleName())) {
-			 stepWorkerValue =  String.format("%s#%s",GroupSearch.ROLE.getValue(),this.getRoleName());
-		 }
-		return stepWorkerValue;
+		GroupSearch groupSearch = GroupSearch.getGroupSearch(this.type);
+		if(groupSearch != null) {
+			return groupSearch.getValuePlugin() + this.uuid;
+		}
+		return null;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 }

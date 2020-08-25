@@ -1,85 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.PriorityMapper">
-
-	<select id="searchPriorityCount" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="int">
-	SELECT 
-	COUNT(`uuid`) 
-	FROM `priority`
-	WHERE 1=1
-	<if test="keyword != null">
-	AND `name` LIKE CONCAT('%', #{keyword}, '%')
-	</if>
-	<if test="isActive != null">
-	AND `is_active` = #{isActive}
-	</if>
+	<select id="searchPriorityCount" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="int" useCache="false">
+		SELECT
+		COUNT(p.`uuid`)
+		FROM `priority` p
+		<if test="channelUuid != null and channelUuid != ''">
+			JOIN `channel_priority` cp ON cp.`priority_uuid` = p.`uuid` AND cp.`channel_uuid` = #{channelUuid}
+		</if>
+		WHERE 1=1
+		<if test="keyword != null">
+			AND p.`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+			AND p.`is_active` = #{isActive}
+		</if>
 	</select>
 
-	<select id="searchPriorityList" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="codedriver.framework.process.dto.PriorityVo">
-	SELECT 
-	`uuid`,
-	`name`,
-	`is_active` as isActive,
-	`desc`,
-	`icon`,
-	`color`,
-	`sort`
-	FROM `priority`
-	WHERE 1=1
-	<if test="keyword != null">
-	AND `name` LIKE CONCAT('%', #{keyword}, '%')
-	</if>
-	<if test="isActive != null">
-	AND `is_active` = #{isActive}
-	</if>
-	ORDER BY `sort` DESC
-	<if test="needPage">
-	limit #{startNum}, #{pageSize}
-	</if>
+	<select id="searchPriorityList" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="codedriver.framework.process.dto.PriorityVo" useCache="false">
+		SELECT
+		p.`uuid`,
+		p.`name`,
+		p.`is_active` as isActive,
+		p.`desc`,
+		p.`icon`,
+		p.`color`,
+		p.`sort`
+		FROM `priority` p
+		<if test="channelUuid != null and channelUuid != ''">
+			JOIN `channel_priority` cp ON cp.`priority_uuid` = p.`uuid` AND cp.`channel_uuid` = #{channelUuid}
+		</if>
+		WHERE 1=1
+		<if test="keyword != null">
+			AND p.`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+			AND p.`is_active` = #{isActive}
+		</if>
+		ORDER BY p.`sort` DESC
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="searchPriorityListForSelect" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
+		SELECT
+		p.`uuid` as `value`,
+		p.`name` as `text`
+		FROM `priority` p
+		<if test="channelUuid != null and channelUuid != ''">
+			JOIN `channel_priority` cp ON cp.`priority_uuid` = p.`uuid` AND cp.`channel_uuid` = #{channelUuid}
+		</if>
+		WHERE 1=1
+		<if test="keyword != null">
+			AND p.`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+			AND p.`is_active` = #{isActive}
+		</if>
+		ORDER BY p.`sort` DESC
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="checkPriorityIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
+		SELECT COUNT(`uuid`) FROM `priority` WHERE `uuid`=#{uuid}
+	</select>
+
+	<select id="getPriorityByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.PriorityVo" useCache="false">
+		SELECT
+		`uuid`,
+		`name`,
+		`is_active` AS isActive,
+		`desc`,
+		`icon`,
+		`color`,
+		`sort`
+		FROM `priority`
+		WHERE `uuid` = #{uuid}
 	</select>
 	
-	<select id="checkPriorityIsExists" parameterType="java.lang.String" resultType="int">
-	SELECT COUNT(`uuid`) FROM `priority` WHERE `uuid`=#{uuid}
+	<select id="getPriorityByName" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.PriorityVo" useCache="false">
+		SELECT
+		`uuid`,
+		`name`,
+		`is_active` AS isActive,
+		`desc`,
+		`icon`,
+		`color`,
+		`sort`
+		FROM `priority`
+		WHERE `name` = #{value}
 	</select>
 
-	<select id="getPriorityByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.PriorityVo">
-	SELECT 
-	`uuid`, 
-	`name`, 
-	`is_active` AS isActive, 
-	`desc`, 
-	`icon`, 
-	`color`,
-	`sort`
-	FROM `priority` 
-	WHERE `uuid` = #{uuid}
+	<select id="checkPriorityNameIsRepeat" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="int" useCache="false">
+		SELECT COUNT(1) FROM `priority` WHERE `name` = #{name} AND `uuid` != #{uuid}
 	</select>
 
-	<select id="checkPriorityNameIsRepeat" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="int">
-	SELECT COUNT(1) FROM `priority` WHERE `name` = #{name} AND `uuid` != #{uuid}
-	</select>
-	
-	<select id="getMaxSort" resultType="java.lang.Integer">
-	SELECT MAX(`sort`) FROM `priority`
+	<select id="getMaxSort" resultType="java.lang.Integer" useCache="false">
+		SELECT MAX(`sort`) FROM `priority` FOR UPDATE
 	</select>
 
 	<insert id="insertPriority" parameterType="codedriver.framework.process.dto.PriorityVo">
-	INSERT INTO `priority` (`uuid`, `name`, `is_active`, `desc`, `icon`, `color`, `sort`) 
-	VALUES(#{uuid}, #{name}, #{isActive}, #{desc}, #{icon}, #{color}, #{sort})
+		INSERT INTO `priority` (`uuid`, `name`, `is_active`, `desc`, `icon`, `color`, `sort`)
+		VALUES(#{uuid}, #{name}, #{isActive}, #{desc}, #{icon}, #{color}, #{sort})
 	</insert>
 
-	<update id="updatePriority">
-	UPDATE `priority`
-	SET
-	`name` = #{name},
-	`is_active` = #{isActive},
-	`desc` = #{desc},
-	`icon` = #{icon},
-	`color` = #{color}
-	WHERE `uuid` = #{uuid}
+	<update id="updatePriority" parameterType="codedriver.framework.process.dto.PriorityVo">
+		UPDATE `priority`
+		SET
+		`name` = #{name},
+		`is_active` = #{isActive},
+		`desc` = #{desc},
+		`icon` = #{icon},
+		`color` = #{color},
+		`sort` = #{sort}
+		WHERE `uuid` = #{uuid}
 	</update>
-
+	
+	<update id="updateSortIncrement">
+	update `priority` SET `sort` = `sort` + 1
+	WHERE `sort` &gt;= #{fromSort} 
+	<if test="toSort != null">	
+	AND `sort` &lt;= #{toSort}
+	</if>
+	</update>
+	
+	<update id="updateSortDecrement">
+	update `priority` SET `sort` = `sort` - 1
+	WHERE `sort` &gt;= #{fromSort} 
+	<if test="toSort != null">
+	AND `sort` &lt;= #{toSort}
+	</if>
+	</update>
+	
 	<delete id="deletePriorityByUuid" parameterType="java.lang.String">
-	DELETE FROM `priority` WHERE `uuid` = #{uuid}
+		DELETE FROM `priority` WHERE `uuid` = #{uuid}
 	</delete>
 </mapper>

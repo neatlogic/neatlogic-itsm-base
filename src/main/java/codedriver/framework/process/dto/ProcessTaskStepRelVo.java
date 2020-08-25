@@ -15,7 +15,9 @@ public class ProcessTaskStepRelVo {
 	private String scriptResult;
 	private String error;
 	private List<RelExpressionVo> relExpressionList;
-
+	private String name;
+	private String type;
+	
 	public ProcessTaskStepRelVo() {
 
 	}
@@ -25,6 +27,8 @@ public class ProcessTaskStepRelVo {
 		this.setToProcessStepUuid(processStepRelVo.getToStepUuid());
 		this.setCondition(processStepRelVo.getCondition());
 		this.setProcessStepRelUuid(processStepRelVo.getUuid());
+		this.setName(processStepRelVo.getName());
+		this.setType(processStepRelVo.getType());
 	}
 
 	public Long getProcessTaskId() {
@@ -121,6 +125,22 @@ public class ProcessTaskStepRelVo {
 
 	public void setError(String error) {
 		this.error = error;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

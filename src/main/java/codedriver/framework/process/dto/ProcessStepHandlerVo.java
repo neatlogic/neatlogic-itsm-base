@@ -1,10 +1,16 @@
 package codedriver.framework.process.dto;
 
-import codedriver.framework.apiparam.core.ApiParamType;
+import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+
+import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
-	
+
 	@EntityField(name = "类型", type = ApiParamType.STRING)
 	private String type;
 	@EntityField(name = "处理器", type = ApiParamType.STRING)
@@ -16,18 +22,39 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	@EntityField(name = "是否激活", type = ApiParamType.STRING)
 	private Integer isActive;
 	@EntityField(name = "图标", type = ApiParamType.STRING)
+	private Integer isAllowStart;
+	@EntityField(name = "是否允许作为开始节点", type = ApiParamType.STRING)
 	private String icon;
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
 	@EntityField(name = "配置信息", type = ApiParamType.STRING)
-	private String config;
+	private JSONObject config;
+	@EntityField(name = "前端配置信息", type = ApiParamType.JSONOBJECT)
+	private JSONObject chartConfig;
 
-	public String getConfig() {
+	private transient String configStr;
+
+	public ProcessStepHandlerVo() {
+	}
+
+	public ProcessStepHandlerVo(String handler, String name, JSONObject config) {
+		this.handler = handler;
+		this.name = name;
+		this.config = config;
+	}
+
+	public JSONObject getConfig() {
 		return config;
 	}
 
 	public void setConfig(String config) {
-		this.config = config;
+		if (StringUtils.isNotBlank(config)) {
+			try {
+				this.config = JSON.parseObject(config);
+			} catch (JSONException e) {
+
+			}
+		}
 	}
 
 	public String getIcon() {
@@ -91,4 +118,26 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 		this.moduleId = moduleId;
 	}
 
+	public JSONObject getChartConfig() {
+		return chartConfig;
+	}
+
+	public void setChartConfig(JSONObject chartConfig) {
+		this.chartConfig = chartConfig;
+	}
+
+	public Integer getIsAllowStart() {
+		return isAllowStart;
+	}
+
+	public void setIsAllowStart(Integer isAllowStart) {
+		this.isAllowStart = isAllowStart;
+	}
+
+	public String getConfigStr() {
+		if (configStr == null && this.config != null) {
+			configStr = this.config.toJSONString();
+		}
+		return configStr;
+	}
 }

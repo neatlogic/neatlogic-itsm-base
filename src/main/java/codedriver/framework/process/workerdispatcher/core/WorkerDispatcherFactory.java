@@ -49,10 +49,10 @@ public class WorkerDispatcherFactory implements ApplicationListener<ContextRefre
 		Map<String, IWorkerDispatcher> myMap = context.getBeansOfType(IWorkerDispatcher.class);
 		for (Map.Entry<String, IWorkerDispatcher> entry : myMap.entrySet()) {
 			IWorkerDispatcher component = entry.getValue();
-			if (StringUtils.isNotBlank(component.getHandler())) {
-				componentMap.put(component.getHandler(), component);
+			if (StringUtils.isNotBlank(component.getClassName())) {
+				componentMap.put(component.getClassName(), component);
 				WorkerDispatcherVo workerDispatcherVo = new WorkerDispatcherVo();
-				workerDispatcherVo.setHandler(component.getHandler());
+				workerDispatcherVo.setHandler(component.getClassName());
 				workerDispatcherVo.setName(component.getName());
 				workerDispatcherVo.setIsActive(1);
 				workerDispatcherVo.setHelp(component.getHelp());

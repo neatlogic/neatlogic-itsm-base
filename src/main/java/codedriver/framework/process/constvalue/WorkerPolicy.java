@@ -7,8 +7,8 @@ public enum WorkerPolicy {
 	//FROMER("fromer", "前置步骤指定"), 
 	COPY("copy", "复制前置步骤"), 
 	//ATTRIBUTE("attribute", "属性值"), 
-	FORM("form", "表单值");
-
+	FORM("form", "表单值"),
+	PRESTEPASSIGN("prestepassign","前置步骤分配");
 	private String policy;
 	private String text;
 

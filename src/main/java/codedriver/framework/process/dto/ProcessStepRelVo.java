@@ -9,7 +9,8 @@ public class ProcessStepRelVo implements Serializable {
 	private String fromStepUuid;
 	private String toStepUuid;
 	private String condition;
-
+	private String name;
+	private String type;
 	@Override
 	public boolean equals(Object other) {
 		if (this == other)
@@ -74,6 +75,22 @@ public class ProcessStepRelVo implements Serializable {
 
 	public void setProcessUuid(String processUuid) {
 		this.processUuid = processUuid;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

@@ -4,9 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.attribute.constvalue.AttributeHandler;
-import codedriver.framework.attribute.constvalue.AttributeType;
-
 public class ProcessTaskStepFormAttributeVo {
 	private Long processTaskId;
 	private Long processTaskStepId;
@@ -20,9 +17,9 @@ public class ProcessTaskStepFormAttributeVo {
 	private String data;
 	private String label;
 	private String handler;
-	private String handlerName;
+//	private String handlerName;
 	private String type;
-	private String typeName;
+//	private String typeName;
 	private ProcessTaskFormAttributeDataVo attributeData;
 	private JSONObject configObj;
 
@@ -150,27 +147,27 @@ public class ProcessTaskStepFormAttributeVo {
 		this.configObj = configObj;
 	}
 
-	public String getHandlerName() {
-		if (StringUtils.isNotBlank(handler) && StringUtils.isBlank(handlerName)) {
-			handlerName = AttributeHandler.getName(handler);
-		}
-		return handlerName;
-	}
-
-	public void setHandlerName(String handlerName) {
-		this.handlerName = handlerName;
-	}
-
-	public String getTypeName() {
-		if (StringUtils.isNotBlank(type) && StringUtils.isBlank(typeName)) {
-			typeName = AttributeType.getName(type);
-		}
-		return typeName;
-	}
-
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
+//	public String getHandlerName() {
+//		if (StringUtils.isNotBlank(handler) && StringUtils.isBlank(handlerName)) {
+//			handlerName = AttributeHandler.getName(handler);
+//		}
+//		return handlerName;
+//	}
+//
+//	public void setHandlerName(String handlerName) {
+//		this.handlerName = handlerName;
+//	}
+//
+//	public String getTypeName() {
+//		if (StringUtils.isNotBlank(type) && StringUtils.isBlank(typeName)) {
+//			typeName = AttributeType.getName(type);
+//		}
+//		return typeName;
+//	}
+//
+//	public void setTypeName(String typeName) {
+//		this.typeName = typeName;
+//	}
 
 	public ProcessTaskFormAttributeDataVo getAttributeData() {
 		return attributeData;

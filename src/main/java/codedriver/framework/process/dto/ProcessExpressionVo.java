@@ -1,16 +1,19 @@
 package codedriver.framework.process.dto;
 
-import codedriver.framework.process.constvalue.ProcessExpression;
+import java.io.Serializable;
 
-public class ProcessExpressionVo {
+import codedriver.framework.common.constvalue.Expression;
 
+public class ProcessExpressionVo implements Serializable {
+
+	private static final long serialVersionUID = -2045500057556272026L;
 	private String expression;
 	private String expressionName;
 	private String expressionEs;
 	
 	public ProcessExpressionVo() {
 	}
-	public ProcessExpressionVo(ProcessExpression processExpression) {
+	public ProcessExpressionVo(Expression processExpression) {
 		this.expression = processExpression.getExpression();
 		this.expressionName = processExpression.getExpressionName();
 		this.expressionEs = processExpression.getExpressionEs();

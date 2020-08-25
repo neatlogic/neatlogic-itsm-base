@@ -3,10 +3,10 @@ package codedriver.framework.process.workcenter.dto;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
-import codedriver.framework.apiparam.core.ApiParamType;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
-import codedriver.framework.process.constvalue.ProcessWorkcenterConditionType;
-import codedriver.framework.process.workcenter.column.core.IWorkcenterColumn;
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.process.column.core.IProcessTaskColumn;
+import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class WorkcenterTheadVo {
@@ -26,29 +26,35 @@ public class WorkcenterTheadVo {
 	private Integer isShow = 1;
 	@JSONField(serialize = false)
 	@EntityField(name = "所属用户", type = ApiParamType.STRING)
-	private String userId;
+	private String userUuid;
 	@EntityField(name = "字段类型", type = ApiParamType.STRING)
 	private String type ;
+	@EntityField(name = "字段样式", type = ApiParamType.STRING)
+	private String className ;
+	
 	
 	public WorkcenterTheadVo(JSONObject obj) {
 		this.name = obj.getString("name");
 		this.sort = obj.getInteger("sort");
 		this.width = obj.getInteger("width");
 		this.isShow = obj.getInteger("isShow");
-		this.userId = UserContext.get().getUserId();
+		this.userUuid = UserContext.get().getUserUuid();
 		this.type = obj.getString("type");
+		this.className = obj.getString("className");
 	}
 	
-	public WorkcenterTheadVo(IWorkcenterColumn column) {
+	public WorkcenterTheadVo(IProcessTaskColumn column) {
 		this.name = column.getName();
-		this.userId = UserContext.get().getUserId();
+		this.userUuid = UserContext.get().getUserUuid();
 		this.displayName = column.getDisplayName();
-		this.type = ProcessWorkcenterConditionType.COMMON.getValue();
+		this.type = ProcessFieldType.COMMON.getValue();
+		this.className = column.getClassName();
+		this.sort = column.getSort();
 	}
 	
-	public WorkcenterTheadVo(String _workcenterUuid,String _userId) {
+	public WorkcenterTheadVo(String _workcenterUuid,String _userUuid) {
 		this.workcenterUuid = _workcenterUuid;
-		this.userId = _userId;
+		this.userUuid = _userUuid;
 	}
 		
 	public WorkcenterTheadVo() {
@@ -73,12 +79,12 @@ public class WorkcenterTheadVo {
 		this.sort = sort;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserUuid() {
+		return userUuid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 
 	public Integer getWidth() {
@@ -112,5 +118,15 @@ public class WorkcenterTheadVo {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+	
+	
 	
 }

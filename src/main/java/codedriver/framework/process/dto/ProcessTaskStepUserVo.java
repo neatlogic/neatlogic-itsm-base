@@ -10,7 +10,7 @@ import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 public class ProcessTaskStepUserVo {
 	private Long processTaskId;
 	private Long processTaskStepId;
-	private String userId;
+	private String userUuid;
 	private String userName;
 	private String userType = "major";
 	private String status = ProcessTaskStepUserStatus.DOING.getValue();
@@ -25,21 +25,21 @@ public class ProcessTaskStepUserVo {
 
 	}
 
-	public ProcessTaskStepUserVo(Long _processTaskStepId, String _userId) {
+	public ProcessTaskStepUserVo(Long _processTaskStepId, String _userUuid) {
 		this.setProcessTaskStepId(_processTaskStepId);
-		this.setUserId(_userId);
+		this.setUserUuid(_userUuid);
 	}
 
-	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userId) {
+	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid) {
 		this.setProcessTaskId(_processTaskId);
 		this.setProcessTaskStepId(_processTaskStepId);
-		this.setUserId(_userId);
+		this.setUserUuid(_userUuid);
 	}
 
-	public ProcessTaskStepUserVo(ProcessStepUserVo processStepUserVo) {
-		this.setUserId(processStepUserVo.getUserId());
-		this.setUserName(processStepUserVo.getUserName());
-	}
+//	public ProcessTaskStepUserVo(ProcessStepUserVo processStepUserVo) {
+//		this.setUserUuid(processStepUserVo.getUserUuid());
+//		this.setUserName(processStepUserVo.getUserName());
+//	}
 
 	public Long getProcessTaskStepId() {
 		return processTaskStepId;
@@ -49,12 +49,12 @@ public class ProcessTaskStepUserVo {
 		this.processTaskStepId = processTaskStepId;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserUuid() {
+		return userUuid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
 	}
 
 	public String getUserName() {

@@ -4,15 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.apiparam.core.ApiParamType;
-import codedriver.framework.process.constvalue.ProcessExpression;
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.Expression;
+import codedriver.framework.common.constvalue.FormHandlerType;
+import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.process.constvalue.ProcessFormHandler;
-import codedriver.framework.process.constvalue.ProcessWorkcenterConditionModel;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class FormAttributeVo implements Serializable {
@@ -41,7 +42,7 @@ public class FormAttributeVo implements Serializable {
 	ProcessExpressionVo defaultExpression;
 	
 	@EntityField(name = "条件模型")
-	private String conditionModel;
+	private String conditionModel = ProcessConditionModel.CUSTOM.getValue();
 	
 	public FormAttributeVo() {
 
@@ -155,8 +156,12 @@ public class FormAttributeVo implements Serializable {
 		if(handler == null) {
 			return null;
 		}
-		ProcessExpression processExpression = ProcessFormHandler.getExpression(handler);
-		return new ProcessExpressionVo(processExpression);
+		Expression processExpression = ProcessFormHandler.getExpression(handler);
+		if(processExpression != null) {
+			return new ProcessExpressionVo(processExpression);
+		}else {
+			return null;
+		}
 	}
 
 	public void setDefaultExpression(ProcessExpressionVo defaultExpression) {
@@ -170,12 +175,12 @@ public class FormAttributeVo implements Serializable {
 		if(handler == null) {
 			return null;
 		}
-		List<ProcessExpression> processExpressionList = ProcessFormHandler.getExpressionList(handler);
+		List<Expression> processExpressionList = ProcessFormHandler.getExpressionList(handler);
 		if(CollectionUtils.isEmpty(processExpressionList)) {
 			return null;
 		}
 		expressionList = new ArrayList<>();
-		for(ProcessExpression processExpression : processExpressionList) {
+		for(Expression processExpression : processExpressionList) {
 			expressionList.add(new ProcessExpressionVo(processExpression));
 		}
 		return expressionList;
@@ -207,7 +212,8 @@ public class FormAttributeVo implements Serializable {
 		if(conditionModel == null) {
 			return null;
 		}
-		return ProcessFormHandler.getType(handler, conditionModel).toString();
+		FormHandlerType  handlerType = ProcessFormHandler.getType(handler, conditionModel);
+		return handlerType == null?null:handlerType.toString();
 	}
 	
 	public Boolean getIsMultiple() {
@@ -219,7 +225,7 @@ public class FormAttributeVo implements Serializable {
 			return configObj.getBoolean("isMultiple");
 		} 
 
-		if(conditionModel.equals(ProcessWorkcenterConditionModel.CUSTOM.getValue())) {
+		if(conditionModel.equals(ProcessConditionModel.CUSTOM.getValue())) {
 			if(ProcessFormHandler.FORMCHECKBOX.getHandler().equals(handler)){
 				return true;
 			}else {

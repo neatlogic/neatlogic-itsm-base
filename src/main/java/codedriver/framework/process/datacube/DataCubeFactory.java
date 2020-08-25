@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.common.RootComponent;
 
 @RootComponent
-public class DataCubeFactory implements ApplicationListener<ContextRefreshedEvent> {
+public class DataCubeFactory extends ApplicationListenerBase {
 	private static Map<String, IDataCubeHandler> componentMap = new HashMap<String, IDataCubeHandler>();
 
 	public static IDataCubeHandler getComponent(String type) {
@@ -30,5 +30,11 @@ public class DataCubeFactory implements ApplicationListener<ContextRefreshedEven
 				componentMap.put(component.getType(), component);
 			}
 		}
+	}
+
+	@Override
+	protected void myInit() {
+		// TODO Auto-generated method stub
+
 	}
 }

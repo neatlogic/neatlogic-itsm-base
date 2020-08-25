@@ -2,6 +2,7 @@ package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.process.dto.ChannelProcessVo;
@@ -13,8 +14,6 @@ import codedriver.framework.process.dto.ProcessStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessStepNotifyTemplateVo;
 import codedriver.framework.process.dto.ProcessStepRelVo;
 import codedriver.framework.process.dto.ProcessStepTeamVo;
-import codedriver.framework.process.dto.ProcessStepTimeoutPolicyVo;
-import codedriver.framework.process.dto.ProcessStepUserVo;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTypeVo;
@@ -36,6 +35,8 @@ public interface ProcessMapper {
 	public List<ProcessStepFormAttributeVo> getProcessStepFormAttributeByStepUuid(ProcessStepFormAttributeVo processStepFormAttributeVo);
 
 	public ProcessVo getProcessByUuid(String processUuid);
+	
+	public ProcessVo getProcessByName(String processName);
 
 	public ProcessVo getProcessBaseInfoByUuid(String processUuid);
 
@@ -49,6 +50,8 @@ public interface ProcessMapper {
 
 	public List<ProcessVo> searchProcessList(ProcessVo processVo);
 
+	public List<ValueTextVo> searchProcessListForSelect(ProcessVo processVo);
+
 	public int getProcessReferenceCount(String processUuid);
 
 	public List<ChannelVo> getProcessReferenceList(ChannelProcessVo channelProcessVo);
@@ -61,6 +64,10 @@ public interface ProcessMapper {
 
 	public String getEarliestProcessDraft(ProcessDraftVo processDraftVo);
 
+	public List<ProcessStepWorkerPolicyVo> getProcessStepWorkerPolicyListByProcessUuid(String processUuid);
+
+	public ProcessStepVo getProcessStepByUuid(String processStepUuid);
+
 	public int insertProcess(ProcessVo processVo);
 
 	public int insertProcessStep(ProcessStepVo processStepVo);
@@ -69,11 +76,7 @@ public interface ProcessMapper {
 
 	public int insertProcessStepRel(ProcessStepRelVo processStepRelVo);
 
-	public int insertProcessStepUser(ProcessStepUserVo processStepUserVo);
-
 	public int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
-
-	public int insertProcessStepTimeoutPolicy(ProcessStepTimeoutPolicyVo processStepTimeoutPolicyVo);
 
 	public int insertProcessStepWorkerPolicy(ProcessStepWorkerPolicyVo processStepWorkerPolicyVo);
 
@@ -83,7 +86,7 @@ public interface ProcessMapper {
 
 	public int insertProcessSla(ProcessSlaVo processSlaVo);
 
-	public int insertProcessStepNotifyTemplate(ProcessStepNotifyTemplateVo processStepNotifyTemplateVo);
+	public int replaceProcessStepNotifyTemplate(ProcessStepNotifyTemplateVo processStepNotifyTemplateVo);
 
 	public int insertProcessDraft(ProcessDraftVo processDraftVo);
 
@@ -93,13 +96,9 @@ public interface ProcessMapper {
 
 	public int deleteProcessStepRelByProcessUuid(String processUuid);
 
-	public int deleteProcessStepUserByProcessUuid(String processUuid);
-
 	public int deleteProcessStepTeamByProcessUuid(String processUuid);
 
 	public int deleteProcessStepWorkerPolicyByProcessUuid(String processUuid);
-
-	public int deleteProcessStepTimeoutPolicyByProcessUuid(String processUuid);
 
 	public int deleteProcessStepFormAttributeByProcessUuid(String processUuid);
 

@@ -47,6 +47,8 @@
 		`uuid`,
 		`from_step_uuid` AS fromStepUuid,
 		`to_step_uuid` AS toStepUuid,
+		`name`,
+		`type`,
 		`condition`
 		FROM
 		`process_step_rel`
@@ -64,12 +66,7 @@
 		<collection property="formAttributeList" ofType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
 			<id column="formAttributeUuid" property="attributeUuid" />
 			<result column="formUuid" property="formUuid" />
-			<result column="formAttributeHandler" property="handler" />
-			<result column="formAttributeLabel" property="label" />
-			<result column="formAttributeType" property="type" />
-			<result column="formAttributeIsEditable" property="isEditable" />
-			<result column="formAttributeData" property="data" />
-			<result column="formAttributeConfig" property="config" />
+			<result column="action" property="action" />
 		</collection>
 		<collection property="workerPolicyList" ofType="codedriver.framework.process.dto.ProcessStepWorkerPolicyVo">
 			<id column="workerPolicy" property="policy" />
@@ -77,14 +74,6 @@
 			<result column="workerPolicyProcessStepUuid" property="processStepUuid" />
 			<result column="workerPolicySort" property="sort" />
 			<result column="workerPolicyConfig" property="config" />
-		</collection>
-		<collection property="timeoutPolicyList" ofType="codedriver.framework.process.dto.ProcessStepTimeoutPolicyVo">
-			<result column="timeoutPolicy" property="policy" />
-			<result column="timeoutPolicyProcessUuid" property="processUuid" />
-			<result column="timeoutPolicyProcessStepUuid" property="processStepUuid" />
-			<result column="timeoutPolicySort" property="sort" />
-			<result column="timeoutPolicyConfig" property="config" />
-			<result column="timeoutPolicyTime" property="time" />
 		</collection>
 	</resultMap>
 
@@ -98,6 +87,7 @@
 		a.`config` AS stepConfig,
 		b.`form_uuid` AS formUuid,
 		b.`attribute_uuid` AS formAttributeUuid,
+		b.`action` AS action,
 		c.`handler` AS formAttributeHandler,
 		c.`type` AS formAttributeType,
 		c.`label` AS attributeLabel,
@@ -105,19 +95,12 @@
 		h.`sort` AS workerPolicySort,
 		h.`config` AS workerPolicyConfig,
 		h.`process_uuid` AS workerPolicyProcessUuid,
-		h.`process_step_uuid` AS workerPolicyProcessStepUuid,
-		i.`policy` AS timeoutPolicy,
-		i.`time` AS timeoutPolicyTime,
-		i.`sort` AS timeoutPolicySort,
-		i.`config` AS timeoutPolicyConfig,
-		i.`process_uuid` AS timeoutPolicyProcessUuid,
-		i.`process_step_uuid` AS timeoutPolicyProcessStepUuid
+		h.`process_step_uuid` AS workerPolicyProcessStepUuid
 		FROM
 		`process_step` a
 		LEFT JOIN `process_step_formattribute` b ON a.`uuid` = b.`process_step_uuid`
 		LEFT JOIN `form_attribute` c ON b.`attribute_uuid` = c.`uuid`
 		LEFT JOIN `process_step_worker_policy` h ON a.`uuid` = h.`process_step_uuid`
-		LEFT JOIN `process_step_timeout_policy` i ON a.`uuid` = i.`process_step_uuid`
 		WHERE a.`process_uuid` = #{value}
 	</select>
 
@@ -160,6 +143,20 @@
 		LEFT JOIN `process_form` d ON a.`uuid` = d.`process_uuid`
 		WHERE
 		a.uuid = #{value}
+	</select>
+	
+	<select id="getProcessByName" parameterType="java.lang.String" resultMap="processDetailMap">
+		SELECT
+		a.`uuid`,
+		a.`name`,
+		a.`is_active` AS isActive,
+		a.`config`,
+		d.`form_uuid` AS formUuid
+		FROM
+		`process` a
+		LEFT JOIN `process_form` d ON a.`uuid` = d.`process_uuid`
+		WHERE
+		a.name = #{value}
 	</select>
 
 	<select id="getProcessBaseInfoByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessVo">
@@ -224,6 +221,27 @@
 		`name`,
 		`is_active` AS isActive,
 		`config`
+		FROM `process`
+		WHERE 1=1
+		<if test="keyword != null and keyword != ''">
+			AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+			AND `is_Active` = #{isActive}
+		</if>
+		<if test="fcu != null">
+			AND `fcu` = #{fcu}
+		</if>
+		ORDER BY `fcd` DESC
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="searchProcessListForSelect" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT
+		`uuid` as `value`,
+		`name` as `text`
 		FROM `process`
 		WHERE 1=1
 		<if test="keyword != null and keyword != ''">
@@ -324,6 +342,30 @@
 		LIMIT 5, 1
 	</select>
 
+	<select id="getProcessStepWorkerPolicyListByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepWorkerPolicyVo">
+	SELECT 
+	  `process_uuid` AS processUuid,
+	  `process_step_uuid` AS processStepUuid,
+	  `policy`,
+	  `sort`,
+	  `config` 
+	FROM `process_step_worker_policy` 
+	WHERE `process_uuid` = #{processUuid}
+	</select>
+
+	<select id="getProcessStepByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepVo">
+	SELECT 
+	  `process_uuid` AS processUuid,
+	  `uuid`,
+	  `name`,
+	  `type`,
+	  `handler`,
+	  `config`,
+	  `description` 
+	FROM `process_step`
+	WHERE `uuid` = #{uuid}
+	</select>
+	
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,
@@ -344,26 +386,6 @@
 		INSERT INTO `process_step_sla` (`sla_uuid`, `step_uuid`)
 		VALUES
 		(#{slaUuid}, #{stepUuid})
-	</insert>
-
-	<insert id="insertProcessStepTimeoutPolicy" parameterType="codedriver.framework.process.dto.ProcessStepTimeoutPolicyVo">
-		INSERT INTO `process_step_timeout_policy` (
-		`process_uuid`,
-		`process_step_uuid`,
-		`policy`,
-		`sort`,
-		`time`,
-		`config`
-		)
-		VALUES
-		(
-		#{processUuid},
-		#{processStepUuid},
-		#{policy},
-		#{sort},
-		#{time},
-		#{config}
-		)
 	</insert>
 
 	<insert id="insertProcess" parameterType="codedriver.framework.process.dto.ProcessVo">
@@ -450,7 +472,9 @@
 		`uuid`,
 		`from_step_uuid`,
 		`to_step_uuid`,
-		`condition`
+		`condition`,
+		`name`,
+		`type`
 		)
 		VALUES
 		(
@@ -458,7 +482,9 @@
 		#{uuid},
 		#{fromStepUuid},
 		#{toStepUuid},
-		#{condition}
+		#{condition},
+		#{name},
+		#{type}
 		)
 	</insert>
 
@@ -476,31 +502,13 @@
 		)
 	</insert>
 
-	<insert id="insertProcessStepUser" parameterType="codedriver.framework.process.dto.ProcessStepUserVo">
-		INSERT INTO `process_step_user` (
-		`process_uuid`,
-		`process_step_uuid`,
-		`user_id`,
-		`user_name`,
-		`sort`
-		)
-		VALUES
-		(
-		#{processUuid},
-		#{processStepUuid},
-		#{userId},
-		#{userName},
-		#{sort}
-		)
-	</insert>
-
 	<insert id="insertProcessForm" parameterType="codedriver.framework.process.dto.ProcessFormVo">
 		INSERT INTO `process_form` (`process_uuid`, `form_uuid`)
 		VALUES (#{processUuid}, #{formUuid})
 	</insert>
 
-	<insert id="insertProcessStepNotifyTemplate" parameterType="codedriver.framework.process.dto.ProcessStepNotifyTemplateVo">
-		INSERT INTO `process_step_notifytemplate` ( `process_uuid`, `process_step_uuid`, `template_uuid` )
+	<insert id="replaceProcessStepNotifyTemplate" parameterType="codedriver.framework.process.dto.ProcessStepNotifyTemplateVo">
+		REPLACE INTO `process_step_notifytemplate` ( `process_uuid`, `process_step_uuid`, `template_uuid` )
 		VALUES ( #{processUuid}, #{processStepUuid}, #{templateUuid} )
 	</insert>
 
@@ -555,13 +563,6 @@
 		WHERE `process_uuid` = #{value}
 	</delete>
 
-	<delete id="deleteProcessStepUserByProcessUuid" parameterType="java.lang.String">
-		DELETE
-		FROM
-		`process_step_user`
-		WHERE `process_uuid` = #{value}
-	</delete>
-
 	<delete id="deleteProcessStepTeamByProcessUuid" parameterType="java.lang.String">
 		DELETE
 		FROM
@@ -574,13 +575,6 @@
 		FROM
 		`process_step_worker_policy`
 		WHERE process_uuid = #{value}
-	</delete>
-
-	<delete id="deleteProcessStepTimeoutPolicyByProcessUuid" parameterType="java.lang.String">
-		DELETE
-		FROM
-		`process_step_timeout_policy`
-		WHERE `process_uuid` = #{value}
 	</delete>
 
 	<delete id="deleteProcessStepFormAttributeByProcessUuid" parameterType="java.lang.String">
@@ -603,7 +597,11 @@
 	</delete>
 
 	<delete id="deleteProcessDraft" parameterType="codedriver.framework.process.dto.ProcessDraftVo">
-		DELETE FROM `process_draft` WHERE `process_uuid` = #{processUuid} AND `fcu` = #{fcu}
+		DELETE FROM `process_draft` 
+		WHERE `process_uuid` = #{processUuid} 
+		<if test="fcu != null and fcu != ''">
+		AND `fcu` = #{fcu}
+		</if>
 	</delete>
 
 	<delete id="deleteProcessDraftByUuid" parameterType="java.lang.String">
