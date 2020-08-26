@@ -13,7 +13,7 @@ public class ScoreTemplateDimensionVo extends BasePageVo {
 	private Long scoreTemplateId;
 	@EntityField(name = "评分维度名称", type = ApiParamType.STRING)
 	private String name;
-	@EntityField(name = "评分模版说明", type = ApiParamType.STRING)
+	@EntityField(name = "评分维度说明", type = ApiParamType.STRING)
 	private String description;
 
 	public ScoreTemplateDimensionVo() {}
