@@ -66,6 +66,14 @@
 		)
 	</insert>
 
+	<delete id="deleteScoreTemplate" parameterType="java.lang.Long">
+		DELETE st,std
+		FROM `score_template` st
+		left join `score_template_dimension` std
+		on st.`id` = std.`score_template_id`
+		WHERE st.`id` = #{scoreTemplateId}
+	</delete>
+
 	<delete id="deleteScoreTemplateDimension" parameterType="java.lang.Long">
 		DELETE FROM `score_template_dimension` WHERE `score_template_id` = #{scoreTemplateId}
 	</delete>

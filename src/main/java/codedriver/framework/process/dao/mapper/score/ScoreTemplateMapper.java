@@ -18,6 +18,8 @@ public interface ScoreTemplateMapper {
 
     public void insertScoreTemplateDimension(ScoreTemplateDimensionVo scoreTemplateDimensionVo);
 
+    public void deleteScoreTemplate(@Param("scoreTemplateId") Long scoreTemplateId);
+
     public void deleteScoreTemplateDimension(@Param("scoreTemplateId") Long scoreTemplateId);
 
 }
