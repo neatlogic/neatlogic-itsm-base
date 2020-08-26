@@ -2017,6 +2017,6 @@
 	</delete>
 	
 	<delete id="deleteProcessTaskStepContentById" parameterType="java.lang.Long">
-	DELETE FROM `processtask_step_content` WHERE `content_id` = #{value}
+	DELETE FROM `processtask_step_content` WHERE `id` = #{value}
 	</delete>
 </mapper>
