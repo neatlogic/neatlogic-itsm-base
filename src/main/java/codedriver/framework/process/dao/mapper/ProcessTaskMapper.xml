@@ -2021,7 +2021,7 @@
 	</delete>
 
 	<select id="getProcessTaskIdList" resultType="java.lang.Long">
-	SELECT `id` FROM` processtask` 
+	SELECT `id` FROM `processtask` 
 	</select>
 
 	<update id="updateProcessTaskStepContentType">
