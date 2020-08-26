@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.score.ScoreTemplateMapper">
+
+	<select id="checkScoreTemplateNameIsRepeat" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="int">
+		SELECT COUNT(1) FROM `score_template` WHERE `name` = #{name} AND `id` != #{id}
+	</select>
+
+	<select id="checkScoreTemplateExistsById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		SELECT `id`,`name` FROM `score_template` WHERE `id` = #{id}
+	</select>
+
+
+
+	<update id="updateScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		UPDATE `score_template` SET
+		 `name` = #{name},
+		 `description` = #{description},
+		 `is_active` = #{isActive},
+		 `lcu` = #{lcu},
+		 `lcd` = NOW()
+		 WHERE `id` = #{id}
+	</update>
+
+	<update id="updateScoreTemplateActiveStatus" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		UPDATE `score_template` SET
+		 `is_active` = #{isActive},
+		 `lcu` = #{lcu},
+		 `lcd` = NOW()
+		 WHERE `id` = #{id}
+	</update>
+
+	<insert id="insertScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" >
+		INSERT INTO `score_template` (
+		`id`,
+		`name`,
+		`description`,
+		`is_active`,
+		`fcu`,
+		`fcd`,
+		`lcu`,
+		`lcd`
+		) VALUES (
+		#{id},
+		#{name},
+		#{description},
+		#{isActive},
+		#{fcu},
+		NOW(),
+		#{lcu},
+		NOW()
+		)
+	</insert>
+
+	<insert id="insertScoreTemplateDimension" parameterType="codedriver.framework.process.dto.score.ScoreTemplateDimensionVo" >
+		INSERT INTO `score_template_dimension` (
+		`id`,
+		`score_template_id`,
+		`name`,
+		`description`
+		) VALUES (
+		#{id},
+		#{scoreTemplateId},
+		#{name},
+		#{description}
+		)
+	</insert>
+
+	<delete id="deleteScoreTemplateDimension" parameterType="java.lang.Long">
+		DELETE FROM `score_template_dimension` WHERE `score_template_id` = #{scoreTemplateId}
+	</delete>
+
+</mapper>
