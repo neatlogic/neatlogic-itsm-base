@@ -135,7 +135,7 @@ public interface ProcessTaskMapper {
 
 	public ProcessTaskStepSubtaskVo getProcessTaskStepSubtaskById(Long processTaskStepSubtaskId);
 
-	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskListByProcessTaskStepId(Long processTaskStepId);
 
 	public List<ProcessTaskStepSubtaskContentVo> getProcessTaskStepSubtaskContentBySubtaskId(Long processTaskStepSubtaskId);
 

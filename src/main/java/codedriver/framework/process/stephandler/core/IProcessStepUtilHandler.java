@@ -26,7 +26,7 @@ public interface IProcessStepUtilHandler {
 	* @param @return 
 	* @return Object
 	 */
-	public Object getHandlerStepInfo(Long processTaskStepId);
+	public Object getHandlerStepInfo(ProcessTaskStepVo currentProcessTaskStepVo);
 	/**
 	 * 
 	* @Time:2020年8月12日
@@ -34,7 +34,7 @@ public interface IProcessStepUtilHandler {
 	* @param @return 
 	* @return Object
 	 */
-	public Object getHandlerStepInitInfo(Long processTaskStepId);
+	public Object getHandlerStepInitInfo(ProcessTaskStepVo currentProcessTaskStepVo);
 
 	/**
 	 * @Author: chenqiwei

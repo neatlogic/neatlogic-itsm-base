@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
-
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.TeamLevel;
 import codedriver.framework.dto.TeamVo;
@@ -25,7 +23,6 @@ import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.PriorityVo;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
-import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
@@ -40,8 +37,6 @@ import codedriver.framework.process.exception.process.ProcessStepHandlerNotFound
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 
 public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilBase implements IProcessStepUtilHandler {
-
-
 
 	@Override
 	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, IProcessTaskAuditType action) {
@@ -86,42 +81,6 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation) {
 		return true;
 	}
-
-    @Override
-    public String getHandler() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Object getHandlerStepInfo(Long processTaskStepId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Object getHandlerStepInitInfo(Long processTaskStepId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void updateProcessTaskStepUserAndWorker(Long processTaskId, Long processTaskStepId) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public JSONObject makeupConfig(JSONObject configObj) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public ProcessTaskVo getProcessTaskDetailById(Long processTaskId) {
@@ -224,7 +183,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         if(startProcessStepUtilHandler == null) {
             throw new ProcessStepHandlerNotFoundException(startProcessTaskStepVo.getHandler());
         }
-        startProcessTaskStepVo.setHandlerStepInfo(startProcessStepUtilHandler.getHandlerStepInfo(startProcessTaskStepVo.getId()));
+        startProcessTaskStepVo.setHandlerStepInfo(startProcessStepUtilHandler.getHandlerStepInfo(startProcessTaskStepVo));
         return startProcessTaskStepVo;
     }
     
