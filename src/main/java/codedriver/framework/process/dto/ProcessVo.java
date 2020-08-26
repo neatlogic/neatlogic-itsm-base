@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -119,43 +121,48 @@ public class ProcessVo extends BasePageVo implements Serializable {
 			return;
 		}
 		JSONObject processObj = this.configObj.getJSONObject("process");
-		if(processObj == null || processObj.isEmpty()) {
+		if(MapUtils.isEmpty(processObj)) {
 			return;
 		}
 		/** 组装表单属性 **/
 		Map<String, List<ProcessStepFormAttributeVo>> processStepFormAttributeMap = new HashMap<>();
 		JSONObject formConfig = processObj.getJSONObject("formConfig");
-		if (formConfig != null && formConfig.size() > 0) {
+		if (MapUtils.isNotEmpty(formConfig)) {
 			String formUuid = formConfig.getString("uuid");
 			if (StringUtils.isNotBlank(formUuid)) {
 				this.setFormUuid(formUuid);
-			}
-			JSONArray authorityList = formConfig.getJSONArray("authorityList");
-			if (authorityList != null && authorityList.size() > 0) {
-				for (int i = 0; i < authorityList.size(); i++) {
-					JSONObject authorityObj = authorityList.getJSONObject(i);
-					JSONArray processStepUuidList = authorityObj.getJSONArray("processStepUuidList");
-					if (processStepUuidList != null && processStepUuidList.size() > 0) {
-						String attributeUuid = authorityObj.getString("attributeUuid");
-						String action = authorityObj.getString("action");
-						for (int j = 0; j < processStepUuidList.size(); j++) {
-							String processStepUuid = processStepUuidList.getString(j);
-							ProcessStepFormAttributeVo processStepFormAttributeVo = new ProcessStepFormAttributeVo();
-							processStepFormAttributeVo.setProcessUuid(this.getUuid());
-							processStepFormAttributeVo.setFormUuid(this.getFormUuid());
-							processStepFormAttributeVo.setProcessStepUuid(processStepUuid);
-							processStepFormAttributeVo.setAttributeUuid(attributeUuid);
-							processStepFormAttributeVo.setAction(action);
-
-							List<ProcessStepFormAttributeVo> processStepFormAttributeList = processStepFormAttributeMap.get(processStepUuid);
-							if (processStepFormAttributeList == null) {
-								processStepFormAttributeList = new ArrayList<>();
-								processStepFormAttributeMap.put(processStepUuid, processStepFormAttributeList);
-							}
-							processStepFormAttributeList.add(processStepFormAttributeVo);
-						}
-					}
-				}
+				JSONArray authorityList = formConfig.getJSONArray("authorityList");
+	            if (CollectionUtils.isNotEmpty(authorityList)) {
+	                for (int i = 0; i < authorityList.size(); i++) {
+	                    JSONObject authorityObj = authorityList.getJSONObject(i);
+	                    JSONArray processStepUuidList = authorityObj.getJSONArray("processStepUuidList");
+                        JSONArray attributeUuidList = authorityObj.getJSONArray("attributeUuidList");
+                        String action = authorityObj.getString("action");
+                        String type = authorityObj.getString("type");
+	                    if (CollectionUtils.isNotEmpty(processStepUuidList) && CollectionUtils.isNotEmpty(attributeUuidList) && StringUtils.isNotBlank(action)) {
+	                        for (int j = 0; j < processStepUuidList.size(); j++) {
+                                String processStepUuid = processStepUuidList.getString(j);
+	                            for(int k = 0; k < attributeUuidList.size(); k++) {
+	                                String attributeUuid = attributeUuidList.getString(k);
+	                                ProcessStepFormAttributeVo processStepFormAttributeVo = new ProcessStepFormAttributeVo();
+	                                processStepFormAttributeVo.setProcessUuid(this.getUuid());
+	                                processStepFormAttributeVo.setFormUuid(this.getFormUuid());
+	                                processStepFormAttributeVo.setProcessStepUuid(processStepUuid);
+	                                processStepFormAttributeVo.setAttributeUuid(attributeUuid);
+	                                processStepFormAttributeVo.setAction(action);
+	                                processStepFormAttributeVo.setType(type);
+	                                List<ProcessStepFormAttributeVo> processStepFormAttributeList = processStepFormAttributeMap.get(processStepUuid);
+	                                if (processStepFormAttributeList == null) {
+	                                    processStepFormAttributeList = new ArrayList<>();
+	                                    processStepFormAttributeMap.put(processStepUuid, processStepFormAttributeList);
+	                                }
+	                                processStepFormAttributeList.add(processStepFormAttributeVo);
+	                            }
+	                            
+	                        }
+	                    }
+	                }
+	            }
 			}
 		}
 		JSONArray slaList = processObj.getJSONArray("slaList");

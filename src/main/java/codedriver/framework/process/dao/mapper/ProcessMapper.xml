@@ -454,7 +454,8 @@
 		`process_step_uuid`,
 		`form_uuid`,
 		`attribute_uuid`,
-		`action`
+		`action`,
+		`type`
 		)
 		VALUES
 		(
@@ -462,7 +463,8 @@
 		#{processStepUuid},
 		#{formUuid},
 		#{attributeUuid},
-		#{action}
+		#{action},
+		#{type}
 		)
 	</insert>
 
