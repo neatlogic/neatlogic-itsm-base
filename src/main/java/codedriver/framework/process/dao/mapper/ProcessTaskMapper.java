@@ -19,7 +19,6 @@ import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
-import codedriver.framework.process.dto.ProcessTaskStepCommentVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
@@ -305,14 +304,4 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskStepFileByContentId(Long contentId);
 
     public int deleteProcessTaskStepContentById(Long contentId);
-
-    public List<Long> getProcessTaskIdList();
-
-    public int updateProcessTaskStepContentType(ProcessTaskStepContentVo processTaskStepContentVo);
-
-    public int updateProcessTaskStepFileContentId(@Param("processTaskStepId") Long processTaskStepId, @Param("contentId") Long contentId);
-
-    public List<ProcessTaskStepCommentVo> getAllProcessTaskStepComment();
-
-    public int insertProcessTaskStepContent2(ProcessTaskStepContentVo processTaskStepContent);
 }
