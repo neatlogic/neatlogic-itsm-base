@@ -666,40 +666,6 @@
 		`processtask_step`
 		WHERE `processtask_id` = #{value}
 	</select>
-
-	<resultMap id="processTaskStepFormAttributeResultMap" type="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
-		<id column="processTaskStepId" property="processTaskStepId" />
-		<id column="attributeUuid" property="attributeUuid" />
-		<id column="processTaskId" property="processTaskId" />
-		<result column="isEditable" property="isEditable" />
-		<result column="label" property="label" />
-		<result column="handler" property="handler" />
-		<result column="config" property="config" />
-		<result column="data" property="data" />
-	</resultMap>
-
-	<select id="getProcessTaskStepFormAttributeByStepId" parameterType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo" resultMap="processTaskStepFormAttributeResultMap">
-		SELECT
-		a.`processtask_step_id` AS processTaskStepId,
-		a.`attribute_uuid` AS attributeUuid,
-		a.`processtask_id` AS processTaskId,
-		a.`action`,
-		f.`label`,
-		f.`handler`,
-		e.`data`,
-		e.`attribute_uuid` AS dataAttributeUuid,
-		e.`processtask_id` AS dataProcessTaskId
-		FROM
-		`processtask_step_formattribute` a
-		LEFT JOIN `processtask_formattribute_data` e ON a.`processtask_id` = e.`processtask_id` AND a.`attribute_uuid` = e.`attribute_uuid`
-		JOIN `form_attribute` f ON a.`attribute_uuid` = f.`uuid`
-		WHERE
-		a.`processtask_step_id` = #{processTaskStepId}
-		<if test="attributeUuid != null and attributeUuid != ''">
-			AND
-			a.attribute_uuid = #{attributeUuid}
-		</if>
-	</select>
 	
 	<select id="getProcessTaskById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 	SELECT 
@@ -726,9 +692,10 @@
 	  `processtask_id` AS processTaskId,
 	  `processtask_step_id` AS processTaskStepId,
 	  `attribute_uuid` AS attributeUuid,
-	  `action` 
+	  `action`,
+	  `type` 
 	FROM `processtask_step_formattribute` 
-	WHERE `processtask_step_id` = #{processTaskStepId}
+	WHERE `processtask_step_id` = #{value}
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ProcessTaskStepAuditVo" id="processTaskStepAuditMap">
@@ -1643,14 +1610,16 @@
 		`processtask_id`,
 		`processtask_step_id`,
 		`attribute_uuid`,
-		`action`
+		`action`,
+		`type`
 		)
 		VALUES
 		(
 		#{processTaskId},
 		#{processTaskStepId},
 		#{attributeUuid},
-		#{action}
+		#{action},
+		#{type}
 		)
 	</insert>
 

@@ -85,6 +85,8 @@ public class ProcessTaskVo {
 	
 	private transient Boolean isAutoGenerateId = true;
 	
+	@EntityField(name = "步骤表单属性隐藏数据", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskStepFormAttributeVo> stepFormconfig = new ArrayList<>();
 	public ProcessTaskVo() {
 
 	}
@@ -374,6 +376,14 @@ public class ProcessTaskVo {
 
     public void setIsHasOldFormProp(int isHasOldFormProp) {
         this.isHasOldFormProp = isHasOldFormProp;
+    }
+
+    public List<ProcessTaskStepFormAttributeVo> getStepFormconfig() {
+        return stepFormconfig;
+    }
+
+    public void setStepFormconfig(List<ProcessTaskStepFormAttributeVo> stepFormconfig) {
+        this.stepFormconfig = stepFormconfig;
     }
 
 }

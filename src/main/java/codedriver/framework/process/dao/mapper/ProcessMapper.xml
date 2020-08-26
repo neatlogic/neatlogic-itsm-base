@@ -64,9 +64,10 @@
 		<result column="handler" property="handler" />
 		<result column="stepConfig" property="config" />
 		<collection property="formAttributeList" ofType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
-			<id column="formAttributeUuid" property="attributeUuid" />
+			<result column="formAttributeUuid" property="attributeUuid" />
 			<result column="formUuid" property="formUuid" />
 			<result column="action" property="action" />
+			<result column="actionType" property="type" />
 		</collection>
 		<collection property="workerPolicyList" ofType="codedriver.framework.process.dto.ProcessStepWorkerPolicyVo">
 			<id column="workerPolicy" property="policy" />
@@ -88,6 +89,7 @@
 		b.`form_uuid` AS formUuid,
 		b.`attribute_uuid` AS formAttributeUuid,
 		b.`action` AS action,
+		b.`type` AS actionType,
 		c.`handler` AS formAttributeHandler,
 		c.`type` AS formAttributeType,
 		c.`label` AS attributeLabel,
@@ -104,23 +106,16 @@
 		WHERE a.`process_uuid` = #{value}
 	</select>
 
-	<select id="getProcessStepFormAttributeByStepUuid" parameterType="codedriver.framework.process.dto.ProcessStepFormAttributeVo" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
+	<select id="getProcessStepFormAttributeByStepUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
 		SELECT
 		a.`process_uuid` AS processUuid,
 		a.`process_step_uuid` AS processStepUuid,
 		a.`attribute_uuid` AS attributeUuid,
 		a.`form_uuid` AS formUuid,
 		a.`action` AS action,
-		c.`handler`,
-		c.`type`
-		FROM
-		`process_step_formattribute` a JOIN `form_attribute` c ON a.`attribute_uuid` = c.`uuid`
-		WHERE
-		a.`process_step_uuid` = #{processStepUuid}
-		<if test="attributeUuid != null and attributeUuid != ''">
-			AND
-			a.attribute_uuid = #{attributeUuid}
-		</if>
+		a.`type`
+		FROM `process_step_formattribute`
+		WHERE a.`process_step_uuid` = #{value}
 	</select>
 
 	<resultMap id="processDetailMap" type="codedriver.framework.process.dto.ProcessVo">
