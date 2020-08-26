@@ -286,10 +286,6 @@
 		ORDER BY id DESC
 	</select>
 	
-	<!-- <select id="getProcessTaskStepContentHashByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.String">
-		SELECT `content_hash` FROM `processtask_step_content` WHERE processtask_step_id = #{value}
-	</select> -->
-	
 	<select id="getProcessTaskStepContentProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
 		SELECT
 		`id`,
@@ -1038,37 +1034,6 @@
 		WHERE `processtask_id` = #{processTaskId} 
 		AND `process_step_uuid` = #{processStepUuid}
 	</select>
-	
-	<!-- <select id="getProcessTaskStepCommentListByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
-	SELECT 
-	  `id`,
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `content_hash` AS contentHash,
-	  `file_id_list_hash` fileIdListHash,
-	  `fcd`,
-	  `fcu`,
-	  `lcd`,
-	  `lcu` 
-	FROM `processtask_step_comment` 
-	WHERE `processtask_step_id` = #{processtaskStepId}
-	ORDER BY id
-	</select> -->
-	
-	<!-- <select id="getProcessTaskStepCommentById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
-	SELECT 
-	  `id`,
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `content_hash` AS contentHash,
-	  `file_id_list_hash` fileIdListHash,
-	  `fcd`,
-	  `fcu`,
-	  `lcd`,
-	  `lcu` 
-	FROM `processtask_step_comment` 
-	WHERE `id` = #{id}
-	</select> -->
 
 	<select id="getProcessTaskAuditList" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
 		SELECT 
@@ -1179,10 +1144,6 @@
 	GROUP BY c.`uuid`
 	ORDER BY COUNT(c.`uuid`) ASC
 	</select>
-	
-	<!-- <select id="getFileIdListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.Long">
-	SELECT `file_id` FROM `processtask_file` WHERE `processtask_step_id` = #{value}
-	</select> -->
 	
 	<select id="getFileIdListByContentId" parameterType="java.lang.Long" resultType="java.lang.Long">
 	SELECT `file_id` FROM `processtask_file` WHERE `content_id` = #{value}
@@ -1661,24 +1622,6 @@
 		)
 	</insert>
 
-	<!-- <insert id="insertProcessTaskStepAuditFormAttributeData" parameterType="codedriver.framework.process.dto.ProcessTaskStepAuditFormAttributeDataVo">
-		INSERT INTO `processtask_step_audit_formattribute_data` (
-		`audit_id`,
-		`form_uuid`,
-		`processtask_step_id`,
-		`attribute_uuid`,
-		`data`
-		)
-		VALUES
-		(
-		#{auditId},
-		#{formUuid},
-		#{processTaskStepId},
-		#{attributeUuid},
-		#{data}
-		)
-	</insert> -->
-
 	<insert id="insertProcessTaskStepUser" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 		INSERT INTO `processtask_step_user` (
 		`processtask_id`,
@@ -1837,29 +1780,6 @@
 	    NOW(3)
 	  ) 
 	</insert>
-	
-	<!-- <insert id="insertProcessTaskStepComment" parameterType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
-	<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
-		select LAST_INSERT_ID() AS id
-	</selectKey>
-	INSERT INTO `processtask_step_comment` (
-	  `processtask_id`,
-	  `processtask_step_id`,
-	  `content_hash`,
-	  `file_id_list_hash`,
-	  `fcd`,
-	  `fcu`
-	) 
-	VALUES
-	  (
-	    #{processTaskId},
-	    #{processTaskStepId},
-	    #{contentHash},
-	    #{fileIdListHash},
-	    NOW(3),
-	    #{fcu}
-	  ) 
-	</insert> -->
 
 	<insert id="replaceProcessTaskStepNotifyPolicyConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">
 	REPLACE INTO `processtask_step_notify_policy_config` (`hash`, `config`) 
@@ -2011,16 +1931,6 @@
 	WHERE `id` = #{id}
 	</update>
 	
-	<!-- <update id="updateProcessTaskStepCommentById" parameterType="codedriver.framework.process.dto.ProcessTaskStepCommentVo">
-	UPDATE  `processtask_step_comment` 
-	SET
-	  `content_hash` = #{contentHash},
-	  `file_id_list_hash` = #{fileIdListHash},
-	  `lcd` = NOW(3),
-	  `lcu` = #{lcu} 
-	WHERE `id` = #{id}
-	</update> -->
-	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
 		FROM
@@ -2081,12 +1991,6 @@
 		WHERE id = #{value}
 	</delete>
 	
-	<!-- <delete id="deleteProcessTaskFile" parameterType="codedriver.framework.process.dto.ProcessTaskStepFileVo">
-	DELETE FROM `processtask_file` 
-	WHERE `processtask_id` = #{processTaskId} 
-	AND `processtask_step_id` = #{processTaskStepId} 
-	</delete> -->
-	
 	<delete id="deleteProcessTaskStepAuditById" parameterType="java.lang.Long">
 	DELETE psa, psad
 	FROM `processtask_step_audit` psa
@@ -2094,21 +1998,11 @@
 	WHERE `id` = #{id}
 	</delete>
 	
-	<!-- <delete id="deleteProcessTaskStepContent" parameterType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
-	DELETE FROM `processtask_step_content` 
-	WHERE `processtask_step_id` = #{processTaskStepId} 
-	AND `content_hash` = #{contentHash}
-	</delete> -->
-	
 	<delete id="deleteProcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
 	DELETE FROM`processtask_assignworker` 
 	WHERE `processtask_step_id` = #{processTaskStepId}
 	AND `from_processtask_step_id` = #{fromProcessTaskStepId}
 	</delete>
-	
-	<!-- <delete id="deleteProcessTaskStepCommentById" parameterType="java.lang.Long">
-	DELETE FROM `processtask_step_comment` WHERE `id` = #{id}
-	</delete> -->
 	
 	<delete id="deleteProcessTaskStepFileByProcessTaskStepId" parameterType="java.lang.Long">
 	DELETE FROM `processtask_file` WHERE `processtask_step_id` = #{value}
@@ -2123,6 +2017,6 @@
 	</delete>
 	
 	<delete id="deleteProcessTaskStepContentById" parameterType="java.lang.Long">
-	DELETE FROM `processtask_step_content` WHERE `content_id` = #{value}
+	DELETE FROM `processtask_step_content` WHERE `id` = #{value}
 	</delete>
 </mapper>

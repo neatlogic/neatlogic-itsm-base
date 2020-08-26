@@ -1550,10 +1550,7 @@ public abstract class ProcessStepHandlerUtilBase {
                     break;
                 }
             }
-//			String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(currentProcessTaskStepVo.getId());
-//			if (StringUtils.isNotBlank(processTaskStepContentHash)) {
-//				paramObj.put(ProcessTaskAuditDetailType.CONTENT.getParamName(), processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContentHash));
-//			}
+
 			if (CollectionUtils.isNotEmpty(fileIdList)) {
 				for (Long fileId : fileIdList) {
 					if (fileMapper.getFileById(fileId) == null) {

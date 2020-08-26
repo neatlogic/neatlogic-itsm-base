@@ -205,10 +205,6 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 
         ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo();
         //获取上报描述内容
-//        String processTaskStepContentHash = processTaskMapper.getProcessTaskStepContentHashByProcessTaskStepId(startProcessTaskStepVo.getId());
-//        if(StringUtils.isNotBlank(processTaskStepContentHash)) {
-//            comment.setContent(processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContentHash));
-//        }
         List<Long> fileIdList = new ArrayList<>();
         List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentByProcessTaskStepId(startProcessTaskStepVo.getId());
         for(ProcessTaskStepContentVo processTaskStepContent : processTaskStepContentList) {
