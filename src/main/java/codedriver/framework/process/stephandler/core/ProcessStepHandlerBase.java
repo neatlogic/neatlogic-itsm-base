@@ -1365,7 +1365,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 			processTaskMapper.deleteProcessTaskStepContentByProcessTaskStepId(currentProcessTaskStepVo.getId());
 	        processTaskMapper.deleteProcessTaskStepFileByProcessTaskStepId(currentProcessTaskStepVo.getId());
-	        processTaskMapper.deleteProcessTaskFormAttributeValueByProcessTaskId(processTaskId);
 		}
 		try {
 
@@ -1379,49 +1378,53 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 			/** 保存描述内容和附件 **/
 			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskStepAction.STARTPROCESS);
-			
-			// 组件联动导致隐藏的属性uuid列表
-			ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
-			processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-			processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-			processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
-			processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
-			processTaskStepDataMapper.deleteProcessTaskStepData(processTaskStepDataVo);
-			processTaskStepDataVo.setData(paramObj.toJSONString());
-			processTaskStepDataVo.setIsAutoGenerateId(true);
-			processTaskStepDataMapper.replaceProcessTaskStepData(processTaskStepDataVo);
 
-			List<String> hidecomponentList = JSON.parseArray(paramObj.getString("hidecomponentList"), String.class);
+			if(processTaskMapper.checkProcessTaskhasForm(currentProcessTaskStepVo.getProcessTaskId()) > 0) {
+			    processTaskMapper.deleteProcessTaskFormAttributeDataByProcessTaskId(processTaskId);
+	            // 组件联动导致隐藏的属性uuid列表
+	            ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
+	            processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+	            processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+	            processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
+	            processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
+	            processTaskStepDataMapper.deleteProcessTaskStepData(processTaskStepDataVo);
+	            processTaskStepDataVo.setData(paramObj.toJSONString());
+	            processTaskStepDataVo.setIsAutoGenerateId(true);
+	            processTaskStepDataMapper.replaceProcessTaskStepData(processTaskStepDataVo);
 
-			/** 写入当前步骤的表单属性值 **/
-			JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
-			if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
-				// 表单属性显示控制
-				Map<String, String> formAttributeActionMap = new HashMap<>();
-				List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
-				if (processTaskStepFormAttributeList.size() > 0) {
-					for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
-						formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
-					}
-				}
-				for (int i = 0; i < formAttributeDataList.size(); i++) {
-					JSONObject formAttributeDataObj = formAttributeDataList.getJSONObject(i);
-					String attributeUuid = formAttributeDataObj.getString("attributeUuid");
-					if (formAttributeActionMap.get(attributeUuid) != null) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
-						continue;
-					}
-					if (hidecomponentList.contains(attributeUuid)) {
-						continue;
-					}
-					ProcessTaskFormAttributeDataVo attributeData = new ProcessTaskFormAttributeDataVo();
-					attributeData.setData(formAttributeDataObj.getString("dataList"));
-					attributeData.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-					attributeData.setAttributeUuid(formAttributeDataObj.getString("attributeUuid"));
-					attributeData.setType(formAttributeDataObj.getString("handler"));
-					attributeData.setSort(i);
-					processTaskMapper.replaceProcessTaskFormAttributeData(attributeData);
-				}
+	            List<String> hidecomponentList = JSON.parseArray(paramObj.getString("hidecomponentList"), String.class);
+
+	            /** 写入当前步骤的表单属性值 **/
+	            JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
+	            if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
+	                // 表单属性显示控制
+	                Map<String, String> formAttributeActionMap = new HashMap<>();
+	                List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
+	                if (processTaskStepFormAttributeList.size() > 0) {
+	                    for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
+	                        formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
+	                    }
+	                }
+	                for (int i = 0; i < formAttributeDataList.size(); i++) {
+	                    JSONObject formAttributeDataObj = formAttributeDataList.getJSONObject(i);
+	                    String attributeUuid = formAttributeDataObj.getString("attributeUuid");
+	                    if (formAttributeActionMap.get(attributeUuid) != null) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
+	                        continue;
+	                    }
+	                    if (hidecomponentList.contains(attributeUuid)) {
+	                        continue;
+	                    }
+	                    ProcessTaskFormAttributeDataVo attributeData = new ProcessTaskFormAttributeDataVo();
+	                    attributeData.setData(formAttributeDataObj.getString("dataList"));
+	                    attributeData.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+	                    attributeData.setAttributeUuid(formAttributeDataObj.getString("attributeUuid"));
+	                    attributeData.setType(formAttributeDataObj.getString("handler"));
+	                    attributeData.setSort(i);
+	                    processTaskMapper.replaceProcessTaskFormAttributeData(attributeData);
+	                }
+	            }
 			}
+            
 			mySaveDraft(currentProcessTaskStepVo);
 			currentProcessTaskStepVo.setIsActive(1);
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.DRAFT.getValue());

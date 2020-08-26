@@ -903,7 +903,7 @@
 	WHERE a.`id` = #{id}
 	</select>
 	
-	<select id="getProcessTaskStepSubtaskList" parameterType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
+	<select id="getProcessTaskStepSubtaskListByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskVo">
 	SELECT 
 	  a.`processtask_id` AS processTaskId,
 	  a.`processtask_step_id` AS processTaskStepId,
@@ -922,27 +922,9 @@
 	  b.`user_uuid` AS majorUser
 	FROM `processtask_step_subtask` a
 	JOIN `processtask_step_user` b ON b.`processtask_step_id`=a.`processtask_step_id` AND b.`user_type`='major'
-	<where>
-		<if test="id != null">
-		AND a.`id` = #{id}
-		</if>
-		<if test="processTaskId != null">
-		AND a.`processtask_id` = #{processTaskId}
-		</if>
-		<if test="processTaskStepId != null">
-		AND a.`processtask_step_id` = #{processTaskStepId}
-		</if>
-		<if test="userUuid != null and userUuid != ''">
-		AND a.`user_uuid` = #{userUuid}
-		</if>
-		<if test="owner != null and owner != ''">
-		AND a.`owner` = #{owner}
-		</if>
-		<if test="status != null and status != ''">
-		AND a.`status` = #{status}
-		</if>
-	</where>
+	WHERE a.`processtask_step_id` = #{value}
 	</select>
+	
 	<select id="getProcessTaskStepSubtaskContentBySubtaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
 	SELECT 
 	  a.`id`,
@@ -1162,6 +1144,10 @@
 	`lcu`
 	FROM `processtask_step_content`
 	WHERE `id` = #{value}
+	</select>
+	
+	<select id="checkProcessTaskhasForm" parameterType="java.lang.Long" resultType="int">
+	SELECT COUNT(`processtask_id`) FROM `processtask_form` WHERE `processtask_id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
@@ -1939,8 +1925,8 @@
 		`processtask_step_id` = #{value}
 	</delete>
 
-	<delete id="deleteProcessTaskFormAttributeValueByProcessTaskId" parameterType="java.lang.Long">
-		DELETE FROM `processtask_formattribute_value` WHERE `processtask_id` = #{value}
+	<delete id="deleteProcessTaskFormAttributeDataByProcessTaskId" parameterType="java.lang.Long">
+		DELETE FROM `processtask_formattribute_data` WHERE `processtask_id` = #{value}
 	</delete>
 
 	<delete id="deleteProcessTaskStepWorker" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
