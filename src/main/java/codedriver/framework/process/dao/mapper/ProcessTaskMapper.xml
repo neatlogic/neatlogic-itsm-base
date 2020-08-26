@@ -1164,6 +1164,10 @@
 	WHERE `id` = #{value}
 	</select>
 	
+	<select id="checkProcessTaskhasForm" parameterType="java.lang.Long" resultType="int">
+	SELECT COUNT(`processtask_id`) FROM `processtask_form` WHERE `processtask_id` = #{value}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1939,8 +1943,8 @@
 		`processtask_step_id` = #{value}
 	</delete>
 
-	<delete id="deleteProcessTaskFormAttributeValueByProcessTaskId" parameterType="java.lang.Long">
-		DELETE FROM `processtask_formattribute_value` WHERE `processtask_id` = #{value}
+	<delete id="deleteProcessTaskFormAttributeDataByProcessTaskId" parameterType="java.lang.Long">
+		DELETE FROM `processtask_formattribute_data` WHERE `processtask_id` = #{value}
 	</delete>
 
 	<delete id="deleteProcessTaskStepWorker" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">

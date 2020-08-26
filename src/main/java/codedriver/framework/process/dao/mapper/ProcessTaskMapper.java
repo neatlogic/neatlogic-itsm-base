@@ -172,6 +172,8 @@ public interface ProcessTaskMapper {
     public List<Long> getFileIdListByContentId(Long contentId);
 
     public ProcessTaskStepContentVo getProcessTaskStepContentById(Long id);
+
+    public int checkProcessTaskhasForm(Long processTaskId);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
@@ -281,7 +283,7 @@ public interface ProcessTaskMapper {
 
     public int updateProcessTaskStepContentById(ProcessTaskStepContentVo processTaskStepContentVo);
 
-	public int deleteProcessTaskFormAttributeValueByProcessTaskId(Long processTaskId);
+	public int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
 	public int deleteProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
