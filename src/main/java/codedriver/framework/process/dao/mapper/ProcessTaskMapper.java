@@ -109,8 +109,6 @@ public interface ProcessTaskMapper {
 	
 	public List<ProcessTaskStepVo> getProcessTaskActiveStepByProcessTaskIdAndProcessStepType(@Param("processTaskId") Long processTaskId,@Param("processStepTypeList") List<String> processStepTypeList,@Param("isActive") Integer isActive);
 
-	public List<ProcessTaskStepFormAttributeVo> getProcessTaskStepFormAttributeByStepId(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
-
 	public ProcessTaskStepVo getProcessTaskStepBaseInfoById(Long processTaskStepId);
 
 	public ProcessTaskVo getProcessTaskById(Long id);

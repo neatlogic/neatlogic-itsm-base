@@ -116,6 +116,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private transient Map<String, Object> formAttributeDataMap;
 	/** 获取自定义按钮映射数据 **/
 	private transient Map<String, String> customButtonMap = new HashMap<>();
+    
+    @EntityField(name = "步骤表单属性隐藏数据", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskStepFormAttributeVo> stepFormConfig = new ArrayList<>();
 	
 	public ProcessTaskStepVo() {
 
@@ -724,6 +727,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setCustomButtonMap(Map<String, String> customButtonMap) {
         this.customButtonMap = customButtonMap;
+    }
+
+    public List<ProcessTaskStepFormAttributeVo> getStepFormConfig() {
+        return stepFormConfig;
+    }
+
+    public void setStepFormConfig(List<ProcessTaskStepFormAttributeVo> stepFormConfig) {
+        this.stepFormConfig = stepFormConfig;
     }
 
 }
