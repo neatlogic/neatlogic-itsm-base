@@ -123,7 +123,7 @@
 		 WHERE `id` = #{id}
 	</update>
 
-	<update id="updateScoreTemplateActiveStatus" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
+	<update id="updateScoreTemplateStatus" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
 		UPDATE `score_template` SET
 		 `is_active` = #{isActive},
 		 `lcu` = #{lcu},

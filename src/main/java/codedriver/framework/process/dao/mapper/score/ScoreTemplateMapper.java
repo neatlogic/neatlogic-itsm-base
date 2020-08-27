@@ -27,7 +27,7 @@ public interface ScoreTemplateMapper {
 
     public void updateScoreTemplate(ScoreTemplateVo scoreTemplateVo);
 
-    public void updateScoreTemplateActiveStatus(ScoreTemplateVo scoreTemplateVo);
+    public void updateScoreTemplateStatus(ScoreTemplateVo scoreTemplateVo);
 
     public void insertScoreTemplate(ScoreTemplateVo scoreTemplateVo);
 
