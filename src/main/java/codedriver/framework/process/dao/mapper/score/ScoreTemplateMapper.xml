@@ -14,7 +14,7 @@
 		</collection>
 	</resultMap>
 
-	<resultMap id="scoreTemplateVoMap" type="codedriver.framework.process.dto.score.ScoreTemplateVo">
+	<resultMap id="scoreTemplateListMap" type="codedriver.framework.process.dto.score.ScoreTemplateVo">
 		<id property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="isActive" column="isActive" />
@@ -26,15 +26,13 @@
 		<result property="dimensionName" column="dimensionName" />
 	</resultMap>
 
-	<select id="searchScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultMap="scoreTemplateVoMap">
+	<select id="searchScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultMap="scoreTemplateListMap">
 		SELECT
 		st.`id`,
 		st.`name`,
 		st.`description`,
 		st.`is_active` as isActive,
-		std.`id` as dimensionId,
-		std.`name` as dimensionName,
-		std.`description` as dimensionDescription
+		std.`name` as dimensionName
 		FROM `score_template` st
 		left join `score_template_dimension` std on st.`id` = std.`score_template_id`
 		WHERE
