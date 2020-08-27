@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.score.ScoreTemplateMapper">
+
+	<resultMap id="scoreTemplateMap" type="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="isActive" column="isActive" />
+		<result property="description" column="description" />
+		<collection property="dimensionList" ofType="codedriver.framework.process.dto.score.ScoreTemplateDimensionVo">
+			<id property="id" column="dimensionId" />
+			<result property="name" column="dimensionName" />
+			<result property="description" column="dimensionDescription" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="scoreTemplateListMap" type="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="isActive" column="isActive" />
+		<result property="description" column="description" />
+		<collection property="dimensionNameList" resultMap="dimensionNameMap" />
+	</resultMap>
+
+	<resultMap id="dimensionNameMap" type="java.lang.String">
+		<result property="dimensionName" column="dimensionName" />
+	</resultMap>
+
+	<select id="searchScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultMap="scoreTemplateListMap">
+		SELECT
+		st.`id`,
+		st.`name`,
+		st.`description`,
+		st.`is_active` as isActive,
+		std.`name` as dimensionName
+		FROM `score_template` st
+		left join `score_template_dimension` std on st.`id` = std.`score_template_id`
+		WHERE
+		1=1
+		<if test="keyword != null and keyword != ''">
+			and st.`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="searchScoreTemplateCount" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="int">
+		SELECT
+		COUNT(1)
+		FROM
+		`score_template`
+		WHERE
+		1=1
+		<if test="keyword != null and keyword != ''">
+			and name LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</select>
+
+	<select id="getProcessCountByIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		SELECT
+		st.`id` as id,
+		COUNT(DISTINCT pst.`process_uuid`) AS processCount
+		FROM `score_template` st
+		LEFT JOIN `process_score_template` pst ON st.`id` = pst.`score_template_id`
+		WHERE st.`id` IN
+		<foreach collection="list" item="scoreTemplateId" open="(" close=")" separator=",">
+			#{scoreTemplateId}
+		</foreach>
+		GROUP BY st.`id`
+	</select>
+
+	<select id="getScoreTemplateById" parameterType="java.lang.Long" resultMap="scoreTemplateMap">
+		SELECT
+		st.`id`,
+		st.`name`,
+		st.`is_active` as isActive,
+		st.`description`,
+		std.`id` as dimensionId,
+		std.`name` as dimensionName,
+		std.`description` as dimensionDescription
+		FROM `score_template` st
+		left join `score_template_dimension` std on st.`id` = std.`score_template_id`
+		WHERE
+		st.`id` = #{id}
+	</select>
+
+	<select id="checkScoreTemplateNameIsRepeat" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="int">
+		SELECT COUNT(1) FROM `score_template` WHERE `name` = #{name} AND `id` != #{id}
+	</select>
+
+	<select id="checkScoreTemplateExistsById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		SELECT `id`,`name` FROM `score_template` WHERE `id` = #{id}
+	</select>
+
+	<select id="getRefProcessList" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT
+		p.`uuid` as `value`,
+		p.`name` as `text`
+		FROM `process` p
+		left JOIN `process_score_template` pst ON pst.`process_uuid` = p.`uuid`
+		where pst.`score_template_id` = #{id}
+		<if test="needPage">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="getRefProcessCount" parameterType="java.lang.Long" resultType="int">
+		SELECT
+		count(p.`uuid`)
+		FROM `process` p
+		left JOIN `process_score_template` pst ON pst.`process_uuid` = p.`uuid`
+		where pst.`score_template_id` = #{scoreTemplateId}
+	</select>
+
+	<update id="updateScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		UPDATE `score_template` SET
+		 `name` = #{name},
+		 `description` = #{description},
+		 `is_active` = #{isActive},
+		 `lcu` = #{lcu},
+		 `lcd` = NOW()
+		 WHERE `id` = #{id}
+	</update>
+
+	<update id="updateScoreTemplateStatus" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
+		UPDATE `score_template` SET
+		 `is_active` = #{isActive},
+		 `lcu` = #{lcu},
+		 `lcd` = NOW()
+		 WHERE `id` = #{id}
+	</update>
+
+	<insert id="insertScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" >
+		INSERT INTO `score_template` (
+		`id`,
+		`name`,
+		`description`,
+		`is_active`,
+		`fcu`,
+		`fcd`,
+		`lcu`,
+		`lcd`
+		) VALUES (
+		#{id},
+		#{name},
+		#{description},
+		#{isActive},
+		#{fcu},
+		NOW(),
+		#{lcu},
+		NOW()
+		)
+	</insert>
+
+	<insert id="insertScoreTemplateDimension" parameterType="codedriver.framework.process.dto.score.ScoreTemplateDimensionVo" >
+		INSERT INTO `score_template_dimension` (
+		`id`,
+		`score_template_id`,
+		`name`,
+		`description`
+		) VALUES (
+		#{id},
+		#{scoreTemplateId},
+		#{name},
+		#{description}
+		)
+	</insert>
+
+	<delete id="deleteScoreTemplate" parameterType="java.lang.Long">
+		DELETE st,std
+		FROM `score_template` st
+		left join `score_template_dimension` std
+		on st.`id` = std.`score_template_id`
+		WHERE st.`id` = #{scoreTemplateId}
+	</delete>
+
+	<delete id="deleteScoreTemplateDimension" parameterType="java.lang.Long">
+		DELETE FROM `score_template_dimension` WHERE `score_template_id` = #{scoreTemplateId}
+	</delete>
+
+</mapper>
