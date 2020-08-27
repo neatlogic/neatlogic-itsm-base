@@ -23,6 +23,8 @@ public interface ScoreTemplateMapper {
 
     public int getRefProcessCount(@Param("scoreTemplateId") Long scoreTemplateId);
 
+    public List<ScoreTemplateVo> getProcessCountByIdList(List<Long> scoreTemplateIdList);
+
     public void updateScoreTemplate(ScoreTemplateVo scoreTemplateVo);
 
     public void updateScoreTemplateActiveStatus(ScoreTemplateVo scoreTemplateVo);
