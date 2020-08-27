@@ -1,6 +1,8 @@
 package codedriver.framework.process.operationauth.core;
 
-import java.util.Set;
+import java.util.Map;
+
+import org.apache.commons.collections4.MapUtils;
 
 public abstract class OperationAuthHandlerBase implements IOperationAuthHandler {
 
@@ -33,23 +35,19 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
 	}
 
 	@Override
-	public final Set<String> getFinalOperateList(Long processTaskId, Long processTaskStepId) {
-		Set<String> operateList = getOperateList(processTaskId, processTaskStepId);
+	public final Map<String, Boolean> getFinalOperateMap(Long processTaskId, Long processTaskStepId) {
+		Map<String, Boolean> operateMap = getOperateMap(processTaskId, processTaskStepId);
 		if (nextHandler != null) {
-			Set<String> nextOperateList = nextHandler.getFinalOperateList(processTaskId, processTaskStepId);
-			if (operateList != null && nextOperateList != null) {
-				operateList.addAll(nextOperateList);
-				return operateList;
-			} else if (operateList == null && nextOperateList != null) {
-				return nextOperateList;
-			} else {
-				return null;
-			}
-		} else {
-			return operateList;
+		    Map<String, Boolean> nextOperateMap = nextHandler.getFinalOperateMap(processTaskId, processTaskStepId);
+		    if(MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+	            operateMap.putAll(nextOperateMap);
+		    }else if(MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+		        operateMap = nextOperateMap;
+		    }
 		}
+		return operateMap;
 	}
 
-	public abstract Set<String> getOperateList(Long processTaskId, Long processTaskStepId);
+	public abstract Map<String, Boolean> getOperateMap(Long processTaskId, Long processTaskStepId);
 
 }

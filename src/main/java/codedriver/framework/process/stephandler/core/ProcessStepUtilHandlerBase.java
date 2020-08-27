@@ -35,6 +35,8 @@ import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
+import codedriver.framework.process.operationauth.core.OperationAuthHandlerType;
+import codedriver.framework.process.operationauth.core.ProcessOperateManager;
 
 public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilBase implements IProcessStepUtilHandler {
 
@@ -77,11 +79,30 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
 		NotifyHandler.notify(currentProcessTaskStepVo, trigger);
 	}
+	
+	@Override
+	public List<String> getOperateList(Long processTaskId, Long processTaskStepId){
+	    ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder()
+            .setNext(OperationAuthHandlerType.TASK)
+            .setNext(OperationAuthHandlerType.STEP);
+        MySetNextOperationAuthHandlerType(builder);
+        ProcessOperateManager processOperateManager = builder.build();
+        return processOperateManager.getOperateList(processTaskId, processTaskStepId);
+	}
+	
 	@Override
 	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation) {
-		return true;
+	    ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder()
+	        .setNext(OperationAuthHandlerType.TASK)
+	        .setNext(OperationAuthHandlerType.STEP);
+	    MySetNextOperationAuthHandlerType(builder);
+	    ProcessOperateManager processOperateManager = builder.build();
+	    List<String> operationList = processOperateManager.getOperateList(processTaskId, processTaskStepId);
+		return operationList.contains(operation.getValue());
 	}
 
+	protected abstract void MySetNextOperationAuthHandlerType(ProcessOperateManager.Builder builder);
+	
     @Override
     public ProcessTaskVo getProcessTaskDetailById(Long processTaskId) {
       //获取工单基本信息(title、channel_uuid、config_hash、priority_uuid、status、start_time、end_time、expire_time、owner、ownerName、reporter、reporterName)

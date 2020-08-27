@@ -135,6 +135,16 @@ public interface IProcessStepUtilHandler {
 	 */
 	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger);
 
+    /**
+     * 
+     * @Time:2020年3月30日
+     * @Description: 获取当前用户对当前步骤的所有操作权限列表
+     * @param processTaskId
+     * @param processTaskStepId
+     * @return List<String>
+     */
+    public List<String> getOperateList(Long processTaskId, Long processTaskStepId);
+
 	/**
 	 * 
 	 * @Time:2020年3月30日
