@@ -84,7 +84,6 @@ public class ProcessTaskVo {
 	private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
 	
 	private transient Boolean isAutoGenerateId = true;
-	
 	public ProcessTaskVo() {
 
 	}
