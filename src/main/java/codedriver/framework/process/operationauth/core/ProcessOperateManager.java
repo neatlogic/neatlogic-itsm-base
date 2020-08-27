@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 
 import org.apache.commons.collections4.MapUtils;
 
+import codedriver.framework.process.constvalue.OperationType;
+
 public class ProcessOperateManager {
 	private OperationAuthHandlerBase handler;
 
@@ -54,4 +56,7 @@ public class ProcessOperateManager {
 		return resultList;
 	}
 
+	public boolean getOperateList(Long processTaskId, Long processTaskStepId, OperationType operationType) {
+        return this.handler.getFinalOperateMap(processTaskId, processTaskStepId, operationType);
+    }
 }

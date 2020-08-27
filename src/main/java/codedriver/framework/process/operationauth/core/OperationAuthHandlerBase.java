@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
 
+import codedriver.framework.process.constvalue.OperationType;
+
 public abstract class OperationAuthHandlerBase implements IOperationAuthHandler {
 
 	private OperationAuthHandlerBase nextHandler;
@@ -49,5 +51,16 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
 	}
 
 	public abstract Map<String, Boolean> getOperateMap(Long processTaskId, Long processTaskStepId);
+	
+	@Override
+    public final boolean getFinalOperateMap(Long processTaskId, Long processTaskStepId, OperationType operationType) {
+        boolean result = getOperateMap(processTaskId, processTaskStepId, operationType);
+        if (nextHandler != null) {
+            boolean nextResult = nextHandler.getFinalOperateMap(processTaskId, processTaskStepId, operationType);
+            return result && nextResult;
+        }
+        return result;
+    }
 
+	public abstract boolean getOperateMap(Long processTaskId, Long processTaskStepId, OperationType operationType);
 }

@@ -83,22 +83,27 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	@Override
 	public List<String> getOperateList(Long processTaskId, Long processTaskStepId){
 	    ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder()
-            .setNext(OperationAuthHandlerType.TASK)
-            .setNext(OperationAuthHandlerType.STEP);
-        MySetNextOperationAuthHandlerType(builder);
+            .setNext(OperationAuthHandlerType.TASK);
+	    if(processTaskStepId != null) {
+	        builder.setNext(OperationAuthHandlerType.STEP);
+	        MySetNextOperationAuthHandlerType(builder);
+	    }
         ProcessOperateManager processOperateManager = builder.build();
         return processOperateManager.getOperateList(processTaskId, processTaskStepId);
 	}
 	
 	@Override
-	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation) {
-	    ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder()
-	        .setNext(OperationAuthHandlerType.TASK)
-	        .setNext(OperationAuthHandlerType.STEP);
-	    MySetNextOperationAuthHandlerType(builder);
+	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operationType) {
+	    ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder();
+	    if(OperationAuthHandlerType.TASK.getOperationTypeList().contains(operationType)) {
+            builder.setNext(OperationAuthHandlerType.TASK);
+	    }
+	    if(processTaskStepId != null && OperationAuthHandlerType.STEP.getOperationTypeList().contains(operationType)) {
+	        builder.setNext(OperationAuthHandlerType.STEP);
+	        MySetNextOperationAuthHandlerType(builder);
+	    }
 	    ProcessOperateManager processOperateManager = builder.build();
-	    List<String> operationList = processOperateManager.getOperateList(processTaskId, processTaskStepId);
-		return operationList.contains(operation.getValue());
+	    return processOperateManager.getOperateList(processTaskId, processTaskStepId, operationType);
 	}
 
 	protected abstract void MySetNextOperationAuthHandlerType(ProcessOperateManager.Builder builder);
