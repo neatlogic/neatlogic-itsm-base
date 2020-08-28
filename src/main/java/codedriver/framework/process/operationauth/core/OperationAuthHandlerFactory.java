@@ -18,18 +18,18 @@ import codedriver.framework.common.RootComponent;
  */
 @RootComponent
 public class OperationAuthHandlerFactory implements ApplicationListener<ContextRefreshedEvent> {
-	private static Map<IOperationAuthHandlerType, OperationAuthHandlerBase> componentMap = new HashMap<>();
+	private static Map<IOperationAuthHandlerType, IOperationAuthHandler> componentMap = new HashMap<>();
 
-	public static OperationAuthHandlerBase getHandler(IOperationAuthHandlerType handler) {
+	public static IOperationAuthHandler getHandler(IOperationAuthHandlerType handler) {
 		return componentMap.get(handler);
 	}
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		ApplicationContext context = event.getApplicationContext();
-		Map<String, OperationAuthHandlerBase> myMap = context.getBeansOfType(OperationAuthHandlerBase.class);
-		for (Map.Entry<String, OperationAuthHandlerBase> entry : myMap.entrySet()) {
-			OperationAuthHandlerBase component = entry.getValue();
+		Map<String, IOperationAuthHandler> myMap = context.getBeansOfType(IOperationAuthHandler.class);
+		for (Map.Entry<String, IOperationAuthHandler> entry : myMap.entrySet()) {
+		    IOperationAuthHandler component = entry.getValue();
 			if (component.getHandler() != null) {
 				if (componentMap.containsKey(component.getHandler())) {
 					throw new RuntimeException("操作处理器：" + component.getHandler() + "已存在，请修改代码");
