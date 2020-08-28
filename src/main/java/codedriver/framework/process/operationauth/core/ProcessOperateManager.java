@@ -2,7 +2,12 @@ package codedriver.framework.process.operationauth.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.collections4.MapUtils;
+
+import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 
 public class ProcessOperateManager {
 	private OperationAuthHandlerBase handler;
@@ -28,21 +33,42 @@ public class ProcessOperateManager {
 		this.handler = builder.handler;
 	}
 
-	public List<String> getOperateList(Long processTaskId, Long processTaskStepId) {
+	public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId) {
 		//开始执行区
 		
 		//开始执行区
+        List<ProcessTaskOperationType> resultList = new ArrayList<>();
 		if (this.handler != null) {
-			Set<String> set = this.handler.getFinalOperateList(processTaskId, processTaskStepId);
-			if (set != null) {
-				return new ArrayList<String>(set);
+			Map<ProcessTaskOperationType, Boolean> operateMap = this.handler.getFinalOperateMap(processTaskId, processTaskStepId);
+			if (MapUtils.isNotEmpty(operateMap)) {
+			    for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
+			        if(entry.getValue() == Boolean.TRUE) {
+			            resultList.add(entry.getKey());
+			        }
+			    }
+				return resultList;
 			}
 		}
 		//结束操作区
 		
 		
 		//结束操作区
-		return new ArrayList<>();
+		return resultList;
 	}
 
+	public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId, List<ProcessTaskOperationType> operationTypeList) {
+	    List<ProcessTaskOperationType> resultList = new ArrayList<>();
+        if (this.handler != null) {
+            Map<ProcessTaskOperationType, Boolean> operateMap = this.handler.getFinalOperateMap(processTaskId, processTaskStepId, operationTypeList);
+            if (MapUtils.isNotEmpty(operateMap)) {
+                for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
+                    if(entry.getValue() == Boolean.TRUE) {
+                        resultList.add(entry.getKey());
+                    }
+                }
+                return resultList;
+            }
+        }
+        return resultList;
+    }
 }

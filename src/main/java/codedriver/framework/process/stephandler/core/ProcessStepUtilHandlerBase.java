@@ -14,7 +14,7 @@ import codedriver.framework.common.constvalue.TeamLevel;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
-import codedriver.framework.process.constvalue.OperationType;
+import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.constvalue.ProcessUserType;
@@ -34,7 +34,10 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
+import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
+import codedriver.framework.process.operationauth.core.OperationAuthHandlerType;
+import codedriver.framework.process.operationauth.core.ProcessOperateManager;
 
 public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilBase implements IProcessStepUtilHandler {
 
@@ -77,11 +80,62 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
 		NotifyHandler.notify(currentProcessTaskStepVo, trigger);
 	}
+	
 	@Override
-	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation) {
-		return true;
+	public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId){
+	    ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder()
+            .setNext(OperationAuthHandlerType.TASK);
+	    if(processTaskStepId != null) {
+	        builder.setNext(OperationAuthHandlerType.STEP);
+	        MySetNextOperationAuthHandlerType(builder);
+	    }
+        ProcessOperateManager processOperateManager = builder.build();
+        return processOperateManager.getOperateList(processTaskId, processTaskStepId);
 	}
+	
+	@Override
+    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId, List<ProcessTaskOperationType> operationTypeList){
+	    if(CollectionUtils.isNotEmpty(operationTypeList)) {
+	        ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder();
+	        if(OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeList)) {
+	            builder.setNext(OperationAuthHandlerType.TASK);
+	        }
+	        if(processTaskStepId != null) {
+                MySetNextOperationAuthHandlerType(builder);
+	            if(OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeList)) {
+	                builder.setNext(OperationAuthHandlerType.STEP);
+	            }
+	        }
+	        ProcessOperateManager processOperateManager = builder.build();
+	        return processOperateManager.getOperateList(processTaskId, processTaskStepId, operationTypeList);
+	    }else {
+	        return getOperateList(processTaskId, processTaskStepId);
+	    }
+    }
+	
+	@Override
+	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskOperationType operationType, boolean isThrowException) {
+	    List<ProcessTaskOperationType> operationTypeList = new ArrayList<>();
+	    operationTypeList.add(operationType);
+	    List<ProcessTaskOperationType> resultList = getOperateList(processTaskId, processTaskStepId, operationTypeList);
+	    if(resultList.contains(operationType)) {
+	        return true;
+	    }else {
+	        if(isThrowException) {
+	            throw new ProcessTaskNoPermissionException(operationType.getText());
+	        }else {
+	            return false;
+	        }
+	    }
+	}
+	
+	@Override
+    public boolean verifyOperationAuthoriy(Long processTaskId, ProcessTaskOperationType operationType, boolean isThrowException) {
+	    return verifyOperationAuthoriy(processTaskId, null, operationType, isThrowException);
+    }
 
+	protected abstract void MySetNextOperationAuthHandlerType(ProcessOperateManager.Builder builder);
+	
     @Override
     public ProcessTaskVo getProcessTaskDetailById(Long processTaskId) {
       //获取工单基本信息(title、channel_uuid、config_hash、priority_uuid、status、start_time、end_time、expire_time、owner、ownerName、reporter、reporterName)
