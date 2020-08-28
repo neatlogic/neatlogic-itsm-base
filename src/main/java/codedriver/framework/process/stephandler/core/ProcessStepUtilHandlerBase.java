@@ -3,7 +3,6 @@ package codedriver.framework.process.stephandler.core;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -46,35 +45,35 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 		AuditHandler.audit(currentProcessTaskStepVo, action);
 	}
 
-	@Override
-	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId) {
-		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId);
-	}
-
-	@Override
-	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
-		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId, verifyActionList);
-	}
-
-	@Override
-	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action) {
-		return ActionRoleChecker.verifyActionAuthoriy(processTaskId, processTaskStepId, action);
-	}
-
-	@Override
-	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId) {
-		return ActionRoleChecker.getProcessableStepList(processTaskId);
-	}
-
-	@Override
-	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId) {
-		return ActionRoleChecker.getRetractableStepListByProcessTaskId(processTaskId);
-	}
-
-	@Override
-	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId) {
-		return ActionRoleChecker.getUrgeableStepList(processTaskId);
-	}
+//	@Override
+//	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId) {
+//		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId);
+//	}
+//
+//	@Override
+//	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
+//		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId, verifyActionList);
+//	}
+//
+//	@Override
+//	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action) {
+//		return ActionRoleChecker.verifyActionAuthoriy(processTaskId, processTaskStepId, action);
+//	}
+//
+//	@Override
+//	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId) {
+//		return ActionRoleChecker.getProcessableStepList(processTaskId);
+//	}
+//
+//	@Override
+//	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId) {
+//		return ActionRoleChecker.getRetractableStepListByProcessTaskId(processTaskId);
+//	}
+//
+//	@Override
+//	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId) {
+//		return ActionRoleChecker.getUrgeableStepList(processTaskId);
+//	}
 
 	@Override
 	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {

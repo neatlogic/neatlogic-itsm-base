@@ -2,14 +2,12 @@ package codedriver.framework.process.stephandler.core;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
-import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -73,7 +71,7 @@ public interface IProcessStepUtilHandler {
 	 * @param processTaskStepId
 	 * @return List<String>
 	 */
-	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId);
+//	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId);
 
 	/**
 	 * 
@@ -85,7 +83,7 @@ public interface IProcessStepUtilHandler {
 	 * @param verifyActionList
 	 * @return List<String>
 	 */
-	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList);
+//	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList);
 
 	/**
 	 * 
@@ -96,7 +94,7 @@ public interface IProcessStepUtilHandler {
 	 * @param action
 	 * @return boolean
 	 */
-	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action);
+//	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action);
 
 	/**
 	 * 
@@ -105,7 +103,7 @@ public interface IProcessStepUtilHandler {
 	 * @param processTaskId
 	 * @return Set<ProcessTaskStepVo>
 	 */
-	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId);
+//	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId);
 
 	/**
 	 * 
@@ -114,7 +112,7 @@ public interface IProcessStepUtilHandler {
 	 * @param processTaskId
 	 * @return List<ProcessTaskStepVo>
 	 */
-	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId);
+//	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId);
 
 	/**
 	 * 
@@ -123,7 +121,7 @@ public interface IProcessStepUtilHandler {
 	 * @param processTaskId
 	 * @return List<ProcessTaskStepVo>
 	 */
-	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId);
+//	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId);
 
 	/**
 	 * 
