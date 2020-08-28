@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
-import codedriver.framework.process.constvalue.OperationType;
+import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
@@ -143,8 +143,18 @@ public interface IProcessStepUtilHandler {
      * @param processTaskStepId
      * @return List<String>
      */
-    public List<String> getOperateList(Long processTaskId, Long processTaskStepId);
-
+    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId);
+    
+    /**
+     * 
+     * @Time:2020年3月30日
+     * @Description: 获取当前用户对当前步骤的部分操作权限列表（operationTypeList包含的那部分）
+     * @param processTaskId
+     * @param processTaskStepId
+     * @return List<String>
+     */
+    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId, List<ProcessTaskOperationType> operationTypeList);
+    
 	/**
 	 * 
 	 * @Time:2020年3月30日
@@ -154,8 +164,19 @@ public interface IProcessStepUtilHandler {
 	 * @param action
 	 * @return boolean
 	 */
-	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, OperationType operation);
+	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskOperationType operationType, boolean isThrowException);
 	
+	/**
+     * 
+     * @Time:2020年3月30日
+     * @Description: 判断当前用户对当前步骤的某个操作是否有权限
+     * @param processTaskId
+     * @param processTaskStepId
+     * @param action
+     * @return boolean
+     */
+    public boolean verifyOperationAuthoriy(Long processTaskId, ProcessTaskOperationType operationType, boolean isThrowException);
+    
 	/**
 	 * 
 	* @Time:2020年6月30日

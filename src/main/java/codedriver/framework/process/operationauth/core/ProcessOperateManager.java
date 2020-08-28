@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.collections4.MapUtils;
 
-import codedriver.framework.process.constvalue.OperationType;
+import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 
 public class ProcessOperateManager {
 	private OperationAuthHandlerBase handler;
@@ -33,15 +33,15 @@ public class ProcessOperateManager {
 		this.handler = builder.handler;
 	}
 
-	public List<String> getOperateList(Long processTaskId, Long processTaskStepId) {
+	public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId) {
 		//开始执行区
 		
 		//开始执行区
-        List<String> resultList = new ArrayList<>();
+        List<ProcessTaskOperationType> resultList = new ArrayList<>();
 		if (this.handler != null) {
-			Map<String, Boolean> operateMap = this.handler.getFinalOperateMap(processTaskId, processTaskStepId);
+			Map<ProcessTaskOperationType, Boolean> operateMap = this.handler.getFinalOperateMap(processTaskId, processTaskStepId);
 			if (MapUtils.isNotEmpty(operateMap)) {
-			    for(Entry<String, Boolean> entry : operateMap.entrySet()) {
+			    for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
 			        if(entry.getValue() == Boolean.TRUE) {
 			            resultList.add(entry.getKey());
 			        }
@@ -56,7 +56,19 @@ public class ProcessOperateManager {
 		return resultList;
 	}
 
-	public boolean getOperateList(Long processTaskId, Long processTaskStepId, OperationType operationType) {
-        return this.handler.getFinalOperateMap(processTaskId, processTaskStepId, operationType);
+	public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId, List<ProcessTaskOperationType> operationTypeList) {
+	    List<ProcessTaskOperationType> resultList = new ArrayList<>();
+        if (this.handler != null) {
+            Map<ProcessTaskOperationType, Boolean> operateMap = this.handler.getFinalOperateMap(processTaskId, processTaskStepId, operationTypeList);
+            if (MapUtils.isNotEmpty(operateMap)) {
+                for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
+                    if(entry.getValue() == Boolean.TRUE) {
+                        resultList.add(entry.getKey());
+                    }
+                }
+                return resultList;
+            }
+        }
+        return resultList;
     }
 }

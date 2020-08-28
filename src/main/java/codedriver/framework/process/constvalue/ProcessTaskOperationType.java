@@ -1,6 +1,6 @@
 package codedriver.framework.process.constvalue;
 
-public enum OperationType {
+public enum ProcessTaskOperationType {
 	/**
 	 * 查看节点信息
 	 * 无论该节点的状态如何，只有被授权的对象可以查看活动和步骤中所有与该节点相关的信息，否则不可见；（活动是整个活动不可见，步骤只可见步骤名称和状态，其他内容不可见）
@@ -66,7 +66,7 @@ public enum OperationType {
 	private String status;
 	private String text;
 
-	private OperationType(String _status, String _text) {
+	private ProcessTaskOperationType(String _status, String _text) {
 		this.status = _status;
 		this.text = _text;
 	}
@@ -80,7 +80,7 @@ public enum OperationType {
 	}
 
 	public static String getValue(String _status) {
-		for (OperationType s : OperationType.values()) {
+		for (ProcessTaskOperationType s : ProcessTaskOperationType.values()) {
 			if (s.getValue().equals(_status)) {
 				return s.getValue();
 			}
@@ -89,7 +89,7 @@ public enum OperationType {
 	}
 
 	public static String getText(String _status) {
-		for (OperationType s : OperationType.values()) {
+		for (ProcessTaskOperationType s : ProcessTaskOperationType.values()) {
 			if (s.getValue().equals(_status)) {
 				return s.getText();
 			}
