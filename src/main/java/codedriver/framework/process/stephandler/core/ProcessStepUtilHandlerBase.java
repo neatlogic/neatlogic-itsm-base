@@ -35,6 +35,7 @@ import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
+import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType;
 import codedriver.framework.process.operationauth.core.OperationAuthHandlerType;
 import codedriver.framework.process.operationauth.core.ProcessOperateManager;
 
@@ -86,7 +87,10 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             .setNext(OperationAuthHandlerType.TASK);
 	    if(processTaskStepId != null) {
 	        builder.setNext(OperationAuthHandlerType.STEP);
-	        MySetNextOperationAuthHandlerType(builder);
+	        IOperationAuthHandlerType type = MyOperationAuthHandlerType();
+	        if(type != null) {
+	            builder.setNext(type);
+	        }
 	    }
         ProcessOperateManager processOperateManager = builder.build();
         return processOperateManager.getOperateList(processTaskId, processTaskStepId);
@@ -100,10 +104,13 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	            builder.setNext(OperationAuthHandlerType.TASK);
 	        }
 	        if(processTaskStepId != null) {
-                MySetNextOperationAuthHandlerType(builder);
 	            if(OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeList)) {
 	                builder.setNext(OperationAuthHandlerType.STEP);
 	            }
+                IOperationAuthHandlerType type = MyOperationAuthHandlerType();
+                if(type != null && CollectionUtils.isNotEmpty(type.getOperationTypeList()) && type.getOperationTypeList().removeAll(operationTypeList)) {
+                    builder.setNext(type);
+                }
 	        }
 	        ProcessOperateManager processOperateManager = builder.build();
 	        return processOperateManager.getOperateList(processTaskId, processTaskStepId, operationTypeList);
@@ -133,7 +140,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	    return verifyOperationAuthoriy(processTaskId, null, operationType, isThrowException);
     }
 
-	protected abstract void MySetNextOperationAuthHandlerType(ProcessOperateManager.Builder builder);
+	protected abstract IOperationAuthHandlerType MyOperationAuthHandlerType();
 	
     @Override
     public ProcessTaskVo getProcessTaskDetailById(Long processTaskId) {
