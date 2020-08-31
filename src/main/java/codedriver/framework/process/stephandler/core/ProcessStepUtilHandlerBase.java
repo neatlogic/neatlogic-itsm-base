@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.TeamLevel;
+import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
@@ -93,8 +95,27 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	        }
 	    }
         ProcessOperateManager processOperateManager = builder.build();
-        return processOperateManager.getOperateList(processTaskId, processTaskStepId);
+        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
+        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
+        setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+        return processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
 	}
+	
+	@Override
+    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo){
+        ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder()
+            .setNext(OperationAuthHandlerType.TASK);
+        if(processTaskStepVo != null) {
+            builder.setNext(OperationAuthHandlerType.STEP);
+            IOperationAuthHandlerType type = MyOperationAuthHandlerType();
+            if(type != null) {
+                builder.setNext(type);
+            }
+        }
+        ProcessOperateManager processOperateManager = builder.build();
+        setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+        return processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
+    }
 	
 	@Override
     public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId, List<ProcessTaskOperationType> operationTypeList){
@@ -113,12 +134,95 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                 }
 	        }
 	        ProcessOperateManager processOperateManager = builder.build();
-	        return processOperateManager.getOperateList(processTaskId, processTaskStepId, operationTypeList);
+	        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
+	        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
+            setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+	        return processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
 	    }else {
 	        return getOperateList(processTaskId, processTaskStepId);
 	    }
     }
 	
+	@Override
+    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, List<ProcessTaskOperationType> operationTypeList){
+        if(CollectionUtils.isNotEmpty(operationTypeList)) {
+            ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder();
+            if(OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeList)) {
+                builder.setNext(OperationAuthHandlerType.TASK);
+            }
+            if(processTaskStepVo != null) {
+                if(OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeList)) {
+                    builder.setNext(OperationAuthHandlerType.STEP);
+                }
+                IOperationAuthHandlerType type = MyOperationAuthHandlerType();
+                if(type != null && CollectionUtils.isNotEmpty(type.getOperationTypeList()) && type.getOperationTypeList().removeAll(operationTypeList)) {
+                    builder.setNext(type);
+                }
+            }
+            ProcessOperateManager processOperateManager = builder.build();
+            setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+            return processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
+        }else {
+            return getOperateList(processTaskVo, processTaskStepVo);
+        }
+    }
+    
+//    private void setProcessTaskStepUser(ProcessTaskStepVo processTaskStepVo) {
+//        List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+//        if(CollectionUtils.isNotEmpty(majorUserList)) {
+//            processTaskStepVo.setMajorUser(majorUserList.get(0));
+//        }
+//        processTaskStepVo.setWorkerList(processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepVo.getId()));        
+//        processTaskStepVo.setMinorUserList(processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.MINOR.getValue()));
+//        processTaskStepVo.setAgentUserList(processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.AGENT.getValue()));
+//    }
+	
+    /**
+     * 
+     * @Time:2020年4月3日
+     * @Description: 获取当前用户在当前步骤中工单干系人列表
+     * @param processTaskVo     工单信息
+     * @param processTaskStepId 步骤id
+     * @return List<String>
+     */
+    private void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
+        Long processTaskStepId = null;
+        if(processTaskStepVo != null) {
+            processTaskStepId = processTaskStepVo.getId();
+        }
+        List<String> currentUserProcessUserTypeList = new ArrayList<>();
+        currentUserProcessUserTypeList.add(UserType.ALL.getValue());
+        processTaskVo.getCurrentUserProcessUserTypeList().add(UserType.ALL.getValue());
+        if (UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
+            currentUserProcessUserTypeList.add(ProcessUserType.OWNER.getValue());
+            processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.OWNER.getValue());
+        }
+        if (UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
+            currentUserProcessUserTypeList.add(ProcessUserType.REPORTER.getValue());
+            processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.REPORTER.getValue());
+        }
+        List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
+        if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepId, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
+            currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
+            processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
+        }
+        if(processTaskStepVo != null) {
+            processTaskStepVo.getCurrentUserProcessUserTypeList().addAll(currentUserProcessUserTypeList);
+            ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), UserContext.get().getUserUuid(true));
+            processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());
+            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
+            }
+            processTaskStepUserVo.setUserType(ProcessUserType.MINOR.getValue());
+            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MINOR.getValue());
+            }
+            processTaskStepUserVo.setUserType(ProcessUserType.AGENT.getValue());
+            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
+            }
+        }
+    }
 	@Override
 	public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskOperationType operationType, boolean isThrowException) {
 	    List<ProcessTaskOperationType> operationTypeList = new ArrayList<>();
@@ -136,10 +240,29 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	}
 	
 	@Override
+    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, ProcessTaskOperationType operationType, boolean isThrowException) {
+        List<ProcessTaskOperationType> operationTypeList = new ArrayList<>();
+        operationTypeList.add(operationType);
+        List<ProcessTaskOperationType> resultList = getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
+        if(resultList.contains(operationType)) {
+            return true;
+        }else {
+            if(isThrowException) {
+                throw new ProcessTaskNoPermissionException(operationType.getText());
+            }else {
+                return false;
+            }
+        }
+    }
+	
+	@Override
     public boolean verifyOperationAuthoriy(Long processTaskId, ProcessTaskOperationType operationType, boolean isThrowException) {
 	    return verifyOperationAuthoriy(processTaskId, null, operationType, isThrowException);
     }
-
+	@Override
+    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskOperationType operationType, boolean isThrowException) {
+        return verifyOperationAuthoriy(processTaskVo, null, operationType, isThrowException);
+    }
 	protected abstract IOperationAuthHandlerType MyOperationAuthHandlerType();
 	
     @Override
