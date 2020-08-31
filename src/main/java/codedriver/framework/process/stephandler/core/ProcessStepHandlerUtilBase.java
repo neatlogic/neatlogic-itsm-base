@@ -942,7 +942,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
 					} else if (processTaskMapper.checkIsWorker(processTaskId, null, UserContext.get().getUserUuid(true), currentUserTeamList, UserContext.get().getRoleUuidList()) > 0) {
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
-					} else if (processTaskMapper.checkIsProcessTaskStepUser(processTaskId, null, UserContext.get().getUserUuid(true)) > 0) {
+					} else if (processTaskMapper.checkIsProcessTaskStepUser(new ProcessTaskStepUserVo(processTaskId, null, UserContext.get().getUserUuid(true))) > 0) {
 						resultList.add(ProcessTaskStepAction.POCESSTASKVIEW.getValue());
 					}
 				}
@@ -986,7 +986,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							resultList.add(ProcessTaskStepAction.VIEW.getValue());
 						} else if (UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
 							resultList.add(ProcessTaskStepAction.VIEW.getValue());
-						} else if (processTaskMapper.checkIsProcessTaskStepUser(processTaskId, processTaskStepId, UserContext.get().getUserUuid(true)) > 0) {
+						} else if (processTaskMapper.checkIsProcessTaskStepUser(new ProcessTaskStepUserVo(processTaskId, processTaskStepId, UserContext.get().getUserUuid(true))) > 0) {
 							resultList.add(ProcessTaskStepAction.VIEW.getValue());
 						}
 					}

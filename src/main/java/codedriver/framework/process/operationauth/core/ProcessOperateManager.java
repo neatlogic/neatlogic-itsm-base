@@ -2,9 +2,11 @@ package codedriver.framework.process.operationauth.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 
 import org.apache.commons.collections4.MapUtils;
 
@@ -16,7 +18,7 @@ import codedriver.framework.process.exception.operationauth.OperationAuthHandler
 public class ProcessOperateManager {
 //	private OperationAuthHandlerBase handler;
 
-	private List<IOperationAuthHandlerType> list;
+	private Queue<IOperationAuthHandlerType> typeQueue;
 	public static class Builder {
 //		private OperationAuthHandlerBase handler;
 //
@@ -28,12 +30,12 @@ public class ProcessOperateManager {
 //			}
 //			return this;
 //		}
-	    private List<IOperationAuthHandlerType> list = new ArrayList<>();
+	    private Queue<IOperationAuthHandlerType> typeQueue = new LinkedList<>();
 	    public Builder setNext(IOperationAuthHandlerType type) {
 	        if(OperationAuthHandlerFactory.getHandler(type) == null) {
 	            throw new OperationAuthHandlerNotFoundException(type.getText());
 	        }
-	        list.add(type);
+	        typeQueue.add(type);
 	        return this;
 	    }
 		public ProcessOperateManager build() {
@@ -43,7 +45,7 @@ public class ProcessOperateManager {
 
 	private ProcessOperateManager(Builder builder) {
 //		this.handler = builder.handler;
-		this.list = builder.list;
+		this.typeQueue = builder.typeQueue;
 	}
 
 	public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId) {
@@ -65,7 +67,8 @@ public class ProcessOperateManager {
 	    List<ProcessTaskOperationType> resultList = new ArrayList<>();
 	  //系统用户拥有所有权限
         if(SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid())) {
-            for(IOperationAuthHandlerType type : list) {
+            IOperationAuthHandlerType type  = null;
+            while((type  = typeQueue.poll()) != null) {
                 for(ProcessTaskOperationType operationType : type.getOperationTypeList()) {
                     if(!resultList.contains(operationType)) {
                         resultList.add(operationType);
@@ -74,7 +77,8 @@ public class ProcessOperateManager {
             }
         }else {
             Map<ProcessTaskOperationType, Boolean> operateMap = new HashMap<>();
-            for(IOperationAuthHandlerType type : list) {
+            IOperationAuthHandlerType type  = null;
+            while((type  = typeQueue.poll()) != null) {
                 IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(type);
                 Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler.getOperateMap(processTaskId, processTaskStepId);
                 if(MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
@@ -107,7 +111,8 @@ public class ProcessOperateManager {
 	    }
 	    List<ProcessTaskOperationType> resultList = new ArrayList<>();
         Map<ProcessTaskOperationType, Boolean> operateMap = new HashMap<>();
-        for(IOperationAuthHandlerType type : list) {
+        IOperationAuthHandlerType type  = null;
+        while((type  = typeQueue.poll()) != null) {
             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(type);
             Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler.getOperateMap(processTaskId, processTaskStepId, operationTypeList);
             if(MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {

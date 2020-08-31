@@ -145,11 +145,7 @@ public interface ProcessTaskMapper {
 			@Param("roleUuidList") List<String> roleUuidList
 			);
 	
-	public int checkIsProcessTaskStepUser(
-			@Param("processTaskId") Long processTaskId, 
-			@Param("processTaskStepId") Long processTaskStepId, 
-			@Param("userUuid") String userUuid
-			);
+	public int checkIsProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public List<ProcessTaskAssignWorkerVo> getPrcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
