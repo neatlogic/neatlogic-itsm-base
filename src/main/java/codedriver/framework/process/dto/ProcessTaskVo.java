@@ -59,7 +59,7 @@ public class ProcessTaskVo {
 	private Date expireTime;
 	private String configHash;
 
-	private List<ProcessTaskStepVo> stepList;
+	private List<ProcessTaskStepVo> stepList = new ArrayList<>();
 	
 	@EntityField(name = "优先级信息", type = ApiParamType.JSONOBJECT)
 	private PriorityVo priority;

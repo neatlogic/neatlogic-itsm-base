@@ -166,16 +166,6 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             return getOperateList(processTaskVo, processTaskStepVo);
         }
     }
-    
-//    private void setProcessTaskStepUser(ProcessTaskStepVo processTaskStepVo) {
-//        List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
-//        if(CollectionUtils.isNotEmpty(majorUserList)) {
-//            processTaskStepVo.setMajorUser(majorUserList.get(0));
-//        }
-//        processTaskStepVo.setWorkerList(processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepVo.getId()));        
-//        processTaskStepVo.setMinorUserList(processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.MINOR.getValue()));
-//        processTaskStepVo.setAgentUserList(processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepVo.getId(), ProcessUserType.AGENT.getValue()));
-//    }
 	
     /**
      * 
