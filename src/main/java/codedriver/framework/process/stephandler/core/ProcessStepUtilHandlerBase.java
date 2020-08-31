@@ -98,6 +98,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
         ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
         setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+        setProcessTaskStepConfig(processTaskStepVo);
         return processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
 	}
 	
@@ -114,6 +115,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         }
         ProcessOperateManager processOperateManager = builder.build();
         setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+        setProcessTaskStepConfig(processTaskStepVo);
         return processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
     }
 	
@@ -137,6 +139,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
 	        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
             setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+            setProcessTaskStepConfig(processTaskStepVo);
 	        return processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
 	    }else {
 	        return getOperateList(processTaskId, processTaskStepId);
@@ -161,6 +164,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             }
             ProcessOperateManager processOperateManager = builder.build();
             setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+            setProcessTaskStepConfig(processTaskStepVo);
             return processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
         }else {
             return getOperateList(processTaskVo, processTaskStepVo);
@@ -211,6 +215,22 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
                 processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
             }
+        }
+    }
+    /**
+     * 
+    * @Author: linbq
+    * @Time:2020年8月24日
+    * @Description: 设置步骤配置、处理器全局配置信息 
+    * @param processTaskStepVo 
+    * @return void
+     */
+    private void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo) {
+        String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+        processTaskStepVo.setConfig(stepConfig);
+        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
+        if(processStepHandlerConfig != null) {
+            processTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());                    
         }
     }
 	@Override
