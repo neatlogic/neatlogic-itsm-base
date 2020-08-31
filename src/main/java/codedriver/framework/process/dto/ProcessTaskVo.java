@@ -59,7 +59,7 @@ public class ProcessTaskVo {
 	private Date expireTime;
 	private String configHash;
 
-	private List<ProcessTaskStepVo> stepList;
+	private List<ProcessTaskStepVo> stepList = new ArrayList<>();
 	
 	@EntityField(name = "优先级信息", type = ApiParamType.JSONOBJECT)
 	private PriorityVo priority;
@@ -84,6 +84,9 @@ public class ProcessTaskVo {
 	private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
 	
 	private transient Boolean isAutoGenerateId = true;
+	/** 当前用户在当前工单中工单干系人列表 **/
+	private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
+	
 	public ProcessTaskVo() {
 
 	}
@@ -373,6 +376,14 @@ public class ProcessTaskVo {
 
     public void setIsHasOldFormProp(int isHasOldFormProp) {
         this.isHasOldFormProp = isHasOldFormProp;
+    }
+
+    public List<String> getCurrentUserProcessUserTypeList() {
+        return currentUserProcessUserTypeList;
+    }
+
+    public void setCurrentUserProcessUserTypeList(List<String> currentUserProcessUserTypeList) {
+        this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
     }
 
 }

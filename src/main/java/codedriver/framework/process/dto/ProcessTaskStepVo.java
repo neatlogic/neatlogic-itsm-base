@@ -119,6 +119,9 @@ public class ProcessTaskStepVo extends BasePageVo {
     
     @EntityField(name = "步骤表单属性隐藏数据", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepFormAttributeVo> stepFormConfig = new ArrayList<>();
+    
+    /** 当前用户在当前步骤中工单干系人列表 **/
+    private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
 	
 	public ProcessTaskStepVo() {
 
@@ -735,6 +738,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setStepFormConfig(List<ProcessTaskStepFormAttributeVo> stepFormConfig) {
         this.stepFormConfig = stepFormConfig;
+    }
+
+    public List<String> getCurrentUserProcessUserTypeList() {
+        return currentUserProcessUserTypeList;
+    }
+
+    public void setCurrentUserProcessUserTypeList(List<String> currentUserProcessUserTypeList) {
+        this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
     }
 
 }
