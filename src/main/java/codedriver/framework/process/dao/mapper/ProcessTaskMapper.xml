@@ -937,15 +937,18 @@
 	)
 	</select>
 	
-	<select id="checkIsProcessTaskStepUser" resultType="int">
+	<select id="checkIsProcessTaskStepUser" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo" resultType="int">
 	SELECT 
 		COUNT(1)
 	FROM `processtask_step_user`
 	WHERE `processtask_id` = #{processTaskId}
+	AND `user_uuid` = #{userUuid}
 	<if test="processTaskStepId != null">
 		AND `processtask_step_id` = #{processTaskStepId}
 	</if>
-	AND `user_uuid` = #{userUuid}
+	<if test="userType != null and userType != ''">
+		AND `user_type` = #{userType}
+	</if>
 	</select>
 	
 	<select id="getPrcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo" resultType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">

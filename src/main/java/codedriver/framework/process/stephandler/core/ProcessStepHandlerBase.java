@@ -306,13 +306,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		/** 当只分配到一个用户时，自动设置为处理人，不需要抢单 **/
 		if (workerList.size() == 1) {
 			if (StringUtils.isNotBlank(workerList.get(0).getUuid()) && GroupSearch.USER.getValue().equals(workerList.get(0).getType())) {
-				ProcessTaskStepUserVo userVo = new ProcessTaskStepUserVo();
-				userVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-				userVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-				userVo.setUserUuid(workerList.get(0).getUuid());
-//				UserVo user = userMapper.getUserBaseInfoByUuid(workerList.get(0).getUuid());
-//				userVo.setUserName(user.getUserName());
-				processTaskMapper.insertProcessTaskStepUser(userVo);
+				processTaskMapper.insertProcessTaskStepUser(new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), workerList.get(0).getUuid(), ProcessUserType.MAJOR.getValue()));
 				/** 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
 				if (autoStart == 1) {
 					currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
@@ -1095,13 +1089,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 当只分配到一个用户时，自动设置为处理人，不需要抢单 **/
 			if (workerList.size() == 1) {
 				if (StringUtils.isNotBlank(workerList.get(0).getUuid()) && GroupSearch.USER.getValue().equals(workerList.get(0).getType())) {
-					ProcessTaskStepUserVo userVo = new ProcessTaskStepUserVo();
-					userVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-					userVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-					userVo.setUserUuid(workerList.get(0).getUuid());
-//					UserVo user = userMapper.getUserBaseInfoByUuid(workerList.get(0).getUuid());
-//					userVo.setUserName(user.getUserName());
-					processTaskMapper.insertProcessTaskStepUser(userVo);
+					processTaskMapper.insertProcessTaskStepUser(new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), workerList.get(0).getUuid(), ProcessUserType.MAJOR.getValue()));
 					/** 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
 					int autoStart = myAssign(processTaskStepVo, workerList);
 					if (autoStart == 1) {
@@ -1376,7 +1364,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 
 			/** 加入上报人为处理人 **/
-			ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserUuid(true));
+			ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue());
 //			processTaskStepUserVo.setUserName(UserContext.get().getUserName());
 			processTaskMapper.insertProcessTaskStepUser(processTaskStepUserVo);
 			processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue()));

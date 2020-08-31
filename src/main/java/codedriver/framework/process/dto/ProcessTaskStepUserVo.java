@@ -12,7 +12,7 @@ public class ProcessTaskStepUserVo {
 	private Long processTaskStepId;
 	private String userUuid;
 	private String userName;
-	private String userType = "major";
+	private String userType;
 	private String status = ProcessTaskStepUserStatus.DOING.getValue();
 	private String statusName;
 	private Date startTime;
@@ -36,6 +36,13 @@ public class ProcessTaskStepUserVo {
 		this.setUserUuid(_userUuid);
 	}
 
+	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid, String userType) {
+        this.setProcessTaskId(_processTaskId);
+        this.setProcessTaskStepId(_processTaskStepId);
+        this.setUserUuid(_userUuid);
+        this.setUserType(userType);
+    }
+	
 //	public ProcessTaskStepUserVo(ProcessStepUserVo processStepUserVo) {
 //		this.setUserUuid(processStepUserVo.getUserUuid());
 //		this.setUserName(processStepUserVo.getUserName());
