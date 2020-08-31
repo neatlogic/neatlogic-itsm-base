@@ -226,11 +226,13 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     * @return void
      */
     private void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo) {
-        String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
-        processTaskStepVo.setConfig(stepConfig);
-        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
-        if(processStepHandlerConfig != null) {
-            processTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());                    
+        if(processTaskStepVo != null) {
+            String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+            processTaskStepVo.setConfig(stepConfig);
+            ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
+            if(processStepHandlerConfig != null) {
+                processTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());                    
+            }
         }
     }
 	@Override
