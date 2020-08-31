@@ -525,6 +525,7 @@
 		<result column="handler" property="handler" />
 		<result column="isActive" property="isActive" />
 		<result column="startTime" property="startTime" />
+		<result column="configHash" property="configHash" />
 		<result column="endTime" property="endTime" />
 		<result column="error" property="error" />
 		<collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
@@ -552,6 +553,7 @@
 		ps.`end_time` AS endTime,
 		ps.`error`,
 		ps.`is_active` AS isActive,
+		ps.`config_hash` AS configHash,
 		psw.`type` as workerType,
 		psw.`uuid`,
 		psu.`user_uuid`,

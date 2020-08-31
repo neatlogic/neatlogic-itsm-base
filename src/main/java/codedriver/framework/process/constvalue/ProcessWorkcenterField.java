@@ -5,6 +5,8 @@ public enum ProcessWorkcenterField {
 	TITLE("title", "标题"),
 	CHANNELTYPE("channeltype", "服务类型"),
 	CHANNEL("channel", "服务"),
+	PROCESS("process","流程"),
+	CONFIGHASH("confighash","工单配置hash"),
 	CATALOG("catalog", "服务目录"),
 	CONTENT("content", "上报内容","contentincludehtml"),
 	ENDTIME("endtime", "结束时间"),
