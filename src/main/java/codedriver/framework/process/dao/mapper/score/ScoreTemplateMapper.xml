@@ -113,6 +113,13 @@
 		where pst.`score_template_id` = #{scoreTemplateId}
 	</select>
 
+	<select id="getScoreTemplateIdByProcessUuid" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT
+		`score_template_id`
+		FROM `process_score_template`
+		where `process_uuid` = #{value}
+	</select>
+
 	<update id="updateScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
 		UPDATE `score_template` SET
 		 `name` = #{name},

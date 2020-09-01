@@ -25,6 +25,8 @@ public interface ScoreTemplateMapper {
 
     public List<ScoreTemplateVo> getProcessCountByIdList(List<Long> scoreTemplateIdList);
 
+    public Long getScoreTemplateIdByProcessUuid(String processUuid);
+
     public void updateScoreTemplate(ScoreTemplateVo scoreTemplateVo);
 
     public void updateScoreTemplateStatus(ScoreTemplateVo scoreTemplateVo);
