@@ -35,7 +35,6 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
-import codedriver.framework.process.constvalue.ProcessTaskStepAction;
 import codedriver.framework.process.constvalue.ProcessTaskStepDataType;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 import codedriver.framework.process.constvalue.ProcessUserType;
@@ -118,7 +117,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	* @param currentProcessTaskStepVo 
 	* @return void
 	 */
-	private void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskStepAction action) {
+	private void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskOperationType action) {
 	    JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 		String content = paramObj.getString("content");        
         List<Long> fileIdList = JSON.parseArray(JSON.toJSONString(paramObj.getJSONArray("fileIdList")), Long.class);
@@ -238,9 +237,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
 				/** 写入时间审计 **/
-				TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.ACTIVE);
+				TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
 				if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
-					TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.START);
+					TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
 				}
 
 				/** 计算SLA并触发超时警告 **/
@@ -406,7 +405,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 如果步骤被标记为全部完成，则触发完成 **/
 				if (currentProcessTaskStepVo.getIsAllDone()) {
 					/** 记录时间审计 **/
-					TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.COMPLETE);
+					TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
 					doNext(new ProcessStepThread(currentProcessTaskStepVo) {
 						@Override
@@ -436,7 +435,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						myHandle(currentProcessTaskStepVo);
 						if (currentProcessTaskStepVo.getIsAllDone()) {
 							/** 记录时间审计 **/
-							TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.COMPLETE);
+							TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
 
 							doNext(new ProcessStepThread(currentProcessTaskStepVo) {
 								@Override
@@ -490,7 +489,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
 			/** 检查处理人是否合法 **/
-//			ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskStepAction.START);
+//			ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.START);
             processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.START, true);
 			ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 
@@ -519,7 +518,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processStepUtilHandler.updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
 			
 			/** 写入时间审计 **/
-			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.START);
+			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
 
 			/** 计算SLA **/
 			SlaHandler.calculate(currentProcessTaskStepVo);
@@ -564,7 +563,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		}
 		NotifyTriggerType notifyTriggerType = NotifyTriggerType.SUCCEED;
 		ProcessTaskOperationType operationType = ProcessTaskOperationType.COMPLETE;
-		ProcessTaskStepAction processTaskStepAction = ProcessTaskStepAction.COMPLETE;
 		boolean canComplete = false;
 		if (this.getMode().equals(ProcessStepMode.MT)) {
 			// TODO 还需要增加代理人的逻辑
@@ -574,11 +572,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				String action = paramObj.getString("action");
 				if (ProcessTaskOperationType.BACK.getValue().equals(action)) {
 				    operationType = ProcessTaskOperationType.BACK;
-				    processTaskStepAction = ProcessTaskStepAction.BACK;
 					notifyTriggerType = NotifyTriggerType.BACK;
 				}
 			}
-//			canComplete = ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), processTaskStepAction);
+//			canComplete = ActionRoleChecker.verifyActionAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType);
 			IProcessStepUtilHandler  processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(this.getHandler());
             if(processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
@@ -604,7 +601,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					}
 				}
 				/** 保存描述内容 **/
-				saveContentAndFile(currentProcessTaskStepVo, processTaskStepAction);
+				saveContentAndFile(currentProcessTaskStepVo, operationType);
 				myComplete(currentProcessTaskStepVo);			
 
 				if (this.getMode().equals(ProcessStepMode.MT)) {
@@ -734,7 +731,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 			if (this.getMode().equals(ProcessStepMode.MT)) {
 				/** 写入时间审计 **/
-				TimeAuditHandler.audit(currentProcessTaskStepVo, processTaskStepAction);
+				TimeAuditHandler.audit(currentProcessTaskStepVo, operationType);
 				/** 计算SLA **/
 				SlaHandler.calculate(currentProcessTaskStepVo);
 			}
@@ -761,7 +758,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 设置当前步骤状态为未开始 **/
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 			/** 保存撤回原因 **/
-			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskStepAction.RETREAT);
+			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.RETREAT);
 			myRetreat(currentProcessTaskStepVo);
 
 			/** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
@@ -799,9 +796,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
 			/** 写入时间审计 **/
-			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.RETREAT);
+			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.RETREAT);
 			if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
-				TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.START);
+				TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
 			}
 
 			/** 计算SLA并触发超时警告 **/
@@ -872,7 +869,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
 		/** 写入时间审计 **/
-		TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.ABORT);
+		TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ABORT);
 
 		/** 计算SLA **/
 		SlaHandler.calculate(currentProcessTaskStepVo);
@@ -971,7 +968,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
 			/** 写入时间审计 **/
-			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.RECOVER);
+			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.RECOVER);
 
 			/** 计算SLA **/
 			SlaHandler.calculate(currentProcessTaskStepVo);
@@ -1079,7 +1076,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 默认状态设为pending，但子类可以选择置为start **/
 //			processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 			/** 保存描述内容 **/
-			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskStepAction.TRANSFER);
+			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TRANSFER);
 			
 			/** 根据子类需要把最终处理人放进来，引擎将自动写入数据库，也可能为空，例如一些特殊的流程节点 **/
 //			List<ProcessTaskStepUserVo> userList = new ArrayList<>();
@@ -1115,7 +1112,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.TRANSFER);
 
 			/** 处理时间审计 **/
-			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.TRANSFER);
+			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.TRANSFER);
 		} catch (ProcessTaskException e) {
 			logger.error(e.getMessage(), e);
 			processTaskStepVo.setError(e.getMessage());
@@ -1182,7 +1179,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 //			currentProcessTaskStepVo.setIsActive(0);
 //			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 			/** 处理时间审计 **/
-			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskStepAction.BACK);
+			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.BACK);
 
 			/** 触发通知 **/
 			NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.BACK);
@@ -1391,7 +1388,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskMapper.updateProcessTaskTitleOwnerPriorityUuid(processTaskVo);
 
 			/** 保存描述内容和附件 **/
-			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskStepAction.STARTPROCESS);
+			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STARTPROCESS);
 
 			if(processTaskMapper.checkProcessTaskhasForm(currentProcessTaskStepVo.getProcessTaskId()) > 0) {
 			    processTaskMapper.deleteProcessTaskFormAttributeDataByProcessTaskId(processTaskId);
