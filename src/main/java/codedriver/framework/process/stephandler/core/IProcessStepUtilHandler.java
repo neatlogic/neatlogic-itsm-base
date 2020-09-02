@@ -65,66 +65,6 @@ public interface IProcessStepUtilHandler {
 
 	/**
 	 * 
-	 * @Time:2020年3月30日
-	 * @Description: 获取当前用户对当前步骤的所有操作权限列表
-	 * @param processTaskId
-	 * @param processTaskStepId
-	 * @return List<String>
-	 */
-//	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId);
-
-	/**
-	 * 
-	 * @Author: 14378
-	 * @Time:2020年4月1日
-	 * @Description: 获取当前用户对当前步骤的部分操作权限列表（verifyActionList包含的那部分）
-	 * @param processTaskId
-	 * @param processTaskStepId
-	 * @param verifyActionList
-	 * @return List<String>
-	 */
-//	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList);
-
-	/**
-	 * 
-	 * @Time:2020年3月30日
-	 * @Description: 判断当前用户对当前步骤的某个操作是否有权限
-	 * @param processTaskId
-	 * @param processTaskStepId
-	 * @param action
-	 * @return boolean
-	 */
-//	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action);
-
-	/**
-	 * 
-	 * @Time:2020年3月30日
-	 * @Description: 当前用户可撤回的步骤列表
-	 * @param processTaskId
-	 * @return Set<ProcessTaskStepVo>
-	 */
-//	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId);
-
-	/**
-	 * 
-	 * @Time:2020年3月30日
-	 * @Description: 当前用户可处理的步骤列表
-	 * @param processTaskId
-	 * @return List<ProcessTaskStepVo>
-	 */
-//	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId);
-
-	/**
-	 * 
-	 * @Time:2020年4月18日
-	 * @Description: 获取工单中当前用户能催办的步骤列表
-	 * @param processTaskId
-	 * @return List<ProcessTaskStepVo>
-	 */
-//	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId);
-
-	/**
-	 * 
 	* @Time:2020年8月13日
 	* @Description: 通知 
 	* @param currentProcessTaskStepVo
