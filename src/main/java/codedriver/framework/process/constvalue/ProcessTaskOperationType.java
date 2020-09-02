@@ -62,7 +62,8 @@ public enum ProcessTaskOperationType {
 	 * 催办时会生成一条活动，并在对应的步骤中记录；如果配置了催办的通知设置，还会根据配置进行通知；
 	 */
 	URGE("urge","催办"),
-	RESTFULACTION("restfulaction", "RESTFUL动作");
+	RESTFULACTION("restfulaction", "RESTFUL动作"),
+	SCORE("score", "评分");
 	private String status;
 	private String text;
 
