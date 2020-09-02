@@ -42,6 +42,7 @@ import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.PriorityMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
 import codedriver.framework.process.dto.CatalogVo;
 import codedriver.framework.process.dto.ChannelTypeVo;
@@ -90,6 +91,8 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 	private FileMapper fileMapper;
 	@Autowired
 	private ProcessStepHandlerMapper processStepHandlerMapper;
+	@Autowired
+	private SelectContentByHashMapper selectContentByHashMapper;
 	
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
@@ -246,7 +249,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
       //获取工单基本信息(title、channel_uuid、config_hash、priority_uuid、status、start_time、end_time、expire_time、owner、ownerName、reporter、reporterName)
         ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
         //获取工单流程图信息
-        ProcessTaskConfigVo processTaskConfig = processTaskMapper.getProcessTaskConfigByHash(processTaskVo.getConfigHash());
+        ProcessTaskConfigVo processTaskConfig = selectContentByHashMapper.getProcessTaskConfigByHash(processTaskVo.getConfigHash());
         if(processTaskConfig == null) {
             throw new ProcessTaskRuntimeException("没有找到工单：'" + processTaskId + "'的流程图配置信息");
         }
@@ -284,11 +287,14 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
         
         //获取工单表单信息
         ProcessTaskFormVo processTaskFormVo = processTaskMapper.getProcessTaskFormByProcessTaskId(processTaskId);
-        if(processTaskFormVo != null && StringUtils.isNotBlank(processTaskFormVo.getFormContent())) {
-            processTaskVo.setFormConfig(processTaskFormVo.getFormContent());            
-            List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(processTaskId);
-            for(ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
-                processTaskVo.getFormAttributeDataMap().put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
+        if(processTaskFormVo != null && StringUtils.isNotBlank(processTaskFormVo.getFormContentHash())) {
+            String formContent = selectContentByHashMapper.getProcessTaskFromContentByHash(processTaskFormVo.getFormContentHash());
+            if(StringUtils.isNotBlank(formContent)) {
+                processTaskVo.setFormConfig(formContent);            
+                List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(processTaskId);
+                for(ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
+                    processTaskVo.getFormAttributeDataMap().put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
+                }
             }
         }
         /** 上报人公司列表 **/
@@ -314,7 +320,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
         }
 
         ProcessTaskStepVo startProcessTaskStepVo = processTaskStepList.get(0);
-        String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
+        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
         startProcessTaskStepVo.setConfig(stepConfig);
         ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
         if(processStepHandlerConfig != null) {
@@ -328,7 +334,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
         for(ProcessTaskStepContentVo processTaskStepContent : processTaskStepContentList) {
             if (ProcessTaskStepAction.STARTPROCESS.getValue().equals(processTaskStepContent.getType())) {
                 fileIdList = processTaskMapper.getFileIdListByContentId(processTaskStepContent.getId());
-                comment.setContent(processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
+                comment.setContent(selectContentByHashMapper.getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
                 break;
             }
         }
