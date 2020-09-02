@@ -214,8 +214,7 @@
 		SELECT
 		`uuid`,
 		`name`,
-		`is_active` AS isActive,
-		`config`
+		`is_active` AS isActive
 		FROM `process`
 		WHERE 1=1
 		<if test="keyword != null and keyword != ''">
