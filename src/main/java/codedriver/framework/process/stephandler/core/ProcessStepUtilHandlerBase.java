@@ -15,9 +15,8 @@ import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
-import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessStepType;
-import codedriver.framework.process.constvalue.ProcessTaskStepAction;
+import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dto.CatalogVo;
 import codedriver.framework.process.dto.ChannelTypeVo;
@@ -47,36 +46,6 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	public void activityAudit(ProcessTaskStepVo currentProcessTaskStepVo, IProcessTaskAuditType action) {
 		AuditHandler.audit(currentProcessTaskStepVo, action);
 	}
-
-//	@Override
-//	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId) {
-//		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId);
-//	}
-//
-//	@Override
-//	public List<String> getProcessTaskStepActionList(Long processTaskId, Long processTaskStepId, List<String> verifyActionList) {
-//		return ActionRoleChecker.getProcessTaskStepActionList(processTaskId, processTaskStepId, verifyActionList);
-//	}
-//
-//	@Override
-//	public boolean verifyActionAuthoriy(Long processTaskId, Long processTaskStepId, ProcessTaskStepAction action) {
-//		return ActionRoleChecker.verifyActionAuthoriy(processTaskId, processTaskStepId, action);
-//	}
-//
-//	@Override
-//	public List<ProcessTaskStepVo> getProcessableStepList(Long processTaskId) {
-//		return ActionRoleChecker.getProcessableStepList(processTaskId);
-//	}
-//
-//	@Override
-//	public Set<ProcessTaskStepVo> getRetractableStepList(Long processTaskId) {
-//		return ActionRoleChecker.getRetractableStepListByProcessTaskId(processTaskId);
-//	}
-//
-//	@Override
-//	public List<ProcessTaskStepVo> getUrgeableStepList(Long processTaskId) {
-//		return ActionRoleChecker.getUrgeableStepList(processTaskId);
-//	}
 
 	@Override
 	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
@@ -203,18 +172,28 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         if(processTaskStepVo != null) {
             processTaskStepVo.getCurrentUserProcessUserTypeList().addAll(currentUserProcessUserTypeList);
             ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), UserContext.get().getUserUuid(true));
-            processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());
-            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
-                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
+            List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUserVo);
+            for(ProcessTaskStepUserVo processTaskStepUser : processTaskStepUserList) {
+                if(ProcessUserType.MAJOR.getValue().equals(processTaskStepUser.getUserType())) {
+                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
+                }else if(ProcessUserType.MINOR.getValue().equals(processTaskStepUser.getUserType())) {
+                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MINOR.getValue());
+                }else if(ProcessUserType.AGENT.getValue().equals(processTaskStepUser.getUserType())) {
+                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
+                }
             }
-            processTaskStepUserVo.setUserType(ProcessUserType.MINOR.getValue());
-            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
-                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MINOR.getValue());
-            }
-            processTaskStepUserVo.setUserType(ProcessUserType.AGENT.getValue());
-            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
-                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
-            }
+//            processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());
+//            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+//                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
+//            }
+//            processTaskStepUserVo.setUserType(ProcessUserType.MINOR.getValue());
+//            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+//                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MINOR.getValue());
+//            }
+//            processTaskStepUserVo.setUserType(ProcessUserType.AGENT.getValue());
+//            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+//                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
+//            }
         }
     }
     /**
@@ -227,11 +206,11 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
      */
     private void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo) {
         if(processTaskStepVo != null) {
-            String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+            String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
             processTaskStepVo.setConfig(stepConfig);
             ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
             if(processStepHandlerConfig != null) {
-                processTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());                    
+                processTaskStepVo.setGlobalConfig(makeupConfig(processStepHandlerConfig.getConfig()));                    
             }
         }
     }
@@ -282,7 +261,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
       //获取工单基本信息(title、channel_uuid、config_hash、priority_uuid、status、start_time、end_time、expire_time、owner、ownerName、reporter、reporterName)
         ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
         //获取工单流程图信息
-        ProcessTaskConfigVo processTaskConfig = processTaskMapper.getProcessTaskConfigByHash(processTaskVo.getConfigHash());
+        ProcessTaskConfigVo processTaskConfig = selectContentByHashMapper.getProcessTaskConfigByHash(processTaskVo.getConfigHash());
         if(processTaskConfig == null) {
             throw new ProcessTaskRuntimeException("没有找到工单：'" + processTaskId + "'的流程图配置信息");
         }
@@ -320,11 +299,14 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         
         //获取工单表单信息
         ProcessTaskFormVo processTaskFormVo = processTaskMapper.getProcessTaskFormByProcessTaskId(processTaskId);
-        if(processTaskFormVo != null && StringUtils.isNotBlank(processTaskFormVo.getFormContent())) {
-            processTaskVo.setFormConfig(processTaskFormVo.getFormContent());            
-            List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(processTaskId);
-            for(ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
-                processTaskVo.getFormAttributeDataMap().put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
+        if(processTaskFormVo != null && StringUtils.isNotBlank(processTaskFormVo.getFormContentHash())) {
+            String formContent = selectContentByHashMapper.getProcessTaskFromContentByHash(processTaskFormVo.getFormContentHash());
+            if(StringUtils.isNotBlank(formContent)) {
+                processTaskVo.setFormConfig(formContent);            
+                List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(processTaskId);
+                for(ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
+                    processTaskVo.getFormAttributeDataMap().put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
+                }
             }
         }
         /** 上报人公司列表 **/
@@ -350,7 +332,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         }
 
         ProcessTaskStepVo startProcessTaskStepVo = processTaskStepList.get(0);
-        String stepConfig = processTaskMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
+        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
         startProcessTaskStepVo.setConfig(stepConfig);
         ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
         if(processStepHandlerConfig != null) {
@@ -362,9 +344,9 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         List<Long> fileIdList = new ArrayList<>();
         List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentByProcessTaskStepId(startProcessTaskStepVo.getId());
         for(ProcessTaskStepContentVo processTaskStepContent : processTaskStepContentList) {
-            if (ProcessTaskStepAction.STARTPROCESS.getValue().equals(processTaskStepContent.getType())) {
+            if (ProcessTaskOperationType.STARTPROCESS.getValue().equals(processTaskStepContent.getType())) {
                 fileIdList = processTaskMapper.getFileIdListByContentId(processTaskStepContent.getId());
-                comment.setContent(processTaskMapper.getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
+                comment.setContent(selectContentByHashMapper.getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
                 break;
             }
         }
