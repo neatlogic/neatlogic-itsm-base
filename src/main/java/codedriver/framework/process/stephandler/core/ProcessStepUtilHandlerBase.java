@@ -168,6 +168,8 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepId, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
             currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
             processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
+        }else {
+            processTaskVo.getCurrentUserProcessUserTypeList().remove(ProcessUserType.WORKER.getValue());
         }
         if(processTaskStepVo != null) {
             processTaskStepVo.getCurrentUserProcessUserTypeList().addAll(currentUserProcessUserTypeList);
