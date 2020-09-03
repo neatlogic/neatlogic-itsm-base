@@ -155,48 +155,33 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         }
         List<String> currentUserProcessUserTypeList = new ArrayList<>();
         currentUserProcessUserTypeList.add(UserType.ALL.getValue());
-        processTaskVo.getCurrentUserProcessUserTypeList().add(UserType.ALL.getValue());
         if (UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
             currentUserProcessUserTypeList.add(ProcessUserType.OWNER.getValue());
-            processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.OWNER.getValue());
         }
         if (UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
             currentUserProcessUserTypeList.add(ProcessUserType.REPORTER.getValue());
-            processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.REPORTER.getValue());
         }
         List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
         if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepId, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
             currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
-            processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
         }else {
-            processTaskVo.getCurrentUserProcessUserTypeList().remove(ProcessUserType.WORKER.getValue());
+            currentUserProcessUserTypeList.remove(ProcessUserType.WORKER.getValue());
         }
         if(processTaskStepVo != null) {
-            processTaskStepVo.getCurrentUserProcessUserTypeList().addAll(currentUserProcessUserTypeList);
             ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), UserContext.get().getUserUuid(true));
             List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUserVo);
             for(ProcessTaskStepUserVo processTaskStepUser : processTaskStepUserList) {
                 if(ProcessUserType.MAJOR.getValue().equals(processTaskStepUser.getUserType())) {
-                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
+                    currentUserProcessUserTypeList.add(ProcessUserType.MAJOR.getValue());
                 }else if(ProcessUserType.MINOR.getValue().equals(processTaskStepUser.getUserType())) {
-                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MINOR.getValue());
+                    currentUserProcessUserTypeList.add(ProcessUserType.MINOR.getValue());
                 }else if(ProcessUserType.AGENT.getValue().equals(processTaskStepUser.getUserType())) {
-                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
+                    currentUserProcessUserTypeList.add(ProcessUserType.AGENT.getValue());
                 }
             }
-//            processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());
-//            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
-//                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
-//            }
-//            processTaskStepUserVo.setUserType(ProcessUserType.MINOR.getValue());
-//            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
-//                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MINOR.getValue());
-//            }
-//            processTaskStepUserVo.setUserType(ProcessUserType.AGENT.getValue());
-//            if(processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
-//                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
-//            }
+            processTaskStepVo.setCurrentUserProcessUserTypeList(currentUserProcessUserTypeList);
         }
+        processTaskVo.setCurrentUserProcessUserTypeList(currentUserProcessUserTypeList);
     }
     /**
      * 
