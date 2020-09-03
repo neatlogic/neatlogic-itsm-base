@@ -190,6 +190,20 @@
 		)
 	</insert>
 
+	<insert id="insertProcessScoreTemplate" parameterType="codedriver.framework.process.dto.score.ProcessScoreTemplateVo" >
+		INSERT INTO `process_score_template` (
+		`score_template_id`,
+		`process_uuid`,
+		`is_active`,
+		`config`
+		) VALUES (
+		#{scoreTemplateId},
+		#{processUuid},
+		#{isActive},
+		#{config}
+		)
+	</insert>
+
 	<delete id="deleteScoreTemplate" parameterType="java.lang.Long">
 		DELETE st,std
 		FROM `score_template` st
@@ -200,6 +214,10 @@
 
 	<delete id="deleteScoreTemplateDimension" parameterType="java.lang.Long">
 		DELETE FROM `score_template_dimension` WHERE `score_template_id` = #{scoreTemplateId}
+	</delete>
+
+	<delete id="deleteProcessScoreTemplateByProcessUuid" parameterType="java.lang.String">
+		DELETE FROM `process_score_template` WHERE `process_uuid` = #{value}
 	</delete>
 
 </mapper>

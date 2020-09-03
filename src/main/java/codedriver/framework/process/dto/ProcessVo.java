@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,6 +56,8 @@ public class ProcessVo extends BasePageVo implements Serializable {
 	private List<ProcessStepRelVo> stepRelList;
 
 	private List<ProcessSlaVo> slaList;
+
+	private ProcessScoreTemplateVo processScoreTemplateVo;
 
 	private transient String fcu;
 	private transient String keyword;
@@ -258,6 +262,12 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				stepRelList.add(processStepRelVo);
 			}
 		}
+		/** 组装评分设置 */
+		JSONObject scoreConfig = processObj.getJSONObject("scoreConfig");
+		if(MapUtils.isNotEmpty(scoreConfig)){
+			this.processScoreTemplateVo = JSON.toJavaObject(scoreConfig, ProcessScoreTemplateVo.class);
+			this.processScoreTemplateVo.setProcessUuid(uuid);
+		}
 	}
 
 	public void setStepList(List<ProcessStepVo> stepList) {
@@ -310,5 +320,13 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
 	public void setSlaList(List<ProcessSlaVo> slaList) {
 		this.slaList = slaList;
+	}
+
+	public ProcessScoreTemplateVo getProcessScoreTemplateVo() {
+		return processScoreTemplateVo;
+	}
+
+	public void setProcessScoreTemplateVo(ProcessScoreTemplateVo processScoreTemplateVo) {
+		this.processScoreTemplateVo = processScoreTemplateVo;
 	}
 }
