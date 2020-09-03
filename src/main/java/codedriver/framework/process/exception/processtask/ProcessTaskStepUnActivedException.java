@@ -1,6 +1,5 @@
 package codedriver.framework.process.exception.processtask;
 
-import codedriver.framework.exception.core.ApiRuntimeException;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 
 public class ProcessTaskStepUnActivedException extends ProcessTaskRuntimeException {

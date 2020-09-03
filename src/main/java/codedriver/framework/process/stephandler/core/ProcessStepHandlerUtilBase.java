@@ -856,7 +856,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
 				}
 				break;
-			case ABORT:
+			case ABORTPROCESSTASK:
 				/** 如果找不到审计记录并且aborttime不为空，则新建审计记录 **/
 				newAuditVo.setAbortTime("now");
 				if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getAbortTime())) {
@@ -876,7 +876,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
 				}
 				break;
-			case RECOVER:
+			case RECOVERPROCESSTASK:
 				if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue())) {
 					newAuditVo.setActiveTime("now");
 					if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getActiveTime())) {
@@ -1042,8 +1042,8 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 
 			List<String> actionList = new ArrayList<>();
-			actionList.add(ProcessTaskOperationType.ABORT.getValue());
-			actionList.add(ProcessTaskOperationType.RECOVER.getValue());
+			actionList.add(ProcessTaskOperationType.ABORTPROCESSTASK.getValue());
+			actionList.add(ProcessTaskOperationType.RECOVERPROCESSTASK.getValue());
 			actionList.add(ProcessTaskOperationType.UPDATE.getValue());
 			actionList.add(ProcessTaskOperationType.URGE.getValue());
 			if (CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
@@ -1055,13 +1055,13 @@ public abstract class ProcessStepHandlerUtilBase {
 					if (processTaskStep.getIsActive().intValue() == 1) {
 						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
 						actionList = new ArrayList<>();
-						actionList.add(ProcessTaskOperationType.ABORT.getValue());
+						actionList.add(ProcessTaskOperationType.ABORTPROCESSTASK.getValue());
 						actionList.add(ProcessTaskOperationType.UPDATE.getValue());
 						actionList.add(ProcessTaskOperationType.URGE.getValue());
 						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
 						// 根据流程设置和步骤状态判断当前用户权限
 						for (String action : configActionList) {
-							if (ProcessTaskOperationType.ABORT.getValue().equals(action)) {
+							if (ProcessTaskOperationType.ABORTPROCESSTASK.getValue().equals(action)) {
 								// 工单状态为进行中的才能终止
 								if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskVo.getStatus())) {
 									resultList.add(action);
@@ -1075,14 +1075,14 @@ public abstract class ProcessStepHandlerUtilBase {
 					} else if (processTaskStep.getIsActive().intValue() == -1) {
 						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
 						actionList = new ArrayList<>();
-						actionList.add(ProcessTaskOperationType.ABORT.getValue());
+						actionList.add(ProcessTaskOperationType.ABORTPROCESSTASK.getValue());
 						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
-						if (configActionList.contains(ProcessTaskOperationType.ABORT.getValue())) {
-							configActionList.add(ProcessTaskOperationType.RECOVER.getValue());
+						if (configActionList.contains(ProcessTaskOperationType.ABORTPROCESSTASK.getValue())) {
+							configActionList.add(ProcessTaskOperationType.RECOVERPROCESSTASK.getValue());
 						}
 						// 根据流程设置和步骤状态判断当前用户权限
 						for (String action : configActionList) {
-							if (ProcessTaskOperationType.RECOVER.getValue().equals(action)) {
+							if (ProcessTaskOperationType.RECOVERPROCESSTASK.getValue().equals(action)) {
 								// 工单状态为已终止的才能恢复
 								if (ProcessTaskStatus.ABORTED.getValue().equals(processTaskVo.getStatus())) {
 									resultList.add(action);
