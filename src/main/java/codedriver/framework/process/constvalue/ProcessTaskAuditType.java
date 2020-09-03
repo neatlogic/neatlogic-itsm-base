@@ -6,6 +6,9 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	COMMENT("comment", "回复", "回复【${DATA.processTaskStepName}】"),
 	EDITCOMMENT("editcomment", "编辑回复", "编辑回复【${DATA.processTaskStepName}】"),
 	DELETECOMMENT("deletecomment", "删除回复", "删除回复【${DATA.processTaskStepName}】"),
+//	UPDATETITLE("updatetitle", "更新标题", "修改工单"),
+//	UPDATEPRIORITY("updatepriority", "更新优先级", "修改工单"),
+//	UPDATECONTENT("updatecontent", "更新上报描述内容", "修改工单"),
 	UPDATE("update", "上报内容", "修改工单"),
 	URGE("urge","催办","发起催办"),
 	CREATESUBTASK("createsubtask", "创建子任务", "创建子任务【${DATA.processTaskStepName}】"),
@@ -15,16 +18,15 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	COMPLETESUBTASK("completesubtask", "完成子任务", "完成子任务【${DATA.processTaskStepName}】"),
 	START("start", "开始", "开始【${DATA.processTaskStepName}】"),
 	RETREAT("retreat", "撤回", "撤回【${DATA.processTaskStepName}】"),
-	ABORTPROCESSTASK("abortprocesstask", "取消", "取消工单"),
-	RECOVERPROCESSTASK("recoverprocesstask", "恢复", "恢复工单"),
-	RECOVER("recover", "恢复", "恢复【${DATA.processTaskStepName}】"),
-	PAUSE("pause", "暂停", "暂停【${DATA.processTaskStepName}】"),
+	ABORT("abort", "取消", "取消工单"),
+	RECOVER("recover", "恢复", "恢复工单"),
 	TRANSFER("transfer", "转交", "转交【${DATA.processTaskStepName}】"),
 	STARTPROCESS("startprocess", "上报", "提交工单"),
 	RESTFULACTION("restfulaction", "RESTFUL动作","【${DATA.processTaskStepName}】"),
 	COMPLETE("complete", "流转", "完成【${DATA.processTaskStepName}】"),
 	BACK("back", "回退", "回退【${DATA.processTaskStepName}】至【${DATA.nextStepName}】"),
 	CONDITION("condition", "条件", "条件 <span style=\"color:${DATA.stepStatusVo.color};vertical-align: baseline;\">${DATA.stepStatusVo.text}</span> "),
+	SCORE("score", "评分", "评价工单")
 	;
 	private String value;
 	private String text;

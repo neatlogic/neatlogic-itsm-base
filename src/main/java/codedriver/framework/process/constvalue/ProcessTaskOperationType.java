@@ -68,7 +68,8 @@ public enum ProcessTaskOperationType {
     URGE("urge","催办", Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),
     PAUSE("pause","暂停", new ArrayList<String>(), Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue())),
     RECOVER("recover","恢复", new ArrayList<String>(), Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue())),
-    RESTFULACTION("restfulaction", "RESTFUL动作");
+    RESTFULACTION("restfulaction", "RESTFUL动作"),
+    SCORE("score", "评分");
     private String status;
     private String text;
     /** 节点管理中默认授权对象 **/
@@ -86,7 +87,7 @@ public enum ProcessTaskOperationType {
         this.acceptList = _acceptList;
         this.groupList = _groupList;
     }
-    
+
     public String getValue() {
         return status;
     }
