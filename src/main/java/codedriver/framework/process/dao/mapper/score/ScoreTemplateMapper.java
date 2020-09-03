@@ -1,6 +1,7 @@
 package codedriver.framework.process.dao.mapper.score;
 
 import codedriver.framework.common.dto.ValueTextVo;
+import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import org.apache.ibatis.annotations.Param;
@@ -10,6 +11,8 @@ import java.util.List;
 public interface ScoreTemplateMapper {
 
     public List<ScoreTemplateVo> searchScoreTemplate(ScoreTemplateVo scoreTemplateVo);
+
+    public List<ValueTextVo> searchScoreTemplateForSelect(ScoreTemplateVo scoreTemplateVo);
 
     public int searchScoreTemplateCount(ScoreTemplateVo scoreTemplateVo);
 
@@ -35,8 +38,12 @@ public interface ScoreTemplateMapper {
 
     public void insertScoreTemplateDimension(ScoreTemplateDimensionVo scoreTemplateDimensionVo);
 
+    public void insertProcessScoreTemplate(ProcessScoreTemplateVo processScoreTemplateVo);
+
     public void deleteScoreTemplate(@Param("scoreTemplateId") Long scoreTemplateId);
 
     public void deleteScoreTemplateDimension(@Param("scoreTemplateId") Long scoreTemplateId);
+
+    public void deleteProcessScoreTemplateByProcessUuid(String processUuid);
 
 }
