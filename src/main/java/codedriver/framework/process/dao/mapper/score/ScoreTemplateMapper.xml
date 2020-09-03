@@ -55,6 +55,9 @@
 		<if test="keyword != null and keyword != ''">
 			and name LIKE CONCAT('%', #{keyword}, '%')
 		</if>
+		<if test="isActive != null">
+			and is_active = #{isActive}
+		</if>
 	</select>
 
 	<select id="searchScoreTemplateForSelect" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="codedriver.framework.common.dto.ValueTextVo">
