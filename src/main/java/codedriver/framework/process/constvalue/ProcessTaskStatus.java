@@ -16,6 +16,7 @@ public enum ProcessTaskStatus {
 	ABORTING("aborting", "终止中","#8E949F"),
 	BACK("back", "已回退","#8E949F"),
 	HANG("hang", "已挂起","#8E949F"),
+	PAUSED("paused", "已暂停","#8E949F"),
 	DRAFT("draft", "未提交","#8E949F");
 	
 	private String status;

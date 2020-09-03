@@ -65,6 +65,8 @@ public enum ProcessTaskOperationType {
      * 催办时会生成一条活动，并在对应的步骤中记录；如果配置了催办的通知设置，还会根据配置进行通知；
      */
     URGE("urge","催办", Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),
+    PAUSE("pause","暂停", null, Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue())),
+    RECOVERSTEP("recoverstep","恢复", null, Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue())),
     RESTFULACTION("restfulaction", "RESTFUL动作");
     private String status;
     private String text;
