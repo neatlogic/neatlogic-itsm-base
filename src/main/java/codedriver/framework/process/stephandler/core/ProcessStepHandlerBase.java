@@ -937,7 +937,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 			/** 修改步骤状态 **/
 			processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
-		}else if(currentProcessTaskStepVo.getIsActive().equals(-1) && ProcessTaskStatus.HANG.getValue().equals(currentProcessTaskStepVo.getStatus())) {
+		}else if(currentProcessTaskStepVo.getIsActive().equals(1) && ProcessTaskStatus.HANG.getValue().equals(currentProcessTaskStepVo.getStatus())) {
 		    IProcessStepUtilHandler  processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(this.getHandler());
             if(processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
@@ -948,7 +948,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             myRecover(currentProcessTaskStepVo);
 
             /** 更新工单步骤状态为 “进行中” **/
-            currentProcessTaskStepVo.setStatus(ProcessTaskStatus.HANG.getValue());
+            currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		}
 
