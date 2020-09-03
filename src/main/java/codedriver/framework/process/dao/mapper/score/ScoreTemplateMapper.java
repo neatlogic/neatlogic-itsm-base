@@ -11,6 +11,8 @@ public interface ScoreTemplateMapper {
 
     public List<ScoreTemplateVo> searchScoreTemplate(ScoreTemplateVo scoreTemplateVo);
 
+    public List<ValueTextVo> searchScoreTemplateForSelect(ScoreTemplateVo scoreTemplateVo);
+
     public int searchScoreTemplateCount(ScoreTemplateVo scoreTemplateVo);
 
     public ScoreTemplateVo getScoreTemplateById(@Param("id") Long id);

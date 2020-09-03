@@ -57,6 +57,22 @@
 		</if>
 	</select>
 
+	<select id="searchScoreTemplateForSelect" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT
+		st.`id` as `value`,
+		st.`name` as `text`
+		FROM `score_template` st
+		WHERE
+		1=1
+		and st.`is_active` = 1
+		<if test="keyword != null and keyword != ''">
+			and st.`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+	</select>
+
 	<select id="getProcessCountByIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.score.ScoreTemplateVo">
 		SELECT
 		st.`id` as id,
@@ -117,7 +133,7 @@
 		SELECT
 		`score_template_id`
 		FROM `process_score_template`
-		where `process_uuid` = #{value}
+		where `process_uuid` = #{value} and `is_active` = 1
 	</select>
 
 	<update id="updateScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
