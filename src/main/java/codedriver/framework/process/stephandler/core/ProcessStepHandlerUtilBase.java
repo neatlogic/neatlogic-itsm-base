@@ -63,7 +63,6 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
-import codedriver.framework.process.constvalue.ProcessTaskStepDataType;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.constvalue.WorkerPolicy;
 import codedriver.framework.process.dao.mapper.CatalogMapper;
@@ -73,7 +72,6 @@ import codedriver.framework.process.dao.mapper.PriorityMapper;
 import codedriver.framework.process.dao.mapper.ProcessMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.dao.mapper.ProcessTaskStepDataMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
@@ -93,7 +91,6 @@ import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepDataVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
@@ -139,13 +136,8 @@ public abstract class ProcessStepHandlerUtilBase {
 	protected static ProcessStepHandlerMapper processStepHandlerMapper;
 	protected static PriorityMapper priorityMapper;
 	private static IntegrationMapper integrationMapper;
-	protected static ProcessTaskStepDataMapper processTaskStepDataMapper;
     protected static CatalogMapper catalogMapper;
     protected static SelectContentByHashMapper selectContentByHashMapper;
-	@Autowired
-	public void setProcessTaskStepDataMapperr(ProcessTaskStepDataMapper _processTaskStepDataMapper) {
-		processTaskStepDataMapper = _processTaskStepDataMapper;
-	}
 
 	@Autowired
 	public void setProcessMapper(ProcessMapper _processMapper) {
@@ -1454,23 +1446,23 @@ public abstract class ProcessStepHandlerUtilBase {
 	                for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
 	                    formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
 	                }
-	                ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
-	                processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-	                processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-	                processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
-	                processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
-	                processTaskStepDataVo = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
-	                List<String> hidecomponentList = new ArrayList<>();
-	                if(processTaskStepDataVo != null) {
-	                    JSONObject dataObj = processTaskStepDataVo.getData();
-	                    if (MapUtils.isNotEmpty(dataObj)) {
-	                        JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
-	                        if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
-	                            hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
-	                        }
-	                    }
-	                }
-	                
+//	                ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
+//	                processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+//	                processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+//	                processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
+//	                processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
+//	                processTaskStepDataVo = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
+//	                List<String> hidecomponentList = new ArrayList<>();
+//	                if(processTaskStepDataVo != null) {
+//	                    JSONObject dataObj = processTaskStepDataVo.getData();
+//	                    if (MapUtils.isNotEmpty(dataObj)) {
+//	                        JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
+//	                        if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
+//	                            hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
+//	                        }
+//	                    }
+//	                }
+	                List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);
 	                for (FormAttributeVo formAttributeVo : formAttributeList) {
 	                    if (!formAttributeVo.isRequired()) {
 	                        continue;

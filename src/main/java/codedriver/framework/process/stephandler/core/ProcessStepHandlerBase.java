@@ -35,7 +35,6 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
-import codedriver.framework.process.constvalue.ProcessTaskStepDataType;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dto.ChannelVo;
@@ -52,7 +51,6 @@ import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepDataVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
@@ -1391,15 +1389,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			if(processTaskMapper.checkProcessTaskhasForm(currentProcessTaskStepVo.getProcessTaskId()) > 0) {
 			    processTaskMapper.deleteProcessTaskFormAttributeDataByProcessTaskId(processTaskId);
 	            // 组件联动导致隐藏的属性uuid列表
-	            ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
-	            processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-	            processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-	            processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
-	            processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
-	            processTaskStepDataMapper.deleteProcessTaskStepData(processTaskStepDataVo);
-	            processTaskStepDataVo.setData(paramObj.toJSONString());
-	            processTaskStepDataVo.setIsAutoGenerateId(true);
-	            processTaskStepDataMapper.replaceProcessTaskStepData(processTaskStepDataVo);
+//	            ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
+//	            processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+//	            processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+//	            processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
+//	            processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
+//	            processTaskStepDataMapper.deleteProcessTaskStepData(processTaskStepDataVo);
+//	            processTaskStepDataVo.setData(paramObj.toJSONString());
+//	            processTaskStepDataVo.setIsAutoGenerateId(true);
+//	            processTaskStepDataMapper.replaceProcessTaskStepData(processTaskStepDataVo);
 
 	            List<String> hidecomponentList = JSON.parseArray(paramObj.getString("hidecomponentList"), String.class);
 
