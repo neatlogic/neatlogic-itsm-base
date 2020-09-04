@@ -124,7 +124,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         if(StringUtils.isBlank(content) && CollectionUtils.isEmpty(fileIdList)) {
             return;
         }
-
         ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo();
         processTaskStepContentVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
         processTaskStepContentVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
@@ -133,19 +132,23 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
 			processTaskMapper.replaceProcessTaskContent(contentVo);
 			processTaskStepContentVo.setContentHash(contentVo.getHash());
+		}else {
+		    paramObj.remove("content");
 		}
         processTaskMapper.insertProcessTaskStepContent(processTaskStepContentVo);
 
         /** 保存附件uuid **/
-        ProcessTaskStepFileVo processTaskStepFileVo = new ProcessTaskStepFileVo();
-        processTaskStepFileVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-        processTaskStepFileVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-        processTaskStepFileVo.setContentId(processTaskStepContentVo.getId());
         if(CollectionUtils.isNotEmpty(fileIdList)) {
+            ProcessTaskStepFileVo processTaskStepFileVo = new ProcessTaskStepFileVo();
+            processTaskStepFileVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+            processTaskStepFileVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+            processTaskStepFileVo.setContentId(processTaskStepContentVo.getId());
             for (Long fileId : fileIdList) {
                 processTaskStepFileVo.setFileId(fileId);
                 processTaskMapper.insertProcessTaskStepFile(processTaskStepFileVo);
             }
+        }else {
+            paramObj.remove("fileIdList");
         }
 	}
 	
@@ -577,24 +580,12 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 		if (canComplete) {
 			try {
-				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
-				ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
-				processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-				processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-				processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
-				processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
-				ProcessTaskStepDataVo stepDraftSaveData = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
-				if(stepDraftSaveData != null) {
-					JSONObject dataObj = stepDraftSaveData.getData();
-					if(MapUtils.isNotEmpty(dataObj)) {
-						paramObj.putAll(dataObj);
-					}
-				}
 				/** 保存描述内容 **/
 				saveContentAndFile(currentProcessTaskStepVo, operationType);
 				myComplete(currentProcessTaskStepVo);			
 
 				if (this.getMode().equals(ProcessStepMode.MT)) {
+	                JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 					if (MapUtils.isNotEmpty(paramObj)) {
 						// 表单属性显示控制
 						Map<String, String> formAttributeActionMap = new HashMap<>();
@@ -878,7 +869,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		// 锁定当前流程
 		processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
 		/** 校验权限 **/
-        ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(currentProcessTaskVo.getId(), ProcessTaskOperationType.RECOVERPROCESSTASK, true);
+        ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(currentProcessTaskVo, ProcessTaskOperationType.RECOVERPROCESSTASK, true);
 
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
 		for (ProcessTaskStepVo stepVo : processTaskStepList) {
