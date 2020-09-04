@@ -86,6 +86,32 @@ import codedriver.framework.process.dao.mapper.ProcessTaskStepDataMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
+import codedriver.framework.process.dto.ActionVo;
+import codedriver.framework.process.dto.ChannelPriorityVo;
+import codedriver.framework.process.dto.FormAttributeVo;
+import codedriver.framework.process.dto.FormVersionVo;
+import codedriver.framework.process.dto.ProcessStepHandlerVo;
+import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
+import codedriver.framework.process.dto.ProcessTaskContentVo;
+import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
+import codedriver.framework.process.dto.ProcessTaskFormVo;
+import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
+import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
+import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
+import codedriver.framework.process.dto.ProcessTaskSlaVo;
+import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
+import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
+import codedriver.framework.process.dto.ProcessTaskStepContentVo;
+import codedriver.framework.process.dto.ProcessTaskStepDataVo;
+import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
+import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
+import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
+import codedriver.framework.process.dto.ProcessTaskStepUserVo;
+import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
+import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.dto.WorktimeRangeVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
@@ -852,7 +878,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
 				}
 				break;
-			case ABORT:
+			case ABORTPROCESSTASK:
 				/** 如果找不到审计记录并且aborttime不为空，则新建审计记录 **/
 				newAuditVo.setAbortTime("now");
 				if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getAbortTime())) {
@@ -872,7 +898,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
 				}
 				break;
-			case RECOVER:
+			case RECOVERPROCESSTASK:
 				if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue())) {
 					newAuditVo.setActiveTime("now");
 					if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getActiveTime())) {
@@ -1038,8 +1064,8 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 
 			List<String> actionList = new ArrayList<>();
-			actionList.add(ProcessTaskOperationType.ABORT.getValue());
-			actionList.add(ProcessTaskOperationType.RECOVER.getValue());
+			actionList.add(ProcessTaskOperationType.ABORTPROCESSTASK.getValue());
+			actionList.add(ProcessTaskOperationType.RECOVERPROCESSTASK.getValue());
 			actionList.add(ProcessTaskOperationType.UPDATE.getValue());
 			actionList.add(ProcessTaskOperationType.URGE.getValue());
 			if (CollectionUtils.isEmpty(verifyActionList) || actionList.removeAll(verifyActionList)) {
@@ -1051,13 +1077,13 @@ public abstract class ProcessStepHandlerUtilBase {
 					if (processTaskStep.getIsActive().intValue() == 1) {
 						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
 						actionList = new ArrayList<>();
-						actionList.add(ProcessTaskOperationType.ABORT.getValue());
+						actionList.add(ProcessTaskOperationType.ABORTPROCESSTASK.getValue());
 						actionList.add(ProcessTaskOperationType.UPDATE.getValue());
 						actionList.add(ProcessTaskOperationType.URGE.getValue());
 						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
 						// 根据流程设置和步骤状态判断当前用户权限
 						for (String action : configActionList) {
-							if (ProcessTaskOperationType.ABORT.getValue().equals(action)) {
+							if (ProcessTaskOperationType.ABORTPROCESSTASK.getValue().equals(action)) {
 								// 工单状态为进行中的才能终止
 								if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskVo.getStatus())) {
 									resultList.add(action);
@@ -1071,14 +1097,14 @@ public abstract class ProcessStepHandlerUtilBase {
 					} else if (processTaskStep.getIsActive().intValue() == -1) {
 						List<String> currentUserProcessUserTypeList = getCurrentUserProcessUserTypeList(processTaskVo, processTaskStep.getId());
 						actionList = new ArrayList<>();
-						actionList.add(ProcessTaskOperationType.ABORT.getValue());
+						actionList.add(ProcessTaskOperationType.ABORTPROCESSTASK.getValue());
 						List<String> configActionList = getProcessTaskStepConfigActionList(processTaskVo, processTaskStep, actionList, currentUserProcessUserTypeList);
-						if (configActionList.contains(ProcessTaskOperationType.ABORT.getValue())) {
-							configActionList.add(ProcessTaskOperationType.RECOVER.getValue());
+						if (configActionList.contains(ProcessTaskOperationType.ABORTPROCESSTASK.getValue())) {
+							configActionList.add(ProcessTaskOperationType.RECOVERPROCESSTASK.getValue());
 						}
 						// 根据流程设置和步骤状态判断当前用户权限
 						for (String action : configActionList) {
-							if (ProcessTaskOperationType.RECOVER.getValue().equals(action)) {
+							if (ProcessTaskOperationType.RECOVERPROCESSTASK.getValue().equals(action)) {
 								// 工单状态为已终止的才能恢复
 								if (ProcessTaskStatus.ABORTED.getValue().equals(processTaskVo.getStatus())) {
 									resultList.add(action);
