@@ -55,6 +55,25 @@
 		<if test="keyword != null and keyword != ''">
 			and name LIKE CONCAT('%', #{keyword}, '%')
 		</if>
+		<if test="isActive != null">
+			and is_active = #{isActive}
+		</if>
+	</select>
+
+	<select id="searchScoreTemplateForSelect" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT
+		st.`id` as `value`,
+		st.`name` as `text`
+		FROM `score_template` st
+		WHERE
+		1=1
+		and st.`is_active` = 1
+		<if test="keyword != null and keyword != ''">
+			and st.`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
 	</select>
 
 	<select id="getProcessCountByIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.score.ScoreTemplateVo">
@@ -117,7 +136,7 @@
 		SELECT
 		`score_template_id`
 		FROM `process_score_template`
-		where `process_uuid` = #{value}
+		where `process_uuid` = #{value} and `is_active` = 1
 	</select>
 
 	<update id="updateScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
@@ -174,6 +193,20 @@
 		)
 	</insert>
 
+	<insert id="insertProcessScoreTemplate" parameterType="codedriver.framework.process.dto.score.ProcessScoreTemplateVo" >
+		INSERT INTO `process_score_template` (
+		`score_template_id`,
+		`process_uuid`,
+		`is_active`,
+		`config`
+		) VALUES (
+		#{scoreTemplateId},
+		#{processUuid},
+		#{isActive},
+		#{config}
+		)
+	</insert>
+
 	<delete id="deleteScoreTemplate" parameterType="java.lang.Long">
 		DELETE st,std
 		FROM `score_template` st
@@ -184,6 +217,10 @@
 
 	<delete id="deleteScoreTemplateDimension" parameterType="java.lang.Long">
 		DELETE FROM `score_template_dimension` WHERE `score_template_id` = #{scoreTemplateId}
+	</delete>
+
+	<delete id="deleteProcessScoreTemplateByProcessUuid" parameterType="java.lang.String">
+		DELETE FROM `process_score_template` WHERE `process_uuid` = #{value}
 	</delete>
 
 </mapper>
