@@ -10,7 +10,7 @@ import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskConvergeVo;
-import codedriver.framework.process.dto.ProcessTaskFileVo;
+import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
@@ -19,14 +19,11 @@ import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
-import codedriver.framework.process.dto.ProcessTaskStepCommentVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
-import codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepSubtaskVo;
 import codedriver.framework.process.dto.ProcessTaskStepTeamVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -50,8 +47,6 @@ public interface ProcessTaskMapper {
 
 	public ProcessTaskSlaTransferVo getProcessTaskSlaTransferById(Long id);
 
-	public ProcessTaskConfigVo getProcessTaskConfigByHash(String hash);
-
 	public List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskStepId(Long processTaskStepId);
 	
 	public List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskId(Long processTaskId);
@@ -66,21 +61,13 @@ public interface ProcessTaskMapper {
 
 	public List<Long> getProcessTaskStepIdByConvergeId(Long convergeId);
 
-	public String getProcessTaskStepConfigByHash(String hash);
-
 	public ProcessTaskFormVo getProcessTaskFormByProcessTaskId(Long processTaskId);
 
 	public List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskId(Long processTaskId);
 
 	public List<ProcessTaskStepContentVo> getProcessTaskStepContentProcessTaskId(Long processTaskId);
 
-	public ProcessTaskStepContentVo getProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
-	
-	public String getProcessTaskStepContentHashByProcessTaskStepId(Long processTaskStepId);
-
-	public ProcessTaskContentVo getProcessTaskContentByHash(String hash);
-	
-	public String getProcessTaskContentStringByHash(String hash);
+	public List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
 
 	public List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(@Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
 
@@ -112,8 +99,6 @@ public interface ProcessTaskMapper {
 	
 	public List<ProcessTaskStepVo> getProcessTaskActiveStepByProcessTaskIdAndProcessStepType(@Param("processTaskId") Long processTaskId,@Param("processStepTypeList") List<String> processStepTypeList,@Param("isActive") Integer isActive);
 
-	public List<ProcessTaskStepFormAttributeVo> getProcessTaskStepFormAttributeByStepId(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
-
 	public ProcessTaskStepVo getProcessTaskStepBaseInfoById(Long processTaskStepId);
 
 	public ProcessTaskVo getProcessTaskById(Long id);
@@ -136,12 +121,6 @@ public interface ProcessTaskMapper {
 
 	public ProcessTaskFormAttributeDataVo getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo);
 
-	public ProcessTaskStepSubtaskVo getProcessTaskStepSubtaskById(Long processTaskStepSubtaskId);
-
-	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
-
-	public List<ProcessTaskStepSubtaskContentVo> getProcessTaskStepSubtaskContentBySubtaskId(Long processTaskStepSubtaskId);
-
 	public int checkIsWorker(
 			@Param("processTaskId") Long processTaskId, 
 			@Param("processTaskStepId") Long processTaskStepId, 
@@ -150,19 +129,11 @@ public interface ProcessTaskMapper {
 			@Param("roleUuidList") List<String> roleUuidList
 			);
 	
-	public int checkIsProcessTaskStepUser(
-			@Param("processTaskId") Long processTaskId, 
-			@Param("processTaskStepId") Long processTaskStepId, 
-			@Param("userUuid") String userUuid
-			);
+	public int checkIsProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public List<ProcessTaskAssignWorkerVo> getPrcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
 	public ProcessTaskStepVo getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuid(@Param("processTaskId") Long processTaskId, @Param("processStepUuid") String processStepUuid);
-
-	public List<ProcessTaskStepCommentVo> getProcessTaskStepCommentListByProcessTaskStepId(Long processTaskStepId);
-
-	public ProcessTaskStepCommentVo getProcessTaskStepCommentById(Long id);
 	
 	public List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
@@ -176,7 +147,13 @@ public interface ProcessTaskMapper {
 
 	public List<Map<String, Object>> getWorkloadByTeamUuid(String teamUuid);
 
-    public List<Long> getFileIdListByProcessTaskStepId(Long processTaskStepId);
+    public List<Long> getFileIdListByContentId(Long contentId);
+
+    public ProcessTaskStepContentVo getProcessTaskStepContentById(Long id);
+
+    public int checkProcessTaskhasForm(Long processTaskId);
+
+    public List<ProcessTaskStepUserVo> getProcessTaskStepUserList(ProcessTaskStepUserVo processTaskStepUserVo);
 	
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
@@ -213,14 +190,12 @@ public interface ProcessTaskMapper {
 
 	public int insertProcessTaskStepRel(ProcessTaskStepRelVo processTaskStepRelVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepContentVo.class)
-	public int replaceProcessTaskStepContent(ProcessTaskStepContentVo processTaskStepContentVo);
+//	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepContentVo.class)
+	public int insertProcessTaskStepContent(ProcessTaskStepContentVo processTaskStepContentVo);
 
 	public int insertProcessTaskStepAudit(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
 	public int insertProcessTaskStepAuditDetail(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo);
-
-//	public int insertProcessTaskStepAuditFormAttributeData(ProcessTaskStepAuditFormAttributeDataVo processTaskStepAuditFormAttributeDataVo);
 
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepWorkerVo.class)
 	public int insertProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
@@ -244,15 +219,9 @@ public interface ProcessTaskMapper {
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskFormAttributeDataVo.class)
 	public int replaceProcessTaskFormAttributeData(ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo);
 	
-	public int insertProcessTaskFile(ProcessTaskFileVo processTaskFileVo);
-
-	public int insertProcessTaskStepSubtask(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
-
-	public int insertProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
+	public int insertProcessTaskStepFile(ProcessTaskStepFileVo processTaskStepFileVo);
 	
 	public int insertProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
-
-	public int insertProcessTaskStepComment(ProcessTaskStepCommentVo processTaskStepCommentVo);
 
 	public int replaceProcessTaskStepNotifyPolicyConfig(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 
@@ -284,13 +253,9 @@ public interface ProcessTaskMapper {
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskVo.class)
 	public int updateProcessTaskTitleOwnerPriorityUuid(ProcessTaskVo processTaskVo);
 
-	public int updateProcessTaskStepSubtaskStatus(ProcessTaskStepSubtaskVo processTaskStepSubtaskVo);
+    public int updateProcessTaskStepContentById(ProcessTaskStepContentVo processTaskStepContentVo);
 
-	public int updateProcessTaskStepSubtaskContent(ProcessTaskStepSubtaskContentVo processTaskStepSubtaskContentVo);
-
-	public int updateProcessTaskStepCommentById(ProcessTaskStepCommentVo processTaskStepCommentVo);
-
-	public int deleteProcessTaskFormAttributeValueByProcessTaskIdAndAttributeUuid(@Param("processTaskId") Long processTaskId, @Param("attributeUuid") String attributeUuid);
+	public int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
 	public int deleteProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
@@ -301,14 +266,16 @@ public interface ProcessTaskMapper {
 	public int deleteProcessTaskSlaNotifyById(Long slaNotifyId);
 
 	public int deleteProcessTaskSlaTransferById(Long slaTransferId);
-	
-	public int deleteProcessTaskFile(ProcessTaskFileVo processTaskFileVo);
 
 	public int deleteProcessTaskStepAuditById(Long auditId);
-	
-	public int deleteProcessTaskStepContent(ProcessTaskStepContentVo processTaskStepContentVo);
 
 	public int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
-	public int deleteProcessTaskStepCommentById(Long id);
+    public int deleteProcessTaskStepFileByProcessTaskStepId(Long processTaskStepId);
+
+    public int deleteProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
+
+    public int deleteProcessTaskStepFileByContentId(Long contentId);
+
+    public int deleteProcessTaskStepContentById(Long contentId);
 }

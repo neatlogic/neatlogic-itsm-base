@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.SelectContentByHashMapper">
+	<cache type="codedriver.framework.dao.cache.CodeDriverCache" flushInterval="60000" size="100"></cache>
+	<select id="getProcessTaskConfigByHash" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskConfigVo">
+		SELECT
+		`hash`,
+		`config`
+		FROM
+		`processtask_config`
+		WHERE
+		`hash` = #{value}
+	</select>
+
+	<select id="getProcessTaskStepConfigByHash" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+		`config`
+		FROM
+		`processtask_step_config`
+		WHERE `hash` = #{value}
+	</select>
+
+	<select id="getProcessTaskContentByHash" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskContentVo">
+		SELECT
+		`hash`,
+		`content`
+		FROM
+		`processtask_content`
+		WHERE
+		`hash` = #{value}
+	</select>
+	
+	<select id="getProcessTaskContentStringByHash" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `content` FROM `processtask_content` WHERE `hash` = #{value}
+	</select>
+	
+	<select id="getProcessTaskFromContentByHash" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `content` FROM `processtask_form_content` WHERE `hash` = #{value}
+	</select>
+
+</mapper>

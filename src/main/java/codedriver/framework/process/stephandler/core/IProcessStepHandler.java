@@ -224,6 +224,16 @@ public interface IProcessStepHandler {
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public int recover(ProcessTaskStepVo currentProcessTaskStepVo);
 
+	/***
+     * @Time:Jan 7, 2020
+     * @Description: 暂停流程步骤
+     * @param @param  processTaskStepVo
+     * @param @return
+     * @return int
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    public int pause(ProcessTaskStepVo currentProcessTaskStepVo);
+    
 	/**
 	 * 
 	 * @Author: chenqiwei

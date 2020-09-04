@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.score.ProcesstaskScoreMapper">
+
+
+	<insert id="insertProcesstaskScore" parameterType="codedriver.framework.process.dto.score.ProcesstaskScoreVo" >
+		INSERT INTO `processtask_score` (
+		`processtask_id`,
+		`score_template_id`,
+		`score_dimension_id`,
+		`score`,
+		`is_auto`,
+		`fcu`,
+		`fcd`
+		) VALUES (
+		#{processtaskId},
+		#{scoreTemplateId},
+		#{scoreDimensionId},
+		#{score},
+		#{isAuto},
+		#{fcu},
+		NOW()
+		)
+	</insert>
+
+	<insert id="insertProcesstaskScoreContent" parameterType="codedriver.framework.process.dto.score.ProcesstaskScoreVo" >
+		INSERT INTO `processtask_score_content` (
+		`processtask_id`,
+		`content_hash`,
+		`fcu`,
+		`fcd`
+		) VALUES (
+		#{processtaskId},
+		#{contentHash},
+		#{fcu},
+		NOW()
+		)
+	</insert>
+
+</mapper>

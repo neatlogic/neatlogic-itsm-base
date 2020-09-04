@@ -18,14 +18,16 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	COMPLETESUBTASK("completesubtask", "完成子任务", "完成子任务【${DATA.processTaskStepName}】"),
 	START("start", "开始", "开始【${DATA.processTaskStepName}】"),
 	RETREAT("retreat", "撤回", "撤回【${DATA.processTaskStepName}】"),
-	ABORT("abort", "取消", "取消工单"),
-	RECOVER("recover", "恢复", "恢复工单"),
+	ABORTPROCESSTASK("abort", "取消", "取消工单"),
+	RECOVERPROCESSTASK("recover", "恢复", "恢复工单"),
+	PAUSE("pause", "暂停", "暂停【${DATA.processTaskStepName}】"),
 	TRANSFER("transfer", "转交", "转交【${DATA.processTaskStepName}】"),
 	STARTPROCESS("startprocess", "上报", "提交工单"),
 	RESTFULACTION("restfulaction", "RESTFUL动作","【${DATA.processTaskStepName}】"),
 	COMPLETE("complete", "流转", "完成【${DATA.processTaskStepName}】"),
 	BACK("back", "回退", "回退【${DATA.processTaskStepName}】至【${DATA.nextStepName}】"),
 	CONDITION("condition", "条件", "条件 <span style=\"color:${DATA.stepStatusVo.color};vertical-align: baseline;\">${DATA.stepStatusVo.text}</span> "),
+	SCORE("score", "评分", "评价工单")
 	;
 	private String value;
 	private String text;

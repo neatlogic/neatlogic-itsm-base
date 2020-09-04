@@ -1,34 +1,42 @@
 package codedriver.framework.process.dto;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
+import codedriver.framework.common.dto.BaseEditorVo;
+import codedriver.framework.util.SnowflakeUtil;
 
-public class ProcessTaskStepContentVo {
+public class ProcessTaskStepContentVo extends BaseEditorVo {
 	private Long id;
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String contentHash;
-	private Date fcd;
-	private String fcu;
-	private Date lcd;
-	private String lcu;
+	private String type;
+    
+    private transient Boolean isAutoGenerateId = true;
 
 	public ProcessTaskStepContentVo() {
 
 	}
 
-	public ProcessTaskStepContentVo(Long _processTaskId, Long _processTaskStepId, String _contentHash) {
-		processTaskId = _processTaskId;
-		processTaskStepId = _processTaskStepId;
-		contentHash = _contentHash;
+	public ProcessTaskStepContentVo(Long _processTaskId, Long _processTaskStepId, String _contentHash, String _type) {
+		this.processTaskId = _processTaskId;
+		this.processTaskStepId = _processTaskStepId;
+		this.contentHash = _contentHash;
+		this.type = _type;
 	}
-
-	public Long getId() {
-		return id;
-	}
+	
+	public ProcessTaskStepContentVo(Long _id, String _contentHash) {
+        this.id = _id;
+        this.contentHash = _contentHash;
+    }
+	
+	public synchronized Long getId() {
+        if(id == null && isAutoGenerateId) {
+            id = SnowflakeUtil.uniqueLong();
+        }
+        return id;
+    }
 
 	public void setId(Long id) {
 		this.id = id;
@@ -50,42 +58,20 @@ public class ProcessTaskStepContentVo {
 		this.contentHash = contentHash;
 	}
 
-	public Date getFcd() {
-		return fcd;
-	}
-
-	public void setFcd(Date fcd) {
-		this.fcd = fcd;
-	}
-
+	@Override
 	public String getFcu() {
-		if (StringUtils.isBlank(fcu)) {
-			fcu = UserContext.get().getUserUuid();
+		if (StringUtils.isBlank(super.getFcu())) {
+		    super.setFcu(UserContext.get().getUserUuid());
 		}
-		return fcu;
+		return super.getFcu();
 	}
-
-	public void setFcu(String fcu) {
-		this.fcu = fcu;
-	}
-
-	public Date getLcd() {
-		return lcd;
-	}
-
-	public void setLcd(Date lcd) {
-		this.lcd = lcd;
-	}
-
+	
+	@Override
 	public String getLcu() {
-		if (StringUtils.isBlank(lcu)) {
-			lcu = UserContext.get().getUserUuid();
+		if (StringUtils.isBlank(super.getLcu())) {
+			super.setLcu(UserContext.get().getUserUuid());
 		}
-		return lcu;
-	}
-
-	public void setLcu(String lcu) {
-		this.lcu = lcu;
+		return super.getLcu();
 	}
 
 	public Long getProcessTaskId() {
@@ -95,5 +81,21 @@ public class ProcessTaskStepContentVo {
 	public void setProcessTaskId(Long processTaskId) {
 		this.processTaskId = processTaskId;
 	}
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Boolean getIsAutoGenerateId() {
+        return isAutoGenerateId;
+    }
+
+    public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
+        this.isAutoGenerateId = isAutoGenerateId;
+    }
 
 }

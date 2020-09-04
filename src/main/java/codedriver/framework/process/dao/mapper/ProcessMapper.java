@@ -32,7 +32,7 @@ public interface ProcessMapper {
 
 	public List<ProcessStepVo> getProcessStepDetailByProcessUuid(String processUuid);
 
-	public List<ProcessStepFormAttributeVo> getProcessStepFormAttributeByStepUuid(ProcessStepFormAttributeVo processStepFormAttributeVo);
+	public List<ProcessStepFormAttributeVo> getProcessStepFormAttributeByStepUuid(String processStepUuid);
 
 	public ProcessVo getProcessByUuid(String processUuid);
 	

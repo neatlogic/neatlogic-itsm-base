@@ -46,6 +46,15 @@ public class WorkcenterFieldBuilder {
 		dataJson.put(ProcessWorkcenterField.TITLE.getValue(), title);
 		return this;
 	}
+	public WorkcenterFieldBuilder setProcessUuid(String process) {
+        dataJson.put(ProcessWorkcenterField.PROCESS.getValue(), process);
+        return this;
+    }
+	
+	public WorkcenterFieldBuilder setConfigHash(String configHash) {
+        dataJson.put(ProcessWorkcenterField.CONFIGHASH.getValue(), configHash);
+        return this;
+    }
 	public WorkcenterFieldBuilder setStatus(String status) {
 		dataJson.put(ProcessWorkcenterField.STATUS.getValue(), status);
 		return this;
@@ -126,6 +135,9 @@ public class WorkcenterFieldBuilder {
 			 stepJson.put("type", step.getType());
 			 stepJson.put("handler", step.getHandler());
 			 stepJson.put("isactive", step.getIsActive());
+			 stepJson.put("confighash", step.getConfigHash());
+			 stepJson.put("starttime", step.getStartTime());
+			 stepJson.put("endtime", step.getEndTime());
 			 stepJson.put("usertypelist", userTypeArray);
 			 //已激活未开始
 			 if(step.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) && step.getIsActive() == 1) {

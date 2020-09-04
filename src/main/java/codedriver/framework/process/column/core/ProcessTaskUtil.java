@@ -18,7 +18,7 @@ import codedriver.framework.process.constvalue.ProcessField;
 import codedriver.framework.process.dto.AttributeDataVo;
 import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
-import codedriver.framework.process.dto.ProcessTaskStepCommentVo;
+import codedriver.framework.process.dto.ProcessTaskStepReplyVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
@@ -47,7 +47,7 @@ public class ProcessTaskUtil {
 		resultObj.put(ProcessField.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null?processTaskVo.getCurrentProcessTaskStep().getId():null);
 		
 		ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
-		ProcessTaskStepCommentVo comment = startProcessTaskStep.getComment();
+		ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
 		if(comment != null && StringUtils.isNotBlank(comment.getContent())) {
 			resultObj.put(ProcessField.CONTENT.getValue(), comment.getContent());
 		}else {

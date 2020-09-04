@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
 	private Long fromProcessTaskStepId;
-	private Long startProcessTaskStepId;
+	private transient Long startProcessTaskStepId;
 	private String processUuid;
 	private String processStepUuid;
 	@EntityField(name = "步骤名称", type = ApiParamType.STRING)
@@ -44,7 +45,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String type;
 	private String formUuid;
 	private Integer isActive = 0;
-	private Integer isCheck;
+//	private Integer isCheck;
 	@EntityField(name = "开始时间", type = ApiParamType.LONG)
 	private Date startTime;
 	@EntityField(name = "结束时间", type = ApiParamType.LONG)
@@ -64,12 +65,12 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Boolean isWorkerPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
-	private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
+	private transient List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
 	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
-	private JSONObject paramObj;
+	private transient JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
 	private Map<String, String> formAttributeActionMap;
 	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
@@ -79,9 +80,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> agentUserList = new ArrayList<>();
 	@EntityField(name = "暂存评论附件或上报描述附件", type = ApiParamType.JSONOBJECT)
-	private ProcessTaskStepCommentVo comment;
+	private ProcessTaskStepReplyVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepCommentVo> commentList = new ArrayList<>();
+	private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
@@ -113,6 +114,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<ProcessTaskStepVo> backwardNextStepList = new ArrayList<>();
 	
 	private transient Map<String, Object> formAttributeDataMap;
+	/** 获取自定义按钮映射数据 **/
+	private transient Map<String, String> customButtonMap = new HashMap<>();
+    
+    @EntityField(name = "步骤表单属性隐藏数据", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskStepFormAttributeVo> stepFormConfig = new ArrayList<>();
+    
+    /** 当前用户在当前步骤中工单干系人列表 **/
+    private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
 	
 	public ProcessTaskStepVo() {
 
@@ -420,13 +429,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.fromProcessTaskStepId = fromProcessTaskStepId;
 	}
 
-	public Integer getIsCheck() {
-		return isCheck;
-	}
-
-	public void setIsCheck(Integer isCheck) {
-		this.isCheck = isCheck;
-	}
+//	public Integer getIsCheck() {
+//		return isCheck;
+//	}
+//
+//	public void setIsCheck(Integer isCheck) {
+//		this.isCheck = isCheck;
+//	}
 
 	public List<ProcessTaskStepWorkerPolicyVo> getWorkerPolicyList() {
 		if (!isWorkerPolicyListSorted && workerPolicyList != null && workerPolicyList.size() > 0) {
@@ -542,19 +551,19 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.agentUserList = agentUserList;
 	}
 
-	public ProcessTaskStepCommentVo getComment() {
+	public ProcessTaskStepReplyVo getComment() {
 		return comment;
 	}
 
-	public void setComment(ProcessTaskStepCommentVo comment) {
+	public void setComment(ProcessTaskStepReplyVo comment) {
 		this.comment = comment;
 	}
 
-	public List<ProcessTaskStepCommentVo> getCommentList() {
+	public List<ProcessTaskStepReplyVo> getCommentList() {
 		return commentList;
 	}
 
-	public void setCommentList(List<ProcessTaskStepCommentVo> commentList) {
+	public void setCommentList(List<ProcessTaskStepReplyVo> commentList) {
 		this.commentList = commentList;
 	}
 
@@ -684,6 +693,59 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setFormAttributeDataMap(Map<String, Object> formAttributeDataMap) {
         this.formAttributeDataMap = formAttributeDataMap;
+    }
+
+    public Map<String, String> getCustomButtonMap() {
+        if(MapUtils.isEmpty(customButtonMap)) {
+            /** 节点管理按钮映射 **/
+            if(MapUtils.isNotEmpty(globalConfig)) {
+                JSONArray customButtonList = globalConfig.getJSONArray("customButtonList");
+                if(CollectionUtils.isNotEmpty(customButtonList)) {
+                    for(int i = 0; i < customButtonList.size(); i++) {
+                        JSONObject customButton = customButtonList.getJSONObject(i);
+                        String value = customButton.getString("value");
+                        if(StringUtils.isNotBlank(value)) {
+                            customButtonMap.put(customButton.getString("name"), value);
+                        }
+                    }
+                }
+            }
+            
+            /** 节点设置按钮映射 **/
+            if(MapUtils.isNotEmpty(getConfigObj())) {
+                JSONArray customButtonList = getConfigObj().getJSONArray("customButtonList");
+                if(CollectionUtils.isNotEmpty(customButtonList)) {
+                    for(int i = 0; i < customButtonList.size(); i++) {
+                        JSONObject customButton = customButtonList.getJSONObject(i);
+                        String value = customButton.getString("value");
+                        if(StringUtils.isNotBlank(value)) {
+                            customButtonMap.put(customButton.getString("name"), value);
+                        }
+                    }
+                }
+            }
+        }       
+        return customButtonMap;
+    }
+
+    public void setCustomButtonMap(Map<String, String> customButtonMap) {
+        this.customButtonMap = customButtonMap;
+    }
+
+    public List<ProcessTaskStepFormAttributeVo> getStepFormConfig() {
+        return stepFormConfig;
+    }
+
+    public void setStepFormConfig(List<ProcessTaskStepFormAttributeVo> stepFormConfig) {
+        this.stepFormConfig = stepFormConfig;
+    }
+
+    public List<String> getCurrentUserProcessUserTypeList() {
+        return currentUserProcessUserTypeList;
+    }
+
+    public void setCurrentUserProcessUserTypeList(List<String> currentUserProcessUserTypeList) {
+        this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
     }
 
 }
