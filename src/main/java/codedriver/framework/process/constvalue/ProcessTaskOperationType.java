@@ -69,6 +69,7 @@ public enum ProcessTaskOperationType {
     PAUSE("pause","暂停", new ArrayList<String>(), Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue())),
     RECOVER("recover","恢复", new ArrayList<String>(), Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue())),
     RESTFULACTION("restfulaction", "RESTFUL动作"),
+    RETREATCURRENTSTEP("retreatcurrentstep", "撤回当前步骤"),
     SCORE("score", "评分");
     private String status;
     private String text;
