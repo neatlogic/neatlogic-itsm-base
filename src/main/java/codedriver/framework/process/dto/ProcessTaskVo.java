@@ -82,7 +82,10 @@ public class ProcessTaskVo {
 	
 	@EntityField(name = "上报人公司列表", type = ApiParamType.JSONARRAY)
 	private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
-	
+
+	@EntityField(name = "评分信息", type = ApiParamType.STRING)
+	private String scoreInfo;
+
 	private transient Boolean isAutoGenerateId = true;
 	/** 当前用户在当前工单中工单干系人列表 **/
 	private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
@@ -386,4 +389,11 @@ public class ProcessTaskVo {
         this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
     }
 
+	public String getScoreInfo() {
+		return scoreInfo;
+	}
+
+	public void setScoreInfo(String scoreInfo) {
+		this.scoreInfo = scoreInfo;
+	}
 }
