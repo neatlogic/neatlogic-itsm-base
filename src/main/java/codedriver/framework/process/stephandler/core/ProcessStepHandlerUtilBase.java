@@ -102,6 +102,7 @@ import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.WorktimeRangeVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
+import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 import codedriver.framework.process.exception.worktime.WorktimeNotFoundException;
 import codedriver.framework.process.integration.handler.ProcessRequestFrom;
@@ -260,10 +261,12 @@ public abstract class ProcessStepHandlerUtilBase {
 				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 				String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
 				stepVo.setConfig(stepConfig);
+                IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
+                if(processStepUtilHandler == null) {
+                    throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
+                }
 				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-				if(processStepHandlerVo != null) {
-					stepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
-				}
+                stepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null));
 				/** 从步骤配置信息中获取动作列表 **/
 				JSONArray actionList = stepVo.getActionList();
 				if (CollectionUtils.isNotEmpty(actionList)) {
@@ -409,10 +412,13 @@ public abstract class ProcessStepHandlerUtilBase {
 				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 				String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
 				stepVo.setConfig(stepConfig);
+	            IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
+	            if(processStepUtilHandler == null) {
+	                throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
+	            }
 				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-				if(processStepHandlerVo != null) {
-					stepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
-				}
+				stepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null));					
+
 				/** 从步骤配置信息中获取通知策略信息 **/
 				JSONObject notifyPolicyConfig = stepVo.getNotifyPolicyConfig();
 				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
@@ -435,7 +441,6 @@ public abstract class ProcessStepHandlerUtilBase {
 							}
 						}
 						if(MapUtils.isNotEmpty(policyConfig)) {
-			                IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
 							ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
 							processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 							JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
