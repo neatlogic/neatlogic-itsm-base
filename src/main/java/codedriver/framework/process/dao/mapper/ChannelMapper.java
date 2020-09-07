@@ -2,13 +2,11 @@ package codedriver.framework.process.dao.mapper;
 
 import java.util.List;
 
-import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.common.dto.ValueTextVo;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.process.dto.ChannelPriorityVo;
-import codedriver.framework.process.dto.ChannelTypeRelationVo;
 import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 
@@ -71,16 +69,6 @@ public interface ChannelMapper {
 	public List<String> getAllAncestorNameListByParentUuid(String parentUuid);
 
     public int checkChannelIsFavorite(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
-
-    public int checkChannelTypeRelationIsExists(Long id);
-
-    public int checkChannelTypeRelationNameIsRepeat(ChannelTypeRelationVo channelTypeRelationVo);
-
-    public ChannelTypeRelationVo getChannelTypeRelationById(Long channelTypeRelationId);
-
-    public List<ChannelTypeRelationVo> getChannelTypeRelationList(BasePageVo basePageVo);
-
-    public int getChannelTypeRelationCount(BasePageVo basePageVo);
 	
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
@@ -96,8 +84,6 @@ public interface ChannelMapper {
 	
 	public int insertChannelType(ChannelTypeVo channelTypeVo);
 
-    public int insertChannelRelation(ChannelTypeRelationVo channelTypeRelationVo);
-
 	public int updateChannelForMove(ChannelVo channelVo);
 
 	public int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
@@ -105,10 +91,6 @@ public interface ChannelMapper {
 	public int updateSortDecrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 	
 	public int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
-
-    public int updateChannelTypeRelationById(ChannelTypeRelationVo channelTypeRelationVo);
-
-    public int updateChannelTypeRelationIsActiveById(ChannelTypeRelationVo channelTypeRelationVo);
 
 	public int deleteChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
 	
@@ -125,6 +107,4 @@ public interface ChannelMapper {
 	public int deleteChannelAuthorityByChannelUuid(String uuid);
 	
 	public int deleteChannelTypeByUuid(String uuid);
-
-    public int deleteChannelTypeRelationById(Long channelTypeRelationId);
 }
