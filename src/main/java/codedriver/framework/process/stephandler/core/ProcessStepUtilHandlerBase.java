@@ -34,6 +34,7 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
+import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType;
@@ -195,10 +196,12 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         if(processTaskStepVo != null) {
             String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
             processTaskStepVo.setConfig(stepConfig);
-            ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
-            if(processStepHandlerConfig != null) {
-                processTaskStepVo.setGlobalConfig(makeupConfig(processStepHandlerConfig.getConfig()));                    
+            IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(processTaskStepVo.getHandler());
+            if(processStepUtilHandler == null) {
+                throw new ProcessStepUtilHandlerNotFoundException(processTaskStepVo.getHandler());
             }
+            ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
+            processTaskStepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null));
         }
     }
 	@Override
@@ -321,10 +324,12 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         ProcessTaskStepVo startProcessTaskStepVo = processTaskStepList.get(0);
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
         startProcessTaskStepVo.setConfig(stepConfig);
-        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
-        if(processStepHandlerConfig != null) {
-            startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());                    
+        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(startProcessTaskStepVo.getHandler());
+        if(processStepUtilHandler == null) {
+            throw new ProcessStepUtilHandlerNotFoundException(startProcessTaskStepVo.getHandler());
         }
+        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
+        startProcessTaskStepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null));                    
 
         ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo();
         //获取上报描述内容

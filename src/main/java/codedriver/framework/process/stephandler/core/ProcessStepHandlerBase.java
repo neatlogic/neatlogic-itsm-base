@@ -287,6 +287,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			ProcessTaskStepUserVo oldUserVo = oldUserList.get(0);
 			workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(), ProcessUserType.MAJOR.getValue()));
 		}
+		currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 		int autoStart = myAssign(currentProcessTaskStepVo, workerList);
 
 		processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
@@ -1089,6 +1090,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TRANSFER);
 			
 			/** 根据子类需要把最终处理人放进来，引擎将自动写入数据库，也可能为空，例如一些特殊的流程节点 **/
+            processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 			myTransfer(processTaskStepVo, workerList);
 			
 			ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId());
@@ -1101,8 +1103,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					if (autoStart == 1) {
 						processTaskStepWorkerVo.setUserType(ProcessUserType.MAJOR.getValue());
 						processTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
-					}else {
-						processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 					}
 				}
 			}

@@ -512,7 +512,7 @@
 		#{prefix}
 		)
 	</insert>
-
+	
 	<update id="updateChannelForMove" parameterType="codedriver.framework.process.dto.ChannelVo">
 		UPDATE `channel` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
 	</update>
@@ -547,7 +547,7 @@
 		`prefix` = #{prefix}
 		WHERE `uuid` = #{uuid}
 	</update>
-
+	
 	<delete id="deleteChannelUser">
 		DELETE FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
 	</delete>
@@ -579,4 +579,5 @@
 	<delete id="deleteChannelTypeByUuid" parameterType="java.lang.String">
 		DELETE FROM `channel_type` WHERE `uuid` = #{uuid}
 	</delete>
+
 </mapper>
