@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,9 +9,10 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class PriorityVo extends BasePageVo {
+public class PriorityVo extends BasePageVo implements Serializable{
 	
-	@EntityField(name = "优先级uuid", type = ApiParamType.STRING)
+    private static final long serialVersionUID = -4831712599845296278L;
+    @EntityField(name = "优先级uuid", type = ApiParamType.STRING)
 	private String uuid;
 	@EntityField(name = "名称", type = ApiParamType.STRING)
 	private String name;
