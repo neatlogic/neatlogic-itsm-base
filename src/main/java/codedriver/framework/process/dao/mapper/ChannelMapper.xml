@@ -437,24 +437,23 @@
 	SELECT 
 	  `id`,
 	  `name`,
-	  `is_active` AS isActive,
-	  `source`,
-	  `target` 
+	  `is_active` AS isActive
 	FROM `channel_type_relation` 
-	WHERE `id` = #{id}
+	WHERE `id` = #{value}
 	</select>
 
-	<select id="getChannelTypeRelationList" parameterType="codedriver.framework.common.dto.BasePageVo" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo">
+	<select id="getChannelTypeRelationList" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo">
 	SELECT 
 	  `id`,
 	  `name`,
-	  `is_active` AS isActive,
-	  `source`,
-	  `target` 
+	  `is_active` AS isActive
 	FROM `channel_type_relation` 
 	<where>
 		<if test="keyword != null and keyword != ''">
-		`name` LIKE CONCAT('%', #{keyword}, '%')
+		AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+		AND `is_active` = #{isActive}
 		</if>
 	</where>
 	ORDER BY `id` DESC
@@ -463,15 +462,45 @@
 	</if>
 	</select>
 	
-	<select id="getChannelTypeRelationCount" parameterType="codedriver.framework.common.dto.BasePageVo" resultType="int">
+	<select id="getChannelTypeRelationListForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+	SELECT 
+	  `id` AS value,
+	  `name` AS text
+	FROM `channel_type_relation` 
+	<where>
+		<if test="keyword != null and keyword != ''">
+		AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+		AND `is_active` = #{isActive}
+		</if>
+	</where>
+	ORDER BY `id` DESC
+	<if test="needPage">
+		limit #{startNum}, #{pageSize}
+	</if>
+	</select>
+	
+	<select id="getChannelTypeRelationCount" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="int">
 	SELECT 
 	  COUNT(1)
 	FROM `channel_type_relation` 
 	<where>
 		<if test="keyword != null and keyword != ''">
-		`name` LIKE CONCAT('%', #{keyword}, '%')
+		AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+		AND `is_active` = #{isActive}
 		</if>
 	</where>
+	</select>
+	
+	<select id="getChannelTypeRelationSourceListByChannelTypeRelationId" parameterType="java.lang.Long" resultType="java.lang.String">
+	SELECT `channel_type_uuid` FROM `channel_type_relation_source` WHERE `channel_type_relation_id` = #{value}
+	</select>
+	
+	<select id="getChannelTypeRelationTargetListByChannelTypeRelationId" parameterType="java.lang.Long" resultType="java.lang.String">
+	SELECT `channel_type_uuid` FROM `channel_type_relation_target` WHERE `channel_type_relation_id` = #{value}
 	</select>
 	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
@@ -562,21 +591,41 @@
 		)
 	</insert>
 
-	<insert id="insertChannelRelation">
+	<insert id="insertChannelRelation" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo">
 	INSERT INTO `channel_type_relation` (
 	  `id`,
 	  `name`,
-	  `is_active`,
-	  `source`,
-	  `target`
+	  `is_active`
 	) 
 	VALUES
 	  (
 	    #{id},
 	    #{name},
-	    #{isActive},
-	    #{source},
-	    #{target}
+	    #{isActive}
+	  )
+	</insert>
+	
+	<insert id="insertChannelTypeRelationSource">
+	INSERT INTO `channel_type_relation_source` (
+	  `channel_type_relation_id`,
+	  `channel_type_uuid`
+	) 
+	VALUES
+	  (
+	    #{channelTypeRelationId},
+	    #{channelTypeUuid}
+	  )
+	</insert>
+	
+	<insert id="insertChannelTypeRelationTarget">
+	INSERT INTO `channel_type_relation_target` (
+	  `channel_type_relation_id`,
+	  `channel_type_uuid`
+	) 
+	VALUES
+	  (
+	    #{channelTypeRelationId},
+	    #{channelTypeUuid}
 	  )
 	</insert>
 	
@@ -619,15 +668,13 @@
 	UPDATE `channel_type_relation` 
 	SET
 	  `name` = #{name},
-	  `is_active` = #{isActive},
-	  `source` = #{source},
-	  `target` = #{target} 
+	  `is_active` = #{isActive}
 	WHERE `id` = #{id} 
 	</update>
 	
-	<update id="updateChannelTypeRelationIsActiveById">
+	<!-- <update id="updateChannelTypeRelationIsActiveById">
 	UPDATE `channel_type_relation` SET `is_active` = #{isActive} WHERE `id` = #{id} 
-	</update>
+	</update> -->
 	
 	<delete id="deleteChannelUser">
 		DELETE FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
@@ -661,8 +708,15 @@
 		DELETE FROM `channel_type` WHERE `uuid` = #{uuid}
 	</delete>
 	
-	<delete id="deleteChannelTypeRelationById" parameterType="java.lang.String">
-		DELETE FROM `channel_type_relation` WHERE `id` = #{id}
+	<delete id="deleteChannelTypeRelationById" parameterType="java.lang.Long">
+		DELETE FROM `channel_type_relation` WHERE `id` = #{value}
+	</delete>
+	
+	<delete id="deleteChannelTypeRelationSourceByChannelTypeRelationId" parameterType="java.lang.Long">
+		DELETE FROM `channel_type_relation_source` WHERE `channel_type_relation_id` = #{value}
 	</delete>
 
+	<delete id="deleteChannelTypeRelationTargetByChannelTypeRelationId" parameterType="java.lang.Long">
+		DELETE FROM `channel_type_relation_Target` WHERE `channel_type_relation_id` = #{value}
+	</delete>
 </mapper>
