@@ -156,7 +156,9 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserList(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public String getProcessTaskScoreInfoById(Long processtaskId);
-	
+
+	public ProcessTaskVo getProcessTaskAndStepById(Long processtaskId);
+
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
 	public int replaceProcessTaskOldFormProp(@Param("processTaskId")Long processTaskId,@Param("form")String form,@Param("prop")String prop);
