@@ -324,9 +324,8 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
         startProcessTaskStepVo.setConfig(stepConfig);
         ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
         if(processStepHandlerConfig != null) {
-            startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());                    
+            startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());
         }
-
         ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo();
         //获取上报描述内容
         List<Long> fileIdList = new ArrayList<>();

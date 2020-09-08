@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -11,9 +12,9 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class WorktimeVo extends BasePageVo {
-
-	@EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
+public class WorktimeVo extends BasePageVo implements Serializable{
+    private static final long serialVersionUID = 3223914468345456530L;
+    @EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
 	private String uuid;
 	@EntityField(name = "工作时间窗口名称", type = ApiParamType.STRING)
 	private String name;
