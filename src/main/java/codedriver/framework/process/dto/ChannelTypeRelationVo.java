@@ -16,6 +16,7 @@ public class ChannelTypeRelationVo extends BasePageVo {
     private List<String> targetList = new ArrayList<>();
     
     private transient Boolean isAutoGenerateId = true;
+    private transient String source;
     
     public synchronized Long getId() {
         if(id == null && isAutoGenerateId) {
@@ -61,5 +62,11 @@ public class ChannelTypeRelationVo extends BasePageVo {
     }
     public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
         this.isAutoGenerateId = isAutoGenerateId;
+    }
+    public String getSource() {
+        return source;
+    }
+    public void setSource(String source) {
+        this.source = source;
     }
 }

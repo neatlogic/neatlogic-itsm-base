@@ -425,15 +425,15 @@
 	SELECT COUNT(1) FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
 	</select>
 	
-	<select id="checkChannelTypeRelationIsExists" parameterType="java.lang.Long" resultType="int">
+	<select id="checkChannelTypeRelationIsExists" parameterType="java.lang.Long" resultType="int" useCache="false">
 	SELECT COUNT(`id`) FROM `channel_type_relation` WHERE `id` = #{id}
 	</select>
 	
-	<select id="checkChannelTypeRelationNameIsRepeat" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="int">
+	<select id="checkChannelTypeRelationNameIsRepeat" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="int" useCache="false">
 	SELECT COUNT(1) FROM `channel_type_relation` WHERE `name` = #{name} AND `id` != #{id}
 	</select>
 	
-	<select id="getChannelTypeRelationById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo">
+	<select id="getChannelTypeRelationById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo" useCache="false">
 	SELECT 
 	  `id`,
 	  `name`,
@@ -442,7 +442,7 @@
 	WHERE `id` = #{value}
 	</select>
 
-	<select id="getChannelTypeRelationList" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo">
+	<select id="getChannelTypeRelationList" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo" useCache="false">
 	SELECT 
 	  `id`,
 	  `name`,
@@ -462,7 +462,21 @@
 	</if>
 	</select>
 	
-	<select id="getChannelTypeRelationListForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+	<select id="getChannelTypeRelationCount" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="int" useCache="false">
+	SELECT 
+	  COUNT(1)
+	FROM `channel_type_relation` 
+	<where>
+		<if test="keyword != null and keyword != ''">
+		AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+		AND `is_active` = #{isActive}
+		</if>
+	</where>
+	</select>
+	
+	<select id="getChannelTypeRelationListForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
 	SELECT 
 	  `id` AS value,
 	  `name` AS text
@@ -481,26 +495,67 @@
 	</if>
 	</select>
 	
-	<select id="getChannelTypeRelationCount" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="int">
-	SELECT 
-	  COUNT(1)
-	FROM `channel_type_relation` 
-	<where>
-		<if test="keyword != null and keyword != ''">
-		AND `name` LIKE CONCAT('%', #{keyword}, '%')
-		</if>
-		<if test="isActive != null">
-		AND `is_active` = #{isActive}
-		</if>
-	</where>
-	</select>
-	
-	<select id="getChannelTypeRelationSourceListByChannelTypeRelationId" parameterType="java.lang.Long" resultType="java.lang.String">
+	<select id="getChannelTypeRelationSourceListByChannelTypeRelationId" parameterType="java.lang.Long" resultType="java.lang.String" useCache="false">
 	SELECT `channel_type_uuid` FROM `channel_type_relation_source` WHERE `channel_type_relation_id` = #{value}
 	</select>
 	
-	<select id="getChannelTypeRelationTargetListByChannelTypeRelationId" parameterType="java.lang.Long" resultType="java.lang.String">
+	<select id="getChannelTypeRelationTargetListByChannelTypeRelationId" parameterType="java.lang.Long" resultType="java.lang.String" useCache="false">
 	SELECT `channel_type_uuid` FROM `channel_type_relation_target` WHERE `channel_type_relation_id` = #{value}
+	</select>
+	
+	<select id="getChannelRelationListBySource" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelRelationVo" useCache="false">
+	SELECT 
+	  `source`,
+	  `channel_type_relation_id` AS channelTypeRelationId,
+	  `target` 
+	FROM `channel_relation` 
+	WHERE `source` = #{value}
+	</select>
+	
+	<select id="getChannelRelationAuthorityListBySource" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelRelationVo" useCache="false">
+	SELECT 
+	  `source`,
+	  `channel_type_relation_id` AS channelTypeRelationId,
+	  `type`,
+	  `uuid` 
+	FROM `channel_relation_authority` 
+	WHERE `source` = #{value}
+	</select>
+	
+	<select id="getChannelListByChannelTypeUuidList" parameterType="java.lang.String" resultMap="simpleChannelMap" useCache="false">
+	SELECT
+	`uuid`,
+	`name`,
+	`parent_uuid`,
+	`sort`,
+	`is_active`
+	FROM `channel` 
+	WHERE `channel_type_uuid` IN 
+	<foreach collection="list" item="channelTypeUuid" open="(" separator="," close=")">
+	#{channelTypeUuid}
+	</foreach>
+	</select>
+	
+	<select id="getChannelTypeRelationSourceListByChannelTypeRelationIdList" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ChannelTypeRelationChannelVo" useCache="false">
+	SELECT 
+	  `channel_type_relation_id` AS channelTypeRelationId,
+	  `channel_type_uuid` AS channelTypeUuid
+	FROM `channel_type_relation_source` 
+	WHERE `channel_type_relation_id` IN 
+	<foreach collection="list" item="channelTypeRelationId" open="(" separator="," close=")">
+	#{channelTypeRelationId}
+	</foreach>
+	</select>
+	
+	<select id="getChannelTypeRelationTargetListByChannelTypeRelationIdList" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ChannelTypeRelationChannelVo" useCache="false">
+	SELECT 
+	  `channel_type_relation_id` AS channelTypeRelationId,
+	  `channel_type_uuid` AS channelTypeUuid
+	FROM `channel_type_relation_target` 
+	WHERE `channel_type_relation_id` IN 
+	<foreach collection="list" item="channelTypeRelationId" open="(" separator="," close=")">
+	#{channelTypeRelationId}
+	</foreach>
 	</select>
 	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
@@ -629,6 +684,36 @@
 	  )
 	</insert>
 	
+	<insert id="insertChannelRelation" parameterType="codedriver.framework.process.dto.ChannelRelationVo">
+	INSERT INTO `channel_relation` (
+	  `source`,
+	  `channel_type_relation_id`,
+	  `target`
+	) 
+	VALUES
+	  (
+	    #{source},
+	    #{channelTypeRelationId},
+	    #{target}
+	  )
+	</insert>
+	
+	<insert id="insertChannelRelationAuthority" parameterType="codedriver.framework.process.dto.ChannelRelationVo">
+	INSERT INTO `channel_relation_authority` (
+	  `source`,
+	  `channel_type_relation_id`,
+	  `type`,
+	  `uuid`
+	) 
+	VALUES
+	  (
+	    #{source},
+	    #{channelTypeRelationId},
+	    #{type},
+	    #{uuid}
+	  )
+	</insert>
+	
 	<update id="updateChannelForMove" parameterType="codedriver.framework.process.dto.ChannelVo">
 		UPDATE `channel` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
 	</update>
@@ -718,5 +803,13 @@
 
 	<delete id="deleteChannelTypeRelationTargetByChannelTypeRelationId" parameterType="java.lang.Long">
 		DELETE FROM `channel_type_relation_Target` WHERE `channel_type_relation_id` = #{value}
+	</delete>
+	
+	<delete id="deleteChannelRelationBySource" parameterType="java.lang.String">
+		DELETE FROM `channel_relation` WHERE `source` = #{value}
+	</delete>
+	
+	<delete id="deleteChannelRelationAuthorityBySource" parameterType="java.lang.String">
+		DELETE FROM `channel_relation_authority` WHERE `source` = #{value}
 	</delete>
 </mapper>

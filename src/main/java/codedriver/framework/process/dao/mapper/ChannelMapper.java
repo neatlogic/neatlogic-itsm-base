@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.process.dto.ChannelPriorityVo;
+import codedriver.framework.process.dto.ChannelRelationVo;
+import codedriver.framework.process.dto.ChannelTypeRelationChannelVo;
 import codedriver.framework.process.dto.ChannelTypeRelationVo;
 import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
@@ -79,13 +81,25 @@ public interface ChannelMapper {
 
     public List<ChannelTypeRelationVo> getChannelTypeRelationList(ChannelTypeRelationVo channelTypeRelationVo);
 
-    public List<ValueTextVo> getChannelTypeRelationListForSelect(ChannelTypeRelationVo channelTypeRelationVo);
-
     public int getChannelTypeRelationCount(ChannelTypeRelationVo channelTypeRelationVo);
+
+    public List<ValueTextVo> getChannelTypeRelationListForSelect(ChannelTypeRelationVo channelTypeRelationVo);
 
     public List<String> getChannelTypeRelationSourceListByChannelTypeRelationId(Long channelTypeRelationId);
 
     public List<String> getChannelTypeRelationTargetListByChannelTypeRelationId(Long channelTypeRelationId);
+
+    public List<ChannelRelationVo> getChannelRelationListBySource(String channelUuid);
+
+    public List<ChannelRelationVo> getChannelRelationAuthorityListBySource(String channelUuid);
+
+    public List<ChannelVo> getChannelListByChannelTypeUuidList(List<String> channelTypeUuidList);
+
+    public List<ChannelTypeRelationChannelVo>
+        getChannelTypeRelationSourceListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
+
+    public List<ChannelTypeRelationChannelVo>
+        getChannelTypeRelationTargetListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
 	
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
@@ -106,6 +120,10 @@ public interface ChannelMapper {
     public int insertChannelTypeRelationSource(@Param("channelTypeRelationId")Long channelTypeRelationId, @Param("channelTypeUuid")String channelTypeUuid);
 
     public int insertChannelTypeRelationTarget(@Param("channelTypeRelationId")Long channelTypeRelationId, @Param("channelTypeUuid")String channelTypeUuid);
+
+    public int insertChannelRelation(ChannelRelationVo channelRelationVo);
+
+    public int insertChannelRelationAuthority(ChannelRelationVo channelRelationVo);
 
 	public int updateChannelForMove(ChannelVo channelVo);
 
@@ -140,4 +158,8 @@ public interface ChannelMapper {
     public int deleteChannelTypeRelationSourceByChannelTypeRelationId(Long id);
 
     public int deleteChannelTypeRelationTargetByChannelTypeRelationId(Long id);
+
+    public int deleteChannelRelationBySource(String channelUuid);
+
+    public int deleteChannelRelationAuthorityBySource(String channelUuid);
 }

@@ -80,6 +80,12 @@ public class ChannelVo extends BasePageVo implements Serializable{
 	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
 	private String channelTypeUuid;
 	
+	@EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
+	private int allowTranferReport;
+	
+	@EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
+	private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
+	
 	private transient boolean isAuthority = false;
 	
 	private transient List<AuthorityVo> authorityVoList;
@@ -357,4 +363,20 @@ public class ChannelVo extends BasePageVo implements Serializable{
 			return false;
 		return true;
 	}
+
+    public int getAllowTranferReport() {
+        return allowTranferReport;
+    }
+
+    public void setAllowTranferReport(int allowTranferReport) {
+        this.allowTranferReport = allowTranferReport;
+    }
+
+    public List<ChannelRelationVo> getChannelRelationList() {
+        return channelRelationList;
+    }
+
+    public void setChannelRelationList(List<ChannelRelationVo> channelRelationList) {
+        this.channelRelationList = channelRelationList;
+    }
 }
