@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,9 +9,10 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ChannelTypeVo extends BasePageVo{
+public class ChannelTypeVo extends BasePageVo implements Serializable{
 
-	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+    private static final long serialVersionUID = -3747925860575582286L;
+    @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
 	private String uuid;
 	@EntityField(name = "名称", type = ApiParamType.STRING)
 	private String name;

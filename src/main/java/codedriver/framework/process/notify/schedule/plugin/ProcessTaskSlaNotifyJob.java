@@ -62,10 +62,7 @@ import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
-import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
-import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
-import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 import codedriver.framework.scheduler.core.JobBase;
 import codedriver.framework.scheduler.dto.JobObject;
 import codedriver.framework.util.NotifyPolicyUtil;
@@ -325,13 +322,10 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
         ProcessTaskStepVo startProcessTaskStepVo = processTaskStepList.get(0);
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
         startProcessTaskStepVo.setConfig(stepConfig);
-        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(startProcessTaskStepVo.getHandler());
-        if(processStepUtilHandler == null) {
-            throw new ProcessStepUtilHandlerNotFoundException(startProcessTaskStepVo.getHandler());
-        }
         ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
-        startProcessTaskStepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null));
-        
+        if(processStepHandlerConfig != null) {
+            startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());
+        }
         ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo();
         //获取上报描述内容
         List<Long> fileIdList = new ArrayList<>();
