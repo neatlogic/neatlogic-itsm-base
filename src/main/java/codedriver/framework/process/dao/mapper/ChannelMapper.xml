@@ -425,6 +425,55 @@
 	SELECT COUNT(1) FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
 	</select>
 	
+	<select id="checkChannelTypeRelationIsExists" parameterType="java.lang.Long" resultType="int">
+	SELECT COUNT(`id`) FROM `channel_type_relation` WHERE `id` = #{id}
+	</select>
+	
+	<select id="checkChannelTypeRelationNameIsRepeat" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="int">
+	SELECT COUNT(1) FROM `channel_type_relation` WHERE `name` = #{name} AND `id` != #{id}
+	</select>
+	
+	<select id="getChannelTypeRelationById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo">
+	SELECT 
+	  `id`,
+	  `name`,
+	  `is_active` AS isActive,
+	  `source`,
+	  `target` 
+	FROM `channel_type_relation` 
+	WHERE `id` = #{id}
+	</select>
+
+	<select id="getChannelTypeRelationList" parameterType="codedriver.framework.common.dto.BasePageVo" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo">
+	SELECT 
+	  `id`,
+	  `name`,
+	  `is_active` AS isActive,
+	  `source`,
+	  `target` 
+	FROM `channel_type_relation` 
+	<where>
+		<if test="keyword != null and keyword != ''">
+		`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</where>
+	ORDER BY `id` DESC
+	<if test="needPage">
+		limit #{startNum}, #{pageSize}
+	</if>
+	</select>
+	
+	<select id="getChannelTypeRelationCount" parameterType="codedriver.framework.common.dto.BasePageVo" resultType="int">
+	SELECT 
+	  COUNT(1)
+	FROM `channel_type_relation` 
+	<where>
+		<if test="keyword != null and keyword != ''">
+		`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</where>
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
@@ -512,6 +561,24 @@
 		#{prefix}
 		)
 	</insert>
+
+	<insert id="insertChannelRelation">
+	INSERT INTO `channel_type_relation` (
+	  `id`,
+	  `name`,
+	  `is_active`,
+	  `source`,
+	  `target`
+	) 
+	VALUES
+	  (
+	    #{id},
+	    #{name},
+	    #{isActive},
+	    #{source},
+	    #{target}
+	  )
+	</insert>
 	
 	<update id="updateChannelForMove" parameterType="codedriver.framework.process.dto.ChannelVo">
 		UPDATE `channel` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
@@ -547,6 +614,20 @@
 		`prefix` = #{prefix}
 		WHERE `uuid` = #{uuid}
 	</update>
+
+	<update id="updateChannelTypeRelationById">
+	UPDATE `channel_type_relation` 
+	SET
+	  `name` = #{name},
+	  `is_active` = #{isActive},
+	  `source` = #{source},
+	  `target` = #{target} 
+	WHERE `id` = #{id} 
+	</update>
+	
+	<update id="updateChannelTypeRelationIsActiveById">
+	UPDATE `channel_type_relation` SET `is_active` = #{isActive} WHERE `id` = #{id} 
+	</update>
 	
 	<delete id="deleteChannelUser">
 		DELETE FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
@@ -578,6 +659,10 @@
 
 	<delete id="deleteChannelTypeByUuid" parameterType="java.lang.String">
 		DELETE FROM `channel_type` WHERE `uuid` = #{uuid}
+	</delete>
+	
+	<delete id="deleteChannelTypeRelationById" parameterType="java.lang.String">
+		DELETE FROM `channel_type_relation` WHERE `id` = #{id}
 	</delete>
 
 </mapper>
