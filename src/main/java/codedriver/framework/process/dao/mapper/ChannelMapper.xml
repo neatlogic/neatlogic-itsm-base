@@ -478,21 +478,24 @@
 	
 	<select id="getChannelTypeRelationListForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
 	SELECT 
-	  a.`id` AS value,
-	  a.`name` AS text
-	FROM `channel_type_relation` a
-	<if test="source != null and source != ''">
-	JOIN `channel_type_relation_source` b ON b.`channel_type_relation_id` = a.`id` AND (b.`channel_type_uuid` = #{source} OR b.`channel_type_uuid` = 'all')
-	</if>
+	  `id` AS value,
+	  `name` AS text
+	FROM `channel_type_relation` 
 	<where>
 		<if test="keyword != null and keyword != ''">
-		AND a.`name` LIKE CONCAT('%', #{keyword}, '%')
+		AND `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 		<if test="isActive != null">
-		AND a.`is_active` = #{isActive}
+		AND `is_active` = #{isActive}
+		</if>
+		<if test="useIdList">
+		AND `id` IN
+			<foreach collection="idList" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
 		</if>
 	</where>
-	ORDER BY a.`id` DESC
+	ORDER BY `id` DESC
 	<if test="needPage">
 		limit #{startNum}, #{pageSize}
 	</if>
@@ -501,16 +504,19 @@
 	<select id="getChannelTypeRelationCountForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
 	SELECT 
 	  COUNT(1)
-	FROM `channel_type_relation` a
-	<if test="source != null and source != ''">
-	JOIN `channel_type_relation_source` b ON b.`channel_type_relation_id` = a.`id` AND (b.`channel_type_uuid` = #{source} OR b.`channel_type_uuid` = 'all')
-	</if>
+	FROM `channel_type_relation` 
 	<where>
 		<if test="keyword != null and keyword != ''">
-		AND a.`name` LIKE CONCAT('%', #{keyword}, '%')
+		AND `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 		<if test="isActive != null">
-		AND a.`is_active` = #{isActive}
+		AND `is_active` = #{isActive}
+		</if>
+		<if test="useIdList">
+		AND `id` IN
+			<foreach collection="idList" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
 		</if>
 	</where>
 	</select>
@@ -576,6 +582,14 @@
 	<foreach collection="list" item="channelTypeRelationId" open="(" separator="," close=")">
 	#{channelTypeRelationId}
 	</foreach>
+	</select>
+	
+	<select id="getChannelTypeRelationIdListBySourceChannelTypeUuid" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT DISTINCT `channel_type_relation_id` FROM `channel_type_relation_source` WHERE `channel_type_uuid` IN (#{value}, 'all')
+	</select>
+	
+	<select id="getChannelTypeRelationIdListBySourceChannelUuid" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT DISTINCT `channel_type_relation_id` FROM `channel_relation` WHERE `source` = #{value}
 	</select>
 	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">

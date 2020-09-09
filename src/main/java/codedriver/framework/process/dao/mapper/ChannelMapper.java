@@ -102,6 +102,10 @@ public interface ChannelMapper {
 
     public List<ChannelTypeRelationChannelVo>
         getChannelTypeRelationTargetListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
+
+    public List<Long> getChannelTypeRelationIdListBySourceChannelTypeUuid(String sourceChannelTypeUuid);
+
+    public List<Long> getChannelTypeRelationIdListBySourceChannelUuid(String sourceChannelUuid);
 	
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
