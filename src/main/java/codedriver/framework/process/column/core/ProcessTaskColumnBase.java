@@ -17,6 +17,7 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 		return getMyValue(commonJson);
 	}
 
+	@Override
 	public Object getMyValue(JSONObject json) {
 		return null;
 	}
