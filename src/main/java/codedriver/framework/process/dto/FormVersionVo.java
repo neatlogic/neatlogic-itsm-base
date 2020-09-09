@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.dto.matrix.ProcessMatrixFormComponentVo;
 
 public class FormVersionVo extends BasePageVo implements Serializable {
 	private static final long serialVersionUID = 8345592242508980127L;
