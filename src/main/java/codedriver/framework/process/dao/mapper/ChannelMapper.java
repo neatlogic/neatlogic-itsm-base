@@ -137,8 +137,6 @@ public interface ChannelMapper {
 
     public int updateChannelTypeRelationById(ChannelTypeRelationVo channelTypeRelationVo);
 
-//    public int updateChannelTypeRelationIsActiveById(ChannelTypeRelationVo channelTypeRelationVo);
-
 	public int deleteChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
 	
 	public int deleteChannelByUuid(String uuid);

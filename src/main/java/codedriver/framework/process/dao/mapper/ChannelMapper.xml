@@ -777,10 +777,6 @@
 	WHERE `id` = #{id} 
 	</update>
 	
-	<!-- <update id="updateChannelTypeRelationIsActiveById">
-	UPDATE `channel_type_relation` SET `is_active` = #{isActive} WHERE `id` = #{id} 
-	</update> -->
-	
 	<delete id="deleteChannelUser">
 		DELETE FROM `channel_user` WHERE `user_uuid` = #{userUuid} AND `channel_uuid` = #{channelUuid}
 	</delete>

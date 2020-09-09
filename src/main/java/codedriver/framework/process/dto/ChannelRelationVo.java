@@ -10,9 +10,7 @@ public class ChannelRelationVo {
     private String target;
     private List<String> targetList = new ArrayList<>();
     private List<String> authorityList = new ArrayList<>();
-    
-//    private transient List<AuthorityVo> authorityVoList;
-//    private transient AuthorityVo authorityVo;
+
     private transient String type;
     private transient String uuid;
     
@@ -42,15 +40,6 @@ public class ChannelRelationVo {
     }
 
     public List<String> getAuthorityList() {
-//        if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
-//            authorityList = new ArrayList<>();
-//            for(AuthorityVo authorityVo : authorityVoList) {
-//                GroupSearch groupSearch = GroupSearch.getGroupSearch(authorityVo.getType());
-//                if(groupSearch != null) {
-//                    authorityList.add(groupSearch.getValuePlugin() + authorityVo.getUuid());
-//                }
-//            }
-//        }
         return authorityList;
     }
 
@@ -58,31 +47,6 @@ public class ChannelRelationVo {
         this.authorityList = authorityList;
     }
     
-//    public List<AuthorityVo> getAuthorityVoList() {
-//        if(authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
-//            authorityVoList = new ArrayList<>();
-//            for(String authority : authorityList) {
-//                String[] split = authority.split("#");
-//                if(GroupSearch.getGroupSearch(split[0]) != null) {
-//                    AuthorityVo authorityVo = new AuthorityVo();
-//                    authorityVo.setType(split[0]);
-//                    authorityVo.setUuid(split[1]);
-//                    authorityVoList.add(authorityVo);
-//                }
-//            }
-//        }
-//        return authorityVoList;
-//    }
-//
-//    public void setAuthorityVoList(List<AuthorityVo> authorityVoList) {
-//        this.authorityVoList = authorityVoList;
-//    }
-//    public AuthorityVo getAuthorityVo() {
-//        return authorityVo;
-//    }
-//    public void setAuthorityVo(AuthorityVo authorityVo) {
-//        this.authorityVo = authorityVo;
-//    }
     public String getType() {
         return type;
     }
