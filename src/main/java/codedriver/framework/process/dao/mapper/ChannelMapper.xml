@@ -478,21 +478,41 @@
 	
 	<select id="getChannelTypeRelationListForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
 	SELECT 
-	  `id` AS value,
-	  `name` AS text
-	FROM `channel_type_relation` 
+	  a.`id` AS value,
+	  a.`name` AS text
+	FROM `channel_type_relation` a
+	<if test="source != null and source != ''">
+	JOIN `channel_type_relation_source` b ON b.`channel_type_relation_id` = a.`id` AND (b.`channel_type_uuid` = #{source} OR b.`channel_type_uuid` = 'all')
+	</if>
 	<where>
 		<if test="keyword != null and keyword != ''">
-		AND `name` LIKE CONCAT('%', #{keyword}, '%')
+		AND a.`name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 		<if test="isActive != null">
-		AND `is_active` = #{isActive}
+		AND a.`is_active` = #{isActive}
 		</if>
 	</where>
-	ORDER BY `id` DESC
+	ORDER BY a.`id` DESC
 	<if test="needPage">
 		limit #{startNum}, #{pageSize}
 	</if>
+	</select>
+	
+	<select id="getChannelTypeRelationCountForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
+	SELECT 
+	  COUNT(1)
+	FROM `channel_type_relation` a
+	<if test="source != null and source != ''">
+	JOIN `channel_type_relation_source` b ON b.`channel_type_relation_id` = a.`id` AND (b.`channel_type_uuid` = #{source} OR b.`channel_type_uuid` = 'all')
+	</if>
+	<where>
+		<if test="keyword != null and keyword != ''">
+		AND a.`name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="isActive != null">
+		AND a.`is_active` = #{isActive}
+		</if>
+	</where>
 	</select>
 	
 	<select id="getChannelTypeRelationSourceListByChannelTypeRelationId" parameterType="java.lang.Long" resultType="java.lang.String" useCache="false">

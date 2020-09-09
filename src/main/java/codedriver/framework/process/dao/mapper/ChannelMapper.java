@@ -84,6 +84,8 @@ public interface ChannelMapper {
     public int getChannelTypeRelationCount(ChannelTypeRelationVo channelTypeRelationVo);
 
     public List<ValueTextVo> getChannelTypeRelationListForSelect(ChannelTypeRelationVo channelTypeRelationVo);
+    
+    public int getChannelTypeRelationCountForSelect(ChannelTypeRelationVo channelTypeRelationVo);
 
     public List<String> getChannelTypeRelationSourceListByChannelTypeRelationId(Long channelTypeRelationId);
 

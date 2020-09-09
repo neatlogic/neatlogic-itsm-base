@@ -14,6 +14,8 @@ public class ChannelTypeRelationVo extends BasePageVo {
     private int referenceCount;
     private List<String> sourceList = new ArrayList<>();
     private List<String> targetList = new ArrayList<>();
+    private List<ChannelTypeVo> sourceVoList = new ArrayList<>();
+    private List<ChannelTypeVo> targetVoList = new ArrayList<>();
     
     private transient Boolean isAutoGenerateId = true;
     private transient String source;
@@ -68,5 +70,17 @@ public class ChannelTypeRelationVo extends BasePageVo {
     }
     public void setSource(String source) {
         this.source = source;
+    }
+    public List<ChannelTypeVo> getSourceVoList() {
+        return sourceVoList;
+    }
+    public void setSourceVoList(List<ChannelTypeVo> sourceVoList) {
+        this.sourceVoList = sourceVoList;
+    }
+    public List<ChannelTypeVo> getTargetVoList() {
+        return targetVoList;
+    }
+    public void setTargetVoList(List<ChannelTypeVo> targetVoList) {
+        this.targetVoList = targetVoList;
     }
 }
