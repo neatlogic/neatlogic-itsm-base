@@ -18,8 +18,6 @@ public class ChannelTypeRelationVo extends BasePageVo {
     private List<ChannelTypeVo> targetVoList = new ArrayList<>();
     
     private transient Boolean isAutoGenerateId = true;
-//    private transient String sourceChannelTypeUuid;
-//    private transient String sourceChannelUuid;
     private transient List<Long> idList = new ArrayList<>();
     private transient boolean useIdList;
     public synchronized Long getId() {
@@ -79,18 +77,6 @@ public class ChannelTypeRelationVo extends BasePageVo {
     public void setTargetVoList(List<ChannelTypeVo> targetVoList) {
         this.targetVoList = targetVoList;
     }
-//    public String getSourceChannelTypeUuid() {
-//        return sourceChannelTypeUuid;
-//    }
-//    public void setSourceChannelTypeUuid(String sourceChannelTypeUuid) {
-//        this.sourceChannelTypeUuid = sourceChannelTypeUuid;
-//    }
-//    public String getSourceChannelUuid() {
-//        return sourceChannelUuid;
-//    }
-//    public void setSourceChannelUuid(String sourceChannelUuid) {
-//        this.sourceChannelUuid = sourceChannelUuid;
-//    }
     public List<Long> getIdList() {
         return idList;
     }
