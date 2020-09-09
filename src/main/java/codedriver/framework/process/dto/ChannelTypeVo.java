@@ -31,7 +31,20 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	
 	private transient String keyword;
 	
-	public synchronized String getUuid() {
+	public ChannelTypeVo() {}
+	public ChannelTypeVo(ChannelTypeVo channelTypeVo) {
+	    if(channelTypeVo != null) {
+	        this.uuid = channelTypeVo.getUuid();
+	        this.name = channelTypeVo.getName();
+	        this.isActive = channelTypeVo.getIsActive();
+	        this.icon = channelTypeVo.getIcon();
+	        this.color = channelTypeVo.getColor();
+	        this.description = channelTypeVo.getDescription();
+	        this.sort = channelTypeVo.getSort();
+	        this.prefix = channelTypeVo.getPrefix();
+	    }      
+    }
+    public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
