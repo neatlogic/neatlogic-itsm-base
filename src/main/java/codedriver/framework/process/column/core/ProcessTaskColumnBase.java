@@ -19,10 +19,7 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 
 	@Override
 	public Object getMyValue(JSONObject json) {
-		if(json == null){
-			return CollectionUtils.EMPTY_COLLECTION;
-		}
-		return getMyValue(json);
+		return null;
 	}
 	
 	@Override
