@@ -115,7 +115,7 @@ public interface ChannelMapper {
 	
 	public int insertChannelType(ChannelTypeVo channelTypeVo);
 
-    public int insertChannelRelation(ChannelTypeRelationVo channelTypeRelationVo);
+    public int insertChannelTypeRelation(ChannelTypeRelationVo channelTypeRelationVo);
 
     public int insertChannelTypeRelationSource(@Param("channelTypeRelationId")Long channelTypeRelationId, @Param("channelTypeUuid")String channelTypeUuid);
 

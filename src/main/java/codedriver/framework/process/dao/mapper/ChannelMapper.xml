@@ -646,7 +646,7 @@
 		)
 	</insert>
 
-	<insert id="insertChannelRelation" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo">
+	<insert id="insertChannelTypeRelation" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo">
 	INSERT INTO `channel_type_relation` (
 	  `id`,
 	  `name`,
