@@ -818,7 +818,7 @@
 	</delete>
 
 	<delete id="deleteChannelTypeRelationTargetByChannelTypeRelationId" parameterType="java.lang.Long">
-		DELETE FROM `channel_type_relation_Target` WHERE `channel_type_relation_id` = #{value}
+		DELETE FROM `channel_type_relation_target` WHERE `channel_type_relation_id` = #{value}
 	</delete>
 	
 	<delete id="deleteChannelRelationBySource" parameterType="java.lang.String">
