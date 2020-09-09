@@ -264,7 +264,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 		}
 		/** 组装评分设置 */
 		JSONObject scoreConfig = processObj.getJSONObject("scoreConfig");
-		if(MapUtils.isNotEmpty(scoreConfig) && scoreConfig.getInteger("isActive") != null && scoreConfig.getInteger("isActive").intValue() == 1){
+		if(MapUtils.isNotEmpty(scoreConfig) && scoreConfig.getInteger("isActive") != null){
 			this.processScoreTemplateVo = JSON.toJavaObject(scoreConfig, ProcessScoreTemplateVo.class);
 			this.processScoreTemplateVo.setProcessUuid(uuid);
 		}
