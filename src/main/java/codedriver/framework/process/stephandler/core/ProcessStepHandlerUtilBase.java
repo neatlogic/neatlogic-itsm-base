@@ -1451,22 +1451,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	                for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
 	                    formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
 	                }
-//	                ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
-//	                processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-//	                processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-//	                processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
-//	                processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
-//	                processTaskStepDataVo = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
-//	                List<String> hidecomponentList = new ArrayList<>();
-//	                if(processTaskStepDataVo != null) {
-//	                    JSONObject dataObj = processTaskStepDataVo.getData();
-//	                    if (MapUtils.isNotEmpty(dataObj)) {
-//	                        JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
-//	                        if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
-//	                            hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
-//	                        }
-//	                    }
-//	                }
+
 	                List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);
 	                for (FormAttributeVo formAttributeVo : formAttributeList) {
 	                    if (!formAttributeVo.isRequired()) {
@@ -1475,7 +1460,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	                    if (formAttributeActionMap.containsKey(formAttributeVo.getUuid())) {
 	                        continue;
 	                    }
-	                    if (hidecomponentList.contains(formAttributeVo.getUuid())) {
+	                    if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {
 	                        continue;
 	                    }
 	                    Object data = formAttributeDataMap.get(formAttributeVo.getUuid());
