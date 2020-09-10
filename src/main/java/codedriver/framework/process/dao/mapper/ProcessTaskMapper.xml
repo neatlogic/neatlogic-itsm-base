@@ -88,6 +88,8 @@
 		<association property="slaTimeVo" javaType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
 			<result column="expireTime" property="expireTime" />
 			<result column="realExpireTime" property="realExpireTime" />
+			<result column="expireTimeLong" property="expireTimeLong" />
+			<result column="realExpireTimeLong" property="realExpireTimeLong" />
 			<result column="timeLeft" property="timeLeft" />
 			<result column="realTimeLeft" property="realTimeLeft" />
 			<result column="timeSum" property="timeSum" />
@@ -120,8 +122,8 @@
 		a.`name`,
 		a.`config`,
 		b.`processtask_step_id` as processTaskStepId,
-		c.`expire_time` as expireTime,
-		c.`realexpire_time` AS realExpireTime,
+		UNIX_TIMESTAMP(c.`expire_time`) * 1000 as expireTimeLong,
+		UNIX_TIMESTAMP(c.`realexpire_time`) * 1000 AS realExpireTimeLong,
 		c.`time_left` as timeLeft,
 		c.`realtime_left` as realTimeLeft,
 		c.`time_sum` as timeSum
