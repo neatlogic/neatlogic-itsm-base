@@ -61,6 +61,9 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Seria
 	@EntityField(name = "子节点数", type = ApiParamType.INTEGER)
 	private int childrenCount = 0;
 	
+	@EntityField(name = "类型#uuid", type = ApiParamType.STRING)
+	private String typeAndUuid;
+	
 	private transient boolean isAuthority = false;
 	
 	private transient List<AuthorityVo> authorityVoList;
@@ -364,5 +367,12 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Seria
 		}
 		return resultDefault;
 	}
+
+    public String getTypeAndUuid() {
+        if(StringUtils.isBlank(typeAndUuid) && StringUtils.isNotBlank(getUuid())) {
+            typeAndUuid = type + "#" + uuid;
+        }
+        return typeAndUuid;
+    }
 
 }

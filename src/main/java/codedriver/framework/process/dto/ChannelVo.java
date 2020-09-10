@@ -85,6 +85,9 @@ public class ChannelVo extends BasePageVo implements Serializable{
 	
 	@EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
 	private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
+    
+    @EntityField(name = "类型#uuid", type = ApiParamType.STRING)
+    private String typeAndUuid;
 	
 	private transient boolean isAuthority = false;
 	
@@ -378,5 +381,12 @@ public class ChannelVo extends BasePageVo implements Serializable{
 
     public void setChannelRelationList(List<ChannelRelationVo> channelRelationList) {
         this.channelRelationList = channelRelationList;
+    }
+
+    public String getTypeAndUuid() {
+        if(StringUtils.isBlank(typeAndUuid) && StringUtils.isNotBlank(getUuid())) {
+            typeAndUuid = type + "#" + uuid;
+        }
+        return typeAndUuid;
     }
 }

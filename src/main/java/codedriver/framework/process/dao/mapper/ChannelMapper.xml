@@ -533,6 +533,7 @@
 	SELECT 
 	  `source`,
 	  `channel_type_relation_id` AS channelTypeRelationId,
+	  `type`,
 	  `target` 
 	FROM `channel_relation` 
 	WHERE `source` = #{value}
@@ -754,12 +755,14 @@
 	INSERT INTO `channel_relation` (
 	  `source`,
 	  `channel_type_relation_id`,
+	  `type`,
 	  `target`
 	) 
 	VALUES
 	  (
 	    #{source},
 	    #{channelTypeRelationId},
+	    #{type},
 	    #{target}
 	  )
 	</insert>
