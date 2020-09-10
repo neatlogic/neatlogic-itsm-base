@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.FormHandlerType;
+import codedriver.framework.dto.ExpressionVo;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.process.constvalue.ProcessFormHandler;
 import codedriver.framework.restful.annotation.EntityField;
@@ -37,9 +38,9 @@ public class FormAttributeVo implements Serializable {
 	@EntityField(name = "是否必填", type = ApiParamType.BOOLEAN)
 	private boolean isRequired;
 	@EntityField(name = "表达式列表", type = ApiParamType.JSONARRAY)
-	List<ProcessExpressionVo> expressionList;
+	List<ExpressionVo> expressionList;
 	@EntityField(name = "默认表达式", type = ApiParamType.JSONOBJECT)
-	ProcessExpressionVo defaultExpression;
+	ExpressionVo defaultExpression;
 	
 	@EntityField(name = "条件模型")
 	private String conditionModel = ProcessConditionModel.CUSTOM.getValue();
@@ -149,7 +150,7 @@ public class FormAttributeVo implements Serializable {
 	}
 
 	
-	public ProcessExpressionVo getDefaultExpression() {
+	public ExpressionVo getDefaultExpression() {
 		if(expressionList != null) {
 			return defaultExpression;
 		}
@@ -158,17 +159,17 @@ public class FormAttributeVo implements Serializable {
 		}
 		Expression processExpression = ProcessFormHandler.getExpression(handler);
 		if(processExpression != null) {
-			return new ProcessExpressionVo(processExpression);
+			return new ExpressionVo(processExpression);
 		}else {
 			return null;
 		}
 	}
 
-	public void setDefaultExpression(ProcessExpressionVo defaultExpression) {
+	public void setDefaultExpression(ExpressionVo defaultExpression) {
 		this.defaultExpression = defaultExpression;
 	}
 
-	public List<ProcessExpressionVo> getExpressionList() {
+	public List<ExpressionVo> getExpressionList() {
 		if(expressionList != null) {
 			return expressionList;
 		}
@@ -181,12 +182,12 @@ public class FormAttributeVo implements Serializable {
 		}
 		expressionList = new ArrayList<>();
 		for(Expression processExpression : processExpressionList) {
-			expressionList.add(new ProcessExpressionVo(processExpression));
+			expressionList.add(new ExpressionVo(processExpression));
 		}
 		return expressionList;
 	}
 
-	public void setExpressionList(List<ProcessExpressionVo> expressionList) {
+	public void setExpressionList(List<ExpressionVo> expressionList) {
 		this.expressionList = expressionList;
 	}
 
