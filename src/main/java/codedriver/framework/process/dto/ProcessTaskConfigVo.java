@@ -1,8 +1,11 @@
 package codedriver.framework.process.dto;
 
-public class ProcessTaskConfigVo {
+import java.io.Serializable;
 
-	private String hash;
+public class ProcessTaskConfigVo implements Serializable{
+
+    private static final long serialVersionUID = 7890897600719272951L;
+    private String hash;
 	private String config;
 
 	public ProcessTaskConfigVo() {
