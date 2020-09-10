@@ -340,7 +340,7 @@
 		SELECT MAX(`sort`) FROM `channel_type` FOR UPDATE
 	</select>
 
-	<select id="getAuthorizedChannelUuidList" resultType="java.lang.String">
+	<select id="getAuthorizedChannelUuidList" resultType="java.lang.String" useCache="false">
 		SELECT
 		DISTINCT `channel_uuid`
 		FROM `channel_authority`
@@ -588,8 +588,40 @@
 	SELECT DISTINCT `channel_type_relation_id` FROM `channel_type_relation_source` WHERE `channel_type_uuid` IN (#{value}, 'all')
 	</select>
 	
-	<select id="getChannelTypeRelationIdListBySourceChannelUuid" parameterType="java.lang.Long" resultType="java.lang.Long">
-	SELECT DISTINCT `channel_type_relation_id` FROM `channel_relation` WHERE `source` = #{value}
+	<select id="getAuthorizedChannelTypeRelationIdListBySourceChannelUuid" resultType="java.lang.Long">
+	SELECT 
+	DISTINCT `channel_type_relation_id` 
+	FROM `channel_relation_authority` 
+	WHERE `source` = #{source}
+	AND ((ca.type = 'common' AND ca.`uuid` = 'alluser')
+	<if test="userUuid != null and userUuid != ''">
+		OR (ca.type = 'user' AND ca.`uuid` = #{userUuid})
+	</if>
+	<if test="teamUuidList != null and teamUuidList.size() > 0">
+		OR (ca.type = 'team' AND ca.`uuid` IN
+		<foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
+			#{teamUuid}
+		</foreach>
+		)
+	</if>
+	<if test="roleUuidList != null and roleUuidList.size() > 0">
+		OR (ca.type = 'role' AND ca.`uuid` IN
+		<foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
+			#{roleUuid}
+		</foreach>
+		)
+	</if>
+	)
+	</select>
+	
+	<select id="getChannelRelationTargetList" parameterType="codedriver.framework.process.dto.ChannelRelationVo" resultType="java.lang.String">
+	SELECT 
+	  DISTINCT `target` 
+	FROM `channel_relation` 
+	WHERE `source` = #{source}
+	<if test="channelTypeRelationId != null">
+	AND `channel_type_relation_id` = #{channelTypeRelationId}
+	</if>
 	</select>
 	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
