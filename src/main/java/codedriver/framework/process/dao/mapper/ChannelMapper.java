@@ -102,6 +102,17 @@ public interface ChannelMapper {
 
     public List<ChannelTypeRelationChannelVo>
         getChannelTypeRelationTargetListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
+
+    public List<Long> getChannelTypeRelationIdListBySourceChannelTypeUuid(String sourceChannelTypeUuid);
+
+    public List<Long> getAuthorizedChannelTypeRelationIdListBySourceChannelUuid(
+        @Param("source") String source,
+        @Param("userUuid") String userUuid, 
+        @Param("teamUuidList") List<String> teamUuidList, 
+        @Param("roleUuidList") List<String> roleUuidList
+    );
+
+    public List<String> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
 	
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 

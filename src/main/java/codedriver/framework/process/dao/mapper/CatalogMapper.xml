@@ -50,12 +50,11 @@
 		DISTINCT `parent_uuid`
 		FROM `channel`
 		WHERE `is_active` = 1
-		<if test="list != null and list.size() > 0">
-			AND `uuid` IN
-			<foreach collection="list" item="channelUuid" open="(" separator="," close=")">
-				#{channelUuid}
-			</foreach>
-		</if>
+		AND `uuid` IN
+		<foreach collection="list" item="channelUuid" open="(" separator="," close=")">
+			#{channelUuid}
+		</foreach>
+
 	</select>
 
 	<select id="checkCatalogNameIsRepeat" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int" useCache="false">
@@ -80,7 +79,7 @@
 		FROM `catalog`
 		WHERE `lft` &gt;= #{lft}
 		AND `rht` &lt;= #{rht}
-		ORDER BY `parent_uuid`,`lft`
+		ORDER BY `lft`
 	</select>
 
 	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.dto.AuthorityVo" useCache="false">

@@ -18,8 +18,8 @@ public class ChannelTypeRelationVo extends BasePageVo {
     private List<ChannelTypeVo> targetVoList = new ArrayList<>();
     
     private transient Boolean isAutoGenerateId = true;
-    private transient String source;
-    
+    private transient List<Long> idList = new ArrayList<>();
+    private transient boolean useIdList;
     public synchronized Long getId() {
         if(id == null && isAutoGenerateId) {
             id = SnowflakeUtil.uniqueLong();
@@ -65,12 +65,6 @@ public class ChannelTypeRelationVo extends BasePageVo {
     public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
         this.isAutoGenerateId = isAutoGenerateId;
     }
-    public String getSource() {
-        return source;
-    }
-    public void setSource(String source) {
-        this.source = source;
-    }
     public List<ChannelTypeVo> getSourceVoList() {
         return sourceVoList;
     }
@@ -82,5 +76,17 @@ public class ChannelTypeRelationVo extends BasePageVo {
     }
     public void setTargetVoList(List<ChannelTypeVo> targetVoList) {
         this.targetVoList = targetVoList;
+    }
+    public List<Long> getIdList() {
+        return idList;
+    }
+    public void setIdList(List<Long> idList) {
+        this.idList = idList;
+    }
+    public boolean isUseIdList() {
+        return useIdList;
+    }
+    public void setUseIdList(boolean useIdList) {
+        this.useIdList = useIdList;
     }
 }
