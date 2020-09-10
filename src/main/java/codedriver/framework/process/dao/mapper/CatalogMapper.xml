@@ -169,7 +169,7 @@
 		SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
 	</select>
 
-	<select id="getAncestorsAndSelfByLftRht" resultType="codedriver.framework.process.dto.CatalogVo">
+	<select id="getAncestorsAndSelfByLftRht" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
 	SELECT
 	a.`uuid`,
 	a.`name`,
@@ -184,7 +184,7 @@
 	ORDER BY `lft` ASC
 	</select>
 	
-	<select id="getAuthorizedCatalogList" resultType="codedriver.framework.process.dto.CatalogVo">
+	<select id="getAuthorizedCatalogList" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
 	    SELECT
 		DISTINCT b.`uuid`,b.`name`,b.`icon`,b.`desc`,b.`parent_uuid` AS parentUuid
 		FROM `catalog_authority` a 
@@ -223,7 +223,7 @@
         SELECT max(`rht`) FROM `catalog`
     </select>
 	
-	<select id="checkLeftRightCodeIsWrong" resultType="int">
+	<select id="checkLeftRightCodeIsWrong" resultType="int" useCache="false">
 	SELECT COUNT(a.`uuid`) FROM (
 		SELECT `uuid` FROM `catalog`  WHERE `lft` IS NULL OR `rht` IS NULL
 		UNION
@@ -236,6 +236,14 @@
 		LEFT JOIN `catalog` child ON child.`parent_uuid` = parent.`uuid` 
 		WHERE child.uuid IS NULL AND parent.`rht` - parent.`lft` != 1
 	) a
+	</select>
+	
+	<select id="getCatalogUuidListByLftRht" resultType="java.lang.String" useCache="false">
+	SELECT
+		`uuid`
+	FROM `catalog`
+	WHERE `lft` &gt;= #{lft}
+	AND `rht` &lt;= #{rht}
 	</select>
 	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
