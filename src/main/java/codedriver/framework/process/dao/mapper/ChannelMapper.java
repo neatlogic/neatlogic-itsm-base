@@ -113,6 +113,8 @@ public interface ChannelMapper {
     );
 
     public List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
+
+    public List<String> getChannelUuidListByParentUuidList(List<String> parentUuidList);
 	
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 

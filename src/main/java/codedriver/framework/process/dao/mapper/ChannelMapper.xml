@@ -627,6 +627,13 @@
 	</if>
 	</select>
 	
+	<select id="getChannelUuidListByParentUuidList" parameterType="java.lang.String" resultType="java.lang.String">
+	SELECT `uuid` FROM `channel` WHERE `parent_uuid` IN
+	<foreach collection="list" item="parentUuid" open="(" separator="," close=")">
+	#{parentUuid}
+	</foreach>
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
