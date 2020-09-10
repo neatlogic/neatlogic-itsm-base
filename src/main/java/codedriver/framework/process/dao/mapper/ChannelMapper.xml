@@ -501,7 +501,7 @@
 	</if>
 	</select>
 	
-	<select id="getChannelTypeRelationCountForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
+	<select id="getChannelTypeRelationCountForSelect" parameterType="codedriver.framework.process.dto.ChannelTypeRelationVo" resultType="int" useCache="false">
 	SELECT 
 	  COUNT(1)
 	FROM `channel_type_relation` 
@@ -615,9 +615,11 @@
 	)
 	</select>
 	
-	<select id="getChannelRelationTargetList" parameterType="codedriver.framework.process.dto.ChannelRelationVo" resultType="java.lang.String">
+	<select id="getChannelRelationTargetList" parameterType="codedriver.framework.process.dto.ChannelRelationVo" resultType="codedriver.framework.process.dto.ChannelRelationVo">
 	SELECT 
-	  DISTINCT `target` 
+	  DISTINCT 
+	  `type`,
+	  `target` 
 	FROM `channel_relation` 
 	WHERE `source` = #{source}
 	<if test="channelTypeRelationId != null">
