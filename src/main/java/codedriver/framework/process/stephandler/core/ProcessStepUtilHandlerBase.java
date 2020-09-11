@@ -34,6 +34,7 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
+import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType;
@@ -149,39 +150,46 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
      * @return List<String>
      */
     private void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
-        Long processTaskStepId = null;
+
+        if(!processTaskVo.getCurrentUserProcessUserTypeList().contains(UserType.ALL.getValue())) {
+            processTaskVo.getCurrentUserProcessUserTypeList().add(UserType.ALL.getValue());
+        }
+        if(!processTaskVo.getCurrentUserProcessUserTypeList().contains(ProcessUserType.OWNER.getValue())) {
+            if (UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
+                processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.OWNER.getValue());
+            }
+        }
+        
+        if(!processTaskVo.getCurrentUserProcessUserTypeList().contains(ProcessUserType.REPORTER.getValue())) {
+            if (UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
+                processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.REPORTER.getValue());
+            }
+        }
+        
+        List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));           
         if(processTaskStepVo != null) {
-            processTaskStepId = processTaskStepVo.getId();
-        }
-        List<String> currentUserProcessUserTypeList = new ArrayList<>();
-        currentUserProcessUserTypeList.add(UserType.ALL.getValue());
-        if (UserContext.get().getUserUuid(true).equals(processTaskVo.getOwner())) {
-            currentUserProcessUserTypeList.add(ProcessUserType.OWNER.getValue());
-        }
-        if (UserContext.get().getUserUuid(true).equals(processTaskVo.getReporter())) {
-            currentUserProcessUserTypeList.add(ProcessUserType.REPORTER.getValue());
-        }
-        List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
-        if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepId, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
-            currentUserProcessUserTypeList.add(ProcessUserType.WORKER.getValue());
-        }else {
-            currentUserProcessUserTypeList.remove(ProcessUserType.WORKER.getValue());
-        }
-        if(processTaskStepVo != null) {
+            processTaskStepVo.getCurrentUserProcessUserTypeList().addAll(processTaskVo.getCurrentUserProcessUserTypeList());
+            if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepVo.getId(), UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
+                processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
+            }
             ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), UserContext.get().getUserUuid(true));
             List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUserVo);
             for(ProcessTaskStepUserVo processTaskStepUser : processTaskStepUserList) {
                 if(ProcessUserType.MAJOR.getValue().equals(processTaskStepUser.getUserType())) {
-                    currentUserProcessUserTypeList.add(ProcessUserType.MAJOR.getValue());
+                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
                 }else if(ProcessUserType.MINOR.getValue().equals(processTaskStepUser.getUserType())) {
-                    currentUserProcessUserTypeList.add(ProcessUserType.MINOR.getValue());
+                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MINOR.getValue());
                 }else if(ProcessUserType.AGENT.getValue().equals(processTaskStepUser.getUserType())) {
-                    currentUserProcessUserTypeList.add(ProcessUserType.AGENT.getValue());
+                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
                 }
             }
-            processTaskStepVo.setCurrentUserProcessUserTypeList(currentUserProcessUserTypeList);
         }
-        processTaskVo.setCurrentUserProcessUserTypeList(currentUserProcessUserTypeList);
+        
+        if(!processTaskVo.getCurrentUserProcessUserTypeList().contains(ProcessUserType.WORKER.getValue())) {
+            if(processTaskMapper.checkIsWorker(processTaskVo.getId(), null, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
+                processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
+            }
+        } 
     }
     /**
      * 
@@ -195,10 +203,12 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         if(processTaskStepVo != null) {
             String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
             processTaskStepVo.setConfig(stepConfig);
-            ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
-            if(processStepHandlerConfig != null) {
-                processTaskStepVo.setGlobalConfig(makeupConfig(processStepHandlerConfig.getConfig()));                    
+            IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(processTaskStepVo.getHandler());
+            if(processStepUtilHandler == null) {
+                throw new ProcessStepUtilHandlerNotFoundException(processTaskStepVo.getHandler());
             }
+            ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
+            processTaskStepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null));
         }
     }
 	@Override
@@ -321,10 +331,12 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         ProcessTaskStepVo startProcessTaskStepVo = processTaskStepList.get(0);
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
         startProcessTaskStepVo.setConfig(stepConfig);
-        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
-        if(processStepHandlerConfig != null) {
-            startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());                    
+        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(startProcessTaskStepVo.getHandler());
+        if(processStepUtilHandler == null) {
+            throw new ProcessStepUtilHandlerNotFoundException(startProcessTaskStepVo.getHandler());
         }
+        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
+        startProcessTaskStepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null));                    
 
         ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo();
         //获取上报描述内容

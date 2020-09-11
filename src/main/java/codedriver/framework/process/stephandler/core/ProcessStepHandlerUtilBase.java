@@ -1,5 +1,30 @@
 package codedriver.framework.process.stephandler.core;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import codedriver.framework.asynchronization.thread.CodeDriverThread;
 import codedriver.framework.asynchronization.threadlocal.ConditionParamContext;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
@@ -37,6 +62,7 @@ import codedriver.framework.process.dto.*;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
+import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 import codedriver.framework.process.exception.worktime.WorktimeNotFoundException;
 import codedriver.framework.process.integration.handler.ProcessRequestFrom;
@@ -223,10 +249,12 @@ public abstract class ProcessStepHandlerUtilBase {
 				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 				String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
 				stepVo.setConfig(stepConfig);
+                IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
+                if(processStepUtilHandler == null) {
+                    throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
+                }
 				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-				if(processStepHandlerVo != null) {
-					stepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
-				}
+                stepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null));
 				/** 从步骤配置信息中获取动作列表 **/
 				JSONArray actionList = stepVo.getActionList();
 				if (CollectionUtils.isNotEmpty(actionList)) {
@@ -372,10 +400,13 @@ public abstract class ProcessStepHandlerUtilBase {
 				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 				String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
 				stepVo.setConfig(stepConfig);
+	            IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
+	            if(processStepUtilHandler == null) {
+	                throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
+	            }
 				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-				if(processStepHandlerVo != null) {
-					stepVo.setGlobalConfig(processStepHandlerVo.getConfig());					
-				}
+				stepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null));
+
 				/** 从步骤配置信息中获取通知策略信息 **/
 				JSONObject notifyPolicyConfig = stepVo.getNotifyPolicyConfig();
 				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
@@ -398,7 +429,6 @@ public abstract class ProcessStepHandlerUtilBase {
 							}
 						}
 						if(MapUtils.isNotEmpty(policyConfig)) {
-			                IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
 							ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
 							processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 							JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
@@ -1478,22 +1508,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	                for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
 	                    formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
 	                }
-//	                ProcessTaskStepDataVo processTaskStepDataVo = new ProcessTaskStepDataVo();
-//	                processTaskStepDataVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-//	                processTaskStepDataVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-//	                processTaskStepDataVo.setType(ProcessTaskStepDataType.STEPDRAFTSAVE.getValue());
-//	                processTaskStepDataVo.setFcu(UserContext.get().getUserUuid(true));
-//	                processTaskStepDataVo = processTaskStepDataMapper.getProcessTaskStepData(processTaskStepDataVo);
-//	                List<String> hidecomponentList = new ArrayList<>();
-//	                if(processTaskStepDataVo != null) {
-//	                    JSONObject dataObj = processTaskStepDataVo.getData();
-//	                    if (MapUtils.isNotEmpty(dataObj)) {
-//	                        JSONArray hidecomponentArray = dataObj.getJSONArray("hidecomponentList");
-//	                        if (CollectionUtils.isNotEmpty(hidecomponentArray)) {
-//	                            hidecomponentList = JSON.parseArray(JSON.toJSONString(hidecomponentArray), String.class);
-//	                        }
-//	                    }
-//	                }
+
 	                List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);
 	                for (FormAttributeVo formAttributeVo : formAttributeList) {
 	                    if (!formAttributeVo.isRequired()) {
@@ -1502,7 +1517,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	                    if (formAttributeActionMap.containsKey(formAttributeVo.getUuid())) {
 	                        continue;
 	                    }
-	                    if (hidecomponentList.contains(formAttributeVo.getUuid())) {
+	                    if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {
 	                        continue;
 	                    }
 	                    Object data = formAttributeDataMap.get(formAttributeVo.getUuid());

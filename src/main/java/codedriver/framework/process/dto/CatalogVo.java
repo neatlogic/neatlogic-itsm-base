@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,9 +17,10 @@ import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
+public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Serializable{
 
-	public final static String ROOT_UUID = "0";
+    private static final long serialVersionUID = 9045187703084309757L;
+    public final static String ROOT_UUID = "0";
 	public final static String ROOT_PARENTUUID = "-1";
 	public final static String UNCATEGORIZED_CATALOG_UUID = "1";
 	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
@@ -58,6 +60,9 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 
 	@EntityField(name = "子节点数", type = ApiParamType.INTEGER)
 	private int childrenCount = 0;
+	
+	@EntityField(name = "类型#uuid", type = ApiParamType.STRING)
+	private String typeAndUuid;
 	
 	private transient boolean isAuthority = false;
 	
@@ -362,5 +367,12 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo> {
 		}
 		return resultDefault;
 	}
+
+    public String getTypeAndUuid() {
+        if(StringUtils.isBlank(typeAndUuid) && StringUtils.isNotBlank(getUuid())) {
+            typeAndUuid = type + "#" + uuid;
+        }
+        return typeAndUuid;
+    }
 
 }

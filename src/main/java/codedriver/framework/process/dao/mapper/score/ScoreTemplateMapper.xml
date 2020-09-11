@@ -27,22 +27,28 @@
 	</resultMap>
 
 	<select id="searchScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultMap="scoreTemplateListMap">
-		SELECT
-		st.`id`,
+		select st.`id`,
 		st.`name`,
 		st.`description`,
 		st.`is_active` as isActive,
 		std.`name` as dimensionName
-		FROM `score_template` st
-		left join `score_template_dimension` std on st.`id` = std.`score_template_id`
+		from
+		(SELECT
+		`id`,
+		`name`,
+		`description`,
+		`is_active`
+		FROM `score_template`
 		WHERE
 		1=1
 		<if test="keyword != null and keyword != ''">
-			and st.`name` LIKE CONCAT('%', #{keyword}, '%')
+			and `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
+		) st
+		left join `score_template_dimension` std on st.`id` = std.`score_template_id`
 	</select>
 
 	<select id="searchScoreTemplateCount" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="int">

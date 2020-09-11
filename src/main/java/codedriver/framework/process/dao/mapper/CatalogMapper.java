@@ -75,6 +75,8 @@ public interface CatalogMapper {
     * @return int 返回左右编码不正确的个数
      */
     public int checkLeftRightCodeIsWrong();
+
+    public List<String> getCatalogUuidListByLftRht(@Param("lft") Integer lft, @Param("rht")Integer rht);
 	
 	public int replaceCatalog(CatalogVo catalogVo);
 

@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -15,9 +16,11 @@ import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ChannelVo extends BasePageVo {
+public class ChannelVo extends BasePageVo implements Serializable{
 
-	@EntityField(name = "服务通道uuid", type = ApiParamType.STRING)
+    private static final long serialVersionUID = 7055291271172611259L;
+
+    @EntityField(name = "服务通道uuid", type = ApiParamType.STRING)
 	private String uuid;
 
 	@EntityField(name = "服务通道名称", type = ApiParamType.STRING)
@@ -76,6 +79,15 @@ public class ChannelVo extends BasePageVo {
 	
 	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
 	private String channelTypeUuid;
+	
+	@EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
+	private int allowTranferReport;
+	
+	@EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
+	private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
+    
+    @EntityField(name = "类型#uuid", type = ApiParamType.STRING)
+    private String typeAndUuid;
 	
 	private transient boolean isAuthority = false;
 	
@@ -354,4 +366,27 @@ public class ChannelVo extends BasePageVo {
 			return false;
 		return true;
 	}
+
+    public int getAllowTranferReport() {
+        return allowTranferReport;
+    }
+
+    public void setAllowTranferReport(int allowTranferReport) {
+        this.allowTranferReport = allowTranferReport;
+    }
+
+    public List<ChannelRelationVo> getChannelRelationList() {
+        return channelRelationList;
+    }
+
+    public void setChannelRelationList(List<ChannelRelationVo> channelRelationList) {
+        this.channelRelationList = channelRelationList;
+    }
+
+    public String getTypeAndUuid() {
+        if(StringUtils.isBlank(typeAndUuid) && StringUtils.isNotBlank(getUuid())) {
+            typeAndUuid = type + "#" + uuid;
+        }
+        return typeAndUuid;
+    }
 }

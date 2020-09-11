@@ -287,6 +287,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			ProcessTaskStepUserVo oldUserVo = oldUserList.get(0);
 			workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(), ProcessUserType.MAJOR.getValue()));
 		}
+		currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 		int autoStart = myAssign(currentProcessTaskStepVo, workerList);
 
 		processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
@@ -585,38 +586,38 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 	                JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 					if (MapUtils.isNotEmpty(paramObj)) {
-						// 表单属性显示控制
-						Map<String, String> formAttributeActionMap = new HashMap<>();
-						List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
-						if (processTaskStepFormAttributeList.size() > 0) {
-							for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
-								formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
-							}
-						}
-						// 组件联动导致隐藏的属性uuid列表
-						List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(paramObj.getJSONArray("hidecomponentList")), String.class);
-						// 获取旧表单数据
-						List<ProcessTaskFormAttributeDataVo> oldProcessTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-						if (CollectionUtils.isNotEmpty(oldProcessTaskFormAttributeDataList)) {
-							Iterator<ProcessTaskFormAttributeDataVo> iterator = oldProcessTaskFormAttributeDataList.iterator();
-							while (iterator.hasNext()) {
-								ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo = iterator.next();
-								String attributeUuid = processTaskFormAttributeDataVo.getAttributeUuid();
-								if (formAttributeActionMap.containsKey(attributeUuid)) {// 只读或隐藏
-									iterator.remove();
-								}
-								if (CollectionUtils.isNotEmpty(hidecomponentList)&&hidecomponentList.contains(attributeUuid)) {
-									iterator.remove();
-								}
-							}
-							oldProcessTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
-							ProcessTaskContentVo processTaskContentVo = new ProcessTaskContentVo(JSON.toJSONString(oldProcessTaskFormAttributeDataList));
-							processTaskMapper.replaceProcessTaskContent(processTaskContentVo);
-							paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), processTaskContentVo.getHash());
-						}
+					    JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
+                        if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
+    						// 表单属性显示控制
+    						Map<String, String> formAttributeActionMap = new HashMap<>();
+    						List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
+    						if (processTaskStepFormAttributeList.size() > 0) {
+    							for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
+    								formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
+    							}
+    						}
+    						// 组件联动导致隐藏的属性uuid列表
+    						List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(paramObj.getJSONArray("hidecomponentList")), String.class);
+    						// 获取旧表单数据
+    						List<ProcessTaskFormAttributeDataVo> oldProcessTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+    						if (CollectionUtils.isNotEmpty(oldProcessTaskFormAttributeDataList)) {
+    							Iterator<ProcessTaskFormAttributeDataVo> iterator = oldProcessTaskFormAttributeDataList.iterator();
+    							while (iterator.hasNext()) {
+    								ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo = iterator.next();
+    								String attributeUuid = processTaskFormAttributeDataVo.getAttributeUuid();
+    								if (formAttributeActionMap.containsKey(attributeUuid)) {// 只读或隐藏
+    									iterator.remove();
+    								}
+    								if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(attributeUuid)) {
+    									iterator.remove();
+    								}
+    							}
+    							oldProcessTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
+    							ProcessTaskContentVo processTaskContentVo = new ProcessTaskContentVo(JSON.toJSONString(oldProcessTaskFormAttributeDataList));
+    							processTaskMapper.replaceProcessTaskContent(processTaskContentVo);
+    							paramObj.put(ProcessTaskAuditDetailType.FORM.getOldDataParamName(), processTaskContentVo.getHash());
+    						}
 
-						JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
-						if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
 							List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = new ArrayList<>(formAttributeDataList.size());
 							for (int i = 0; i < formAttributeDataList.size(); i++) {
 								JSONObject formAttributeDataObj = formAttributeDataList.getJSONObject(i);
@@ -624,7 +625,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 								if (formAttributeActionMap.containsKey(attributeUuid)) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
 									continue;
 								}
-								if (CollectionUtils.isNotEmpty(hidecomponentList)&&hidecomponentList.contains(attributeUuid)) {
+								if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(attributeUuid)) {
 									continue;
 								}
 								ProcessTaskFormAttributeDataVo attributeData = new ProcessTaskFormAttributeDataVo();
@@ -1089,6 +1090,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TRANSFER);
 			
 			/** 根据子类需要把最终处理人放进来，引擎将自动写入数据库，也可能为空，例如一些特殊的流程节点 **/
+            processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 			myTransfer(processTaskStepVo, workerList);
 			
 			ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId());
@@ -1101,8 +1103,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					if (autoStart == 1) {
 						processTaskStepWorkerVo.setUserType(ProcessUserType.MAJOR.getValue());
 						processTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
-					}else {
-						processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 					}
 				}
 			}

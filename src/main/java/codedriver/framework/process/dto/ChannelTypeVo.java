@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,9 +9,10 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ChannelTypeVo extends BasePageVo{
+public class ChannelTypeVo extends BasePageVo implements Serializable{
 
-	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+    private static final long serialVersionUID = -3747925860575582286L;
+    @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
 	private String uuid;
 	@EntityField(name = "名称", type = ApiParamType.STRING)
 	private String name;
@@ -29,7 +31,20 @@ public class ChannelTypeVo extends BasePageVo{
 	
 	private transient String keyword;
 	
-	public synchronized String getUuid() {
+	public ChannelTypeVo() {}
+	public ChannelTypeVo(ChannelTypeVo channelTypeVo) {
+	    if(channelTypeVo != null) {
+	        this.uuid = channelTypeVo.getUuid();
+	        this.name = channelTypeVo.getName();
+	        this.isActive = channelTypeVo.getIsActive();
+	        this.icon = channelTypeVo.getIcon();
+	        this.color = channelTypeVo.getColor();
+	        this.description = channelTypeVo.getDescription();
+	        this.sort = channelTypeVo.getSort();
+	        this.prefix = channelTypeVo.getPrefix();
+	    }      
+    }
+    public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
 		}
