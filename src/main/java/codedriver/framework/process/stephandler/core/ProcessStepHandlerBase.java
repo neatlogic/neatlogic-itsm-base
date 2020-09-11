@@ -48,6 +48,7 @@ import codedriver.framework.process.dto.ProcessTaskConvergeVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
+import codedriver.framework.process.dto.ProcessTaskRelationVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
@@ -58,6 +59,7 @@ import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
+import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.ProcessVo;
 import codedriver.framework.process.exception.core.ProcessTaskException;
@@ -1362,6 +1364,13 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskMapper.insertProcessTaskStepUser(processTaskStepUserVo);
 			processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue()));
 
+			/** 保存转报数据 **/
+			Long fromProcessTaskId = paramObj.getLong("fromProcessTaskId");
+			Long channelTypeRelationId = paramObj.getLong("channelTypeRelationId");
+			if(fromProcessTaskId != null && channelTypeRelationId != null) {
+			    processTaskMapper.insertProcessTaskTranferReport(new ProcessTaskTranferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskId));
+			    processTaskMapper.insertProcessTaskRelation(new ProcessTaskRelationVo(channelTypeRelationId, fromProcessTaskId, processTaskId));
+			}
 		} else {
 			/** 锁定当前流程 **/
 			processTaskMapper.getProcessTaskLockById(processTaskId);

@@ -1117,7 +1117,15 @@
 	on p.`id` = ps.`processtask_id`
 	where p.`id` = #{value}
 	</select>
-
+	
+	<select id="getFromProcessTaskIdByToProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `from_processtask_id` FROM `processtask_tranfer_report` WHERE `to_processtask_id` = #{value}
+	</select>
+	
+	<select id="getLastToProcessTaskIdByFromProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `to_processtask_id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} ORDER BY `id` DESC limit 1
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1717,6 +1725,38 @@
 	  (#{processTaskId}, #{form}, #{prop})
 	</insert>
 
+	<insert id="insertProcessTaskTranferReport" parameterType="codedriver.framework.process.dto.ProcessTaskTranferReportVo">
+	INSERT INTO `processtask_tranfer_report` (
+	  `id`,
+	  `channel_type_relation_id`,
+	  `from_processtask_id`,
+	  `to_processtask_id`
+	) 
+	VALUES
+	  (
+	    #{id},
+	    #{channelTypeRelationId},
+	    #{fromProcesstaskId},
+	    #{toProcesstaskId}
+	  )
+	</insert>
+	
+	<insert id="insertProcessTaskRelation" parameterType="codedriver.framework.process.dto.ProcessTaskRelationVo">
+	INSERT INTO `processtask_relation` (
+	  `id`,
+	  `channel_type_relation_id`,
+	  `source`,
+	  `target`
+	) 
+	VALUES
+	  (
+	    #{id},
+	    #{channelTypeRelationId},
+	    #{source},
+	    #{target}
+	  )
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
