@@ -2,18 +2,20 @@ package codedriver.framework.process.dto;
 
 import codedriver.framework.util.SnowflakeUtil;
 
-public class ProcessTaskRelationVo {
+public class ProcessTaskTranferReportVo {
+
     private Long id;
     private Long channelTypeRelationId;
-    private Long source;
-    private Long target;
+    private Long fromProcessTaskId;
+    private Long toProcessTaskId;
     
     private transient Boolean isAutoGenerateId = true;
-    public ProcessTaskRelationVo() {}
-    public ProcessTaskRelationVo(Long channelTypeRelationId, Long source, Long target) {
+    
+    public ProcessTaskTranferReportVo() {}
+    public ProcessTaskTranferReportVo(Long channelTypeRelationId, Long fromProcessTaskId, Long toProcessTaskId) {
         this.channelTypeRelationId = channelTypeRelationId;
-        this.source = source;
-        this.target = target;
+        this.fromProcessTaskId = fromProcessTaskId;
+        this.toProcessTaskId = toProcessTaskId;
     }
     public synchronized Long getId() {
         if(id == null && isAutoGenerateId) {
@@ -30,22 +32,16 @@ public class ProcessTaskRelationVo {
     public void setChannelTypeRelationId(Long channelTypeRelationId) {
         this.channelTypeRelationId = channelTypeRelationId;
     }
-    public Long getSource() {
-        return source;
+    public Long getFromProcessTaskId() {
+        return fromProcessTaskId;
     }
-    public void setSource(Long source) {
-        this.source = source;
+    public void setFromProcessTaskId(Long fromProcessTaskId) {
+        this.fromProcessTaskId = fromProcessTaskId;
     }
-    public Long getTarget() {
-        return target;
+    public Long getToProcessTaskId() {
+        return toProcessTaskId;
     }
-    public void setTarget(Long target) {
-        this.target = target;
-    }
-    public Boolean getIsAutoGenerateId() {
-        return isAutoGenerateId;
-    }
-    public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
-        this.isAutoGenerateId = isAutoGenerateId;
+    public void setToProcessTaskId(Long toProcessTaskId) {
+        this.toProcessTaskId = toProcessTaskId;
     }
 }
