@@ -1,5 +1,6 @@
 package codedriver.framework.process.column.core;
 
+import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
 
 public interface IProcessTaskColumn {
@@ -76,5 +77,7 @@ public interface IProcessTaskColumn {
 	 * @Date: 2020/6/5
 	 */
 	public Boolean getIsShow();
+
+	Object getMyValue(JSONObject json);
 
 }

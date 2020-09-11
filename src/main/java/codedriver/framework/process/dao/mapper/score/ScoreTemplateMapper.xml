@@ -145,6 +145,16 @@
 		where `process_uuid` = #{value} and `is_active` = 1
 	</select>
 
+	<select id="getProcessScoreTemplateByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.score.ProcessScoreTemplateVo">
+		SELECT
+		`score_template_id` as `scoreTemplateId`,
+		`process_uuid` as `processUuid`,
+		`is_active` as `isActive`,
+		`config` as `config`
+		FROM `process_score_template`
+		where `process_uuid` = #{value} and `is_active` = 1
+	</select>
+
 	<update id="updateScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
 		UPDATE `score_template` SET
 		 `name` = #{name},

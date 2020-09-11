@@ -13,6 +13,7 @@ import codedriver.framework.process.dto.ProcessTaskConvergeVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
+import codedriver.framework.process.dto.ProcessTaskRelationVo;
 import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
 import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
 import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
@@ -30,6 +31,7 @@ import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
+import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 
 public interface ProcessTaskMapper {
@@ -156,7 +158,17 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserList(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public String getProcessTaskScoreInfoById(Long processtaskId);
-	
+
+	public ProcessTaskVo getProcessTaskAndStepById(Long processtaskId);
+
+    public Long getFromProcessTaskIdByToProcessTaskId(Long toProcessTaskId);
+
+    public Long getLastToProcessTaskIdByFromProcessTaskId(Long processTaskId);
+
+    public int getProcessTaskRelationCountByProcessTaskId(Long processTaskId);
+
+    public List<ProcessTaskRelationVo> getProcessTaskRelationList(ProcessTaskRelationVo processTaskRelationVo);
+
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
 	public int replaceProcessTaskOldFormProp(@Param("processTaskId")Long processTaskId,@Param("form")String form,@Param("prop")String prop);
@@ -228,6 +240,10 @@ public interface ProcessTaskMapper {
 	public int replaceProcessTaskStepNotifyPolicyConfig(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 
 	public int insertProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
+
+    public int insertProcessTaskTranferReport(ProcessTaskTranferReportVo processTaskTranferReportVo);
+
+    public int insertProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
 	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);

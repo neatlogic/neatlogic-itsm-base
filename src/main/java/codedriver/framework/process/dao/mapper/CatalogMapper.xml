@@ -50,12 +50,11 @@
 		DISTINCT `parent_uuid`
 		FROM `channel`
 		WHERE `is_active` = 1
-		<if test="list != null and list.size() > 0">
-			AND `uuid` IN
-			<foreach collection="list" item="channelUuid" open="(" separator="," close=")">
-				#{channelUuid}
-			</foreach>
-		</if>
+		AND `uuid` IN
+		<foreach collection="list" item="channelUuid" open="(" separator="," close=")">
+			#{channelUuid}
+		</foreach>
+
 	</select>
 
 	<select id="checkCatalogNameIsRepeat" parameterType="codedriver.framework.process.dto.CatalogVo" resultType="int" useCache="false">
@@ -80,7 +79,7 @@
 		FROM `catalog`
 		WHERE `lft` &gt;= #{lft}
 		AND `rht` &lt;= #{rht}
-		ORDER BY `parent_uuid`,`lft`
+		ORDER BY `lft`
 	</select>
 
 	<select id="getCatalogAuthorityListByCatalogUuid" parameterType="java.lang.String" resultType="codedriver.framework.dto.AuthorityVo" useCache="false">
@@ -170,7 +169,7 @@
 		SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
 	</select>
 
-	<select id="getAncestorsAndSelfByLftRht" resultType="codedriver.framework.process.dto.CatalogVo">
+	<select id="getAncestorsAndSelfByLftRht" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
 	SELECT
 	a.`uuid`,
 	a.`name`,
@@ -185,7 +184,7 @@
 	ORDER BY `lft` ASC
 	</select>
 	
-	<select id="getAuthorizedCatalogList" resultType="codedriver.framework.process.dto.CatalogVo">
+	<select id="getAuthorizedCatalogList" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
 	    SELECT
 		DISTINCT b.`uuid`,b.`name`,b.`icon`,b.`desc`,b.`parent_uuid` AS parentUuid
 		FROM `catalog_authority` a 
@@ -224,7 +223,7 @@
         SELECT max(`rht`) FROM `catalog`
     </select>
 	
-	<select id="checkLeftRightCodeIsWrong" resultType="int">
+	<select id="checkLeftRightCodeIsWrong" resultType="int" useCache="false">
 	SELECT COUNT(a.`uuid`) FROM (
 		SELECT `uuid` FROM `catalog`  WHERE `lft` IS NULL OR `rht` IS NULL
 		UNION
@@ -237,6 +236,14 @@
 		LEFT JOIN `catalog` child ON child.`parent_uuid` = parent.`uuid` 
 		WHERE child.uuid IS NULL AND parent.`rht` - parent.`lft` != 1
 	) a
+	</select>
+	
+	<select id="getCatalogUuidListByLftRht" resultType="java.lang.String" useCache="false">
+	SELECT
+		`uuid`
+	FROM `catalog`
+	WHERE `lft` &gt;= #{lft}
+	AND `rht` &lt;= #{rht}
 	</select>
 	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
