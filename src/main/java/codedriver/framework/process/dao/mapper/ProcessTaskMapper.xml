@@ -1126,6 +1126,42 @@
 	SELECT `to_processtask_id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} ORDER BY `id` DESC limit 1
 	</select>
 	
+	<select id="getProcessTaskRelationCountByProcessTaskId" parameterType="java.lang.Long" resultType="int">
+	SELECT COUNT(1) FROM `processtask_relation` WHERE `source` = #{value} OR target = #{value}
+	</select>
+	
+	<select id="getProcessTaskRelationList" parameterType="codedriver.framework.process.dto.ProcessTaskRelationVo" resultType="codedriver.framework.process.dto.ProcessTaskRelationVo">
+	SELECT 
+	  a.`id`,
+	  a.`channelTypeRelationId`,
+	  a.`source`,
+	  a.`target`,
+	  a.`processTaskId`
+	FROM (
+		SELECT 
+		  `id`,
+		  `channel_type_relation_id` AS channelTypeRelationId,
+		  `source`,
+		  `target`,
+		  `target` AS processTaskId 
+		FROM `processtask_relation` 
+		WHERE `source` = #{processTaskId}
+		UNION
+		SELECT 
+		  `id`,
+		  `channel_type_relation_id` AS channelTypeRelationId,
+		  `source`,
+		  `target`,
+		  `source` AS processTaskId 
+		FROM `processtask_relation` 
+		WHERE `target` = #{processTaskId}
+	) a
+	ORDER BY a.id DESC
+	<if test="needPage == true">
+		LIMIT #{startNum}, #{pageSize}
+	</if>
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
