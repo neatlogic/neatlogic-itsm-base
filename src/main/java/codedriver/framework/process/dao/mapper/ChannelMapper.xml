@@ -594,19 +594,19 @@
 	DISTINCT `channel_type_relation_id` 
 	FROM `channel_relation_authority` 
 	WHERE `source` = #{source}
-	AND ((ca.type = 'common' AND ca.`uuid` = 'alluser')
+	AND ((`type` = 'common' AND `uuid` = 'alluser')
 	<if test="userUuid != null and userUuid != ''">
-		OR (ca.type = 'user' AND ca.`uuid` = #{userUuid})
+		OR (`type` = 'user' AND `uuid` = #{userUuid})
 	</if>
 	<if test="teamUuidList != null and teamUuidList.size() > 0">
-		OR (ca.type = 'team' AND ca.`uuid` IN
+		OR (`type` = 'team' AND `uuid` IN
 		<foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
 			#{teamUuid}
 		</foreach>
 		)
 	</if>
 	<if test="roleUuidList != null and roleUuidList.size() > 0">
-		OR (ca.type = 'role' AND ca.`uuid` IN
+		OR (`type` = 'role' AND `uuid` IN
 		<foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
 			#{roleUuid}
 		</foreach>
