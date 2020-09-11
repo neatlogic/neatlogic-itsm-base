@@ -165,6 +165,10 @@ public interface ProcessTaskMapper {
 
     public Long getLastToProcessTaskIdByFromProcessTaskId(Long processTaskId);
 
+    public int getProcessTaskRelationCountByProcessTaskId(Long processTaskId);
+
+    public List<ProcessTaskRelationVo> getProcessTaskRelationList(ProcessTaskRelationVo processTaskRelationVo);
+
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
 	public int replaceProcessTaskOldFormProp(@Param("processTaskId")Long processTaskId,@Param("form")String form,@Param("prop")String prop);

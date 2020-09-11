@@ -9,9 +9,9 @@ public class ProcessTaskRelationVo extends BasePageVo {
     private Long source;
     private Long target;
 
-    private Long channelTypeRelationName;
+    private String channelTypeRelationName;
     private Long processTaskId;
-    private Long tilte;
+    private String tilte;
     private ProcessTaskStatusVo statusVo;
     private ChannelTypeVo channelTypeVo;
     
@@ -55,10 +55,10 @@ public class ProcessTaskRelationVo extends BasePageVo {
     public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
         this.isAutoGenerateId = isAutoGenerateId;
     }
-    public Long getChannelTypeRelationName() {
+    public String getChannelTypeRelationName() {
         return channelTypeRelationName;
     }
-    public void setChannelTypeRelationName(Long channelTypeRelationName) {
+    public void setChannelTypeRelationName(String channelTypeRelationName) {
         this.channelTypeRelationName = channelTypeRelationName;
     }
     public Long getProcessTaskId() {
@@ -67,10 +67,10 @@ public class ProcessTaskRelationVo extends BasePageVo {
     public void setProcessTaskId(Long processTaskId) {
         this.processTaskId = processTaskId;
     }
-    public Long getTilte() {
+    public String getTilte() {
         return tilte;
     }
-    public void setTilte(Long tilte) {
+    public void setTilte(String tilte) {
         this.tilte = tilte;
     }
     public ProcessTaskStatusVo getStatusVo() {
