@@ -64,31 +64,29 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 		TenantContext.get().switchTenant(tenantUuid);
 		Long processTaskId = (Long) jobObject.getData("processTaskId");
 		ProcessTaskVo task = processTaskMapper.getProcessTaskById(processTaskId);
-		if(task != null){
-			List<ProcesstaskScoreVo> processtaskScoreVos = processtaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
-			if(CollectionUtils.isEmpty(processtaskScoreVos)){
-				ProcessScoreTemplateVo processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
-				if(processScoreTemplate != null){
-					String config = processScoreTemplate.getConfig();
-					if(StringUtils.isNotBlank(config)){
-						JSONObject configObj = JSONObject.parseObject(config);
-						Object isAuto = configObj.get("isAuto");
-						Object autoTime = configObj.get("autoTime");
-						if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
-							Date autoScoreDate = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString()));
-							JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskId.toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
-									.withBeginTime(autoScoreDate)
-									.withIntervalInSeconds(60 * 60)
-									.withRepeatCount(0)
-									.addData("processTaskId", processTaskId);
-							JobObject newJobObject = newJobObjectBuilder.build();
-							schedulerManager.loadJob(newJobObject);
-						}
-					}
-				}
-			}
+		List<ProcesstaskScoreVo> processtaskScoreVos = processtaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
+		ProcessScoreTemplateVo processScoreTemplate = null;
+		if(task != null && CollectionUtils.isEmpty(processtaskScoreVos)){
+			processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
 		}
-
+		String config = null;
+		Object isAuto = null;
+		Object autoTime = null;
+		if(processScoreTemplate != null && StringUtils.isNotBlank(config = processScoreTemplate.getConfig())) {
+			JSONObject configObj = JSONObject.parseObject(config);
+			isAuto = configObj.get("isAuto");
+			autoTime = configObj.get("autoTime");
+		}
+		if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
+			Date autoScoreDate = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString()));
+			JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskId.toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
+					.withBeginTime(autoScoreDate)
+					.withIntervalInSeconds(60 * 60)
+					.withRepeatCount(0)
+					.addData("processTaskId", processTaskId);
+			JobObject newJobObject = newJobObjectBuilder.build();
+			schedulerManager.loadJob(newJobObject);
+		}
 	}
 
 	@Override
@@ -99,54 +97,47 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
 		Long processTaskId = (Long) jobObject.getData("processTaskId");
 		ProcessTaskVo task = processTaskMapper.getProcessTaskById(processTaskId);
-		if (task != null) {
-			List<ProcesstaskScoreVo> processtaskScoreVos = processtaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
-			if(CollectionUtils.isEmpty(processtaskScoreVos)){
-				ProcessScoreTemplateVo processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
-				if(processScoreTemplate != null){
-					IProcessStepUtilHandler handler = ProcessStepUtilHandlerFactory.getHandler();
-					Long scoreTemplateId = processScoreTemplate.getScoreTemplateId();
-					ScoreTemplateVo template = scoreTemplateMapper.getScoreTemplateById(scoreTemplateId);
-					if(template != null){
-						List<ScoreTemplateDimensionVo> dimensionList = template.getDimensionList();
-						ProcesstaskScoreVo processtaskScoreVo = new ProcesstaskScoreVo();
-						processtaskScoreVo.setProcesstaskId(processTaskId);
-						processtaskScoreVo.setScoreTemplateId(scoreTemplateId);
-						processtaskScoreVo.setFcu(SystemUser.SYSTEM.getUserId());
-						processtaskScoreVo.setIsAuto(1);
-						JSONArray dimensionArray = new JSONArray();
-						if(CollectionUtils.isNotEmpty(dimensionList)){
-							for(ScoreTemplateDimensionVo vo : dimensionList){
-								processtaskScoreVo.setScoreDimensionId(vo.getId());
-								processtaskScoreVo.setScore(5);
-								processtaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
-								JSONObject dimensionObj = new JSONObject();
-								dimensionObj.put("dimensionName",vo.getName());
-								dimensionObj.put("score",5);
-								dimensionObj.put("description",vo.getDescription());
-								dimensionArray.add(dimensionObj);
-							}
-						}
-						JSONObject contentObj = new JSONObject();
-						contentObj.put("scoreTemplateId",scoreTemplateId);
-						contentObj.put("dimensionList",dimensionArray);
-						JSONObject paramObj = new JSONObject();
-						paramObj.put("score",contentObj);
-						ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
-						processTaskStepVo.setProcessTaskId(processTaskId);
-						processTaskStepVo.setParamObj(paramObj);
-						/** 生成活动 */
-						handler.activityAudit(processTaskStepVo, ProcessTaskAuditType.SCORE);
-					}else{
-						schedulerManager.unloadJob(jobObject);
-					}
-				}else{
-					schedulerManager.unloadJob(jobObject);
+		List<ProcesstaskScoreVo> processtaskScoreVos = processtaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
+		ProcessScoreTemplateVo processScoreTemplate = null;
+		if(task != null && CollectionUtils.isEmpty(processtaskScoreVos)){
+			processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
+		}
+		ScoreTemplateVo template = null;
+		if(processScoreTemplate != null){
+			template = scoreTemplateMapper.getScoreTemplateById(processScoreTemplate.getScoreTemplateId());
+		}
+		if(template != null){
+			IProcessStepUtilHandler handler = ProcessStepUtilHandlerFactory.getHandler();
+			List<ScoreTemplateDimensionVo> dimensionList = template.getDimensionList();
+			ProcesstaskScoreVo processtaskScoreVo = new ProcesstaskScoreVo();
+			processtaskScoreVo.setProcesstaskId(processTaskId);
+			processtaskScoreVo.setScoreTemplateId(template.getId());
+			processtaskScoreVo.setFcu(SystemUser.SYSTEM.getUserId());
+			processtaskScoreVo.setIsAuto(1);
+			JSONArray dimensionArray = new JSONArray();
+			if(CollectionUtils.isNotEmpty(dimensionList)){
+				for(ScoreTemplateDimensionVo vo : dimensionList){
+					processtaskScoreVo.setScoreDimensionId(vo.getId());
+					processtaskScoreVo.setScore(5);
+					processtaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
+					JSONObject dimensionObj = new JSONObject();
+					dimensionObj.put("dimensionName",vo.getName());
+					dimensionObj.put("score",5);
+					dimensionObj.put("description",vo.getDescription());
+					dimensionArray.add(dimensionObj);
 				}
-			}else{
-				schedulerManager.unloadJob(jobObject);
 			}
-		} else {
+			JSONObject contentObj = new JSONObject();
+			contentObj.put("scoreTemplateId",template.getId());
+			contentObj.put("dimensionList",dimensionArray);
+			JSONObject paramObj = new JSONObject();
+			paramObj.put("score",contentObj);
+			ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
+			processTaskStepVo.setProcessTaskId(processTaskId);
+			processTaskStepVo.setParamObj(paramObj);
+			/** 生成活动 */
+			handler.activityAudit(processTaskStepVo, ProcessTaskAuditType.SCORE);
+		}else{
 			schedulerManager.unloadJob(jobObject);
 		}
 	}

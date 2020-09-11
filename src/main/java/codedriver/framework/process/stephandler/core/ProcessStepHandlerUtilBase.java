@@ -1430,28 +1430,28 @@ public abstract class ProcessStepHandlerUtilBase {
 			 * 如果设置了自动评分，则启动定时器监听工单是否评分，若超时未评分，则系统自动评分
 			 */
 			ProcessTaskVo task = processTaskMapper.getProcessTaskById(currentProcessTaskVo.getId());
+			ProcessScoreTemplateVo processScoreTemplate = null;
 			if(task != null){
-				ProcessScoreTemplateVo processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
-				if(processScoreTemplate != null){
-					String config = processScoreTemplate.getConfig();
-					if(StringUtils.isNotBlank(config)){
-						JSONObject configObj = JSONObject.parseObject(config);
-						Object isAuto = configObj.get("isAuto");
-						Object autoTime = configObj.get("autoTime");
-						if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
-							IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
-							if (jobHandler != null) {
-								JobObject.Builder jobObjectBuilder = new JobObject.Builder(currentProcessTaskVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", currentProcessTaskVo.getId());
-								JobObject jobObject = jobObjectBuilder.build();
-								jobHandler.reloadJob(jobObject);
-							} else {
-								throw new ScheduleHandlerNotFoundException(ProcessTaskAutoScoreJob.class.getName());
-							}
-						}
-					}
+				processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
+			}
+			String config = null;
+			Object isAuto = null;
+			Object autoTime = null;
+			if(processScoreTemplate != null && StringUtils.isNotBlank(config = processScoreTemplate.getConfig())){
+				JSONObject configObj = JSONObject.parseObject(config);
+				isAuto = configObj.get("isAuto");
+				autoTime = configObj.get("autoTime");
+			}
+			if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
+				IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
+				if (jobHandler != null) {
+					JobObject.Builder jobObjectBuilder = new JobObject.Builder(currentProcessTaskVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", currentProcessTaskVo.getId());
+					JobObject jobObject = jobObjectBuilder.build();
+					jobHandler.reloadJob(jobObject);
+				} else {
+					throw new ScheduleHandlerNotFoundException(ProcessTaskAutoScoreJob.class.getName());
 				}
 			}
-
 		}
 	}
 
