@@ -1,30 +1,5 @@
 package codedriver.framework.process.stephandler.core;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Stack;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import codedriver.framework.asynchronization.thread.CodeDriverThread;
 import codedriver.framework.asynchronization.threadlocal.ConditionParamContext;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
@@ -54,52 +29,12 @@ import codedriver.framework.process.audithandler.core.IProcessTaskAuditDetailTyp
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
 import codedriver.framework.process.audithandler.core.ProcessTaskAuditDetailTypeFactory;
 import codedriver.framework.process.column.core.ProcessTaskUtil;
-import codedriver.framework.process.constvalue.ProcessFieldType;
-import codedriver.framework.process.constvalue.ProcessFlowDirection;
-import codedriver.framework.process.constvalue.ProcessStepMode;
-import codedriver.framework.process.constvalue.ProcessStepType;
-import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
-import codedriver.framework.process.constvalue.ProcessTaskAuditType;
-import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
-import codedriver.framework.process.constvalue.ProcessTaskStatus;
-import codedriver.framework.process.constvalue.ProcessTaskOperationType;
-import codedriver.framework.process.constvalue.ProcessUserType;
-import codedriver.framework.process.constvalue.WorkerPolicy;
-import codedriver.framework.process.dao.mapper.CatalogMapper;
-import codedriver.framework.process.dao.mapper.ChannelMapper;
-import codedriver.framework.process.dao.mapper.FormMapper;
-import codedriver.framework.process.dao.mapper.PriorityMapper;
-import codedriver.framework.process.dao.mapper.ProcessMapper;
-import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
-import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
-import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
-import codedriver.framework.process.dao.mapper.WorktimeMapper;
-import codedriver.framework.process.dto.ActionVo;
-import codedriver.framework.process.dto.ChannelPriorityVo;
-import codedriver.framework.process.dto.FormAttributeVo;
-import codedriver.framework.process.dto.FormVersionVo;
-import codedriver.framework.process.dto.ProcessStepHandlerVo;
-import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskContentVo;
-import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
-import codedriver.framework.process.dto.ProcessTaskFormVo;
-import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
-import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
-import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
-import codedriver.framework.process.dto.ProcessTaskSlaVo;
-import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
-import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
-import codedriver.framework.process.dto.ProcessTaskStepContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
-import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
-import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
-import codedriver.framework.process.dto.ProcessTaskStepUserVo;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.dto.WorktimeRangeVo;
+import codedriver.framework.process.constvalue.*;
+import codedriver.framework.process.dao.mapper.*;
+import codedriver.framework.process.dao.mapper.score.ProcesstaskScoreMapper;
+import codedriver.framework.process.dao.mapper.score.ScoreTemplateMapper;
+import codedriver.framework.process.dto.*;
+import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
@@ -109,6 +44,7 @@ import codedriver.framework.process.integration.handler.ProcessRequestFrom;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
+import codedriver.framework.process.score.schedule.plugin.ProcessTaskAutoScoreJob;
 import codedriver.framework.scheduler.core.IJob;
 import codedriver.framework.scheduler.core.SchedulerManager;
 import codedriver.framework.scheduler.dto.JobObject;
@@ -116,6 +52,20 @@ import codedriver.framework.scheduler.exception.ScheduleHandlerNotFoundException
 import codedriver.framework.util.ConditionUtil;
 import codedriver.framework.util.NotifyPolicyUtil;
 import codedriver.framework.util.RunScriptUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class ProcessStepHandlerUtilBase {
 	static Logger logger = LoggerFactory.getLogger(ProcessStepHandlerUtilBase.class);
@@ -124,6 +74,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	private static final ThreadLocal<List<SlaHandler>> SLA_HANDLERS = new ThreadLocal<>();
 	private static final ThreadLocal<List<NotifyHandler>> NOTIFY_HANDLERS = new ThreadLocal<>();
 	private static final ThreadLocal<List<ActionHandler>> ACTION_HANDLERS = new ThreadLocal<>();
+	private static final ThreadLocal<List<AutoScoreHandler>> AUTOSCORE_HANDLERS = new ThreadLocal<>();
 	protected static ProcessMapper processMapper;
 	protected static ProcessTaskMapper processTaskMapper;
 	protected static FormMapper formMapper;
@@ -139,6 +90,8 @@ public abstract class ProcessStepHandlerUtilBase {
 	private static IntegrationMapper integrationMapper;
     protected static CatalogMapper catalogMapper;
     protected static SelectContentByHashMapper selectContentByHashMapper;
+	protected static ScoreTemplateMapper scoreTemplateMapper;
+	protected static ProcesstaskScoreMapper processtaskScoreMapper;
 
 	@Autowired
 	public void setProcessMapper(ProcessMapper _processMapper) {
@@ -212,6 +165,16 @@ public abstract class ProcessStepHandlerUtilBase {
 	@Autowired
 	public void setSelectContentByHashMapper(SelectContentByHashMapper _selectContentByHashMapper) {
 	    selectContentByHashMapper = _selectContentByHashMapper;
+	}
+
+	@Autowired
+	public void setScoreTemplateMapper(ScoreTemplateMapper _scoreTemplateMapper) {
+		scoreTemplateMapper = _scoreTemplateMapper;
+	}
+
+	@Autowired
+	public void setProcesstaskScoreMapper(ProcesstaskScoreMapper _processtaskScoreMapper) {
+		processtaskScoreMapper = _processtaskScoreMapper;
 	}
 
 	protected static class ActionHandler extends CodeDriverThread {
@@ -417,7 +380,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	                throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
 	            }
 				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-				stepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null));					
+				stepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null));
 
 				/** 从步骤配置信息中获取通知策略信息 **/
 				JSONObject notifyPolicyConfig = stepVo.getNotifyPolicyConfig();
@@ -1419,6 +1382,75 @@ public abstract class ProcessStepHandlerUtilBase {
 				logger.error(ex.getMessage(), ex);
 			} finally {
 				Thread.currentThread().setName(oldName);
+			}
+		}
+	}
+
+	protected static class AutoScoreHandler extends CodeDriverThread {
+		private ProcessTaskVo currentProcessTaskVo;
+
+		public AutoScoreHandler(ProcessTaskVo _currentProcessTaskVo) {
+			currentProcessTaskVo = _currentProcessTaskVo;
+		}
+
+		public static synchronized void autoScore(ProcessTaskVo currentProcessTaskVo) {
+			if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+				AutoScoreHandler handler = new AutoScoreHandler(currentProcessTaskVo);
+				CommonThreadPool.execute(handler);
+			} else {
+				List<AutoScoreHandler> handlerList = AUTOSCORE_HANDLERS.get();
+				if (handlerList == null) {
+					handlerList = new ArrayList<>();
+					AUTOSCORE_HANDLERS.set(handlerList);
+					TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+						@Override
+						public void afterCommit() {
+							List<AutoScoreHandler> handlerList = AUTOSCORE_HANDLERS.get();
+							for (AutoScoreHandler handler : handlerList) {
+								CommonThreadPool.execute(handler);
+							}
+						}
+
+						@Override
+						public void afterCompletion(int status) {
+							AUTOSCORE_HANDLERS.remove();
+						}
+					});
+				}
+				handlerList.add(new AutoScoreHandler(currentProcessTaskVo));
+			}
+		}
+
+		@Override
+		public void execute() {
+			Thread.currentThread().setName("PROCESSTASK-AUTOSCORE-" + currentProcessTaskVo.getId());
+
+			/**
+			 * 先检查是否绑定评分模版,如果绑定了，则检查是否设置自动评分
+			 * 如果设置了自动评分，则启动定时器监听工单是否评分，若超时未评分，则系统自动评分
+			 */
+			ProcessTaskVo task = processTaskMapper.getProcessTaskById(currentProcessTaskVo.getId());
+			ProcessScoreTemplateVo processScoreTemplate = null;
+			if(task != null){
+				processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
+			}
+			String config = null;
+			Object isAuto = null;
+			Object autoTime = null;
+			if(processScoreTemplate != null && StringUtils.isNotBlank(config = processScoreTemplate.getConfig())){
+				JSONObject configObj = JSONObject.parseObject(config);
+				isAuto = configObj.get("isAuto");
+				autoTime = configObj.get("autoTime");
+			}
+			if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
+				IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
+				if (jobHandler != null) {
+					JobObject.Builder jobObjectBuilder = new JobObject.Builder(currentProcessTaskVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", currentProcessTaskVo.getId());
+					JobObject jobObject = jobObjectBuilder.build();
+					jobHandler.reloadJob(jobObject);
+				} else {
+					throw new ScheduleHandlerNotFoundException(ProcessTaskAutoScoreJob.class.getName());
+				}
 			}
 		}
 	}
