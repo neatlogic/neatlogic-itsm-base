@@ -1829,8 +1829,8 @@
 	  )
 	</insert>
 	
-	<insert id="insertProcessTaskRelation" parameterType="codedriver.framework.process.dto.ProcessTaskRelationVo">
-	INSERT INTO `processtask_relation` (
+	<insert id="replaceProcessTaskRelation" parameterType="codedriver.framework.process.dto.ProcessTaskRelationVo">
+	REPLACE INTO `processtask_relation` (
 	  `id`,
 	  `channel_type_relation_id`,
 	  `source`,

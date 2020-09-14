@@ -1369,7 +1369,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			Long channelTypeRelationId = paramObj.getLong("channelTypeRelationId");
 			if(fromProcessTaskId != null && channelTypeRelationId != null) {
 			    processTaskMapper.insertProcessTaskTranferReport(new ProcessTaskTranferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskId));
-			    processTaskMapper.insertProcessTaskRelation(new ProcessTaskRelationVo(channelTypeRelationId, fromProcessTaskId, processTaskId));
+			    processTaskMapper.replaceProcessTaskRelation(new ProcessTaskRelationVo(channelTypeRelationId, fromProcessTaskId, processTaskId));
 			}
 		} else {
 			/** 锁定当前流程 **/

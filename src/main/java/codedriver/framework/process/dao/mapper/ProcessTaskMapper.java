@@ -252,7 +252,7 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskTranferReport(ProcessTaskTranferReportVo processTaskTranferReportVo);
 
-    public int insertProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
+    public int replaceProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
 	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
