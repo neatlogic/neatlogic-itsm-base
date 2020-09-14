@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
@@ -31,7 +32,7 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
 	private JSONObject config;
 	@EntityField(name = "前端配置信息", type = ApiParamType.JSONOBJECT)
 	private JSONObject chartConfig;
-
+	@JSONField(serialize=false)
 	private transient String configStr;
 
 	public ProcessStepHandlerVo() {

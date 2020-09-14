@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Objects;
 
 import codedriver.framework.common.constvalue.ApiParamType;
@@ -88,17 +89,17 @@ public class ChannelVo extends BasePageVo implements Serializable{
     
     @EntityField(name = "类型#uuid", type = ApiParamType.STRING)
     private String typeAndUuid;
-	
+    @JSONField(serialize=false)
 	private transient boolean isAuthority = false;
-	
+    @JSONField(serialize=false)
 	private transient List<AuthorityVo> authorityVoList;
-	
+    @JSONField(serialize=false)
 	private transient CatalogVo parent;
-
+    @JSONField(serialize=false)
 	private transient Integer sort;
-
+    @JSONField(serialize=false)
 	private transient String userUuid;
-	
+    @JSONField(serialize=false)
 	private transient List<String> authorizedUuidList;
 
 	public synchronized String getUuid() {

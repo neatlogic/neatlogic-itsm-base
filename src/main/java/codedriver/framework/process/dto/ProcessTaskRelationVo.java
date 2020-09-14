@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.util.SnowflakeUtil;
 
@@ -14,7 +16,7 @@ public class ProcessTaskRelationVo extends BasePageVo {
     private String tilte;
     private ProcessTaskStatusVo statusVo;
     private ChannelTypeVo channelTypeVo;
-    
+    @JSONField(serialize=false)
     private transient Boolean isAutoGenerateId = true;
     public ProcessTaskRelationVo() {}
     public ProcessTaskRelationVo(Long channelTypeRelationId, Long source, Long target) {

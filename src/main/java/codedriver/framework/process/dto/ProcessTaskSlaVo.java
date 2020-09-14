@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
@@ -18,6 +19,7 @@ public class ProcessTaskSlaVo {
 	private String name;
 	@EntityField(name = "配置", type = ApiParamType.JSONOBJECT)
 	private String config;
+	@JSONField(serialize=false)
 	private transient JSONObject configObj;
 	private List<Long> processTaskStepIdList;
 	private ProcessTaskSlaTimeVo slaTimeVo;

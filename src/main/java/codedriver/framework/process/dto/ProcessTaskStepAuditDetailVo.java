@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.process.audithandler.core.ProcessTaskAuditDetailTypeFactory;
@@ -19,7 +20,7 @@ public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepA
 	private String oldContent;
 	@EntityField(name = "新内容", type = ApiParamType.STRING)
 	private String newContent;
-	
+	@JSONField(serialize=false)
 	private transient JSONObject paramObj = new JSONObject();
 
 	public ProcessTaskStepAuditDetailVo() {

@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.ApiParamType;
@@ -75,7 +76,7 @@ public class ProcessTaskStepSubtaskVo {
 	
 	@EntityField(name = "处理人", type = ApiParamType.STRING)
 	private String workerList;
-	
+	@JSONField(serialize=false)
 	private transient JSONObject paramObj;
 	
 	public Long getProcessTaskId() {

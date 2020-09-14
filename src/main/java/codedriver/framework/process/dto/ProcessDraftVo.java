@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
 
@@ -25,9 +27,9 @@ public class ProcessDraftVo {
 	
 	@EntityField(name = "保存时间", type = ApiParamType.LONG)
 	private Date fcd;
-	
+	@JSONField(serialize=false)
 	private transient String fcu;
-	
+	@JSONField(serialize=false)
 	private transient String md5;
 
 	public synchronized String getUuid() {

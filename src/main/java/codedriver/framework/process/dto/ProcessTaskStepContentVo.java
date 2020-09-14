@@ -2,6 +2,8 @@ package codedriver.framework.process.dto;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.util.SnowflakeUtil;
@@ -12,7 +14,7 @@ public class ProcessTaskStepContentVo extends BaseEditorVo {
 	private Long processTaskStepId;
 	private String contentHash;
 	private String type;
-    
+	@JSONField(serialize=false)
     private transient Boolean isAutoGenerateId = true;
 
 	public ProcessTaskStepContentVo() {

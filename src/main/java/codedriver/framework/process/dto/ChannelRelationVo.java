@@ -3,6 +3,8 @@ package codedriver.framework.process.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 
 public class ChannelRelationVo {
     private String source;
@@ -10,8 +12,9 @@ public class ChannelRelationVo {
     private String target;
     private List<String> targetList = new ArrayList<>();
     private List<String> authorityList = new ArrayList<>();
-
+    @JSONField(serialize=false)
     private transient String type;
+    @JSONField(serialize=false)
     private transient String uuid;
     
     public Long getChannelTypeRelationId() {
