@@ -3,6 +3,8 @@ package codedriver.framework.process.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.util.SnowflakeUtil;
 
@@ -17,8 +19,11 @@ public class ChannelTypeRelationVo extends BasePageVo {
     private List<ChannelTypeVo> sourceVoList = new ArrayList<>();
     private List<ChannelTypeVo> targetVoList = new ArrayList<>();
     
+    @JSONField(serialize=false)
     private transient Boolean isAutoGenerateId = true;
+    @JSONField(serialize=false)
     private transient List<Long> idList = new ArrayList<>();
+    @JSONField(serialize=false)
     private transient boolean useIdList;
     public synchronized Long getId() {
         if(id == null && isAutoGenerateId) {

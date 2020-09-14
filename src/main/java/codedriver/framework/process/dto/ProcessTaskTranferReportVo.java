@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskTranferReportVo {
@@ -8,7 +10,7 @@ public class ProcessTaskTranferReportVo {
     private Long channelTypeRelationId;
     private Long fromProcessTaskId;
     private Long toProcessTaskId;
-    
+    @JSONField(serialize=false)
     private transient Boolean isAutoGenerateId = true;
     
     public ProcessTaskTranferReportVo() {}

@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -32,6 +34,7 @@ public class FormVo extends BasePageVo implements Serializable {
 	
 	@EntityField(name = "版本信息列表", type = ApiParamType.JSONARRAY)
 	private List<FormVersionVo> versionList;
+	@JSONField(serialize=false)
 	private transient String keyword;
 	
 	public synchronized String getUuid() {

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.dto.TeamVo;
@@ -81,6 +82,7 @@ public class ProcessTaskVo {
 	ProcessTaskStepVo currentProcessTaskStep;
 	
 	@EntityField(name = "上报人公司列表", type = ApiParamType.JSONARRAY)
+	@JSONField(serialize=false)
 	private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
 
 	@EntityField(name = "评分信息", type = ApiParamType.STRING)
@@ -92,9 +94,10 @@ public class ProcessTaskVo {
     private ProcessTaskVo fromProcessTaskVo;
     @EntityField(name = "目标工单信息", type = ApiParamType.LONG)
     private ProcessTaskVo toProcessTaskVo;
-
+    @JSONField(serialize=false)
 	private transient Boolean isAutoGenerateId = true;
 	/** 当前用户在当前工单中工单干系人列表 **/
+    @JSONField(serialize=false)
 	private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
 	
 	public ProcessTaskVo() {

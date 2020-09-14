@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 public class ProcessStepVo implements Serializable {
 	private static final long serialVersionUID = -1211661404097123528L;
@@ -31,8 +32,9 @@ public class ProcessStepVo implements Serializable {
 	private List<ProcessStepWorkerPolicyVo> workerPolicyList;
 	private List<ProcessStepTimeoutPolicyVo> timeoutPolicyList;
 	private List<ProcessStepFormAttributeVo> formAttributeList;
-	
+	@JSONField(serialize=false)
 	private transient Long notifyPolicyId;
+	@JSONField(serialize=false)
 	private transient List<String> integrationUuidList = new ArrayList<>();
 
 	@Override

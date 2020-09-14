@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -43,7 +45,7 @@ public class WorktimeVo extends BasePageVo implements Serializable{
 	
 	@EntityField(name = "工作时段列表", type = ApiParamType.JSONARRAY)
 	private Set<String> workingHoursSet;
-	
+	@JSONField(serialize=false)
 	private transient String keyword;
 	
 	public synchronized String getUuid() {

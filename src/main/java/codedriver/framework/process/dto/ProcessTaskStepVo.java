@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
@@ -30,6 +31,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
 	private Long fromProcessTaskStepId;
+	@JSONField(serialize=false)
 	private transient Long startProcessTaskStepId;
 	private String processUuid;
 	private String processStepUuid;
@@ -53,8 +55,11 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
 	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
+	@JSONField(serialize=false)
 	private transient String config;
+	@JSONField(serialize=false)
 	private transient JSONObject configObj;
+	@JSONField(serialize=false)
 	private transient JSONObject globalConfig;
 	private Long expireTimeLong;
 	private String error;
@@ -65,11 +70,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Boolean isWorkerPolicyListSorted = false;
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
+	@JSONField(serialize=false)
 	private transient List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
 	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
+	@JSONField(serialize=false)
 	private transient JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
 	private Map<String, String> formAttributeActionMap;
@@ -95,16 +102,19 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<ProcessTaskStepVo> assignableWorkerStepList = new ArrayList<>();
 	@EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
+	@JSONField(serialize=false)
 	private transient String aliasName;
+	@JSONField(serialize=false)
 	private transient Boolean isAutoGenerateId = false;
-	
+	@JSONField(serialize=false)
 	private transient JSONObject notifyPolicyConfig;
-	
+	@JSONField(serialize=false)
 	private transient JSONArray actionList;
 	
 	@EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
 	private JSONObject processTaskStepData;
 	//@EntityField(name = "当前子任务Id", type = ApiParamType.LONG)
+	@JSONField(serialize=false)
 	private transient Long currentSubtaskId;
 	@EntityField(name = "处理器特有的步骤信息", type = ApiParamType.JSONOBJECT)
 	private Object handlerStepInfo;
@@ -112,15 +122,17 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<ProcessTaskStepVo> forwardNextStepList = new ArrayList<>();
 	@EntityField(name = "向后步骤列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepVo> backwardNextStepList = new ArrayList<>();
-	
+	@JSONField(serialize=false)
 	private transient Map<String, Object> formAttributeDataMap;
 	/** 获取自定义按钮映射数据 **/
+	@JSONField(serialize=false)
 	private transient Map<String, String> customButtonMap = new HashMap<>();
     
     @EntityField(name = "步骤表单属性隐藏数据", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepFormAttributeVo> stepFormConfig = new ArrayList<>();
     
     /** 当前用户在当前步骤中工单干系人列表 **/
+    @JSONField(serialize=false)
     private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
 	
 	public ProcessTaskStepVo() {
