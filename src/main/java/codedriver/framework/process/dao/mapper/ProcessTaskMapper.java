@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ElasticSearch;
 import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
@@ -169,6 +170,14 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskRelationVo> getProcessTaskRelationList(ProcessTaskRelationVo processTaskRelationVo);
 
+    public List<Long> checkProcessTaskIdListIsExists(List<Long> processTaskIdList);
+
+    public int getProcessTaskCountByKeywordAndChannelUuidList(@Param("basePageVo") BasePageVo basePageVo,
+        @Param("channelUuidList") List<String> channelUuidList);
+
+    public List<ProcessTaskVo> getProcessTaskListByKeywordAndChannelUuidList(@Param("basePageVo") BasePageVo basePageVo,
+        @Param("channelUuidList") List<String> channelUuidList);
+
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
 	public int replaceProcessTaskOldFormProp(@Param("processTaskId")Long processTaskId,@Param("form")String form,@Param("prop")String prop);
@@ -296,4 +305,6 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskStepFileByContentId(Long contentId);
 
     public int deleteProcessTaskStepContentById(Long contentId);
+
+    public int deleteProcessTaskRelationById(Long processTaskRelationId);
 }
