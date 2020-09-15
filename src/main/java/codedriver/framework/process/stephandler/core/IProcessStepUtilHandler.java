@@ -160,7 +160,6 @@ public interface IProcessStepUtilHandler {
 	public JSONObject makeupConfig(JSONObject configObj);
 	/**
      * 
-    * @Author: linbq
     * @Time:2020年8月21日
     * @Description: 获取工单信息 
     * @param processTaskId 工单id
@@ -169,7 +168,6 @@ public interface IProcessStepUtilHandler {
     public ProcessTaskVo getProcessTaskDetailById(Long processTaskId);   
     /**
      * 
-    * @Author: 14378
     * @Time:2020年7月3日
     * @Description: 获取所有工单干系人信息，用于通知接收人
     * @param processTaskId 工单id
@@ -178,4 +176,13 @@ public interface IProcessStepUtilHandler {
     * @return void
      */
     public void getReceiverMap(Long processTaskId, Long processTaskStepId, Map<String, List<NotifyReceiverVo>> receiverMap);
+    
+    /**
+     * 
+    * @Time:2020年9月15日
+    * @Description: 根据工单步骤id获取自定义按钮文案映射 
+    * @param processTaskStepId 
+    * @return void
+     */
+    public Map<String, String> getCustomButtonMapByProcessTaskStepId(Long processTaskStepId);
 }
