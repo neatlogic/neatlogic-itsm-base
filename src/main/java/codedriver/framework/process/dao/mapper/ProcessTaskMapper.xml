@@ -1824,8 +1824,8 @@
 	  (
 	    #{id},
 	    #{channelTypeRelationId},
-	    #{fromProcesstaskId},
-	    #{toProcesstaskId}
+	    #{fromProcessTaskId},
+	    #{toProcessTaskId}
 	  )
 	</insert>
 	
