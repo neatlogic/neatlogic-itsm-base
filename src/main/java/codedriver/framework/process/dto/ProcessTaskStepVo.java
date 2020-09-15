@@ -90,6 +90,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private ProcessTaskStepReplyVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
+	@EntityField(name = "是否需要回复框", type = ApiParamType.INTEGER)
+	private Integer isNeedContent;
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
@@ -350,6 +352,20 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setIsRequired(Integer isRequired) {
 		this.isRequired = isRequired;
+	}
+
+	public Integer getIsNeedContent() {
+		if(isNeedContent == null && MapUtils.isNotEmpty(getConfigObj())) {
+			JSONObject workerPolicyConfig = getConfigObj().getJSONObject("workerPolicyConfig");
+			if (MapUtils.isNotEmpty(workerPolicyConfig)) {
+				isNeedContent = workerPolicyConfig.getInteger("isNeedContent");
+			}
+		}
+		return isNeedContent;
+	}
+
+	public void setIsNeedContent(Integer isNeedContent) {
+		this.isNeedContent = isNeedContent;
 	}
 
 	public String getFlowDirection() {
