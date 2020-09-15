@@ -1178,7 +1178,7 @@
 	#{channelUuid}
 	</foreach>
 	<if test="basePageVo.keyword != null and basePageVo.keyword != ''">
-	AND (`id` LIKE CONCAT('%', #{basePageVo.keyword}, '%') OR `title` LIKE CONCAT('%', #{basePageVo.keyword}, '%'))
+	AND `id` LIKE CONCAT('%', #{basePageVo.keyword}, '%')
 	</if>
 	</select>
 	
@@ -1206,7 +1206,7 @@
 	#{channelUuid}
 	</foreach>
 	<if test="basePageVo.keyword != null and basePageVo.keyword != ''">
-	AND (`id` LIKE CONCAT('%', #{basePageVo.keyword}, '%') OR `title` LIKE CONCAT('%', #{basePageVo.keyword}, '%'))
+	AND `id` LIKE CONCAT('%', #{basePageVo.keyword}, '%')
 	</if>
 	ORDER BY `id` DESC
 	<if test="basePageVo.needPage">
