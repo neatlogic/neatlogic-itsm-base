@@ -115,6 +115,8 @@ public interface ChannelMapper {
     public List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
 
     public List<String> getChannelUuidListByParentUuidList(List<String> parentUuidList);
+
+    public int getActiveChannelCountByParentUuidAndChannelTypeUuidList(@Param("parentUuid") String parentUuid, @Param("channelTypeUuidList") List<String> channelTypeUuidList);
 	
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
@@ -175,4 +177,7 @@ public interface ChannelMapper {
     public int deleteChannelRelationBySource(String channelUuid);
 
     public int deleteChannelRelationAuthorityBySource(String channelUuid);
+
+    public List<ChannelTypeRelationVo>
+        getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
 }
