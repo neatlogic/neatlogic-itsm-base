@@ -177,4 +177,7 @@ public interface ChannelMapper {
     public int deleteChannelRelationBySource(String channelUuid);
 
     public int deleteChannelRelationAuthorityBySource(String channelUuid);
+
+    public List<ChannelTypeRelationVo>
+        getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
 }
