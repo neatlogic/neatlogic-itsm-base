@@ -635,6 +635,21 @@
 	</foreach>
 	</select>
 	
+	<select id="getActiveChannelCountByParentUuidAndChannelTypeUuidList" resultType="int">
+	SELECT COUNT(1) FROM (
+		SELECT `uuid` FROM `channel` 
+		WHERE `is_active` = 1
+		AND `parent_uuid` = #{parentUuid}
+		<if test="channelTypeUuidList != null and channelTypeUuidList.size() > 0">
+			AND `channel_type_uuid` IN 
+			<foreach collection="channelTypeUuidList" item="channelTypeUuid" open="(" separator="," close=")">
+			#{channelTypeUuid}
+			</foreach>
+		</if>
+		LIMIT 1 
+	) a
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
