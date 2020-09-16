@@ -1430,6 +1430,22 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	                    if (hidecomponentList.contains(attributeUuid)) {
 	                        continue;
 	                    }
+	                    Object dataObj = formAttributeDataObj.get("dataList");
+	                    if(dataObj == null) {
+	                        continue;
+	                    }else if(dataObj instanceof JSONArray) {
+	                        if(CollectionUtils.isEmpty((JSONArray)dataObj)) {
+	                            continue;
+	                        }
+	                    }else if(dataObj instanceof JSONObject) {
+	                        if(MapUtils.isEmpty((JSONObject)dataObj)) {
+	                            continue;
+	                        }
+	                    }else if(dataObj instanceof String) {
+	                        if(StringUtils.isBlank((String)dataObj)) {
+	                            continue;
+	                        }
+	                    }
 	                    ProcessTaskFormAttributeDataVo attributeData = new ProcessTaskFormAttributeDataVo();
 	                    attributeData.setData(formAttributeDataObj.getString("dataList"));
 	                    attributeData.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
