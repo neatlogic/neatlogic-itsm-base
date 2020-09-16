@@ -89,6 +89,10 @@ public class ChannelVo extends BasePageVo implements Serializable{
     
     @EntityField(name = "类型#uuid", type = ApiParamType.STRING)
     private String typeAndUuid;
+    
+    @EntityField(name = "使用范围", type = ApiParamType.STRING)
+    private String support;
+    
     @JSONField(serialize=false)
 	private transient boolean isAuthority = false;
     @JSONField(serialize=false)
@@ -390,4 +394,14 @@ public class ChannelVo extends BasePageVo implements Serializable{
         }
         return typeAndUuid;
     }
+
+    public String getSupport() {
+        return support;
+    }
+
+    public void setSupport(String support) {
+        this.support = support;
+    }
+    
+    
 }

@@ -144,6 +144,7 @@
 		c.`help`,
 		c.`is_active_help` AS isActiveHelp,
 		c.`channel_type_uuid` AS channelTypeUuid,
+		c.`support`,
 		cp.`process_uuid` AS processUuid,
 		cw.`worktime_uuid` AS worktimeUuid
 		FROM
@@ -648,7 +649,8 @@
 		`allow_desc`,
 		`help`,
 		`is_active_help`,
-		`channel_type_uuid`
+		`channel_type_uuid`,
+		`support`
 		)
 		VALUES
 		(
@@ -664,7 +666,8 @@
 		#{allowDesc},
 		#{help},
 		#{isActiveHelp},
-		#{channelTypeUuid}
+		#{channelTypeUuid},
+		#{support}
 		)
 	</insert>
 
