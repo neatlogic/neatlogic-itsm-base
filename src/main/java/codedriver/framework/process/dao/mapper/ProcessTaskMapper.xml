@@ -1224,7 +1224,7 @@
 	WHERE `to_processtask_id` = #{value}
 	</select>
 	
-	<select id="getProcessTaskTranferReportByToProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskRelationVo">
+	<select id="getProcessTaskRelationById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskRelationVo">
 	SELECT 
 	`id`,
 	`channel_type_relation_id` AS channelTypeRelationId,
