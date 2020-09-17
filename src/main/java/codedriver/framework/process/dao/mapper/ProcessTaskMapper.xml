@@ -1124,12 +1124,16 @@
 	SELECT `from_processtask_id` FROM `processtask_tranfer_report` WHERE `to_processtask_id` = #{value}
 	</select>
 	
-	<select id="getLastToProcessTaskIdByFromProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
-	SELECT `to_processtask_id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} ORDER BY `id` DESC limit 1
+	<select id="getToProcessTaskIdListByFromProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `to_processtask_id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} ORDER BY `id` DESC 
 	</select>
 	
 	<select id="getProcessTaskRelationCountByProcessTaskId" parameterType="java.lang.Long" resultType="int">
-	SELECT COUNT(1) FROM `processtask_relation` WHERE `source` = #{value} OR target = #{value}
+	select count(1) from (
+		SELECT `id` FROM `processtask_relation` WHERE `source` = #{value} OR `target` = #{value}
+		UNION
+		SELECT `id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} OR `to_processtask_id` = #{value}
+	) a
 	</select>
 	
 	<select id="getProcessTaskRelationList" parameterType="codedriver.framework.process.dto.ProcessTaskRelationVo" resultType="codedriver.framework.process.dto.ProcessTaskRelationVo">
@@ -1138,14 +1142,16 @@
 	  a.`channelTypeRelationId`,
 	  a.`source`,
 	  a.`target`,
-	  a.`processTaskId`
+	  a.`processTaskId`,
+	  a.`action`
 	FROM (
 		SELECT 
 		  `id`,
 		  `channel_type_relation_id` AS channelTypeRelationId,
 		  `source`,
 		  `target`,
-		  `target` AS processTaskId 
+		  `target` AS processTaskId,
+		  'relation' AS action
 		FROM `processtask_relation` 
 		WHERE `source` = #{processTaskId}
 		UNION
@@ -1154,9 +1160,30 @@
 		  `channel_type_relation_id` AS channelTypeRelationId,
 		  `source`,
 		  `target`,
-		  `source` AS processTaskId 
+		  `source` AS processTaskId,
+		  'relation' AS action 
 		FROM `processtask_relation` 
 		WHERE `target` = #{processTaskId}
+		UNION
+		SELECT 
+		  `id`,
+		  `channel_type_relation_id` AS channelTypeRelationId,
+		  `from_processtask_id` AS source,
+		  `to_processtask_id` AS target,
+		  `to_processtask_id` AS processTaskId,
+		  'tranferreport' AS action 
+		FROM `processtask_tranfer_report` 
+		WHERE `from_processtask_id` = #{processTaskId}
+		UNION
+		SELECT 
+		  `id`,
+		  `channel_type_relation_id` AS channelTypeRelationId,
+		  `from_processtask_id` AS source,
+		  `to_processtask_id` AS target,
+		  `from_processtask_id` AS processTaskId,
+		  'tranferreport' AS action 
+		FROM `processtask_tranfer_report` 
+		WHERE `to_processtask_id` = #{processTaskId}
 	) a
 	ORDER BY a.id DESC
 	<if test="needPage == true">
@@ -1224,6 +1251,16 @@
 	`to_processtask_id` AS toProcessTaskId
 	FROM `processtask_tranfer_report` 
 	WHERE `to_processtask_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskRelationById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskRelationVo">
+	SELECT 
+	`id`,
+	`channel_type_relation_id` AS channelTypeRelationId,
+	`source`,
+	`target`
+	FROM `processtask_relation` 
+	WHERE `id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
