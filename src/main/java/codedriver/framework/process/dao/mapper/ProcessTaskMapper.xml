@@ -1214,6 +1214,16 @@
 	</if>
 	</select>
 	
+	<select id="getProcessTaskTranferReportByToProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskTranferReportVo">
+	SELECT 
+	`id`,
+	`channel_type_relation_id` AS channelTypeRelationId,
+	`from_processtask_id` AS fromProcessTaskId,
+	`to_processtask_id` AS toProcessTaskId
+	FROM `processtask_tranfer_report` 
+	WHERE `to_processtask_id` = #{value}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
