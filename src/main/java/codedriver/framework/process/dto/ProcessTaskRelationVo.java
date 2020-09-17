@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskRelationVo extends BasePageVo {
@@ -10,7 +11,9 @@ public class ProcessTaskRelationVo extends BasePageVo {
     private Long channelTypeRelationId;
     private Long source;
     private Long target;
-
+    private String action;
+    private Integer isDeletable;
+    
     private String channelTypeRelationName;
     private Long processTaskId;
     private String tilte;
@@ -51,6 +54,12 @@ public class ProcessTaskRelationVo extends BasePageVo {
     public void setTarget(Long target) {
         this.target = target;
     }
+    public String getAction() {
+        return action;
+    }
+    public void setAction(String action) {
+        this.action = action;
+    }
     public Boolean getIsAutoGenerateId() {
         return isAutoGenerateId;
     }
@@ -86,5 +95,18 @@ public class ProcessTaskRelationVo extends BasePageVo {
     }
     public void setChannelTypeVo(ChannelTypeVo channelTypeVo) {
         this.channelTypeVo = channelTypeVo;
+    }
+    public Integer getIsDeletable() {
+        if(isDeletable == null) {
+            if(ProcessTaskOperationType.TRANFERREPORT.getValue().equals(action)) {
+                isDeletable = 0;
+            }else {
+                isDeletable = 1;
+            }
+        }
+        return isDeletable;
+    }
+    public void setIsDeletable(Integer isDeletable) {
+        this.isDeletable = isDeletable;
     }
 }
