@@ -16,6 +16,8 @@ import codedriver.framework.dto.ExpressionVo;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.process.constvalue.ProcessFormHandler;
 import codedriver.framework.restful.annotation.EntityField;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class FormAttributeVo implements Serializable {
 	private static final long serialVersionUID = 8282018124626035430L;
@@ -147,6 +149,17 @@ public class FormAttributeVo implements Serializable {
 
 	public void setRequired(boolean isRequired) {
 		this.isRequired = isRequired;
+	}
+
+	public boolean getIsRequiredFromConfig(){
+		if(StringUtils.isNotBlank(config)){
+			JSONObject configJson = JSONObject.parseObject(config);
+			Boolean isRequiredInConfig = null;
+			if(MapUtils.isNotEmpty(configJson) && (isRequiredInConfig = configJson.getBoolean("isRequired")) != null){
+				this.isRequired = isRequiredInConfig.booleanValue();
+			}
+		}
+		return isRequired;
 	}
 
 	
