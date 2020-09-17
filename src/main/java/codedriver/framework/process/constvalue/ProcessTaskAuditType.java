@@ -27,7 +27,9 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	COMPLETE("complete", "流转", "完成【${DATA.processTaskStepName}】"),
 	BACK("back", "回退", "回退【${DATA.processTaskStepName}】至【${DATA.nextStepName}】"),
 	CONDITION("condition", "条件", "条件 <span style=\"color:${DATA.stepStatusVo.color};vertical-align: baseline;\">${DATA.stepStatusVo.text}</span> "),
-	SCORE("score", "评分", "评价工单")
+	SCORE("score", "评分", "评价工单"),
+    TRANFERREPORT("tranferreport", "转报", "转报并关联工单"),
+    RELATION("relation", "关联", "关联工单")
 	;
 	private String value;
 	private String text;
