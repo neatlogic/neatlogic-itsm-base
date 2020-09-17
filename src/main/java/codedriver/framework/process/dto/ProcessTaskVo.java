@@ -87,13 +87,11 @@ public class ProcessTaskVo {
 
 	@EntityField(name = "评分信息", type = ApiParamType.STRING)
 	private String scoreInfo;
-	
-//	@EntityField(name = "来源工单id", type = ApiParamType.LONG)
-//    private Long fromProcessTaskId;	
+		
     @EntityField(name = "来源工单信息", type = ApiParamType.LONG)
     private ProcessTaskVo fromProcessTaskVo;
-    @EntityField(name = "目标工单信息", type = ApiParamType.LONG)
-    private ProcessTaskVo toProcessTaskVo;
+    @EntityField(name = "目标工单信息列表", type = ApiParamType.LONG)
+    private List<ProcessTaskVo> toProcessTaskList = new ArrayList<>();
     @JSONField(serialize=false)
 	private transient Boolean isAutoGenerateId = true;
 	/** 当前用户在当前工单中工单干系人列表 **/
@@ -407,14 +405,6 @@ public class ProcessTaskVo {
 		this.scoreInfo = scoreInfo;
 	}
 
-//    public Long getFromProcessTaskId() {
-//        return fromProcessTaskId;
-//    }
-//
-//    public void setFromProcessTaskId(Long fromProcessTaskId) {
-//        this.fromProcessTaskId = fromProcessTaskId;
-//    }
-
     public ProcessTaskVo getFromProcessTaskVo() {
         return fromProcessTaskVo;
     }
@@ -423,12 +413,12 @@ public class ProcessTaskVo {
         this.fromProcessTaskVo = fromProcessTaskVo;
     }
 
-    public ProcessTaskVo getToProcessTaskVo() {
-        return toProcessTaskVo;
+    public List<ProcessTaskVo> getToProcessTaskList() {
+        return toProcessTaskList;
     }
 
-    public void setToProcessTaskVo(ProcessTaskVo toProcessTaskVo) {
-        this.toProcessTaskVo = toProcessTaskVo;
+    public void setToProcessTaskList(List<ProcessTaskVo> toProcessTaskList) {
+        this.toProcessTaskList = toProcessTaskList;
     }
 
 }

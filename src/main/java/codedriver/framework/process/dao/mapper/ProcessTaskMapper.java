@@ -164,7 +164,7 @@ public interface ProcessTaskMapper {
 
     public Long getFromProcessTaskIdByToProcessTaskId(Long toProcessTaskId);
 
-    public Long getLastToProcessTaskIdByFromProcessTaskId(Long processTaskId);
+    public List<Long> getToProcessTaskIdListByFromProcessTaskId(Long processTaskId);
 
     public int getProcessTaskRelationCountByProcessTaskId(Long processTaskId);
 
@@ -179,6 +179,8 @@ public interface ProcessTaskMapper {
         @Param("channelUuidList") List<String> channelUuidList);
 
     public ProcessTaskTranferReportVo getProcessTaskTranferReportByToProcessTaskId(Long toProcessTaskId);
+
+    public ProcessTaskRelationVo getProcessTaskRelationById(Long id);
 
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	

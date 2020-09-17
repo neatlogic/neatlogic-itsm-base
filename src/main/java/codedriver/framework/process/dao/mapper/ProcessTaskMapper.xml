@@ -1122,8 +1122,8 @@
 	SELECT `from_processtask_id` FROM `processtask_tranfer_report` WHERE `to_processtask_id` = #{value}
 	</select>
 	
-	<select id="getLastToProcessTaskIdByFromProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
-	SELECT `to_processtask_id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} ORDER BY `id` DESC limit 1
+	<select id="getToProcessTaskIdListByFromProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `to_processtask_id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} ORDER BY `id` DESC 
 	</select>
 	
 	<select id="getProcessTaskRelationCountByProcessTaskId" parameterType="java.lang.Long" resultType="int">
@@ -1222,6 +1222,16 @@
 	`to_processtask_id` AS toProcessTaskId
 	FROM `processtask_tranfer_report` 
 	WHERE `to_processtask_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskTranferReportByToProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskRelationVo">
+	SELECT 
+	`id`,
+	`channel_type_relation_id` AS channelTypeRelationId,
+	`source`,
+	`target`
+	FROM `processtask_relation` 
+	WHERE `id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
