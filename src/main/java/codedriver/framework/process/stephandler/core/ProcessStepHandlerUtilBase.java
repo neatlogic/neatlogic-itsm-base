@@ -471,14 +471,18 @@ public abstract class ProcessStepHandlerUtilBase {
 				Long startTime = null, endTime = null;
 				if (auditVo.getActiveTimeLong() != null) {
 					startTime = auditVo.getActiveTimeLong();
-				}
+				}else if(auditVo.getStartTimeLong() != null) {
+                    startTime = auditVo.getStartTimeLong();
+                }
 				if (auditVo.getCompleteTimeLong() != null) {
 					endTime = auditVo.getCompleteTimeLong();
 				} else if (auditVo.getAbortTimeLong() != null) {
 					endTime = auditVo.getAbortTimeLong();
 				} else if (auditVo.getBackTimeLong() != null) {
 					endTime = auditVo.getBackTimeLong();
-				}
+				}else if(auditVo.getPauseTimeLong() != null) {
+                    endTime = auditVo.getPauseTimeLong();
+                }
 				if (startTime != null && endTime != null) {
 					Map<String, Long> stimeMap = new HashMap<>();
 					stimeMap.put("s", startTime);
@@ -639,7 +643,6 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected void execute() {
 			List<ProcessTaskSlaVo> slaList = processTaskMapper.getProcessTaskSlaByProcessTaskStepId(currentProcessTaskStepVo.getId());
 			if (slaList != null && slaList.size() > 0) {
-				long now = System.currentTimeMillis();
 				ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 				String worktimeUuid = processTaskVo.getWorktimeUuid();
@@ -716,6 +719,7 @@ public abstract class ProcessStepHandlerUtilBase {
 
 					// 修正最终超时日期
 					if (slaTimeVo != null) {
+		                long now = System.currentTimeMillis();
 						slaTimeVo.setRealExpireTime(new Date(now + slaTimeVo.getRealTimeLeft()));
 						if (StringUtils.isNotBlank(worktimeUuid)) {
 							if (slaTimeVo.getTimeLeft() != null) {
