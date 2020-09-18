@@ -1501,12 +1501,30 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					});
 				}
 			}
+            /** 写入时间审计 **/
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
+
+            /** 计算SLA并触发超时警告 **/
+            SlaHandler.calculate(currentProcessTaskStepVo);
+
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
+            
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setIsActive(1);
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 			currentProcessTaskStepVo.setError(ex.getMessage());
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
+            
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
 		} finally {
 			/** 处理历史记录 **/
 		    ProcessTaskTranferReportVo processTaskTranferReportVo =  processTaskMapper.getProcessTaskTranferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());

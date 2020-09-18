@@ -539,13 +539,18 @@ public abstract class ProcessStepHandlerUtilBase {
 					Long startTime = null, endTime = null;
 					if (auditVo.getActiveTimeLong() != null) {
 						startTime = auditVo.getActiveTimeLong();
+					}else if(auditVo.getStartTimeLong() != null) {
+					    startTime = auditVo.getStartTimeLong();
 					}
+					
 					if (auditVo.getCompleteTimeLong() != null) {
 						endTime = auditVo.getCompleteTimeLong();
 					} else if (auditVo.getAbortTimeLong() != null) {
 						endTime = auditVo.getAbortTimeLong();
 					} else if (auditVo.getBackTimeLong() != null) {
 						endTime = auditVo.getBackTimeLong();
+					}else if(auditVo.getPauseTimeLong() != null) {
+					    endTime = auditVo.getPauseTimeLong();
 					}
 					if (startTime != null && endTime != null) {
 						Map<String, Long> smap = new HashMap<>();
@@ -852,6 +857,16 @@ public abstract class ProcessStepHandlerUtilBase {
 					}
 				}
 				break;
+			case PAUSE:
+                /** 如果找不到审计记录并且pausetime不为空，则新建审计记录 **/
+                newAuditVo.setPauseTime("now");
+                if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getPauseTime())) {
+                    processTaskStepTimeAuditMapper.insertProcessTaskStepTimeAudit(newAuditVo);
+                } else if (StringUtils.isBlank(processTaskStepTimeAuditVo.getPauseTime())) {// 如果pausetime为空，则更新pausetime
+                    newAuditVo.setId(processTaskStepTimeAuditVo.getId());
+                    processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
+                }
+                break;
 			}
 		}
 	}

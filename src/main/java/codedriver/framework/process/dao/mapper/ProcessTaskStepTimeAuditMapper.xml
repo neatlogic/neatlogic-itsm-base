@@ -7,7 +7,8 @@
 		UNIX_TIMESTAMP(a.`start_time`) * 1000 as startTimeLong,
 		UNIX_TIMESTAMP(a.`complete_time`) * 1000 as completeTimeLong,
 		UNIX_TIMESTAMP(a.`abort_time`) * 1000 as abortTimeLong,
-		UNIX_TIMESTAMP(a.`back_time`) * 1000 as backTimeLong
+		UNIX_TIMESTAMP(a.`back_time`) * 1000 as backTimeLong,
+		UNIX_TIMESTAMP(a.`pause_time`) * 1000 as pauseTimeLong
 		FROM
 		`processtask_step_timeaudit` a
 		JOIN `processtask_step_sla` b
@@ -23,7 +24,8 @@
 		DATE_FORMAT(`start_time`,'%Y-%m-%d %H:%i:%s') AS startTime,
 		DATE_FORMAT(`abort_time`,'%Y-%m-%d %H:%i:%s') AS abortTime,
 		DATE_FORMAT(`complete_time`,'%Y-%m-%d %H:%i:%s') AS completeTime,
-		DATE_FORMAT(`back_time`,'%Y-%m-%d %H:%i:%s') AS backTime
+		DATE_FORMAT(`back_time`,'%Y-%m-%d %H:%i:%s') AS backTime,
+		DATE_FORMAT(`pause_time`,'%Y-%m-%d %H:%i:%s') AS pauseTime
 		FROM
 		`processtask_step_timeaudit`
 		WHERE
@@ -43,6 +45,7 @@
 			<when test="abortTime != null and abortTime == 'now'">,`abort_time`</when>
 			<when test="completeTime != null and completeTime == 'now'">,`complete_time`</when>
 			<when test="backTime != null and backTime == 'now'">,`back_time`</when>
+			<when test="pauseTime != null and pauseTime == 'now'">,`pause_time`</when>
 		</choose>
 		)
 		VALUES
@@ -54,6 +57,7 @@
 			<when test="abortTime != null and abortTime == 'now'">,NOW(3)</when>
 			<when test="completeTime != null and completeTime == 'now'">,NOW(3)</when>
 			<when test="backTime != null and backTime == 'now'">,NOW(3)</when>
+			<when test="pauseTime != null and pauseTime == 'now'">,NOW(3)</when>
 		</choose>
 		)
 	</insert>
@@ -69,6 +73,7 @@
 			<when test="abortTime != null and abortTime == 'now'">,`abort_time` = NOW(3)</when>
 			<when test="completeTime != null and completeTime == 'now'">,`complete_time` = NOW(3)</when>
 			<when test="backTime != null and backTime == 'now'">,`back_time` = NOW(3)</when>
+			<when test="pauseTime != null and pauseTime == 'now'">,`pause_time` = NOW(3)</when>
 		</choose>
 		WHERE `id` = #{id}
 	</update>
