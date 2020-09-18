@@ -1225,6 +1225,45 @@
 	FROM `processtask_tranfer_report` 
 	WHERE `to_processtask_id` = #{value}
 	</select>
+
+	<select id="searchProcessTaskImportAuditCount" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="int" useCache="false">
+		SELECT
+		COUNT(p.`id`)
+		FROM `processtask_import_audit` p
+		WHERE 1=1
+		<if test="processTaskId != null and processTaskId != ''">
+			and `processtask_id` = #{processTaskId}
+		</if>
+		<if test="title != null and title != ''">
+			and `title` like CONCAT('%', #{title}, '%')
+		</if>
+	</select>
+
+	<select id="searchProcessTaskImportAudit" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" useCache="false">
+		SELECT
+		`id`,
+		`processtask_id` as processTaskId,
+		`title`,
+		`channel_uuid` as channelUuid,
+		`status`,
+		`error_reason` as errorReason,
+		`owner`,
+		(select u.`user_name` from `user` u where u.`uuid` = `owner`) as ownerName,
+		`import_time` as importTime
+		FROM
+		`processtask_import_audit`
+		WHERE 1=1
+		<if test="processTaskId != null and processTaskId != ''">
+			and `processtask_id` = #{processTaskId}
+		</if>
+		<if test="title != null and title != ''">
+			and `title` like CONCAT('%', #{title}, '%')
+		</if>
+		order by `import_time` desc
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}

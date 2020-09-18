@@ -1,16 +1,17 @@
 package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
 import java.util.Date;
 
-public class ProcessTaskImportAuditVo {
+public class ProcessTaskImportAuditVo extends BasePageVo {
 	@EntityField(name = "导入记录id", type = ApiParamType.LONG)
 	private Long id;
 	@EntityField(name = "工单ID", type = ApiParamType.LONG)
-	private Long processtaskId;
+	private Long processTaskId;
 	@EntityField(name = "标题", type = ApiParamType.STRING)
 	private String title;
 	@EntityField(name = "服务uuid", type = ApiParamType.STRING)
@@ -19,10 +20,12 @@ public class ProcessTaskImportAuditVo {
 	private Integer status;
 	@EntityField(name = "上报失败原因", type = ApiParamType.STRING)
 	private String errorReason;
-	@EntityField(name = "上报人", type = ApiParamType.STRING)
+	@EntityField(name = "上报人UUID", type = ApiParamType.STRING)
 	private String owner;
 	@EntityField(name = "导入时间", type = ApiParamType.LONG)
 	private Date importTime;
+	@EntityField(name = "上报人用户名", type = ApiParamType.STRING)
+	private String ownerName;
 
 	public ProcessTaskImportAuditVo() {
 
@@ -43,12 +46,12 @@ public class ProcessTaskImportAuditVo {
 		this.id = id;
 	}
 
-	public Long getProcesstaskId() {
-		return processtaskId;
+	public Long getProcessTaskId() {
+		return processTaskId;
 	}
 
-	public void setProcesstaskId(Long processtaskId) {
-		this.processtaskId = processtaskId;
+	public void setProcessTaskId(Long processTaskId) {
+		this.processTaskId = processTaskId;
 	}
 
 	public String getTitle() {
@@ -97,5 +100,13 @@ public class ProcessTaskImportAuditVo {
 
 	public void setImportTime(Date importTime) {
 		this.importTime = importTime;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
 	}
 }
