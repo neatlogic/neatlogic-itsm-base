@@ -26,6 +26,8 @@ public class ProcessTaskImportAuditVo extends BasePageVo {
 	private Date importTime;
 	@EntityField(name = "上报人用户名", type = ApiParamType.STRING)
 	private String ownerName;
+	@EntityField(name = "服务名称", type = ApiParamType.STRING)
+	private String channelName;
 
 	public ProcessTaskImportAuditVo() {
 
@@ -108,5 +110,13 @@ public class ProcessTaskImportAuditVo extends BasePageVo {
 
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
+	}
+
+	public String getChannelName() {
+		return channelName;
+	}
+
+	public void setChannelName(String channelName) {
+		this.channelName = channelName;
 	}
 }

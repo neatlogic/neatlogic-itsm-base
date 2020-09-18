@@ -1245,6 +1245,7 @@
 		`processtask_id` as processTaskId,
 		`title`,
 		`channel_uuid` as channelUuid,
+		(select `name` from `channel` where `uuid` = `channel_uuid`) as channelName,
 		`status`,
 		`error_reason` as errorReason,
 		`owner`,
