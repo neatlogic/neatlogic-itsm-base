@@ -12,6 +12,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Objects;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.DeviceType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.AuthorityVo;

@@ -5,14 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.DeviceType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.dto.condition.ConditionConfigVo;
@@ -49,8 +54,10 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	private Integer isCanRole;
 	@EntityField(name = "是否附加待我处理条件", type = ApiParamType.INTEGER)
 	private Integer isMeWillDo = 0;
-	@EntityField(name = "附加待我处理的数量", type = ApiParamType.INTEGER)
+	@EntityField(name = "附加待我处理的数量", type = ApiParamType.STRING)
 	private String meWillDoCount;
+	@EntityField(name = "设备类型", type = ApiParamType.STRING)
+	private String device;
 	
 	//params
 	private List<String> channelUuidList;
@@ -218,6 +225,22 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	public void setResultColumnList(JSONArray resultColumnList) {
 		this.resultColumnList = resultColumnList;
 	}
+
+    public String getDevice() {
+        if(device == null) {
+            HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+            if(DeviceType.MOBILE.getValue().equals(request.getHeader("Device"))) {
+                device = DeviceType.MOBILE.getValue();
+            }else {
+                device = DeviceType.PC.getValue();
+            }
+        }
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
 	
 	
 }
