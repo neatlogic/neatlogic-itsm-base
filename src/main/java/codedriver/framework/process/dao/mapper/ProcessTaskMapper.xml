@@ -1202,7 +1202,8 @@
 	SELECT
 	COUNT(1)
 	FROM `processtask`
-	WHERE `channel_uuid` IN 
+	WHERE `status` != 'draft'
+	AND `channel_uuid` IN 
 	<foreach collection="channelUuidList" item="channelUuid" open="(" separator="," close=")">
 	#{channelUuid}
 	</foreach>
@@ -1230,7 +1231,8 @@
 	`worktime_uuid` AS worktimeUuid,
 	`error`
 	FROM `processtask`
-	WHERE `channel_uuid` IN 
+	WHERE `status` != 'draft'
+	AND `channel_uuid` IN 
 	<foreach collection="channelUuidList" item="channelUuid" open="(" separator="," close=")">
 	#{channelUuid}
 	</foreach>
