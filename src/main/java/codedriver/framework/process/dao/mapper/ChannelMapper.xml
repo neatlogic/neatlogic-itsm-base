@@ -27,6 +27,12 @@
 		<if test="isActive != null">
 			AND c.`is_active` = #{isActive}
 		</if>
+		<if test="support == 'mobile'">
+			AND c.`support` != 'pc'
+		</if>
+		<if test="support == 'pc'">
+			AND c.`support` != 'mobile'
+		</if>
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ChannelVo" id="channelMap">
@@ -77,6 +83,12 @@
 		<if test="isActive != null">
 			AND c.`is_active` = #{isActive}
 		</if>
+		<if test="support == 'mobile'">
+			AND c.`support` != 'pc'
+		</if>
+		<if test="support == 'pc'">
+			AND c.`support` != 'mobile'
+		</if>
 		<choose>
 			<when test="isFavorite == 1">
 				ORDER BY cu.`insert_time` DESC
@@ -116,6 +128,12 @@
 		<if test="isActive != null">
 			AND c.`is_active` = #{isActive}
 		</if>
+		<if test="support == 'mobile'">
+			AND c.`support` != 'pc'
+		</if>
+		<if test="support == 'pc'">
+			AND c.`support` != 'mobile'
+		</if>
 		<choose>
 			<when test="isFavorite == 1">
 				ORDER BY cu.`insert_time` DESC
@@ -144,6 +162,7 @@
 		c.`help`,
 		c.`is_active_help` AS isActiveHelp,
 		c.`channel_type_uuid` AS channelTypeUuid,
+		c.`support`,
 		cp.`process_uuid` AS processUuid,
 		cw.`worktime_uuid` AS worktimeUuid
 		FROM
@@ -634,6 +653,33 @@
 	</foreach>
 	</select>
 	
+	<select id="getActiveChannelCountByParentUuidAndChannelTypeUuidList" resultType="int">
+	SELECT COUNT(1) FROM (
+		SELECT `uuid` FROM `channel` 
+		WHERE `is_active` = 1
+		AND `parent_uuid` = #{parentUuid}
+		<if test="channelTypeUuidList != null and channelTypeUuidList.size() > 0">
+			AND `channel_type_uuid` IN 
+			<foreach collection="channelTypeUuidList" item="channelTypeUuid" open="(" separator="," close=")">
+			#{channelTypeUuid}
+			</foreach>
+		</if>
+		LIMIT 1 
+	) a
+	</select>
+	
+	<select id="getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo">
+	SELECT 
+	  `channel_type_relation_id` AS id,
+	  COUNT(`channel_type_relation_id`) AS referenceCount
+	FROM `processtask_relation` 
+	WHERE `channel_type_relation_id` IN 
+	<foreach collection="list" item="channelTypeRelationId" open="(" separator="," close=")">
+	#{channelTypeRelationId}
+	</foreach>
+	GROUP BY `channel_type_relation_id`
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
@@ -648,7 +694,8 @@
 		`allow_desc`,
 		`help`,
 		`is_active_help`,
-		`channel_type_uuid`
+		`channel_type_uuid`,
+		`support`
 		)
 		VALUES
 		(
@@ -664,7 +711,8 @@
 		#{allowDesc},
 		#{help},
 		#{isActiveHelp},
-		#{channelTypeUuid}
+		#{channelTypeUuid},
+		#{support}
 		)
 	</insert>
 

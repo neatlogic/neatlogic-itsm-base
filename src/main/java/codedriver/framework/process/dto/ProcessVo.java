@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
@@ -46,7 +47,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
 	@EntityField(name = "引用数量", type = ApiParamType.INTEGER)
 	private int referenceCount;
-
+	@JSONField(serialize=false)
 	private transient JSONObject configObj;
 	// @EntityField(name = "流程表单uuid", type = ApiParamType.STRING)
 	private String formUuid;
@@ -58,8 +59,9 @@ public class ProcessVo extends BasePageVo implements Serializable {
 	private List<ProcessSlaVo> slaList;
 
 	private ProcessScoreTemplateVo processScoreTemplateVo;
-
+	@JSONField(serialize=false)
 	private transient String fcu;
+	@JSONField(serialize=false)
 	private transient String keyword;
 
 	public synchronized String getUuid() {

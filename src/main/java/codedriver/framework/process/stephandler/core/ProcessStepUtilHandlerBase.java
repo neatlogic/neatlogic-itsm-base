@@ -1,12 +1,18 @@
 package codedriver.framework.process.stephandler.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.GroupSearch;
@@ -171,6 +177,8 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             processTaskStepVo.getCurrentUserProcessUserTypeList().addAll(processTaskVo.getCurrentUserProcessUserTypeList());
             if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepVo.getId(), UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
                 processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
+            }else {
+                processTaskStepVo.getCurrentUserProcessUserTypeList().remove(ProcessUserType.WORKER.getValue());
             }
             ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), UserContext.get().getUserUuid(true));
             List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUserVo);
@@ -286,7 +294,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                 channelTypeVo = new ChannelTypeVo();
                 channelTypeVo.setUuid(channelVo.getChannelTypeUuid());
             }
-            processTaskVo.setChannelType(channelTypeVo);
+            processTaskVo.setChannelType(new ChannelTypeVo(channelTypeVo));
         }
         //耗时
         if(processTaskVo.getEndTime() != null) {
@@ -433,5 +441,44 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                 notifyReceiverList.add(new NotifyReceiverVo(processTaskStepWorkerVo.getType(), processTaskStepWorkerVo.getUuid()));
             }
         }
+    }
+    
+    @Override
+    public Map<String, String> getCustomButtonMapByProcessTaskStepId(Long processTaskStepId) {
+        Map<String, String> customButtonMap = new HashMap<>();
+        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
+        if(processTaskStepVo != null) {
+            JSONArray customButtonList = null;
+            String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+            JSONObject configObj = JSON.parseObject(stepConfig);
+            /** 节点设置按钮映射 **/
+            if(MapUtils.isNotEmpty(configObj)) {
+                customButtonList = configObj.getJSONArray("customButtonList");
+            }
+
+            if(CollectionUtils.isEmpty(customButtonList)) {
+                ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
+                JSONObject globalConfig = processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null;
+                IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(processTaskStepVo.getHandler());
+                if(processStepUtilHandler != null) {
+                    globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
+                }
+                /** 节点管理按钮映射 **/
+                if(MapUtils.isNotEmpty(globalConfig)) {
+                    customButtonList = globalConfig.getJSONArray("customButtonList");
+                }
+            }
+
+            if(CollectionUtils.isNotEmpty(customButtonList)) {
+                for(int i = 0; i < customButtonList.size(); i++) {
+                    JSONObject customButton = customButtonList.getJSONObject(i);
+                    String value = customButton.getString("value");
+                    if(StringUtils.isNotBlank(value)) {
+                        customButtonMap.put(customButton.getString("name"), value);
+                    }
+                }
+            }          
+        }          
+        return customButtonMap;
     }
 }

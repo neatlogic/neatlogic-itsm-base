@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ElasticSearch;
 import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
@@ -163,11 +164,23 @@ public interface ProcessTaskMapper {
 
     public Long getFromProcessTaskIdByToProcessTaskId(Long toProcessTaskId);
 
-    public Long getLastToProcessTaskIdByFromProcessTaskId(Long processTaskId);
+    public List<Long> getToProcessTaskIdListByFromProcessTaskId(Long processTaskId);
 
     public int getProcessTaskRelationCountByProcessTaskId(Long processTaskId);
 
     public List<ProcessTaskRelationVo> getProcessTaskRelationList(ProcessTaskRelationVo processTaskRelationVo);
+
+    public List<Long> checkProcessTaskIdListIsExists(List<Long> processTaskIdList);
+
+    public int getProcessTaskCountByKeywordAndChannelUuidList(@Param("basePageVo") BasePageVo basePageVo,
+        @Param("channelUuidList") List<String> channelUuidList);
+
+    public List<ProcessTaskVo> getProcessTaskListByKeywordAndChannelUuidList(@Param("basePageVo") BasePageVo basePageVo,
+        @Param("channelUuidList") List<String> channelUuidList);
+
+    public ProcessTaskTranferReportVo getProcessTaskTranferReportByToProcessTaskId(Long toProcessTaskId);
+
+    public ProcessTaskRelationVo getProcessTaskRelationById(Long id);
 
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
@@ -243,7 +256,7 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskTranferReport(ProcessTaskTranferReportVo processTaskTranferReportVo);
 
-    public int insertProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
+    public int replaceProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
 	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
@@ -296,4 +309,6 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskStepFileByContentId(Long contentId);
 
     public int deleteProcessTaskStepContentById(Long contentId);
+
+    public int deleteProcessTaskRelationById(Long processTaskRelationId);
 }

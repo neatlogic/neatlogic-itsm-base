@@ -1,6 +1,7 @@
 package codedriver.framework.process.stephandler.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -48,7 +49,6 @@ import codedriver.framework.process.dto.ProcessTaskConvergeVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
-import codedriver.framework.process.dto.ProcessTaskRelationVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
@@ -1368,8 +1368,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			Long fromProcessTaskId = paramObj.getLong("fromProcessTaskId");
 			Long channelTypeRelationId = paramObj.getLong("channelTypeRelationId");
 			if(fromProcessTaskId != null && channelTypeRelationId != null) {
-			    processTaskMapper.insertProcessTaskTranferReport(new ProcessTaskTranferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskId));
-			    processTaskMapper.insertProcessTaskRelation(new ProcessTaskRelationVo(channelTypeRelationId, fromProcessTaskId, processTaskId));
+			    processTaskMapper.insertProcessTaskTranferReport(new ProcessTaskTranferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
+//			    processTaskMapper.replaceProcessTaskRelation(new ProcessTaskRelationVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
 			}
 		} else {
 			/** 锁定当前流程 **/
@@ -1509,7 +1509,20 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		} finally {
 			/** 处理历史记录 **/
-			AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.STARTPROCESS);
+		    ProcessTaskTranferReportVo processTaskTranferReportVo =  processTaskMapper.getProcessTaskTranferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+			if(processTaskTranferReportVo != null) {
+			    currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
+			    currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASK.getParamName(), processTaskTranferReportVo.getFromProcessTaskId());
+			    AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.TRANFERREPORT);
+			    
+			    ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
+                processTaskStepVo.setProcessTaskId(processTaskTranferReportVo.getFromProcessTaskId());
+                processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
+                processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASKLIST.getParamName(), JSON.toJSONString(Arrays.asList(currentProcessTaskStepVo.getProcessTaskId())));
+                AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.RELATION);
+			}else {
+	            AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.STARTPROCESS);			    
+			}
 			
 		}
 		return 0;

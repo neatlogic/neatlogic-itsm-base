@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -26,8 +28,9 @@ public class PriorityVo extends BasePageVo implements Serializable{
 	private String desc;
 	@EntityField(name = "排序", type = ApiParamType.INTEGER)
 	private Integer sort;
-	
+	@JSONField(serialize=false)
 	private transient String channelUuid;
+	@JSONField(serialize=false)
 	private transient String keyword;
 	
 	public synchronized String getUuid() {

@@ -16,6 +16,7 @@ public class ProcessTaskStepDataVo {
 	private JSONObject data;
 	private String type;
 	private String fcu;
+	@JSONField(serialize=false)
 	private transient Boolean isAutoGenerateId = false;
 	public ProcessTaskStepDataVo() {
 

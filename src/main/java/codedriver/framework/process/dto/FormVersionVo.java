@@ -13,10 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.process.dto.matrix.ProcessMatrixFormComponentVo;
+import codedriver.framework.matrix.dto.ProcessMatrixFormComponentVo;
 
 public class FormVersionVo extends BasePageVo implements Serializable {
 	private static final long serialVersionUID = 8345592242508980127L;
@@ -28,7 +29,9 @@ public class FormVersionVo extends BasePageVo implements Serializable {
 	private String formConfig;
 	private String editor;
 	private Date editTime;
+	@JSONField(serialize=false)
 	private transient List<FormAttributeVo> formAttributeList;
+	@JSONField(serialize=false)
 	private transient List<ProcessMatrixFormComponentVo> processMatrixFormComponentList;
 	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {

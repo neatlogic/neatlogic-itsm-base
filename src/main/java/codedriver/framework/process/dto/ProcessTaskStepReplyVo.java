@@ -3,6 +3,8 @@ package codedriver.framework.process.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BaseEditorVo;
@@ -29,7 +31,7 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 	private Integer isEditable;
 	@EntityField(name = "是否可删除", type = ApiParamType.INTEGER)
 	private Integer isDeletable;
-	
+	@JSONField(serialize=false)
 	private transient String contentHash;
 	public ProcessTaskStepReplyVo() {}
 	public ProcessTaskStepReplyVo(ProcessTaskStepContentVo processTaskStepContentVo) {

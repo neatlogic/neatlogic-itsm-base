@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -29,6 +31,7 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	@EntityField(name = "工单号前缀", type = ApiParamType.STRING)
 	private String prefix;
 	
+	@JSONField(serialize=false)
 	private transient String keyword;
 	
 	public ChannelTypeVo() {}

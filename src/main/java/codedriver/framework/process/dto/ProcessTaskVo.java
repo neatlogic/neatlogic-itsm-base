@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.dto.TeamVo;
@@ -81,20 +82,24 @@ public class ProcessTaskVo {
 	ProcessTaskStepVo currentProcessTaskStep;
 	
 	@EntityField(name = "上报人公司列表", type = ApiParamType.JSONARRAY)
+	@JSONField(serialize=false)
 	private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
 
 	@EntityField(name = "评分信息", type = ApiParamType.STRING)
 	private String scoreInfo;
-	
-//	@EntityField(name = "来源工单id", type = ApiParamType.LONG)
-//    private Long fromProcessTaskId;	
-    @EntityField(name = "来源工单信息", type = ApiParamType.LONG)
-    private ProcessTaskVo fromProcessTaskVo;
-    @EntityField(name = "目标工单信息", type = ApiParamType.LONG)
-    private ProcessTaskVo toProcessTaskVo;
-
+		
+//    @EntityField(name = "来源工单信息", type = ApiParamType.JSONOBJECT)
+//    private ProcessTaskVo fromProcessTaskVo;
+//    @EntityField(name = "目标工单信息列表", type = ApiParamType.JSONOBJECT)
+//    private List<ProcessTaskVo> toProcessTaskList = new ArrayList<>();
+	@EntityField(name = "转报工单信息列表", type = ApiParamType.JSONOBJECT)
+    private List<ProcessTaskVo> tranferReportProcessTaskList = new ArrayList<>();
+	@EntityField(name = "评分信息", type = ApiParamType.STRING)
+	private String tranferReportDirection;
+    @JSONField(serialize=false)
 	private transient Boolean isAutoGenerateId = true;
 	/** 当前用户在当前工单中工单干系人列表 **/
+    @JSONField(serialize=false)
 	private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
 	
 	public ProcessTaskVo() {
@@ -404,28 +409,36 @@ public class ProcessTaskVo {
 		this.scoreInfo = scoreInfo;
 	}
 
-//    public Long getFromProcessTaskId() {
-//        return fromProcessTaskId;
+    public List<ProcessTaskVo> getTranferReportProcessTaskList() {
+        return tranferReportProcessTaskList;
+    }
+
+    public void setTranferReportProcessTaskList(List<ProcessTaskVo> tranferReportProcessTaskList) {
+        this.tranferReportProcessTaskList = tranferReportProcessTaskList;
+    }
+
+    public String getTranferReportDirection() {
+        return tranferReportDirection;
+    }
+
+    public void setTranferReportDirection(String tranferReportDirection) {
+        this.tranferReportDirection = tranferReportDirection;
+    }
+
+//    public ProcessTaskVo getFromProcessTaskVo() {
+//        return fromProcessTaskVo;
 //    }
 //
-//    public void setFromProcessTaskId(Long fromProcessTaskId) {
-//        this.fromProcessTaskId = fromProcessTaskId;
+//    public void setFromProcessTaskVo(ProcessTaskVo fromProcessTaskVo) {
+//        this.fromProcessTaskVo = fromProcessTaskVo;
 //    }
-
-    public ProcessTaskVo getFromProcessTaskVo() {
-        return fromProcessTaskVo;
-    }
-
-    public void setFromProcessTaskVo(ProcessTaskVo fromProcessTaskVo) {
-        this.fromProcessTaskVo = fromProcessTaskVo;
-    }
-
-    public ProcessTaskVo getToProcessTaskVo() {
-        return toProcessTaskVo;
-    }
-
-    public void setToProcessTaskVo(ProcessTaskVo toProcessTaskVo) {
-        this.toProcessTaskVo = toProcessTaskVo;
-    }
+//
+//    public List<ProcessTaskVo> getToProcessTaskList() {
+//        return toProcessTaskList;
+//    }
+//
+//    public void setToProcessTaskList(List<ProcessTaskVo> toProcessTaskList) {
+//        this.toProcessTaskList = toProcessTaskList;
+//    }
 
 }
