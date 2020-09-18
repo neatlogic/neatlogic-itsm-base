@@ -88,10 +88,14 @@ public class ProcessTaskVo {
 	@EntityField(name = "评分信息", type = ApiParamType.STRING)
 	private String scoreInfo;
 		
-    @EntityField(name = "来源工单信息", type = ApiParamType.LONG)
-    private ProcessTaskVo fromProcessTaskVo;
-    @EntityField(name = "目标工单信息列表", type = ApiParamType.LONG)
-    private List<ProcessTaskVo> toProcessTaskList = new ArrayList<>();
+//    @EntityField(name = "来源工单信息", type = ApiParamType.JSONOBJECT)
+//    private ProcessTaskVo fromProcessTaskVo;
+//    @EntityField(name = "目标工单信息列表", type = ApiParamType.JSONOBJECT)
+//    private List<ProcessTaskVo> toProcessTaskList = new ArrayList<>();
+	@EntityField(name = "转报工单信息列表", type = ApiParamType.JSONOBJECT)
+    private List<ProcessTaskVo> tranferReportProcessTaskList = new ArrayList<>();
+	@EntityField(name = "评分信息", type = ApiParamType.STRING)
+	private String tranferReportDirection;
     @JSONField(serialize=false)
 	private transient Boolean isAutoGenerateId = true;
 	/** 当前用户在当前工单中工单干系人列表 **/
@@ -405,20 +409,36 @@ public class ProcessTaskVo {
 		this.scoreInfo = scoreInfo;
 	}
 
-    public ProcessTaskVo getFromProcessTaskVo() {
-        return fromProcessTaskVo;
+    public List<ProcessTaskVo> getTranferReportProcessTaskList() {
+        return tranferReportProcessTaskList;
     }
 
-    public void setFromProcessTaskVo(ProcessTaskVo fromProcessTaskVo) {
-        this.fromProcessTaskVo = fromProcessTaskVo;
+    public void setTranferReportProcessTaskList(List<ProcessTaskVo> tranferReportProcessTaskList) {
+        this.tranferReportProcessTaskList = tranferReportProcessTaskList;
     }
 
-    public List<ProcessTaskVo> getToProcessTaskList() {
-        return toProcessTaskList;
+    public String getTranferReportDirection() {
+        return tranferReportDirection;
     }
 
-    public void setToProcessTaskList(List<ProcessTaskVo> toProcessTaskList) {
-        this.toProcessTaskList = toProcessTaskList;
+    public void setTranferReportDirection(String tranferReportDirection) {
+        this.tranferReportDirection = tranferReportDirection;
     }
+
+//    public ProcessTaskVo getFromProcessTaskVo() {
+//        return fromProcessTaskVo;
+//    }
+//
+//    public void setFromProcessTaskVo(ProcessTaskVo fromProcessTaskVo) {
+//        this.fromProcessTaskVo = fromProcessTaskVo;
+//    }
+//
+//    public List<ProcessTaskVo> getToProcessTaskList() {
+//        return toProcessTaskList;
+//    }
+//
+//    public void setToProcessTaskList(List<ProcessTaskVo> toProcessTaskList) {
+//        this.toProcessTaskList = toProcessTaskList;
+//    }
 
 }
