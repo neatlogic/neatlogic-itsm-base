@@ -1856,6 +1856,32 @@
 	    #{target}
 	  )
 	</insert>
+
+	<insert id="batchInsertProcessTaskImportAudit" parameterType="java.util.List">
+		INSERT INTO `processtask_import_audit`(
+	  		`id`,
+	  		`processtask_id`,
+	  		`title`,
+	  		`channel_uuid`,
+	  		`status`,
+	  		`error_reason`,
+	  		`owner`,
+	  		`import_time`
+		)
+		VALUES
+		<foreach collection="list" index="index" item="item" separator=",">
+			(
+			#{item.id},
+	    	#{item.processtaskId},
+	    	#{item.title},
+	    	#{item.channelUuid},
+	    	#{item.status},
+	    	#{item.errorReason},
+	    	#{item.owner},
+	    	NOW()
+			)
+		</foreach>
+	</insert>
 	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
