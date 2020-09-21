@@ -227,7 +227,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	}
 
     public String getDevice() {
-        if(device == null) {
+        if(device == null && RequestContextHolder.getRequestAttributes() != null && ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest() != null) {
             HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
             if(DeviceType.MOBILE.getValue().equals(request.getHeader("Device"))) {
                 device = DeviceType.MOBILE.getValue();
