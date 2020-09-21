@@ -1231,11 +1231,11 @@
 		COUNT(p.`id`)
 		FROM `processtask_import_audit` p
 		WHERE 1=1
-		<if test="processTaskId != null and processTaskId != ''">
-			and `processtask_id` = #{processTaskId}
+		<if test="status != null">
+			and `status` = #{status}
 		</if>
-		<if test="title != null and title != ''">
-			and `title` like CONCAT('%', #{title}, '%')
+		<if test="keyword != null and keyword != ''">
+			and (`title` like CONCAT('%', #{keyword}, '%') or `processtask_id` like CONCAT('%', #{keyword}, '%'))
 		</if>
 	</select>
 
@@ -1254,11 +1254,11 @@
 		FROM
 		`processtask_import_audit`
 		WHERE 1=1
-		<if test="processTaskId != null and processTaskId != ''">
-			and `processtask_id` = #{processTaskId}
+		<if test="status != null">
+			and `status` = #{status}
 		</if>
-		<if test="title != null and title != ''">
-			and `title` like CONCAT('%', #{title}, '%')
+		<if test="keyword != null and keyword != ''">
+			and (`title` like CONCAT('%', #{keyword}, '%') or `processtask_id` like CONCAT('%', #{keyword}, '%'))
 		</if>
 		order by `import_time` desc
 		<if test="needPage">
