@@ -75,6 +75,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
 	private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
+	private List<FormAttributeVo> formAttributeVoList = new ArrayList<>();
+	
 	@JSONField(serialize=false)
 	private transient JSONObject paramObj;
 	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
@@ -773,6 +775,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setCurrentUserProcessUserTypeList(List<String> currentUserProcessUserTypeList) {
         this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
+    }
+
+    public List<FormAttributeVo> getFormAttributeVoList() {
+        return formAttributeVoList;
+    }
+
+    public void setFormAttributeVoList(List<FormAttributeVo> formAttributeVoList) {
+        this.formAttributeVoList = formAttributeVoList;
     }
 
 }
