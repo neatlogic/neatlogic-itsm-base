@@ -1912,7 +1912,7 @@
 		<foreach collection="list" index="index" item="item" separator=",">
 			(
 			#{item.id},
-	    	#{item.processtaskId},
+	    	#{item.processTaskId},
 	    	#{item.title},
 	    	#{item.channelUuid},
 	    	#{item.status},

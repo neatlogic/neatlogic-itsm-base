@@ -4,6 +4,7 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.Date;
 
@@ -14,12 +15,14 @@ public class ProcessTaskImportAuditVo extends BasePageVo {
 	private Long processTaskId;
 	@EntityField(name = "标题", type = ApiParamType.STRING)
 	private String title;
+	@JSONField(serialize = false)
 	@EntityField(name = "服务uuid", type = ApiParamType.STRING)
 	private String channelUuid;
 	@EntityField(name = "状态", type = ApiParamType.INTEGER)
 	private Integer status;
 	@EntityField(name = "上报失败原因", type = ApiParamType.STRING)
 	private String errorReason;
+	@JSONField(serialize = false)
 	@EntityField(name = "上报人UUID", type = ApiParamType.STRING)
 	private String owner;
 	@EntityField(name = "导入时间", type = ApiParamType.LONG)
