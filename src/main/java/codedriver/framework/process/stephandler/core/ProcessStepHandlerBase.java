@@ -49,7 +49,6 @@ import codedriver.framework.process.dto.ProcessTaskConvergeVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
-import codedriver.framework.process.dto.ProcessTaskRelationVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
@@ -1370,7 +1369,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			Long channelTypeRelationId = paramObj.getLong("channelTypeRelationId");
 			if(fromProcessTaskId != null && channelTypeRelationId != null) {
 			    processTaskMapper.insertProcessTaskTranferReport(new ProcessTaskTranferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
-			    processTaskMapper.replaceProcessTaskRelation(new ProcessTaskRelationVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
+//			    processTaskMapper.replaceProcessTaskRelation(new ProcessTaskRelationVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
 			}
 		} else {
 			/** 锁定当前流程 **/
@@ -1430,22 +1429,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	                    }
 	                    if (hidecomponentList.contains(attributeUuid)) {
 	                        continue;
-	                    }
-	                    Object dataObj = formAttributeDataObj.get("dataList");
-	                    if(dataObj == null) {
-	                        continue;
-	                    }else if(dataObj instanceof JSONArray) {
-	                        if(CollectionUtils.isEmpty((JSONArray)dataObj)) {
-	                            continue;
-	                        }
-	                    }else if(dataObj instanceof JSONObject) {
-	                        if(MapUtils.isEmpty((JSONObject)dataObj)) {
-	                            continue;
-	                        }
-	                    }else if(dataObj instanceof String) {
-	                        if(StringUtils.isBlank((String)dataObj)) {
-	                            continue;
-	                        }
 	                    }
 	                    ProcessTaskFormAttributeDataVo attributeData = new ProcessTaskFormAttributeDataVo();
 	                    attributeData.setData(formAttributeDataObj.getString("dataList"));

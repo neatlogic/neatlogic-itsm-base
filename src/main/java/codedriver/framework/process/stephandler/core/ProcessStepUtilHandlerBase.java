@@ -294,7 +294,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                 channelTypeVo = new ChannelTypeVo();
                 channelTypeVo.setUuid(channelVo.getChannelTypeUuid());
             }
-            processTaskVo.setChannelType(channelTypeVo);
+            processTaskVo.setChannelType(new ChannelTypeVo(channelTypeVo));
         }
         //耗时
         if(processTaskVo.getEndTime() != null) {

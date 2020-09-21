@@ -27,6 +27,12 @@
 		<if test="isActive != null">
 			AND c.`is_active` = #{isActive}
 		</if>
+		<if test="support == 'mobile'">
+			AND c.`support` != 'pc'
+		</if>
+		<if test="support == 'pc'">
+			AND c.`support` != 'mobile'
+		</if>
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ChannelVo" id="channelMap">
@@ -77,6 +83,12 @@
 		<if test="isActive != null">
 			AND c.`is_active` = #{isActive}
 		</if>
+		<if test="support == 'mobile'">
+			AND c.`support` != 'pc'
+		</if>
+		<if test="support == 'pc'">
+			AND c.`support` != 'mobile'
+		</if>
 		<choose>
 			<when test="isFavorite == 1">
 				ORDER BY cu.`insert_time` DESC
@@ -115,6 +127,12 @@
 		</if>
 		<if test="isActive != null">
 			AND c.`is_active` = #{isActive}
+		</if>
+		<if test="support == 'mobile'">
+			AND c.`support` != 'pc'
+		</if>
+		<if test="support == 'pc'">
+			AND c.`support` != 'mobile'
 		</if>
 		<choose>
 			<when test="isFavorite == 1">
