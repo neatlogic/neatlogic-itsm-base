@@ -51,7 +51,7 @@ public class ProcessTaskStepRemindVo {
     public void setContentHash(String contentHash) {
         this.contentHash = contentHash;
     }
-    public String getDetailHash() {
+    public String getTitle() {
         return title;
     }
     public void setTitle(String title) {

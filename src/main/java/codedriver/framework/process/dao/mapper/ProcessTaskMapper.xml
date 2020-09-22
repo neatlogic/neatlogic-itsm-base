@@ -1265,13 +1265,14 @@
 	WHERE `id` = #{value}
 	</select>
 	
-	<select id="getProcessTaskStepRemindListByProcessTaskStepId" parameterType="java.lang.Long">
+	<select id="getProcessTaskStepRemindListByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
 	SELECT 
 	  `processtask_id` AS processTaskId,
 	  `processtask_step_id` AS processTaskStepId,
 	  `action`,
 	  `title`,
 	  `fcu`,
+	  (SELECT user_name FROM `user` x WHERE x.uuid = `fcu`) AS fcuName,
 	  `fcd`,
 	  `content_hash` AS contentHash
 	FROM `processtask_step_remind` 
@@ -1921,8 +1922,8 @@
 	) 
 	VALUES
 	  (
-	    #{processtaskId},
-	    #{processtaskStepId},
+	    #{processTaskId},
+	    #{processTaskStepId},
 	    #{action},
 	    #{title},
 	    #{fcu},

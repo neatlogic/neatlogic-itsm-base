@@ -30,10 +30,12 @@ import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.PriorityVo;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
+import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskStepReplyVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
+import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
@@ -46,6 +48,7 @@ import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType;
 import codedriver.framework.process.operationauth.core.OperationAuthHandlerType;
 import codedriver.framework.process.operationauth.core.ProcessOperateManager;
+import codedriver.framework.process.stepremind.core.IProcessTaskStepRemindType;
 
 public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilBase implements IProcessStepUtilHandler {
 
@@ -480,5 +483,22 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             }          
         }          
         return customButtonMap;
+    }
+    
+    public int saveStepRemind(ProcessTaskStepVo currentProcessTaskStepVo,Long targerProcessTaskStepId, String reason, IProcessTaskStepRemindType ation) {
+        ProcessTaskStepRemindVo processTaskStepRemindVo = new ProcessTaskStepRemindVo();
+        processTaskStepRemindVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+        processTaskStepRemindVo.setProcessTaskStepId(targerProcessTaskStepId);
+        processTaskStepRemindVo.setAction(ation.getValue());
+        processTaskStepRemindVo.setFcu(UserContext.get().getUserUuid(true));
+        String title = ation.getTitle();
+        title = title.replace("processTaskStepName", currentProcessTaskStepVo.getName());
+        processTaskStepRemindVo.setTitle(title);
+        if(StringUtils.isNotBlank(reason)) {
+            ProcessTaskContentVo contentVo = new ProcessTaskContentVo(reason);
+            processTaskMapper.replaceProcessTaskContent(contentVo);
+            processTaskStepRemindVo.setContentHash(contentVo.getHash());                            
+        }
+        return processTaskMapper.insertProcessTaskStepRemind(processTaskStepRemindVo);
     }
 }

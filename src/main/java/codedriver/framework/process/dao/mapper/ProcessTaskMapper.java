@@ -183,7 +183,7 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskRelationVo getProcessTaskRelationById(Long id);
 
-    public List<ProcessTaskStepRemindVo> getProcessTaskStepRemindListByProcessTaskStepId();
+    public List<ProcessTaskStepRemindVo> getProcessTaskStepRemindListByProcessTaskStepId(Long processTaskStepId);
 
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
