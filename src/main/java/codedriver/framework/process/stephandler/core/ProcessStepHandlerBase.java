@@ -263,7 +263,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			currentProcessTaskStepVo.setError(e.getMessage());
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 			/** 异常提醒 **/
-			ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), e.getMessage(), ProcessTaskStepRemindType.ERROR);
+			ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), e.getMessage(), ProcessTaskStepRemindType.ERROR);
 		} finally {
 			if (ProcessTaskStatus.FAILED.getValue().equals(currentProcessTaskStepVo.getStatus())) {
 				/**
@@ -668,9 +668,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 流转到下一步 **/
 				Set<ProcessTaskStepVo> nextStepList = getNext(currentProcessTaskStepVo);
 				if (nextStepList.size() > 0) {
+				    Long startProcessTaskStepId = currentProcessTaskStepVo.getStartProcessTaskStepId();
+				    if(startProcessTaskStepId == null) {
+				        startProcessTaskStepId = currentProcessTaskStepVo.getId();
+				    }
 					for (ProcessTaskStepVo nextStep : nextStepList) {
 						IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
 						nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+						nextStep.setStartProcessTaskStepId(startProcessTaskStepId);
 						if (nextStepHandler != null) {
 							doNext(new ProcessStepThread(nextStep) {
 								@Override
@@ -702,7 +707,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 				updateProcessTaskStepStatus(currentProcessTaskStepVo);
 				/** 异常提醒 **/
-	            ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), ex.getMessage(), ProcessTaskStepRemindType.ERROR);
+	            ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(), ProcessTaskStepRemindType.ERROR);
 				/** 触发通知 **/
 				NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
 				
@@ -1522,6 +1527,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			for (ProcessTaskStepVo nextStep : nextStepList) {
 				IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
 				nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+				nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
 				if (nextStepHandler != null) {
 					doNext(new ProcessStepThread(nextStep) {
 						@Override
