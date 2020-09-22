@@ -12,6 +12,7 @@ import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
+import codedriver.framework.process.stepremind.core.IProcessTaskStepRemindType;
 
 public interface IProcessStepUtilHandler {
 
@@ -185,4 +186,15 @@ public interface IProcessStepUtilHandler {
     * @return void
      */
     public Map<String, String> getCustomButtonMapByProcessTaskStepId(Long processTaskStepId);
+    
+    /**
+     * 
+    * @Time:2020年9月22日
+    * @Description: 保存步骤提醒 
+    * @param @param currentProcessTaskStepVo
+    * @param @param content
+    * @param @param type 
+    * @return void
+     */
+    public int saveStepRemind(ProcessTaskStepVo currentProcessTaskStepVo,Long targerProcessTaskStepId, String reason, IProcessTaskStepRemindType ation);
 }

@@ -1493,12 +1493,11 @@ public abstract class ProcessStepHandlerUtilBase {
 		/**
 		 * 
 		* @Time:2020年7月28日
-		* @Description: 验证表单数据是否合法
+		* @Description: 获取需要验证表单数据，并校验
 		* @param currentProcessTaskStepVo
 		* @return boolean
 		 */
-		public static boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo) {
-
+		public static boolean formAttributeDataValidFromDb(ProcessTaskStepVo currentProcessTaskStepVo) {
 			ProcessTaskFormVo processTaskFormVo = processTaskMapper.getProcessTaskFormByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 			if (processTaskFormVo != null && StringUtils.isNotBlank(processTaskFormVo.getFormContentHash())) {
 			    String formContent = selectContentByHashMapper.getProcessTaskFromContentByHash(processTaskFormVo.getFormContentHash());
@@ -1517,42 +1516,70 @@ public abstract class ProcessStepHandlerUtilBase {
 	                for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
 	                    formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
 	                }
-
-	                List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);
-	                for (FormAttributeVo formAttributeVo : formAttributeList) {
-	                    if (!formAttributeVo.isRequired()) {
-	                        continue;
-	                    }
-	                    if (formAttributeActionMap.containsKey(formAttributeVo.getUuid())) {
-	                        continue;
-	                    }
-	                    if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {
-	                        continue;
-	                    }
-	                    Object data = formAttributeDataMap.get(formAttributeVo.getUuid());
-	                    if(data != null) {
-	                        if(data instanceof String) {
-	                            if (StringUtils.isBlank(data.toString())) {
-	                                throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-	                            }
-	                        }else if(data instanceof JSONArray) {
-	                            if(CollectionUtils.isEmpty((JSONArray) data)){
-	                                throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-	                            }
-	                        }else if(data instanceof JSONObject) {
-	                            if(MapUtils.isEmpty((JSONObject) data)) {
-	                                throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-	                            }
-	                        }
-	                    }else {
-	                        throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-	                    }
-	                }
+	                currentProcessTaskStepVo.setFormAttributeDataMap(formAttributeDataMap);
+	                currentProcessTaskStepVo.setFormAttributeVoList(formAttributeList);
+	                currentProcessTaskStepVo.setFormAttributeActionMap(formAttributeActionMap);
+	                formAttributeDataValid(currentProcessTaskStepVo);
 	            }
 			}
 			
 			return true;
 		}
+		
+		/**
+         * 
+        * @Time:2020年7月28日
+        * @Description: 验证表单数据是否合法
+        * @param currentProcessTaskStepVo
+        * @return boolean
+         */
+		public static boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo) {
+            List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);           
+            for (FormAttributeVo formAttributeVo : currentProcessTaskStepVo.getFormAttributeVoList()) {
+                if (!formAttributeVo.isRequired()) {
+                    continue;
+                }
+                if ( currentProcessTaskStepVo.getFormAttributeActionMap().containsKey(formAttributeVo.getUuid())) {
+                    continue;
+                }
+                if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {
+                    continue;
+                }
+                Object data = currentProcessTaskStepVo.getFormAttributeDataMap().get(formAttributeVo.getUuid());
+                if(data != null) {
+                    if(data instanceof String) {
+                        if (StringUtils.isBlank(data.toString())) {
+                            throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+                        }
+                    }else if(data instanceof JSONArray) {
+                        if(CollectionUtils.isEmpty((JSONArray) data)){
+                            throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+                        }
+                    }else if(data instanceof JSONObject) {
+                        if(MapUtils.isEmpty((JSONObject) data)) {
+                            throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+                        }
+                    }
+                }else {
+                    throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+                }
+            }
+            return true;
+        }
+		
+		/**
+         * 
+        * @Time:2020年7月28日
+        * @Description: 获取验证基本信息数据是否合法，并验证
+        * @param currentProcessTaskStepVo
+        * @return boolean
+         */
+        public static boolean baseInfoValidFromDb(ProcessTaskStepVo currentProcessTaskStepVo) {
+            ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
+            baseInfoValid(currentProcessTaskStepVo, processTaskVo);
+            return true;
+        }
+        
 		/**
 		 * 
 		* @Time:2020年7月28日
@@ -1560,9 +1587,8 @@ public abstract class ProcessStepHandlerUtilBase {
 		* @param currentProcessTaskStepVo
 		* @return boolean
 		 */
-		public static boolean baseInfoValid(ProcessTaskStepVo currentProcessTaskStepVo) {
+		public static boolean baseInfoValid(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskVo processTaskVo) {
 			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
-			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
 			if(processTaskVo.getTitle() == null) {
 				throw new ProcessTaskRuntimeException("工单标题格式不能为空");
 			}
