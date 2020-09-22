@@ -316,4 +316,6 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskStepContentById(Long contentId);
 
     public int deleteProcessTaskRelationById(Long processTaskRelationId);
+
+    public int deleteProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
 }

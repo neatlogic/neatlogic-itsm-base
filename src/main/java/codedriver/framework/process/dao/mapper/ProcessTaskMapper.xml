@@ -2108,4 +2108,12 @@
 	<delete id="deleteProcessTaskRelationById" parameterType="java.lang.Long">
 	DELETE FROM `processtask_relation` WHERE `id` = #{value}
 	</delete>
+	
+	<delete id="deleteProcessTaskStepRemind" parameterType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
+	DELETE FROM `processtask_step_remind` 
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	<if test="action != null and action != ''">
+  	AND `action` = #{action} 
+  	</if>
+	</delete>
 </mapper>

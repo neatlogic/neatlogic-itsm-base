@@ -15,6 +15,14 @@ public class ProcessTaskStepRemindVo {
     private String fcu;
     private String fcuName;
     private Date fcd;
+    public ProcessTaskStepRemindVo() {}
+    public ProcessTaskStepRemindVo(Long processTaskStepId) {
+        this.processTaskStepId = processTaskStepId;
+    }
+    public ProcessTaskStepRemindVo(Long processTaskStepId, String action) {
+        this.processTaskStepId = processTaskStepId;
+        this.action = action;
+    }
     public Long getProcessTaskId() {
         return processTaskId;
     }

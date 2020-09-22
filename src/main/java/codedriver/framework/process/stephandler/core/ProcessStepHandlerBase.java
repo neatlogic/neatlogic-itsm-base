@@ -57,6 +57,7 @@ import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
+import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
@@ -527,6 +528,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			
 			/** 执行动作 **/
 			ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.START);
+
+            processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setError(ex.getMessage());
@@ -697,7 +700,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 				    JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				    if (ProcessTaskOperationType.BACK.getValue().equals(paramObj.getString("action"))) {
+				        processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
 	                    ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, paramObj.getLong("nextStepId"), paramObj.getString("content"), ProcessTaskStepRemindType.BACK);
+				    }else {
+				        processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
 				    }
 				}
 			} catch (ProcessTaskException ex) {
@@ -1053,7 +1059,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 			/** 触发通知 **/
 			// NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.ACCEPT);
-			
+			processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
 		} catch (ProcessTaskRuntimeException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setError(ex.getMessage());
@@ -1143,6 +1149,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 处理时间审计 **/
 			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.TRANSFER);
 			/** 转交提醒 **/
+
+            processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
 	        ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), currentProcessTaskStepVo.getParamObj().getString("content"), ProcessTaskStepRemindType.TRANSFER);
 		} catch (ProcessTaskException e) {
 			logger.error(e.getMessage(), e);
