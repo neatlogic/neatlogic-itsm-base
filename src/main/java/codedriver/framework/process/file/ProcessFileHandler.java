@@ -17,7 +17,7 @@ public class ProcessFileHandler extends FileTypeHandlerBase {
 
 	@Override
 	public String getDisplayName() {
-		return "ITSM附件";
+		return "IT服务附件";
 	}
 
 	@Override
