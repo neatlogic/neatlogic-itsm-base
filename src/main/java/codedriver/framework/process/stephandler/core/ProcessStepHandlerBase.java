@@ -36,6 +36,7 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
+import codedriver.framework.process.constvalue.ProcessTaskStepRemindType;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dto.ChannelVo;
@@ -55,6 +56,7 @@ import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
+import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
@@ -684,6 +686,26 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				
 				/** 执行动作 **/
 				ActionHandler.action(currentProcessTaskStepVo, notifyTriggerType);
+				if (this.getMode().equals(ProcessStepMode.MT)) {
+				    JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+				    if (ProcessTaskOperationType.BACK.getValue().equals(paramObj.getString("action"))) {
+	                    ProcessTaskStepRemindVo processTaskStepRemindVo = new ProcessTaskStepRemindVo();
+	                    processTaskStepRemindVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+	                    processTaskStepRemindVo.setProcessTaskStepId(paramObj.getLong("nextStepId"));
+	                    processTaskStepRemindVo.setAction(ProcessTaskStepRemindType.BACK.getValue());
+	                    processTaskStepRemindVo.setFcu(UserContext.get().getUserUuid(true));
+	                    String title = ProcessTaskStepRemindType.BACK.getTitle();
+	                    title = title.replace("processTaskStepName", currentProcessTaskStepVo.getName());
+	                    processTaskStepRemindVo.setTitle(title);
+	                    String content = paramObj.getString("content");
+	                    if(StringUtils.isNotBlank(content)) {
+	                        ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
+	                        processTaskMapper.replaceProcessTaskContent(contentVo);
+	                        processTaskStepRemindVo.setContentHash(contentVo.getHash());	                        
+	                    }
+	                    processTaskMapper.insertProcessTaskStepRemind(processTaskStepRemindVo);
+				    }
+				}
 			} catch (ProcessTaskException ex) {
 				logger.error(ex.getMessage(), ex);
 				currentProcessTaskStepVo.setError(ex.getMessage());

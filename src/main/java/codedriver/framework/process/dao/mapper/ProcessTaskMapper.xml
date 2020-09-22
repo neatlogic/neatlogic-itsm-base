@@ -1265,6 +1265,19 @@
 	WHERE `id` = #{value}
 	</select>
 	
+	<select id="getProcessTaskStepRemindListByProcessTaskStepId" parameterType="java.lang.Long">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `action`,
+	  `title`,
+	  `fcu`,
+	  `fcd`,
+	  `content_hash` AS contentHash
+	FROM `processtask_step_remind` 
+	WHERE `processtask_step_id` = #{value}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1893,6 +1906,28 @@
 	    #{channelTypeRelationId},
 	    #{source},
 	    #{target}
+	  )
+	</insert>
+	
+	<insert id="insertProcessTaskStepRemind" parameterType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
+	INSERT INTO `processtask_step_remind` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `action`,
+	  `title`,
+	  `fcu`,
+	  `fcd`,
+	  `content_hash`
+	) 
+	VALUES
+	  (
+	    #{processtaskId},
+	    #{processtaskStepId},
+	    #{action},
+	    #{title},
+	    #{fcu},
+	    NOW(3),
+	    #{contentHash}
 	  )
 	</insert>
 	

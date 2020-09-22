@@ -46,7 +46,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String type;
 	private String formUuid;
 	private Integer isActive = 0;
-//	private Integer isCheck;
 	@EntityField(name = "开始时间", type = ApiParamType.LONG)
 	private Date startTime;
 	@EntityField(name = "结束时间", type = ApiParamType.LONG)
@@ -125,9 +124,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<ProcessTaskStepVo> backwardNextStepList = new ArrayList<>();
 	@JSONField(serialize=false)
 	private transient Map<String, Object> formAttributeDataMap;
-	/** 获取自定义按钮映射数据 **/
-//	@JSONField(serialize=false)
-//	private transient Map<String, String> customButtonMap = new HashMap<>();
     
     @EntityField(name = "步骤表单属性隐藏数据", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepFormAttributeVo> stepFormConfig = new ArrayList<>();
@@ -135,7 +131,10 @@ public class ProcessTaskStepVo extends BasePageVo {
     /** 当前用户在当前步骤中工单干系人列表 **/
     @JSONField(serialize=false)
     private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
-	
+    
+    @EntityField(name = "提醒列表", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskStepRemindVo> processTaskStepRemindList = new ArrayList<>();
+    
 	public ProcessTaskStepVo() {
 
 	}
@@ -456,14 +455,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.fromProcessTaskStepId = fromProcessTaskStepId;
 	}
 
-//	public Integer getIsCheck() {
-//		return isCheck;
-//	}
-//
-//	public void setIsCheck(Integer isCheck) {
-//		this.isCheck = isCheck;
-//	}
-
 	public List<ProcessTaskStepWorkerPolicyVo> getWorkerPolicyList() {
 		if (!isWorkerPolicyListSorted && workerPolicyList != null && workerPolicyList.size() > 0) {
 			Collections.sort(workerPolicyList);
@@ -722,43 +713,6 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.formAttributeDataMap = formAttributeDataMap;
     }
 
-//    public Map<String, String> getCustomButtonMap() {
-//        if(MapUtils.isEmpty(customButtonMap)) {
-//            /** 节点管理按钮映射 **/
-//            if(MapUtils.isNotEmpty(globalConfig)) {
-//                JSONArray customButtonList = globalConfig.getJSONArray("customButtonList");
-//                if(CollectionUtils.isNotEmpty(customButtonList)) {
-//                    for(int i = 0; i < customButtonList.size(); i++) {
-//                        JSONObject customButton = customButtonList.getJSONObject(i);
-//                        String value = customButton.getString("value");
-//                        if(StringUtils.isNotBlank(value)) {
-//                            customButtonMap.put(customButton.getString("name"), value);
-//                        }
-//                    }
-//                }
-//            }
-//            
-//            /** 节点设置按钮映射 **/
-//            if(MapUtils.isNotEmpty(getConfigObj())) {
-//                JSONArray customButtonList = getConfigObj().getJSONArray("customButtonList");
-//                if(CollectionUtils.isNotEmpty(customButtonList)) {
-//                    for(int i = 0; i < customButtonList.size(); i++) {
-//                        JSONObject customButton = customButtonList.getJSONObject(i);
-//                        String value = customButton.getString("value");
-//                        if(StringUtils.isNotBlank(value)) {
-//                            customButtonMap.put(customButton.getString("name"), value);
-//                        }
-//                    }
-//                }
-//            }
-//        }       
-//        return customButtonMap;
-//    }
-//
-//    public void setCustomButtonMap(Map<String, String> customButtonMap) {
-//        this.customButtonMap = customButtonMap;
-//    }
-
     public List<ProcessTaskStepFormAttributeVo> getStepFormConfig() {
         return stepFormConfig;
     }
@@ -773,6 +727,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setCurrentUserProcessUserTypeList(List<String> currentUserProcessUserTypeList) {
         this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
+    }
+
+    public List<ProcessTaskStepRemindVo> getProcessTaskStepRemindList() {
+        return processTaskStepRemindList;
+    }
+
+    public void setProcessTaskStepRemindList(List<ProcessTaskStepRemindVo> processTaskStepRemindList) {
+        this.processTaskStepRemindList = processTaskStepRemindList;
     }
 
 }

@@ -26,6 +26,7 @@ import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
+import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
 import codedriver.framework.process.dto.ProcessTaskStepTeamVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -182,6 +183,8 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskRelationVo getProcessTaskRelationById(Long id);
 
+    public List<ProcessTaskStepRemindVo> getProcessTaskStepRemindListByProcessTaskStepId();
+
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
 	public int replaceProcessTaskOldFormProp(@Param("processTaskId")Long processTaskId,@Param("form")String form,@Param("prop")String prop);
@@ -257,6 +260,8 @@ public interface ProcessTaskMapper {
     public int insertProcessTaskTranferReport(ProcessTaskTranferReportVo processTaskTranferReportVo);
 
     public int replaceProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
+
+    public int insertProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
 	
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
