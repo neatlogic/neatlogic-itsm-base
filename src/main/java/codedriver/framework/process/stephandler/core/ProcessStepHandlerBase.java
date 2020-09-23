@@ -1705,10 +1705,4 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			runableActionList.add(thread);
 		}
 	}
-	
-	@Override
-	public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo) {
-	    
-	    return 1;
-	}
 }
