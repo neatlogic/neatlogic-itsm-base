@@ -1305,6 +1305,20 @@
 	WHERE `id` = #{value}
 	</select>
 	
+	<select id="getProcessTaskStepRemindListByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `action`,
+	  `title`,
+	  `fcu`,
+	  (SELECT user_name FROM `user` x WHERE x.uuid = `fcu`) AS fcuName,
+	  `fcd`,
+	  `content_hash` AS contentHash
+	FROM `processtask_step_remind` 
+	WHERE `processtask_step_id` = #{value}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1962,6 +1976,28 @@
 		</foreach>
 	</insert>
 	
+	<insert id="insertProcessTaskStepRemind" parameterType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
+	INSERT INTO `processtask_step_remind` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `action`,
+	  `title`,
+	  `fcu`,
+	  `fcd`,
+	  `content_hash`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{action},
+	    #{title},
+	    #{fcu},
+	    NOW(3),
+	    #{contentHash}
+	  )
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -2137,5 +2173,13 @@
 	
 	<delete id="deleteProcessTaskRelationById" parameterType="java.lang.Long">
 	DELETE FROM `processtask_relation` WHERE `id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepRemind" parameterType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
+	DELETE FROM `processtask_step_remind` 
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	<if test="action != null and action != ''">
+  	AND `action` = #{action} 
+  	</if>
 	</delete>
 </mapper>

@@ -156,6 +156,8 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskRelationVo getProcessTaskRelationById(Long id);
 
+    public List<ProcessTaskStepRemindVo> getProcessTaskStepRemindListByProcessTaskStepId(Long processTaskStepId);
+
     public int searchProcessTaskImportAuditCount(ProcessTaskImportAuditVo processTaskImportAuditVo);
 
     public List<ProcessTaskImportAuditVo> searchProcessTaskImportAudit(ProcessTaskImportAuditVo processTaskImportAuditVo);
@@ -236,7 +238,9 @@ public interface ProcessTaskMapper {
 
     public int replaceProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
 
-	public int batchInsertProcessTaskImportAudit(@Param("list") List<ProcessTaskImportAuditVo> processTaskImportAuditVos);
+    public int insertProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
+
+    public int batchInsertProcessTaskImportAudit(@Param("list") List<ProcessTaskImportAuditVo> processTaskImportAuditVos);
 
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
@@ -291,4 +295,6 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskStepContentById(Long contentId);
 
     public int deleteProcessTaskRelationById(Long processTaskRelationId);
+
+    public int deleteProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
 }
