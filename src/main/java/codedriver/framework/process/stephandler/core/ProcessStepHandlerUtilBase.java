@@ -1435,12 +1435,12 @@ public abstract class ProcessStepHandlerUtilBase {
 				processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
 			}
 			String config = null;
-			Object isAuto = null;
-			Object autoTime = null;
+			Integer isAuto = null;
+			Integer autoTime = null;
 			if(processScoreTemplate != null && StringUtils.isNotBlank(config = processScoreTemplate.getConfig())){
 				JSONObject configObj = JSONObject.parseObject(config);
-				isAuto = configObj.get("isAuto");
-				autoTime = configObj.get("autoTime");
+				isAuto = configObj.getInteger("isAuto");
+				autoTime = configObj.getInteger("autoTime");
 			}
 			if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
 				IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
