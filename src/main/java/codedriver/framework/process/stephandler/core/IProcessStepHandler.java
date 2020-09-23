@@ -275,5 +275,12 @@ public interface IProcessStepHandler {
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public int back(ProcessTaskStepVo currentProcessTaskStepVo);
 
-	
+	/***
+     * @Time:Sep 23, 2020
+     * @Description: 评分
+     * @param currentProcessTaskVo
+     * @return int
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo);
 }

@@ -80,11 +80,13 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	private int updateProcessTaskStatus(Long processTaskId) {
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
 
-		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0;
+		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0, hangCount = 0;
 		for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
 			if (ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus()) && processTaskStepVo.getIsActive().equals(1)) {
 				draftCount += 1;
-			} else if (processTaskStepVo.getIsActive().equals(1)) {
+			} else if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
+			    hangCount += 1;
+            } else if (processTaskStepVo.getIsActive().equals(1)) {
 				runningCount += 1;
 			} else if (processTaskStepVo.getIsActive().equals(-1)) {
 				abortedCount += 1;
@@ -107,6 +109,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 		} else if (succeedCount > 0) {
 			processTaskVo.setStatus(ProcessTaskStatus.SUCCEED.getValue());
+		} else if(hangCount > 0) {
+		    processTaskVo.setStatus(ProcessTaskStatus.HANG.getValue());
 		} else {
 			return 1;
 		}
@@ -1701,5 +1705,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			runableActionList.add(thread);
 		}
 	}
-
+	
+	@Override
+	public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo) {
+	    
+	    return 1;
+	}
 }
