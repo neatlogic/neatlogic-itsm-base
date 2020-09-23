@@ -1254,6 +1254,46 @@
 	FROM `processtask_tranfer_report` 
 	WHERE `to_processtask_id` = #{value}
 	</select>
+
+	<select id="searchProcessTaskImportAuditCount" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="int" useCache="false">
+		SELECT
+		COUNT(p.`id`)
+		FROM `processtask_import_audit` p
+		WHERE 1=1
+		<if test="status != null">
+			and `status` = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+			and (`title` like CONCAT('%', #{keyword}, '%') or `processtask_id` like CONCAT('%', #{keyword}, '%'))
+		</if>
+	</select>
+
+	<select id="searchProcessTaskImportAudit" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" useCache="false">
+		SELECT
+		`id`,
+		`processtask_id` as processTaskId,
+		`title`,
+		`channel_uuid` as channelUuid,
+		(select `name` from `channel` where `uuid` = `channel_uuid`) as channelName,
+		`status`,
+		`error_reason` as errorReason,
+		`owner`,
+		(select u.`user_name` from `user` u where u.`uuid` = `owner`) as ownerName,
+		`import_time` as importTime
+		FROM
+		`processtask_import_audit`
+		WHERE 1=1
+		<if test="status != null">
+			and `status` = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+			and (`title` like CONCAT('%', #{keyword}, '%') or `processtask_id` like CONCAT('%', #{keyword}, '%'))
+		</if>
+		order by `import_time` desc
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
 	
 	<select id="getProcessTaskRelationById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskRelationVo">
 	SELECT 
@@ -1908,6 +1948,32 @@
 	    #{source},
 	    #{target}
 	  )
+	</insert>
+
+	<insert id="batchInsertProcessTaskImportAudit" parameterType="java.util.List">
+		INSERT INTO `processtask_import_audit`(
+	  		`id`,
+	  		`processtask_id`,
+	  		`title`,
+	  		`channel_uuid`,
+	  		`status`,
+	  		`error_reason`,
+	  		`owner`,
+	  		`import_time`
+		)
+		VALUES
+		<foreach collection="list" index="index" item="item" separator=",">
+			(
+			#{item.id},
+	    	#{item.processTaskId},
+	    	#{item.title},
+	    	#{item.channelUuid},
+	    	#{item.status},
+	    	#{item.errorReason},
+	    	#{item.owner},
+	    	NOW()
+			)
+		</foreach>
 	</insert>
 	
 	<insert id="insertProcessTaskStepRemind" parameterType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
