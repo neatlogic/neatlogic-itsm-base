@@ -13,10 +13,12 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.dto.TeamVo;
+import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskVo {
+    @ElasticSearchKey(type = "pk", id ="processTaskId")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long id;
 	@EntityField(name = "父工单id", type = ApiParamType.LONG)

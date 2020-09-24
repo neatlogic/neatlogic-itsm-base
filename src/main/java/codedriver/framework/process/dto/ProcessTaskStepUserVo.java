@@ -4,10 +4,12 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
+import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 
 public class ProcessTaskStepUserVo {
+    @ElasticSearchKey(type = "pk")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String userUuid;

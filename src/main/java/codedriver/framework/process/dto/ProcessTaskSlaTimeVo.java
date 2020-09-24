@@ -3,9 +3,11 @@ package codedriver.framework.process.dto;
 import java.util.Date;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskSlaTimeVo {
+    @ElasticSearchKey(type = "pk")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
 	@EntityField(name = "步骤id", type = ApiParamType.LONG)

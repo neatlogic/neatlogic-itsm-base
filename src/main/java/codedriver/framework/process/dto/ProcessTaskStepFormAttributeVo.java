@@ -1,6 +1,9 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
+
 public class ProcessTaskStepFormAttributeVo {
+    @ElasticSearchKey(type = "pk")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String action;

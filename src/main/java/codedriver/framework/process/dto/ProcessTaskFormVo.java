@@ -3,7 +3,10 @@ package codedriver.framework.process.dto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
+import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
+
 public class ProcessTaskFormVo {
+    @ElasticSearchKey(type = "pk")
 	private Long processTaskId;
 	private String formUuid;
 	private String formName;

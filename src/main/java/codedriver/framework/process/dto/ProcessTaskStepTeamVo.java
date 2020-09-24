@@ -1,6 +1,10 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
+
 public class ProcessTaskStepTeamVo {
+    @ElasticSearchKey(type = "pk")
+    private Long processTaskId;
 	private Long processTaskStepId;
 	private Long teamId;
 	private String teamName;
@@ -38,4 +42,13 @@ public class ProcessTaskStepTeamVo {
 		this.teamName = teamName;
 	}
 
+    public Long getProcessTaskId() {
+        return processTaskId;
+    }
+
+    public void setProcessTaskId(Long processTaskId) {
+        this.processTaskId = processTaskId;
+    }
+
+	
 }

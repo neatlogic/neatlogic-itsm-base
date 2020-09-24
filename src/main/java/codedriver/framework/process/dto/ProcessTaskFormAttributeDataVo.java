@@ -1,6 +1,9 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
+
 public class ProcessTaskFormAttributeDataVo extends AttributeDataVo implements Comparable<ProcessTaskFormAttributeDataVo>{
+    @ElasticSearchKey(type = "pk")
 	private Long processTaskId;
 	private String type;
 	private Integer sort;

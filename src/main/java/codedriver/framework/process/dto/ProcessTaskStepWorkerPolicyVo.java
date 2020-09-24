@@ -5,7 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
+
 public class ProcessTaskStepWorkerPolicyVo implements Comparable<ProcessTaskStepWorkerPolicyVo> {
+    @ElasticSearchKey(type = "pk")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String processStepUuid;
