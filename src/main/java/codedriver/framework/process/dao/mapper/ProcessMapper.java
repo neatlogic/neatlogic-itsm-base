@@ -18,6 +18,7 @@ import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTypeVo;
 import codedriver.framework.process.dto.ProcessVo;
+import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 
 public interface ProcessMapper {
 	public int checkProcessIsExists(String processUuid);
@@ -67,6 +68,8 @@ public interface ProcessMapper {
 	public List<ProcessStepWorkerPolicyVo> getProcessStepWorkerPolicyListByProcessUuid(String processUuid);
 
 	public ProcessStepVo getProcessStepByUuid(String processStepUuid);
+
+    public ProcessScoreTemplateVo getProcessScoreTemplateByProcessUuid(String processUuid);
 
 	public int insertProcess(ProcessVo processVo);
 

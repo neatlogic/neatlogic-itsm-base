@@ -360,6 +360,16 @@
 	WHERE `uuid` = #{uuid}
 	</select>
 	
+	<select id="getProcessScoreTemplateByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.score.ProcessScoreTemplateVo">
+	SELECT 
+	  `score_template_id` AS scoreTemplateId,
+	  `process_uuid` AS processUuid,
+	  `is_auto` AS isAuto,
+	  `config` 
+	FROM `process_score_template` 
+	WHERE `process_uuid` = #{value}
+	</select>
+	
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,
