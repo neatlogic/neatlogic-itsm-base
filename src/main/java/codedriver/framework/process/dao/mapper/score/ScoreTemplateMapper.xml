@@ -142,17 +142,17 @@
 		SELECT
 		`score_template_id`
 		FROM `process_score_template`
-		where `process_uuid` = #{value} and `is_active` = 1
+		where `process_uuid` = #{value}
 	</select>
 
 	<select id="getProcessScoreTemplateByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.score.ProcessScoreTemplateVo">
 		SELECT
 		`score_template_id` as `scoreTemplateId`,
 		`process_uuid` as `processUuid`,
-		`is_active` as `isActive`,
+		`is_auto` as `isAuto`,
 		`config` as `config`
 		FROM `process_score_template`
-		where `process_uuid` = #{value} and `is_active` = 1
+		where `process_uuid` = #{value}
 	</select>
 
 	<update id="updateScoreTemplate" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo">
@@ -213,12 +213,12 @@
 		INSERT INTO `process_score_template` (
 		`score_template_id`,
 		`process_uuid`,
-		`is_active`,
+		`is_auto`,
 		`config`
 		) VALUES (
 		#{scoreTemplateId},
 		#{processUuid},
-		#{isActive},
+		#{isAuto},
 		#{config}
 		)
 	</insert>
