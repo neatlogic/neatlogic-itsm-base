@@ -75,7 +75,7 @@ public class ProcessTaskScoreTemplateVo extends BaseEditorVo {
     }
 
     public String getConfigStr() {
-        if(StringUtils.isNotBlank(configStr) && config != null) {
+        if(StringUtils.isBlank(configStr) && config != null) {
             configStr = config.toJSONString();
         }
         return configStr;

@@ -1295,7 +1295,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			    ProcessTaskScoreTemplateVo processTaskScoreTemplateVo = new ProcessTaskScoreTemplateVo(processScoreTemplateVo);
 			    if(processTaskScoreTemplateVo.getConfig() != null) {
 			        ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo = new ProcessTaskScoreTemplateConfigVo(processTaskScoreTemplateVo.getConfigStr());
-			        if(selectContentByHashMapper.checkProcessTaskScoreTempleteConfigIsExists(processTaskScoreTemplateConfigVo.getHash()) == 0) {
+			        if(StringUtils.isNotBlank(processTaskScoreTemplateConfigVo.getHash()) && selectContentByHashMapper.checkProcessTaskScoreTempleteConfigIsExists(processTaskScoreTemplateConfigVo.getHash()) == 0) {
 			            processTaskMapper.insertProcessTaskScoreTempleteConfig(processTaskScoreTemplateConfigVo);
 			        }
 			        processTaskScoreTemplateVo.setConfigHash(processTaskScoreTemplateConfigVo.getHash());
