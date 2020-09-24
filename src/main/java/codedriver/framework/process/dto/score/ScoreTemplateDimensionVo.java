@@ -15,6 +15,8 @@ public class ScoreTemplateDimensionVo extends BasePageVo {
 	private String name;
 	@EntityField(name = "评分维度说明", type = ApiParamType.STRING)
 	private String description;
+	@EntityField(name = "评分值", type = ApiParamType.INTEGER)
+	private Integer score;
 
 	public ScoreTemplateDimensionVo() {}
 
@@ -52,5 +54,13 @@ public class ScoreTemplateDimensionVo extends BasePageVo {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
 
 }

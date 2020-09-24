@@ -51,6 +51,8 @@ import codedriver.framework.process.dto.ProcessTaskConvergeVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
+import codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo;
+import codedriver.framework.process.dto.ProcessTaskScoreTemplateVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
@@ -65,6 +67,7 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.ProcessVo;
+import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.exception.core.ProcessTaskException;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
@@ -80,11 +83,13 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	private int updateProcessTaskStatus(Long processTaskId) {
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
 
-		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0;
+		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0, hangCount = 0;
 		for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
 			if (ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus()) && processTaskStepVo.getIsActive().equals(1)) {
 				draftCount += 1;
-			} else if (processTaskStepVo.getIsActive().equals(1)) {
+			} else if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
+			    hangCount += 1;
+            } else if (processTaskStepVo.getIsActive().equals(1)) {
 				runningCount += 1;
 			} else if (processTaskStepVo.getIsActive().equals(-1)) {
 				abortedCount += 1;
@@ -107,6 +112,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 		} else if (succeedCount > 0) {
 			processTaskVo.setStatus(ProcessTaskStatus.SUCCEED.getValue());
+		} else if(hangCount > 0) {
+		    processTaskVo.setStatus(ProcessTaskStatus.HANG.getValue());
 		} else {
 			return 1;
 		}
@@ -1283,6 +1290,19 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				}
 			}
 
+			ProcessScoreTemplateVo processScoreTemplateVo = processMapper.getProcessScoreTemplateByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
+			if(processScoreTemplateVo != null) {
+			    ProcessTaskScoreTemplateVo processTaskScoreTemplateVo = new ProcessTaskScoreTemplateVo(processScoreTemplateVo);
+			    if(processTaskScoreTemplateVo.getConfig() != null) {
+			        ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo = new ProcessTaskScoreTemplateConfigVo(processTaskScoreTemplateVo.getConfigStr());
+			        if(StringUtils.isNotBlank(processTaskScoreTemplateConfigVo.getHash()) && selectContentByHashMapper.checkProcessTaskScoreTempleteConfigIsExists(processTaskScoreTemplateConfigVo.getHash()) == 0) {
+			            processTaskMapper.insertProcessTaskScoreTempleteConfig(processTaskScoreTemplateConfigVo);
+			        }
+			        processTaskScoreTemplateVo.setConfigHash(processTaskScoreTemplateConfigVo.getHash());
+			    }
+			    processTaskScoreTemplateVo.setProcessTaskId(processTaskVo.getId());
+			    processTaskMapper.insertProcessTaskScoreTemplate(processTaskScoreTemplateVo);
+			}
 			Map<String, Long> stepIdMap = new HashMap<>();
 			/** 写入所有步骤信息 **/
 			List<ProcessStepVo> processStepList = processMapper.getProcessStepDetailByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
@@ -1701,5 +1721,4 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			runableActionList.add(thread);
 		}
 	}
-
 }

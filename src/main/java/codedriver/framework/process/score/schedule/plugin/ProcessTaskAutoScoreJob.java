@@ -3,9 +3,11 @@ package codedriver.framework.process.score.schedule.plugin;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.process.constvalue.ProcessTaskAuditType;
+import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.score.ProcesstaskScoreMapper;
 import codedriver.framework.process.dao.mapper.score.ScoreTemplateMapper;
+import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
@@ -14,6 +16,7 @@ import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
 import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
+import codedriver.framework.process.util.WorkTimeUtil;
 import codedriver.framework.scheduler.core.JobBase;
 import codedriver.framework.scheduler.dto.JobObject;
 import com.alibaba.fastjson.JSONArray;
@@ -47,6 +50,9 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	@Autowired
 	private ProcesstaskScoreMapper processtaskScoreMapper;
 
+	@Autowired
+	private ChannelMapper channelMapper;
+
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
 		Long processTaskId = (Long) jobObject.getData("processTaskId");
@@ -70,15 +76,29 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 			processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
 		}
 		String config = null;
-		Object isAuto = null;
-		Object autoTime = null;
+		Integer isAuto = null;
+		Integer autoTime = null;
+		String autoTimeType = null;
 		if(processScoreTemplate != null && StringUtils.isNotBlank(config = processScoreTemplate.getConfig())) {
 			JSONObject configObj = JSONObject.parseObject(config);
-			isAuto = configObj.get("isAuto");
-			autoTime = configObj.get("autoTime");
+			isAuto = configObj.getInteger("isAuto");
+			autoTime = configObj.getInteger("autoTime");
+			autoTimeType = configObj.getString("autoTimeType");
 		}
 		if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
+			/**
+			 * 如果没有设置评分时限类型是自然日还是工作日，默认按自然日顺延
+			 * 如果设置为工作日，那么获取当前时间以后的工作日历，按工作日历顺延
+			 */
 			Date autoScoreDate = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString()));
+			if(StringUtils.isNotBlank(autoTimeType) && "workDay".equals(autoTimeType)){
+				String channelUuid = task.getChannelUuid();
+				ChannelVo channel = channelMapper.getChannelByUuid(channelUuid);
+				String worktimeUuid = channel.getWorktimeUuid();
+				long timeLimit = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString())).getTime() - task.getEndTime().getTime();
+				long expireTime = WorkTimeUtil.calculateExpireTime(task.getEndTime().getTime(), timeLimit, worktimeUuid);
+				autoScoreDate = new Date(expireTime);
+			}
 			JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskId.toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
 					.withBeginTime(autoScoreDate)
 					.withIntervalInSeconds(60 * 60)

@@ -896,6 +896,29 @@
 		WHERE `processtask_id` = #{processTaskId} 
 		AND `process_step_uuid` = #{processStepUuid}
 	</select>
+	
+	<select id="getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuidList" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+		SELECT
+		`id`,
+		`processtask_id` AS processTaskId,
+		`name`,
+		`process_step_uuid` AS processStepUuid,
+		`status`,
+		`result`,
+		`type`,
+		`handler`,
+		`is_active` AS isActive,
+		`config_hash` AS configHash,
+		`start_time` AS startTime,
+		`end_time` AS endTime,
+		`error`
+		FROM `processtask_step`
+		WHERE `processtask_id` = #{processTaskId} 
+		AND `process_step_uuid` IN 
+		<foreach collection="processStepUuidList" item="processStepUuid" open="(" separator="," close=")">
+		#{processStepUuid}
+		</foreach>
+	</select>
 
 	<select id="getProcessTaskAuditList" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
 		SELECT
@@ -1317,6 +1340,16 @@
 	  `content_hash` AS contentHash
 	FROM `processtask_step_remind` 
 	WHERE `processtask_step_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskScoreTemplateByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskScoreTemplateVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `score_template_id` AS scoreTemplateId,
+	  `is_auto` AS isAuto,
+	  `config_hash` AS configHash
+	FROM `processtask_score_template` 
+	WHERE `processtask_id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
@@ -1982,6 +2015,26 @@
 	    NOW(3),
 	    #{contentHash}
 	  )
+	</insert>
+	
+	<insert id="insertProcessTaskScoreTemplate" parameterType="codedriver.framework.process.dto.ProcessTaskScoreTemplateVo">
+	INSERT INTO `processtask_score_template` (
+	  `processtask_id`,
+	  `score_template_id`,
+	  `is_auto`,
+	  `config_hash`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{scoreTemplateId},
+	    #{isAuto},
+	    #{configHash}
+	  )
+	</insert>
+	
+	<insert id="insertProcessTaskScoreTempleteConfig" parameterType="codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo">
+	INSERT INTO `processtask_score_template_config` (`hash`, `config`) VALUES (#{hash}, #{config})
 	</insert>
 	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
