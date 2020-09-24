@@ -364,6 +364,7 @@
 	SELECT 
 	  `score_template_id` AS scoreTemplateId,
 	  `process_uuid` AS processUuid,
+	  `is_auto` AS isAuto,
 	  `config` 
 	FROM `process_score_template` 
 	WHERE `process_uuid` = #{value}

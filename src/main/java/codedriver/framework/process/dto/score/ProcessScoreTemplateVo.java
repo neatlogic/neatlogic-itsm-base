@@ -15,6 +15,9 @@ public class ProcessScoreTemplateVo extends BaseEditorVo {
 	@EntityField(name = "评分配置", type = ApiParamType.STRING)
 	private String config;
 
+	@EntityField(name = "是否自动评分", type = ApiParamType.INTEGER)
+	private Integer isAuto;
+	
 	public ProcessScoreTemplateVo() {}
 
 	public String getProcessUuid() {
@@ -48,4 +51,12 @@ public class ProcessScoreTemplateVo extends BaseEditorVo {
 	public void setConfig(String config) {
 		this.config = config;
 	}
+
+    public Integer getIsAuto() {
+        return isAuto;
+    }
+
+    public void setIsAuto(Integer isAuto) {
+        this.isAuto = isAuto;
+    }
 }

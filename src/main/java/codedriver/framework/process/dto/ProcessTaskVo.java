@@ -13,6 +13,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.dto.TeamVo;
+import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
@@ -97,6 +98,8 @@ public class ProcessTaskVo {
 	private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
 	@EntityField(name = "重做步骤列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> redoStepList = new ArrayList<>();
+	@EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
+	private ScoreTemplateVo scoreTemplateVo;
 	
 	public ProcessTaskVo() {
 
@@ -419,6 +422,14 @@ public class ProcessTaskVo {
 
     public void setRedoStepList(List<ProcessTaskStepVo> redoStepList) {
         this.redoStepList = redoStepList;
+    }
+
+    public ScoreTemplateVo getScoreTemplateVo() {
+        return scoreTemplateVo;
+    }
+
+    public void setScoreTemplateVo(ScoreTemplateVo scoreTemplateVo) {
+        this.scoreTemplateVo = scoreTemplateVo;
     }
 
 }
