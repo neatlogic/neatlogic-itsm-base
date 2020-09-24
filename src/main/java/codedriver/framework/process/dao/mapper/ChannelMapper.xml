@@ -604,7 +604,7 @@
 	</foreach>
 	</select>
 	
-	<select id="getChannelTypeRelationIdListBySourceChannelTypeUuid" parameterType="java.lang.Long" resultType="java.lang.Long">
+	<select id="getChannelTypeRelationIdListBySourceChannelTypeUuid" parameterType="java.lang.String" resultType="java.lang.Long">
 	SELECT DISTINCT `channel_type_relation_id` FROM `channel_type_relation_source` WHERE `channel_type_uuid` IN (#{value}, 'all')
 	</select>
 	
