@@ -1,6 +1,5 @@
 package codedriver.framework.process.dao.mapper;
 
-import java.util.Date;
 import java.util.List;
 
 import codedriver.framework.common.dto.ValueTextVo;
@@ -12,7 +11,7 @@ import codedriver.framework.process.dto.WorktimeVo;
 public interface WorktimeMapper {
 
 	public WorktimeVo getWorktimeByUuid(String uuid);
-	
+
 	public WorktimeVo getWorktimeByName(String name);
 
 	public int checkWorktimeNameIsRepeat(WorktimeVo worktimeVo);
@@ -26,8 +25,6 @@ public interface WorktimeMapper {
 	public List<ValueTextVo> searchWorktimeListForSelect(WorktimeVo worktimeVo);
 
 	public List<WorktimeRangeVo> getWorktimeRangeListByWorktimeUuid(String worktimeUuid);
-
-	public List<WorktimeRangeVo> getWorktimeRangeAfterDeadline(@Param("worktimeUuid") String worktimeUuid, @Param("deadline") Date deadline);
 
 	public List<String> getWorktimeDateList(WorktimeRangeVo worktimeRangeVo);
 

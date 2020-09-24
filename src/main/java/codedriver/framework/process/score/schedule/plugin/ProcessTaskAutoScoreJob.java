@@ -5,19 +5,18 @@ import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.process.constvalue.ProcessTaskAuditType;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.dao.mapper.WorktimeMapper;
 import codedriver.framework.process.dao.mapper.score.ProcesstaskScoreMapper;
 import codedriver.framework.process.dao.mapper.score.ScoreTemplateMapper;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.dto.WorktimeRangeVo;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.dto.score.ProcesstaskScoreVo;
 import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
 import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
+import codedriver.framework.process.util.WorkTimeUtil;
 import codedriver.framework.scheduler.core.JobBase;
 import codedriver.framework.scheduler.dto.JobObject;
 import com.alibaba.fastjson.JSONArray;
@@ -33,10 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 工单自动评分定时类
@@ -58,9 +55,6 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 
 	@Autowired
 	private ChannelMapper channelMapper;
-
-	@Autowired
-	private WorktimeMapper worktimeMapper;
 
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
@@ -97,30 +91,16 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 		if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
 			/**
 			 * 如果没有设置评分时限类型是自然日还是工作日，默认按自然日顺延
-			 * 如果设置为工作日，那么获取当前日期以后的工作日历
-			 * 如果没有工作日历，那么就按自然日顺延
-			 * 如果时限大于工作日历天数，那么先按工作日历顺延，超出的部分按自然日计算
+			 * 如果设置为工作日，那么获取当前时间以后的工作日历，按工作日历顺延
 			 */
 			Date autoScoreDate = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString()));
 			if(StringUtils.isNotBlank(autoTimeType) && "workDay".equals(autoTimeType)){
 				String channelUuid = task.getChannelUuid();
 				ChannelVo channel = channelMapper.getChannelByUuid(channelUuid);
 				String worktimeUuid = channel.getWorktimeUuid();
-				List<WorktimeRangeVo> workDateList = worktimeMapper.getWorktimeRangeAfterDeadline(worktimeUuid,task.getEndTime());
-				if(CollectionUtils.isNotEmpty(workDateList)){
-					List<String> workDayList = workDateList.stream().map(WorktimeRangeVo::getDate).collect(Collectors.toList());
-					int days = Integer.parseInt(autoTime.toString());
-					int overflowDays = 0;
-					if(days > workDayList.size()){
-						overflowDays = days - workDayList.size();
-						days = workDayList.size();
-					}
-					Date activeDate = getScheduleActiveDate(workDayList, days);
-					if(overflowDays > 0){
-						activeDate = DateUtils.addDays(activeDate,overflowDays);
-					}
-					autoScoreDate = activeDate;
-				}
+				long timeLimit = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString())).getTime() - task.getEndTime().getTime();
+				long expireTime = WorkTimeUtil.calculateExpireTime(task.getEndTime().getTime(), timeLimit, worktimeUuid);
+				autoScoreDate = new Date(expireTime);
 			}
 			JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskId.toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
 					.withBeginTime(autoScoreDate)
@@ -189,32 +169,5 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	public String getGroupName() {
 		return TenantContext.get().getTenantUuid() + "-PROCESSTASK-AUTOSCORE";
 	}
-
-	private Date getScheduleActiveDate(List<String> list,int autoTime){
-		Date today = new Date();
-		Date tomorrow = null;
-		int delay = 1;
-		int num = autoTime;
-		while(delay <= num){
-			tomorrow = DateUtils.addDays(today,1);
-			if(isWorkDay(sdf.format(tomorrow),list)){
-				delay++;
-				today = tomorrow;
-			}else{
-				today = tomorrow;
-			}
-		}
-		return today;
-	}
-
-	private boolean isWorkDay(String strDate,List<String> list){
-		for(int i = 0; i < list.size(); i++){
-			if(strDate.equals(list.get(i))){
-				return true;
-			}
-		}
-		return false;
-	}
-
 
 }

@@ -112,19 +112,6 @@
 		ORDER BY `start_time`
 	</select>
 
-	<select id="getWorktimeRangeAfterDeadline" resultMap="worktimeRangeMap" useCache="false">
-		SELECT
-		`year`,
-		`date`,
-		`worktime_uuid`,
-		`start_time`,
-		`end_time`
-		FROM
-		`worktime_range`
-		WHERE `worktime_uuid` = #{worktimeUuid}
-		and STR_TO_DATE(`date`,'%Y-%m-%d') > STR_TO_DATE(date_format(#{deadline},'%Y-%m-%d'),'%Y-%m-%d')
-	</select>
-
 	<select id="getWorktimeDateList" parameterType="codedriver.framework.process.dto.WorktimeRangeVo" resultType="java.lang.String" useCache="false">
 		SELECT
 		DISTINCT `date`
