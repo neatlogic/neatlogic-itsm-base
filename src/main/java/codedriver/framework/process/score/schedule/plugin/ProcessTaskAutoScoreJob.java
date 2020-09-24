@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -41,8 +40,6 @@ import java.util.List;
 @Component
 public class ProcessTaskAutoScoreJob extends JobBase {
 	static Logger logger = LoggerFactory.getLogger(ProcessTaskAutoScoreJob.class);
-
-	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Autowired
 	private ProcessTaskMapper processTaskMapper;
