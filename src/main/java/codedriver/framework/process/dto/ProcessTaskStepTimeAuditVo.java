@@ -8,11 +8,13 @@ public class ProcessTaskStepTimeAuditVo {
 	private String abortTime;
 	private String completeTime;
 	private String backTime;
+	private String pauseTime;
 	private Long activeTimeLong;
 	private Long startTimeLong;
 	private Long abortTimeLong;
 	private Long completeTimeLong;
 	private Long backTimeLong;
+	private Long pauseTimeLong;
 
 	public Long getId() {
 		return id;
@@ -110,5 +112,21 @@ public class ProcessTaskStepTimeAuditVo {
 	public void setCompleteTimeLong(Long completeTimeLong) {
 		this.completeTimeLong = completeTimeLong;
 	}
+
+    public String getPauseTime() {
+        return pauseTime;
+    }
+
+    public void setPauseTime(String pauseTime) {
+        this.pauseTime = pauseTime;
+    }
+
+    public Long getPauseTimeLong() {
+        return pauseTimeLong;
+    }
+
+    public void setPauseTimeLong(Long pauseTimeLong) {
+        this.pauseTimeLong = pauseTimeLong;
+    }
 
 }
