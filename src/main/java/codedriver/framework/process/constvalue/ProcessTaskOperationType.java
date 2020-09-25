@@ -71,6 +71,8 @@ public enum ProcessTaskOperationType {
     RESTFULACTION("restfulaction", "RESTFUL动作"),
     RETREATCURRENTSTEP("retreatcurrentstep", "撤回当前步骤"),
     TRANFERREPORT("tranferreport", "转报"),
+    COPYPROCESSTASK("copyprocesstask", "复制上报"),
+    REDO("redo", "回退"),
     SCORE("score", "评分");
     private String status;
     private String text;

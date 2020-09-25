@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
@@ -266,9 +267,12 @@ public class ProcessVo extends BasePageVo implements Serializable {
 		}
 		/** 组装评分设置 */
 		JSONObject scoreConfig = processObj.getJSONObject("scoreConfig");
-		if(MapUtils.isNotEmpty(scoreConfig) && scoreConfig.getInteger("isActive") != null){
-			this.processScoreTemplateVo = JSON.toJavaObject(scoreConfig, ProcessScoreTemplateVo.class);
-			this.processScoreTemplateVo.setProcessUuid(uuid);
+		if(MapUtils.isNotEmpty(scoreConfig)){
+		    Integer isActive = scoreConfig.getInteger("isActive");
+		    if(Objects.equals(isActive, 1)) {
+	            this.processScoreTemplateVo = JSON.toJavaObject(scoreConfig, ProcessScoreTemplateVo.class);
+	            this.processScoreTemplateVo.setProcessUuid(uuid);		        
+		    }
 		}
 	}
 

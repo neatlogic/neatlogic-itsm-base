@@ -26,11 +26,6 @@ public class ProcessTaskSlaTimeVo {
 	private Long realTimeLeft;
 	private Long expireTimeLong;
 	private Long realExpireTimeLong;
-
-//	@EntityField(name = "剩余时间描述（根据工作日历计算）", type = ApiParamType.STRING)
-//	private String timeLeftDesc;
-//	@EntityField(name = "剩余时间描述（不考虑工作日历）", type = ApiParamType.STRING)
-//	private String realTimeLeftDesc;
 	
 	public Long getProcessTaskId() {
 		return processTaskId;
@@ -120,19 +115,11 @@ public class ProcessTaskSlaTimeVo {
 		this.realExpireTimeLong = realExpireTimeLong;
 	}
 
-	//	public String getTimeLeftDesc() {
-//		return timeLeftDesc;
-//	}
-//
-//	public void setTimeLeftDesc(String timeLeftDesc) {
-//		this.timeLeftDesc = timeLeftDesc;
-//	}
-//
-//	public String getRealTimeLeftDesc() {
-//		return realTimeLeftDesc;
-//	}
-//
-//	public void setRealTimeLeftDesc(String realTimeLeftDesc) {
-//		this.realTimeLeftDesc = realTimeLeftDesc;
-//	}
+    @Override
+    public String toString() {
+        return "processTaskId=" + processTaskId + ", slaId=" + slaId + ", timeSum=" + timeSum + "\n"
+            + ", expireTime=" + expireTime + ", timeLeft=" + timeLeft + "\n"
+            + ", realExpireTime=" + realExpireTime + ", realTimeLeft=" + realTimeLeft;
+    }
+
 }

@@ -1,6 +1,12 @@
 package codedriver.framework.process.dto;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 public class AttributeDataVo {
 	private String attributeUuid;
@@ -34,6 +40,26 @@ public class AttributeDataVo {
 			return data;
 		}
 	}
+    
+    public boolean dataIsEmpty() {
+        Object dataObj = getDataObj();
+        if(dataObj == null) {
+            return true;
+        }else if(dataObj instanceof JSONArray) {
+            if(CollectionUtils.isEmpty((JSONArray)dataObj)) {
+                return true;
+            }
+        }else if(dataObj instanceof JSONObject) {
+            if(MapUtils.isNotEmpty((JSONObject)dataObj)) {
+                return true;
+            }
+        }else if(dataObj instanceof String) {
+            if(StringUtils.isBlank((String)dataObj)) {
+                return true;
+            }
+        }
+        return false;
+    }
 	
 	@Override
 	public int hashCode() {

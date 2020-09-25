@@ -36,9 +36,11 @@ import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
+import codedriver.framework.process.constvalue.ProcessTaskStepRemindType;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dto.ChannelVo;
+import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
 import codedriver.framework.process.dto.ProcessSlaVo;
 import codedriver.framework.process.dto.ProcessStepRelVo;
@@ -49,12 +51,15 @@ import codedriver.framework.process.dto.ProcessTaskConvergeVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
+import codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo;
+import codedriver.framework.process.dto.ProcessTaskScoreTemplateVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
+import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
@@ -62,6 +67,9 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.ProcessVo;
+import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
+import codedriver.framework.process.dto.score.ProcesstaskScoreVo;
+import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
 import codedriver.framework.process.exception.core.ProcessTaskException;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
@@ -77,11 +85,13 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	private int updateProcessTaskStatus(Long processTaskId) {
 		List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
 
-		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0;
+		int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0, hangCount = 0;
 		for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
 			if (ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus()) && processTaskStepVo.getIsActive().equals(1)) {
 				draftCount += 1;
-			} else if (processTaskStepVo.getIsActive().equals(1)) {
+			} else if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())) {
+			    hangCount += 1;
+            } else if (processTaskStepVo.getIsActive().equals(1)) {
 				runningCount += 1;
 			} else if (processTaskStepVo.getIsActive().equals(-1)) {
 				abortedCount += 1;
@@ -104,6 +114,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 		} else if (succeedCount > 0) {
 			processTaskVo.setStatus(ProcessTaskStatus.SUCCEED.getValue());
+		} else if(hangCount > 0) {
+		    processTaskVo.setStatus(ProcessTaskStatus.HANG.getValue());
 		} else {
 			return 1;
 		}
@@ -260,6 +272,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 			currentProcessTaskStepVo.setError(e.getMessage());
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
+			/** 异常提醒 **/
+			ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), e.getMessage(), ProcessTaskStepRemindType.ERROR);
 		} finally {
 			if (ProcessTaskStatus.FAILED.getValue().equals(currentProcessTaskStepVo.getStatus())) {
 				/**
@@ -523,6 +537,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			
 			/** 执行动作 **/
 			ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.START);
+
+            processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setError(ex.getMessage());
@@ -645,7 +661,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						}
 					}
 					if (operationType == ProcessTaskOperationType.COMPLETE) {
-						DataValid.formAttributeDataValid(currentProcessTaskStepVo);
+						DataValid.formAttributeDataValidFromDb(currentProcessTaskStepVo);
 						DataValid.assignWorkerValid(currentProcessTaskStepVo);
 					}
 					/** 更新处理人状态 **/
@@ -664,9 +680,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 流转到下一步 **/
 				Set<ProcessTaskStepVo> nextStepList = getNext(currentProcessTaskStepVo);
 				if (nextStepList.size() > 0) {
+				    Long startProcessTaskStepId = currentProcessTaskStepVo.getStartProcessTaskStepId();
+				    if(startProcessTaskStepId == null) {
+				        startProcessTaskStepId = currentProcessTaskStepVo.getId();
+				    }
 					for (ProcessTaskStepVo nextStep : nextStepList) {
 						IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
 						nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+						nextStep.setStartProcessTaskStepId(startProcessTaskStepId);
 						if (nextStepHandler != null) {
 							doNext(new ProcessStepThread(nextStep) {
 								@Override
@@ -684,12 +705,24 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				
 				/** 执行动作 **/
 				ActionHandler.action(currentProcessTaskStepVo, notifyTriggerType);
+				/** 回退提醒 **/
+				if (this.getMode().equals(ProcessStepMode.MT)) {
+				    JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+				    if (ProcessTaskOperationType.BACK.getValue().equals(paramObj.getString("action"))) {
+				        processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
+	                    ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, paramObj.getLong("nextStepId"), paramObj.getString("content"), ProcessTaskStepRemindType.BACK);
+				    }else {
+				        processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
+				    }
+				}
 			} catch (ProcessTaskException ex) {
 				logger.error(ex.getMessage(), ex);
 				currentProcessTaskStepVo.setError(ex.getMessage());
 				currentProcessTaskStepVo.setIsActive(0);
 				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 				updateProcessTaskStepStatus(currentProcessTaskStepVo);
+				/** 异常提醒 **/
+	            ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(), ProcessTaskStepRemindType.ERROR);
 				/** 触发通知 **/
 				NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
 				
@@ -1035,7 +1068,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 			/** 触发通知 **/
 			// NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.ACCEPT);
-			
+			processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
 		} catch (ProcessTaskRuntimeException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setError(ex.getMessage());
@@ -1124,6 +1157,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 			/** 处理时间审计 **/
 			TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.TRANSFER);
+			/** 转交提醒 **/
+
+            processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
+	        ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), currentProcessTaskStepVo.getParamObj().getString("content"), ProcessTaskStepRemindType.TRANSFER);
 		} catch (ProcessTaskException e) {
 			logger.error(e.getMessage(), e);
 			processTaskStepVo.setError(e.getMessage());
@@ -1214,9 +1251,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	public final int saveDraft(ProcessTaskStepVo currentProcessTaskStepVo) {
 		JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 		Long processTaskId = paramObj.getLong("processTaskId");
+		 Map<String, Object> formAttributeDataMap = new HashMap<String, Object>();
+		 List<FormAttributeVo> formAttributeList = new ArrayList<FormAttributeVo>();
+		 Map<String, String> formAttributeActionMap = new HashMap<String,String>();
+		 ProcessTaskVo processTaskVo = new ProcessTaskVo();
 		if (processTaskId == null) {// 首次保存
-
-			ProcessTaskVo processTaskVo = new ProcessTaskVo();
 			processTaskVo.setTitle(paramObj.getString("title"));
 			processTaskVo.setOwner(paramObj.getString("owner"));
 			processTaskVo.setChannelUuid(paramObj.getString("channelUuid"));
@@ -1249,9 +1288,23 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					processTaskFormVo.setFormName(formVersionVo.getFormName());
 					processTaskMapper.insertProcessTaskForm(processTaskFormVo);
 					processTaskMapper.replaceProcessTaskFormContent(processTaskFormVo);
+					formAttributeList = formVersionVo.getFormAttributeList();
 				}
 			}
 
+			ProcessScoreTemplateVo processScoreTemplateVo = processMapper.getProcessScoreTemplateByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
+			if(processScoreTemplateVo != null) {
+			    ProcessTaskScoreTemplateVo processTaskScoreTemplateVo = new ProcessTaskScoreTemplateVo(processScoreTemplateVo);
+			    if(processTaskScoreTemplateVo.getConfig() != null) {
+			        ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo = new ProcessTaskScoreTemplateConfigVo(processTaskScoreTemplateVo.getConfigStr());
+			        if(StringUtils.isNotBlank(processTaskScoreTemplateConfigVo.getHash()) && selectContentByHashMapper.checkProcessTaskScoreTempleteConfigIsExists(processTaskScoreTemplateConfigVo.getHash()) == 0) {
+			            processTaskMapper.insertProcessTaskScoreTempleteConfig(processTaskScoreTemplateConfigVo);
+			        }
+			        processTaskScoreTemplateVo.setConfigHash(processTaskScoreTemplateConfigVo.getHash());
+			    }
+			    processTaskScoreTemplateVo.setProcessTaskId(processTaskVo.getId());
+			    processTaskMapper.insertProcessTaskScoreTemplate(processTaskScoreTemplateVo);
+			}
 			Map<String, Long> stepIdMap = new HashMap<>();
 			/** 写入所有步骤信息 **/
 			List<ProcessStepVo> processStepList = processMapper.getProcessStepDetailByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
@@ -1375,7 +1428,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			/** 锁定当前流程 **/
 			processTaskMapper.getProcessTaskLockById(processTaskId);
 			// 第二次保存时的操作
-			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
+			processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
 			if (!ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
 				throw new ProcessTaskRuntimeException("工单非草稿状态，不能进行上报暂存操作");
 			}
@@ -1384,16 +1437,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		}
 		try {
 
-			/** 更新工单信息 **/
-			ProcessTaskVo processTaskVo = new ProcessTaskVo();
-			processTaskVo.setId(currentProcessTaskStepVo.getProcessTaskId());
-			processTaskVo.setTitle(paramObj.getString("title"));
-			processTaskVo.setOwner(paramObj.getString("owner"));
-			processTaskVo.setPriorityUuid(paramObj.getString("priorityUuid"));
-			processTaskMapper.updateProcessTaskTitleOwnerPriorityUuid(processTaskVo);
-
-			/** 保存描述内容和附件 **/
-			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STARTPROCESS);
+			
 
 			if(processTaskMapper.checkProcessTaskhasForm(currentProcessTaskStepVo.getProcessTaskId()) > 0) {
 			    processTaskMapper.deleteProcessTaskFormAttributeDataByProcessTaskId(processTaskId);
@@ -1414,7 +1458,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	            JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
 	            if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
 	                // 表单属性显示控制
-	                Map<String, String> formAttributeActionMap = new HashMap<>();
+	                formAttributeActionMap = new HashMap<>();
 	                List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
 	                if (processTaskStepFormAttributeList.size() > 0) {
 	                    for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
@@ -1437,9 +1481,31 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	                    attributeData.setType(formAttributeDataObj.getString("handler"));
 	                    attributeData.setSort(i);
 	                    processTaskMapper.replaceProcessTaskFormAttributeData(attributeData);
+	                    formAttributeDataMap.put(formAttributeDataObj.getString("attributeUuid"), formAttributeDataObj);
 	                }
 	            }
 			}
+			//是否需要校验，兼容提供给第三方的上报接口，表单等不合法，则不生成工单
+            Integer isNeedValid = paramObj.getInteger("isNeedValid");
+			if(isNeedValid != null &&isNeedValid == 1) {
+                currentProcessTaskStepVo.setFormAttributeDataMap(formAttributeDataMap);
+                currentProcessTaskStepVo.setFormAttributeVoList(formAttributeList);
+                currentProcessTaskStepVo.setFormAttributeActionMap(formAttributeActionMap);
+                DataValid.formAttributeDataValid(currentProcessTaskStepVo);
+                DataValid.baseInfoValid(currentProcessTaskStepVo,processTaskVo);
+			}
+            
+			/** 更新工单信息 **/
+            processTaskVo = new ProcessTaskVo();
+            processTaskVo.setId(currentProcessTaskStepVo.getProcessTaskId());
+            processTaskVo.setTitle(paramObj.getString("title"));
+            processTaskVo.setOwner(paramObj.getString("owner"));
+            processTaskVo.setPriorityUuid(paramObj.getString("priorityUuid"));
+            processTaskMapper.updateProcessTaskTitleOwnerPriorityUuid(processTaskVo);
+
+            /** 保存描述内容和附件 **/
+            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STARTPROCESS);
+            
             
 			mySaveDraft(currentProcessTaskStepVo);
 			currentProcessTaskStepVo.setIsActive(1);
@@ -1464,8 +1530,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			// 锁定当前流程
 			processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
 			ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.STARTPROCESS, true);
-			DataValid.formAttributeDataValid(currentProcessTaskStepVo);
-			DataValid.baseInfoValid(currentProcessTaskStepVo);
+			DataValid.formAttributeDataValidFromDb(currentProcessTaskStepVo);
+			DataValid.baseInfoValidFromDb(currentProcessTaskStepVo);
 			DataValid.assignWorkerValid(currentProcessTaskStepVo);
 			myStartProcess(currentProcessTaskStepVo);
 			// 获取表单数据
@@ -1491,6 +1557,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			for (ProcessTaskStepVo nextStep : nextStepList) {
 				IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
 				nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+				nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
 				if (nextStepHandler != null) {
 					doNext(new ProcessStepThread(nextStep) {
 						@Override
@@ -1501,12 +1568,30 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					});
 				}
 			}
+            /** 写入时间审计 **/
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
+
+            /** 计算SLA并触发超时警告 **/
+            SlaHandler.calculate(currentProcessTaskStepVo);
+
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
+            
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setIsActive(1);
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 			currentProcessTaskStepVo.setError(ex.getMessage());
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
+            
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
 		} finally {
 			/** 处理历史记录 **/
 		    ProcessTaskTranferReportVo processTaskTranferReportVo =  processTaskMapper.getProcessTaskTranferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
@@ -1551,6 +1636,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				currentProcessTaskStepVo.appendError(ExceptionUtils.getStackTrace(ex));
 			}
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
+            /** 异常提醒 **/
+            ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), ex.getMessage(), ProcessTaskStepRemindType.ERROR);
 		}
 
 		/** 更新路径isHit=1，在active方法里需要根据isHit状态判断路径是否经通过 **/
@@ -1654,5 +1741,129 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			runableActionList.add(thread);
 		}
 	}
+	
+	public int redo(ProcessTaskStepVo currentProcessTaskStepVo) {
+	    try {
+            // 锁定当前流程
+            processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+            IProcessStepUtilHandler  processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(this.getHandler());
+            if(processStepUtilHandler == null) {
+                throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
+            }
+            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.REDO, true);
 
+            /** 保存打回原因 **/
+            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
+//            myRedo(currentProcessTaskStepVo);
+
+            /** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
+            resetConvergeInfo(currentProcessTaskStepVo);
+
+            /** 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
+            /** 获取当前步骤状态 **/
+            List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+            for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
+                if (nextTaskStepRelVo != null && nextTaskStepRelVo.getIsHit().equals(1)) {
+                    ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
+                    if (nextProcessTaskStepVo != null) {
+                        IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
+                        // 标记挂起操作来源步骤
+                        nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+                        // 标记挂起操作的发起步骤，避免出现死循环
+                        nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
+                        if (handler != null) {
+                            doNext(new ProcessStepThread(nextProcessTaskStepVo) {
+                                @Override
+                                public void execute() {
+                                    handler.hang(nextProcessTaskStepVo);
+                                }
+                            });
+                        }
+                    }
+                }
+                // 恢复路径命中状态为0，代表路径未通过
+                processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
+            }
+
+            /** 分配处理人 **/
+            assign(currentProcessTaskStepVo);
+            currentProcessTaskStepVo.setIsActive(1);
+            updateProcessTaskStepStatus(currentProcessTaskStepVo);
+
+            /** 写入时间审计 **/
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
+            if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
+                TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+            }
+
+            /** 计算SLA并触发超时警告 **/
+            SlaHandler.calculate(currentProcessTaskStepVo);
+
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.REDO);
+            
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.REDO);
+        } catch (ProcessTaskException ex) {
+            logger.error(ex.getMessage(), ex);
+            currentProcessTaskStepVo.setError(ex.getMessage());
+            currentProcessTaskStepVo.setIsActive(1);
+            currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
+            updateProcessTaskStepStatus(currentProcessTaskStepVo);
+        }finally{           
+            /** 处理历史记录 **/
+            AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.REDO);     
+        }
+        return 1;
+	}
+	
+//	protected abstract int myRedo(ProcessTaskStepVo currentProcessTaskStepVo);
+	
+	public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo) {
+	    // 锁定当前流程
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
+        IProcessStepUtilHandler  processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+        //只有上报人才可评分
+        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskVo, ProcessTaskOperationType.SCORE, true);
+        JSONObject paramObj = currentProcessTaskVo.getParamObj();
+        Long scoreTemplateId = paramObj.getLong("scoreTemplateId");
+        String content = paramObj.getString("content");
+        List<ScoreTemplateDimensionVo> scoreDimensionList = JSON.parseArray(paramObj.getJSONArray("scoreDimensionList").toJSONString(), ScoreTemplateDimensionVo.class);
+
+        ProcesstaskScoreVo processtaskScoreVo = new ProcesstaskScoreVo();
+        processtaskScoreVo.setProcesstaskId(currentProcessTaskVo.getId());
+        processtaskScoreVo.setScoreTemplateId(scoreTemplateId);
+        processtaskScoreVo.setFcu(UserContext.get().getUserUuid());
+        processtaskScoreVo.setIsAuto(0);
+        for(ScoreTemplateDimensionVo scoreTemplateDimensionVo : scoreDimensionList){
+            processtaskScoreVo.setScoreDimensionId(scoreTemplateDimensionVo.getId());
+            processtaskScoreVo.setScore(scoreTemplateDimensionVo.getScore());
+            processtaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
+        }
+
+        JSONObject contentObj = new JSONObject();
+        contentObj.put("scoreTemplateId", scoreTemplateId);
+        contentObj.put("content", content);
+        contentObj.put("dimensionList", paramObj.getJSONArray("scoreDimensionList"));
+        JSONObject scoreObj = new JSONObject();
+        scoreObj.put(ProcessTaskAuditDetailType.SCORE.getParamName(),contentObj);
+        /**processtask_content表存储了两份数据：
+         * 1、评价内容content本身
+         * 2、由评分模版ID、评价内容、评分维度与分数组装而成的JSON
+         */
+        if (StringUtils.isNotBlank(content)) {
+            ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
+            processTaskMapper.replaceProcessTaskContent(contentVo);
+            processtaskScoreVo.setContentHash(contentVo.getHash());
+            processtaskScoreMapper.insertProcesstaskScoreContent(processtaskScoreVo);
+        }
+        currentProcessTaskVo.setStatus(ProcessTaskStatus.SCORED.getValue());
+        processTaskMapper.updateProcessTaskStatus(currentProcessTaskVo);
+        ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
+        processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
+        processTaskStepVo.setParamObj(scoreObj);
+        /** 生成活动 */
+        AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
+	    return 1;
+	}
 }

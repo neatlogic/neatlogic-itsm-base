@@ -896,6 +896,29 @@
 		WHERE `processtask_id` = #{processTaskId} 
 		AND `process_step_uuid` = #{processStepUuid}
 	</select>
+	
+	<select id="getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuidList" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+		SELECT
+		`id`,
+		`processtask_id` AS processTaskId,
+		`name`,
+		`process_step_uuid` AS processStepUuid,
+		`status`,
+		`result`,
+		`type`,
+		`handler`,
+		`is_active` AS isActive,
+		`config_hash` AS configHash,
+		`start_time` AS startTime,
+		`end_time` AS endTime,
+		`error`
+		FROM `processtask_step`
+		WHERE `processtask_id` = #{processTaskId} 
+		AND `process_step_uuid` IN 
+		<foreach collection="processStepUuidList" item="processStepUuid" open="(" separator="," close=")">
+		#{processStepUuid}
+		</foreach>
+	</select>
 
 	<select id="getProcessTaskAuditList" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
 		SELECT
@@ -1254,6 +1277,46 @@
 	FROM `processtask_tranfer_report` 
 	WHERE `to_processtask_id` = #{value}
 	</select>
+
+	<select id="searchProcessTaskImportAuditCount" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="int" useCache="false">
+		SELECT
+		COUNT(p.`id`)
+		FROM `processtask_import_audit` p
+		WHERE 1=1
+		<if test="status != null">
+			and `status` = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+			and (`title` like CONCAT('%', #{keyword}, '%') or `processtask_id` like CONCAT('%', #{keyword}, '%'))
+		</if>
+	</select>
+
+	<select id="searchProcessTaskImportAudit" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" useCache="false">
+		SELECT
+		`id`,
+		`processtask_id` as processTaskId,
+		`title`,
+		`channel_uuid` as channelUuid,
+		(select `name` from `channel` where `uuid` = `channel_uuid`) as channelName,
+		`status`,
+		`error_reason` as errorReason,
+		`owner`,
+		(select u.`user_name` from `user` u where u.`uuid` = `owner`) as ownerName,
+		`import_time` as importTime
+		FROM
+		`processtask_import_audit`
+		WHERE 1=1
+		<if test="status != null">
+			and `status` = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+			and (`title` like CONCAT('%', #{keyword}, '%') or `processtask_id` like CONCAT('%', #{keyword}, '%'))
+		</if>
+		order by `import_time` desc
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
 	
 	<select id="getProcessTaskRelationById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskRelationVo">
 	SELECT 
@@ -1263,6 +1326,30 @@
 	`target`
 	FROM `processtask_relation` 
 	WHERE `id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskStepRemindListByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `action`,
+	  `title`,
+	  `fcu`,
+	  (SELECT user_name FROM `user` x WHERE x.uuid = `fcu`) AS fcuName,
+	  `fcd`,
+	  `content_hash` AS contentHash
+	FROM `processtask_step_remind` 
+	WHERE `processtask_step_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskScoreTemplateByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskScoreTemplateVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `score_template_id` AS scoreTemplateId,
+	  `is_auto` AS isAuto,
+	  `config_hash` AS configHash
+	FROM `processtask_score_template` 
+	WHERE `processtask_id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
@@ -1895,6 +1982,74 @@
 	    #{target}
 	  )
 	</insert>
+
+	<insert id="batchInsertProcessTaskImportAudit" parameterType="java.util.List">
+		INSERT INTO `processtask_import_audit`(
+	  		`id`,
+	  		`processtask_id`,
+	  		`title`,
+	  		`channel_uuid`,
+	  		`status`,
+	  		`error_reason`,
+	  		`owner`,
+	  		`import_time`
+		)
+		VALUES
+		<foreach collection="list" index="index" item="item" separator=",">
+			(
+			#{item.id},
+	    	#{item.processTaskId},
+	    	#{item.title},
+	    	#{item.channelUuid},
+	    	#{item.status},
+	    	#{item.errorReason},
+	    	#{item.owner},
+	    	NOW()
+			)
+		</foreach>
+	</insert>
+	
+	<insert id="insertProcessTaskStepRemind" parameterType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
+	INSERT INTO `processtask_step_remind` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `action`,
+	  `title`,
+	  `fcu`,
+	  `fcd`,
+	  `content_hash`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{action},
+	    #{title},
+	    #{fcu},
+	    NOW(3),
+	    #{contentHash}
+	  )
+	</insert>
+	
+	<insert id="insertProcessTaskScoreTemplate" parameterType="codedriver.framework.process.dto.ProcessTaskScoreTemplateVo">
+	INSERT INTO `processtask_score_template` (
+	  `processtask_id`,
+	  `score_template_id`,
+	  `is_auto`,
+	  `config_hash`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{scoreTemplateId},
+	    #{isAuto},
+	    #{configHash}
+	  )
+	</insert>
+	
+	<insert id="insertProcessTaskScoreTempleteConfig" parameterType="codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo">
+	INSERT INTO `processtask_score_template_config` (`hash`, `config`) VALUES (#{hash}, #{config})
+	</insert>
 	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
@@ -2071,5 +2226,13 @@
 	
 	<delete id="deleteProcessTaskRelationById" parameterType="java.lang.Long">
 	DELETE FROM `processtask_relation` WHERE `id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepRemind" parameterType="codedriver.framework.process.dto.ProcessTaskStepRemindVo">
+	DELETE FROM `processtask_step_remind` 
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	<if test="action != null and action != ''">
+  	AND `action` = #{action} 
+  	</if>
 	</delete>
 </mapper>

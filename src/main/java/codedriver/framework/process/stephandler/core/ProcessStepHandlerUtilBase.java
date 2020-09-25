@@ -39,12 +39,12 @@ import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
-import codedriver.framework.process.exception.worktime.WorktimeNotFoundException;
 import codedriver.framework.process.integration.handler.ProcessRequestFrom;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
 import codedriver.framework.process.score.schedule.plugin.ProcessTaskAutoScoreJob;
+import codedriver.framework.process.util.WorkTimeUtil;
 import codedriver.framework.scheduler.core.IJob;
 import codedriver.framework.scheduler.core.SchedulerManager;
 import codedriver.framework.scheduler.dto.JobObject;
@@ -64,6 +64,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -431,54 +433,24 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-		private static long calculateExpireTime(long activeTime, long timeLimit, String worktimeUuid) {
-			if (worktimeMapper.checkWorktimeIsExists(worktimeUuid) == 0) {
-				throw new WorktimeNotFoundException(worktimeUuid);
-			}
-			if (timeLimit <= 0) {
-				return activeTime;
-			}
-			WorktimeRangeVo worktimeRangeVo = new WorktimeRangeVo();
-			WorktimeRangeVo recentWorktimeRange = null;
-			long startTime = 0;
-			long endTime = 0;
-			long duration = 0;
-			while (true) {
-				worktimeRangeVo.setWorktimeUuid(worktimeUuid);
-				worktimeRangeVo.setStartTime(activeTime);
-				recentWorktimeRange = worktimeMapper.getRecentWorktimeRange(worktimeRangeVo);
-				if (recentWorktimeRange == null) {
-					return activeTime;
-				}
-				startTime = recentWorktimeRange.getStartTime();
-				endTime = recentWorktimeRange.getEndTime();
-				if (startTime > activeTime) {
-					activeTime = startTime;
-				}
-				duration = endTime - activeTime;
-				if (duration >= timeLimit) {
-					return activeTime + timeLimit;
-				} else {
-					timeLimit -= duration;
-					activeTime = endTime;
-				}
-			}
-		}
-
 		private static long getTimeCost(List<ProcessTaskStepTimeAuditVo> processTaskStepTimeAuditList, String worktimeUuid) {
 			List<Map<String, Long>> timeList = new ArrayList<>();
 			for (ProcessTaskStepTimeAuditVo auditVo : processTaskStepTimeAuditList) {
 				Long startTime = null, endTime = null;
 				if (auditVo.getActiveTimeLong() != null) {
 					startTime = auditVo.getActiveTimeLong();
-				}
+				}else if(auditVo.getStartTimeLong() != null) {
+                    startTime = auditVo.getStartTimeLong();
+                }
 				if (auditVo.getCompleteTimeLong() != null) {
 					endTime = auditVo.getCompleteTimeLong();
 				} else if (auditVo.getAbortTimeLong() != null) {
 					endTime = auditVo.getAbortTimeLong();
 				} else if (auditVo.getBackTimeLong() != null) {
 					endTime = auditVo.getBackTimeLong();
-				}
+				}else if(auditVo.getPauseTimeLong() != null) {
+                    endTime = auditVo.getPauseTimeLong();
+                }
 				if (startTime != null && endTime != null) {
 					Map<String, Long> stimeMap = new HashMap<>();
 					stimeMap.put("s", startTime);
@@ -539,13 +511,18 @@ public abstract class ProcessStepHandlerUtilBase {
 					Long startTime = null, endTime = null;
 					if (auditVo.getActiveTimeLong() != null) {
 						startTime = auditVo.getActiveTimeLong();
+					}else if(auditVo.getStartTimeLong() != null) {
+					    startTime = auditVo.getStartTimeLong();
 					}
+					
 					if (auditVo.getCompleteTimeLong() != null) {
 						endTime = auditVo.getCompleteTimeLong();
 					} else if (auditVo.getAbortTimeLong() != null) {
 						endTime = auditVo.getAbortTimeLong();
 					} else if (auditVo.getBackTimeLong() != null) {
 						endTime = auditVo.getBackTimeLong();
+					}else if(auditVo.getPauseTimeLong() != null) {
+					    endTime = auditVo.getPauseTimeLong();
 					}
 					if (startTime != null && endTime != null) {
 						Map<String, Long> smap = new HashMap<>();
@@ -634,7 +611,6 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected void execute() {
 			List<ProcessTaskSlaVo> slaList = processTaskMapper.getProcessTaskSlaByProcessTaskStepId(currentProcessTaskStepVo.getId());
 			if (slaList != null && slaList.size() > 0) {
-				long now = System.currentTimeMillis();
 				ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 				String worktimeUuid = processTaskVo.getWorktimeUuid();
@@ -704,17 +680,21 @@ public abstract class ProcessStepHandlerUtilBase {
 						if (StringUtils.isNotBlank(worktimeUuid)) {// 如果有工作时间，则计算实际消耗的工作时间
 							timeCost = getTimeCost(processTaskStepTimeAuditList, worktimeUuid);
 						}
-						slaTimeVo.setRealTimeLeft(slaTimeVo.getRealTimeLeft() - realTimeCost);
-						slaTimeVo.setTimeLeft(slaTimeVo.getTimeLeft() - timeCost);
+						slaTimeVo.setRealTimeLeft(slaTimeVo.getTimeSum() - realTimeCost);
+						slaTimeVo.setTimeLeft(slaTimeVo.getTimeSum() - timeCost);
 
 					}
 
 					// 修正最终超时日期
 					if (slaTimeVo != null) {
+		                long now = System.currentTimeMillis();
+		                System.out.println(new Date() + "\t now:"+ now);
 						slaTimeVo.setRealExpireTime(new Date(now + slaTimeVo.getRealTimeLeft()));
 						if (StringUtils.isNotBlank(worktimeUuid)) {
 							if (slaTimeVo.getTimeLeft() != null) {
-								long expireTime = calculateExpireTime(now, slaTimeVo.getTimeLeft(), worktimeUuid);
+		                        System.out.println("now + slaTimeVo.getTimeLeft():"+ (now + slaTimeVo.getTimeLeft()));
+                                long expireTime = WorkTimeUtil.calculateExpireTime(now, slaTimeVo.getTimeLeft(), worktimeUuid);
+								System.out.println("expireTime:"+ expireTime);
 								slaTimeVo.setExpireTime(new Date(expireTime));
 							} else {
 								throw new RuntimeException("计算剩余时间失败");
@@ -728,6 +708,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						}
 						slaTimeVo.setSlaId(slaVo.getId());
 						slaTimeVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+						System.out.println(slaTimeVo);
 						if (isSlaTimeExists) {
 							processTaskMapper.updateProcessTaskSlaTime(slaTimeVo);
 						} else {
@@ -845,6 +826,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				} else if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
 					newAuditVo.setStartTime("now");
 					if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getStartTime())) {
+					    System.out.println("recover:" + new Date());
 						processTaskStepTimeAuditMapper.insertProcessTaskStepTimeAudit(newAuditVo);
 					} else if (StringUtils.isBlank(processTaskStepTimeAuditVo.getStartTime())) {// 如果starttime为空，则更新starttime
 						newAuditVo.setId(processTaskStepTimeAuditVo.getId());
@@ -852,6 +834,24 @@ public abstract class ProcessStepHandlerUtilBase {
 					}
 				}
 				break;
+			case PAUSE:
+                /** 如果找不到审计记录并且pausetime不为空，则新建审计记录 **/
+                newAuditVo.setPauseTime("now");
+                if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getPauseTime())) {
+                    processTaskStepTimeAuditMapper.insertProcessTaskStepTimeAudit(newAuditVo);
+                } else if (StringUtils.isBlank(processTaskStepTimeAuditVo.getPauseTime())) {// 如果pausetime为空，则更新pausetime
+                    newAuditVo.setId(processTaskStepTimeAuditVo.getId());
+                    Date startTime = new Date();
+                    try {
+                        startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(processTaskStepTimeAuditVo.getStartTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("pause:" + new Date());                   
+                    System.out.println("TimeCost:" + (System.currentTimeMillis() - startTime.getTime()));
+                    processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
+                }
+                break;
 			}
 		}
 	}
@@ -1435,12 +1435,12 @@ public abstract class ProcessStepHandlerUtilBase {
 				processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
 			}
 			String config = null;
-			Object isAuto = null;
-			Object autoTime = null;
+			Integer isAuto = null;
+			Integer autoTime = null;
 			if(processScoreTemplate != null && StringUtils.isNotBlank(config = processScoreTemplate.getConfig())){
 				JSONObject configObj = JSONObject.parseObject(config);
-				isAuto = configObj.get("isAuto");
-				autoTime = configObj.get("autoTime");
+				isAuto = configObj.getInteger("isAuto");
+				autoTime = configObj.getInteger("autoTime");
 			}
 			if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
 				IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
@@ -1459,12 +1459,11 @@ public abstract class ProcessStepHandlerUtilBase {
 		/**
 		 * 
 		* @Time:2020年7月28日
-		* @Description: 验证表单数据是否合法
+		* @Description: 获取需要验证表单数据，并校验
 		* @param currentProcessTaskStepVo
 		* @return boolean
 		 */
-		public static boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo) {
-
+		public static boolean formAttributeDataValidFromDb(ProcessTaskStepVo currentProcessTaskStepVo) {
 			ProcessTaskFormVo processTaskFormVo = processTaskMapper.getProcessTaskFormByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 			if (processTaskFormVo != null && StringUtils.isNotBlank(processTaskFormVo.getFormContentHash())) {
 			    String formContent = selectContentByHashMapper.getProcessTaskFromContentByHash(processTaskFormVo.getFormContentHash());
@@ -1483,42 +1482,70 @@ public abstract class ProcessStepHandlerUtilBase {
 	                for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
 	                    formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
 	                }
-
-	                List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);
-	                for (FormAttributeVo formAttributeVo : formAttributeList) {
-	                    if (!formAttributeVo.isRequired()) {
-	                        continue;
-	                    }
-	                    if (formAttributeActionMap.containsKey(formAttributeVo.getUuid())) {
-	                        continue;
-	                    }
-	                    if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {
-	                        continue;
-	                    }
-	                    Object data = formAttributeDataMap.get(formAttributeVo.getUuid());
-	                    if(data != null) {
-	                        if(data instanceof String) {
-	                            if (StringUtils.isBlank(data.toString())) {
-	                                throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-	                            }
-	                        }else if(data instanceof JSONArray) {
-	                            if(CollectionUtils.isEmpty((JSONArray) data)){
-	                                throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-	                            }
-	                        }else if(data instanceof JSONObject) {
-	                            if(MapUtils.isEmpty((JSONObject) data)) {
-	                                throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-	                            }
-	                        }
-	                    }else {
-	                        throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
-	                    }
-	                }
+	                currentProcessTaskStepVo.setFormAttributeDataMap(formAttributeDataMap);
+	                currentProcessTaskStepVo.setFormAttributeVoList(formAttributeList);
+	                currentProcessTaskStepVo.setFormAttributeActionMap(formAttributeActionMap);
+	                formAttributeDataValid(currentProcessTaskStepVo);
 	            }
 			}
 			
 			return true;
 		}
+		
+		/**
+         * 
+        * @Time:2020年7月28日
+        * @Description: 验证表单数据是否合法
+        * @param currentProcessTaskStepVo
+        * @return boolean
+         */
+		public static boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo) {
+            List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);           
+            for (FormAttributeVo formAttributeVo : currentProcessTaskStepVo.getFormAttributeVoList()) {
+                if (!formAttributeVo.isRequired()) {
+                    continue;
+                }
+                if ( currentProcessTaskStepVo.getFormAttributeActionMap().containsKey(formAttributeVo.getUuid())) {
+                    continue;
+                }
+                if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {
+                    continue;
+                }
+                Object data = currentProcessTaskStepVo.getFormAttributeDataMap().get(formAttributeVo.getUuid());
+                if(data != null) {
+                    if(data instanceof String) {
+                        if (StringUtils.isBlank(data.toString())) {
+                            throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+                        }
+                    }else if(data instanceof JSONArray) {
+                        if(CollectionUtils.isEmpty((JSONArray) data)){
+                            throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+                        }
+                    }else if(data instanceof JSONObject) {
+                        if(MapUtils.isEmpty((JSONObject) data)) {
+                            throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+                        }
+                    }
+                }else {
+                    throw new ProcessTaskRuntimeException("表单属性：'" + formAttributeVo.getLabel() + "'不能为空");
+                }
+            }
+            return true;
+        }
+		
+		/**
+         * 
+        * @Time:2020年7月28日
+        * @Description: 获取验证基本信息数据是否合法，并验证
+        * @param currentProcessTaskStepVo
+        * @return boolean
+         */
+        public static boolean baseInfoValidFromDb(ProcessTaskStepVo currentProcessTaskStepVo) {
+            ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
+            baseInfoValid(currentProcessTaskStepVo, processTaskVo);
+            return true;
+        }
+        
 		/**
 		 * 
 		* @Time:2020年7月28日
@@ -1526,9 +1553,8 @@ public abstract class ProcessStepHandlerUtilBase {
 		* @param currentProcessTaskStepVo
 		* @return boolean
 		 */
-		public static boolean baseInfoValid(ProcessTaskStepVo currentProcessTaskStepVo) {
+		public static boolean baseInfoValid(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskVo processTaskVo) {
 			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
-			ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
 			if(processTaskVo.getTitle() == null) {
 				throw new ProcessTaskRuntimeException("工单标题格式不能为空");
 			}
