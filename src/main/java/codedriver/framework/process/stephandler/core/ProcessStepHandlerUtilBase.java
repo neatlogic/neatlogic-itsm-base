@@ -39,12 +39,12 @@ import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
-import codedriver.framework.process.exception.worktime.WorktimeNotFoundException;
 import codedriver.framework.process.integration.handler.ProcessRequestFrom;
 import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
 import codedriver.framework.process.score.schedule.plugin.ProcessTaskAutoScoreJob;
+import codedriver.framework.process.util.WorkTimeUtil;
 import codedriver.framework.scheduler.core.IJob;
 import codedriver.framework.scheduler.core.SchedulerManager;
 import codedriver.framework.scheduler.dto.JobObject;
@@ -433,40 +433,6 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-		private static long calculateExpireTime(long activeTime, long timeLimit, String worktimeUuid) {
-			if (worktimeMapper.checkWorktimeIsExists(worktimeUuid) == 0) {
-				throw new WorktimeNotFoundException(worktimeUuid);
-			}
-			if (timeLimit <= 0) {
-				return activeTime;
-			}
-			WorktimeRangeVo worktimeRangeVo = new WorktimeRangeVo();
-			WorktimeRangeVo recentWorktimeRange = null;
-			long startTime = 0;
-			long endTime = 0;
-			long duration = 0;
-			while (true) {
-				worktimeRangeVo.setWorktimeUuid(worktimeUuid);
-				worktimeRangeVo.setStartTime(activeTime);
-				recentWorktimeRange = worktimeMapper.getRecentWorktimeRange(worktimeRangeVo);
-				if (recentWorktimeRange == null) {
-					return activeTime;
-				}
-				startTime = recentWorktimeRange.getStartTime();
-				endTime = recentWorktimeRange.getEndTime();
-				if (startTime > activeTime) {
-					activeTime = startTime;
-				}
-				duration = endTime - activeTime;
-				if (duration >= timeLimit) {
-					return activeTime + timeLimit;
-				} else {
-					timeLimit -= duration;
-					activeTime = endTime;
-				}
-			}
-		}
-
 		private static long getTimeCost(List<ProcessTaskStepTimeAuditVo> processTaskStepTimeAuditList, String worktimeUuid) {
 			List<Map<String, Long>> timeList = new ArrayList<>();
 			for (ProcessTaskStepTimeAuditVo auditVo : processTaskStepTimeAuditList) {
@@ -727,7 +693,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						if (StringUtils.isNotBlank(worktimeUuid)) {
 							if (slaTimeVo.getTimeLeft() != null) {
 		                        System.out.println("now + slaTimeVo.getTimeLeft():"+ (now + slaTimeVo.getTimeLeft()));
-								long expireTime = calculateExpireTime(now, slaTimeVo.getTimeLeft(), worktimeUuid);
+                                long expireTime = WorkTimeUtil.calculateExpireTime(now, slaTimeVo.getTimeLeft(), worktimeUuid);
 								System.out.println("expireTime:"+ expireTime);
 								slaTimeVo.setExpireTime(new Date(expireTime));
 							} else {
@@ -1469,12 +1435,12 @@ public abstract class ProcessStepHandlerUtilBase {
 				processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
 			}
 			String config = null;
-			Object isAuto = null;
-			Object autoTime = null;
+			Integer isAuto = null;
+			Integer autoTime = null;
 			if(processScoreTemplate != null && StringUtils.isNotBlank(config = processScoreTemplate.getConfig())){
 				JSONObject configObj = JSONObject.parseObject(config);
-				isAuto = configObj.get("isAuto");
-				autoTime = configObj.get("autoTime");
+				isAuto = configObj.getInteger("isAuto");
+				autoTime = configObj.getInteger("autoTime");
 			}
 			if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
 				IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());

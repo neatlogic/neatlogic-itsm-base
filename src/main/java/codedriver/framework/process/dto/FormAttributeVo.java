@@ -41,10 +41,10 @@ public class FormAttributeVo implements Serializable {
 	List<ExpressionVo> expressionList;
 	@EntityField(name = "默认表达式", type = ApiParamType.JSONOBJECT)
 	ExpressionVo defaultExpression;
-	
+
 	@EntityField(name = "条件模型")
 	private String conditionModel = ProcessConditionModel.CUSTOM.getValue();
-	
+
 	public FormAttributeVo() {
 
 	}
@@ -55,11 +55,11 @@ public class FormAttributeVo implements Serializable {
 //		this.uuid = uuid;
 //		this.config = _config;
 //	}
-	
+
 	public FormAttributeVo(String formUuid) {
 		this.formUuid = formUuid;
 	}
-	
+
 	public FormAttributeVo(String formUuid, String formVersionUuid) {
 		this.formUuid = formUuid;
 		this.formVersionUuid = formVersionUuid;

@@ -3,38 +3,11 @@ package codedriver.framework.process.dao.mapper;
 import java.util.List;
 import java.util.Map;
 
+import codedriver.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ElasticSearch;
-import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskConfigVo;
-import codedriver.framework.process.dto.ProcessTaskContentVo;
-import codedriver.framework.process.dto.ProcessTaskConvergeVo;
-import codedriver.framework.process.dto.ProcessTaskStepFileVo;
-import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
-import codedriver.framework.process.dto.ProcessTaskFormVo;
-import codedriver.framework.process.dto.ProcessTaskRelationVo;
-import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
-import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
-import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
-import codedriver.framework.process.dto.ProcessTaskSlaVo;
-import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
-import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
-import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
-import codedriver.framework.process.dto.ProcessTaskStepContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
-import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
-import codedriver.framework.process.dto.ProcessTaskStepRelVo;
-import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
-import codedriver.framework.process.dto.ProcessTaskStepTeamVo;
-import codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo;
-import codedriver.framework.process.dto.ProcessTaskStepUserVo;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
 
 public interface ProcessTaskMapper {
 	public ProcessTaskSlaVo getProcessTaskSlaById(Long slaId);
@@ -139,6 +112,8 @@ public interface ProcessTaskMapper {
 
 	public ProcessTaskStepVo getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuid(@Param("processTaskId") Long processTaskId, @Param("processStepUuid") String processStepUuid);
 	
+	public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuidList(@Param("processTaskId") Long processTaskId, @Param("processStepUuidList") List<String> processStepUuidList);
+	
 	public List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
 	public List<ProcessTaskVo> getProcessTaskListByKeywordAndIdList(@Param("keyword")String keyword, @Param("processTaskIdList")List<Long> processTaskIdList,@Param("fromDate")String fromDate,@Param("toDate")String toDate);
@@ -184,6 +159,12 @@ public interface ProcessTaskMapper {
     public ProcessTaskRelationVo getProcessTaskRelationById(Long id);
 
     public List<ProcessTaskStepRemindVo> getProcessTaskStepRemindListByProcessTaskStepId(Long processTaskStepId);
+
+    public int searchProcessTaskImportAuditCount(ProcessTaskImportAuditVo processTaskImportAuditVo);
+
+    public List<ProcessTaskImportAuditVo> searchProcessTaskImportAudit(ProcessTaskImportAuditVo processTaskImportAuditVo);
+
+    public ProcessTaskScoreTemplateVo getProcessTaskScoreTemplateByProcessTaskId(Long processTaskId);
 
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
@@ -262,7 +243,13 @@ public interface ProcessTaskMapper {
     public int replaceProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
 
     public int insertProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
-	
+
+    public int batchInsertProcessTaskImportAudit(@Param("list") List<ProcessTaskImportAuditVo> processTaskImportAuditVos);
+
+    public int insertProcessTaskScoreTemplate(ProcessTaskScoreTemplateVo processTaskScoreTemplateVo);
+
+    public int insertProcessTaskScoreTempleteConfig(ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo);
+
 	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
 

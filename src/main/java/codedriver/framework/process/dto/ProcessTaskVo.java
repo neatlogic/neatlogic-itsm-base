@@ -13,6 +13,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.dto.TeamVo;
+import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
@@ -31,8 +32,6 @@ public class ProcessTaskVo {
 	private String channelPath;
 	@EntityField(name = "优先级uuid", type = ApiParamType.STRING)
 	private String priorityUuid;
-	@EntityField(name = "优先级名", type = ApiParamType.STRING)
-	private String priorityName;
 	@EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
 	private String config;
 	private String configPath;
@@ -87,11 +86,7 @@ public class ProcessTaskVo {
 
 	@EntityField(name = "评分信息", type = ApiParamType.STRING)
 	private String scoreInfo;
-		
-//    @EntityField(name = "来源工单信息", type = ApiParamType.JSONOBJECT)
-//    private ProcessTaskVo fromProcessTaskVo;
-//    @EntityField(name = "目标工单信息列表", type = ApiParamType.JSONOBJECT)
-//    private List<ProcessTaskVo> toProcessTaskList = new ArrayList<>();
+
 	@EntityField(name = "转报工单信息列表", type = ApiParamType.JSONOBJECT)
     private List<ProcessTaskVo> tranferReportProcessTaskList = new ArrayList<>();
 	@EntityField(name = "评分信息", type = ApiParamType.STRING)
@@ -101,8 +96,14 @@ public class ProcessTaskVo {
 	/** 当前用户在当前工单中工单干系人列表 **/
     @JSONField(serialize=false)
 	private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
-	
-	public ProcessTaskVo() {
+	@EntityField(name = "重做步骤列表", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskStepVo> redoStepList = new ArrayList<>();
+	@EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
+	private ScoreTemplateVo scoreTemplateVo;
+	@JSONField(serialize=false)
+    private transient JSONObject paramObj;
+
+    public ProcessTaskVo() {
 
 	}
 
@@ -297,14 +298,6 @@ public class ProcessTaskVo {
 		this.priorityUuid = priorityUuid;
 	}
 
-	public String getPriorityName() {
-		return priorityName;
-	}
-
-	public void setPriorityName(String priorityName) {
-		this.priorityName = priorityName;
-	}
-
 	public Long getParentId() {
 		return parentId;
 	}
@@ -425,20 +418,31 @@ public class ProcessTaskVo {
         this.tranferReportDirection = tranferReportDirection;
     }
 
-//    public ProcessTaskVo getFromProcessTaskVo() {
-//        return fromProcessTaskVo;
-//    }
-//
-//    public void setFromProcessTaskVo(ProcessTaskVo fromProcessTaskVo) {
-//        this.fromProcessTaskVo = fromProcessTaskVo;
-//    }
-//
-//    public List<ProcessTaskVo> getToProcessTaskList() {
-//        return toProcessTaskList;
-//    }
-//
-//    public void setToProcessTaskList(List<ProcessTaskVo> toProcessTaskList) {
-//        this.toProcessTaskList = toProcessTaskList;
-//    }
+    public List<ProcessTaskStepVo> getRedoStepList() {
+        return redoStepList;
+    }
+
+    public void setRedoStepList(List<ProcessTaskStepVo> redoStepList) {
+        this.redoStepList = redoStepList;
+    }
+
+    public ScoreTemplateVo getScoreTemplateVo() {
+        return scoreTemplateVo;
+    }
+
+    public void setScoreTemplateVo(ScoreTemplateVo scoreTemplateVo) {
+        this.scoreTemplateVo = scoreTemplateVo;
+    }
+    
+    public JSONObject getParamObj() {
+        if(paramObj == null) {
+            paramObj = new JSONObject();
+        }
+        return paramObj;
+    }
+
+    public void setParamObj(JSONObject paramObj) {
+        this.paramObj = paramObj;
+    }
 
 }
