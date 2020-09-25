@@ -275,4 +275,19 @@ public interface IProcessStepHandler {
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	public int back(ProcessTaskStepVo currentProcessTaskStepVo);
 
+	/**
+     * @Description: 重新激活步骤
+     * @param  processTaskStepVo
+     * @return int
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    public int redo(ProcessTaskStepVo currentProcessTaskStepVo);
+    
+    /**
+     * @Description: 评分
+     * @param  processTaskStepVo
+     * @return int
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo);
 }

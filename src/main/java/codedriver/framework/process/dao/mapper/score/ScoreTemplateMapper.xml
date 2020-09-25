@@ -138,13 +138,6 @@
 		where pst.`score_template_id` = #{scoreTemplateId}
 	</select>
 
-	<select id="getScoreTemplateIdByProcessUuid" parameterType="java.lang.String" resultType="java.lang.Long">
-		SELECT
-		`score_template_id`
-		FROM `process_score_template`
-		where `process_uuid` = #{value}
-	</select>
-
 	<select id="getProcessScoreTemplateByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.score.ProcessScoreTemplateVo">
 		SELECT
 		`score_template_id` as `scoreTemplateId`,
