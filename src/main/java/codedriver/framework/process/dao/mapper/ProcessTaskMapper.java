@@ -176,6 +176,8 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskSlaTransferVo> getProcessTaskSlaTransferBySlaId(Long slaId);
 
+    public Long getProcessTaskSlaLockById(Long slaId);
+
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
 	public int replaceProcessTaskOldFormProp(@Param("processTaskId")Long processTaskId,@Param("form")String form,@Param("prop")String prop);

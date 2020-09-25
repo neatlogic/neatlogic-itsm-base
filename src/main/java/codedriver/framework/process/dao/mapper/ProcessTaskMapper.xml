@@ -1386,6 +1386,10 @@
 	WHERE `sla_id` = #{value}	
 	</select>
 	
+	<select id="getProcessTaskSlaLockById" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `id` FROM `processtask_sla` WHERE `id` = #{value} FOR UPDATE
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}

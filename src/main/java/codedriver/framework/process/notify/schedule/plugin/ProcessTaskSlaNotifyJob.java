@@ -148,7 +148,10 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 							notifyDate.add(Calendar.MINUTE, time);
 						}
 					}
-
+					/** 如果触发时间在当前时间之前，则将触发时间改为当前时间 **/
+					if(notifyDate.before(Calendar.getInstance())) {
+					    notifyDate = Calendar.getInstance();
+					}
 					JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
 							.withBeginTime(notifyDate.getTime())
 							.withIntervalInSeconds(intervalTime)
