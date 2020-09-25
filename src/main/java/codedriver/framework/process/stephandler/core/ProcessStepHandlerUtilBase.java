@@ -64,6 +64,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -437,14 +439,18 @@ public abstract class ProcessStepHandlerUtilBase {
 				Long startTime = null, endTime = null;
 				if (auditVo.getActiveTimeLong() != null) {
 					startTime = auditVo.getActiveTimeLong();
-				}
+				}else if(auditVo.getStartTimeLong() != null) {
+                    startTime = auditVo.getStartTimeLong();
+                }
 				if (auditVo.getCompleteTimeLong() != null) {
 					endTime = auditVo.getCompleteTimeLong();
 				} else if (auditVo.getAbortTimeLong() != null) {
 					endTime = auditVo.getAbortTimeLong();
 				} else if (auditVo.getBackTimeLong() != null) {
 					endTime = auditVo.getBackTimeLong();
-				}
+				}else if(auditVo.getPauseTimeLong() != null) {
+                    endTime = auditVo.getPauseTimeLong();
+                }
 				if (startTime != null && endTime != null) {
 					Map<String, Long> stimeMap = new HashMap<>();
 					stimeMap.put("s", startTime);
@@ -505,13 +511,18 @@ public abstract class ProcessStepHandlerUtilBase {
 					Long startTime = null, endTime = null;
 					if (auditVo.getActiveTimeLong() != null) {
 						startTime = auditVo.getActiveTimeLong();
+					}else if(auditVo.getStartTimeLong() != null) {
+					    startTime = auditVo.getStartTimeLong();
 					}
+					
 					if (auditVo.getCompleteTimeLong() != null) {
 						endTime = auditVo.getCompleteTimeLong();
 					} else if (auditVo.getAbortTimeLong() != null) {
 						endTime = auditVo.getAbortTimeLong();
 					} else if (auditVo.getBackTimeLong() != null) {
 						endTime = auditVo.getBackTimeLong();
+					}else if(auditVo.getPauseTimeLong() != null) {
+					    endTime = auditVo.getPauseTimeLong();
 					}
 					if (startTime != null && endTime != null) {
 						Map<String, Long> smap = new HashMap<>();
@@ -600,7 +611,6 @@ public abstract class ProcessStepHandlerUtilBase {
 		protected void execute() {
 			List<ProcessTaskSlaVo> slaList = processTaskMapper.getProcessTaskSlaByProcessTaskStepId(currentProcessTaskStepVo.getId());
 			if (slaList != null && slaList.size() > 0) {
-				long now = System.currentTimeMillis();
 				ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
 				processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 				String worktimeUuid = processTaskVo.getWorktimeUuid();
@@ -670,17 +680,21 @@ public abstract class ProcessStepHandlerUtilBase {
 						if (StringUtils.isNotBlank(worktimeUuid)) {// 如果有工作时间，则计算实际消耗的工作时间
 							timeCost = getTimeCost(processTaskStepTimeAuditList, worktimeUuid);
 						}
-						slaTimeVo.setRealTimeLeft(slaTimeVo.getRealTimeLeft() - realTimeCost);
-						slaTimeVo.setTimeLeft(slaTimeVo.getTimeLeft() - timeCost);
+						slaTimeVo.setRealTimeLeft(slaTimeVo.getTimeSum() - realTimeCost);
+						slaTimeVo.setTimeLeft(slaTimeVo.getTimeSum() - timeCost);
 
 					}
 
 					// 修正最终超时日期
 					if (slaTimeVo != null) {
+		                long now = System.currentTimeMillis();
+		                System.out.println(new Date() + "\t now:"+ now);
 						slaTimeVo.setRealExpireTime(new Date(now + slaTimeVo.getRealTimeLeft()));
 						if (StringUtils.isNotBlank(worktimeUuid)) {
 							if (slaTimeVo.getTimeLeft() != null) {
-								long expireTime = WorkTimeUtil.calculateExpireTime(now, slaTimeVo.getTimeLeft(), worktimeUuid);
+		                        System.out.println("now + slaTimeVo.getTimeLeft():"+ (now + slaTimeVo.getTimeLeft()));
+                                long expireTime = WorkTimeUtil.calculateExpireTime(now, slaTimeVo.getTimeLeft(), worktimeUuid);
+								System.out.println("expireTime:"+ expireTime);
 								slaTimeVo.setExpireTime(new Date(expireTime));
 							} else {
 								throw new RuntimeException("计算剩余时间失败");
@@ -694,6 +708,7 @@ public abstract class ProcessStepHandlerUtilBase {
 						}
 						slaTimeVo.setSlaId(slaVo.getId());
 						slaTimeVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+						System.out.println(slaTimeVo);
 						if (isSlaTimeExists) {
 							processTaskMapper.updateProcessTaskSlaTime(slaTimeVo);
 						} else {
@@ -811,6 +826,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				} else if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
 					newAuditVo.setStartTime("now");
 					if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getStartTime())) {
+					    System.out.println("recover:" + new Date());
 						processTaskStepTimeAuditMapper.insertProcessTaskStepTimeAudit(newAuditVo);
 					} else if (StringUtils.isBlank(processTaskStepTimeAuditVo.getStartTime())) {// 如果starttime为空，则更新starttime
 						newAuditVo.setId(processTaskStepTimeAuditVo.getId());
@@ -818,6 +834,24 @@ public abstract class ProcessStepHandlerUtilBase {
 					}
 				}
 				break;
+			case PAUSE:
+                /** 如果找不到审计记录并且pausetime不为空，则新建审计记录 **/
+                newAuditVo.setPauseTime("now");
+                if (processTaskStepTimeAuditVo == null || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getPauseTime())) {
+                    processTaskStepTimeAuditMapper.insertProcessTaskStepTimeAudit(newAuditVo);
+                } else if (StringUtils.isBlank(processTaskStepTimeAuditVo.getPauseTime())) {// 如果pausetime为空，则更新pausetime
+                    newAuditVo.setId(processTaskStepTimeAuditVo.getId());
+                    Date startTime = new Date();
+                    try {
+                        startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(processTaskStepTimeAuditVo.getStartTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("pause:" + new Date());                   
+                    System.out.println("TimeCost:" + (System.currentTimeMillis() - startTime.getTime()));
+                    processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
+                }
+                break;
 			}
 		}
 	}
