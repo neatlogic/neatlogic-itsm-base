@@ -16,6 +16,7 @@ public enum NotifyTriggerType implements INotifyTriggerType {
 	RECOVER("recover", "步骤恢复", "流程步骤已恢复", "流程步骤已恢复"),
 	PAUSE("pause", "步骤暂停", "流程步骤已暂停", "流程步骤已暂停"),
 	FAILED("failed", "步骤失败", "流程步骤已失败", "流程步骤已失败"),
+	REDO("redo", "步骤打回", "打回标题", "打回内容"),
 	//ACCEPT("accept", "接管", "流程步骤接管", "流程步骤接管"),
 	TIMEOUT("timeout", "超时", "超时标题", "超时内容"),
 	//STARTPROCESS("startprocess", "上报", "", ""),

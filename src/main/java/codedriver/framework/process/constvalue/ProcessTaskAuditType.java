@@ -30,7 +30,8 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	SCORE("score", "评分", "评价工单"),
     TRANFERREPORT("tranferreport", "转报", "转报并关联工单"),
     RELATION("relation", "关联", "关联工单"),
-    DELETERELATION("deleterelation", "解除关联", "解除关联工单")
+    DELETERELATION("deleterelation", "解除关联", "解除关联工单"),
+    REDO("redo", "回退", "回退至【${DATA.processTaskStepName}】"),
 	;
 	private String value;
 	private String text;
