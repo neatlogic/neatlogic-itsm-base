@@ -20,7 +20,7 @@ public interface ProcessTaskMapper {
 
 	public ProcessTaskSlaTimeVo getProcessTaskSlaTimeBySlaId(Long slaId);
 
-	public ProcessTaskSlaNotifyVo getProcessTaskNotifyById(Long id);
+	public ProcessTaskSlaNotifyVo getProcessTaskSlaNotifyById(Long id);
 
 	public ProcessTaskSlaTransferVo getProcessTaskSlaTransferById(Long id);
 
@@ -165,6 +165,16 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskImportAuditVo> searchProcessTaskImportAudit(ProcessTaskImportAuditVo processTaskImportAuditVo);
 
     public ProcessTaskScoreTemplateVo getProcessTaskScoreTemplateByProcessTaskId(Long processTaskId);
+
+    public List<Long> getSlaIdListByProcessTaskStepId(Long processTaskStepId);
+
+    public String getProcessTaskSlaConfigById(Long id);
+
+    public List<Long> getProcessTaskStepIdListBySlaId(Long slaId);
+
+    public List<ProcessTaskSlaNotifyVo> getProcessTaskSlaNotifyBySlaId(Long slaId);
+
+    public List<ProcessTaskSlaTransferVo> getProcessTaskSlaTransferBySlaId(Long slaId);
 
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
