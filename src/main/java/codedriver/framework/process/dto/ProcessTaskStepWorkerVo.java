@@ -1,7 +1,8 @@
 package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.GroupSearch;
-import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
+import codedriver.framework.elasticsearch.annotation.ESKey;
+import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 
 /**
  * @Author:chenqiwei
@@ -10,7 +11,7 @@ import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
  * @Description: 记录当前流程任务谁可以处理
  */
 public class ProcessTaskStepWorkerVo {
-    @ElasticSearchKey(type = "pk")
+    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String type;

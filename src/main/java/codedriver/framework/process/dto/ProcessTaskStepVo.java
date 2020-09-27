@@ -18,14 +18,15 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.elasticsearch.annotation.ElasticSearchKey;
+import codedriver.framework.elasticsearch.annotation.ESKey;
+import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskStepVo extends BasePageVo {
 
 	private final static Logger logger = LoggerFactory.getLogger(ProcessTaskStepVo.class);
-	@ElasticSearchKey(type = "pk")
+	@ESKey(type = ESKeyType.PKEY, id ="processTaskId")
 	@EntityField(name = "工单步骤id", type = ApiParamType.LONG)
 	private Long id;
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
