@@ -1598,13 +1598,13 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			if(processTaskTranferReportVo != null) {
 			    currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
 			    currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASK.getParamName(), processTaskTranferReportVo.getFromProcessTaskId());
-			    AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.TRANFERREPORT);
+			    AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.REPORTRELATION);
 			    
 			    ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
                 processTaskStepVo.setProcessTaskId(processTaskTranferReportVo.getFromProcessTaskId());
                 processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
                 processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASKLIST.getParamName(), JSON.toJSONString(Arrays.asList(currentProcessTaskStepVo.getProcessTaskId())));
-                AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.RELATION);
+                AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.TRANFERREPORT);
 			}else {
 	            AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.STARTPROCESS);			    
 			}
