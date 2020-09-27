@@ -49,7 +49,7 @@
 		id = #{value}
 	</select>
 
-	<select id="getProcessTaskNotifyById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskSlaNotifyVo">
+	<select id="getProcessTaskSlaNotifyById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskSlaNotifyVo">
 		SELECT
 		id,
 		`sla_id` AS slaId,
@@ -1350,6 +1350,44 @@
 	  `config_hash` AS configHash
 	FROM `processtask_score_template` 
 	WHERE `processtask_id` = #{value}
+	</select>
+	
+	<select id="getSlaIdListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `sla_id` FROM `processtask_step_sla` WHERE `processtask_step_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskSlaConfigById" parameterType="java.lang.Long" resultType="java.lang.String">
+	SELECT `config` FROM `processtask_sla` WHERE `id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskStepIdListBySlaId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `processtask_step_id` FROM `processtask_step_sla` WHERE `sla_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskSlaNotifyBySlaId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskSlaNotifyVo">
+	SELECT 
+	  `id`,
+	  `sla_id` AS slaId,
+	  `hash`,
+	  `trigger_time` triggerTime,
+	  `config` 
+	FROM `processtask_sla_notify` 
+	WHERE `sla_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskSlaTransferBySlaId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
+	SELECT 
+	  `id`,
+	  `sla_id` AS slaId,
+	  `hash`,
+	  `trigger_time` triggerTime,
+	  `config` 
+	FROM `processtask_sla_transfer` 
+	WHERE `sla_id` = #{value}	
+	</select>
+	
+	<select id="getProcessTaskSlaLockById" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `id` FROM `processtask_sla` WHERE `id` = #{value} FOR UPDATE
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">

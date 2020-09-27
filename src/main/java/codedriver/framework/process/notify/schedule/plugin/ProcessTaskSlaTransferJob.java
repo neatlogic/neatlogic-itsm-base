@@ -97,6 +97,10 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 								transferDate.add(Calendar.MINUTE, time);
 							}
 						}
+	                    /** 如果触发时间在当前时间之前，则将触发时间改为当前时间 **/
+	                    if(transferDate.before(Calendar.getInstance())) {
+	                        transferDate = Calendar.getInstance();
+	                    }
 						JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaTransferVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
 								.withBeginTime(transferDate.getTime())
 								.withIntervalInSeconds(INTERVAL_IN_SECONDS)
