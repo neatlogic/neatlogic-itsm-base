@@ -7,7 +7,7 @@ import codedriver.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.elasticsearch.annotation.ElasticSearch;
+import codedriver.framework.elasticsearch.annotation.ESSearch;
 
 public interface ProcessTaskMapper {
 	public ProcessTaskSlaVo getProcessTaskSlaById(Long slaId);
@@ -184,13 +184,13 @@ public interface ProcessTaskMapper {
 
 	public int insertProcessTaskForm(ProcessTaskFormVo processTaskFormVo);
 	
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskFormVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskFormVo.class)
 	public int replaceProcessTaskFormContent(ProcessTaskFormVo processTaskFormVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
 	public int insertProcessTask(ProcessTaskVo processTaskVo);
 	
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
     public int replaceProcessTask(ProcessTaskVo processTaskVo);
 
 	public int replaceProcessTaskContent(ProcessTaskContentVo processTaskContentVo);
@@ -203,24 +203,20 @@ public interface ProcessTaskMapper {
 
 	public int insertProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepUserVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskStepUserVo.class)
 	public int insertProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public int insertProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepTeamVo.class)
-	public int insertProcessTaskStepTeam(ProcessTaskStepTeamVo processTaskStepTeamVo);
-
 	public int insertProcessTaskStepRel(ProcessTaskStepRelVo processTaskStepRelVo);
 
-//	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepContentVo.class)
 	public int insertProcessTaskStepContent(ProcessTaskStepContentVo processTaskStepContentVo);
 
 	public int insertProcessTaskStepAudit(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
 	public int insertProcessTaskStepAuditDetail(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepWorkerVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskStepWorkerVo.class)
 	public int insertProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
 	public int insertProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
@@ -229,17 +225,17 @@ public interface ProcessTaskMapper {
 
 	public int replaceProcessTaskStepConfig(ProcessTaskStepConfigVo processTaskStepConfigVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepFormAttributeVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskStepFormAttributeVo.class)
 	public int insertProcessTaskStepFormAttribute(ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
 
 	public int insertProcessTaskSla(ProcessTaskSlaVo processTaskSlaVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskSlaTimeVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskSlaTimeVo.class)
 	public int insertProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
 
 	public int insertProcessTaskStepSla(@Param("processTaskStepId") Long processTaskStepId, @Param("slaId") Long slaId);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskFormAttributeDataVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskFormAttributeDataVo.class)
 	public int replaceProcessTaskFormAttributeData(ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo);
 	
 	public int insertProcessTaskStepFile(ProcessTaskStepFileVo processTaskStepFileVo);
@@ -262,18 +258,18 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskScoreTempleteConfig(ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
 	public int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
 
 	public int updateProcessTaskSlaNotify(ProcessTaskSlaNotifyVo processTaskNotifyVo);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskSlaTimeVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskSlaTimeVo.class)
 	public int updateProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
 
 	public int updateProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
@@ -282,10 +278,10 @@ public interface ProcessTaskMapper {
 
 	public int updateProcessTaskStepConvergeIsCheck(@Param("isCheck") Integer isCheck, @Param("convergeId") Long convergeId, @Param("processTaskStepId") Long processTaskStepId);
 
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskStepUserVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskStepUserVo.class)
 	public int updateProcessTaskStepUserStatus(ProcessTaskStepUserVo processTaskStepUserVo);
 	
-	@ElasticSearch(type = "processtask-update",paramType=ProcessTaskVo.class)
+	@ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
 	public int updateProcessTaskTitleOwnerPriorityUuid(ProcessTaskVo processTaskVo);
 
     public int updateProcessTaskStepContentById(ProcessTaskStepContentVo processTaskStepContentVo);

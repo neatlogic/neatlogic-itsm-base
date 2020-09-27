@@ -1,6 +1,10 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.elasticsearch.annotation.ESKey;
+import codedriver.framework.elasticsearch.constvalue.ESKeyType;
+
 public class ProcessTaskStepFormAttributeVo {
+    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String action;

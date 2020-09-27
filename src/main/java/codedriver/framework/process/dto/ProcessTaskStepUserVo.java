@@ -4,10 +4,13 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
+import codedriver.framework.elasticsearch.annotation.ESKey;
+import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 
 public class ProcessTaskStepUserVo {
+    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String userUuid;
