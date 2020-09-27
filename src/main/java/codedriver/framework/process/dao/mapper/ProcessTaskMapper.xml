@@ -278,6 +278,7 @@
 		`user_uuid` as userUuid,
 		`user_type` as userType,
 		(SELECT `user_name` from `user` WHERE `uuid` = `user_uuid`) as userName,
+		(SELECT `user_info` from `user` WHERE `uuid` = `user_uuid`) as userInfo,
 		`status` as status,
 		`action`,
 		`start_time` AS startTime,

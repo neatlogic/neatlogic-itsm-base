@@ -27,6 +27,10 @@ public class ProcessTaskStepSubtaskVo {
 	private String owner;
 	@EntityField(name = "创建人名称", type = ApiParamType.STRING)
 	private String ownerName;
+	@EntityField(name = "创建人额外信息", type = ApiParamType.STRING)
+	private String ownerInfo;
+	@EntityField(name = "创建人名称", type = ApiParamType.STRING)
+	private String ownerAvatar;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
 	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
@@ -338,6 +342,23 @@ public class ProcessTaskStepSubtaskVo {
 	public void setWorkerList(String workerList) {
 		this.workerList = workerList;
 	}
+
+	public String getOwnerInfo() {
+		return ownerInfo;
+	}
+
+	public void setOwnerInfo(String ownerInfo) {
+		this.ownerInfo = ownerInfo;
+	}
+
+	public String getOwnerAvatar() {
+		if (StringUtils.isBlank(ownerAvatar) && StringUtils.isNotBlank(ownerInfo)) {
+			JSONObject jsonObject = JSONObject.parseObject(ownerInfo);
+			ownerAvatar = jsonObject.getString("avatar");
+		}
+		return ownerAvatar;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

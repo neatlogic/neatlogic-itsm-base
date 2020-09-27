@@ -2,6 +2,7 @@ package codedriver.framework.process.dto;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.elasticsearch.annotation.ESKey;
@@ -16,6 +17,8 @@ public class ProcessTaskStepUserVo {
 	private String userUuid;
 	private String userName;
 	private String userType;
+	private String userInfo;
+	private String userAvatar;
 	private String status = ProcessTaskStepUserStatus.DOING.getValue();
 	private String statusName;
 	private Date startTime;
@@ -148,6 +151,22 @@ public class ProcessTaskStepUserVo {
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+
+	public String getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(String userInfo) {
+		this.userInfo = userInfo;
+	}
+
+	public String getUserAvatar() {
+		if (StringUtils.isBlank(userAvatar) && StringUtils.isNotBlank(userInfo)) {
+			JSONObject jsonObject = JSONObject.parseObject(userInfo);
+			userAvatar = jsonObject.getString("avatar");
+		}
+		return userAvatar;
 	}
 
 }
