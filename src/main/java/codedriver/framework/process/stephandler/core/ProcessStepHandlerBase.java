@@ -68,6 +68,8 @@ import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.ProcessVo;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
+import codedriver.framework.process.dto.score.ProcesstaskScoreVo;
+import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
 import codedriver.framework.process.exception.core.ProcessTaskException;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
@@ -1566,13 +1568,31 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					});
 				}
 			}
+            /** 写入时间审计 **/
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
+
+            /** 计算SLA并触发超时警告 **/
+            SlaHandler.calculate(currentProcessTaskStepVo);
+
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
+            
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setIsActive(1);
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
 			currentProcessTaskStepVo.setError(ex.getMessage());
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
-       } finally {
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
+            
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.FAILED);
+		} finally {
 			/** 处理历史记录 **/
 		    ProcessTaskTranferReportVo processTaskTranferReportVo =  processTaskMapper.getProcessTaskTranferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 			if(processTaskTranferReportVo != null) {
@@ -1720,5 +1740,130 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 			runableActionList.add(thread);
 		}
+	}
+	
+	public int redo(ProcessTaskStepVo currentProcessTaskStepVo) {
+	    try {
+            // 锁定当前流程
+            processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+            IProcessStepUtilHandler  processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(this.getHandler());
+            if(processStepUtilHandler == null) {
+                throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
+            }
+            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.REDO, true);
+
+            /** 保存打回原因 **/
+            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
+//            myRedo(currentProcessTaskStepVo);
+
+            /** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
+            resetConvergeInfo(currentProcessTaskStepVo);
+
+            /** 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
+            /** 获取当前步骤状态 **/
+            List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+            for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
+                if (nextTaskStepRelVo != null && nextTaskStepRelVo.getIsHit().equals(1)) {
+                    ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
+                    if (nextProcessTaskStepVo != null) {
+                        IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
+                        // 标记挂起操作来源步骤
+                        nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+                        // 标记挂起操作的发起步骤，避免出现死循环
+                        nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
+                        if (handler != null) {
+                            doNext(new ProcessStepThread(nextProcessTaskStepVo) {
+                                @Override
+                                public void execute() {
+                                    handler.hang(nextProcessTaskStepVo);
+                                }
+                            });
+                        }
+                    }
+                }
+                // 恢复路径命中状态为0，代表路径未通过
+                processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
+            }
+
+            /** 分配处理人 **/
+            assign(currentProcessTaskStepVo);
+            currentProcessTaskStepVo.setIsActive(1);
+            updateProcessTaskStepStatus(currentProcessTaskStepVo);
+
+            /** 写入时间审计 **/
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
+            if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
+                TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+            }
+
+            /** 计算SLA并触发超时警告 **/
+            SlaHandler.calculate(currentProcessTaskStepVo);
+
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.REDO);
+            
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.REDO);
+        } catch (ProcessTaskException ex) {
+            logger.error(ex.getMessage(), ex);
+            currentProcessTaskStepVo.setError(ex.getMessage());
+            currentProcessTaskStepVo.setIsActive(1);
+            currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
+            updateProcessTaskStepStatus(currentProcessTaskStepVo);
+        }finally{           
+            /** 处理历史记录 **/
+            AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.REDO);     
+        }
+        return 1;
+	}
+	
+//	protected abstract int myRedo(ProcessTaskStepVo currentProcessTaskStepVo);
+	
+	public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo) {
+	    // 锁定当前流程
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
+        IProcessStepUtilHandler  processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+        //只有上报人才可评分
+        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskVo, ProcessTaskOperationType.SCORE, true);
+        JSONObject paramObj = currentProcessTaskVo.getParamObj();
+        Long scoreTemplateId = paramObj.getLong("scoreTemplateId");
+        String content = paramObj.getString("content");
+        List<ScoreTemplateDimensionVo> scoreDimensionList = JSON.parseArray(paramObj.getJSONArray("scoreDimensionList").toJSONString(), ScoreTemplateDimensionVo.class);
+
+        ProcesstaskScoreVo processtaskScoreVo = new ProcesstaskScoreVo();
+        processtaskScoreVo.setProcesstaskId(currentProcessTaskVo.getId());
+        processtaskScoreVo.setScoreTemplateId(scoreTemplateId);
+        processtaskScoreVo.setFcu(UserContext.get().getUserUuid());
+        processtaskScoreVo.setIsAuto(0);
+        for(ScoreTemplateDimensionVo scoreTemplateDimensionVo : scoreDimensionList){
+            processtaskScoreVo.setScoreDimensionId(scoreTemplateDimensionVo.getId());
+            processtaskScoreVo.setScore(scoreTemplateDimensionVo.getScore());
+            processtaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
+        }
+
+        JSONObject contentObj = new JSONObject();
+        contentObj.put("scoreTemplateId", scoreTemplateId);
+        contentObj.put("content", content);
+        contentObj.put("dimensionList", paramObj.getJSONArray("scoreDimensionList"));
+        JSONObject scoreObj = new JSONObject();
+        scoreObj.put(ProcessTaskAuditDetailType.SCORE.getParamName(),contentObj);
+        /**processtask_content表存储了两份数据：
+         * 1、评价内容content本身
+         * 2、由评分模版ID、评价内容、评分维度与分数组装而成的JSON
+         */
+        if (StringUtils.isNotBlank(content)) {
+            ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
+            processTaskMapper.replaceProcessTaskContent(contentVo);
+            processtaskScoreVo.setContentHash(contentVo.getHash());
+            processtaskScoreMapper.insertProcesstaskScoreContent(processtaskScoreVo);
+        }
+        currentProcessTaskVo.setStatus(ProcessTaskStatus.SCORED.getValue());
+        processTaskMapper.updateProcessTaskStatus(currentProcessTaskVo);
+        ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
+        processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
+        processTaskStepVo.setParamObj(scoreObj);
+        /** 生成活动 */
+        AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
+	    return 1;
 	}
 }

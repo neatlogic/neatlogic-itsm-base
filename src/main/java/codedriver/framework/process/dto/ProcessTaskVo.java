@@ -101,9 +101,10 @@ public class ProcessTaskVo {
     private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
     @EntityField(name = "重做步骤列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> redoStepList = new ArrayList<>();
-    @EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
-    private ScoreTemplateVo scoreTemplateVo;
-    
+	@EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
+	private ScoreTemplateVo scoreTemplateVo;
+	@JSONField(serialize=false)
+    private transient JSONObject paramObj;
     public ProcessTaskVo() {
 
     }
@@ -433,6 +434,17 @@ public class ProcessTaskVo {
 
     public void setScoreTemplateVo(ScoreTemplateVo scoreTemplateVo) {
         this.scoreTemplateVo = scoreTemplateVo;
+    }
+    
+    public JSONObject getParamObj() {
+        if(paramObj == null) {
+            paramObj = new JSONObject();
+        }
+        return paramObj;
+    }
+
+    public void setParamObj(JSONObject paramObj) {
+        this.paramObj = paramObj;
     }
 
 }
