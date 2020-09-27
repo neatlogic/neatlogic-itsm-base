@@ -60,7 +60,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	private SelectContentByHashMapper selectContentByHashMapper;
 
 	@Autowired
-	WorktimeMapper worktimeMapper;
+	private WorktimeMapper worktimeMapper;
 
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
