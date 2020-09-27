@@ -28,10 +28,10 @@ public class ProcessTaskStepUserVo {
 
 	}
 
-	public ProcessTaskStepUserVo(Long _processTaskStepId, String _userUuid) {
-		this.setProcessTaskStepId(_processTaskStepId);
-		this.setUserUuid(_userUuid);
-	}
+    /*public ProcessTaskStepUserVo(Long _processTaskStepId, String _userUuid) {
+    	this.setProcessTaskStepId(_processTaskStepId);
+    	this.setUserUuid(_userUuid);
+    }*/
 
 	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid) {
 		this.setProcessTaskId(_processTaskId);

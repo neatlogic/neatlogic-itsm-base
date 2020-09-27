@@ -26,9 +26,9 @@ import codedriver.framework.util.SnowflakeUtil;
 public class ProcessTaskStepVo extends BasePageVo {
 
 	private final static Logger logger = LoggerFactory.getLogger(ProcessTaskStepVo.class);
-	@ESKey(type = ESKeyType.PKEY, id ="processTaskId")
 	@EntityField(name = "工单步骤id", type = ApiParamType.LONG)
 	private Long id;
+	@ESKey(type = ESKeyType.PKEY, id ="processTaskId")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
 	private Long fromProcessTaskStepId;
