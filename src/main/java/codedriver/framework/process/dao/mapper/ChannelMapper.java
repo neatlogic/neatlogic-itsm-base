@@ -114,7 +114,7 @@ public interface ChannelMapper {
 
     public List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
 
-    public List<String> getChannelUuidListByParentUuidList(List<String> parentUuidList);
+    public List<String> getChannelUuidListByParentUuidListAndChannelTypeUuidList(@Param("parentUuidList")List<String> parentUuidList, @Param("channelTypeUuidList")List<String> channelTypeUuidList);
 
     public int getActiveChannelCountByParentUuidAndChannelTypeUuidList(@Param("parentUuid") String parentUuid, @Param("channelTypeUuidList") List<String> channelTypeUuidList);
 	

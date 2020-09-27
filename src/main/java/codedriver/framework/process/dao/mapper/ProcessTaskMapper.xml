@@ -1675,20 +1675,6 @@
 		)
 	</insert>
 
-	<insert id="insertProcessTaskStepTeam" parameterType="codedriver.framework.process.dto.ProcessTaskStepTeamVo">
-		INSERT INTO `processtask_step_team` (
-		`processtask_step_id`,
-		`team_id`,
-		`team_name`
-		)
-		VALUES
-		(
-		#{processTaskStepId},
-		#{teamId},
-		#{teamName}
-		)
-	</insert>
-
 	<insert id="insertProcessTaskStep" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
 		<!-- <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
 			select LAST_INSERT_ID() as id

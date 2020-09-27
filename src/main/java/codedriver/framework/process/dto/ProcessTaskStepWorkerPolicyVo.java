@@ -5,7 +5,11 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.elasticsearch.annotation.ESKey;
+import codedriver.framework.elasticsearch.constvalue.ESKeyType;
+
 public class ProcessTaskStepWorkerPolicyVo implements Comparable<ProcessTaskStepWorkerPolicyVo> {
+    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String processStepUuid;
