@@ -1389,6 +1389,10 @@
 	<select id="getProcessTaskSlaLockById" parameterType="java.lang.Long" resultType="java.lang.Long">
 	SELECT `id` FROM `processtask_sla` WHERE `id` = #{value} FOR UPDATE
 	</select>
+
+	<select id="checkProcessTaskFocusExists" resultType="int">
+	SELECT count(`processtask_id`) FROM `processtask_focus` WHERE `processtask_id` = #{processTaskId} and `user_uuid` = #{userUuid}
+	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
@@ -2088,6 +2092,10 @@
 	<insert id="insertProcessTaskScoreTempleteConfig" parameterType="codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo">
 	INSERT INTO `processtask_score_template_config` (`hash`, `config`) VALUES (#{hash}, #{config})
 	</insert>
+
+	<insert id="insertProcessTaskFocus">
+	INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTaskId}, #{userUuid})
+	</insert>
 	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
@@ -2272,5 +2280,9 @@
 	<if test="action != null and action != ''">
   	AND `action` = #{action} 
   	</if>
+	</delete>
+
+	<delete id="deleteProcessTaskFocus">
+	DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTaskId} and `user_uuid` = #{userUuid}
 	</delete>
 </mapper>
