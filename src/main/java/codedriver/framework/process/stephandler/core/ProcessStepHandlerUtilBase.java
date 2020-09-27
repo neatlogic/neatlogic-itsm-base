@@ -1426,21 +1426,24 @@ public abstract class ProcessStepHandlerUtilBase {
 			Thread.currentThread().setName("PROCESSTASK-AUTOSCORE-" + currentProcessTaskVo.getId());
 
 			/**
-			 * 先检查是否绑定评分模版,如果绑定了，则检查是否设置自动评分
+			 * 先检查是否设置自动评分
 			 * 如果设置了自动评分，则启动定时器监听工单是否评分，若超时未评分，则系统自动评分
 			 */
 			ProcessTaskVo task = processTaskMapper.getProcessTaskById(currentProcessTaskVo.getId());
-			ProcessScoreTemplateVo processScoreTemplate = null;
-			if(task != null){
-				processScoreTemplate = scoreTemplateMapper.getProcessScoreTemplateByProcessUuid(task.getProcessUuid());
-			}
-			String config = null;
 			Integer isAuto = null;
 			Integer autoTime = null;
-			if(processScoreTemplate != null && StringUtils.isNotBlank(config = processScoreTemplate.getConfig())){
-				JSONObject configObj = JSONObject.parseObject(config);
-				isAuto = configObj.getInteger("isAuto");
-				autoTime = configObj.getInteger("autoTime");
+			if(task != null){
+				String configHash = task.getConfigHash();
+				ProcessTaskConfigVo taskConfigVo = null;
+				JSONObject scoreConfig = null;
+				if(StringUtils.isNotBlank(configHash) && (taskConfigVo = selectContentByHashMapper.getProcessTaskConfigByHash(configHash)) != null){
+					JSONObject taskConfigObj = JSONObject.parseObject(taskConfigVo.getConfig());
+					JSONObject processConfig = taskConfigObj.getJSONObject("process");
+					if(MapUtils.isNotEmpty(processConfig) && MapUtils.isNotEmpty(scoreConfig = processConfig.getJSONObject("scoreConfig")) && MapUtils.isNotEmpty(scoreConfig.getJSONObject("config"))){
+						isAuto = scoreConfig.getJSONObject("config").getInteger("isAuto");
+						autoTime = scoreConfig.getJSONObject("config").getInteger("autoTime");
+					}
+				}
 			}
 			if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
 				IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
