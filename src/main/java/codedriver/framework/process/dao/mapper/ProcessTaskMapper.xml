@@ -1395,7 +1395,7 @@
 	</select>
 
 	<select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
-	SELECT `user_uuid` FROM `processtask_focus` WHERE `processtask_id` = #{value}
+	SELECT CONCAT("user#",`user_uuid`) FROM `processtask_focus` WHERE `processtask_id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
