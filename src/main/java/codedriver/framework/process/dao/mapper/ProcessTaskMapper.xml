@@ -383,8 +383,7 @@
 		a.`is_active` AS isActive,
 		a.`type`,
 		a.`handler`,
-		a.`name`,
-  		a.`config_hash` AS configHash 
+		a.`name`
 		FROM
 		processtask_step a
 		JOIN
