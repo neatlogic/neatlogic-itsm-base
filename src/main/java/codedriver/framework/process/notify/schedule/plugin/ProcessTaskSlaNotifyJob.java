@@ -423,5 +423,18 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
                 notifyReceiverList.add(new NotifyReceiverVo(processTaskStepWorkerVo.getType(), processTaskStepWorkerVo.getUuid()));
             }
         }
-    }
+        /** 工单关注人 */
+		List<String> focusUserList = processTaskMapper.getFocusUsersOfProcessTask(processTaskId);
+		if(CollectionUtils.isNotEmpty(focusUserList)){
+			focusUserList = focusUserList.stream().map(user -> user.replace("user#","")).collect(Collectors.toList());
+			List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.FOCUS_USER.getValue());
+			if(notifyReceiverList == null){
+				notifyReceiverList = new ArrayList<>();
+				receiverMap.put(ProcessUserType.FOCUS_USER.getValue(), notifyReceiverList);
+			}
+			for(String user : focusUserList){
+				notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(),user));
+			}
+		}
+	}
 }
