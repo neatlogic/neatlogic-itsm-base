@@ -1542,7 +1542,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				paramObj.put(ProcessTaskAuditDetailType.FORM.getParamName(), JSON.toJSONString(processTaskFormAttributeDataList));
 			}
 			/** 更新处理人状态 **/
-			ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getId(), UserContext.get().getUserUuid(true));
+			ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(),currentProcessTaskStepVo.getId(), UserContext.get().getUserUuid(true));
 			processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
 			processTaskMajorUser.setUserType(ProcessUserType.MAJOR.getValue());
 			processTaskMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
@@ -1598,13 +1598,13 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			if(processTaskTranferReportVo != null) {
 			    currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
 			    currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASK.getParamName(), processTaskTranferReportVo.getFromProcessTaskId());
-			    AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.TRANFERREPORT);
+			    AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.REPORTRELATION);
 			    
 			    ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
                 processTaskStepVo.setProcessTaskId(processTaskTranferReportVo.getFromProcessTaskId());
                 processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
                 processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASKLIST.getParamName(), JSON.toJSONString(Arrays.asList(currentProcessTaskStepVo.getProcessTaskId())));
-                AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.RELATION);
+                AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.TRANFERREPORT);
 			}else {
 	            AuditHandler.audit(currentProcessTaskStepVo, ProcessTaskAuditType.STARTPROCESS);			    
 			}

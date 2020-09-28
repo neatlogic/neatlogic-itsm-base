@@ -646,11 +646,18 @@
 	</if>
 	</select>
 	
-	<select id="getChannelUuidListByParentUuidList" parameterType="java.lang.String" resultType="java.lang.String">
-	SELECT `uuid` FROM `channel` WHERE `parent_uuid` IN
-	<foreach collection="list" item="parentUuid" open="(" separator="," close=")">
+	<select id="getChannelUuidListByParentUuidListAndChannelTypeUuidList" resultType="java.lang.String">
+	SELECT `uuid` FROM `channel` 
+	WHERE `parent_uuid` IN
+	<foreach collection="parentUuidList" item="parentUuid" open="(" separator="," close=")">
 	#{parentUuid}
 	</foreach>
+	<if test="channelTypeUuidList != null and channelTypeUuidList.size() > 0">
+	AND `channel_type_uuid` IN
+	<foreach collection="channelTypeUuidList" item="channelTypeUuid" open="(" separator="," close=")">
+	#{channelTypeUuid}
+	</foreach>
+	</if>
 	</select>
 	
 	<select id="getActiveChannelCountByParentUuidAndChannelTypeUuidList" resultType="int">

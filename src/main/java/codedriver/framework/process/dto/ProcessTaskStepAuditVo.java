@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.common.constvalue.ApiParamType;
@@ -24,6 +25,8 @@ public class ProcessTaskStepAuditVo {
 	private String userName;
 	@EntityField(name = "用户其他属性", type = ApiParamType.STRING)
 	private String userInfo;
+	@EntityField(name = "用户头像", type = ApiParamType.STRING)
+	private String avatar;
 	@EntityField(name = "创建时间", type = ApiParamType.LONG)
 	private Date actionTime;
 	@EntityField(name = "活动类型，startprocess(上报)、complete(完成)、retreat(撤回)、abort(终止)、recover(恢复)、transfer(转交)、updateTitle(更新标题)、updatePriority(更新优先级)、updateContent(更新上报描述内容)、comment(评论)", type = ApiParamType.STRING)
@@ -184,5 +187,13 @@ public class ProcessTaskStepAuditVo {
 
 	public void setUserInfo(String userInfo) {
 		this.userInfo = userInfo;
+	}
+
+	public String getAvatar(){
+		if (StringUtils.isBlank(avatar) && StringUtils.isNotBlank(userInfo)) {
+			JSONObject jsonObject = JSONObject.parseObject(userInfo);
+			avatar = jsonObject.getString("avatar");
+		}
+		return avatar;
 	}
 }

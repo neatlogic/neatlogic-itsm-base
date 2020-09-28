@@ -278,6 +278,7 @@
 		`user_uuid` as userUuid,
 		`user_type` as userType,
 		(SELECT `user_name` from `user` WHERE `uuid` = `user_uuid`) as userName,
+		(SELECT `user_info` from `user` WHERE `uuid` = `user_uuid`) as userInfo,
 		`status` as status,
 		`action`,
 		`start_time` AS startTime,
@@ -1679,20 +1680,6 @@
 		#{processStepRelUuid},
 		#{name},
 		#{type}
-		)
-	</insert>
-
-	<insert id="insertProcessTaskStepTeam" parameterType="codedriver.framework.process.dto.ProcessTaskStepTeamVo">
-		INSERT INTO `processtask_step_team` (
-		`processtask_step_id`,
-		`team_id`,
-		`team_name`
-		)
-		VALUES
-		(
-		#{processTaskStepId},
-		#{teamId},
-		#{teamName}
 		)
 	</insert>
 
