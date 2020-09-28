@@ -198,4 +198,9 @@ public class WorkcenterFieldBuilder {
 		dataJson.put(ProcessWorkcenterField.EXPIRED_TIME.getValue(), JSONArray.toJSON(processTaskSlaList));
 		return this;
 	}
+
+	public WorkcenterFieldBuilder setFocusUsers(List<String> focusUsers){
+		dataJson.put(ProcessWorkcenterField.FOCUS_USERS.getValue(),focusUsers);
+		return this;
+	}
 }

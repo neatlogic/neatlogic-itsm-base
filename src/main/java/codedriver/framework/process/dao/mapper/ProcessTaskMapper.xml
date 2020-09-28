@@ -1393,6 +1393,10 @@
 	<select id="checkProcessTaskFocusExists" resultType="int">
 	SELECT count(`processtask_id`) FROM `processtask_focus` WHERE `processtask_id` = #{processTaskId} and `user_uuid` = #{userUuid}
 	</select>
+
+	<select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
+	SELECT `user_uuid` FROM `processtask_focus` WHERE `processtask_id` = #{value}
+	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
