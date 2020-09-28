@@ -444,6 +444,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                 notifyReceiverList.add(new NotifyReceiverVo(processTaskStepWorkerVo.getType(), processTaskStepWorkerVo.getUuid()));
             }
         }
+
         /** 工单关注人 */
         List<String> focusUserList = processTaskMapper.getFocusUsersOfProcessTask(processTaskId);
         if(CollectionUtils.isNotEmpty(focusUserList)){
