@@ -2,6 +2,7 @@ package codedriver.framework.process.dto;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
@@ -15,8 +16,12 @@ public class ProcessTaskStepSubtaskContentVo {
 	private Date fcd;
 	private String fcu;
 	private String fcuName;
+	private String fcuInfo;
+	private String fcuAvatar;
 	private Date lcd;
 	private String lcu;
+	private String lcuInfo;
+	private String lcuAvatar;
 
 	public ProcessTaskStepSubtaskContentVo() {
 
@@ -117,6 +122,38 @@ public class ProcessTaskStepSubtaskContentVo {
 
 	public void setLcu(String lcu) {
 		this.lcu = lcu;
+	}
+
+	public String getFcuInfo() {
+		return fcuInfo;
+	}
+
+	public void setFcuInfo(String fcuInfo) {
+		this.fcuInfo = fcuInfo;
+	}
+
+	public String getFcuAvatar() {
+		if (StringUtils.isBlank(fcuAvatar) && StringUtils.isNotBlank(fcuInfo)) {
+			JSONObject jsonObject = JSONObject.parseObject(fcuInfo);
+			fcuAvatar = jsonObject.getString("avatar");
+		}
+		return fcuAvatar;
+	}
+
+	public String getLcuInfo() {
+		return lcuInfo;
+	}
+
+	public void setLcuInfo(String lcuInfo) {
+		this.lcuInfo = lcuInfo;
+	}
+
+	public String getLcuAvatar() {
+		if (StringUtils.isBlank(lcuAvatar) && StringUtils.isNotBlank(lcuInfo)) {
+			JSONObject jsonObject = JSONObject.parseObject(lcuInfo);
+			lcuAvatar = jsonObject.getString("avatar");
+		}
+		return lcuAvatar;
 	}
 
 }
