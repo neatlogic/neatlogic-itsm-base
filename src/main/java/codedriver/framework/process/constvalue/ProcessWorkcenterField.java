@@ -24,7 +24,8 @@ public enum ProcessWorkcenterField {
 	WOKRTIME("worktime","时间窗口"),
 	TRANSFER_FROM_USER("transferfromuser","转交人","transferfromuser"),
 	ABOUTME("aboutme","与我相关"),
-	ACTION("action", "操作栏");
+	ACTION("action", "操作栏"),
+	FOCUS_USERS("focususers", "关注此工单的用户");
 	private String value;
 	private String name;
 	private String conditionValue;

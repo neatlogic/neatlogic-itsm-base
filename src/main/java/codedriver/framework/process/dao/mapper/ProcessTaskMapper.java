@@ -178,6 +178,10 @@ public interface ProcessTaskMapper {
 
     public Long getProcessTaskSlaLockById(Long slaId);
 
+    public int checkProcessTaskFocusExists(@Param("processTaskId") Long processTaskId, @Param("userUuid") String userUuid);
+
+    public List<String> getFocusUsersOfProcessTask(Long processTaskId);
+
 	public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 	
 	public int replaceProcessTaskOldFormProp(@Param("processTaskId")Long processTaskId,@Param("form")String form,@Param("prop")String prop);
@@ -258,6 +262,8 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskScoreTempleteConfig(ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo);
 
+    public int insertProcessTaskFocus(@Param("processTaskId") Long processTaskId, @Param("userUuid") String userUuid);
+
 	@ESSearch(type = "processtask",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
 
@@ -313,4 +319,6 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskRelationById(Long processTaskRelationId);
 
     public int deleteProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
+
+    public int deleteProcessTaskFocus(@Param("processTaskId") Long processTaskId,@Param("userUuid") String userUuid);
 }
