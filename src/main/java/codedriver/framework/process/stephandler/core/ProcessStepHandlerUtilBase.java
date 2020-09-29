@@ -34,7 +34,6 @@ import codedriver.framework.process.dao.mapper.*;
 import codedriver.framework.process.dao.mapper.score.ProcesstaskScoreMapper;
 import codedriver.framework.process.dao.mapper.score.ScoreTemplateMapper;
 import codedriver.framework.process.dto.*;
-import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
