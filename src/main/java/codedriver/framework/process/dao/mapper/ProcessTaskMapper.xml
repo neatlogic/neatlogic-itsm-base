@@ -2085,7 +2085,7 @@
 	</insert>
 
 	<insert id="insertProcessTaskFocus">
-	INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTaskId}, #{userUuid})
+	INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTask.id}, #{userUuid})
 	</insert>
 	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
@@ -2274,6 +2274,6 @@
 	</delete>
 
 	<delete id="deleteProcessTaskFocus">
-	DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTaskId} and `user_uuid` = #{userUuid}
+	DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTask.id} and `user_uuid` = #{userUuid}
 	</delete>
 </mapper>
