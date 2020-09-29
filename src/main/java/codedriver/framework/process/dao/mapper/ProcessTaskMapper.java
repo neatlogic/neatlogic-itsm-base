@@ -321,4 +321,8 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
 
     public int deleteProcessTaskFocus(@Param("processTaskId") Long processTaskId,@Param("userUuid") String userUuid);
+    
+    public int deleteProcessTaskAssignWorkerByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskConvergeByProcessTaskId(Long processTaskId);
 }

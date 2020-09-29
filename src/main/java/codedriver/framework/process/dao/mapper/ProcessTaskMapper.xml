@@ -2179,6 +2179,14 @@
 		WHERE
 		`processtask_step_id` = #{value}
 	</delete>
+	
+	<delete id="deleteProcessTaskConvergeByProcessTaskId" parameterType="java.lang.Long">
+		DELETE
+		FROM
+		`processtask_converge`
+		WHERE
+		`processtask_id` = #{value}
+	</delete>
 
 	<delete id="deleteProcessTaskFormAttributeDataByProcessTaskId" parameterType="java.lang.Long">
 		DELETE FROM `processtask_formattribute_data` WHERE `processtask_id` = #{value}
@@ -2243,6 +2251,11 @@
 	DELETE FROM`processtask_assignworker`
 	WHERE `processtask_step_id` = #{processTaskStepId}
 	AND `from_processtask_step_id` = #{fromProcessTaskStepId}
+	</delete>
+	
+	<delete id="deleteProcessTaskAssignWorkerByProcessTaskId" parameterType="java.lang.Long">
+	DELETE FROM`processtask_assignworker`
+	WHERE `processtask_id` = #{value}
 	</delete>
 
 	<delete id="deleteProcessTaskStepFileByProcessTaskStepId" parameterType="java.lang.Long">
