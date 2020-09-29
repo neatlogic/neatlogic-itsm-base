@@ -124,7 +124,7 @@
 		  `is_show` as isShow,
 		  `type`,
 		  `user_uuid`  as userUuid,
-		  `is_abled`  as isAbled
+		  `disabled`  as disabled
 		FROM
 		  `process_workcenter_thead` 
 		where
@@ -219,7 +219,7 @@
 			  `is_show`,
 			  `width`,
 			  `user_uuid`,
-			  `is_abled`
+			  `disabled`
 			) 
 			VALUES
 			  (
@@ -230,7 +230,7 @@
 			    #{isShow},
 			    #{width},
 			    #{userUuid},
-			    #{isAbled}
+			    #{disabled}
 			  ) ;
 	</insert>
 	
