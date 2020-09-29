@@ -64,21 +64,11 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	
 	@Override
 	public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId){
-	    ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder()
-            .setNext(OperationAuthHandlerType.TASK);
-	    if(processTaskStepId != null) {
-	        builder.setNext(OperationAuthHandlerType.STEP);
-	        IOperationAuthHandlerType type = MyOperationAuthHandlerType();
-	        if(type != null) {
-	            builder.setNext(type);
-	        }
-	    }
-        ProcessOperateManager processOperateManager = builder.build();
         ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
         ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
         setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
         setProcessTaskStepConfig(processTaskStepVo);
-        return processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
+        return getOperateList(processTaskVo, processTaskStepVo);
 	}
 	
 	@Override
@@ -95,33 +85,49 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         ProcessOperateManager processOperateManager = builder.build();
         setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
         setProcessTaskStepConfig(processTaskStepVo);
-        return processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
+        List<ProcessTaskOperationType> resultList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
+        /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
+        String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
+        if(StringUtils.isNotBlank(userUuid)) {
+            List<String> roleUuidList = userMapper.getRoleUuidListByUserUuid(userUuid);
+            String currentUserUuid = UserContext.get().getUserUuid(true);
+            String currentUserId = UserContext.get().getUserId(true);
+            String currentUserName = UserContext.get().getUserName();
+            List<String> currentRoleUuidList = UserContext.get().getRoleUuidList();
+            UserContext.get().setUserUuid(userUuid);
+            UserContext.get().setUserId(null);
+            UserContext.get().setUserName(null);
+            UserContext.get().setRoleUuidList(roleUuidList);
+            processTaskVo.getCurrentUserProcessUserTypeList().clear();
+            if(processTaskStepVo != null) {
+                processTaskStepVo.getCurrentUserProcessUserTypeList().clear();                   
+            }
+            setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+            processTaskVo.getStepList().clear();
+            List<ProcessTaskOperationType> operationTypeList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
+            UserContext.get().setUserUuid(currentUserUuid);
+            UserContext.get().setUserId(currentUserId);
+            UserContext.get().setUserName(currentUserName);
+            UserContext.get().setRoleUuidList(currentRoleUuidList);
+            for(ProcessTaskOperationType type : operationTypeList) {
+                if(!resultList.contains(type)) {
+                    resultList.add(type);
+                }
+            }
+        }
+        return resultList;
     }
 	
 	@Override
     public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId, List<ProcessTaskOperationType> operationTypeList){
+        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
+        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
+        setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+        setProcessTaskStepConfig(processTaskStepVo);
 	    if(CollectionUtils.isNotEmpty(operationTypeList)) {
-	        ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder();
-	        if(OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeList)) {
-	            builder.setNext(OperationAuthHandlerType.TASK);
-	        }
-	        if(processTaskStepId != null) {
-	            if(OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeList)) {
-	                builder.setNext(OperationAuthHandlerType.STEP);
-	            }
-                IOperationAuthHandlerType type = MyOperationAuthHandlerType();
-                if(type != null && CollectionUtils.isNotEmpty(type.getOperationTypeList()) && type.getOperationTypeList().removeAll(operationTypeList)) {
-                    builder.setNext(type);
-                }
-	        }
-	        ProcessOperateManager processOperateManager = builder.build();
-	        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
-	        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
-            setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
-            setProcessTaskStepConfig(processTaskStepVo);
-	        return processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
+	        return getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
 	    }else {
-	        return getOperateList(processTaskId, processTaskStepId);
+	        return getOperateList(processTaskVo, processTaskStepVo);
 	    }
     }
 	
@@ -144,7 +150,37 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             ProcessOperateManager processOperateManager = builder.build();
             setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
             setProcessTaskStepConfig(processTaskStepVo);
-            return processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
+            List<ProcessTaskOperationType> resultList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
+            /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
+            String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
+            if(StringUtils.isNotBlank(userUuid)) {
+                List<String> roleUuidList = userMapper.getRoleUuidListByUserUuid(userUuid);
+                String currentUserUuid = UserContext.get().getUserUuid(true);
+                String currentUserId = UserContext.get().getUserId(true);
+                String currentUserName = UserContext.get().getUserName();
+                List<String> currentRoleUuidList = UserContext.get().getRoleUuidList();
+                UserContext.get().setUserUuid(userUuid);
+                UserContext.get().setUserId(null);
+                UserContext.get().setUserName(null);
+                UserContext.get().setRoleUuidList(roleUuidList);
+                processTaskVo.getCurrentUserProcessUserTypeList().clear();
+                if(processTaskStepVo != null) {
+                    processTaskStepVo.getCurrentUserProcessUserTypeList().clear();                   
+                }
+                setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
+                processTaskVo.getStepList().clear();
+                List<ProcessTaskOperationType> typeList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
+                UserContext.get().setUserUuid(currentUserUuid);
+                UserContext.get().setUserId(currentUserId);
+                UserContext.get().setUserName(currentUserName);
+                UserContext.get().setRoleUuidList(currentRoleUuidList);
+                for(ProcessTaskOperationType type : typeList) {
+                    if(!resultList.contains(type)) {
+                        resultList.add(type);
+                    }
+                }
+            }
+            return resultList;
         }else {
             return getOperateList(processTaskVo, processTaskStepVo);
         }
