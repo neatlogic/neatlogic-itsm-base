@@ -52,7 +52,7 @@ public class WorkcenterTheadVo {
 		this.type = ProcessFieldType.COMMON.getValue();
 		this.className = column.getClassName();
 		this.sort = column.getSort();
-		this.disabled = column.getDisabled() ? 0 : 1;
+		this.disabled = column.getDisabled() ? 1 : 0;
 	}
 	
 	public WorkcenterTheadVo(String _workcenterUuid,String _userUuid) {
