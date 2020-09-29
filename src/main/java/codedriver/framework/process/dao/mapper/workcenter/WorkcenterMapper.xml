@@ -123,7 +123,8 @@
 		  `sort`,
 		  `is_show` as isShow,
 		  `type`,
-		  `user_uuid`  as userUuid
+		  `user_uuid`  as userUuid,
+		  `is_abled`  as isAbled
 		FROM
 		  `process_workcenter_thead` 
 		where
@@ -217,7 +218,8 @@
 			  `type`,
 			  `is_show`,
 			  `width`,
-			  `user_uuid`
+			  `user_uuid`,
+			  `is_abled`
 			) 
 			VALUES
 			  (
@@ -227,7 +229,8 @@
 			    #{type},
 			    #{isShow},
 			    #{width},
-			    #{userUuid}
+			    #{userUuid},
+			    #{isAbled}
 			  ) ;
 	</insert>
 	

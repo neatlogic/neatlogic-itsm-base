@@ -24,6 +24,8 @@ public class WorkcenterTheadVo {
 	private Integer width = 1;
 	@EntityField(name = "字段是否展示", type = ApiParamType.INTEGER)
 	private Integer isShow = 1;
+	@EntityField(name = "字段是否可用", type = ApiParamType.INTEGER)
+	private Integer isAbled;
 	@JSONField(serialize = false)
 	@EntityField(name = "所属用户", type = ApiParamType.STRING)
 	private String userUuid;
@@ -50,6 +52,7 @@ public class WorkcenterTheadVo {
 		this.type = ProcessFieldType.COMMON.getValue();
 		this.className = column.getClassName();
 		this.sort = column.getSort();
+		this.isAbled = column.getIsAbled() ? 1 : 0;
 	}
 	
 	public WorkcenterTheadVo(String _workcenterUuid,String _userUuid) {
@@ -126,7 +129,12 @@ public class WorkcenterTheadVo {
 	public void setClassName(String className) {
 		this.className = className;
 	}
-	
-	
-	
+
+	public Integer getIsAbled() {
+		return isAbled;
+	}
+
+	public void setIsAbled(Integer isAbled) {
+		this.isAbled = isAbled;
+	}
 }
