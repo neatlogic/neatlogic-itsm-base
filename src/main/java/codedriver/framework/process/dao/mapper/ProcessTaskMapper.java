@@ -262,7 +262,8 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskScoreTempleteConfig(ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo);
 
-    public int insertProcessTaskFocus(@Param("processTaskId") Long processTaskId, @Param("userUuid") String userUuid);
+    @ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
+    public int insertProcessTaskFocus(@Param("processTask") ProcessTaskVo processTask, @Param("userUuid") String userUuid);
 
 	@ESSearch(type = "processtask",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
@@ -320,7 +321,8 @@ public interface ProcessTaskMapper {
 
     public int deleteProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
 
-    public int deleteProcessTaskFocus(@Param("processTaskId") Long processTaskId,@Param("userUuid") String userUuid);
+	@ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
+    public int deleteProcessTaskFocus(@Param("processTask") ProcessTaskVo processTask,@Param("userUuid") String userUuid);
     
     public int deleteProcessTaskAssignWorkerByProcessTaskId(Long processTaskId);
     
