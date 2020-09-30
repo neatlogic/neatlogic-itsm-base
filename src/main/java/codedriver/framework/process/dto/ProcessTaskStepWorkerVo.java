@@ -24,7 +24,10 @@ public class ProcessTaskStepWorkerVo {
 	public ProcessTaskStepWorkerVo() {
 
 	}
-
+	public ProcessTaskStepWorkerVo(Long processTaskId,Long processTaskStepId) {
+        this.processTaskId = processTaskId;
+        this.processTaskStepId = processTaskStepId;
+    }
 	public ProcessTaskStepWorkerVo(Long processTaskStepId) {
 		this.processTaskStepId = processTaskStepId;
 	}
