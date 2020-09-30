@@ -80,4 +80,6 @@ public interface IProcessTaskColumn {
 
 	Object getMyValue(JSONObject json);
 
+	public Boolean getDisabled();
+
 }
