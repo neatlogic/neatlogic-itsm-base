@@ -214,7 +214,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));           
         if(processTaskStepVo != null) {
             processTaskStepVo.getCurrentUserProcessUserTypeList().addAll(processTaskVo.getCurrentUserProcessUserTypeList());
-            if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepVo.getId(), UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
+            if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepVo.getId(), null, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
                 processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
             }else {
                 processTaskStepVo.getCurrentUserProcessUserTypeList().remove(ProcessUserType.WORKER.getValue());
@@ -233,7 +233,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         }
         
         if(!processTaskVo.getCurrentUserProcessUserTypeList().contains(ProcessUserType.WORKER.getValue())) {
-            if(processTaskMapper.checkIsWorker(processTaskVo.getId(), null, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
+            if(processTaskMapper.checkIsWorker(processTaskVo.getId(), null, null, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
                 processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
             }
         } 

@@ -19,6 +19,8 @@ public class ProcessTaskStepWorkerVo {
 	private String name;
 	private String userType;
 
+	private String newUuid;
+	
 	public ProcessTaskStepWorkerVo() {
 
 	}
@@ -35,7 +37,16 @@ public class ProcessTaskStepWorkerVo {
 		this.userType = userType;
 	}
 
-	@Override
+	public ProcessTaskStepWorkerVo(Long processTaskId, Long processTaskStepId, String type, String uuid, String userType, String newUuid) {
+        this.processTaskId = processTaskId;
+        this.processTaskStepId = processTaskStepId;
+        this.type = type;
+        this.uuid = uuid;
+        this.userType = userType;
+        this.newUuid = newUuid;
+    }
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -133,4 +144,12 @@ public class ProcessTaskStepWorkerVo {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
+
+    public String getNewUuid() {
+        return newUuid;
+    }
+
+    public void setNewUuid(String newUuid) {
+        this.newUuid = newUuid;
+    }
 }
