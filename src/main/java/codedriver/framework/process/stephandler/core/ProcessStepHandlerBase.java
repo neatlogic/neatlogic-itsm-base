@@ -48,7 +48,6 @@ import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskConvergeVo;
-import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo;
@@ -56,6 +55,7 @@ import codedriver.framework.process.dto.ProcessTaskScoreTemplateVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
+import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
@@ -68,7 +68,7 @@ import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.ProcessVo;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
-import codedriver.framework.process.dto.score.ProcesstaskScoreVo;
+import codedriver.framework.process.dto.score.ProcessTaskScoreVo;
 import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
 import codedriver.framework.process.exception.core.ProcessTaskException;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
@@ -1830,15 +1830,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         String content = paramObj.getString("content");
         List<ScoreTemplateDimensionVo> scoreDimensionList = JSON.parseArray(paramObj.getJSONArray("scoreDimensionList").toJSONString(), ScoreTemplateDimensionVo.class);
 
-        ProcesstaskScoreVo processtaskScoreVo = new ProcesstaskScoreVo();
-        processtaskScoreVo.setProcesstaskId(currentProcessTaskVo.getId());
+        ProcessTaskScoreVo processtaskScoreVo = new ProcessTaskScoreVo();
+        processtaskScoreVo.setProcessTaskId(currentProcessTaskVo.getId());
         processtaskScoreVo.setScoreTemplateId(scoreTemplateId);
         processtaskScoreVo.setFcu(UserContext.get().getUserUuid());
         processtaskScoreVo.setIsAuto(0);
         for(ScoreTemplateDimensionVo scoreTemplateDimensionVo : scoreDimensionList){
             processtaskScoreVo.setScoreDimensionId(scoreTemplateDimensionVo.getId());
             processtaskScoreVo.setScore(scoreTemplateDimensionVo.getScore());
-            processtaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
+            processTaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
         }
 
         JSONObject contentObj = new JSONObject();
@@ -1855,7 +1855,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
             processTaskMapper.replaceProcessTaskContent(contentVo);
             processtaskScoreVo.setContentHash(contentVo.getHash());
-            processtaskScoreMapper.insertProcesstaskScoreContent(processtaskScoreVo);
+            processTaskScoreMapper.insertProcesstaskScoreContent(processtaskScoreVo);
         }
         currentProcessTaskVo.setStatus(ProcessTaskStatus.SCORED.getValue());
         processTaskMapper.updateProcessTaskStatus(currentProcessTaskVo);

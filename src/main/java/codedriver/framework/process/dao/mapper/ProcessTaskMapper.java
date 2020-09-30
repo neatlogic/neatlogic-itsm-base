@@ -323,4 +323,32 @@ public interface ProcessTaskMapper {
 
 	@ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
     public int deleteProcessTaskFocus(@Param("processTask") ProcessTaskVo processTask,@Param("userUuid") String userUuid);
+    
+    public int deleteProcessTaskAssignWorkerByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskConvergeByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskSlaTransferBySlaId(Long slaId);
+    
+    public int deleteProcessTaskStepAuditByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskStepContentByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskStepFileByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskStepRemindByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskStepUserByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskStepWorkerByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskFormByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskSlaTimeBySlaId(Long processTaskId);
+    
+    public int deleteProcessTaskStepByProcessTaskId(Long processTaskId);
+
+    public int deleteProcessTaskByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskFocusByProcessTaskId(Long processTaskId);
 }

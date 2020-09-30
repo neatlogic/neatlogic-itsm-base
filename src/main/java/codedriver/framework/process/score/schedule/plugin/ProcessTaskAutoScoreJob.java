@@ -1,28 +1,8 @@
 package codedriver.framework.process.score.schedule.plugin;
 
-import codedriver.framework.asynchronization.threadlocal.TenantContext;
-import codedriver.framework.common.constvalue.SystemUser;
-import codedriver.framework.process.constvalue.ProcessTaskAuditType;
-import codedriver.framework.process.dao.mapper.ChannelMapper;
-import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
-import codedriver.framework.process.dao.mapper.WorktimeMapper;
-import codedriver.framework.process.dao.mapper.score.ProcesstaskScoreMapper;
-import codedriver.framework.process.dao.mapper.score.ScoreTemplateMapper;
-import codedriver.framework.process.dto.ChannelVo;
-import codedriver.framework.process.dto.ProcessTaskConfigVo;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.dto.score.ProcesstaskScoreVo;
-import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
-import codedriver.framework.process.dto.score.ScoreTemplateVo;
-import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
-import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
-import codedriver.framework.process.util.WorkTimeUtil;
-import codedriver.framework.scheduler.core.JobBase;
-import codedriver.framework.scheduler.dto.JobObject;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,8 +14,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.List;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import codedriver.framework.asynchronization.threadlocal.TenantContext;
+import codedriver.framework.common.constvalue.SystemUser;
+import codedriver.framework.process.constvalue.ProcessTaskAuditType;
+import codedriver.framework.process.dao.mapper.ChannelMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
+import codedriver.framework.process.dao.mapper.WorktimeMapper;
+import codedriver.framework.process.dao.mapper.score.ProcessTaskScoreMapper;
+import codedriver.framework.process.dao.mapper.score.ScoreTemplateMapper;
+import codedriver.framework.process.dto.ChannelVo;
+import codedriver.framework.process.dto.ProcessTaskConfigVo;
+import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.dto.score.ProcessTaskScoreVo;
+import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
+import codedriver.framework.process.dto.score.ScoreTemplateVo;
+import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
+import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
+import codedriver.framework.process.util.WorkTimeUtil;
+import codedriver.framework.scheduler.core.JobBase;
+import codedriver.framework.scheduler.dto.JobObject;
 
 /**
  * 工单自动评分定时类
@@ -51,7 +53,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	private ScoreTemplateMapper scoreTemplateMapper;
 
 	@Autowired
-	private ProcesstaskScoreMapper processtaskScoreMapper;
+	private ProcessTaskScoreMapper processTaskScoreMapper;
 
 	@Autowired
 	private ChannelMapper channelMapper;
@@ -65,7 +67,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
 		Long processTaskId = (Long) jobObject.getData("processTaskId");
-		List<ProcesstaskScoreVo> processtaskScoreVos = processtaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
+		List<ProcessTaskScoreVo> processtaskScoreVos = processTaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
 		if (CollectionUtils.isEmpty(processtaskScoreVos)) {
 			return true;
 		} else {
@@ -84,7 +86,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 		Integer autoTime = null;
 		String autoTimeType = null;
 		if(task != null){
-			List<ProcesstaskScoreVo> processtaskScoreVos = processtaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
+			List<ProcessTaskScoreVo> processtaskScoreVos = processTaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
 			ChannelVo channel = channelMapper.getChannelByUuid(task.getChannelUuid());
 			if(channel != null){
 				worktimeUuid = channel.getWorktimeUuid();
@@ -137,10 +139,10 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
 		Long processTaskId = (Long) jobObject.getData("processTaskId");
 		ProcessTaskVo task = processTaskMapper.getProcessTaskById(processTaskId);
-		List<ProcesstaskScoreVo> processtaskScoreVos = processtaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
+		List<ProcessTaskScoreVo> processTaskScoreVos = processTaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
 		ScoreTemplateVo template = null;
 		// 从processtask_config里查评分模版Id，获取评分模版
-		if(task != null && CollectionUtils.isEmpty(processtaskScoreVos)){
+		if(task != null && CollectionUtils.isEmpty(processTaskScoreVos)){
 			String configHash = task.getConfigHash();
 			ProcessTaskConfigVo taskConfigVo = null;
 			if(StringUtils.isNotBlank(configHash) && (taskConfigVo = selectContentByHashMapper.getProcessTaskConfigByHash(configHash)) != null){
@@ -157,8 +159,8 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 		if(template != null){
 			IProcessStepUtilHandler handler = ProcessStepUtilHandlerFactory.getHandler();
 			List<ScoreTemplateDimensionVo> dimensionList = template.getDimensionList();
-			ProcesstaskScoreVo processtaskScoreVo = new ProcesstaskScoreVo();
-			processtaskScoreVo.setProcesstaskId(processTaskId);
+			ProcessTaskScoreVo processtaskScoreVo = new ProcessTaskScoreVo();
+			processtaskScoreVo.setProcessTaskId(processTaskId);
 			processtaskScoreVo.setScoreTemplateId(template.getId());
 			processtaskScoreVo.setFcu(SystemUser.SYSTEM.getUserId());
 			processtaskScoreVo.setIsAuto(1);
@@ -167,7 +169,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 				for(ScoreTemplateDimensionVo vo : dimensionList){
 					processtaskScoreVo.setScoreDimensionId(vo.getId());
 					processtaskScoreVo.setScore(5);
-					processtaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
+					processTaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
 					JSONObject dimensionObj = new JSONObject();
 					dimensionObj.put("dimensionName",vo.getName());
 					dimensionObj.put("score",5);
