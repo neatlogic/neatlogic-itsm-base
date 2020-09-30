@@ -69,7 +69,7 @@ public enum ProcessTaskOperationType {
     PAUSE("pause","暂停", new ArrayList<String>(), Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue())),
     RECOVER("recover","恢复", new ArrayList<String>(), Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue())),
     RESTFULACTION("restfulaction", "RESTFUL动作"),
-    RETREATCURRENTSTEP("retreatcurrentstep", "撤回当前步骤"),
+    RETREATCURRENTSTEP("retreatcurrentstep", "撤回", Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),
     TRANFERREPORT("tranferreport", "转报"),
     COPYPROCESSTASK("copyprocesstask", "复制上报"),
     REDO("redo", "回退"),

@@ -97,7 +97,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
 		Long slaTransferId = (Long) jobObject.getData("slaNotifyId");
-		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskNotifyById(slaTransferId);
+		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskSlaNotifyById(slaTransferId);
 		if (processTaskSlaNotifyVo == null) {
 			return false;
 		} else {
@@ -110,7 +110,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 		String tenantUuid = jobObject.getTenantUuid();
 		TenantContext.get().switchTenant(tenantUuid);
 		Long slaNotifyId = (Long) jobObject.getData("slaNotifyId");
-		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskNotifyById(slaNotifyId);
+		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskSlaNotifyById(slaNotifyId);
 		boolean isJobLoaded = false;
 		if (processTaskSlaNotifyVo != null) {
 			ProcessTaskSlaTimeVo slaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(processTaskSlaNotifyVo.getSlaId());
@@ -148,7 +148,10 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 							notifyDate.add(Calendar.MINUTE, time);
 						}
 					}
-
+					/** 如果触发时间在当前时间之前，则将触发时间改为当前时间 **/
+					if(notifyDate.before(Calendar.getInstance())) {
+					    notifyDate = Calendar.getInstance();
+					}
 					JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskSlaNotifyVo.getId().toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
 							.withBeginTime(notifyDate.getTime())
 							.withIntervalInSeconds(intervalTime)
@@ -184,7 +187,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 	@Override
 	public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
 		Long slaNotifyId = (Long) jobObject.getData("slaNotifyId");
-		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskNotifyById(slaNotifyId);
+		ProcessTaskSlaNotifyVo processTaskSlaNotifyVo = processTaskMapper.getProcessTaskSlaNotifyById(slaNotifyId);
 		if (processTaskSlaNotifyVo != null) {
 			Long slaId = processTaskSlaNotifyVo.getSlaId();
 			List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoBySlaId(slaId);
@@ -420,5 +423,18 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
                 notifyReceiverList.add(new NotifyReceiverVo(processTaskStepWorkerVo.getType(), processTaskStepWorkerVo.getUuid()));
             }
         }
-    }
+        /** 工单关注人 */
+		List<String> focusUserList = processTaskMapper.getFocusUsersOfProcessTask(processTaskId);
+		if(CollectionUtils.isNotEmpty(focusUserList)){
+			focusUserList = focusUserList.stream().map(user -> user.replace("user#","")).collect(Collectors.toList());
+			List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.FOCUS_USER.getValue());
+			if(notifyReceiverList == null){
+				notifyReceiverList = new ArrayList<>();
+				receiverMap.put(ProcessUserType.FOCUS_USER.getValue(), notifyReceiverList);
+			}
+			for(String user : focusUserList){
+				notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(),user));
+			}
+		}
+	}
 }

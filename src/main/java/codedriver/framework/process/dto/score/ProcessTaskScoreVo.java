@@ -4,10 +4,10 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ProcesstaskScoreVo extends BaseEditorVo {
+public class ProcessTaskScoreVo extends BaseEditorVo {
 
 	@EntityField(name = "工单ID", type = ApiParamType.LONG)
-	private Long processtaskId;
+	private Long processTaskId;
 	@EntityField(name = "评分模版ID", type = ApiParamType.LONG)
 	private Long scoreTemplateId;
 	@EntityField(name = "评分模版维度ID", type = ApiParamType.LONG)
@@ -19,14 +19,14 @@ public class ProcesstaskScoreVo extends BaseEditorVo {
 	@EntityField(name = "评价内容hash", type = ApiParamType.STRING)
 	private String contentHash;
 
-	public ProcesstaskScoreVo() {}
+	public ProcessTaskScoreVo() {}
 
-	public Long getProcesstaskId() {
-		return processtaskId;
+	public Long getProcessTaskId() {
+		return processTaskId;
 	}
 
-	public void setProcesstaskId(Long processtaskId) {
-		this.processtaskId = processtaskId;
+	public void setProcessTaskId(Long processTaskId) {
+		this.processTaskId = processTaskId;
 	}
 
 	public Long getScoreTemplateId() {

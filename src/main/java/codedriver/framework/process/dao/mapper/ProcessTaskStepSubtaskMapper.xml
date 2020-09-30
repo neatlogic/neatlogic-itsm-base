@@ -30,6 +30,7 @@
 	  a.`id`,
 	  a.`owner`,
 	  (SELECT `user_name` FROM `user` WHERE `uuid` = `owner`) AS ownerName,
+	  (SELECT `user_info` FROM `user` WHERE `uuid` = `owner`) AS ownerInfo,
 	  a.`status`,
 	  a.`user_uuid` AS userUuid,
 	  (SELECT `user_name` FROM `user` WHERE `uuid` = a.`user_uuid`) AS userName,
@@ -54,9 +55,11 @@
 	  a.`action`,
 	  a.`fcd`,
 	  a.`fcu`,
+	  (SELECT `user_info` from `user` WHERE `uuid` = a.`fcu`) as fcuInfo,
 	  c.`user_name` AS fcuName,
 	  a.`lcd`,
-	  a.`lcu` 
+	  a.`lcu`,
+	  (SELECT `user_info` from `user` WHERE `uuid` = a.`lcu`) as lcuInfo
 	FROM `processtask_step_subtask_content` a
 	JOIN `processtask_content` b on b.`hash` = a.`content_hash`
 	LEFT JOIN `user` c ON c.`uuid` = a.`fcu`

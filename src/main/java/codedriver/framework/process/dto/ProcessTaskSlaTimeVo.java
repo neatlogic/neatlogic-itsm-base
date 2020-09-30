@@ -3,9 +3,12 @@ package codedriver.framework.process.dto;
 import java.util.Date;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.elasticsearch.annotation.ESKey;
+import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskSlaTimeVo {
+    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
 	@EntityField(name = "步骤id", type = ApiParamType.LONG)
@@ -114,12 +117,5 @@ public class ProcessTaskSlaTimeVo {
 	public void setRealExpireTimeLong(Long realExpireTimeLong) {
 		this.realExpireTimeLong = realExpireTimeLong;
 	}
-
-    @Override
-    public String toString() {
-        return "processTaskId=" + processTaskId + ", slaId=" + slaId + ", timeSum=" + timeSum + "\n"
-            + ", expireTime=" + expireTime + ", timeLeft=" + timeLeft + "\n"
-            + ", realExpireTime=" + realExpireTime + ", realTimeLeft=" + realTimeLeft;
-    }
 
 }

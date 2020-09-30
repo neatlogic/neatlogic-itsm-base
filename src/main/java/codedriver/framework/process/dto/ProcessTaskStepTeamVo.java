@@ -1,6 +1,11 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.elasticsearch.annotation.ESKey;
+import codedriver.framework.elasticsearch.constvalue.ESKeyType;
+
 public class ProcessTaskStepTeamVo {
+    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
+    private Long processTaskId;
 	private Long processTaskStepId;
 	private Long teamId;
 	private String teamName;
@@ -38,4 +43,13 @@ public class ProcessTaskStepTeamVo {
 		this.teamName = teamName;
 	}
 
+    public Long getProcessTaskId() {
+        return processTaskId;
+    }
+
+    public void setProcessTaskId(Long processTaskId) {
+        this.processTaskId = processTaskId;
+    }
+
+	
 }
