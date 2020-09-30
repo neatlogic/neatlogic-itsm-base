@@ -195,7 +195,8 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
      * @param processTaskStepId 步骤id
      * @return List<String>
      */
-    private void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
+	@Override
+    public void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
 
         if(!processTaskVo.getCurrentUserProcessUserTypeList().contains(UserType.ALL.getValue())) {
             processTaskVo.getCurrentUserProcessUserTypeList().add(UserType.ALL.getValue());
@@ -256,7 +257,8 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     * @param processTaskStepVo 
     * @return void
      */
-    private void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo) {
+	@Override
+    public void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo) {
         if(processTaskStepVo != null) {
             String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
             processTaskStepVo.setConfig(stepConfig);
