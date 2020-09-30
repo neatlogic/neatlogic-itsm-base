@@ -53,6 +53,7 @@ import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo;
 import codedriver.framework.process.dto.ProcessTaskScoreTemplateVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
+import codedriver.framework.process.dto.ProcessTaskStepAgentVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
@@ -508,7 +509,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             }
 			/** 检查处理人是否合法 **/
             processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.START, true);
-			ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+            stepMajorUserRegulate(currentProcessTaskStepVo);
+            ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 
 			/** 检查步骤是否“已激活” **/
 			if (!processTaskStepVo.getIsActive().equals(1)) {
@@ -576,8 +578,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		ProcessTaskOperationType operationType = ProcessTaskOperationType.COMPLETE;
 		boolean canComplete = false;
 		if (this.getMode().equals(ProcessStepMode.MT)) {
-			// TODO 还需要增加代理人的逻辑
-
 			JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 			if (MapUtils.isNotEmpty(paramObj)) {
 				String action = paramObj.getString("action");
@@ -591,6 +591,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
 			canComplete = processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), operationType, true);
+			stepMajorUserRegulate(currentProcessTaskStepVo);
 		} else if (this.getMode().equals(ProcessStepMode.AT)) {
 			canComplete = true;
 		}
@@ -769,7 +770,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RETREATCURRENTSTEP, true);
-			/** 设置当前步骤状态为未开始 **/
+            stepMajorUserRegulate(currentProcessTaskStepVo);
+            /** 设置当前步骤状态为未开始 **/
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 			/** 保存撤回原因 **/
 			saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.RETREAT);
@@ -969,7 +971,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             }
             /** 检查处理人是否合法 **/
             processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RECOVER, true);
-
+            stepMajorUserRegulate(currentProcessTaskStepVo);
             myRecover(currentProcessTaskStepVo);
 
             /** 更新工单步骤状态为 “进行中” **/
@@ -1006,7 +1008,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             }
             /** 检查处理人是否合法 **/
             processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.PAUSE, true);
-
+            stepMajorUserRegulate(currentProcessTaskStepVo);
             myPause(currentProcessTaskStepVo);
 
             /** 更新工单步骤状态为 “进行中” **/
@@ -1050,6 +1052,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	            throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
 	        }
 	        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.ACCEPT, true);
+	        stepMajorUserRegulate(currentProcessTaskStepVo);
 			/** 清空worker表，只留下当前处理人 **/
 			processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
 			processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue()));
@@ -1751,7 +1754,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.REDO, true);
-
+            stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 保存打回原因 **/
             saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
 //            myRedo(currentProcessTaskStepVo);
@@ -1865,5 +1868,50 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         /** 生成活动 */
         AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
 	    return 1;
+	}
+	
+	/**
+	 * 
+	* @Time:2020年9月30日
+	* @Description: 步骤主处理人校正操作
+	*  判断当前用户是否是代办人，如果不是就什么都不做，如果是，进行下面3个操作
+	*  1.往processtask_step_agent表中插入一条数据，记录该步骤的原主处理人和代办人
+	*  2.将processtask_step_worker表中该步骤的主处理人uuid改为代办人(当前用户)
+	*  3.将processtask_step_user表中该步骤的主处理人user_uuid改为代办人(当前用户)
+	* @param currentProcessTaskStepVo 
+	* @return void
+	 */
+	private void stepMajorUserRegulate(ProcessTaskStepVo currentProcessTaskStepVo) {
+	    /** 能进入这个方法，说明当前用户有权限处理当前步骤，可能是三类处理人：第一处理人(A)、代办人(B)、代办人的代办人(C) 。其中A授权给B，B授权给C **/
+	    ProcessTaskStepAgentVo processTaskStepAgentVo = processTaskMapper.getProcessTaskStepAgentByProcessTaskStepId(currentProcessTaskStepVo.getId());
+	    if(processTaskStepAgentVo == null) {
+	        //代办人还没接管，当前用户可能是A和B
+	        List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(UserContext.get().getUserUuid(true));
+	        if(processTaskMapper.checkIsWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) == 0) {
+	            //当用户是B
+	            String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(), "processTask");
+	            if(StringUtils.isNotBlank(userUuid)) {
+	                processTaskMapper.replaceProcesssTaskStepAgent(new ProcessTaskStepAgentVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), userUuid, UserContext.get().getUserUuid(true)));
+	                processTaskMapper.updateProcessTaskStepWorkerUuid(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), userUuid, ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
+	                processTaskMapper.updateProcessTaskStepUserUserUuid(new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), userUuid, ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
+	            }
+	        }
+	    }else {
+	        //代办人接管过了，当前用户可能是A、B、C
+	        if(UserContext.get().getUserUuid(true).equals(processTaskStepAgentVo.getUserUuid())) {
+	            //当前用户是A
+	            processTaskMapper.deleteProcessTaskStepAgentByProcessTaskStepId(currentProcessTaskStepVo.getId());
+                processTaskMapper.updateProcessTaskStepWorkerUuid(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), processTaskStepAgentVo.getAgentUuid(), ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
+                processTaskMapper.updateProcessTaskStepUserUserUuid(new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), processTaskStepAgentVo.getAgentUuid(), ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
+	        }else if(UserContext.get().getUserUuid(true).equals(processTaskStepAgentVo.getAgentUuid())) {
+	            //当前用户是B
+	        }else {
+	            //当前用户是C
+	            processTaskMapper.replaceProcesssTaskStepAgent(new ProcessTaskStepAgentVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), processTaskStepAgentVo.getAgentUuid(), UserContext.get().getUserUuid(true)));
+                processTaskMapper.updateProcessTaskStepWorkerUuid(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), processTaskStepAgentVo.getAgentUuid(), ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
+                processTaskMapper.updateProcessTaskStepUserUserUuid(new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), processTaskStepAgentVo.getAgentUuid(), ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
+	        }
+	    }
+	    
 	}
 }

@@ -829,6 +829,9 @@
 	<if test="processTaskStepId != null">
 	AND `processtask_step_id` = #{processTaskStepId}
 	</if>
+	<if test="userType != null and userType != ''">
+	AND `user_type` = #{userType}
+	</if>
 	AND (
 		(`type` = 'user' AND `uuid` = #{userUuid})
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
@@ -1397,6 +1400,16 @@
 
 	<select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
 	SELECT CONCAT("user#",`user_uuid`) FROM `processtask_focus` WHERE `processtask_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `user_uuid` AS userUuid,
+	  `agent_uuid` AS agentUuid 
+	FROM `processtask_step_agent` 
+	WHERE `processtask_step_id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
@@ -2088,6 +2101,22 @@
 	INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTask.id}, #{userUuid})
 	</insert>
 	
+	<insert id="replaceProcesssTaskStepAgent" parameterType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
+	REPLACE INTO `processtask_step_agent` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `user_uuid`,
+	  `agent_uuid`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{userUuid},
+	    #{agentUuid}
+	  )
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -2172,6 +2201,23 @@
 	WHERE `id` = #{id}
 	</update>
 
+	<update id="updateProcessTaskStepWorkerUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+	UPDATE `processtask_step_worker` 
+	SET `uuid` = #{newUuid}
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	  AND `type` = #{type} 
+	  AND `uuid` = #{uuid} 
+	  AND `user_type` = #{userType}
+	</update>
+	
+	<update id="updateProcessTaskStepUserUserUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+	UPDATE `processtask_step_user` 
+	SET `user_uuid` = #{user_uuid}
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	  AND `user_uuid` = #{userUuid} 
+	  AND `user_type` = #{userType}
+	</update>
+	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
 		FROM
@@ -2374,5 +2420,9 @@
 	
 	<delete id="deleteProcessTaskByProcessTaskId" parameterType="java.lang.Long">
 	delete from `processtask` where `id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_step_agent` WHERE `processtask_step_id` = #{value}
 	</delete>
 </mapper>

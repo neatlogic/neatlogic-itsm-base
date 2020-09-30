@@ -27,6 +27,8 @@ public class ProcessTaskStepUserVo {
 	private Long timeCost;
 	private String timeCostStr;
 
+	private String newUserUuid;
+	
 	public ProcessTaskStepUserVo() {
 
 	}
@@ -54,7 +56,16 @@ public class ProcessTaskStepUserVo {
 //		this.setUserName(processStepUserVo.getUserName());
 //	}
 
-	public Long getProcessTaskStepId() {
+	public ProcessTaskStepUserVo(Long processTaskId, Long processTaskStepId, String userUuid, String userType,
+        String newUserUuid) {
+        this.processTaskId = processTaskId;
+        this.processTaskStepId = processTaskStepId;
+        this.userUuid = userUuid;
+        this.userType = userType;
+        this.newUserUuid = newUserUuid;
+    }
+
+    public Long getProcessTaskStepId() {
 		return processTaskStepId;
 	}
 
@@ -168,5 +179,13 @@ public class ProcessTaskStepUserVo {
 		}
 		return userAvatar;
 	}
+
+    public String getNewUserUuid() {
+        return newUserUuid;
+    }
+
+    public void setNewUserUuid(String newUserUuid) {
+        this.newUserUuid = newUserUuid;
+    }
 
 }

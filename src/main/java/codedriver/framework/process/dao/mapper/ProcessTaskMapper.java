@@ -100,7 +100,8 @@ public interface ProcessTaskMapper {
 
 	public int checkIsWorker(
 			@Param("processTaskId") Long processTaskId, 
-			@Param("processTaskStepId") Long processTaskStepId, 
+			@Param("processTaskStepId") Long processTaskStepId,
+			@Param("userType") String userType,
 			@Param("userUuid") String userUuid, 
 			@Param("teamUuidList") List<String> teamUuidList, 
 			@Param("roleUuidList") List<String> roleUuidList
@@ -177,6 +178,8 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskSlaTransferVo> getProcessTaskSlaTransferBySlaId(Long slaId);
 
     public Long getProcessTaskSlaLockById(Long slaId);
+
+    public ProcessTaskStepAgentVo getProcessTaskStepAgentByProcessTaskStepId(Long processTaskStepId);
 
     public int checkProcessTaskFocusExists(@Param("processTaskId") Long processTaskId, @Param("userUuid") String userUuid);
 
@@ -265,6 +268,8 @@ public interface ProcessTaskMapper {
     @ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
     public int insertProcessTaskFocus(@Param("processTask") ProcessTaskVo processTask, @Param("userUuid") String userUuid);
 
+    public int replaceProcesssTaskStepAgent(ProcessTaskStepAgentVo processTaskStepAgentVo);
+
 	@ESSearch(type = "processtask",paramType=ProcessTaskStepVo.class)
 	public int updateProcessTaskStepExpireTime(ProcessTaskStepVo processTaskStepVo);
 
@@ -292,6 +297,10 @@ public interface ProcessTaskMapper {
 	public int updateProcessTaskTitleOwnerPriorityUuid(ProcessTaskVo processTaskVo);
 
     public int updateProcessTaskStepContentById(ProcessTaskStepContentVo processTaskStepContentVo);
+
+    public int updateProcessTaskStepWorkerUuid(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+
+    public int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
 
 	public int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
@@ -323,6 +332,8 @@ public interface ProcessTaskMapper {
 
 	@ESSearch(type = "processtask",paramType=ProcessTaskVo.class)
     public int deleteProcessTaskFocus(@Param("processTask") ProcessTaskVo processTask,@Param("userUuid") String userUuid);
+
+    public int deleteProcessTaskStepAgentByProcessTaskStepId(Long processTaskStepId);
     
     public int deleteProcessTaskAssignWorkerByProcessTaskId(Long processTaskId);
     
