@@ -2101,7 +2101,7 @@
 	INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTask.id}, #{userUuid})
 	</insert>
 	
-	<insert id="replaceProcesssTaskStepAgent" paramerType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
+	<insert id="replaceProcesssTaskStepAgent" parameterType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
 	REPLACE INTO `processtask_step_agent` (
 	  `processtask_id`,
 	  `processtask_step_id`,
