@@ -8,7 +8,7 @@ import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskSlaTimeVo {
-    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
+    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
 	@EntityField(name = "步骤id", type = ApiParamType.LONG)

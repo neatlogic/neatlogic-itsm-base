@@ -11,7 +11,7 @@ import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 
 public class ProcessTaskStepUserVo {
-    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
+    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String userUuid;
