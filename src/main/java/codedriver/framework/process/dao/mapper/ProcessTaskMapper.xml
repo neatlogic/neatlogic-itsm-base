@@ -178,19 +178,6 @@
 		WHERE sla_id = #{value}
 	</select>
 
-	<select id="getProcessTaskStepAuditDetail" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
-		SELECT
-		b.`audit_id` AS auditId,
-		b.`old_content` AS oldContent,
-		b.`new_content` AS newContent,
-		b.`type` AS `type`
-		FROM
-		`processtask_step_audit` a JOIN `processtask_step_audit_detail` b ON a.`id` = b.`audit_id` AND b.`type` = #{type}
-		WHERE a.`processtask_id` = #{processTaskId}
-		ORDER BY auditId DESC
-		LIMIT 1
-	</select>
-
 	<select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		SELECT
 		`id`,
@@ -680,6 +667,8 @@
 		<result column="action_time" property="actionTime"/>
 		<result column="action" property="action"/>
 		<result column="step_status" property="stepStatus"/>
+		<result column="original_user" property="originalUser"/>
+		<result column="originalUserName" property="originalUserName"/>
 		<collection property="auditDetailList" ofType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
 			<result column="audit_id" property="auditId"/>
 			<result column="type" property="type"/>
@@ -699,6 +688,8 @@
 	  psa.`action_time`,
 	  psa.`action`,
 	  psa.`step_status`,
+	  psa.`original_user`,
+	  (SELECT user_name FROM `user` x WHERE x.uuid = psa.`original_user`) AS originalUserName,
 	  psad.`audit_id`,
 	  psad.`type`,
 	  psad.`old_content`,
@@ -717,19 +708,6 @@
 	AND psa.`user_uuid` = #{userUuid}
 	</if>
 	ORDER BY psa.`id` DESC
-	</select>
-
-	<select id="getProcessTaskStepAuditById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
-	SELECT 
-	  `id`,
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `user_uuid` AS userUuid,
-	  `action_time` AS actionTime,
-	  `action`,
-	  `step_status` AS stepStatus 
-	FROM `processtask_step_audit`
-	WHERE `id` = #{id}
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ProcessTaskStepVo" id="processTaskStepMap">
@@ -932,7 +910,8 @@
 		`user_uuid` as userUuid,
 		`action_time` as actionTime,
 		`action`,
-		`step_status` as stepStatus
+		`step_status` as stepStatus,
+		`original_user` as originalUser
 		FROM
 		  `processtask_step_audit`
 		WHERE 1=1
@@ -1542,7 +1521,8 @@
 		`user_uuid`,
 		`action_time`,
 		`action`,
-		`step_status`
+		`step_status`,
+		`original_user`
 		)
 		VALUES
 		(
@@ -1551,7 +1531,8 @@
 		#{userUuid},
 		NOW(3),
 		#{action},
-		#{stepStatus}
+		#{stepStatus},
+		#{originalUser}
 		)
 	</insert>
 
@@ -2213,7 +2194,7 @@
 	
 	<update id="updateProcessTaskStepUserUserUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 	UPDATE `processtask_step_user` 
-	SET `user_uuid` = #{user_uuid}
+	SET `user_uuid` = #{userUuid}
 	WHERE `processtask_step_id` = #{processTaskStepId} 
 	  AND `user_uuid` = #{userUuid} 
 	  AND `user_type` = #{userType}

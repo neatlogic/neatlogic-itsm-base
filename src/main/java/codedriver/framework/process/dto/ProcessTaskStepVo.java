@@ -138,6 +138,10 @@ public class ProcessTaskStepVo extends BasePageVo {
     
     @EntityField(name = "提醒列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepRemindVo> processTaskStepRemindList = new ArrayList<>();
+    @EntityField(name = "原始处理人", type = ApiParamType.STRING)
+    private String originalUser;
+    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
+    private String originalUserName;
     
 	public ProcessTaskStepVo() {
 
@@ -747,6 +751,22 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setFormAttributeVoList(List<FormAttributeVo> formAttributeVoList) {
         this.formAttributeVoList = formAttributeVoList;
+    }
+
+    public String getOriginalUser() {
+        return originalUser;
+    }
+
+    public void setOriginalUser(String originalUser) {
+        this.originalUser = originalUser;
+    }
+
+    public String getOriginalUserName() {
+        return originalUserName;
+    }
+
+    public void setOriginalUserName(String originalUserName) {
+        this.originalUserName = originalUserName;
     }
 
 }

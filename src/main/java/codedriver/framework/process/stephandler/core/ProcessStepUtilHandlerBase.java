@@ -33,6 +33,7 @@ import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
+import codedriver.framework.process.dto.ProcessTaskStepAgentVo;
 import codedriver.framework.process.dto.ProcessTaskStepReplyVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
@@ -194,7 +195,8 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
      * @param processTaskStepId 步骤id
      * @return List<String>
      */
-    private void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
+	@Override
+    public void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
 
         if(!processTaskVo.getCurrentUserProcessUserTypeList().contains(UserType.ALL.getValue())) {
             processTaskVo.getCurrentUserProcessUserTypeList().add(UserType.ALL.getValue());
@@ -216,6 +218,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             processTaskStepVo.getCurrentUserProcessUserTypeList().addAll(processTaskVo.getCurrentUserProcessUserTypeList());
             if(processTaskMapper.checkIsWorker(processTaskVo.getId(), processTaskStepVo.getId(), null, UserContext.get().getUserUuid(true), teamUuidList, UserContext.get().getRoleUuidList()) > 0) {
                 processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
+                processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
             }else {
                 processTaskStepVo.getCurrentUserProcessUserTypeList().remove(ProcessUserType.WORKER.getValue());
             }
@@ -226,8 +229,16 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                     processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
                 }else if(ProcessUserType.MINOR.getValue().equals(processTaskStepUser.getUserType())) {
                     processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MINOR.getValue());
-                }else if(ProcessUserType.AGENT.getValue().equals(processTaskStepUser.getUserType())) {
-                    processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.AGENT.getValue());
+                }
+            }
+            if(!processTaskStepVo.getCurrentUserProcessUserTypeList().contains(ProcessUserType.MAJOR.getValue())) {
+                ProcessTaskStepAgentVo processTaskStepAgentVo = processTaskMapper.getProcessTaskStepAgentByProcessTaskStepId(processTaskStepVo.getId());
+                if(processTaskStepAgentVo != null) {
+                    if(UserContext.get().getUserUuid(true).equals(processTaskStepAgentVo.getUserUuid())) {
+                        processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.MAJOR.getValue());
+                        processTaskStepVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
+                        processTaskVo.getCurrentUserProcessUserTypeList().add(ProcessUserType.WORKER.getValue());
+                    }
                 }
             }
         }
@@ -246,7 +257,8 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     * @param processTaskStepVo 
     * @return void
      */
-    private void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo) {
+	@Override
+    public void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo) {
         if(processTaskStepVo != null) {
             String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
             processTaskStepVo.setConfig(stepConfig);
