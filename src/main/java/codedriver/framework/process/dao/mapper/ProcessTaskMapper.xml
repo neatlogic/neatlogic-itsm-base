@@ -178,19 +178,6 @@
 		WHERE sla_id = #{value}
 	</select>
 
-	<!-- <select id="getProcessTaskStepAuditDetail" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
-		SELECT
-		b.`audit_id` AS auditId,
-		b.`old_content` AS oldContent,
-		b.`new_content` AS newContent,
-		b.`type` AS `type`
-		FROM
-		`processtask_step_audit` a JOIN `processtask_step_audit_detail` b ON a.`id` = b.`audit_id` AND b.`type` = #{type}
-		WHERE a.`processtask_id` = #{processTaskId}
-		ORDER BY auditId DESC
-		LIMIT 1
-	</select> -->
-
 	<select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		SELECT
 		`id`,
@@ -722,19 +709,6 @@
 	</if>
 	ORDER BY psa.`id` DESC
 	</select>
-
-	<!-- <select id="getProcessTaskStepAuditById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
-	SELECT 
-	  `id`,
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `user_uuid` AS userUuid,
-	  `action_time` AS actionTime,
-	  `action`,
-	  `step_status` AS stepStatus 
-	FROM `processtask_step_audit`
-	WHERE `id` = #{id}
-	</select> -->
 
 	<resultMap type="codedriver.framework.process.dto.ProcessTaskStepVo" id="processTaskStepMap">
 		<id column="id" property="id"/>
