@@ -1841,7 +1841,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         for(ScoreTemplateDimensionVo scoreTemplateDimensionVo : scoreDimensionList){
             processtaskScoreVo.setScoreDimensionId(scoreTemplateDimensionVo.getId());
             processtaskScoreVo.setScore(scoreTemplateDimensionVo.getScore());
-            processTaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
+            processTaskScoreMapper.insertProcessTaskScore(processtaskScoreVo);
         }
 
         JSONObject contentObj = new JSONObject();
@@ -1858,7 +1858,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
             processTaskMapper.replaceProcessTaskContent(contentVo);
             processtaskScoreVo.setContentHash(contentVo.getHash());
-            processTaskScoreMapper.insertProcesstaskScoreContent(processtaskScoreVo);
+            processTaskScoreMapper.insertProcessTaskScoreContent(processtaskScoreVo);
         }
         currentProcessTaskVo.setStatus(ProcessTaskStatus.SCORED.getValue());
         processTaskMapper.updateProcessTaskStatus(currentProcessTaskVo);
