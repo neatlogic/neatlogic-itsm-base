@@ -47,8 +47,8 @@ public class ProcessTaskVo {
     private String owner;
     @EntityField(name = "上报人", type = ApiParamType.STRING)
     private String ownerName;
-    @EntityField(name = "上报人等级", type = ApiParamType.STRING)
-    private String ownerVipLevel;
+    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
+    private Integer ownerVipLevel;
     @EntityField(name = "代报人userUuid", type = ApiParamType.STRING)
     private String reporter;
     @EntityField(name = "代报人", type = ApiParamType.STRING)
@@ -449,11 +449,11 @@ public class ProcessTaskVo {
         this.paramObj = paramObj;
     }
 
-    public String getOwnerVipLevel() {
+    public Integer getOwnerVipLevel() {
         return ownerVipLevel;
     }
 
-    public void setOwnerVipLevel(String ownerVipLevel) {
+    public void setOwnerVipLevel(Integer ownerVipLevel) {
         this.ownerVipLevel = ownerVipLevel;
     }
 }
