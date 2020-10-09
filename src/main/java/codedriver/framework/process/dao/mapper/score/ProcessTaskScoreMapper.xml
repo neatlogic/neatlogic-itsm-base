@@ -4,7 +4,7 @@
 
 	<select id="searchProcessTaskScoreByProcesstaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.score.ProcessTaskScoreVo">
 		SELECT
-		`processtask_id` as `processtaskId`,
+		`processtask_id` as `processTaskId`,
 		`score_template_id` as `scoreTemplateId`,
 		`score_dimension_id` as `scoreDimensionId`,
 		`score` as `score`,
@@ -25,7 +25,7 @@
 		`fcu`,
 		`fcd`
 		) VALUES (
-		#{processtaskId},
+		#{processTaskId},
 		#{scoreTemplateId},
 		#{scoreDimensionId},
 		#{score},
@@ -42,7 +42,7 @@
 		`fcu`,
 		`fcd`
 		) VALUES (
-		#{processtaskId},
+		#{processTaskId},
 		#{contentHash},
 		#{fcu},
 		NOW()
