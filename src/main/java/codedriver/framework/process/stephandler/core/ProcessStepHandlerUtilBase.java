@@ -968,6 +968,7 @@ public abstract class ProcessStepHandlerUtilBase {
 				processTaskStepAuditVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 				processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid());// 兼容automatic作业无用户
 				processTaskStepAuditVo.setStepStatus(currentProcessTaskStepVo.getStatus());
+				processTaskStepAuditVo.setOriginalUser(currentProcessTaskStepVo.getOriginalUser());
 				processTaskMapper.insertProcessTaskStepAudit(processTaskStepAuditVo);
 				JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 				if (MapUtils.isNotEmpty(paramObj)) {
