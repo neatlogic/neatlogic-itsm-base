@@ -204,6 +204,7 @@
 		`end_time` AS endTime,
 		`owner`,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
+		(SELECT vip_level FROM `user` x WHERE x.uuid = `owner`) AS ownerVipLevel,
 		`reporter`,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time` AS expireTime,
