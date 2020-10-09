@@ -20,7 +20,7 @@ import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskVo {
-    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
+    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
     @EntityField(name = "工单id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "父工单id", type = ApiParamType.LONG)

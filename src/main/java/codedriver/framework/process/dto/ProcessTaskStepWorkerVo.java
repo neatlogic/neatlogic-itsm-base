@@ -11,7 +11,7 @@ import codedriver.framework.elasticsearch.constvalue.ESKeyType;
  * @Description: 记录当前流程任务谁可以处理
  */
 public class ProcessTaskStepWorkerVo {
-    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
+    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private String type;

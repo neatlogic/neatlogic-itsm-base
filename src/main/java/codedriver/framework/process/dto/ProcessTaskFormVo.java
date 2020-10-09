@@ -7,7 +7,7 @@ import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 
 public class ProcessTaskFormVo {
-    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
+    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private String formUuid;
 	private String formName;
