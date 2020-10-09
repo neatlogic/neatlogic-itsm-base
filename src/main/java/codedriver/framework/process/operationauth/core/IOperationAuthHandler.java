@@ -16,10 +16,6 @@ public interface IOperationAuthHandler {
     
 	public IOperationAuthHandlerType getHandler();
 
-//	public Map<ProcessTaskOperationType, Boolean> getFinalOperateMap(Long processTaskId, Long processTaskStepId);
-//	
-//	public Map<ProcessTaskOperationType, Boolean> getFinalOperateMap(Long processTaskId, Long processTaskStepId, List<ProcessTaskOperationType> operationTypeList);
-
     default Map<ProcessTaskOperationType, Boolean> getOperateMap(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
         Map<ProcessTaskOperationType, Boolean> resultMap = new HashMap<>();
         for(Entry<ProcessTaskOperationType, BiPredicate<ProcessTaskVo, ProcessTaskStepVo>> entry : getOperationBiPredicateMap().entrySet()) {

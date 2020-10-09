@@ -43,4 +43,9 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	public Boolean getMyIsShow() {
 		return true;
 	}
+
+	@Override
+	public Boolean getDisabled(){
+		return false;
+	}
 }

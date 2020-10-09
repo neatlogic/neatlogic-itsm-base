@@ -830,6 +830,9 @@
 	<if test="processTaskStepId != null">
 	AND `processtask_step_id` = #{processTaskStepId}
 	</if>
+	<if test="userType != null and userType != ''">
+	AND `user_type` = #{userType}
+	</if>
 	AND (
 		(`type` = 'user' AND `uuid` = #{userUuid})
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
@@ -1398,6 +1401,16 @@
 
 	<select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
 	SELECT CONCAT("user#",`user_uuid`) FROM `processtask_focus` WHERE `processtask_id` = #{value}
+	</select>
+	
+	<select id="getProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `user_uuid` AS userUuid,
+	  `agent_uuid` AS agentUuid 
+	FROM `processtask_step_agent` 
+	WHERE `processtask_step_id` = #{value}
 	</select>
 	
 	<update id="updateProcessTaskStepConvergeIsCheck">
@@ -2089,6 +2102,22 @@
 	INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTask.id}, #{userUuid})
 	</insert>
 	
+	<insert id="replaceProcesssTaskStepAgent" parameterType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
+	REPLACE INTO `processtask_step_agent` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `user_uuid`,
+	  `agent_uuid`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{userUuid},
+	    #{agentUuid}
+	  )
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -2173,12 +2202,37 @@
 	WHERE `id` = #{id}
 	</update>
 
+	<update id="updateProcessTaskStepWorkerUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+	UPDATE `processtask_step_worker` 
+	SET `uuid` = #{newUuid}
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	  AND `type` = #{type} 
+	  AND `uuid` = #{uuid} 
+	  AND `user_type` = #{userType}
+	</update>
+	
+	<update id="updateProcessTaskStepUserUserUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+	UPDATE `processtask_step_user` 
+	SET `user_uuid` = #{user_uuid}
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	  AND `user_uuid` = #{userUuid} 
+	  AND `user_type` = #{userType}
+	</update>
+	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
 		FROM
 		`processtask_converge`
 		WHERE
 		`processtask_step_id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskConvergeByProcessTaskId" parameterType="java.lang.Long">
+		DELETE
+		FROM
+		`processtask_converge`
+		WHERE
+		`processtask_id` = #{value}
 	</delete>
 
 	<delete id="deleteProcessTaskFormAttributeDataByProcessTaskId" parameterType="java.lang.Long">
@@ -2205,6 +2259,12 @@
 			</if>
 		</where>
 	</delete>
+	
+	<delete id="deleteProcessTaskStepWorkerByProcessTaskId" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+		DELETE FROM `processtask_step_worker`
+		where `processtask_id` = #{processTaskId}
+		
+	</delete>
 
 	<delete id="deleteProcessTaskStepUser">
 		DELETE
@@ -2217,6 +2277,13 @@
 		<if test="userUuid != null and userUuid != ''">
 			AND `user_uuid` = #{userUuid}
 		</if>
+	</delete>
+	
+	<delete id="deleteProcessTaskStepUserByProcessTaskId" parameterType="java.lang.Long">
+		DELETE
+		FROM
+		`processtask_step_user`
+		WHERE `processtask_id` = #{value}
 	</delete>
 
 	<delete id="deleteProcessTaskSlaNotifyById" parameterType="java.lang.Long">
@@ -2232,6 +2299,13 @@
 		`processtask_sla_transfer`
 		WHERE id = #{value}
 	</delete>
+	
+	<delete id="deleteProcessTaskSlaTransferBySlaId" parameterType="java.lang.Long">
+		DELETE
+		FROM
+		`processtask_sla_transfer`
+		WHERE sla_id = #{value}
+	</delete>
 
 	<delete id="deleteProcessTaskStepAuditById" parameterType="java.lang.Long">
 	DELETE psa, psad
@@ -2239,15 +2313,31 @@
 	LEFT JOIN `processtask_step_audit_detail` psad ON psad.`audit_id` = psa.`id`
 	WHERE `id` = #{id}
 	</delete>
+	
+	<delete id="deleteProcessTaskStepAuditByProcessTaskId" parameterType="java.lang.Long">
+	DELETE psa, psad
+	FROM `processtask_step_audit` psa
+	LEFT JOIN `processtask_step_audit_detail` psad ON psad.`audit_id` = psa.`id`
+	WHERE `processtask_id` = #{id}
+	</delete>
 
 	<delete id="deleteProcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
 	DELETE FROM`processtask_assignworker`
 	WHERE `processtask_step_id` = #{processTaskStepId}
 	AND `from_processtask_step_id` = #{fromProcessTaskStepId}
 	</delete>
+	
+	<delete id="deleteProcessTaskAssignWorkerByProcessTaskId" parameterType="java.lang.Long">
+	DELETE FROM`processtask_assignworker`
+	WHERE `processtask_id` = #{value}
+	</delete>
 
 	<delete id="deleteProcessTaskStepFileByProcessTaskStepId" parameterType="java.lang.Long">
 	DELETE FROM `processtask_file` WHERE `processtask_step_id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepFileByProcessTaskId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_file` WHERE `processtask_id` = #{value}
 	</delete>
 
 	<delete id="deleteProcessTaskStepContentByProcessTaskStepId" parameterType="java.lang.Long">
@@ -2262,6 +2352,10 @@
 	DELETE FROM `processtask_step_content` WHERE `id` = #{value}
 	</delete>
 	
+	<delete id="deleteProcessTaskStepContentByProcessTaskId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_step_content` WHERE `processtask_id` = #{value}
+	</delete>
+	
 	<delete id="deleteProcessTaskRelationById" parameterType="java.lang.Long">
 	DELETE FROM `processtask_relation` WHERE `id` = #{value}
 	</delete>
@@ -2273,8 +2367,63 @@
   	AND `action` = #{action} 
   	</if>
 	</delete>
+	
+	<delete id="deleteProcessTaskStepRemindByProcessTaskId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_step_remind` 
+	WHERE `processtask_id` = #{value} 
+	</delete>
 
 	<delete id="deleteProcessTaskFocus">
-	DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTask.id} and `user_uuid` = #{userUuid}
+	DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTask.id} 
+	<if test="userUuid != null">
+		and `user_uuid` = #{userUuid}
+	</if>
+	</delete>
+	
+	<delete id="deleteProcessTaskFocusByProcessTaskId">
+	DELETE FROM `processtask_focus` WHERE `processtask_id` = #{value} 
+	</delete>
+	
+	<delete id="deleteProcessTaskFormByProcessTaskId" parameterType="java.lang.Long">
+		delete from `processtask_form` 
+		where `processtask_id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskSlaTimeBySlaId" parameterType="java.lang.Long">
+		delete from `processtask_sla_time`
+		where `sla_id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepByProcessTaskId" parameterType="java.lang.Long">
+	DELETE ps,psa,psau,psaud,psc,psnp,psco,psd,psf,psr,psrl,pss,pssu,pssc,pst,pstp,psu,psw,pswp
+	FROM 
+	`processtask_step` ps
+	LEFT JOIN `processtask_step_agent`psa ON psa.`processtask_id` = ps.`processtask_id` AND psa.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_audit` psau ON psau.`processtask_id` = ps.`processtask_id` AND psau.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_audit_detail` psaud ON psau.id = psaud.audit_id
+	LEFT JOIN `processtask_step_content` psc ON psc.`processtask_id` = ps.`processtask_id` AND psc.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_notify_policy`  psnp ON psnp.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_comment` psco ON psco.`processtask_id` = ps.`processtask_id` AND psco.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_data` psd ON psd.`processtask_id` = ps.`processtask_id` AND psd.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_formattribute` psf ON psf.`processtask_id` = ps.`processtask_id` AND psf.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_remind` psr ON psr.`processtask_id` = ps.`processtask_id` AND psr.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_rel` psrl ON psrl.`processtask_id` = ps.`processtask_id`
+	LEFT JOIN `processtask_step_sla` pss ON pss.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_subtask` pssu ON pssu.`processtask_id` = ps.`processtask_id` AND pssu.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_subtask_content` pssc ON pssu.`id` = pssc.`processtask_step_subtask_id`
+	LEFT JOIN `processtask_step_timeaudit` pst ON pst.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_timeout_policy` pstp ON pstp.`processtask_id` = ps.`processtask_id` AND pstp.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_user` psu ON psu.`processtask_id` = ps.`processtask_id` AND psu.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_worker` psw ON psw.`processtask_id` = ps.`processtask_id` AND psw.`processtask_step_id` = ps.id
+	LEFT JOIN `processtask_step_worker_policy` pswp ON pswp.`processtask_id` = ps.`processtask_id` AND pswp.`processtask_step_id` = ps.id
+	WHERE ps.`processtask_id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskByProcessTaskId" parameterType="java.lang.Long">
+	delete from `processtask` where `id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_step_agent` WHERE `processtask_step_id` = #{value}
 	</delete>
 </mapper>
