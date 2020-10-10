@@ -6,11 +6,11 @@ import codedriver.framework.process.dto.score.ProcessTaskScoreVo;
 
 public interface ProcessTaskScoreMapper {
 
-    public List<ProcessTaskScoreVo> searchProcesstaskScoreByProcesstaskId(Long processtaskId);
+    public List<ProcessTaskScoreVo> searchProcessTaskScoreByProcesstaskId(Long processtaskId);
 
-    public void insertProcesstaskScore(ProcessTaskScoreVo vo);
+    public void insertProcessTaskScore(ProcessTaskScoreVo vo);
 
-    public void insertProcesstaskScoreContent(ProcessTaskScoreVo vo);
+    public void insertProcessTaskScoreContent(ProcessTaskScoreVo vo);
     
     public int deleteProcessTaskByProcessTaskId(Long processTaskId);
 
