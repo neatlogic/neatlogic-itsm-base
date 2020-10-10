@@ -677,14 +677,22 @@
 	
 	<select id="getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ChannelTypeRelationVo">
 	SELECT 
-	  `channel_type_relation_id` AS id,
-	  COUNT(`channel_type_relation_id`) AS referenceCount
-	FROM `processtask_relation` 
-	WHERE `channel_type_relation_id` IN 
-	<foreach collection="list" item="channelTypeRelationId" open="(" separator="," close=")">
-	#{channelTypeRelationId}
-	</foreach>
-	GROUP BY `channel_type_relation_id`
+		a.`channel_type_relation_id` AS id,
+		COUNT(a.`channel_type_relation_id`) AS referenceCount
+	FROM (
+		SELECT `channel_type_relation_id` FROM `processtask_relation` 
+		WHERE `channel_type_relation_id` IN 
+		<foreach collection="list" item="channelTypeRelationId" open="(" separator="," close=")">
+			#{channelTypeRelationId}
+		</foreach>
+		UNION ALL
+		SELECT `channel_type_relation_id` FROM `processtask_tranfer_report` 
+		WHERE `channel_type_relation_id` IN 
+		<foreach collection="list" item="channelTypeRelationId" open="(" separator="," close=")">
+			#{channelTypeRelationId}
+		</foreach>
+	) a 
+	GROUP BY a.`channel_type_relation_id` 
 	</select>
 	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
