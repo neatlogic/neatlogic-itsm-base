@@ -1112,12 +1112,13 @@ public abstract class ProcessStepHandlerUtilBase {
         * @return boolean
          */
 		public static boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo) {
+		    Map<String, String> formAttributeActionMap = currentProcessTaskStepVo.getFormAttributeActionMap();
             List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);           
             for (FormAttributeVo formAttributeVo : currentProcessTaskStepVo.getFormAttributeVoList()) {
                 if (!formAttributeVo.isRequired()) {
                     continue;
                 }
-                if ( currentProcessTaskStepVo.getFormAttributeActionMap().containsKey(formAttributeVo.getUuid())) {
+                if(formAttributeActionMap.containsKey(formAttributeVo.getUuid()) || formAttributeActionMap.containsKey("all")) {
                     continue;
                 }
                 if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {

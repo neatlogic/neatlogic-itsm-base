@@ -80,20 +80,10 @@
 	
 	<delete id="deleteProcessTaskStepData" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
 	DELETE FROM `processtask_step_data` 
-	<where>
-		<if test="processTaskId != null">
-		AND `processtask_id` = #{processTaskId} 
-		</if>
-		<if test="processTaskStepId != null">
-		AND `processtask_step_id` = #{processTaskStepId} 
-		</if>
-		<if test="type != null and type != ''">
-		AND `type` = #{type} 
-		</if>
-		<if test="fcu != null and fcu != ''">
-		AND `fcu` = #{fcu} 
-		</if>
-	</where>
+	WHERE `processtask_id` = #{processTaskId} 
+	AND `processtask_step_id` = #{processTaskStepId} 
+	AND `type` = #{type}
+	AND `fcu` = #{fcu} 
 	</delete>
 	
 	<delete id="deleteProcessTaskStepDataById" parameterType="codedriver.framework.process.dto.ProcessTaskStepDataVo">
