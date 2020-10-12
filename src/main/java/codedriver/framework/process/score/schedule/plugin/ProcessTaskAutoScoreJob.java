@@ -67,7 +67,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	@Override
 	public Boolean checkCronIsExpired(JobObject jobObject) {
 		Long processTaskId = (Long) jobObject.getData("processTaskId");
-		List<ProcessTaskScoreVo> processtaskScoreVos = processTaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
+		List<ProcessTaskScoreVo> processtaskScoreVos = processTaskScoreMapper.searchProcessTaskScoreByProcesstaskId(processTaskId);
 		if (CollectionUtils.isEmpty(processtaskScoreVos)) {
 			return true;
 		} else {
@@ -86,7 +86,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 		Integer autoTime = null;
 		String autoTimeType = null;
 		if(task != null){
-			List<ProcessTaskScoreVo> processtaskScoreVos = processTaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
+			List<ProcessTaskScoreVo> processtaskScoreVos = processTaskScoreMapper.searchProcessTaskScoreByProcesstaskId(processTaskId);
 			ChannelVo channel = channelMapper.getChannelByUuid(task.getChannelUuid());
 			if(channel != null){
 				worktimeUuid = channel.getWorktimeUuid();
@@ -139,7 +139,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
 		Long processTaskId = (Long) jobObject.getData("processTaskId");
 		ProcessTaskVo task = processTaskMapper.getProcessTaskById(processTaskId);
-		List<ProcessTaskScoreVo> processTaskScoreVos = processTaskScoreMapper.searchProcesstaskScoreByProcesstaskId(processTaskId);
+		List<ProcessTaskScoreVo> processTaskScoreVos = processTaskScoreMapper.searchProcessTaskScoreByProcesstaskId(processTaskId);
 		ScoreTemplateVo template = null;
 		// 从processtask_config里查评分模版Id，获取评分模版
 		if(task != null && CollectionUtils.isEmpty(processTaskScoreVos)){
@@ -169,7 +169,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 				for(ScoreTemplateDimensionVo vo : dimensionList){
 					processtaskScoreVo.setScoreDimensionId(vo.getId());
 					processtaskScoreVo.setScore(5);
-					processTaskScoreMapper.insertProcesstaskScore(processtaskScoreVo);
+					processTaskScoreMapper.insertProcessTaskScore(processtaskScoreVo);
 					JSONObject dimensionObj = new JSONObject();
 					dimensionObj.put("dimensionName",vo.getName());
 					dimensionObj.put("score",5);

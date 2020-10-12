@@ -20,7 +20,7 @@ import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskVo {
-    @ESKey(type = ESKeyType.PKEY, id ="processTaskId")
+    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
     @EntityField(name = "工单id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "父工单id", type = ApiParamType.LONG)
@@ -47,6 +47,8 @@ public class ProcessTaskVo {
     private String owner;
     @EntityField(name = "上报人", type = ApiParamType.STRING)
     private String ownerName;
+    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
+    private Integer ownerVipLevel;
     @EntityField(name = "代报人userUuid", type = ApiParamType.STRING)
     private String reporter;
     @EntityField(name = "代报人", type = ApiParamType.STRING)
@@ -447,4 +449,11 @@ public class ProcessTaskVo {
         this.paramObj = paramObj;
     }
 
+    public Integer getOwnerVipLevel() {
+        return ownerVipLevel;
+    }
+
+    public void setOwnerVipLevel(Integer ownerVipLevel) {
+        this.ownerVipLevel = ownerVipLevel;
+    }
 }

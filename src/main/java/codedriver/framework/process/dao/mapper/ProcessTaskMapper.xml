@@ -178,19 +178,6 @@
 		WHERE sla_id = #{value}
 	</select>
 
-	<select id="getProcessTaskStepAuditDetail" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
-		SELECT
-		b.`audit_id` AS auditId,
-		b.`old_content` AS oldContent,
-		b.`new_content` AS newContent,
-		b.`type` AS `type`
-		FROM
-		`processtask_step_audit` a JOIN `processtask_step_audit_detail` b ON a.`id` = b.`audit_id` AND b.`type` = #{type}
-		WHERE a.`processtask_id` = #{processTaskId}
-		ORDER BY auditId DESC
-		LIMIT 1
-	</select>
-
 	<select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		SELECT
 		`id`,
@@ -204,6 +191,7 @@
 		`end_time` AS endTime,
 		`owner`,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
+		(SELECT vip_level FROM `user` x WHERE x.uuid = `owner`) AS ownerVipLevel,
 		`reporter`,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time` AS expireTime,
@@ -679,6 +667,8 @@
 		<result column="action_time" property="actionTime"/>
 		<result column="action" property="action"/>
 		<result column="step_status" property="stepStatus"/>
+		<result column="original_user" property="originalUser"/>
+		<result column="originalUserName" property="originalUserName"/>
 		<collection property="auditDetailList" ofType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
 			<result column="audit_id" property="auditId"/>
 			<result column="type" property="type"/>
@@ -698,6 +688,8 @@
 	  psa.`action_time`,
 	  psa.`action`,
 	  psa.`step_status`,
+	  psa.`original_user`,
+	  (SELECT user_name FROM `user` x WHERE x.uuid = psa.`original_user`) AS originalUserName,
 	  psad.`audit_id`,
 	  psad.`type`,
 	  psad.`old_content`,
@@ -716,19 +708,6 @@
 	AND psa.`user_uuid` = #{userUuid}
 	</if>
 	ORDER BY psa.`id` DESC
-	</select>
-
-	<select id="getProcessTaskStepAuditById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
-	SELECT 
-	  `id`,
-	  `processtask_id` AS processTaskId,
-	  `processtask_step_id` AS processTaskStepId,
-	  `user_uuid` AS userUuid,
-	  `action_time` AS actionTime,
-	  `action`,
-	  `step_status` AS stepStatus 
-	FROM `processtask_step_audit`
-	WHERE `id` = #{id}
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ProcessTaskStepVo" id="processTaskStepMap">
@@ -829,6 +808,9 @@
 	<if test="processTaskStepId != null">
 	AND `processtask_step_id` = #{processTaskStepId}
 	</if>
+	<if test="userType != null and userType != ''">
+	AND `user_type` = #{userType}
+	</if>
 	AND (
 		(`type` = 'user' AND `uuid` = #{userUuid})
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
@@ -928,7 +910,8 @@
 		`user_uuid` as userUuid,
 		`action_time` as actionTime,
 		`action`,
-		`step_status` as stepStatus
+		`step_status` as stepStatus,
+		`original_user` as originalUser
 		FROM
 		  `processtask_step_audit`
 		WHERE 1=1
@@ -1399,6 +1382,16 @@
 	SELECT CONCAT("user#",`user_uuid`) FROM `processtask_focus` WHERE `processtask_id` = #{value}
 	</select>
 	
+	<select id="getProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
+	SELECT 
+	  `processtask_id` AS processTaskId,
+	  `processtask_step_id` AS processTaskStepId,
+	  `user_uuid` AS userUuid,
+	  `agent_uuid` AS agentUuid 
+	FROM `processtask_step_agent` 
+	WHERE `processtask_step_id` = #{value}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -1528,7 +1521,8 @@
 		`user_uuid`,
 		`action_time`,
 		`action`,
-		`step_status`
+		`step_status`,
+		`original_user`
 		)
 		VALUES
 		(
@@ -1537,7 +1531,8 @@
 		#{userUuid},
 		NOW(3),
 		#{action},
-		#{stepStatus}
+		#{stepStatus},
+		#{originalUser}
 		)
 	</insert>
 
@@ -2088,6 +2083,22 @@
 	INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTask.id}, #{userUuid})
 	</insert>
 	
+	<insert id="replaceProcesssTaskStepAgent" parameterType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
+	REPLACE INTO `processtask_step_agent` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `user_uuid`,
+	  `agent_uuid`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{userUuid},
+	    #{agentUuid}
+	  )
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -2172,6 +2183,23 @@
 	WHERE `id` = #{id}
 	</update>
 
+	<update id="updateProcessTaskStepWorkerUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+	UPDATE `processtask_step_worker` 
+	SET `uuid` = #{newUuid}
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	  AND `type` = #{type} 
+	  AND `uuid` = #{uuid} 
+	  AND `user_type` = #{userType}
+	</update>
+	
+	<update id="updateProcessTaskStepUserUserUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+	UPDATE `processtask_step_user` 
+	SET `user_uuid` = #{userUuid}
+	WHERE `processtask_step_id` = #{processTaskStepId} 
+	  AND `user_uuid` = #{userUuid} 
+	  AND `user_type` = #{userType}
+	</update>
+	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
 		FROM
@@ -2374,5 +2402,9 @@
 	
 	<delete id="deleteProcessTaskByProcessTaskId" parameterType="java.lang.Long">
 	delete from `processtask` where `id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_step_agent` WHERE `processtask_step_id` = #{value}
 	</delete>
 </mapper>

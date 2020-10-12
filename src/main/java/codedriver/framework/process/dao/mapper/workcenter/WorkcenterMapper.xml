@@ -230,7 +230,7 @@
 			    #{isShow},
 			    #{width},
 			    #{userUuid},
-			    #{disabled}
+			    0
 			  ) ;
 	</insert>
 	

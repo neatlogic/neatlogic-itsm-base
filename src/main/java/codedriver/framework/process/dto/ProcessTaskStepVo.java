@@ -28,7 +28,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private final static Logger logger = LoggerFactory.getLogger(ProcessTaskStepVo.class);
 	@EntityField(name = "工单步骤id", type = ApiParamType.LONG)
 	private Long id;
-	@ESKey(type = ESKeyType.PKEY, id ="processTaskId")
+	@ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
 	private Long fromProcessTaskStepId;
@@ -86,8 +86,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private ProcessTaskStepUserVo majorUser;
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> minorUserList = new ArrayList<>();
-	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepUserVo> agentUserList = new ArrayList<>();
+//	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
+//	private List<ProcessTaskStepUserVo> agentUserList = new ArrayList<>();
 	@EntityField(name = "暂存评论附件或上报描述附件", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepReplyVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
@@ -138,6 +138,10 @@ public class ProcessTaskStepVo extends BasePageVo {
     
     @EntityField(name = "提醒列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepRemindVo> processTaskStepRemindList = new ArrayList<>();
+    @EntityField(name = "原始处理人", type = ApiParamType.STRING)
+    private String originalUser;
+    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
+    private String originalUserName;
     
 	public ProcessTaskStepVo() {
 
@@ -565,13 +569,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.minorUserList = minorUserList;
 	}
 
-	public List<ProcessTaskStepUserVo> getAgentUserList() {
-		return agentUserList;
-	}
-
-	public void setAgentUserList(List<ProcessTaskStepUserVo> agentUserList) {
-		this.agentUserList = agentUserList;
-	}
+//	public List<ProcessTaskStepUserVo> getAgentUserList() {
+//		return agentUserList;
+//	}
+//
+//	public void setAgentUserList(List<ProcessTaskStepUserVo> agentUserList) {
+//		this.agentUserList = agentUserList;
+//	}
 
 	public ProcessTaskStepReplyVo getComment() {
 		return comment;
@@ -747,6 +751,22 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setFormAttributeVoList(List<FormAttributeVo> formAttributeVoList) {
         this.formAttributeVoList = formAttributeVoList;
+    }
+
+    public String getOriginalUser() {
+        return originalUser;
+    }
+
+    public void setOriginalUser(String originalUser) {
+        this.originalUser = originalUser;
+    }
+
+    public String getOriginalUserName() {
+        return originalUserName;
+    }
+
+    public void setOriginalUserName(String originalUserName) {
+        this.originalUserName = originalUserName;
     }
 
 }
