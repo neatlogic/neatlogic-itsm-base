@@ -694,6 +694,10 @@
 	) a 
 	GROUP BY a.`channel_type_relation_id` 
 	</select>
+
+	<select id="checkChannelTypeHasReference" parameterType="java.lang.String" resultType="int" useCache="false">
+	select count(1) from (SELECT `uuid` FROM `channel` WHERE `channel_type_uuid` = #{value} limit 1) a
+	</select>
 	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
