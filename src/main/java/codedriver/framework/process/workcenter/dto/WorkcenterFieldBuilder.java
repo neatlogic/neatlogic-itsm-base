@@ -203,4 +203,9 @@ public class WorkcenterFieldBuilder {
 		dataJson.put(ProcessWorkcenterField.FOCUS_USERS.getValue(),focusUsers);
 		return this;
 	}
+	
+	public WorkcenterFieldBuilder setIsShow(Integer isShow) {
+	    dataJson.put(ProcessWorkcenterField.IS_SHOW.getValue(),isShow);
+        return this;
+	}
 }

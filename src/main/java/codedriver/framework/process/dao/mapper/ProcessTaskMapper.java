@@ -343,6 +343,9 @@ public interface ProcessTaskMapper {
 
     @ESSearch
     public int updateProcessTaskStepUserStatus(@ESParam("processtask") ProcessTaskStepUserVo processTaskStepUserVo);
+    
+    @ESSearch
+    public int updateProcessTaskIsShow(@ESParam("processtask") ProcessTaskVo processTaskVo);
 
     @ESSearch
     public int updateProcessTaskTitleOwnerPriorityUuid(@ESParam("processtask") ProcessTaskVo processTaskVo);

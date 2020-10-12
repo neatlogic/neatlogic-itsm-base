@@ -25,6 +25,7 @@ public enum ProcessWorkcenterField {
 	TRANSFER_FROM_USER("transferfromuser","转交人","transferfromuser"),
 	ABOUTME("aboutme","与我相关"),
 	ACTION("action", "操作栏"),
+	IS_SHOW("isshow","是否显示，0隐藏，1显示"),
 	FOCUS_USERS("focususers", "关注此工单的用户");
 	private String value;
 	private String name;

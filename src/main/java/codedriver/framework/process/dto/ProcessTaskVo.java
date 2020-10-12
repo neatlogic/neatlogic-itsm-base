@@ -107,6 +107,9 @@ public class ProcessTaskVo {
 	private ScoreTemplateVo scoreTemplateVo;
 	@JSONField(serialize=false)
     private transient JSONObject paramObj;
+	@EntityField(name = "是否显示，1：显示，0：隐藏", type = ApiParamType.INTEGER)
+	private Integer isShow;
+
     public ProcessTaskVo() {
 
     }
@@ -455,5 +458,13 @@ public class ProcessTaskVo {
 
     public void setOwnerVipLevel(Integer ownerVipLevel) {
         this.ownerVipLevel = ownerVipLevel;
+    }
+    
+    public Integer getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(Integer isShow) {
+        this.isShow = isShow;
     }
 }
