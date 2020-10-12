@@ -641,7 +641,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							for (int i = 0; i < formAttributeDataList.size(); i++) {
 								JSONObject formAttributeDataObj = formAttributeDataList.getJSONObject(i);
 								String attributeUuid = formAttributeDataObj.getString("attributeUuid");
-								if (formAttributeActionMap.containsKey(attributeUuid)) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
+								if (formAttributeActionMap.containsKey(attributeUuid) || formAttributeActionMap.containsKey("all")) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
 									continue;
 								}
 								if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(attributeUuid)) {
