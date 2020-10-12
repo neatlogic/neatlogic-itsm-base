@@ -117,7 +117,9 @@ public interface ChannelMapper {
     public List<String> getChannelUuidListByParentUuidListAndChannelTypeUuidList(@Param("parentUuidList")List<String> parentUuidList, @Param("channelTypeUuidList")List<String> channelTypeUuidList);
 
     public int getActiveChannelCountByParentUuidAndChannelTypeUuidList(@Param("parentUuid") String parentUuid, @Param("channelTypeUuidList") List<String> channelTypeUuidList);
-	
+
+    public int checkChannelTypeHasReference(String channelTypeUuid);
+
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
 	public int replaceChannel(ChannelVo channelVo);
