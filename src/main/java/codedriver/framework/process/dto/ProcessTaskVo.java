@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import codedriver.framework.auth.core.AuthActionChecker;
-import codedriver.framework.auth.label.VIP_MODIFY;
+import codedriver.framework.auth.label.VIP_VIEW;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -456,7 +456,7 @@ public class ProcessTaskVo {
 
     public Integer getOwnerVipLevel() {
         /** 判断是否有权限查看VIP等级 */
-        if(ownerVipLevel != null && !AuthActionChecker.check(VIP_MODIFY.class.getSimpleName())){
+        if(ownerVipLevel != null && !AuthActionChecker.check(VIP_VIEW.class.getSimpleName())){
             ownerVipLevel = null;
         }
         return ownerVipLevel;
