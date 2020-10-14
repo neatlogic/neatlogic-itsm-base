@@ -1084,6 +1084,7 @@
 		<result column="reporter" property="reporter" />
 		<result column="worktime_uuid" property="worktimeUuid" />
 		<result column="start_time" property="startTime" />
+		<result column="isShow" property="isShow" />
 		<result column="endTime" property="endTime" />
 		<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
 			<result column="stepId" property="id" />
@@ -1102,23 +1103,23 @@
 	SELECT
 	p.`id`,
 	p.`title`,
-	p.`process_uuid` as processUuid,
-	p.`channel_uuid` as channelUuid,
-	p.`config_hash` as configHash,
-	p.`priority_uuid` as priorityUuid,
+	p.`process_uuid`,
+	p.`channel_uuid`,
+	p.`config_hash`,
+	p.`priority_uuid`,
 	p.`status`,
 	p.`owner`,
 	p.`reporter`,
-	p.`worktime_uuid` as worktimeUuid,
-	p.`start_time` as startTime,
-	p.`end_time` as endTime,
+	p.`worktime_uuid`,
+	p.`start_time`,
+	p.`end_time`,
 	p.`is_show` as isShow,
 	ps.`id` as stepId,
 	ps.`name` as stepName,
 	ps.`status` as stepStatus,
 	ps.`type`,
 	ps.`handler`,
-	ps.`is_active` as isActive,
+	ps.`is_active`,
 	ps.`config_hash` as stepConfigHash,
 	ps.`start_time` as stepStartTime,
 	ps.`end_time` as stepEndTime
