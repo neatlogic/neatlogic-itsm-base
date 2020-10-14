@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import codedriver.framework.auth.core.AuthActionChecker;
+import codedriver.framework.auth.label.VIP_VIEW;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -109,6 +111,8 @@ public class ProcessTaskVo {
     private transient JSONObject paramObj;
 	@EntityField(name = "是否显示，1：显示，0：隐藏", type = ApiParamType.INTEGER)
 	private Integer isShow;
+    @EntityField(name = "是否已关注，1：是，0：否", type = ApiParamType.INTEGER)
+    private Integer isFocus = 0;
 
     public ProcessTaskVo() {
 
@@ -453,6 +457,10 @@ public class ProcessTaskVo {
     }
 
     public Integer getOwnerVipLevel() {
+        /** 判断是否有权限查看VIP等级 */
+        if(ownerVipLevel != null && !AuthActionChecker.check(VIP_VIEW.class.getSimpleName())){
+            ownerVipLevel = null;
+        }
         return ownerVipLevel;
     }
 
@@ -466,5 +474,13 @@ public class ProcessTaskVo {
 
     public void setIsShow(Integer isShow) {
         this.isShow = isShow;
+    }
+
+    public Integer getIsFocus() {
+        return isFocus;
+    }
+
+    public void setIsFocus(Integer isFocus) {
+        this.isFocus = isFocus;
     }
 }
