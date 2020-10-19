@@ -58,6 +58,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	private String meWillDoCount;
 	@EntityField(name = "设备类型", type = ApiParamType.STRING)
 	private String device;
+	@EntityField(name = "排序的字段", type = ApiParamType.JSONARRAY)
+	private JSONArray sortList;
 	
 	//params
 	private List<String> channelUuidList;
@@ -73,6 +75,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	public WorkcenterVo(JSONObject jsonObj) {
 		super(jsonObj);
 		this.isMeWillDo = jsonObj.getInteger("isMeWillDo")!=null?jsonObj.getInteger("isMeWillDo"):0;
+		this.sortList = jsonObj.getJSONArray("sortList");
 		this.uuid = jsonObj.getString("uuid");
 		this.setCurrentPage(jsonObj.getInteger("currentPage"));
 		this.setPageSize(jsonObj.getInteger("pageSize"));
@@ -241,6 +244,13 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
     public void setDevice(String device) {
         this.device = device;
     }
-	
+
+    public JSONArray getSortList() {
+        return sortList;
+    }
+
+    public void setSortList(JSONArray sortList) {
+        this.sortList = sortList;
+    }
 	
 }

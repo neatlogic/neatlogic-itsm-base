@@ -13,5 +13,13 @@ public interface IProcessTaskCondition extends IConditionHandler {
 	 * @Date: 2020/4/13
 	 */
 	public String  getEsWhere(List<ConditionVo> conditionList,Integer index);
-
+	
+	/**
+	* @Author 89770
+	* @Time 2020年10月19日  
+	* @Description: 拼接ES orderby
+	* @Param 
+	* @return
+	 */
+	public String  getEsOrderBy(String sort);
 }
