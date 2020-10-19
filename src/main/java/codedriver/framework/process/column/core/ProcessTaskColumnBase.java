@@ -48,4 +48,9 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	public Boolean getDisabled(){
 		return false;
 	}
+	
+	@Override
+	public Boolean getIsSort() {
+	    return false;
+	}
 }

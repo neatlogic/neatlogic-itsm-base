@@ -71,4 +71,17 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 		}
 		return where;
 	}
+	
+	@Override
+    public String getEsOrderBy(String sortType) {
+	    String orderBy = getMyEsOrderBy(sortType);
+	    if(StringUtils.isBlank(orderBy)) {
+	         orderBy = String.format(" %s %s " ,ProcessWorkcenterField.getConditionValue(this.getName()),sortType.toUpperCase());
+	    }
+	    return orderBy;
+	}
+	
+	protected String getMyEsOrderBy(String sortType) {
+	    return StringUtils.EMPTY;
+	}
 }

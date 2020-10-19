@@ -81,5 +81,14 @@ public interface IProcessTaskColumn {
 	Object getMyValue(JSONObject json);
 
 	public Boolean getDisabled();
+	
+	/**
+	* @Author 89770
+	* @Time 2020年10月19日  
+	* @Description: 是否需要按该字段排序工单数据
+	* @Param 
+	* @return
+	 */
+	public Boolean getIsSort();
 
 }
