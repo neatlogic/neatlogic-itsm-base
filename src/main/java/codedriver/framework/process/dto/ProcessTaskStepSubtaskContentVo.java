@@ -18,10 +18,12 @@ public class ProcessTaskStepSubtaskContentVo {
 	private String fcuName;
 	private String fcuInfo;
 	private String fcuAvatar;
+	private Integer fcuVipLevel;
 	private Date lcd;
 	private String lcu;
 	private String lcuInfo;
 	private String lcuAvatar;
+	private Integer lcuVipLevel;
 
 	public ProcessTaskStepSubtaskContentVo() {
 
@@ -156,4 +158,19 @@ public class ProcessTaskStepSubtaskContentVo {
 		return lcuAvatar;
 	}
 
+	public Integer getFcuVipLevel() {
+		return fcuVipLevel;
+	}
+
+	public void setFcuVipLevel(Integer fcuVipLevel) {
+		this.fcuVipLevel = fcuVipLevel;
+	}
+
+	public Integer getLcuVipLevel() {
+		return lcuVipLevel;
+	}
+
+	public void setLcuVipLevel(Integer lcuVipLevel) {
+		this.lcuVipLevel = lcuVipLevel;
+	}
 }
