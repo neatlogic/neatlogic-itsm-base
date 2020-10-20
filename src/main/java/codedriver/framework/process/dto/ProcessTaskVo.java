@@ -457,10 +457,6 @@ public class ProcessTaskVo {
     }
 
     public Integer getOwnerVipLevel() {
-        /** 判断是否有权限查看VIP等级 */
-        if(ownerVipLevel != null && !AuthActionChecker.check(VIP_VIEW.class.getSimpleName())){
-            ownerVipLevel = null;
-        }
         return ownerVipLevel;
     }
 
