@@ -57,10 +57,12 @@
 	  a.`fcd`,
 	  a.`fcu`,
 	  (SELECT `user_info` from `user` WHERE `uuid` = a.`fcu`) as fcuInfo,
+	  (SELECT `vip_level` from `user` WHERE `uuid` = a.`fcu`) as fcuVipLevel,
 	  c.`user_name` AS fcuName,
 	  a.`lcd`,
 	  a.`lcu`,
-	  (SELECT `user_info` from `user` WHERE `uuid` = a.`lcu`) as lcuInfo
+	  (SELECT `user_info` from `user` WHERE `uuid` = a.`lcu`) as lcuInfo,
+	  (SELECT `vip_level` from `user` WHERE `uuid` = a.`lcu`) as lcuVipLevel
 	FROM `processtask_step_subtask_content` a
 	JOIN `processtask_content` b on b.`hash` = a.`content_hash`
 	LEFT JOIN `user` c ON c.`uuid` = a.`fcu`
