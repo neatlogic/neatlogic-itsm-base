@@ -31,6 +31,8 @@ public class ProcessTaskStepSubtaskVo {
 	private String ownerInfo;
 	@EntityField(name = "创建人名称", type = ApiParamType.STRING)
 	private String ownerAvatar;
+	@EntityField(name = "创建人VIP等级", type = ApiParamType.INTEGER)
+	private Integer ownerVipLevel;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
 	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
@@ -357,6 +359,14 @@ public class ProcessTaskStepSubtaskVo {
 			ownerAvatar = jsonObject.getString("avatar");
 		}
 		return ownerAvatar;
+	}
+
+	public Integer getOwnerVipLevel() {
+		return ownerVipLevel;
+	}
+
+	public void setOwnerVipLevel(Integer ownerVipLevel) {
+		this.ownerVipLevel = ownerVipLevel;
 	}
 
 	@Override

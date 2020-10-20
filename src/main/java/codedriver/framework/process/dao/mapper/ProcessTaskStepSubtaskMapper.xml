@@ -31,6 +31,7 @@
 	  a.`owner`,
 	  (SELECT `user_name` FROM `user` WHERE `uuid` = `owner`) AS ownerName,
 	  (SELECT `user_info` FROM `user` WHERE `uuid` = `owner`) AS ownerInfo,
+	  (SELECT `vip_level` FROM `user` WHERE `uuid` = `owner`) AS ownerVipLevel,
 	  a.`status`,
 	  a.`user_uuid` AS userUuid,
 	  (SELECT `user_name` FROM `user` WHERE `uuid` = a.`user_uuid`) AS userName,
