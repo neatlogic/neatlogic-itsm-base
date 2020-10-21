@@ -11,7 +11,7 @@ public enum ProcessWorkcenterField {
 	CONTENT("content", "上报内容","contentincludehtml"),
 	ENDTIME("endtime", "结束时间"),
 	STARTTIME("starttime", "开始时间"),
-	EXPIRED_TIME("expiretime", "剩余时间"),
+	EXPIRED_TIME("expiretime", "剩余时间","expiretime.slaTimeVo.expireTimeLong"),
 	OWNER("owner", "上报人"),
 	REPORTER("reporter", "代报人"),
 	PRIORITY("priority", "优先级"),
