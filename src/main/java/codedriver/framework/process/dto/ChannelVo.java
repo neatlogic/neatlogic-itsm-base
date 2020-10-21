@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Objects;
@@ -397,6 +401,14 @@ public class ChannelVo extends BasePageVo implements Serializable{
     }
 
     public String getSupport() {
+        if(support == null && RequestContextHolder.getRequestAttributes() != null && ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest() != null) {
+            HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+            if(DeviceType.MOBILE.getValue().equals(request.getHeader("Device"))) {
+                support = DeviceType.MOBILE.getValue();
+            }else {
+                support = DeviceType.PC.getValue();
+            }
+        }
         return support;
     }
 
