@@ -169,7 +169,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                     processTaskStepVo.getCurrentUserProcessUserTypeList().clear();                   
                 }
                 setCurrentUserProcessUserTypeList(processTaskVo, processTaskStepVo);
-                processTaskVo.getStepList().clear();
+                //processTaskVo.getStepList().clear();//工单中心外层有for 循环 不允许 clear
                 List<ProcessTaskOperationType> typeList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
                 UserContext.get().setUserUuid(currentUserUuid);
                 UserContext.get().setUserId(currentUserId);
