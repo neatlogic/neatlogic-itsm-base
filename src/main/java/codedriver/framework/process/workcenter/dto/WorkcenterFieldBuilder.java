@@ -14,6 +14,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.condition.core.ConditionHandlerFactory;
+import codedriver.framework.process.condition.core.IProcessTaskCondition;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessUserType;
@@ -78,7 +80,7 @@ public class WorkcenterFieldBuilder {
 	public WorkcenterFieldBuilder setContent(ProcessTaskContentVo startContentVo) {
 		String contentIncludeHtml = startContentVo== null?StringUtils.EMPTY:startContentVo.getContent();
 		dataJson.put(ProcessWorkcenterField.CONTENT.getValue(), HtmlUtil.removeHtml(contentIncludeHtml, null));
-		dataJson.put(ProcessWorkcenterField.CONTENT.getConditionValue(), contentIncludeHtml);
+		dataJson.put(((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessWorkcenterField.CONTENT.getValue())).getEsName(), contentIncludeHtml);
 		return this;
 	}
 	public WorkcenterFieldBuilder setStartTime(Date startTime) {

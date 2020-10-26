@@ -22,4 +22,25 @@ public interface IProcessTaskCondition extends IConditionHandler {
 	* @return
 	 */
 	public String  getEsOrderBy(String sort);
+	
+	/**
+	 * 
+	* @Author 89770
+	* @Time 2020年10月26日  
+	* @Description: 获取es 字段 path
+	* @Param 
+	* @return
+	 */
+	public String  getEsPath(String... values);
+	
+	/**
+     * 
+    * @Author 89770
+    * @Time 2020年10月26日  
+    * @Description: 获取es 字段 name
+    * @Param 
+    * @return
+     */
+    public String  getEsName(String... values);
+    
 }
