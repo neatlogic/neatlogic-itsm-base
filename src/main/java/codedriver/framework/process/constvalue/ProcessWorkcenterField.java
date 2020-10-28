@@ -9,6 +9,7 @@ public enum ProcessWorkcenterField {
 	CONFIGHASH("confighash","工单配置hash"),
 	CATALOG("catalog", "服务目录"),
 	CONTENT("content", "上报内容"),
+	CONTENT_INCLUDE_HTML("contentincludehtml", "上报内容"),
 	ENDTIME("endtime", "结束时间"),
 	STARTTIME("starttime", "开始时间"),
 	EXPIRED_TIME("expiretime", "剩余时间"),
