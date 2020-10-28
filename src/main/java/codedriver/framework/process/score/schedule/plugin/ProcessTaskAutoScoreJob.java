@@ -101,7 +101,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 						JSONObject scoreConfig = taskConfigObj.getJSONObject("process").getJSONObject("scoreConfig");
 						JSONObject config = null;
 						if(MapUtils.isNotEmpty(scoreConfig) && MapUtils.isNotEmpty(config = scoreConfig.getJSONObject("config"))){
-							isAuto = config.getInteger("isAuto");
+							isAuto = scoreConfig.getInteger("isAuto");
 							autoTime = config.getInteger("autoTime");
 							autoTimeType = config.getString("autoTimeType");
 						}
