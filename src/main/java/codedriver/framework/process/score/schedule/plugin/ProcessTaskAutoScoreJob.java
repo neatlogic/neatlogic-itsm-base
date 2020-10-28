@@ -115,9 +115,9 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 			 * 如果没有设置评分时限类型是自然日还是工作日，默认按自然日顺延
 			 * 如果设置为工作日，那么获取当前时间以后的工作日历，按工作日历顺延
 			 */
-			Date autoScoreDate = DateUtils.addMinutes(task.getEndTime(), Integer.parseInt(autoTime.toString()));
+			Date autoScoreDate = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString()));
 			if(StringUtils.isNotBlank(autoTimeType) && "workDay".equals(autoTimeType) && StringUtils.isNotBlank(worktimeUuid) && worktimeMapper.checkWorktimeIsExists(worktimeUuid) > 0){
-				long timeLimit = DateUtils.addMinutes(task.getEndTime(), Integer.parseInt(autoTime.toString())).getTime() - task.getEndTime().getTime();
+				long timeLimit = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString())).getTime() - task.getEndTime().getTime();
 				long expireTime = WorkTimeUtil.calculateExpireTime(task.getEndTime().getTime(), timeLimit, worktimeUuid);
 				autoScoreDate = new Date(expireTime);
 			}
@@ -171,7 +171,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 					processtaskScoreVo.setScore(5);
 					processTaskScoreMapper.insertProcessTaskScore(processtaskScoreVo);
 					JSONObject dimensionObj = new JSONObject();
-					dimensionObj.put("dimensionName",vo.getName());
+					dimensionObj.put("name",vo.getName());
 					dimensionObj.put("score",5);
 					dimensionObj.put("description",vo.getDescription());
 					dimensionArray.add(dimensionObj);
