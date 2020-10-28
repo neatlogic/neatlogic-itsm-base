@@ -73,7 +73,10 @@ public enum ProcessTaskOperationType {
     TRANFERREPORT("tranferreport", "转报"),
     COPYPROCESSTASK("copyprocesstask", "复制上报"),
     REDO("redo", "回退"),
-    SCORE("score", "评分");
+    SCORE("score", "评分"),
+    SHOW("show","显示"),
+    HIDE("hide","隐藏"),
+    DELETE("delete","删除");
     private String status;
     private String text;
     /** 节点管理中默认授权对象 **/

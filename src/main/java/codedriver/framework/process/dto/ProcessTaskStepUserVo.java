@@ -19,6 +19,7 @@ public class ProcessTaskStepUserVo {
 	private String userType;
 	private String userInfo;
 	private String userAvatar;
+	private Integer userVipLevel;
 	private String status = ProcessTaskStepUserStatus.DOING.getValue();
 	private String statusName;
 	private Date startTime;
@@ -188,4 +189,11 @@ public class ProcessTaskStepUserVo {
         this.newUserUuid = newUserUuid;
     }
 
+	public Integer getUserVipLevel() {
+		return userVipLevel;
+	}
+
+	public void setUserVipLevel(Integer userVipLevel) {
+		this.userVipLevel = userVipLevel;
+	}
 }

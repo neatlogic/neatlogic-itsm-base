@@ -78,7 +78,7 @@ public class WorkcenterFieldBuilder {
 	public WorkcenterFieldBuilder setContent(ProcessTaskContentVo startContentVo) {
 		String contentIncludeHtml = startContentVo== null?StringUtils.EMPTY:startContentVo.getContent();
 		dataJson.put(ProcessWorkcenterField.CONTENT.getValue(), HtmlUtil.removeHtml(contentIncludeHtml, null));
-		dataJson.put(ProcessWorkcenterField.CONTENT.getConditionValue(), contentIncludeHtml);
+		dataJson.put(ProcessWorkcenterField.CONTENT_INCLUDE_HTML.getValue(), contentIncludeHtml);
 		return this;
 	}
 	public WorkcenterFieldBuilder setStartTime(Date startTime) {
@@ -90,12 +90,12 @@ public class WorkcenterFieldBuilder {
 		return this;
 	}
 	public WorkcenterFieldBuilder setOwner(String owner) {
-		dataJson.put(ProcessWorkcenterField.OWNER.getValue(), String.format("user#%s", owner));
+		dataJson.put(ProcessWorkcenterField.OWNER.getValue(), String.format("%s%s", GroupSearch.USER.getValuePlugin(),owner));
 		return this;
 	}
 	public WorkcenterFieldBuilder setReporter(String reporter,String owner) {
 		if(!reporter.equals(owner)) {
-			dataJson.put(ProcessWorkcenterField.REPORTER.getValue(), String.format("user#%s", reporter));
+			dataJson.put(ProcessWorkcenterField.REPORTER.getValue(), String.format("%s%s", GroupSearch.USER.getValuePlugin(), reporter));
 		}
 		return this;
 	}
@@ -202,5 +202,10 @@ public class WorkcenterFieldBuilder {
 	public WorkcenterFieldBuilder setFocusUsers(List<String> focusUsers){
 		dataJson.put(ProcessWorkcenterField.FOCUS_USERS.getValue(),focusUsers);
 		return this;
+	}
+	
+	public WorkcenterFieldBuilder setIsShow(Integer isShow) {
+	    dataJson.put(ProcessWorkcenterField.IS_SHOW.getValue(),isShow);
+        return this;
 	}
 }

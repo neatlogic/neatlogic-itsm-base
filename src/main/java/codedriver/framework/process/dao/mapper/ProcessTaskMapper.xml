@@ -196,7 +196,8 @@
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
-		`error`
+		`error`,
+		`is_show` as isShow
 		FROM
 		`processtask`
 		WHERE
@@ -267,6 +268,7 @@
 		`user_type` as userType,
 		(SELECT `user_name` from `user` WHERE `uuid` = `user_uuid`) as userName,
 		(SELECT `user_info` from `user` WHERE `uuid` = `user_uuid`) as userInfo,
+		(SELECT `vip_level` from `user` WHERE `uuid` = `user_uuid`) as userVipLevel,
 		`status` as status,
 		`action`,
 		`start_time` AS startTime,
@@ -664,6 +666,7 @@
 		<result column="user_uuid" property="userUuid"/>
 		<result column="userName" property="userName"/>
 		<result column="userInfo" property="userInfo"/>
+		<result column="vipLevel" property="vipLevel"/>
 		<result column="action_time" property="actionTime"/>
 		<result column="action" property="action"/>
 		<result column="step_status" property="stepStatus"/>
@@ -685,6 +688,7 @@
 	  psa.`user_uuid`,
 	  (SELECT user_name FROM `user` x WHERE x.uuid = psa.`user_uuid`) AS userName,
 	  (SELECT user_info FROM `user` x WHERE x.uuid = psa.`user_uuid`) as userInfo,
+	  (SELECT vip_level FROM `user` x WHERE x.uuid = psa.`user_uuid`) as vipLevel,
 	  psa.`action_time`,
 	  psa.`action`,
 	  psa.`step_status`,
@@ -1083,6 +1087,7 @@
 		<result column="reporter" property="reporter" />
 		<result column="worktime_uuid" property="worktimeUuid" />
 		<result column="start_time" property="startTime" />
+		<result column="isShow" property="isShow" />
 		<result column="endTime" property="endTime" />
 		<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
 			<result column="stepId" property="id" />
@@ -1111,6 +1116,7 @@
 	p.`worktime_uuid`,
 	p.`start_time`,
 	p.`end_time`,
+	p.`is_show` as isShow,
 	ps.`id` as stepId,
 	ps.`name` as stepName,
 	ps.`status` as stepStatus,
@@ -2198,6 +2204,10 @@
 	WHERE `processtask_step_id` = #{processTaskStepId} 
 	  AND `user_uuid` = #{userUuid} 
 	  AND `user_type` = #{userType}
+	</update>
+	
+	<update id="updateProcessTaskIsShow" parameterType="codedriver.framework.process.dto.ProcessTaskVo">
+	UPDATE `processtask` SET `is_show` = #{isShow} WHERE id = #{id}
 	</update>
 	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">

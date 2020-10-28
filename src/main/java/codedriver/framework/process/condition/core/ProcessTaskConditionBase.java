@@ -12,63 +12,113 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.Expression;
+import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dto.condition.ConditionVo;
+import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.util.TimeUtil;
 
 public abstract class ProcessTaskConditionBase implements IProcessTaskCondition {
 
-	@Override
-	public String getEsWhere(List<ConditionVo> conditionList,Integer index) {
-		ConditionVo condition = conditionList.get(index);
-		String where = getMyEsWhere(index,conditionList);
-		if(StringUtils.isBlank(where)) {
-			Object value = StringUtils.EMPTY;
-			if(condition.getValueList() instanceof String) {
-				value = condition.getValueList();
-			}else if(condition.getValueList() instanceof List) {
-				List<String> values = JSON.parseArray(JSON.toJSONString(condition.getValueList()), String.class);
-				value = String.join("','", values);
-			}
-			if(StringUtils.isNotBlank(value.toString())) {
-				value = String.format("'%s'",  value);
-			}
-			where = String.format(Expression.getExpressionEs(condition.getExpression()),ProcessWorkcenterField.getConditionValue(condition.getName()),value);
-			
-		}
-		return where;
-	}
-	
-	protected String getMyEsWhere(Integer index,List<ConditionVo> conditionList) {
-		return null;
-	}
+    @Override
+    public String getEsWhere(List<ConditionVo> conditionList, Integer index) {
+        ConditionVo condition = conditionList.get(index);
+        String where = getMyEsWhere(index, conditionList);
+        if (StringUtils.isBlank(where)) {
+            Object value = StringUtils.EMPTY;
+            if (condition.getValueList() instanceof String) {
+                value = condition.getValueList();
+            } else if (condition.getValueList() instanceof List) {
+                List<String> values = JSON.parseArray(JSON.toJSONString(condition.getValueList()), String.class);
+                value = String.join("','", values);
+            }
+            if (StringUtils.isNotBlank(value.toString())) {
+                value = String.format("'%s'", value);
+            }
+            where = String.format(Expression.getExpressionEs(condition.getExpression()),
+                ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(condition.getName())).getEsName(), value);
 
-	
-	protected String getDateEsWhere(ConditionVo condition,List<ConditionVo> conditionList) {
-		JSONArray dateJSONArray = JSONArray.parseArray(JSON.toJSONString(condition.getValueList()));
-		String where = StringUtils.EMPTY;
-		if(CollectionUtils.isNotEmpty(dateJSONArray)) {
-			JSONObject dateValue = JSONObject.parseObject(dateJSONArray.get(0).toString());
-			SimpleDateFormat format = new SimpleDateFormat(TimeUtil.YYYY_MM_DD_HH_MM_SS);
-			String startTime = StringUtils.EMPTY;
-			String endTime = StringUtils.EMPTY;
-			String expression = condition.getExpression();
-			if(dateValue.containsKey(ProcessWorkcenterField.STARTTIME.getValue())) {
-				startTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.STARTTIME.getValue())));
-				endTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.ENDTIME.getValue())));
-			}else {
-				startTime = TimeUtil.timeTransfer(dateValue.getInteger("timeRange"), dateValue.getString("timeUnit"));
-				endTime = TimeUtil.timeNow();
-			}
-			if(StringUtils.isEmpty(startTime)) {
-				expression = Expression.LESSTHAN.getExpression();
-				startTime = endTime;
-			}else if(StringUtils.isEmpty(endTime)) {
-				expression = Expression.GREATERTHAN.getExpression();
-			}
-			where = String.format(Expression.getExpressionEs(expression),ProcessWorkcenterField.getConditionValue(condition.getName()),startTime,endTime);
-			
-		}
-		return where;
-	}
+        }
+        return where;
+    }
+
+    protected String getMyEsWhere(Integer index, List<ConditionVo> conditionList) {
+        return null;
+    }
+
+    protected String getDateEsWhere(ConditionVo condition, List<ConditionVo> conditionList) {
+        JSONArray dateJSONArray = JSONArray.parseArray(JSON.toJSONString(condition.getValueList()));
+        String where = StringUtils.EMPTY;
+        if (CollectionUtils.isNotEmpty(dateJSONArray)) {
+            JSONObject dateValue = JSONObject.parseObject(dateJSONArray.get(0).toString());
+            SimpleDateFormat format = new SimpleDateFormat(TimeUtil.YYYY_MM_DD_HH_MM_SS);
+            String startTime = StringUtils.EMPTY;
+            String endTime = StringUtils.EMPTY;
+            String expression = condition.getExpression();
+            if (dateValue.containsKey(ProcessWorkcenterField.STARTTIME.getValue())) {
+                startTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.STARTTIME.getValue())));
+                endTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.ENDTIME.getValue())));
+            } else {
+                startTime = TimeUtil.timeTransfer(dateValue.getInteger("timeRange"), dateValue.getString("timeUnit"));
+                endTime = TimeUtil.timeNow();
+            }
+            if (StringUtils.isEmpty(startTime)) {
+                expression = Expression.LESSTHAN.getExpression();
+                startTime = endTime;
+            } else if (StringUtils.isEmpty(endTime)) {
+                expression = Expression.GREATERTHAN.getExpression();
+            }
+            where = String.format(Expression.getExpressionEs(expression),
+                ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(condition.getName())).getEsName(), startTime,
+                endTime);
+
+        }
+        return where;
+    }
+
+    @Override
+    public String getEsOrderBy(String sortType) {
+        if (StringUtils.isBlank(sortType)) {
+            return StringUtils.EMPTY;
+        }
+        String orderBy = getMyEsOrderBy(sortType);
+        if (StringUtils.isBlank(orderBy)) {
+            orderBy = String.format(" %s %s ", this.getEsPath(), sortType.toUpperCase());
+        }
+        return orderBy;
+    }
+
+    protected String getMyEsOrderBy(String sortType) {
+        return StringUtils.EMPTY;
+    }
+
+    @Override
+    public String getEsName(String... values) {
+        String name = String.format("%s.%s ", ProcessFieldType.COMMON.getValue(), this.getName());
+        String myName = StringUtils.EMPTY;
+        myName = this.getMyEsName();
+        if(StringUtils.isBlank(myName)) {
+            myName = this.getMyEsName(values);
+        }
+            
+        if (StringUtils.isNotBlank(myName)) {
+            name = myName;
+        }
+        return name;
+    }
+
+    public String getMyEsName(String... values) {
+        return null;
+    }
+
+
+    public String getMyEsName() {
+        return null;
+    }
+
+    @Override
+    public String getEsPath(String... values) {
+        String esName = getEsName(values);
+        return esName.substring(0, esName.lastIndexOf("."));
+    }
 }
