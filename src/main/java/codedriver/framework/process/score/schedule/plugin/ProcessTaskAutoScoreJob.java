@@ -101,7 +101,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 						JSONObject scoreConfig = taskConfigObj.getJSONObject("process").getJSONObject("scoreConfig");
 						JSONObject config = null;
 						if(MapUtils.isNotEmpty(scoreConfig) && MapUtils.isNotEmpty(config = scoreConfig.getJSONObject("config"))){
-							isAuto = config.getInteger("isAuto");
+							isAuto = scoreConfig.getInteger("isAuto");
 							autoTime = config.getInteger("autoTime");
 							autoTimeType = config.getString("autoTimeType");
 						}
@@ -115,7 +115,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 			 * 如果没有设置评分时限类型是自然日还是工作日，默认按自然日顺延
 			 * 如果设置为工作日，那么获取当前时间以后的工作日历，按工作日历顺延
 			 */
-			Date autoScoreDate = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString()));
+			Date autoScoreDate = DateUtils.addMinutes(task.getEndTime(), Integer.parseInt(autoTime.toString()));
 			if(StringUtils.isNotBlank(autoTimeType) && "workDay".equals(autoTimeType) && StringUtils.isNotBlank(worktimeUuid) && worktimeMapper.checkWorktimeIsExists(worktimeUuid) > 0){
 				long timeLimit = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString())).getTime() - task.getEndTime().getTime();
 				long expireTime = WorkTimeUtil.calculateExpireTime(task.getEndTime().getTime(), timeLimit, worktimeUuid);
