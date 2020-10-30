@@ -961,7 +961,7 @@
 			AND `start_time` >= #{fromDate}
 		</if>
 		<if test="toDate != null and toDate != ''">
-			AND `start_time` &lt;= #{fromDate}
+			AND `start_time` &lt;= #{toDate}
 		</if>
 	</where>
 	</select>

@@ -74,7 +74,7 @@ public enum ProcessTaskOperationType {
     COPYPROCESSTASK("copyprocesstask", "复制上报"),
     REDO("redo", "回退"),
     SCORE("score", "评分"),
-    SHOW("show","显示"),
+    SHOW("show","取消隐藏"),
     HIDE("hide","隐藏"),
     DELETE("delete","删除");
     private String status;
