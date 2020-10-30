@@ -1049,7 +1049,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					JSONObject taskConfigObj = JSONObject.parseObject(taskConfigVo.getConfig());
 					JSONObject processConfig = taskConfigObj.getJSONObject("process");
 					if(MapUtils.isNotEmpty(processConfig) && MapUtils.isNotEmpty(scoreConfig = processConfig.getJSONObject("scoreConfig")) && MapUtils.isNotEmpty(scoreConfig.getJSONObject("config"))){
-						isAuto = scoreConfig.getJSONObject("config").getInteger("isAuto");
+						isAuto = scoreConfig.getInteger("isAuto");
 						autoTime = scoreConfig.getJSONObject("config").getInteger("autoTime");
 					}
 				}

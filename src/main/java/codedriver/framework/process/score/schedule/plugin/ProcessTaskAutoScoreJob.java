@@ -101,7 +101,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 						JSONObject scoreConfig = taskConfigObj.getJSONObject("process").getJSONObject("scoreConfig");
 						JSONObject config = null;
 						if(MapUtils.isNotEmpty(scoreConfig) && MapUtils.isNotEmpty(config = scoreConfig.getJSONObject("config"))){
-							isAuto = config.getInteger("isAuto");
+							isAuto = scoreConfig.getInteger("isAuto");
 							autoTime = config.getInteger("autoTime");
 							autoTimeType = config.getString("autoTimeType");
 						}
@@ -171,7 +171,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 					processtaskScoreVo.setScore(5);
 					processTaskScoreMapper.insertProcessTaskScore(processtaskScoreVo);
 					JSONObject dimensionObj = new JSONObject();
-					dimensionObj.put("dimensionName",vo.getName());
+					dimensionObj.put("name",vo.getName());
 					dimensionObj.put("score",5);
 					dimensionObj.put("description",vo.getDescription());
 					dimensionArray.add(dimensionObj);
