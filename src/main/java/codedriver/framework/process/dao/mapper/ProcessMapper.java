@@ -74,6 +74,8 @@ public interface ProcessMapper {
     
     public List<ValueTextVo> getProcessTagForSelect(ProcessTagVo processTagVo);
     
+    public List<ProcessTagVo> getProcessTagByNameList(@Param("tagNameList")List<String> tagNameList);
+    
     public int getProcessTagCount(ProcessTagVo processTagVo);
 
 	public int insertProcess(ProcessVo processVo);
@@ -97,6 +99,8 @@ public interface ProcessMapper {
 	public int replaceProcessStepNotifyTemplate(ProcessStepNotifyTemplateVo processStepNotifyTemplateVo);
 
 	public int insertProcessDraft(ProcessDraftVo processDraftVo);
+	
+	public int insertProcessTag(@Param("processTagList") List<ProcessTagVo> processTagList);
 
 	public int updateProcess(ProcessVo processVo);
 

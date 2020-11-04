@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ESParam;
 import codedriver.framework.elasticsearch.annotation.ESSearch;
+import codedriver.framework.process.dto.ProcessTagVo;
 import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
@@ -37,6 +38,7 @@ import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
+import codedriver.framework.process.dto.ProcessTaskTagVo;
 import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 
@@ -230,6 +232,8 @@ public interface ProcessTaskMapper {
     public List<String> getFocusUsersOfProcessTask(Long processTaskId);
 
     public List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskId(Long processTaskId);
+    
+    public List<ProcessTagVo> getProcessTaskTagListByProcessTaskId(@Param("processTaskId") Long processTaskId);
 
     public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -318,6 +322,8 @@ public interface ProcessTaskMapper {
     @ESSearch
     public int insertProcessTaskFocus(@Param("processTask") @ESParam("processtask") ProcessTaskVo processTask,
         @Param("userUuid") String userUuid);
+    
+    public int insertProcessTaskTag(@Param("processTaskTagList") List<ProcessTaskTagVo> processTaskTagList);
 
     public int replaceProcesssTaskStepAgent(ProcessTaskStepAgentVo processTaskStepAgentVo);
 
@@ -419,4 +425,6 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskByProcessTaskId(Long processTaskId);
 
     public int deleteProcessTaskFocusByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskTagByProcessTaskId(Long processTaskId);
 }

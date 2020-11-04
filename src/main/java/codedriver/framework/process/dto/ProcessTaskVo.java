@@ -113,7 +113,8 @@ public class ProcessTaskVo {
     private Integer isFocus = 0;    
     @EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
-
+    @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
+    private List<ProcessTagVo> tagVoList;
     public ProcessTaskVo() {
 
     }
@@ -487,4 +488,13 @@ public class ProcessTaskVo {
     public void setCommentList(List<ProcessTaskStepReplyVo> commentList) {
         this.commentList = commentList;
     }
+
+    public List<ProcessTagVo> getTagVoList() {
+        return tagVoList;
+    }
+
+    public void setTagVoList(List<ProcessTagVo> tagVoList) {
+        this.tagVoList = tagVoList;
+    }
+    
 }

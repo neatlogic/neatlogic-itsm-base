@@ -8,6 +8,11 @@ public class ProcessTagVo extends BasePageVo{
     private Long id;
     private String name;
     
+    public ProcessTagVo(String name) {
+        super();
+        this.name = name;
+    }
+
     public synchronized Long getId() {
         if(id == null) {
             id = SnowflakeUtil.uniqueLong();
