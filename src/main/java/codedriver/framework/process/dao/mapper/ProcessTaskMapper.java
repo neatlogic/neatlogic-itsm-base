@@ -229,6 +229,8 @@ public interface ProcessTaskMapper {
 
     public List<String> getFocusUsersOfProcessTask(Long processTaskId);
 
+    public List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskId(Long processTaskId);
+
     public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
