@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import codedriver.framework.auth.core.AuthActionChecker;
-import codedriver.framework.auth.label.VIP_VIEW;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -112,7 +110,9 @@ public class ProcessTaskVo {
 	@EntityField(name = "是否显示，1：显示，0：隐藏", type = ApiParamType.INTEGER)
 	private Integer isShow;
     @EntityField(name = "是否已关注，1：是，0：否", type = ApiParamType.INTEGER)
-    private Integer isFocus = 0;
+    private Integer isFocus = 0;    
+    @EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
 
     public ProcessTaskVo() {
 
@@ -478,5 +478,13 @@ public class ProcessTaskVo {
 
     public void setIsFocus(Integer isFocus) {
         this.isFocus = isFocus;
+    }
+
+    public List<ProcessTaskStepReplyVo> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<ProcessTaskStepReplyVo> commentList) {
+        this.commentList = commentList;
     }
 }
