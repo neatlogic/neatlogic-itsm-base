@@ -370,6 +370,28 @@
 	WHERE `process_uuid` = #{value}
 	</select>
 	
+	<select id="getProcessTagForSelect" parameterType="codedriver.framework.process.dto.ProcessTagVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT 
+		`id` as value,
+		`name` as text
+		FROM  `process_tag` 
+		<if test="keyword != null and keyword != ''">
+			WHERE `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+	
+	<select id="getProcessTagCount" parameterType="codedriver.framework.process.dto.ProcessTagVo" resultType="java.lang.Integer">
+		SELECT 
+		count(1)
+		FROM  `process_tag`  
+		<if test="keyword != null and keyword != ''">
+			WHERE `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</select>
+	
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,

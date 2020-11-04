@@ -16,6 +16,7 @@ import codedriver.framework.process.dto.ProcessStepRelVo;
 import codedriver.framework.process.dto.ProcessStepTeamVo;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessStepWorkerPolicyVo;
+import codedriver.framework.process.dto.ProcessTagVo;
 import codedriver.framework.process.dto.ProcessTypeVo;
 import codedriver.framework.process.dto.ProcessVo;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
@@ -70,6 +71,10 @@ public interface ProcessMapper {
 	public ProcessStepVo getProcessStepByUuid(String processStepUuid);
 
     public ProcessScoreTemplateVo getProcessScoreTemplateByProcessUuid(String processUuid);
+    
+    public List<ValueTextVo> getProcessTagForSelect(ProcessTagVo processTagVo);
+    
+    public int getProcessTagCount(ProcessTagVo processTagVo);
 
 	public int insertProcess(ProcessVo processVo);
 
