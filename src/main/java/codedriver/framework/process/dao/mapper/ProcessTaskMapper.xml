@@ -1398,6 +1398,22 @@
 	WHERE `processtask_step_id` = #{value}
 	</select>
 	
+	<select id="getProcessTaskStepContentByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
+	SELECT
+	`id`,
+	`processtask_id` AS processTaskId,
+	`processtask_step_id` AS processTaskStepId,
+	`content_hash` AS contentHash,
+	`type`,
+	`fcd`,
+	`fcu`,
+	`lcd`,
+	`lcu`
+	FROM `processtask_step_content`
+	WHERE `processtask_id` = #{value}
+	ORDER BY `processtask_step_id`
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
