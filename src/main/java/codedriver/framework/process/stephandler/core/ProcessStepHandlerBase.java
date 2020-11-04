@@ -1409,7 +1409,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						processTaskSlaVo.setProcessTaskId(processTaskVo.getId());
 						processTaskMapper.insertProcessTaskSla(processTaskSlaVo);
 						for (String suuid : slaStepUuidList) {
-							processTaskMapper.insertProcessTaskStepSla(stepIdMap.get(suuid), processTaskSlaVo.getId());
+						    Long stepId = stepIdMap.get(suuid);
+						    if(stepId != null) {
+	                            processTaskMapper.insertProcessTaskStepSla(stepId, processTaskSlaVo.getId());
+						    }
 						}
 					}
 				}
