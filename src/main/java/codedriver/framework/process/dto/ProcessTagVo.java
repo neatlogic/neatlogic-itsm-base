@@ -8,8 +8,10 @@ public class ProcessTagVo extends BasePageVo{
     private Long id;
     private String name;
     
+    public ProcessTagVo() {
+    }
+    
     public ProcessTagVo(String name) {
-        super();
         this.name = name;
     }
 
