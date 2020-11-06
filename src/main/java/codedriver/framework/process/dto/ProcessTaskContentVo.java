@@ -29,7 +29,7 @@ public class ProcessTaskContentVo {
 	}
 
 	public String getHash() {
-		if (StringUtils.isBlank(hash) && StringUtils.isNotBlank(content)) {
+		if (StringUtils.isBlank(hash) && content != null) {
 			hash = DigestUtils.md5DigestAsHex(content.getBytes());
 		}
 		return hash;
