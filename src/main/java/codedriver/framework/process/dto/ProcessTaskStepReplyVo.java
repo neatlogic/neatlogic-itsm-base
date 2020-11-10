@@ -18,6 +18,8 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 	private Long processTaskId;
 	@EntityField(name = "步骤id", type = ApiParamType.LONG)
 	private Long processTaskStepId;
+	@EntityField(name = "步骤名", type = ApiParamType.STRING)
+    private String processTaskStepName;
 	@EntityField(name = "描述内容", type = ApiParamType.STRING)
 	private String content;
 	@EntityField(name = "类型", type = ApiParamType.STRING)
@@ -85,7 +87,13 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 		this.processTaskStepId = processTaskStepId;
 	}
 
-	public List<Long> getFileIdList() {
+	public String getProcessTaskStepName() {
+        return processTaskStepName;
+    }
+    public void setProcessTaskStepName(String processTaskStepName) {
+        this.processTaskStepName = processTaskStepName;
+    }
+    public List<Long> getFileIdList() {
 		return fileIdList;
 	}
 	public void setFileIdList(List<Long> fileIdList) {

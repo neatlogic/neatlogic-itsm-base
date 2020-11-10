@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -45,6 +46,7 @@ import codedriver.framework.process.dto.FormVersionVo;
 import codedriver.framework.process.dto.ProcessSlaVo;
 import codedriver.framework.process.dto.ProcessStepRelVo;
 import codedriver.framework.process.dto.ProcessStepVo;
+import codedriver.framework.process.dto.ProcessTagVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskConvergeVo;
@@ -65,6 +67,7 @@ import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
+import codedriver.framework.process.dto.ProcessTaskTagVo;
 import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.dto.ProcessVo;
@@ -1410,7 +1413,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						processTaskSlaVo.setProcessTaskId(processTaskVo.getId());
 						processTaskMapper.insertProcessTaskSla(processTaskSlaVo);
 						for (String suuid : slaStepUuidList) {
-							processTaskMapper.insertProcessTaskStepSla(stepIdMap.get(suuid), processTaskSlaVo.getId());
+						    Long stepId = stepIdMap.get(suuid);
+						    if(stepId != null) {
+	                            processTaskMapper.insertProcessTaskStepSla(stepId, processTaskSlaVo.getId());
+						    }
 						}
 					}
 				}
@@ -1510,6 +1516,27 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             /** 保存描述内容和附件 **/
             saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STARTPROCESS);
             
+            /** 写入“标签”信息**/
+            processTaskMapper.deleteProcessTaskTagByProcessTaskId(processTaskVo.getId());
+            JSONArray tagArray = paramObj.getJSONArray("tagList");
+            if(CollectionUtils.isNotEmpty(tagArray)) {
+                List<String> tagNameList = JSONObject.parseArray(tagArray.toJSONString(), String.class);
+                List<ProcessTagVo> existTagList = processMapper.getProcessTagByNameList(tagNameList);
+                List<String> notExistTagList = tagNameList.stream().filter(a->!existTagList.stream().map(b -> b.getName()).collect(Collectors.toList()).contains(a)).collect(Collectors.toList());
+                List<ProcessTagVo> notExistTagVoList = new ArrayList<ProcessTagVo>();
+                for(String tagName : notExistTagList) {
+                    notExistTagVoList.add(new ProcessTagVo(tagName));
+                }
+                if(CollectionUtils.isNotEmpty(notExistTagVoList)) {
+                    processMapper.insertProcessTag(notExistTagVoList);
+                    existTagList.addAll(notExistTagVoList);
+                }
+                List<ProcessTaskTagVo> processTaskTagVoList = new ArrayList<ProcessTaskTagVo>();
+                for(ProcessTagVo processTagVo : existTagList) {
+                    processTaskTagVoList.add(new ProcessTaskTagVo(processTaskVo.getId(),processTagVo.getId()));
+                }
+                processTaskMapper.insertProcessTaskTag(processTaskTagVoList);
+            }   
             
 			mySaveDraft(currentProcessTaskStepVo);
 			currentProcessTaskStepVo.setIsActive(1);

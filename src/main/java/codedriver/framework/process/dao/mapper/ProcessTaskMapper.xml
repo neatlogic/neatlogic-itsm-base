@@ -1398,6 +1398,31 @@
 	WHERE `processtask_step_id` = #{value}
 	</select>
 	
+	<select id="getProcessTaskStepContentByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
+	SELECT
+	`id`,
+	`processtask_id` AS processTaskId,
+	`processtask_step_id` AS processTaskStepId,
+	`content_hash` AS contentHash,
+	`type`,
+	`fcd`,
+	`fcu`,
+	`lcd`,
+	`lcu`
+	FROM `processtask_step_content`
+	WHERE `processtask_id` = #{value}
+	ORDER BY `processtask_step_id`
+	</select>
+	
+	<select id="getProcessTaskTagListByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTagVo">
+		SELECT 
+		b.`id`,
+		b.`name`
+		FROM `processtask_tag` a
+		LEFT JOIN `process_tag` b ON a.`tag_id` = b.`id`
+		WHERE a.`processtask_id` = #{processTaskId}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -2105,6 +2130,15 @@
 	  )
 	</insert>
 	
+	<insert id="insertProcessTaskTag" parameterType="codedriver.framework.process.dto.ProcessTaskTagVo">
+		INSERT INTO `processtask_tag` (`processtask_id`, `tag_id`) 
+		VALUES
+		  <foreach collection="processTaskTagList" item="tag" open="(" separator="),(" close=")">
+			  #{tag.processTaskId}, 
+			  #{tag.tagId}
+		  </foreach>
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -2416,5 +2450,11 @@
 	
 	<delete id="deleteProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long">
 	DELETE FROM `processtask_step_agent` WHERE `processtask_step_id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskTagByProcessTaskId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_tag` 
+	WHERE
+	`processtask_id` = #{value}
 	</delete>
 </mapper>
