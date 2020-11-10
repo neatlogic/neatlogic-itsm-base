@@ -10,7 +10,7 @@ import codedriver.framework.common.constvalue.ParamType;
  * @ClassName: IProcessFormHandler
  * @Description: 表单组件类型枚举接口
  */
-public interface IProcessFormHandler {
+public interface IProcessFormHandlerType {
     /**
      * @Author: chenqiwei
      * @Time:2020年11月10日
@@ -61,4 +61,58 @@ public interface IProcessFormHandler {
     public Expression getExpression();
 
     public ParamType getParamType();
+
+    /**
+     * @Author: chenqiwei
+     * @Time:2020年11月10日
+     * @Description: 是否可设置为条件
+     * @param @return
+     * @return boolean
+     */
+    public boolean isConditionable();
+
+    /**
+     * @Author: chenqiwei
+     * @Time:2020年11月10日
+     * @Description: 是否可设置显示隐藏
+     * @param @return
+     * @return boolean
+     */
+    public boolean isShowable();
+
+    /**
+     * @Author: chenqiwei
+     * @Time:2020年11月10日
+     * @Description: 是否可设置赋值
+     * @param @return
+     * @return boolean
+     */
+    public boolean isValueable();
+
+    /**
+     * @Author: chenqiwei
+     * @Time:2020年11月10日
+     * @Description: 是否可设置过滤
+     * @param @return
+     * @return boolean
+     */
+    public boolean isFilterable();
+
+    /**
+     * @Author: chenqiwei
+     * @Time:2020年11月10日
+     * @Description: 是否有拓展属性
+     * @param @return
+     * @return boolean
+     */
+    public boolean isExtendable();
+
+    /**
+     * @Author: chenqiwei
+     * @Time:2020年11月10日
+     * @Description: 所属模块
+     * @param @return
+     * @return String
+     */
+    public String getModule();
 }

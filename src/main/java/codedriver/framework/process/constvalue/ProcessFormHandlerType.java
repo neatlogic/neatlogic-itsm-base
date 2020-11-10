@@ -9,7 +9,7 @@ import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.FormHandlerType;
 import codedriver.framework.common.constvalue.ParamType;
 
-public enum ProcessFormHandler implements IProcessFormHandler {
+public enum ProcessFormHandlerType implements IProcessFormHandlerType {
 
     FORMSELECT("formselect", "下拉框", "ts-sitemap", "form", FormHandlerType.SELECT, ParamType.ARRAY,
         List.class.getSimpleName().toLowerCase()),
@@ -47,17 +47,48 @@ public enum ProcessFormHandler implements IProcessFormHandler {
     private List<Expression> expressionList;
     private String icon;
     private String type;
+    private boolean isConditionable = true;// 是否可设置为条件
+    private boolean isShowable = true;// 是否可设置显示隐藏
+    private boolean isValueable = true;// 是否可设置赋值
+    private boolean isFilterable = true;// 是否可设置过滤
+    private boolean isExtendable = false;// 是否有拓展属性
 
-    private ProcessFormHandler(String _handler, String _handlerName, String _icon, String _type) {
+    private String module = "process";
+
+    public boolean isConditionable() {
+        return isConditionable;
+    }
+
+    public boolean isShowable() {
+        return isShowable;
+    }
+
+    public boolean isValueable() {
+        return isValueable;
+    }
+
+    public boolean isFilterable() {
+        return isFilterable;
+    }
+
+    public boolean isExtendable() {
+        return isExtendable;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type) {
         this(_handler, _handlerName, _icon, _type, null, null, null);
     }
 
-    private ProcessFormHandler(String _handler, String _handlerName, String _icon, String _type,
+    private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type,
         FormHandlerType _handlerType, ParamType _paramType, String _dataType) {
         this(_handler, _handlerName, _icon, _type, _handlerType, _paramType, _dataType, null, null);
     }
 
-    private ProcessFormHandler(String _handler, String _handlerName, String _icon, String _type,
+    private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type,
         FormHandlerType _handlerType, ParamType _paramType, String _dataType, List<Expression> _expressionList,
         Expression _expression) {
         this.handler = _handler;
@@ -72,7 +103,7 @@ public enum ProcessFormHandler implements IProcessFormHandler {
     }
 
     public static String getHandlerName(String _handler) {
-        for (ProcessFormHandler s : ProcessFormHandler.values()) {
+        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getHandlerName();
             }
@@ -81,7 +112,7 @@ public enum ProcessFormHandler implements IProcessFormHandler {
     }
 
     public static FormHandlerType getHandlerType(String _handler, String processWorkcenterConditionType) {
-        for (ProcessFormHandler s : ProcessFormHandler.values()) {
+        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
             if (s.getHandler().equals(_handler)) {
 
                 return s.getHandlerType(processWorkcenterConditionType);
@@ -91,7 +122,7 @@ public enum ProcessFormHandler implements IProcessFormHandler {
     }
 
     public static List<Expression> getExpressionList(String _handler) {
-        for (ProcessFormHandler s : ProcessFormHandler.values()) {
+        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getExpressionList();
             }
@@ -112,7 +143,7 @@ public enum ProcessFormHandler implements IProcessFormHandler {
     }
 
     public static Expression getExpression(String _handler) {
-        for (ProcessFormHandler s : ProcessFormHandler.values()) {
+        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getExpression();
             }
@@ -121,7 +152,7 @@ public enum ProcessFormHandler implements IProcessFormHandler {
     }
 
     public static String getDataType(String _handler) {
-        for (ProcessFormHandler s : ProcessFormHandler.values()) {
+        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getDataType();
             }
@@ -160,7 +191,7 @@ public enum ProcessFormHandler implements IProcessFormHandler {
     }
 
     public static ParamType getParamType(String _handler) {
-        for (ProcessFormHandler s : ProcessFormHandler.values()) {
+        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getParamType();
             }
