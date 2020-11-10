@@ -47,6 +47,37 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
     private List<Expression> expressionList;
     private String icon;
     private String type;
+    private boolean isConditionable = true;// 是否可设置为条件
+    private boolean isShowable = true;// 是否可设置显示隐藏
+    private boolean isValueable = true;// 是否可设置赋值
+    private boolean isFilterable = true;// 是否可设置过滤
+    private boolean isExtendable = false;// 是否有拓展属性
+
+    private String module = "process";
+
+    public boolean isConditionable() {
+        return isConditionable;
+    }
+
+    public boolean isShowable() {
+        return isShowable;
+    }
+
+    public boolean isValueable() {
+        return isValueable;
+    }
+
+    public boolean isFilterable() {
+        return isFilterable;
+    }
+
+    public boolean isExtendable() {
+        return isExtendable;
+    }
+
+    public String getModule() {
+        return module;
+    }
 
     private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type) {
         this(_handler, _handlerName, _icon, _type, null, null, null);
