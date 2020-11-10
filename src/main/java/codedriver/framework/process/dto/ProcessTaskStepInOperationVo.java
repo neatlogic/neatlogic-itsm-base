@@ -10,6 +10,10 @@ public class ProcessTaskStepInOperationVo {
         this.processTaskStepId = processTaskStepId;
         this.operationType = operationType;
     }
+    public ProcessTaskStepInOperationVo(Long processTaskStepId, String operationType) {
+        this.processTaskStepId = processTaskStepId;
+        this.operationType = operationType;
+    }
     public Long getProcessTaskId() {
         return processTaskId;
     }

@@ -2478,7 +2478,7 @@
 	`processtask_id` = #{value}
 	</delete>
 	
-	<delete id="deleteProcessTaskStepInOperationByProcessTaskStepId" parameterType="java.lang.Long">
-	DELETE FROM `processtask_step_in_operation` WHERE `processtask_step_id` = #{value}
+	<delete id="deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType" parameterType="codedriver.framework.process.dto.ProcessTaskStepInOperationVo">
+	DELETE FROM `processtask_step_in_operation` WHERE `processtask_step_id` = #{processTaskStepId} and `operation_type` = #{operationType}
 	</delete>
 </mapper>

@@ -433,5 +433,5 @@ public interface ProcessTaskMapper {
     
     public int deleteProcessTaskTagByProcessTaskId(Long processTaskId);
     
-    public int deleteProcessTaskStepInOperationByProcessTaskStepId(Long processTaskStepId);
+    public int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 }
