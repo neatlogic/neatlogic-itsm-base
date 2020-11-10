@@ -689,6 +689,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
 						nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
 						nextStep.setStartProcessTaskStepId(startProcessTaskStepId);
+						
 						if (nextStepHandler != null) {
 							doNext(new ProcessStepThread(nextStep) {
 								@Override
@@ -1718,6 +1719,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	protected abstract Set<ProcessTaskStepVo> myGetNext(ProcessTaskStepVo currentProcessTaskStepVo, List<ProcessTaskStepVo> nextStepList, Long nextStepId) throws ProcessTaskException;
 
 	protected synchronized static void doNext(ProcessStepThread thread) {
+	    
 		if (!TransactionSynchronizationManager.isSynchronizationActive()) {
 			CachedThreadPool.execute(thread);
 		} else {

@@ -213,7 +213,7 @@ public class FormAttributeVo implements Serializable {
 		if(conditionModel == null) {
 			return null;
 		}
-		FormHandlerType  handlerType = ProcessFormHandler.getType(handler, conditionModel);
+		FormHandlerType  handlerType = ProcessFormHandler.getHandlerType(handler, conditionModel);
 		return handlerType == null?null:handlerType.toString();
 	}
 	
