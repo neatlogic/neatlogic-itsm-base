@@ -21,7 +21,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
-import codedriver.framework.process.constvalue.ProcessStepHandler;
+import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
@@ -200,7 +200,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 			for (int i = 0; i < stepList.size(); i++) {
 				JSONObject stepObj = stepList.getJSONObject(i);
 				String handler = stepObj.getString("handler");
-				if(ProcessStepHandler.START.getHandler().equals(handler)) {//找到虚拟开始节点uuid,虚拟开始节点不写入process_step表
+				if(ProcessStepHandlerType.START.getHandler().equals(handler)) {//找到虚拟开始节点uuid,虚拟开始节点不写入process_step表
 					virtualStartStepUuid = stepObj.getString("uuid");
 					continue;
 				}
@@ -220,7 +220,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 				
 				if (StringUtils.isNotBlank(handler)) {
 					processStepVo.setHandler(handler);
-					processStepVo.setType(ProcessStepHandler.getType(handler));
+					processStepVo.setType(ProcessStepHandlerType.getType(handler));
 					IProcessStepUtilHandler procssStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(handler);
 					if (procssStepUtilHandler != null) {
 						JSONObject stepConfigObj = stepObj.getJSONObject("stepConfig");

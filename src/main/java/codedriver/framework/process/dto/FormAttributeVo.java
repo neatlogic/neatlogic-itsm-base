@@ -14,7 +14,7 @@ import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.FormHandlerType;
 import codedriver.framework.dto.ExpressionVo;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
-import codedriver.framework.process.constvalue.ProcessFormHandler;
+import codedriver.framework.process.constvalue.ProcessFormHandlerType;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class FormAttributeVo implements Serializable {
@@ -156,7 +156,7 @@ public class FormAttributeVo implements Serializable {
 		if(handler == null) {
 			return null;
 		}
-		Expression processExpression = ProcessFormHandler.getExpression(handler);
+		Expression processExpression = ProcessFormHandlerType.getExpression(handler);
 		if(processExpression != null) {
 		    defaultExpression = new ExpressionVo(processExpression);
 		}
@@ -174,7 +174,7 @@ public class FormAttributeVo implements Serializable {
 		if(handler == null) {
 			return null;
 		}
-		List<Expression> processExpressionList = ProcessFormHandler.getExpressionList(handler);
+		List<Expression> processExpressionList = ProcessFormHandlerType.getExpressionList(handler);
 		if(CollectionUtils.isEmpty(processExpressionList)) {
 			return null;
 		}
@@ -201,7 +201,7 @@ public class FormAttributeVo implements Serializable {
 		if(handler == null) {
 			return null;
 		}
-		return ProcessFormHandler.getHandlerName(handler);
+		return ProcessFormHandlerType.getHandlerName(handler);
 	}
 	
 	public String getHandlerType() {
@@ -211,7 +211,7 @@ public class FormAttributeVo implements Serializable {
 		if(conditionModel == null) {
 			return null;
 		}
-		FormHandlerType  handlerType = ProcessFormHandler.getHandlerType(handler, conditionModel);
+		FormHandlerType  handlerType = ProcessFormHandlerType.getHandlerType(handler, conditionModel);
 		return handlerType == null?null:handlerType.toString();
 	}
 	
@@ -219,13 +219,13 @@ public class FormAttributeVo implements Serializable {
 		if(handler == null) {
 			return null;
 		}
-		if(ProcessFormHandler.FORMSELECT.getHandler().equals(handler)) {
+		if(ProcessFormHandlerType.FORMSELECT.getHandler().equals(handler)) {
 			JSONObject configObj = JSON.parseObject(config);
 			return configObj.getBoolean("isMultiple");
 		} 
 
 		if(conditionModel.equals(ProcessConditionModel.CUSTOM.getValue())) {
-			if(ProcessFormHandler.FORMCHECKBOX.getHandler().equals(handler)){
+			if(ProcessFormHandlerType.FORMCHECKBOX.getHandler().equals(handler)){
 				return true;
 			}else {
 				return false;

@@ -10,7 +10,7 @@ import codedriver.framework.common.constvalue.ParamType;
  * @ClassName: IProcessFormHandler
  * @Description: 表单组件类型枚举接口
  */
-public interface IProcessFormHandler {
+public interface IProcessFormHandlerType {
     /**
      * @Author: chenqiwei
      * @Time:2020年11月10日

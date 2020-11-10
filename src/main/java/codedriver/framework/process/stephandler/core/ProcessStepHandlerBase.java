@@ -30,7 +30,7 @@ import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.notify.dto.NotifyPolicyInvokerVo;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
-import codedriver.framework.process.constvalue.ProcessStepHandler;
+import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
@@ -99,7 +99,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				runningCount += 1;
 			} else if (processTaskStepVo.getIsActive().equals(-1)) {
 				abortedCount += 1;
-			} else if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.SUCCEED.getValue()) && ProcessStepHandler.END.getHandler().equals(processTaskStepVo.getHandler())) {
+			} else if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.SUCCEED.getValue()) && ProcessStepHandlerType.END.getHandler().equals(processTaskStepVo.getHandler())) {
 				succeedCount += 1;
 			} else if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.FAILED.getValue())) {
 				failedCount += 1;
@@ -702,7 +702,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							});
 						}
 					}
-				} else if (nextStepList.size() == 0 && !processTaskStepVo.getHandler().equals(ProcessStepHandler.END.getHandler())) {
+				} else if (nextStepList.size() == 0 && !processTaskStepVo.getHandler().equals(ProcessStepHandlerType.END.getHandler())) {
 					throw new ProcessTaskException("找不到可流转路径");
 				}
 				/** 触发通知 **/
@@ -1203,7 +1203,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					ProcessTaskStepVo fromProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepRelVo.getFromProcessTaskStepId());
 					if (fromProcessTaskStepVo != null) {
 						// 如果是分流节点或条件节点，则再次调用back查找上一个处理节点
-						if (fromProcessTaskStepVo.getHandler().equals(ProcessStepHandler.DISTRIBUTARY.getHandler()) || fromProcessTaskStepVo.getHandler().equals(ProcessStepHandler.CONDITION.getHandler())) {
+						if (fromProcessTaskStepVo.getHandler().equals(ProcessStepHandlerType.DISTRIBUTARY.getHandler()) || fromProcessTaskStepVo.getHandler().equals(ProcessStepHandlerType.CONDITION.getHandler())) {
 							IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(fromProcessTaskStepVo.getHandler());
 							if (handler != null) {
 								fromProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
