@@ -23,6 +23,7 @@ public enum ProcessFormHandler {
 	FORMCASCADELIST("formcascadelist","级联下拉",FormHandlerType.CASCADELIST,ParamType.STRING,String.class.getSimpleName().toLowerCase()),
 	FORMDYNAMICLIST("formdynamiclist","动态列表"),
 	FORMDIVIDER("formdivider","分割线"),
+	FORMPRIORITY("formpriority","修改优先级"),
 	FORMUSERSELECT("formuserselect", "用户选择器", FormHandlerType.USERSELECT, ParamType.ARRAY, String.class.getSimpleName().toLowerCase()),
 	FORMLINK("formlink", "链接", null, ParamType.STRING, String.class.getSimpleName().toLowerCase());
 	
@@ -37,7 +38,7 @@ public enum ProcessFormHandler {
         this(_handler, _handlerName, null, null, null);
     }
 	private ProcessFormHandler(String _handler,String _handlerName,FormHandlerType _type,ParamType _paramType,String _dataType) {
-	    this(_handler, _handlerName, null, null, null, null, null);
+	    this(_handler, _handlerName, _type, _paramType, _dataType, null, null);
 	}
     private ProcessFormHandler(String _handler,String _handlerName,FormHandlerType _type,ParamType _paramType,String _dataType, List<Expression> _expressionList, Expression _expression) {
         this.handler = _handler;
@@ -108,7 +109,7 @@ public enum ProcessFormHandler {
 	}
 	
 	public List<Expression> getExpressionList() {
-	    if(CollectionUtils.isEmpty(expressionList)) {
+	    if(CollectionUtils.isEmpty(expressionList) && paramType != null) {
 	        expressionList = this.paramType.getExpressionList();
 	    }
 		return expressionList;
@@ -129,7 +130,7 @@ public enum ProcessFormHandler {
 	}
 
 	public Expression getExpression() {
-	    if(expression == null) {
+	    if(expression == null && paramType != null) {
 	        expression = this.paramType.getDefaultExpression();
 	    }
 		return expression;

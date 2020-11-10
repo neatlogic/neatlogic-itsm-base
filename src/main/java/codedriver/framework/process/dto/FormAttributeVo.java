@@ -148,10 +148,9 @@ public class FormAttributeVo implements Serializable {
 	public void setRequired(boolean isRequired) {
 		this.isRequired = isRequired;
 	}
-
 	
 	public ExpressionVo getDefaultExpression() {
-		if(expressionList != null) {
+		if(defaultExpression != null) {
 			return defaultExpression;
 		}
 		if(handler == null) {
@@ -159,10 +158,9 @@ public class FormAttributeVo implements Serializable {
 		}
 		Expression processExpression = ProcessFormHandler.getExpression(handler);
 		if(processExpression != null) {
-			return new ExpressionVo(processExpression);
-		}else {
-			return null;
+		    defaultExpression = new ExpressionVo(processExpression);
 		}
+		return defaultExpression;
 	}
 
 	public void setDefaultExpression(ExpressionVo defaultExpression) {
@@ -170,7 +168,7 @@ public class FormAttributeVo implements Serializable {
 	}
 
 	public List<ExpressionVo> getExpressionList() {
-		if(expressionList != null) {
+		if(CollectionUtils.isNotEmpty(expressionList)) {
 			return expressionList;
 		}
 		if(handler == null) {
