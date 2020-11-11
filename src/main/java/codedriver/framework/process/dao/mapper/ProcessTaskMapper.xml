@@ -1423,6 +1423,10 @@
 		WHERE a.`processtask_id` = #{processTaskId}
 	</select>
 	
+	<select id="getProcessTaskStepInOperationCountByProcessTaskId" parameterType="java.lang.Long" resultType="int">
+	SELECT COUNT(1) FROM `processtask_step_in_operation` WHERE `processtask_id` = #{value}
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -2139,6 +2143,22 @@
 		  </foreach>
 	</insert>
 	
+	<insert id="insertProcessTaskStepInOperation" parameterType="codedriver.framework.process.dto.ProcessTaskStepInOperationVo">
+	INSERT INTO `processtask_step_in_operation` (
+	  `processtask_id`,
+	  `processtask_step_id`,
+	  `operation_type`,
+	  `operation_time`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{processTaskStepId},
+	    #{operationType},
+	    NOW()
+	  ) 
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -2456,5 +2476,9 @@
 	DELETE FROM `processtask_tag` 
 	WHERE
 	`processtask_id` = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType" parameterType="codedriver.framework.process.dto.ProcessTaskStepInOperationVo">
+	DELETE FROM `processtask_step_in_operation` WHERE `processtask_step_id` = #{processTaskStepId} and `operation_type` = #{operationType}
 	</delete>
 </mapper>

@@ -60,6 +60,7 @@ import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
+import codedriver.framework.process.dto.ProcessTaskStepInOperationVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
 import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
@@ -224,10 +225,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							// 标记挂起操作的发起步骤，避免出现死循环
 							nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
 							if (handler != null) {
-								doNext(new ProcessStepThread(nextProcessTaskStepVo) {
+								doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
 									@Override
-									public void execute() {
-										handler.hang(nextProcessTaskStepVo);
+									public void myExecute() {
+									    handler.hang(nextProcessTaskStepVo);
 									}
 								});
 							}
@@ -243,10 +244,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				} else if (this.getMode().equals(ProcessStepMode.AT)) {
 					/** 自动处理 **/
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
-					doNext(new ProcessStepThread(currentProcessTaskStepVo) {
+					doNext(ProcessTaskOperationType.HANDLE, new ProcessStepThread(currentProcessTaskStepVo) {
 						@Override
-						public void execute() {
-							handler.handle(currentProcessTaskStepVo);
+						public void myExecute() {
+						    handler.handle(currentProcessTaskStepVo);
 						}
 					});
 				}
@@ -284,13 +285,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				 * 发生异常不能激活当前步骤，执行当前步骤的回退操作
 				 */
 				IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
-				doNext(new ProcessStepThread(currentProcessTaskStepVo) {
+				doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(currentProcessTaskStepVo) {
 					@Override
-					public void execute() {
-						handler.back(currentProcessTaskStepVo);
+					public void myExecute() {
+					    handler.back(currentProcessTaskStepVo);
 					}
 				});
 			}
+//			deleteProcessTaskStepInOperationByProcessTaskStepId(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.ACTIVE);
 		}
 		return 1;
 	}
@@ -379,10 +381,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							toProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
 							toProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
 							if (handler != null) {
-								doNext(new ProcessStepThread(toProcessTaskStepVo) {
+								doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(toProcessTaskStepVo) {
 									@Override
-									public void execute() {
-										handler.hang(toProcessTaskStepVo);
+									public void myExecute() {
+									    handler.hang(toProcessTaskStepVo);
 									}
 								});
 							}
@@ -408,6 +410,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			currentProcessTaskStepVo.setError(ExceptionUtils.getStackTrace(e));
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		}
+//		finally {
+//		    deleteProcessTaskStepInOperationByProcessTaskStepId(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.HANG);
+//		}
 		return 1;
 	}
 
@@ -429,10 +434,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					/** 记录时间审计 **/
 					TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
-					doNext(new ProcessStepThread(currentProcessTaskStepVo) {
+					doNext(ProcessTaskOperationType.COMPLETE, new ProcessStepThread(currentProcessTaskStepVo) {
 						@Override
-						public void execute() {
-							handler.complete(currentProcessTaskStepVo);
+						public void myExecute() {
+						    handler.complete(currentProcessTaskStepVo);
 						}
 					});
 				}
@@ -450,7 +455,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			String handlerType = this.getHandler();
 			ProcessStepThread thread = new ProcessStepThread(currentProcessTaskStepVo) {
 				@Override
-				public void execute() {
+				public void myExecute() {
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(handlerType);
 					try {
 						// 这里不会有事务控制
@@ -459,10 +464,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							/** 记录时间审计 **/
 							TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
 
-							doNext(new ProcessStepThread(currentProcessTaskStepVo) {
+							doNext(ProcessTaskOperationType.COMPLETE, new ProcessStepThread(currentProcessTaskStepVo) {
 								@Override
-								public void execute() {
-									handler.complete(currentProcessTaskStepVo);
+								public void myExecute() {
+								    handler.complete(currentProcessTaskStepVo);
 								}
 							});
 						}
@@ -494,7 +499,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			// thread.setTimeoutDetector(timeoutDetector);
 			doNext(thread);
 		}
-
+//	    finally {
+//	        deleteProcessTaskStepInOperationByProcessTaskStepId(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.HANDLE);
+//	    }
 		return 1;
 	}
 
@@ -694,10 +701,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						nextStep.setStartProcessTaskStepId(startProcessTaskStepId);
 						
 						if (nextStepHandler != null) {
-							doNext(new ProcessStepThread(nextStep) {
+							doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(nextStep) {
 								@Override
-								public void execute() {
-									nextStepHandler.active(nextStep);
+								public void myExecute() {
+								    nextStepHandler.active(nextStep);
 								}
 							});
 						}
@@ -739,10 +746,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					 * 发生异常不能完成当前步骤，执行当前步骤的回退操作
 					 */
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
-					doNext(new ProcessStepThread(currentProcessTaskStepVo) {
+					doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(currentProcessTaskStepVo) {
 						@Override
-						public void execute() {
-							handler.back(currentProcessTaskStepVo);
+						public void myExecute() {
+						    handler.back(currentProcessTaskStepVo);
 						}
 					});
 				}
@@ -797,10 +804,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						// 标记挂起操作的发起步骤，避免出现死循环
 						nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
 						if (handler != null) {
-							doNext(new ProcessStepThread(nextProcessTaskStepVo) {
+							doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
 								@Override
-								public void execute() {
-									handler.hang(nextProcessTaskStepVo);
+								public void myExecute() {
+								    handler.hang(nextProcessTaskStepVo);
 								}
 							});
 						}
@@ -1207,10 +1214,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(fromProcessTaskStepVo.getHandler());
 							if (handler != null) {
 								fromProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-								doNext(new ProcessStepThread(fromProcessTaskStepVo) {
+								doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(fromProcessTaskStepVo) {
 									@Override
-									public void execute() {
-										handler.back(fromProcessTaskStepVo);
+									public void myExecute() {
+									    handler.back(fromProcessTaskStepVo);
 									}
 								});
 							}
@@ -1219,10 +1226,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(fromProcessTaskStepVo.getHandler());
 							if (handler != null) {
 								fromProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-								doNext(new ProcessStepThread(fromProcessTaskStepVo) {
+								doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(fromProcessTaskStepVo) {
 									@Override
-									public void execute() {
-										handler.active(fromProcessTaskStepVo);
+									public void myExecute() {
+									    handler.active(fromProcessTaskStepVo);
 									}
 								});
 							}
@@ -1590,10 +1597,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
 				nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
 				if (nextStepHandler != null) {
-					doNext(new ProcessStepThread(nextStep) {
+					doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(nextStep) {
 						@Override
-						public void execute() {
-							nextStepHandler.active(nextStep);
+						public void myExecute() {
+						    nextStepHandler.active(nextStep);
 						}
 
 					});
@@ -1745,9 +1752,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 	protected abstract Set<ProcessTaskStepVo> myGetNext(ProcessTaskStepVo currentProcessTaskStepVo, List<ProcessTaskStepVo> nextStepList, Long nextStepId) throws ProcessTaskException;
 
-	protected synchronized static void doNext(ProcessStepThread thread) {
-	    
-		if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+	protected synchronized static void doNext(ProcessTaskOperationType operationType, ProcessStepThread thread) {
+	    if(operationType != null) {
+	        ProcessTaskStepInOperationVo processTaskStepInOperationVo = new ProcessTaskStepInOperationVo(thread.getProcessTaskStepVo().getProcessTaskId(), thread.getProcessTaskStepVo().getId(), operationType.getValue());
+	        processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+	        thread.setSupplier(() -> processTaskMapper.deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(processTaskStepInOperationVo));
+	    }
+	        
+	    if (!TransactionSynchronizationManager.isSynchronizationActive()) {
 			CachedThreadPool.execute(thread);
 		} else {
 			List<ProcessStepThread> runableActionList = PROCESS_STEP_RUNNABLES.get();
@@ -1773,7 +1785,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			runableActionList.add(thread);
 		}
 	}
-	
+	/** handle方法异步模式会调用这个方法**/
+	protected synchronized static void doNext(ProcessStepThread thread) {
+        doNext(null, thread);
+    }
 	public int redo(ProcessTaskStepVo currentProcessTaskStepVo) {
 	    try {
             // 锁定当前流程
@@ -1804,9 +1819,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                         // 标记挂起操作的发起步骤，避免出现死循环
                         nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                         if (handler != null) {
-                            doNext(new ProcessStepThread(nextProcessTaskStepVo) {
+                            doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
                                 @Override
-                                public void execute() {
+                                public void myExecute() {
                                     handler.hang(nextProcessTaskStepVo);
                                 }
                             });

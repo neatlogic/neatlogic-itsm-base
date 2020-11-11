@@ -30,6 +30,7 @@ import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepFileVo;
 import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
+import codedriver.framework.process.dto.ProcessTaskStepInOperationVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
 import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
@@ -235,6 +236,8 @@ public interface ProcessTaskMapper {
     
     public List<ProcessTagVo> getProcessTaskTagListByProcessTaskId(@Param("processTaskId") Long processTaskId);
 
+    public int getProcessTaskStepInOperationCountByProcessTaskId(Long processTaskId);
+    
     public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -326,6 +329,8 @@ public interface ProcessTaskMapper {
     public int insertProcessTaskTag(@Param("processTaskTagList") List<ProcessTaskTagVo> processTaskTagList);
 
     public int replaceProcesssTaskStepAgent(ProcessTaskStepAgentVo processTaskStepAgentVo);
+    
+    public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
     @ESSearch
     public int updateProcessTaskStepExpireTime(@ESParam("processtask") ProcessTaskStepVo processTaskStepVo);
@@ -427,4 +432,6 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskFocusByProcessTaskId(Long processTaskId);
     
     public int deleteProcessTaskTagByProcessTaskId(Long processTaskId);
+    
+    public int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 }
