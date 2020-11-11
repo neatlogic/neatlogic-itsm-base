@@ -2264,6 +2264,10 @@
 	UPDATE `processtask` SET `is_show` = #{isShow} WHERE id = #{id}
 	</update>
 	
+	<update id="updateProcessTaskPriorityUuidById">
+	UPDATE `processtask` SET `priority_uuid` = #{priorityUuid} WHERE `id` = #{id}
+	</update>
+	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
 		FROM

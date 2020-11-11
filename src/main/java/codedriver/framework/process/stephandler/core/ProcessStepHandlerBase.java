@@ -615,6 +615,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 	                JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
 					if (MapUtils.isNotEmpty(paramObj)) {
+					    String priorityUuid = paramObj.getString("priorityUuid");
+					    if(StringUtils.isNotBlank(priorityUuid)) {
+					        processTaskMapper.updateProcessTaskPriorityUuidById(currentProcessTaskStepVo.getProcessTaskId(), priorityUuid);
+					    }
 					    JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
                         if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
     						// 表单属性显示控制

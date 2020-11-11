@@ -369,6 +369,8 @@ public interface ProcessTaskMapper {
 
     public int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
 
+    public int updateProcessTaskPriorityUuidById(@Param("id") Long processTaskId, @Param("priorityUuid") String priorityUuid);
+
     public int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
     public int deleteProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
