@@ -370,6 +370,39 @@
 	WHERE `process_uuid` = #{value}
 	</select>
 	
+	<select id="getProcessTagForSelect" parameterType="codedriver.framework.process.dto.ProcessTagVo" resultType="codedriver.framework.common.dto.ValueTextVo">
+		SELECT 
+		`id` as value,
+		`name` as text
+		FROM  `process_tag` 
+		<if test="keyword != null and keyword != ''">
+			WHERE `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="needPage">
+			limit #{startNum}, #{pageSize}
+		</if>
+	</select>
+	
+	<select id="getProcessTagByNameList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessTagVo">
+		SELECT 
+		`name`,
+		`id` 
+		FROM `process_tag` 
+		WHERE `name` in
+		<foreach collection="tagNameList" item="name" open="(" separator="," close=")">
+			#{name}
+		</foreach>
+	</select>
+	
+	<select id="getProcessTagCount" parameterType="codedriver.framework.process.dto.ProcessTagVo" resultType="java.lang.Integer">
+		SELECT 
+		count(1)
+		FROM  `process_tag`  
+		<if test="keyword != null and keyword != ''">
+			WHERE `name` LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</select>
+	
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,
@@ -538,6 +571,15 @@
 		#{fcu},
 		#{md5}
 		)
+	</insert>
+	
+	<insert id="insertProcessTag" parameterType="codedriver.framework.process.dto.ProcessTagVo">
+		INSERT ignore INTO `process_tag` (`id`, `name`) 
+		VALUES
+		<foreach collection="processTagList" item="tag" open="(" separator="),(" close=")">
+			#{tag.id}, 
+		  	#{tag.name}
+		</foreach>  
 	</insert>
 
 	<update id="updateProcess" parameterType="codedriver.framework.process.dto.ProcessVo">

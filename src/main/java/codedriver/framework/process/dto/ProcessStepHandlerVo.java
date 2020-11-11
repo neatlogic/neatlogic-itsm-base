@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -10,9 +12,10 @@ import com.alibaba.fastjson.annotation.JSONField;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo> {
+public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Serializable {
 
-	@EntityField(name = "类型", type = ApiParamType.STRING)
+    private static final long serialVersionUID = -5961832237506853192L;
+    @EntityField(name = "类型", type = ApiParamType.STRING)
 	private String type;
 	@EntityField(name = "处理器", type = ApiParamType.STRING)
 	private String handler;

@@ -73,6 +73,8 @@ public enum ProcessTaskOperationType {
     TRANFERREPORT("tranferreport", "转报"),
     COPYPROCESSTASK("copyprocesstask", "复制上报"),
     REDO("redo", "回退"),
+    HANG("hang", "挂起"),
+    HANDLE("handle", "自动处理"),
     SCORE("score", "评分"),
     SHOW("show","取消隐藏"),
     HIDE("hide","隐藏"),
