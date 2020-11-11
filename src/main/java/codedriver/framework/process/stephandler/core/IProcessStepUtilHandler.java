@@ -73,7 +73,22 @@ public interface IProcessStepUtilHandler {
 	* @return void
 	 */
 	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger);
-
+	/**
+	 * 
+	* @Time:2020年11月11日
+	* @Description: 触发计算sla 
+	* @param currentProcessTaskVo 
+	* @return void
+	 */
+	public void calculateSla(ProcessTaskVo currentProcessTaskVo);
+	/**
+     * 
+    * @Time:2020年11月11日
+    * @Description: 触发计算sla 
+    * @param currentProcessTaskStepVo 
+    * @return void
+     */
+    public void calculateSla(ProcessTaskStepVo currentProcessTaskStepVo);
     /**
      * 
      * @Time:2020年3月30日

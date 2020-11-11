@@ -1346,6 +1346,10 @@
 	SELECT `sla_id` FROM `processtask_step_sla` WHERE `processtask_step_id` = #{value}
 	</select>
 	
+	<select id="getSlaIdListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `id` FROM `processtask_sla` WHERE `processtask_id` = #{value}
+	</select>
+	
 	<select id="getProcessTaskSlaConfigById" parameterType="java.lang.Long" resultType="java.lang.String">
 	SELECT `config` FROM `processtask_sla` WHERE `id` = #{value}
 	</select>
@@ -2353,6 +2357,13 @@
 		DELETE
 		FROM
 		`processtask_sla_transfer`
+		WHERE sla_id = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskSlaNotifyBySlaId" parameterType="java.lang.Long">
+		DELETE
+		FROM
+		`processtask_sla_notify`
 		WHERE sla_id = #{value}
 	</delete>
 
