@@ -169,9 +169,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         }
 	}
 	
-	private int deleteProcessTaskStepInOperationByProcessTaskStepId(Long processTaskStepId, ProcessTaskOperationType operationType) {
-	    return processTaskMapper.deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(new ProcessTaskStepInOperationVo(processTaskStepId, operationType.getValue()));
-	}
 	@Override
 	public final int active(ProcessTaskStepVo currentProcessTaskStepVo) {
 		try {
@@ -230,12 +227,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							if (handler != null) {
 								doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
 									@Override
-									public void execute() {
-									    try {
-									        handler.hang(nextProcessTaskStepVo);
-									    }finally {
-									        deleteProcessTaskStepInOperationByProcessTaskStepId(nextProcessTaskStepVo.getId(), ProcessTaskOperationType.HANG);
-									    }
+									public void myExecute() {
+									    handler.hang(nextProcessTaskStepVo);
 									}
 								});
 							}
@@ -253,12 +246,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
 					doNext(ProcessTaskOperationType.HANDLE, new ProcessStepThread(currentProcessTaskStepVo) {
 						@Override
-						public void execute() {
-						    try {
-						        handler.handle(currentProcessTaskStepVo);
-						    }finally {
-						        deleteProcessTaskStepInOperationByProcessTaskStepId(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.HANDLE);
-						    }
+						public void myExecute() {
+						    handler.handle(currentProcessTaskStepVo);
 						}
 					});
 				}
@@ -298,12 +287,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
 				doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(currentProcessTaskStepVo) {
 					@Override
-					public void execute() {
-					    try {
-						handler.back(currentProcessTaskStepVo);
-					    }finally {
-					        deleteProcessTaskStepInOperationByProcessTaskStepId(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.BACK);
-					    }
+					public void myExecute() {
+					    handler.back(currentProcessTaskStepVo);
 					}
 				});
 			}
@@ -398,12 +383,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							if (handler != null) {
 								doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(toProcessTaskStepVo) {
 									@Override
-									public void execute() {
-									    try {
-									        handler.hang(toProcessTaskStepVo);									        
-									    }finally {
-									        deleteProcessTaskStepInOperationByProcessTaskStepId(toProcessTaskStepVo.getId(), ProcessTaskOperationType.HANG);
-									    }
+									public void myExecute() {
+									    handler.hang(toProcessTaskStepVo);
 									}
 								});
 							}
@@ -455,12 +436,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
 					doNext(ProcessTaskOperationType.COMPLETE, new ProcessStepThread(currentProcessTaskStepVo) {
 						@Override
-						public void execute() {
-						    try {
-						        handler.complete(currentProcessTaskStepVo);
-						    }finally {
-						        deleteProcessTaskStepInOperationByProcessTaskStepId(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.COMPLETE);
-						    }
+						public void myExecute() {
+						    handler.complete(currentProcessTaskStepVo);
 						}
 					});
 				}
@@ -478,7 +455,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			String handlerType = this.getHandler();
 			ProcessStepThread thread = new ProcessStepThread(currentProcessTaskStepVo) {
 				@Override
-				public void execute() {
+				public void myExecute() {
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(handlerType);
 					try {
 						// 这里不会有事务控制
@@ -489,12 +466,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 							doNext(ProcessTaskOperationType.COMPLETE, new ProcessStepThread(currentProcessTaskStepVo) {
 								@Override
-								public void execute() {
-								    try {
-								        handler.complete(currentProcessTaskStepVo);
-								    }finally {
-		                                deleteProcessTaskStepInOperationByProcessTaskStepId(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.COMPLETE);
-		                            }
+								public void myExecute() {
+								    handler.complete(currentProcessTaskStepVo);
 								}
 							});
 						}
@@ -730,12 +703,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						if (nextStepHandler != null) {
 							doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(nextStep) {
 								@Override
-								public void execute() {
-								    try {
-	                                    nextStepHandler.active(nextStep);
-								    }finally {
-								        deleteProcessTaskStepInOperationByProcessTaskStepId(nextStep.getId(), ProcessTaskOperationType.ACTIVE);
-								    }
+								public void myExecute() {
+								    nextStepHandler.active(nextStep);
 								}
 							});
 						}
@@ -779,12 +748,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
 					doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(currentProcessTaskStepVo) {
 						@Override
-						public void execute() {
-						    try {						        
-						        handler.back(currentProcessTaskStepVo);
-						    }finally {
-						        deleteProcessTaskStepInOperationByProcessTaskStepId(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.BACK);
-						    }
+						public void myExecute() {
+						    handler.back(currentProcessTaskStepVo);
 						}
 					});
 				}
@@ -841,12 +806,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						if (handler != null) {
 							doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
 								@Override
-								public void execute() {
-								    try {
-									handler.hang(nextProcessTaskStepVo);
-								    }finally {
-								        deleteProcessTaskStepInOperationByProcessTaskStepId(nextProcessTaskStepVo.getId(), ProcessTaskOperationType.HANG);
-								    }
+								public void myExecute() {
+								    handler.hang(nextProcessTaskStepVo);
 								}
 							});
 						}
@@ -1255,12 +1216,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 								fromProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
 								doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(fromProcessTaskStepVo) {
 									@Override
-									public void execute() {
-									    try {
-									        handler.back(fromProcessTaskStepVo);
-									    }finally {
-									        deleteProcessTaskStepInOperationByProcessTaskStepId(fromProcessTaskStepVo.getId(), ProcessTaskOperationType.BACK);
-									    }
+									public void myExecute() {
+									    handler.back(fromProcessTaskStepVo);
 									}
 								});
 							}
@@ -1271,12 +1228,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 								fromProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
 								doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(fromProcessTaskStepVo) {
 									@Override
-									public void execute() {
-									    try {
-										handler.active(fromProcessTaskStepVo);
-									    }finally {
-									        deleteProcessTaskStepInOperationByProcessTaskStepId(fromProcessTaskStepVo.getId(), ProcessTaskOperationType.ACTIVE);
-									    }
+									public void myExecute() {
+									    handler.active(fromProcessTaskStepVo);
 									}
 								});
 							}
@@ -1646,12 +1599,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				if (nextStepHandler != null) {
 					doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(nextStep) {
 						@Override
-						public void execute() {
-						    try {
-							nextStepHandler.active(nextStep);
-						    }finally {
-						        deleteProcessTaskStepInOperationByProcessTaskStepId(nextStep.getId(), ProcessTaskOperationType.ACTIVE);
-						    }
+						public void myExecute() {
+						    nextStepHandler.active(nextStep);
 						}
 
 					});
@@ -1805,7 +1754,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 	protected synchronized static void doNext(ProcessTaskOperationType operationType, ProcessStepThread thread) {
 	    if(operationType != null) {
-	        processTaskMapper.insertProcessTaskStepInOperation(new ProcessTaskStepInOperationVo(thread.getProcessTaskStepVo().getProcessTaskId(), thread.getProcessTaskStepVo().getId(), operationType.getValue())); 
+	        ProcessTaskStepInOperationVo processTaskStepInOperationVo = new ProcessTaskStepInOperationVo(thread.getProcessTaskStepVo().getProcessTaskId(), thread.getProcessTaskStepVo().getId(), operationType.getValue());
+	        processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+	        thread.setSupplier(() -> processTaskMapper.deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(processTaskStepInOperationVo));
 	    }
 	        
 	    if (!TransactionSynchronizationManager.isSynchronizationActive()) {
@@ -1870,12 +1821,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                         if (handler != null) {
                             doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
                                 @Override
-                                public void execute() {
-                                    try {
+                                public void myExecute() {
                                     handler.hang(nextProcessTaskStepVo);
-                                    }finally {
-                                        deleteProcessTaskStepInOperationByProcessTaskStepId(nextProcessTaskStepVo.getId(), ProcessTaskOperationType.HANG);
-                                    }
                                 }
                             });
                         }
