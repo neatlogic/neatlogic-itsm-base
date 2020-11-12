@@ -62,7 +62,14 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
 		NotifyHandler.notify(currentProcessTaskStepVo, trigger);
 	}
-	
+	@Override
+	public void calculateSla(ProcessTaskVo currentProcessTaskVo) {
+	    SlaHandler.calculate(currentProcessTaskVo);
+	}
+	@Override
+	public void calculateSla(ProcessTaskStepVo currentProcessTaskStepVo) {
+	    SlaHandler.calculate(currentProcessTaskStepVo);
+    }
 	@Override
 	public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId){
         ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);

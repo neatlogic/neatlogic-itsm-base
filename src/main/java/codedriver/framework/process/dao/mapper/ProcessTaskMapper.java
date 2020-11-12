@@ -214,6 +214,8 @@ public interface ProcessTaskMapper {
     public ProcessTaskScoreTemplateVo getProcessTaskScoreTemplateByProcessTaskId(Long processTaskId);
 
     public List<Long> getSlaIdListByProcessTaskStepId(Long processTaskStepId);
+    
+    public List<Long> getSlaIdListByProcessTaskId(Long processTaskId);
 
     public String getProcessTaskSlaConfigById(Long id);
 
@@ -411,6 +413,8 @@ public interface ProcessTaskMapper {
 
     public int deleteProcessTaskSlaTransferBySlaId(Long slaId);
 
+    public int deleteProcessTaskSlaNotifyBySlaId(Long slaId);
+
     public int deleteProcessTaskStepAuditByProcessTaskId(Long processTaskId);
 
     public int deleteProcessTaskStepContentByProcessTaskId(Long processTaskId);
@@ -425,7 +429,7 @@ public interface ProcessTaskMapper {
 
     public int deleteProcessTaskFormByProcessTaskId(Long processTaskId);
 
-    public int deleteProcessTaskSlaTimeBySlaId(Long processTaskId);
+    public int deleteProcessTaskSlaTimeBySlaId(Long slaId);
 
     public int deleteProcessTaskStepByProcessTaskId(Long processTaskId);
 

@@ -764,7 +764,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 写入时间审计 **/
 				TimeAuditHandler.audit(currentProcessTaskStepVo, operationType);
 				/** 计算SLA **/
-				SlaHandler.calculate(currentProcessTaskStepVo);
+				SlaHandler.calculate(new ProcessTaskVo(currentProcessTaskStepVo.getProcessTaskId()));
 			}
 		}
 
