@@ -1346,7 +1346,7 @@
 	SELECT `sla_id` FROM `processtask_step_sla` WHERE `processtask_step_id` = #{value}
 	</select>
 	
-	<select id="getSlaIdListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	<select id="getSlaIdListByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
 	SELECT `id` FROM `processtask_sla` WHERE `processtask_id` = #{value}
 	</select>
 	

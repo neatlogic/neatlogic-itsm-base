@@ -828,15 +828,18 @@ public abstract class ProcessStepHandlerUtilBase {
 
 		@Override
 		protected void execute() {
+		    Long processTaskId = null;
 			List<Long> slaIdList = null;
 			if(currentProcessTaskStepVo != null) {
 			    slaIdList = processTaskMapper.getSlaIdListByProcessTaskStepId(currentProcessTaskStepVo.getId());
+			    processTaskId = currentProcessTaskStepVo.getProcessTaskId();
 			}else if(currentProcessTaskVo != null){
 			    slaIdList = processTaskMapper.getSlaIdListByProcessTaskId(currentProcessTaskVo.getId());
+			    processTaskId = currentProcessTaskVo.getId();
 			}
 			    
 			if (CollectionUtils.isNotEmpty(slaIdList)) {
-				ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+				ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(processTaskId);
 				processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 				String worktimeUuid = processTaskVo.getWorktimeUuid();
 				for (Long slaId : slaIdList) {
@@ -867,7 +870,7 @@ public abstract class ProcessStepHandlerUtilBase {
 		                    if(Objects.equals(timeSum, oldTimeSum) && Objects.equals(slaTimeVo.getExpireTime(), oldExpireTime)) {
 		                        return;
 		                    }
-		                    slaTimeVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+		                    slaTimeVo.setProcessTaskId(processTaskId);
 		                    if (isSlaTimeExists) {
 		                        processTaskMapper.updateProcessTaskSlaTime(slaTimeVo);
 		                    } else {
