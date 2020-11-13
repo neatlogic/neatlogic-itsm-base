@@ -2,7 +2,9 @@ package codedriver.framework.process.constvalue;
 
 public enum FormAttributeAction {
 	HIDE("hide", "隐藏"),
-	READ("read", "只读");
+	READ("read", "只读"),
+	EDIT("edit", "编辑")
+	;
 	private String value;
 	private String text;
 	public String getValue() {

@@ -30,6 +30,7 @@ import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.notify.dto.NotifyPolicyInvokerVo;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
+import codedriver.framework.process.constvalue.FormAttributeAction;
 import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessStepType;
@@ -622,11 +623,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 					    JSONArray formAttributeDataList = paramObj.getJSONArray("formAttributeDataList");
                         if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
     						// 表单属性显示控制
-    						Map<String, String> formAttributeActionMap = new HashMap<>();
+//    						Map<String, String> formAttributeActionMap = new HashMap<>();
+                            List<String> editableFormAttributeList = new ArrayList<>();
     						List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
     						if (processTaskStepFormAttributeList.size() > 0) {
     							for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
-    								formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
+    								//formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
+    							    if(processTaskStepFormAttributeVo.getAction().equals(FormAttributeAction.EDIT.getValue())) {
+    							        editableFormAttributeList.add(processTaskStepFormAttributeVo.getAttributeUuid());
+    							    }
     							}
     						}
     						// 组件联动导致隐藏的属性uuid列表
@@ -638,8 +643,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
     							while (iterator.hasNext()) {
     								ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo = iterator.next();
     								String attributeUuid = processTaskFormAttributeDataVo.getAttributeUuid();
-    								if (formAttributeActionMap.containsKey(attributeUuid)) {// 只读或隐藏
-    									iterator.remove();
+//    								if (formAttributeActionMap.containsKey(attributeUuid)) {// 只读或隐藏
+//    									iterator.remove();
+//    								}
+    								if(!editableFormAttributeList.contains(attributeUuid) && !editableFormAttributeList.contains("all")) {
+    								    iterator.remove();
     								}
     								if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(attributeUuid)) {
     									iterator.remove();
@@ -655,8 +663,11 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							for (int i = 0; i < formAttributeDataList.size(); i++) {
 								JSONObject formAttributeDataObj = formAttributeDataList.getJSONObject(i);
 								String attributeUuid = formAttributeDataObj.getString("attributeUuid");
-								if (formAttributeActionMap.containsKey(attributeUuid) || formAttributeActionMap.containsKey("all")) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
-									continue;
+//								if (formAttributeActionMap.containsKey(attributeUuid) || formAttributeActionMap.containsKey("all")) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
+//									continue;
+//								}
+								if(!editableFormAttributeList.contains(attributeUuid) && !editableFormAttributeList.contains("all")) {
+								    continue;
 								}
 								if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(attributeUuid)) {
 									continue;
@@ -1480,16 +1491,20 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	            if (CollectionUtils.isNotEmpty(formAttributeDataList)) {
 	                // 表单属性显示控制
 	                formAttributeActionMap = new HashMap<>();
+	                List<String> editableFormAttributeList = new ArrayList<>();
 	                List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
 	                if (processTaskStepFormAttributeList.size() > 0) {
 	                    for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
 	                        formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
+	                        if(processTaskStepFormAttributeVo.getAction().equals(FormAttributeAction.EDIT.getValue())) {
+                                editableFormAttributeList.add(processTaskStepFormAttributeVo.getAttributeUuid());
+                            }
 	                    }
 	                }
 	                for (int i = 0; i < formAttributeDataList.size(); i++) {
 	                    JSONObject formAttributeDataObj = formAttributeDataList.getJSONObject(i);
 	                    String attributeUuid = formAttributeDataObj.getString("attributeUuid");
-	                    if (formAttributeActionMap.get(attributeUuid) != null) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
+	                    if(!editableFormAttributeList.contains(attributeUuid) && !editableFormAttributeList.contains("all")) {// 对于只读或隐藏的属性，当前用户不能修改，不更新数据库中的值，不进行修改前后对比
 	                        continue;
 	                    }
 	                    if (hidecomponentList.contains(attributeUuid)) {
