@@ -12,31 +12,31 @@ import codedriver.framework.common.constvalue.ParamType;
 public enum ProcessFormHandlerType implements IProcessFormHandlerType {
 
     FORMSELECT("formselect", "下拉框", "ts-sitemap", "form", FormHandlerType.SELECT, ParamType.ARRAY,
-        List.class.getSimpleName().toLowerCase()),
+        List.class.getSimpleName().toLowerCase(), true, true, true, true, false),
     FORMINPUT("forminput", "文本框", "ts-textmodule", "form", FormHandlerType.INPUT, ParamType.STRING,
-        String.class.getSimpleName().toLowerCase()),
+        String.class.getSimpleName().toLowerCase(), true, true, true, false, false),
     FORMTEXTAREA("formtextarea", "文本域", "ts-text", "form", FormHandlerType.TEXTAREA, ParamType.STRING,
-        String.class.getSimpleName().toLowerCase()),
+        String.class.getSimpleName().toLowerCase(), true, true, true, false, false),
     FORMEDITOR("formeditor", "富文本框", "ts-viewmodule", "form", FormHandlerType.EDITOR, ParamType.STRING,
-        String.class.getSimpleName().toLowerCase(), Arrays.asList(Expression.LIKE, Expression.NOTLIKE),
-        Expression.LIKE),
+        String.class.getSimpleName().toLowerCase(), Arrays.asList(Expression.LIKE, Expression.NOTLIKE), Expression.LIKE,
+        true, true, true, false, false),
     FORMRADIO("formradio", "单选框", "ts-complete", "form", FormHandlerType.RADIO, ParamType.ARRAY,
-        String.class.getSimpleName().toLowerCase()),
+        String.class.getSimpleName().toLowerCase(), true, true, true, true, false),
     FORMCHECKBOX("formcheckbox", "复选框", "ts-check-square-o", "form", FormHandlerType.CHECKBOX, ParamType.ARRAY,
-        List.class.getSimpleName().toLowerCase()),
+        List.class.getSimpleName().toLowerCase(), true, true, true, true, false),
     FORMDATE("formdate", "日期", "ts-calendar", "form", FormHandlerType.DATE, ParamType.DATE,
-        String.class.getSimpleName().toLowerCase()),
-    FORMTIME("formtime", "时间", "ts-timer", "form", FormHandlerType.TIME, ParamType.DATE,
-        String.class.getSimpleName().toLowerCase()),
-    FORMSTATICLIST("formstaticlist", "静态列表", "ts-list", "form"),
+        String.class.getSimpleName().toLowerCase(), true, true, true, false, false),
+    FORMTIME("formtime", "时间", "ts-timer", "form", FormHandlerType.TIME, ParamType.DATE, "string", true, true, true,
+        false, false),
+    FORMSTATICLIST("formstaticlist", "静态列表", "ts-list", "form", true, true, true, false, false),
     FORMCASCADELIST("formcascadelist", "级联下拉", "ts-formlist", "form", FormHandlerType.CASCADELIST, ParamType.STRING,
-        String.class.getSimpleName().toLowerCase()),
-    FORMDYNAMICLIST("formdynamiclist", "动态列表", "ts-viewlist", "form"),
-    FORMDIVIDER("formdivider", "分割线", "ts-minus", "form"),
-    FORMUSERSELECT("formuserselect", "用户选择器", "ts-user", "form", FormHandlerType.USERSELECT, ParamType.ARRAY,
-        String.class.getSimpleName().toLowerCase()),
-    FORMLINK("formlink", "链接", "ts-link", "form", null, ParamType.STRING, String.class.getSimpleName().toLowerCase()),
-    FORMPRIORITY("formpriority", "修改优先级", "ts-user", "control");
+        "string", true, true, true, false, false),
+    FORMDYNAMICLIST("formdynamiclist", "动态列表", "ts-viewlist", "form", false, true, false, false, false),
+    FORMDIVIDER("formdivider", "分割线", "ts-minus", "form", false, false, false, false, false),
+    FORMUSERSELECT("formuserselect", "用户选择器", "ts-user", "form", FormHandlerType.USERSELECT, ParamType.ARRAY, "string",
+        true, true, true, false, false),
+    FORMLINK("formlink", "链接", "ts-link", "form", null, ParamType.STRING, "string", false, true, false, false, false),
+    FORMPRIORITY("formpriority", "修改优先级", "ts-user", "control", false, false, false, false, true);
 
     private String handler;
     private String handlerName;
@@ -79,18 +79,24 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
         return module;
     }
 
-    private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type) {
-        this(_handler, _handlerName, _icon, _type, null, null, null);
+    private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type,
+        boolean _isConditionable, boolean _isShowable, boolean _isValueable, boolean _isFilterable,
+        boolean _isExtendable) {
+        this(_handler, _handlerName, _icon, _type, null, null, null, _isConditionable, _isShowable, _isValueable,
+            _isFilterable, _isExtendable);
     }
 
     private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type,
-        FormHandlerType _handlerType, ParamType _paramType, String _dataType) {
-        this(_handler, _handlerName, _icon, _type, _handlerType, _paramType, _dataType, null, null);
+        FormHandlerType _handlerType, ParamType _paramType, String _dataType, boolean _isConditionable,
+        boolean _isShowable, boolean _isValueable, boolean _isFilterable, boolean _isExtendable) {
+        this(_handler, _handlerName, _icon, _type, _handlerType, _paramType, _dataType, null, null, _isConditionable,
+            _isShowable, _isValueable, _isFilterable, _isExtendable);
     }
 
     private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type,
         FormHandlerType _handlerType, ParamType _paramType, String _dataType, List<Expression> _expressionList,
-        Expression _expression) {
+        Expression _expression, boolean _isConditionable, boolean _isShowable, boolean _isValueable,
+        boolean _isFilterable, boolean _isExtendable) {
         this.handler = _handler;
         this.handlerName = _handlerName;
         this.handlerType = _handlerType;
@@ -100,6 +106,11 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
         this.expression = _expression;
         this.icon = _icon;
         this.type = _type;
+        this.isConditionable = _isConditionable;
+        this.isShowable = _isShowable;
+        this.isValueable = _isValueable;
+        this.isFilterable = _isFilterable;
+        this.isExtendable = _isExtendable;
     }
 
     public static String getHandlerName(String _handler) {
