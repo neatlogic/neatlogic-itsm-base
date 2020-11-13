@@ -2,6 +2,7 @@ package codedriver.framework.process.column.core;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -80,6 +81,7 @@ public class ProcessTaskUtil {
 				resultObj.putAll(formAttributeDataMap);
 			}else {
 				if(StringUtils.isNotBlank(processTaskVo.getFormConfig())) {
+				    Map<String, Object> formAttributeMap = new HashMap<>();
 					FormVersionVo formVersionVo = new FormVersionVo();
 					formVersionVo.setFormConfig(processTaskVo.getFormConfig());
 					List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
@@ -99,11 +101,14 @@ public class ProcessTaskUtil {
 								}
 								Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
 								resultObj.put(formAttribute.getUuid(), value);
+								formAttributeMap.put(formAttribute.getLabel(), value.toString());
 							}else {
 								resultObj.put(formAttribute.getUuid(), attributeValue);
+								formAttributeMap.put(formAttribute.getLabel(), attributeValue.toString());
 							}
 						}
 					}
+					resultObj.put("form", formAttributeMap);
 				}
 			}
 		}
