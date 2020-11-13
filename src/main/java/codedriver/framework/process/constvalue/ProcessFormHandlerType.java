@@ -36,7 +36,7 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
     FORMUSERSELECT("formuserselect", "用户选择器", "ts-user", "form", FormHandlerType.USERSELECT, ParamType.ARRAY, "string",
         true, true, true, false, false),
     FORMLINK("formlink", "链接", "ts-link", "form", null, ParamType.STRING, "string", false, true, false, false, false),
-    FORMPRIORITY("formpriority", "修改优先级", "ts-user", "control", false, false, false, false, true);
+    FORMPRIORITY("formpriority", "修改优先级", "ts-user", "control", false, false, false, true, false);
 
     private String handler;
     private String handlerName;
