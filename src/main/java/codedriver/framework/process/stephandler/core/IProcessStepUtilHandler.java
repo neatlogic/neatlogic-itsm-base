@@ -80,7 +80,7 @@ public interface IProcessStepUtilHandler {
 	* @param currentProcessTaskVo 
 	* @return void
 	 */
-	public void calculateSla(ProcessTaskVo currentProcessTaskVo);
+	public void calculateSla(ProcessTaskVo currentProcessTaskVo, boolean isAsync);
 	/**
      * 
     * @Time:2020年11月11日
