@@ -463,7 +463,6 @@ public abstract class ProcessStepHandlerUtilBase {
 	protected static class SlaHandler extends CodeDriverThread {
 		private ProcessTaskStepVo currentProcessTaskStepVo;
 		private ProcessTaskVo currentProcessTaskVo;
-
 		public SlaHandler(ProcessTaskVo _currentProcessTaskVo, ProcessTaskStepVo _currentProcessTaskStepVo) {
 			currentProcessTaskVo = _currentProcessTaskVo;
 			currentProcessTaskStepVo = _currentProcessTaskStepVo;
@@ -610,13 +609,19 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 			return timeCost;
 		}
+		protected static void calculate(ProcessTaskVo currentProcessTaskVo, boolean isAsync) {
+            calculate(currentProcessTaskVo, null, isAsync);
+        }
 		protected static void calculate(ProcessTaskVo currentProcessTaskVo) {
-		    calculate(currentProcessTaskVo, null);
+		    calculate(currentProcessTaskVo, null, true);
 		}
 		protected static void calculate(ProcessTaskStepVo currentProcessTaskStepVo) {
-		    calculate(null, currentProcessTaskStepVo);
+		    calculate(null, currentProcessTaskStepVo, true);
 		}
-		protected static void calculate(ProcessTaskVo currentProcessTaskVo, ProcessTaskStepVo currentProcessTaskStepVo) {
+		protected static void calculate(ProcessTaskVo currentProcessTaskVo, ProcessTaskStepVo currentProcessTaskStepVo, boolean isAsync) {
+		    if(!isAsync) {
+		        new SlaHandler(currentProcessTaskVo, currentProcessTaskStepVo).execute();
+		    }
 			if (!TransactionSynchronizationManager.isSynchronizationActive()) {
 				CachedThreadPool.execute(new SlaHandler(currentProcessTaskVo, currentProcessTaskStepVo));
 			} else {
