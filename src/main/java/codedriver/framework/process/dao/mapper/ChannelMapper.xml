@@ -54,6 +54,7 @@
 		c.`name`,
 		c.`parent_uuid`,
 		(SELECT GROUP_CONCAT(NAME  ORDER BY lft) FROM catalog  WHERE lft &lt; (SELECT lft FROM `catalog` WHERE UUID = c.`parent_uuid`) AND rht > (SELECT rht FROM `catalog` WHERE UUID = c.`parent_uuid`)) AS parentNames,
+		(SELECT GROUP_CONCAT(`uuid`  ORDER BY lft) FROM catalog  WHERE lft &lt; (SELECT lft FROM `catalog` WHERE UUID = c.`parent_uuid`) AND rht > (SELECT rht FROM `catalog` WHERE UUID = c.`parent_uuid`)) AS parentUuids,
 		c.`is_active`,
 		c.`icon`,
 		c.`color`,
@@ -84,7 +85,7 @@
 			AND c.`is_active` = #{isActive}
 		</if>
 		<if test="support == 'mobile'">
-			AND c.`support` != 'pc'
+			AND c.`support` != 'pc' 
 		</if>
 		<if test="support == 'pc'">
 			AND c.`support` != 'mobile'
@@ -393,6 +394,7 @@
 	
 	<select id="getAuthorizedChannelListByParentUuid" resultType="codedriver.framework.process.dto.ChannelVo">
 		SELECT 
+		distinct
 		c.`uuid`,
 		c.`name`,
 		c.`is_active` AS isActive,
