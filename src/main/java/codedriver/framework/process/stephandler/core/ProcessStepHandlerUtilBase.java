@@ -83,7 +83,6 @@ import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
 import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
 import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -1144,14 +1143,14 @@ public abstract class ProcessStepHandlerUtilBase {
 	                for (ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
 	                    formAttributeDataMap.put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
 	                }
-	                Map<String, String> formAttributeActionMap = new HashMap<>();
-	                List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
-	                for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
-	                    formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
-	                }
+//	                Map<String, String> formAttributeActionMap = new HashMap<>();
+//	                List<ProcessTaskStepFormAttributeVo> processTaskStepFormAttributeList = processTaskMapper.getProcessTaskStepFormAttributeByProcessTaskStepId(currentProcessTaskStepVo.getId());
+//	                for (ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo : processTaskStepFormAttributeList) {
+//	                    formAttributeActionMap.put(processTaskStepFormAttributeVo.getAttributeUuid(), processTaskStepFormAttributeVo.getAction());
+//	                }
 	                currentProcessTaskStepVo.setFormAttributeDataMap(formAttributeDataMap);
 	                currentProcessTaskStepVo.setFormAttributeVoList(formAttributeList);
-	                currentProcessTaskStepVo.setFormAttributeActionMap(formAttributeActionMap);
+//	                currentProcessTaskStepVo.setFormAttributeActionMap(formAttributeActionMap);
 	                formAttributeDataValid(currentProcessTaskStepVo);
 	            }
 			}
@@ -1167,16 +1166,20 @@ public abstract class ProcessStepHandlerUtilBase {
         * @return boolean
          */
 		public static boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo) {
-		    Map<String, String> formAttributeActionMap = currentProcessTaskStepVo.getFormAttributeActionMap();
+//		    Map<String, String> formAttributeActionMap = currentProcessTaskStepVo.getFormAttributeActionMap();
             List<String> hidecomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("hidecomponentList")), String.class);           
+            List<String> readcomponentList = JSON.parseArray(JSON.toJSONString(currentProcessTaskStepVo.getParamObj().getJSONArray("readcomponentList")), String.class);           
             for (FormAttributeVo formAttributeVo : currentProcessTaskStepVo.getFormAttributeVoList()) {
                 if (!formAttributeVo.isRequired()) {
                     continue;
                 }
-                if(formAttributeActionMap.containsKey(formAttributeVo.getUuid()) || formAttributeActionMap.containsKey("all")) {
+//                if(formAttributeActionMap.containsKey(formAttributeVo.getUuid()) || formAttributeActionMap.containsKey("all")) {
+//                    continue;
+//                }
+                if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {
                     continue;
                 }
-                if (CollectionUtils.isNotEmpty(hidecomponentList) && hidecomponentList.contains(formAttributeVo.getUuid())) {
+                if (CollectionUtils.isNotEmpty(readcomponentList) && readcomponentList.contains(formAttributeVo.getUuid())) {
                     continue;
                 }
                 Object data = currentProcessTaskStepVo.getFormAttributeDataMap().get(formAttributeVo.getUuid());
