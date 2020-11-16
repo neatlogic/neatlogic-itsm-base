@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -101,6 +102,7 @@ import codedriver.framework.scheduler.core.IJob;
 import codedriver.framework.scheduler.core.SchedulerManager;
 import codedriver.framework.scheduler.dto.JobObject;
 import codedriver.framework.scheduler.exception.ScheduleHandlerNotFoundException;
+import codedriver.framework.transaction.util.TransactionUtil;
 import codedriver.framework.util.ConditionUtil;
 import codedriver.framework.util.NotifyPolicyUtil;
 import codedriver.framework.util.RunScriptUtil;
@@ -130,7 +132,7 @@ public abstract class ProcessStepHandlerUtilBase {
     protected static SelectContentByHashMapper selectContentByHashMapper;
 	protected static ScoreTemplateMapper scoreTemplateMapper;
 	protected static ProcessTaskScoreMapper processTaskScoreMapper;
-
+	private static TransactionUtil transactionUtil;
 	@Autowired
 	public void setProcessMapper(ProcessMapper _processMapper) {
 		processMapper = _processMapper;
@@ -213,6 +215,11 @@ public abstract class ProcessStepHandlerUtilBase {
 	@Autowired
 	public void setProcessTaskScoreMapper(ProcessTaskScoreMapper _processTaskScoreMapper) {
 		processTaskScoreMapper = _processTaskScoreMapper;
+	}
+	
+	@Autowired
+	public void settransactionUtil(TransactionUtil _transactionUtil) {
+	    transactionUtil = _transactionUtil;
 	}
 
 	protected static class ActionHandler extends CodeDriverThread {
@@ -832,63 +839,71 @@ public abstract class ProcessStepHandlerUtilBase {
 
 		@Override
 		protected void execute() {
-		    Long processTaskId = null;
-			List<Long> slaIdList = null;
-			if(currentProcessTaskStepVo != null) {
-			    slaIdList = processTaskMapper.getSlaIdListByProcessTaskStepId(currentProcessTaskStepVo.getId());
-			    processTaskId = currentProcessTaskStepVo.getProcessTaskId();
-			}else if(currentProcessTaskVo != null){
-			    slaIdList = processTaskMapper.getSlaIdListByProcessTaskId(currentProcessTaskVo.getId());
-			    processTaskId = currentProcessTaskVo.getId();
-			}
-			    
-			if (CollectionUtils.isNotEmpty(slaIdList)) {
-				ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(processTaskId);
-				processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
-				String worktimeUuid = processTaskVo.getWorktimeUuid();
-				for (Long slaId : slaIdList) {
-				    processTaskMapper.getProcessTaskSlaLockById(slaId);
-		            String config = processTaskMapper.getProcessTaskSlaConfigById(slaId);
-		            JSONObject slaConfigObj = JSON.parseObject(config);
-		            if(MapUtils.isNotEmpty(slaConfigObj)) {
-		                /** 旧的超时时间点 **/
-		                Date oldExpireTime = null;
-		                Long oldTimeSum = null;
-		                boolean isSlaTimeExists = false;
-		                /** 如果没有超时时间，证明第一次进入SLA标签范围，开始计算超时时间 **/
-		                ProcessTaskSlaTimeVo oldSlaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(slaId);
-		                if(oldSlaTimeVo != null) {
-		                    /** 记录旧的超时时间点 **/
-		                    oldExpireTime = oldSlaTimeVo.getExpireTime();
-		                    oldTimeSum = oldSlaTimeVo.getTimeSum();
-		                    isSlaTimeExists = true;
-		                }
-		                Long timeSum = getSlaTimeSumBySlaConfig(slaConfigObj, processTaskVo);
+		    TransactionStatus transactionStatus = transactionUtil.openTx();
+		    try {
+		        Long processTaskId = null;
+	            List<Long> slaIdList = null;
+	            if(currentProcessTaskStepVo != null) {
+	                slaIdList = processTaskMapper.getSlaIdListByProcessTaskStepId(currentProcessTaskStepVo.getId());
+	                processTaskId = currentProcessTaskStepVo.getProcessTaskId();
+	            }else if(currentProcessTaskVo != null){
+	                slaIdList = processTaskMapper.getSlaIdListByProcessTaskId(currentProcessTaskVo.getId());
+	                processTaskId = currentProcessTaskVo.getId();
+	            }
+	                
+	            if (CollectionUtils.isNotEmpty(slaIdList)) {
+	                ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(processTaskId);
+	                processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
+	                String worktimeUuid = processTaskVo.getWorktimeUuid();
+	                for (Long slaId : slaIdList) {
+	                    processTaskMapper.getProcessTaskSlaLockById(slaId);
+	                    String config = processTaskMapper.getProcessTaskSlaConfigById(slaId);
+	                    JSONObject slaConfigObj = JSON.parseObject(config);
+	                    if(MapUtils.isNotEmpty(slaConfigObj)) {
+	                        /** 旧的超时时间点 **/
+	                        Date oldExpireTime = null;
+	                        Long oldTimeSum = null;
+	                        boolean isSlaTimeExists = false;
+	                        /** 如果没有超时时间，证明第一次进入SLA标签范围，开始计算超时时间 **/
+	                        ProcessTaskSlaTimeVo oldSlaTimeVo = processTaskMapper.getProcessTaskSlaTimeBySlaId(slaId);
+	                        if(oldSlaTimeVo != null) {
+	                            /** 记录旧的超时时间点 **/
+	                            oldExpireTime = oldSlaTimeVo.getExpireTime();
+	                            oldTimeSum = oldSlaTimeVo.getTimeSum();
+	                            isSlaTimeExists = true;
+	                        }
+	                        Long timeSum = getSlaTimeSumBySlaConfig(slaConfigObj, processTaskVo);
 
-		                // 修正最终超时日期
-		                if (timeSum != null) {
-	                        ProcessTaskSlaTimeVo slaTimeVo = new ProcessTaskSlaTimeVo();
-	                        slaTimeVo.setTimeSum(timeSum);
-		                    slaTimeVo.setSlaId(slaId);
-		                    calculateExpireTime(slaTimeVo, worktimeUuid);
-		                    if(Objects.equals(timeSum, oldTimeSum) && Objects.equals(slaTimeVo.getExpireTime(), oldExpireTime)) {
-		                        return;
-		                    }
-		                    slaTimeVo.setProcessTaskId(processTaskId);
-		                    if (isSlaTimeExists) {
-		                        processTaskMapper.updateProcessTaskSlaTime(slaTimeVo);
-		                    } else {
-		                        processTaskMapper.insertProcessTaskSlaTime(slaTimeVo);
-		                    }
-		                    adjustJob(slaTimeVo, slaConfigObj, oldExpireTime);
-		                }else if(isSlaTimeExists){
-		                    processTaskMapper.deleteProcessTaskSlaTimeBySlaId(slaId);
-		                    processTaskMapper.deleteProcessTaskSlaTransferBySlaId(slaId);
-		                    processTaskMapper.deleteProcessTaskSlaNotifyBySlaId(slaId);
-		                }
-		            }
-				}
-			}
+	                        // 修正最终超时日期
+	                        if (timeSum != null) {
+	                            ProcessTaskSlaTimeVo slaTimeVo = new ProcessTaskSlaTimeVo();
+	                            slaTimeVo.setTimeSum(timeSum);
+	                            slaTimeVo.setSlaId(slaId);
+	                            calculateExpireTime(slaTimeVo, worktimeUuid);
+	                            if(Objects.equals(timeSum, oldTimeSum) && Objects.equals(slaTimeVo.getExpireTime(), oldExpireTime)) {
+	                                return;
+	                            }
+	                            slaTimeVo.setProcessTaskId(processTaskId);
+	                            if (isSlaTimeExists) {
+	                                processTaskMapper.updateProcessTaskSlaTime(slaTimeVo);
+	                            } else {
+	                                processTaskMapper.insertProcessTaskSlaTime(slaTimeVo);
+	                            }
+	                            adjustJob(slaTimeVo, slaConfigObj, oldExpireTime);
+	                        }else if(isSlaTimeExists){
+	                            processTaskMapper.deleteProcessTaskSlaTimeBySlaId(slaId);
+	                            processTaskMapper.deleteProcessTaskSlaTransferBySlaId(slaId);
+	                            processTaskMapper.deleteProcessTaskSlaNotifyBySlaId(slaId);
+	                        }
+	                    }
+	                }
+	            }
+		        transactionUtil.commitTx(transactionStatus);
+		    }catch (Exception e) {
+	            logger.error(e.getMessage(), e);
+	            transactionUtil.rollbackTx(transactionStatus);
+	        }
+		    
 		}
 	}
 
