@@ -115,6 +115,8 @@ public class ProcessTaskVo {
     private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
     @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTagVo> tagVoList;
+    @EntityField(name = "移动端表单交互类型，1：下探页面；0：当前页", type = ApiParamType.INTEGER)
+    private Integer mobileFormUIType;
     public ProcessTaskVo() {
 
     }
@@ -495,6 +497,14 @@ public class ProcessTaskVo {
 
     public void setTagVoList(List<ProcessTagVo> tagVoList) {
         this.tagVoList = tagVoList;
+    }
+
+    public Integer getMobileFormUIType() {
+        return mobileFormUIType;
+    }
+
+    public void setMobileFormUIType(Integer mobileFormUIType) {
+        this.mobileFormUIType = mobileFormUIType;
     }
     
 }
