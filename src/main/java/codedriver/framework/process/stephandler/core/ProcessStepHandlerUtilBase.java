@@ -869,7 +869,23 @@ public abstract class ProcessStepHandlerUtilBase {
 	                while(iterator.hasNext()) {
 	                    Long slaId = iterator.next();
 	                    if(processTaskMapper.getProcessTaskSlaTimeBySlaId(slaId) == null) {
-	                        iterator.remove();
+	                        List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoBySlaId(slaId);
+	                        Iterator<ProcessTaskStepVo> it = processTaskStepList.iterator();
+	                        while (it.hasNext()) {
+	                            ProcessTaskStepVo processTaskStepVo = it.next();
+	                            // 未处理、处理中和挂起的步骤才需要计算SLA
+	                            if (processTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue())) {
+	                                continue;
+	                            }else if(processTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
+	                                continue;
+	                            }else if(processTaskStepVo.getStatus().equals(ProcessTaskStatus.HANG.getValue())){
+	                                continue;
+	                            }	                            
+	                            it.remove();
+	                        }
+	                        if(CollectionUtils.isEmpty(processTaskStepList)) {
+	                            iterator.remove();
+	                        }
 	                    }
 	                }
 	                processTaskId = currentProcessTaskVo.getId();
