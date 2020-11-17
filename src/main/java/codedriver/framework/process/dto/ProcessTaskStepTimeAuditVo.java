@@ -129,4 +129,12 @@ public class ProcessTaskStepTimeAuditVo {
         this.pauseTimeLong = pauseTimeLong;
     }
 
+    @Override
+    public String toString() {
+        return "[activeTimeLong="
+            + activeTimeLong + ", startTimeLong=" + startTimeLong + ", abortTimeLong=" + abortTimeLong
+            + ", completeTimeLong=" + completeTimeLong + ", backTimeLong=" + backTimeLong + ", pauseTimeLong="
+            + pauseTimeLong + "]";
+    }
+
 }

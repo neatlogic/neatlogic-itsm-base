@@ -135,6 +135,21 @@
 		ORDER BY `start_time`
 		limit 0,1
 	</select>
+	
+	<select id="getRecentWorktimeRange2" parameterType="codedriver.framework.process.dto.WorktimeRangeVo" resultMap="worktimeRangeMap" useCache="false">
+		SELECT
+		`year`,
+		`date`,
+		`worktime_uuid`,
+		`start_time`,
+		`end_time`
+		FROM
+		`worktime_range`
+		WHERE `worktime_uuid` = #{worktimeUuid}
+		AND `start_time` &lt; #{startTime}
+		ORDER BY `start_time` DESC
+		limit 1
+	</select>
 
 	<select id="calculateCostTime" resultType="long" useCache="false">
 		SELECT

@@ -54,7 +54,49 @@ public class WorkTimeUtil {
             }
         }
     }
-
+    /**
+     * 
+    * @Time:2020年11月17日
+    * @Description: TODO 
+    * @param currentTimeMillis
+    * @param timeLimit
+    * @param worktimeUuid
+    * @return long
+     */
+    public static long calculateExpireTimeForTimedOut(long currentTimeMillis, long timeoutPeriod, String worktimeUuid) {
+        if (worktimeMapper.checkWorktimeIsExists(worktimeUuid) == 0) {
+            throw new WorktimeNotFoundException(worktimeUuid);
+        }
+        if (timeoutPeriod <= 0) {
+            return currentTimeMillis;
+        }
+        WorktimeRangeVo worktimeRangeVo = new WorktimeRangeVo();
+        WorktimeRangeVo recentWorktimeRange = null;
+        long startTime = 0;
+        long endTime = 0;
+        long duration = 0;
+        while (true) {
+            worktimeRangeVo.setWorktimeUuid(worktimeUuid);
+            worktimeRangeVo.setStartTime(currentTimeMillis);
+            recentWorktimeRange = worktimeMapper.getRecentWorktimeRange2(worktimeRangeVo);
+            if (recentWorktimeRange == null) {
+                return currentTimeMillis;
+            }
+            startTime = recentWorktimeRange.getStartTime();
+            endTime = recentWorktimeRange.getEndTime();
+            if (endTime < currentTimeMillis) {
+                currentTimeMillis = endTime;
+            }
+            duration = currentTimeMillis - startTime;
+            if (duration >= timeoutPeriod) {
+                return currentTimeMillis - timeoutPeriod;
+            } else {
+                timeoutPeriod -= duration;
+                currentTimeMillis = startTime;
+            }
+        }
+    }
+    
     public static long calculateCostTime(List<WorktimeRangeVo> worktimeRangeList) {
         if (worktimeRangeList == null || worktimeRangeList.isEmpty()) {
             return 0L;
