@@ -30,7 +30,7 @@ public interface WorktimeMapper {
 
 	public WorktimeRangeVo getRecentWorktimeRange(WorktimeRangeVo worktimeRangeVo);
 	
-	public WorktimeRangeVo getRecentWorktimeRange2(WorktimeRangeVo worktimeRangeVo);
+	public WorktimeRangeVo getRecentWorktimeRangeBackward(WorktimeRangeVo worktimeRangeVo);
 
 	public long calculateCostTime(@Param("worktimeUuid")
 	String worktimeUuid, @Param("startTime")

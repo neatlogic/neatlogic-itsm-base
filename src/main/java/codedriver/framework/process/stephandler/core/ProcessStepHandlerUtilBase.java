@@ -483,7 +483,7 @@ public abstract class ProcessStepHandlerUtilBase {
 		private static long getTimeCost(List<ProcessTaskStepTimeAuditVo> processTaskStepTimeAuditList, long currentTimeMillis, String worktimeUuid) {
 			List<Map<String, Long>> timeList = new ArrayList<>();
 			for (ProcessTaskStepTimeAuditVo auditVo : processTaskStepTimeAuditList) {
-			    System.out.println(auditVo);
+			    //System.out.println(auditVo);
 				Long startTime = null, endTime = null;
 				if (auditVo.getActiveTimeLong() != null) {
 					startTime = auditVo.getActiveTimeLong();
@@ -536,7 +536,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			Stack<Long> timeStack = new Stack<>();
 			List<Map<String, Long>> newTimeList = new ArrayList<>();
 			for (Map<String, Long> timeMap : timeList) {
-			    System.out.println(timeMap);
+			    //System.out.println(timeMap);
 				if (timeMap.containsKey("s")) {
 					timeStack.push(timeMap.get("s"));
 				} else if (timeMap.containsKey("e")) {
@@ -564,7 +564,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			if (CollectionUtils.isNotEmpty(processTaskStepTimeAuditList)) {
 				List<Map<String, Long>> timeZoneList = new ArrayList<>();
 				for (ProcessTaskStepTimeAuditVo auditVo : processTaskStepTimeAuditList) {
-				    System.out.println(auditVo);
+				    //System.out.println(auditVo);
 					Long startTime = null, endTime = null;
 					if (auditVo.getActiveTimeLong() != null) {
 						startTime = auditVo.getActiveTimeLong();
@@ -618,7 +618,7 @@ public abstract class ProcessStepHandlerUtilBase {
 
 				Stack<Long> timeStack = new Stack<>();
 				for (Map<String, Long> timeMap : timeZoneList) {
-				    System.out.println(timeMap);
+				    //System.out.println(timeMap);
 					if (timeMap.containsKey("s")) {
 						timeStack.push(timeMap.get("s"));
 					} else if (timeMap.containsKey("e")) {
@@ -632,7 +632,7 @@ public abstract class ProcessStepHandlerUtilBase {
 					}
 				}
 			}
-			System.out.println("timeCost:" + timeCost);
+			//System.out.println("timeCost:" + timeCost);
 			return timeCost;
 		}
 		protected static void calculate(ProcessTaskVo currentProcessTaskVo, boolean isAsync) {
@@ -711,25 +711,14 @@ public abstract class ProcessStepHandlerUtilBase {
                         }
                     }
                     if (isHit) {
-//                        ProcessTaskSlaTimeVo slaTimeVo = new ProcessTaskSlaTimeVo();
                         if (enablePriority == 0) {
                             return getRealtime(time, unit);
-//                            long timecost = getRealtime(time, unit);
-//                            slaTimeVo.setTimeSum(timecost);
-//                            slaTimeVo.setRealTimeLeft(timecost);
-//                            slaTimeVo.setTimeLeft(timecost);
-//                            return slaTimeVo;
                         } else {//关联优先级
                             if (CollectionUtils.isNotEmpty(priorityList)) {
                                 for (int p = 0; p < priorityList.size(); p++) {
                                     JSONObject priorityObj = priorityList.getJSONObject(p);
                                     if (priorityObj.getString("priorityUuid").equals(processTaskVo.getPriorityUuid())) {
                                         return getRealtime(priorityObj.getIntValue("time"), priorityObj.getString("unit"));
-//                                        long timecost = getRealtime(priorityObj.getIntValue("time"), priorityObj.getString("unit"));
-//                                        slaTimeVo.setTimeSum(timecost);
-//                                        slaTimeVo.setRealTimeLeft(timecost);
-//                                        slaTimeVo.setTimeLeft(timecost);
-//                                        return slaTimeVo;
                                     }
                                 }
                             }
@@ -779,7 +768,7 @@ public abstract class ProcessStepHandlerUtilBase {
                     throw new RuntimeException("计算剩余时间失败");
                 }
             }
-            System.out.println(slaTimeVo);
+            //System.out.println(slaTimeVo);
 		}
 		
 		private void adjustJob(ProcessTaskSlaTimeVo slaTimeVo, JSONObject slaConfigObj, Date oldExpireTime) {

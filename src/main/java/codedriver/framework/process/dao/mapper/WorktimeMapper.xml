@@ -136,7 +136,7 @@
 		limit 0,1
 	</select>
 	
-	<select id="getRecentWorktimeRange2" parameterType="codedriver.framework.process.dto.WorktimeRangeVo" resultMap="worktimeRangeMap" useCache="false">
+	<select id="getRecentWorktimeRangeBackward" parameterType="codedriver.framework.process.dto.WorktimeRangeVo" resultMap="worktimeRangeMap" useCache="false">
 		SELECT
 		`year`,
 		`date`,

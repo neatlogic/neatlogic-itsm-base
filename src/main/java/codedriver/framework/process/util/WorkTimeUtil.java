@@ -20,7 +20,15 @@ public class WorkTimeUtil {
     public void setWorktimeMapper(WorktimeMapper _worktimeMapper) {
         worktimeMapper = _worktimeMapper;
     }
-
+    /**
+     * 
+    * @Time:2020年11月17日
+    * @Description: 超时前，计算超时时间点
+    * @param activeTime 当前时间
+    * @param timeLimit 剩余时长
+    * @param worktimeUuid 时间窗口uuid
+    * @return long
+     */
     public static long calculateExpireTime(long activeTime, long timeLimit, String worktimeUuid) {
         if (worktimeMapper.checkWorktimeIsExists(worktimeUuid) == 0) {
             throw new WorktimeNotFoundException(worktimeUuid);
@@ -57,9 +65,9 @@ public class WorkTimeUtil {
     /**
      * 
     * @Time:2020年11月17日
-    * @Description: TODO 
+    * @Description: 超时后，计算超时时间点
     * @param currentTimeMillis
-    * @param timeLimit
+    * @param timeoutPeriod 已超时时长
     * @param worktimeUuid
     * @return long
      */
@@ -78,7 +86,7 @@ public class WorkTimeUtil {
         while (true) {
             worktimeRangeVo.setWorktimeUuid(worktimeUuid);
             worktimeRangeVo.setStartTime(currentTimeMillis);
-            recentWorktimeRange = worktimeMapper.getRecentWorktimeRange2(worktimeRangeVo);
+            recentWorktimeRange = worktimeMapper.getRecentWorktimeRangeBackward(worktimeRangeVo);
             if (recentWorktimeRange == null) {
                 return currentTimeMillis;
             }
