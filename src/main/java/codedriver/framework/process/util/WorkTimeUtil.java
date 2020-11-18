@@ -20,7 +20,15 @@ public class WorkTimeUtil {
     public void setWorktimeMapper(WorktimeMapper _worktimeMapper) {
         worktimeMapper = _worktimeMapper;
     }
-
+    /**
+     * 
+    * @Time:2020年11月17日
+    * @Description: 超时前，计算超时时间点
+    * @param activeTime 当前时间
+    * @param timeLimit 剩余时长
+    * @param worktimeUuid 时间窗口uuid
+    * @return long
+     */
     public static long calculateExpireTime(long activeTime, long timeLimit, String worktimeUuid) {
         if (worktimeMapper.checkWorktimeIsExists(worktimeUuid) == 0) {
             throw new WorktimeNotFoundException(worktimeUuid);
@@ -54,7 +62,49 @@ public class WorkTimeUtil {
             }
         }
     }
-
+    /**
+     * 
+    * @Time:2020年11月17日
+    * @Description: 超时后，计算超时时间点
+    * @param currentTimeMillis
+    * @param timeoutPeriod 已超时时长
+    * @param worktimeUuid
+    * @return long
+     */
+    public static long calculateExpireTimeForTimedOut(long currentTimeMillis, long timeoutPeriod, String worktimeUuid) {
+        if (worktimeMapper.checkWorktimeIsExists(worktimeUuid) == 0) {
+            throw new WorktimeNotFoundException(worktimeUuid);
+        }
+        if (timeoutPeriod <= 0) {
+            return currentTimeMillis;
+        }
+        WorktimeRangeVo worktimeRangeVo = new WorktimeRangeVo();
+        WorktimeRangeVo recentWorktimeRange = null;
+        long startTime = 0;
+        long endTime = 0;
+        long duration = 0;
+        while (true) {
+            worktimeRangeVo.setWorktimeUuid(worktimeUuid);
+            worktimeRangeVo.setStartTime(currentTimeMillis);
+            recentWorktimeRange = worktimeMapper.getRecentWorktimeRangeBackward(worktimeRangeVo);
+            if (recentWorktimeRange == null) {
+                return currentTimeMillis;
+            }
+            startTime = recentWorktimeRange.getStartTime();
+            endTime = recentWorktimeRange.getEndTime();
+            if (endTime < currentTimeMillis) {
+                currentTimeMillis = endTime;
+            }
+            duration = currentTimeMillis - startTime;
+            if (duration >= timeoutPeriod) {
+                return currentTimeMillis - timeoutPeriod;
+            } else {
+                timeoutPeriod -= duration;
+                currentTimeMillis = startTime;
+            }
+        }
+    }
+    
     public static long calculateCostTime(List<WorktimeRangeVo> worktimeRangeList) {
         if (worktimeRangeList == null || worktimeRangeList.isEmpty()) {
             return 0L;

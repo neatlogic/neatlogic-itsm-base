@@ -283,33 +283,6 @@
 		</if>
 	</select>
 
-	<select id="searchProcessTaskStep" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
-		SELECT
-		`id`,
-		`processtask_id` AS processTaskId,
-		`name`,
-		`process_step_uuid` AS processStepUuid,
-		`status`,
-		`result`,
-		`type`,
-		`handler`,
-		`is_active` AS isActive,
-		a.`start_time` AS startTime,
-		a.`end_time` AS endTime,
-		a.`expire_time` AS endTime,
-		`error`
-		FROM
-		`processtask_step` a
-		WHERE
-		1=1
-		<if test="processStepUuid != null and processStepUuid != ''">
-			AND `process_step_uuid` = #{processStepUuid}
-		</if>
-		<if test="needPage == true">
-			LIMIT #{startNum}, #{pageSize}
-		</if>
-	</select>
-
 	<select id="getProcessTaskStepTimeoutPolicyByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo">
 		SELECT
 		`processtask_id` as processTaskId,
@@ -422,6 +395,7 @@
 		a.`type`,
 		a.`handler`,
 		a.`is_active` AS isActive,
+		a.`active_time` AS activeTime,
 		a.`start_time` AS startTime,
 		a.`end_time` AS endTime,
 		a.`error`,
@@ -462,6 +436,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -507,6 +482,7 @@
 		ps.`result`,
 		ps.`type`,
 		ps.`handler`,
+		ps.`active_time` AS activeTime,
 		ps.`start_time` AS startTime,
 		ps.`end_time` AS endTime,
 		ps.`error`,
@@ -578,6 +554,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -598,6 +575,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -619,6 +597,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -741,6 +720,7 @@
 	  `type`,
 	  `handler`,
 	  `is_active`,
+	  `active_time`,
 	  `start_time`,
 	  `end_time`,
 	  `error`,
@@ -876,6 +856,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -896,6 +877,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -977,6 +959,7 @@
 	  `type`,
 	  `handler`,
 	  `is_active` AS isActive,
+	  `active_time` AS activeTime,
 	  `start_time` AS startTime,
 	  `end_time` AS endTime,
 	  `error`,
@@ -1097,6 +1080,7 @@
 			<result column="handler" property="handler" />
 			<result column="is_active" property="isActive" />
 			<result column="stepConfigHash" property="configHash" />
+			<result column="stepActiveTime" property="activeTime" />
 			<result column="stepStartTime" property="startTime" />
 			<result column="stepEndTime" property="endTime" />
 		</collection>
@@ -1124,6 +1108,7 @@
 	ps.`handler`,
 	ps.`is_active`,
 	ps.`config_hash` as stepConfigHash,
+	ps.`active_time` as stepActiveTime,
 	ps.`start_time` as stepStartTime,
 	ps.`end_time` as stepEndTime
 	from
@@ -1454,22 +1439,26 @@
 		`status` = #{status},
 		`result` = #{result},
 		`is_active` = #{isActive},
-		<if test="isActive == 1">
-			`start_time` = NOW(3),
-			`end_time` = NULL,
+		<if test="updateActiveTime == 1">
+			`active_time` = NOW(3),
 		</if>
-		<if test="isActive == 2">
-			`end_time` = NOW(3),
-		</if>
+		<choose>
+			<when test="updateStartTime == 1">
+				`start_time` = NOW(3),
+			</when>
+			<when test="updateStartTime == -1">
+				`start_time` = NULL,
+			</when>
+		</choose>
+		<choose>
+			<when test="updateEndTime == 1">
+				`end_time` = NOW(3),
+			</when>
+			<when test="updateEndTime == -1">
+				`end_time` = NULL,
+			</when>
+		</choose>
 		`error` = #{error}
-		WHERE `id` = #{id}
-	</update>
-
-	<update id="updateProcessTaskStepExpireTime" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
-		UPDATE
-		`processtask_step`
-		SET
-		`expire_time` = #{expireTime}
 		WHERE `id` = #{id}
 	</update>
 
@@ -1759,6 +1748,7 @@
 		`type`,
 		`handler`,
 		`is_active`,
+		`active_time`,
 		`start_time`,
 		`end_time`,
 		`config_hash`
@@ -1773,6 +1763,7 @@
 		#{type},
 		#{handler},
 		#{isActive},
+		#{activeTime},
 		#{startTime},
 		#{endTime},
 		#{configHash}
