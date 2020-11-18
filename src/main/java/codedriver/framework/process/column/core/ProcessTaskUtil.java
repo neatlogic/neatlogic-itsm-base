@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.process.constvalue.ProcessField;
+import codedriver.framework.process.constvalue.ProcessTaskParams;
 import codedriver.framework.process.dto.AttributeDataVo;
 import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
@@ -115,4 +116,84 @@ public class ProcessTaskUtil {
 		
 		return resultObj;
 	}
+	
+	public static JSONObject getProcessTaskParamData(ProcessTaskVo processTaskVo) {
+        JSONObject resultObj = new JSONObject();
+        /** 工单信息数据 **/
+        resultObj.put(ProcessTaskParams.ID.getValue(), processTaskVo.getId());
+        resultObj.put(ProcessTaskParams.TITLE.getValue(), processTaskVo.getTitle());
+        resultObj.put(ProcessTaskParams.CHANNELTYPE.getValue(), processTaskVo.getChannelType().getName());
+        resultObj.put(ProcessTaskParams.OWNERNAME.getValue(), processTaskVo.getOwnerName());
+        resultObj.put(ProcessTaskParams.REPORTERNAME.getValue(), processTaskVo.getReporterName());
+        resultObj.put(ProcessTaskParams.PRIORITY.getValue(), processTaskVo.getPriority().getName());
+        resultObj.put(ProcessTaskParams.STATUSTEXT.getValue(), processTaskVo.getStatusVo().getText());
+        resultObj.put(ProcessTaskParams.OWNERCOMPANYLIST.getValue(), processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
+        resultObj.put(ProcessTaskParams.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);
+        resultObj.put(ProcessTaskParams.STEPNAME.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getName() : null);
+        
+        ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
+        ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
+        if(comment != null && StringUtils.isNotBlank(comment.getContent())) {
+            resultObj.put(ProcessTaskParams.CONTENT.getValue(), comment.getContent());
+        }else {
+            resultObj.put(ProcessTaskParams.CONTENT.getValue(), "");
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date endTime = processTaskVo.getEndTime();
+        if(endTime != null) {
+            resultObj.put(ProcessTaskParams.ENDTIME.getValue(), sdf.format(endTime));
+        }else {
+            resultObj.put(ProcessTaskParams.ENDTIME.getValue(), "");
+        }
+        Date startTime = processTaskVo.getStartTime();
+        if(startTime != null) {
+            resultObj.put(ProcessTaskParams.STARTTIME.getValue(), sdf.format(startTime));
+        }else {
+            resultObj.put(ProcessTaskParams.STARTTIME.getValue(), "");
+        }
+//        Date expireTime = processTaskVo.getExpireTime();
+//        if(expireTime != null) {
+//            resultObj.put(ProcessTaskParams.EXPIREDTIME.getValue(), sdf.format(expireTime));
+//        }else {
+//            resultObj.put(ProcessTaskParams.EXPIREDTIME.getValue(), "");
+//        }
+        
+        /** 表单信息数据 **/
+        Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
+        if(MapUtils.isNotEmpty(formAttributeDataMap)) {
+            if(StringUtils.isNotBlank(processTaskVo.getFormConfig())) {
+                Map<String, Object> formAttributeMap = new HashMap<>();
+                FormVersionVo formVersionVo = new FormVersionVo();
+                formVersionVo.setFormConfig(processTaskVo.getFormConfig());
+                List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
+                for(FormAttributeVo formAttribute : formAttributeList) {
+                    Object attributeValue = formAttributeDataMap.get(formAttribute.getUuid());
+                    if(attributeValue != null) {
+                        IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
+                        if(handler != null) {
+                            AttributeDataVo attributeDataVo = new AttributeDataVo();
+                            attributeDataVo.setAttributeUuid(formAttribute.getUuid());
+                            if(attributeValue instanceof String) {
+                                attributeDataVo.setData((String)attributeValue);
+                            }else if(attributeValue instanceof JSONArray){
+                                attributeDataVo.setData(JSON.toJSONString(attributeValue));
+                            }else if(attributeValue instanceof JSONObject) {
+                                attributeDataVo.setData(JSON.toJSONString(attributeValue));
+                            }
+                            Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+                            
+                            resultObj.put(formAttribute.getUuid(), value);
+                            formAttributeMap.put(formAttribute.getLabel(), value.toString());
+                        }else {
+                            resultObj.put(formAttribute.getUuid(), attributeValue);
+                            formAttributeMap.put(formAttribute.getLabel(), attributeValue.toString());
+                        }
+                    }
+                }
+                resultObj.put(ProcessTaskParams.FORM.getValue(), formAttributeMap);
+            }
+        }
+        
+        return resultObj;
+    }
 }

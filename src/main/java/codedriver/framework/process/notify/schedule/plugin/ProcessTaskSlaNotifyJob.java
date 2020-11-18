@@ -215,7 +215,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 						//IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
 						ProcessTaskVo processTaskVo = getProcessTaskDetailById(processTaskSlaVo.getProcessTaskId());
 						JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
-						JSONObject templateParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
+						JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
 						Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
 						for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
 						    getReceiverMap(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), receiverMap);							
