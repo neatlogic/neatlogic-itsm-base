@@ -29,11 +29,12 @@ public class ProcessTaskStepDataVo {
         this.isAutoGenerateId = _isAutoGenerateId;
     }
 
-    public ProcessTaskStepDataVo(Long processTaskId, Long processTaskStepId, String type) {
+    public ProcessTaskStepDataVo(Long processTaskId, Long processTaskStepId, String type,String fcu) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
         this.type = type;
         this.isAutoGenerateId = true;
+        this.fcu = fcu;
     }
 
     public synchronized Long getId() {
