@@ -283,33 +283,6 @@
 		</if>
 	</select>
 
-	<!-- <select id="searchProcessTaskStep" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
-		SELECT
-		`id`,
-		`processtask_id` AS processTaskId,
-		`name`,
-		`process_step_uuid` AS processStepUuid,
-		`status`,
-		`result`,
-		`type`,
-		`handler`,
-		`is_active` AS isActive,
-		a.`start_time` AS startTime,
-		a.`end_time` AS endTime,
-		a.`expire_time` AS endTime,
-		`error`
-		FROM
-		`processtask_step` a
-		WHERE
-		1=1
-		<if test="processStepUuid != null and processStepUuid != ''">
-			AND `process_step_uuid` = #{processStepUuid}
-		</if>
-		<if test="needPage == true">
-			LIMIT #{startNum}, #{pageSize}
-		</if>
-	</select> -->
-
 	<select id="getProcessTaskStepTimeoutPolicyByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo">
 		SELECT
 		`processtask_id` as processTaskId,
@@ -1488,14 +1461,6 @@
 		`error` = #{error}
 		WHERE `id` = #{id}
 	</update>
-
-	<!-- <update id="updateProcessTaskStepExpireTime" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
-		UPDATE
-		`processtask_step`
-		SET
-		`expire_time` = #{expireTime}
-		WHERE `id` = #{id}
-	</update> -->
 
 	<insert id="insertProcessTaskSlaNotify" parameterType="codedriver.framework.process.dto.ProcessTaskSlaNotifyVo">
 		<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">

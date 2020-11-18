@@ -84,8 +84,6 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
         @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
 
-//    public List<ProcessTaskStepVo> searchProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
-
     public List<ProcessTaskStepTimeoutPolicyVo>
         getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);
 
@@ -333,9 +331,6 @@ public interface ProcessTaskMapper {
     public int replaceProcesssTaskStepAgent(ProcessTaskStepAgentVo processTaskStepAgentVo);
     
     public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
-
-//    @ESSearch
-//    public int updateProcessTaskStepExpireTime(@ESParam("processtask") ProcessTaskStepVo processTaskStepVo);
 
     @ESSearch
     public int updateProcessTaskStepStatus(@ESParam("processtask") ProcessTaskStepVo processTaskStepVo);
