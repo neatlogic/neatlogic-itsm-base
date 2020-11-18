@@ -283,7 +283,7 @@
 		</if>
 	</select>
 
-	<select id="searchProcessTaskStep" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+	<!-- <select id="searchProcessTaskStep" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
 		SELECT
 		`id`,
 		`processtask_id` AS processTaskId,
@@ -308,7 +308,7 @@
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
-	</select>
+	</select> -->
 
 	<select id="getProcessTaskStepTimeoutPolicyByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo">
 		SELECT
@@ -422,6 +422,7 @@
 		a.`type`,
 		a.`handler`,
 		a.`is_active` AS isActive,
+		a.`active_time` AS activeTime,
 		a.`start_time` AS startTime,
 		a.`end_time` AS endTime,
 		a.`error`,
@@ -462,6 +463,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -507,6 +509,7 @@
 		ps.`result`,
 		ps.`type`,
 		ps.`handler`,
+		ps.`active_time` AS activeTime,
 		ps.`start_time` AS startTime,
 		ps.`end_time` AS endTime,
 		ps.`error`,
@@ -578,6 +581,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -598,6 +602,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -619,6 +624,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -741,6 +747,7 @@
 	  `type`,
 	  `handler`,
 	  `is_active`,
+	  `active_time`,
 	  `start_time`,
 	  `end_time`,
 	  `error`,
@@ -876,6 +883,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -896,6 +904,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -977,6 +986,7 @@
 	  `type`,
 	  `handler`,
 	  `is_active` AS isActive,
+	  `active_time` AS activeTime,
 	  `start_time` AS startTime,
 	  `end_time` AS endTime,
 	  `error`,
@@ -1097,6 +1107,7 @@
 			<result column="handler" property="handler" />
 			<result column="is_active" property="isActive" />
 			<result column="stepConfigHash" property="configHash" />
+			<result column="stepActiveTime" property="activeTime" />
 			<result column="stepStartTime" property="startTime" />
 			<result column="stepEndTime" property="endTime" />
 		</collection>
@@ -1124,6 +1135,7 @@
 	ps.`handler`,
 	ps.`is_active`,
 	ps.`config_hash` as stepConfigHash,
+	ps.`active_time` as stepActiveTime,
 	ps.`start_time` as stepStartTime,
 	ps.`end_time` as stepEndTime
 	from

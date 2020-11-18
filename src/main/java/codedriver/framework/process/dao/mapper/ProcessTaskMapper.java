@@ -84,7 +84,7 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
         @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
 
-    public List<ProcessTaskStepVo> searchProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
+//    public List<ProcessTaskStepVo> searchProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
 
     public List<ProcessTaskStepTimeoutPolicyVo>
         getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);

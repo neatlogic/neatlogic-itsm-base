@@ -261,6 +261,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	                /** 执行动作 **/
 	                ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.ACTIVE);
 				} else if (this.getMode().equals(ProcessStepMode.AT)) {
+				    myActive(currentProcessTaskStepVo);
+                    currentProcessTaskStepVo.setIsActive(1);
+                    updateProcessTaskStepStatus(currentProcessTaskStepVo);
 					/** 自动处理 **/
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
 					doNext(ProcessTaskOperationType.HANDLE, new ProcessStepThread(currentProcessTaskStepVo) {
@@ -570,6 +573,12 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	}
 
 	private int updateProcessTaskStepStatus(ProcessTaskStepVo currentProcessTaskStepVo) {
+	    if(currentProcessTaskStepVo.getActiveTime() != null) {
+	        currentProcessTaskStepVo.setUpdateActiveTime(0);
+	    }
+	    if(currentProcessTaskStepVo.getStartTime() != null) {
+            currentProcessTaskStepVo.setUpdateStartTime(0);
+        }
 		processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		updateProcessTaskStatus(currentProcessTaskStepVo.getProcessTaskId());
 		return 1;
