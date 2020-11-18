@@ -48,6 +48,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String type;
 	private String formUuid;
 	private Integer isActive = 0;
+    @EntityField(name = "激活时间", type = ApiParamType.LONG)
+    private Date activeTime;
 	@EntityField(name = "开始时间", type = ApiParamType.LONG)
 	private Date startTime;
 	@EntityField(name = "结束时间", type = ApiParamType.LONG)
@@ -86,8 +88,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private ProcessTaskStepUserVo majorUser;
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> minorUserList = new ArrayList<>();
-//	@EntityField(name = "代办人列表", type = ApiParamType.JSONARRAY)
-//	private List<ProcessTaskStepUserVo> agentUserList = new ArrayList<>();
 	@EntityField(name = "暂存评论附件或上报描述附件", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepReplyVo comment;
 	@EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
@@ -143,6 +143,9 @@ public class ProcessTaskStepVo extends BasePageVo {
     @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
     private String originalUserName;
     
+    private transient int updateActiveTime;
+    private transient int updateStartTime;
+    private transient int updateEndTime;
 	public ProcessTaskStepVo() {
 
 	}
@@ -289,7 +292,15 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.isActive = isActived;
 	}
 
-	public Date getStartTime() {
+	public Date getActiveTime() {
+        return activeTime;
+    }
+
+    public void setActiveTime(Date activeTime) {
+        this.activeTime = activeTime;
+    }
+
+    public Date getStartTime() {
 		return startTime;
 	}
 
@@ -569,14 +580,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.minorUserList = minorUserList;
 	}
 
-//	public List<ProcessTaskStepUserVo> getAgentUserList() {
-//		return agentUserList;
-//	}
-//
-//	public void setAgentUserList(List<ProcessTaskStepUserVo> agentUserList) {
-//		this.agentUserList = agentUserList;
-//	}
-
 	public ProcessTaskStepReplyVo getComment() {
 		return comment;
 	}
@@ -767,6 +770,30 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setOriginalUserName(String originalUserName) {
         this.originalUserName = originalUserName;
+    }
+
+    public int getUpdateActiveTime() {
+        return updateActiveTime;
+    }
+
+    public void setUpdateActiveTime(int updateActiveTime) {
+        this.updateActiveTime = updateActiveTime;
+    }
+
+    public int getUpdateStartTime() {
+        return updateStartTime;
+    }
+
+    public void setUpdateStartTime(int updateStartTime) {
+        this.updateStartTime = updateStartTime;
+    }
+
+    public int getUpdateEndTime() {
+        return updateEndTime;
+    }
+
+    public void setUpdateEndTime(int updateEndTime) {
+        this.updateEndTime = updateEndTime;
     }
 
 }

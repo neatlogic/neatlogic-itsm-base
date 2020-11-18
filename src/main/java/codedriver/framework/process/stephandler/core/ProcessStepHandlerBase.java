@@ -208,7 +208,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			if (canFire) {
 				/** 设置当前步骤状态为未开始 **/
 				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
-
+				currentProcessTaskStepVo.setUpdateActiveTime(1);
 				/** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
 				resetConvergeInfo(currentProcessTaskStepVo);
 
@@ -241,6 +241,25 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 					/** 分配处理人 **/
 					assign(currentProcessTaskStepVo);
+
+	                myActive(currentProcessTaskStepVo);
+	                currentProcessTaskStepVo.setIsActive(1);
+	                updateProcessTaskStepStatus(currentProcessTaskStepVo);
+
+	                /** 写入时间审计 **/
+	                TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
+	                if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
+	                    TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+	                }
+
+	                /** 计算SLA并触发超时警告 **/
+	                SlaHandler.calculate(currentProcessTaskStepVo);
+
+	                /** 触发通知 **/
+	                NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.ACTIVE);
+	                
+	                /** 执行动作 **/
+	                ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.ACTIVE);
 				} else if (this.getMode().equals(ProcessStepMode.AT)) {
 					/** 自动处理 **/
 					IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
@@ -251,25 +270,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 						}
 					});
 				}
-
-				myActive(currentProcessTaskStepVo);
-				currentProcessTaskStepVo.setIsActive(1);
-				updateProcessTaskStepStatus(currentProcessTaskStepVo);
-
-				/** 写入时间审计 **/
-				TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
-				if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
-					TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
-				}
-
-				/** 计算SLA并触发超时警告 **/
-				SlaHandler.calculate(currentProcessTaskStepVo);
-
-				/** 触发通知 **/
-				NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.ACTIVE);
-				
-				/** 执行动作 **/
-				ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.ACTIVE);
 			}
 		} catch (ProcessTaskException e) {
 			logger.error(e.getMessage(), e);
@@ -308,6 +308,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		if (oldUserList.size() > 0) {
 			ProcessTaskStepUserVo oldUserVo = oldUserList.get(0);
 			workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(), ProcessUserType.MAJOR.getValue()));
+			currentProcessTaskStepVo.setUpdateActiveTime(0);
 		}
 		currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 		int autoStart = myAssign(currentProcessTaskStepVo, workerList);
@@ -333,6 +334,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
 				if (autoStart == 1) {
 					currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
+					currentProcessTaskStepVo.setUpdateStartTime(1);
 				}			
 			}
 		}
@@ -425,6 +427,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
 		// 修改当前步骤状态为运行中
 		currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
+		currentProcessTaskStepVo.setUpdateStartTime(1);
+		currentProcessTaskStepVo.setUpdateEndTime(-1);
 		updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		if (!this.isAsync()) {// 同步模式
 			try {
@@ -535,6 +539,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
 			/** 更新工单步骤状态为 “进行中” **/
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
+			currentProcessTaskStepVo.setUpdateStartTime(1);
+			currentProcessTaskStepVo.setUpdateEndTime(-1);
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 			processStepUtilHandler.updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
 			
@@ -694,6 +700,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				/** 更新步骤状态 **/
 				currentProcessTaskStepVo.setStatus(ProcessTaskStatus.SUCCEED.getValue());
 				currentProcessTaskStepVo.setIsActive(2);
+				currentProcessTaskStepVo.setUpdateEndTime(1);
 				updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
 				/** 流转到下一步 **/
@@ -1550,6 +1557,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			mySaveDraft(currentProcessTaskStepVo);
 			currentProcessTaskStepVo.setIsActive(1);
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.DRAFT.getValue());
+			currentProcessTaskStepVo.setUpdateActiveTime(1);
+			currentProcessTaskStepVo.setUpdateStartTime(1);
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
@@ -1590,6 +1599,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
 			currentProcessTaskStepVo.setIsActive(2);
 			currentProcessTaskStepVo.setStatus(ProcessTaskStatus.SUCCEED.getValue());
+			currentProcessTaskStepVo.setUpdateEndTime(1);
 			updateProcessTaskStepStatus(currentProcessTaskStepVo);
 			
 			/** 流转到下一步 **/
@@ -1801,6 +1811,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             }
             processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.REDO, true);
             stepMajorUserRegulate(currentProcessTaskStepVo);
+            /** 设置当前步骤状态为未开始 **/
+            currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
             /** 保存打回原因 **/
             saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
 //            myRedo(currentProcessTaskStepVo);

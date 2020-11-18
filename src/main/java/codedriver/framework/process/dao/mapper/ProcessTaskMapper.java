@@ -334,8 +334,8 @@ public interface ProcessTaskMapper {
     
     public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
-    @ESSearch
-    public int updateProcessTaskStepExpireTime(@ESParam("processtask") ProcessTaskStepVo processTaskStepVo);
+//    @ESSearch
+//    public int updateProcessTaskStepExpireTime(@ESParam("processtask") ProcessTaskStepVo processTaskStepVo);
 
     @ESSearch
     public int updateProcessTaskStepStatus(@ESParam("processtask") ProcessTaskStepVo processTaskStepVo);

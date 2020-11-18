@@ -1454,24 +1454,36 @@
 		`status` = #{status},
 		`result` = #{result},
 		`is_active` = #{isActive},
-		<if test="isActive == 1">
-			`start_time` = NOW(3),
-			`end_time` = NULL,
+		<if test="updateActiveTime == 1">
+			`active_time` = NOW(3),
 		</if>
-		<if test="isActive == 2">
-			`end_time` = NOW(3),
-		</if>
+		<choose>
+			<when test="updateStartTime == 1">
+				`start_time` = NOW(3),
+			</when>
+			<when test="updateStartTime == -1">
+				`start_time` = NULL,
+			</when>
+		</choose>
+		<choose>
+			<when test="updateEndTime == 1">
+				`end_time` = NOW(3),
+			</when>
+			<when test="updateEndTime == -1">
+				`end_time` = NULL,
+			</when>
+		</choose>
 		`error` = #{error}
 		WHERE `id` = #{id}
 	</update>
 
-	<update id="updateProcessTaskStepExpireTime" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
+	<!-- <update id="updateProcessTaskStepExpireTime" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
 		UPDATE
 		`processtask_step`
 		SET
 		`expire_time` = #{expireTime}
 		WHERE `id` = #{id}
-	</update>
+	</update> -->
 
 	<insert id="insertProcessTaskSlaNotify" parameterType="codedriver.framework.process.dto.ProcessTaskSlaNotifyVo">
 		<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
@@ -1759,6 +1771,7 @@
 		`type`,
 		`handler`,
 		`is_active`,
+		`active_time`,
 		`start_time`,
 		`end_time`,
 		`config_hash`
@@ -1773,6 +1786,7 @@
 		#{type},
 		#{handler},
 		#{isActive},
+		#{activeTime},
 		#{startTime},
 		#{endTime},
 		#{configHash}
