@@ -18,7 +18,7 @@ public enum ProcessTaskParams {
     STATUSTEXT("statustext", "工单状态", ParamType.STRING),
     STEPID("stepid", "步骤id", ParamType.NUMBER),
     STEPNAME("stepName", "步骤名", ParamType.STRING),
-    FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form?? && (DATA.form?size > 0)><#list DATA.form?keys as key>${key}：${DATA.form[key]}<#if key_has_next><br></#if></#list></#if>")
+    FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??><#list DATA.form?keys as key>${key}：${DATA.form[key]}<#if key_has_next><br></#if></#list></#if>")
     ;
     private String value;
     private String text;
