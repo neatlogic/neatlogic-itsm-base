@@ -42,6 +42,7 @@ import codedriver.framework.integration.core.IntegrationHandlerFactory;
 import codedriver.framework.integration.dao.mapper.IntegrationMapper;
 import codedriver.framework.integration.dto.IntegrationResultVo;
 import codedriver.framework.integration.dto.IntegrationVo;
+import codedriver.framework.notify.core.INotifyTriggerType;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
@@ -94,7 +95,6 @@ import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.integration.handler.ProcessRequestFrom;
-import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
 import codedriver.framework.process.score.schedule.plugin.ProcessTaskAutoScoreJob;
@@ -226,9 +226,9 @@ public abstract class ProcessStepHandlerUtilBase {
 	protected static class ActionHandler extends CodeDriverThread {
 
 		private ProcessTaskStepVo currentProcessTaskStepVo;
-		private NotifyTriggerType triggerType;
+		private INotifyTriggerType triggerType;
 
-		public ActionHandler(ProcessTaskStepVo _currentProcessTaskStepVo, NotifyTriggerType _trigger) {
+		public ActionHandler(ProcessTaskStepVo _currentProcessTaskStepVo, INotifyTriggerType _trigger) {
 			currentProcessTaskStepVo = _currentProcessTaskStepVo;
 			triggerType = _trigger;
 			if (_currentProcessTaskStepVo != null) {
@@ -236,7 +236,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-		protected static void action(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
+		protected static void action(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger) {
 			if (!TransactionSynchronizationManager.isSynchronizationActive()) {
 				CachedThreadPool.execute(new ActionHandler(currentProcessTaskStepVo, trigger));
 			} else {
@@ -377,9 +377,9 @@ public abstract class ProcessStepHandlerUtilBase {
 
 	protected static class NotifyHandler extends CodeDriverThread {
 		private ProcessTaskStepVo currentProcessTaskStepVo;
-		private NotifyTriggerType notifyTriggerType;
+		private INotifyTriggerType notifyTriggerType;
 
-		public NotifyHandler(ProcessTaskStepVo _currentProcessTaskStepVo, NotifyTriggerType _trigger) {
+		public NotifyHandler(ProcessTaskStepVo _currentProcessTaskStepVo, INotifyTriggerType _trigger) {
 			currentProcessTaskStepVo = _currentProcessTaskStepVo;
 			notifyTriggerType = _trigger;
 			if (_currentProcessTaskStepVo != null) {
@@ -387,7 +387,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			}
 		}
 
-		protected static void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
+		protected static void notify(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger) {
 			if (!TransactionSynchronizationManager.isSynchronizationActive()) {
 				CachedThreadPool.execute(new NotifyHandler(currentProcessTaskStepVo, trigger));
 			} else {
@@ -451,7 +451,7 @@ public abstract class ProcessStepHandlerUtilBase {
 							ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
 							processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 							JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
-							JSONObject templateParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, false);
+							JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
 							Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
 							processStepUtilHandler.getReceiverMap(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), receiverMap);
 		                    /** 参数映射列表**/

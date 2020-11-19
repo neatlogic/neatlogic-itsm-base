@@ -733,14 +733,23 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 							});
 						}
 					}
-				} else if (nextStepList.size() == 0 && !processTaskStepVo.getHandler().equals(ProcessStepHandlerType.END.getHandler())) {
+				} else if (nextStepList.size() == 0 && !this.getHandler().equals(ProcessStepHandlerType.END.getHandler())) {
 					throw new ProcessTaskException("找不到可流转路径");
 				}
-				/** 触发通知 **/
-				NotifyHandler.notify(currentProcessTaskStepVo, notifyTriggerType);
 				
-				/** 执行动作 **/
-				ActionHandler.action(currentProcessTaskStepVo, notifyTriggerType);
+				if(this.getHandler().equals(ProcessStepHandlerType.END.getHandler())) {
+				    ProcessTaskScoreTemplateVo processTaskScoreTemplateVo = processTaskMapper.getProcessTaskScoreTemplateByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+		            if(processTaskScoreTemplateVo != null) {
+		                NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.PROCESSTASKCOMPLETE);
+		            }
+                    ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.PROCESSTASKCOMPLETE);
+				}else {
+				    /** 触发通知 **/
+	                NotifyHandler.notify(currentProcessTaskStepVo, notifyTriggerType);
+	                /** 执行动作 **/
+	                ActionHandler.action(currentProcessTaskStepVo, notifyTriggerType);
+				}				
+				
 				/** 回退提醒 **/
 				if (this.getMode().equals(ProcessStepMode.MT)) {
 				    JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
@@ -1636,10 +1645,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             SlaHandler.calculate(currentProcessTaskStepVo);
 
             /** 触发通知 **/
-            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
+            NotifyHandler.notify(currentProcessTaskStepVo, NotifyTriggerType.STARTPROCESS);
             
             /** 执行动作 **/
-            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.SUCCEED);
+            ActionHandler.action(currentProcessTaskStepVo, NotifyTriggerType.STARTPROCESS);
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setIsActive(1);
@@ -1934,6 +1943,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         processTaskStepVo.setParamObj(scoreObj);
         /** 生成活动 */
         AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
+        /** 触发通知 **/
+        NotifyHandler.notify(processTaskStepVo, NotifyTriggerType.PROCESSTASKSCORE);
 	    return 1;
 	}
 	

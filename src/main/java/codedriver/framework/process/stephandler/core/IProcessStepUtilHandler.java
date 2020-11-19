@@ -5,13 +5,13 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.notify.core.INotifyTriggerType;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.stepremind.core.IProcessTaskStepRemindType;
 
 public interface IProcessStepUtilHandler {
@@ -72,7 +72,7 @@ public interface IProcessStepUtilHandler {
 	* @param  trigger 
 	* @return void
 	 */
-	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger);
+	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger);
 	/**
 	 * 
 	* @Time:2020年11月11日
