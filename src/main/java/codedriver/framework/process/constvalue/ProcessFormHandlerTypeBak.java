@@ -9,7 +9,7 @@ import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.FormHandlerType;
 import codedriver.framework.common.constvalue.ParamType;
 
-public enum ProcessFormHandlerType implements IProcessFormHandlerType {
+public enum ProcessFormHandlerTypeBak implements IProcessFormHandlerType {
 
     FORMSELECT("formselect", "下拉框", "ts-sitemap", "form", FormHandlerType.SELECT, ParamType.ARRAY,
         List.class.getSimpleName().toLowerCase(), true, true, true, true, false),
@@ -79,21 +79,21 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
         return module;
     }
 
-    private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type,
+    private ProcessFormHandlerTypeBak(String _handler, String _handlerName, String _icon, String _type,
         boolean _isConditionable, boolean _isShowable, boolean _isValueable, boolean _isFilterable,
         boolean _isExtendable) {
         this(_handler, _handlerName, _icon, _type, null, null, null, _isConditionable, _isShowable, _isValueable,
             _isFilterable, _isExtendable);
     }
 
-    private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type,
+    private ProcessFormHandlerTypeBak(String _handler, String _handlerName, String _icon, String _type,
         FormHandlerType _handlerType, ParamType _paramType, String _dataType, boolean _isConditionable,
         boolean _isShowable, boolean _isValueable, boolean _isFilterable, boolean _isExtendable) {
         this(_handler, _handlerName, _icon, _type, _handlerType, _paramType, _dataType, null, null, _isConditionable,
             _isShowable, _isValueable, _isFilterable, _isExtendable);
     }
 
-    private ProcessFormHandlerType(String _handler, String _handlerName, String _icon, String _type,
+    private ProcessFormHandlerTypeBak(String _handler, String _handlerName, String _icon, String _type,
         FormHandlerType _handlerType, ParamType _paramType, String _dataType, List<Expression> _expressionList,
         Expression _expression, boolean _isConditionable, boolean _isShowable, boolean _isValueable,
         boolean _isFilterable, boolean _isExtendable) {
@@ -114,7 +114,7 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
     }
 
     public static String getHandlerName(String _handler) {
-        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
+        for (ProcessFormHandlerTypeBak s : ProcessFormHandlerTypeBak.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getHandlerName();
             }
@@ -123,7 +123,7 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
     }
 
     public static FormHandlerType getHandlerType(String _handler, String processWorkcenterConditionType) {
-        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
+        for (ProcessFormHandlerTypeBak s : ProcessFormHandlerTypeBak.values()) {
             if (s.getHandler().equals(_handler)) {
 
                 return s.getHandlerType(processWorkcenterConditionType);
@@ -133,7 +133,7 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
     }
 
     public static List<Expression> getExpressionList(String _handler) {
-        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
+        for (ProcessFormHandlerTypeBak s : ProcessFormHandlerTypeBak.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getExpressionList();
             }
@@ -154,7 +154,7 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
     }
 
     public static Expression getExpression(String _handler) {
-        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
+        for (ProcessFormHandlerTypeBak s : ProcessFormHandlerTypeBak.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getExpression();
             }
@@ -163,7 +163,7 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
     }
 
     public static String getDataType(String _handler) {
-        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
+        for (ProcessFormHandlerTypeBak s : ProcessFormHandlerTypeBak.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getDataType();
             }
@@ -202,7 +202,7 @@ public enum ProcessFormHandlerType implements IProcessFormHandlerType {
     }
 
     public static ParamType getParamType(String _handler) {
-        for (ProcessFormHandlerType s : ProcessFormHandlerType.values()) {
+        for (ProcessFormHandlerTypeBak s : ProcessFormHandlerTypeBak.values()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getParamType();
             }
