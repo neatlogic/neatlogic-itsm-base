@@ -122,10 +122,11 @@ public class ProcessTaskUtil {
         /** 工单信息数据 **/
         resultObj.put(ProcessTaskParams.ID.getValue(), processTaskVo.getId());
         resultObj.put(ProcessTaskParams.TITLE.getValue(), processTaskVo.getTitle());
-        resultObj.put(ProcessTaskParams.CHANNELTYPE.getValue(), processTaskVo.getChannelType().getName());
+        resultObj.put(ProcessTaskParams.CHANNELTYPENAME.getValue(), processTaskVo.getChannelType().getName());
+        resultObj.put(ProcessTaskParams.CHANNELPATH.getValue(), processTaskVo.getChannelPath());
         resultObj.put(ProcessTaskParams.OWNERNAME.getValue(), processTaskVo.getOwnerName());
         resultObj.put(ProcessTaskParams.REPORTERNAME.getValue(), processTaskVo.getReporterName());
-        resultObj.put(ProcessTaskParams.PRIORITY.getValue(), processTaskVo.getPriority().getName());
+        resultObj.put(ProcessTaskParams.PRIORITYNAME.getValue(), processTaskVo.getPriority().getName());
         resultObj.put(ProcessTaskParams.STATUSTEXT.getValue(), processTaskVo.getStatusVo().getText());
         resultObj.put(ProcessTaskParams.OWNERCOMPANYLIST.getValue(), processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessTaskParams.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);

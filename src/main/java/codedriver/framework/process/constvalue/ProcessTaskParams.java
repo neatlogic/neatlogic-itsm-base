@@ -5,8 +5,9 @@ import codedriver.framework.common.constvalue.ParamType;
 public enum ProcessTaskParams {
     ID("id", "工单号", ParamType.NUMBER),
     TITLE("title", "标题", ParamType.STRING),
-    PRIORITY("priority", "优先级", ParamType.STRING),
-    CHANNELTYPE("channeltype", "服务类型", ParamType.STRING),
+    PRIORITYNAME("priorityname", "优先级", ParamType.STRING),
+    CHANNELPATH("channelpath", "服务路径", ParamType.STRING),
+    CHANNELTYPENAME("channeltypename", "服务类型", ParamType.STRING),
     CONTENT("content", "上报内容", ParamType.STRING),
     STARTTIME("starttime", "开始时间", ParamType.DATE),
     ENDTIME("endtime", "结束时间", ParamType.DATE),
@@ -17,7 +18,7 @@ public enum ProcessTaskParams {
     STATUSTEXT("statustext", "工单状态", ParamType.STRING),
     STEPID("stepid", "步骤id", ParamType.NUMBER),
     STEPNAME("stepName", "步骤名", ParamType.STRING),
-    FORM("form", "表单", ParamType.ARRAY, "<#list DATA.form?keys as key>${key}：${DATA.form[key]}<#if key_has_next><br></#if></#list>")
+    FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form?? && (DATA.form?size > 0)><#list DATA.form?keys as key>${key}：${DATA.form[key]}<#if key_has_next><br></#if></#list></#if>")
     ;
     private String value;
     private String text;

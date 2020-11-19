@@ -62,7 +62,7 @@ import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
-import codedriver.framework.process.notify.core.NotifyTriggerType;
+import codedriver.framework.process.notify.core.SlaNotifyTriggerType;
 import codedriver.framework.scheduler.core.JobBase;
 import codedriver.framework.scheduler.dto.JobObject;
 import codedriver.framework.util.NotifyPolicyUtil;
@@ -220,7 +220,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 						for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
 						    getReceiverMap(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), receiverMap);							
 						}
-						NotifyPolicyUtil.execute(policyConfig, paramMappingList, NotifyTriggerType.TIMEOUT, templateParamData, conditionParamData, receiverMap);
+						NotifyPolicyUtil.execute(policyConfig, paramMappingList, SlaNotifyTriggerType.TIMEOUT, templateParamData, conditionParamData, receiverMap);
 					}
 				}
 				Date nextFireTime = context.getNextFireTime();

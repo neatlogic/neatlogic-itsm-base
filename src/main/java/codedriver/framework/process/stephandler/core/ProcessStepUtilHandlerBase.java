@@ -19,6 +19,7 @@ import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.TeamLevel;
 import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.dto.TeamVo;
+import codedriver.framework.notify.core.INotifyTriggerType;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessStepType;
@@ -45,7 +46,6 @@ import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
-import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType;
 import codedriver.framework.process.operationauth.core.OperationAuthHandlerType;
 import codedriver.framework.process.operationauth.core.ProcessOperateManager;
@@ -59,7 +59,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
 	}
 
 	@Override
-	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger) {
+	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger) {
 		NotifyHandler.notify(currentProcessTaskStepVo, trigger);
 	}
 	@Override
