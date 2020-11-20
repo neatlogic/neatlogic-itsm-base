@@ -20,10 +20,10 @@ import codedriver.framework.process.constvalue.ConditionProcessTaskOptions;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskParams;
-import codedriver.framework.process.notify.core.StepNotifyTriggerType;
+import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
 import codedriver.framework.process.notify.core.SubtaskNotifyTriggerType;
 @Component
-public class StepNotifyPolicyHandler extends NotifyPolicyHandlerBase {
+public class TaskStepNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 
 	@Override
 	public String getName() {
@@ -33,7 +33,7 @@ public class StepNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 	@Override
 	public List<ValueTextVo> myNotifyTriggerList() {
 		List<ValueTextVo> returnList = new ArrayList<>();
-		for (StepNotifyTriggerType notifyTriggerType : StepNotifyTriggerType.values()) {
+		for (TaskStepNotifyTriggerType notifyTriggerType : TaskStepNotifyTriggerType.values()) {
 			returnList.add(new ValueTextVo(notifyTriggerType.getTrigger(), notifyTriggerType.getText()));
 		}
 		for (SubtaskNotifyTriggerType notifyTriggerType : SubtaskNotifyTriggerType.values()) {
