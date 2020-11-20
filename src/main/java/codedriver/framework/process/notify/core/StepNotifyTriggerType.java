@@ -2,7 +2,7 @@ package codedriver.framework.process.notify.core;
 
 import codedriver.framework.notify.core.INotifyTriggerType;
 
-public enum NotifyTriggerType implements INotifyTriggerType {
+public enum StepNotifyTriggerType implements INotifyTriggerType {
 
     STARTPROCESS("startprocess", "上报"),
 	ACTIVE("active", "步骤激活"),
@@ -20,14 +20,14 @@ public enum NotifyTriggerType implements INotifyTriggerType {
 	PAUSE("pause", "步骤暂停"),
 	FAILED("failed", "步骤失败"),
 	REDO("redo", "步骤打回"),
-	PROCESSTASKCOMPLETE("processtaskcomplete", "工单完成"),
-	PROCESSTASKSCORE("processtaskscore", "工单评分"),
+//	PROCESSTASKCOMPLETE("processtaskcomplete", "工单完成"),
+//	PROCESSTASKSCORE("processtaskscore", "工单评分"),
 	;
 
 	private String trigger;
 	private String text;
 
-	private NotifyTriggerType(String _trigger, String _text) {
+	private StepNotifyTriggerType(String _trigger, String _text) {
 		this.trigger = _trigger;
 		this.text = _text;
 	}
@@ -42,7 +42,7 @@ public enum NotifyTriggerType implements INotifyTriggerType {
 	}
 	
 	public static String getText(String trigger) {
-		for(NotifyTriggerType n : NotifyTriggerType.values()) {
+		for(StepNotifyTriggerType n : StepNotifyTriggerType.values()) {
 			if(n.getTrigger().equals(trigger)) {
 				return n.getText();
 			}
