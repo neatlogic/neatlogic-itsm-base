@@ -4,13 +4,13 @@ import codedriver.framework.notify.core.INotifyTriggerType;
 
 public enum StepNotifyTriggerType implements INotifyTriggerType {
 
-    STARTPROCESS("startprocess", "上报"),
+//    STARTPROCESS("startprocess", "上报"),
 	ACTIVE("active", "步骤激活"),
 	ASSIGN("assign", "步骤分配处理人"),
     //ACCEPT("accept", "接管"),
 	START("start", "步骤开始"),
 	TRANSFER("transfer", "步骤转交"),
-	URGE("urge", "步骤催办"),
+//	URGE("urge", "步骤催办"),
 	SUCCEED("succeed", "步骤成功"),
 	BACK("back", "步骤回退"),
 	RETREAT("retreat", "步骤撤回"),

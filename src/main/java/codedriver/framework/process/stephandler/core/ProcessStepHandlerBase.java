@@ -1646,10 +1646,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             SlaHandler.calculate(currentProcessTaskStepVo);
 
             /** 触发通知 **/
-            NotifyHandler.notify(currentProcessTaskStepVo, StepNotifyTriggerType.STARTPROCESS);
+            NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.STARTPROCESS);
             
             /** 执行动作 **/
-            ActionHandler.action(currentProcessTaskStepVo, StepNotifyTriggerType.STARTPROCESS);
+            ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.STARTPROCESS);
 		} catch (ProcessTaskException ex) {
 			logger.error(ex.getMessage(), ex);
 			currentProcessTaskStepVo.setIsActive(1);

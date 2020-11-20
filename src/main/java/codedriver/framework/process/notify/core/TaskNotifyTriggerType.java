@@ -5,10 +5,9 @@ import codedriver.framework.notify.core.INotifyTriggerType;
 public enum TaskNotifyTriggerType implements INotifyTriggerType {
 
     STARTPROCESS("startprocess", "上报"),	
-//	URGE("urge", "步骤催办"),	
+	URGE("urge", "催办"),	
 //	ABORT("abort", "步骤终止"),
 //	RECOVER("recover", "步骤恢复"),
-//	REDO("redo", "步骤打回"),
 	PROCESSTASKCOMPLETE("processtaskcomplete", "工单完成"),
 	PROCESSTASKSCORE("processtaskscore", "工单评分"),
 	;
