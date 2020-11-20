@@ -119,6 +119,6 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
     @Override
     public String getEsPath(String... values) {
         String esName = getEsName(values);
-        return esName.substring(0, esName.lastIndexOf("."));
+        return esName;
     }
 }
