@@ -11,6 +11,10 @@
 		WHERE
 		`hash` = #{value}
 	</select>
+	
+	<select id="getProcessTaskConfigStringByHash" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `config` FROM `processtask_config` WHERE `hash` = #{value}
+	</select>
 
 	<select id="getProcessTaskStepConfigByHash" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT

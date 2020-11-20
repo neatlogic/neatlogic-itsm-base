@@ -18,4 +18,6 @@ public interface SelectContentByHashMapper {
     public int checkProcessTaskScoreTempleteConfigIsExists(String hash);
     
     public String getProcessTaskScoreTempleteConfigStringIsByHash(String hash);
+
+    public String getProcessTaskConfigStringByHash(String configHash);
 }

@@ -251,6 +251,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	                TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
 	                if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
 	                    TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+	                    NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.START);
 	                }
 
 	                /** 计算SLA并触发超时警告 **/
