@@ -4,7 +4,7 @@ import org.springframework.util.ClassUtils;
 
 import codedriver.framework.notify.core.NotifyHandlerType;
 import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
-import codedriver.framework.process.notify.core.NotifyTriggerType;
+import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
 
 public interface IDefaultTemplate {
 	
@@ -21,7 +21,7 @@ public interface IDefaultTemplate {
 		return NotifyDefaultTemplateFactory.nextNum();
 	}
 	public default String getName() {
-		return NotifyHandlerType.getText(getNotifyHandlerType())+ "_" + NotifyTriggerType.getText(getTrigger());
+		return NotifyHandlerType.getText(getNotifyHandlerType())+ "_" + TaskStepNotifyTriggerType.getText(getTrigger());
 	}
 	public default String getType() {
 		return DEFAULT_TEMPLATE_TYPE;
