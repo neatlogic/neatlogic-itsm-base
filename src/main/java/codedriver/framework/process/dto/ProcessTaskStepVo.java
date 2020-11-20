@@ -668,10 +668,16 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public JSONArray getActionList() {
 		if(actionList == null && MapUtils.isNotEmpty(getConfigObj())) {
-			actionList = getConfigObj().getJSONArray("actionList");
+		    JSONObject actionConfig = getConfigObj().getJSONObject("actionConfig");
+		    if(MapUtils.isNotEmpty(actionConfig)) {
+	            actionList = actionConfig.getJSONArray("actionList");
+		    }
 		}
 		if(CollectionUtils.isEmpty(actionList) && MapUtils.isNotEmpty(globalConfig)) {
-			actionList = globalConfig.getJSONArray("actionList");
+		    JSONObject actionConfig = globalConfig.getJSONObject("actionConfig");
+		    if(MapUtils.isNotEmpty(actionConfig)) {
+	            actionList = actionConfig.getJSONArray("actionList");
+		    }
 		}
 		return actionList;
 	}
