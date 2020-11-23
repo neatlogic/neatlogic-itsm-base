@@ -740,10 +740,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				}
 				
 				if(this.getHandler().equals(ProcessStepHandlerType.END.getHandler())) {
-				    ProcessTaskScoreTemplateVo processTaskScoreTemplateVo = processTaskMapper.getProcessTaskScoreTemplateByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-		            if(processTaskScoreTemplateVo != null) {
-		                NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
-		            }
+		            NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
                     ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
 				}else {
 				    /** 触发通知 **/

@@ -528,17 +528,6 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
         /** 节点设置按钮映射 **/
         JSONArray customButtonList = JSONUtil.getJSONArray(stepConfig, "customButtonList");
-        if(CollectionUtils.isEmpty(customButtonList)) {
-            ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(handler);
-            JSONObject globalConfig = processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null;
-            IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(handler);
-            if(processStepUtilHandler != null) {
-                globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
-            }
-            /** 节点管理按钮映射 **/
-            customButtonList = JSONUtil.getJSONArray(globalConfig, "customButtonList");
-        }
-
         if(CollectionUtils.isNotEmpty(customButtonList)) {
             for(int i = 0; i < customButtonList.size(); i++) {
                 JSONObject customButton = customButtonList.getJSONObject(i);
@@ -548,25 +537,35 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                 }
             }
         }
+        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(handler);
+        JSONObject globalConfig = processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null;
+        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(handler);
+        if(processStepUtilHandler != null) {
+            globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
+        }
+        /** 节点管理按钮映射 **/
+        customButtonList = JSONUtil.getJSONArray(globalConfig, "customButtonList");
+        if(CollectionUtils.isNotEmpty(customButtonList)) {
+            for(int i = 0; i < customButtonList.size(); i++) {
+                JSONObject customButton = customButtonList.getJSONObject(i);
+                String name = customButton.getString("name");
+                if(!customButtonMap.containsKey(name)) {
+                    String value = customButton.getString("value");
+                    if(StringUtils.isNotBlank(value)) {
+                        customButtonMap.put(name, value);
+                    }
+                }
+                
+            }
+        }
         return customButtonMap;
     }
     
     @Override
     public String getStatusTextByConfigHashAndHandler(String configHash, String handler, String status) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
-        /** 节点设置按钮映射 **/
-        JSONArray customButtonList = JSONUtil.getJSONArray(stepConfig, "customButtonList");
-        if(CollectionUtils.isEmpty(customButtonList)) {
-            ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(handler);
-            JSONObject globalConfig = processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null;
-            IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(handler);
-            if(processStepUtilHandler != null) {
-                globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
-            }
-            /** 节点管理按钮映射 **/
-            customButtonList = JSONUtil.getJSONArray(globalConfig, "customButtonList");
-        }
-
+        /** 节点设置状态映射 **/
+        JSONArray customButtonList = JSONUtil.getJSONArray(stepConfig, "customStatusList");
         if(CollectionUtils.isNotEmpty(customButtonList)) {
             for(int i = 0; i < customButtonList.size(); i++) {
                 JSONObject customButton = customButtonList.getJSONObject(i);
