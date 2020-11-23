@@ -40,7 +40,6 @@ import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.CatalogMapper;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.PriorityMapper;
-import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
@@ -48,7 +47,6 @@ import codedriver.framework.process.dto.CatalogVo;
 import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.PriorityVo;
-import codedriver.framework.process.dto.ProcessStepHandlerVo;
 import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
@@ -89,8 +87,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 	private TeamMapper teamMapper;
 	@Autowired
 	private FileMapper fileMapper;
-	@Autowired
-	private ProcessStepHandlerMapper processStepHandlerMapper;
 	@Autowired
 	private SelectContentByHashMapper selectContentByHashMapper;
 	
@@ -212,7 +208,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 					if (notifyPolicyVo != null) {
 						JSONObject policyConfig = notifyPolicyVo.getConfig();
 						List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
-						//IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
 						ProcessTaskVo processTaskVo = getProcessTaskDetailById(processTaskSlaVo.getProcessTaskId());
 						JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 						JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
@@ -323,12 +318,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
         }
 
         ProcessTaskStepVo startProcessTaskStepVo = processTaskStepList.get(0);
-        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
-        startProcessTaskStepVo.setConfig(stepConfig);
-        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
-        if(processStepHandlerConfig != null) {
-            startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());
-        }
         ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo();
         //获取上报描述内容
         List<Long> fileIdList = new ArrayList<>();
@@ -345,12 +334,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
             comment.setFileList(fileMapper.getFileListByIdList(fileIdList));
         }
         startProcessTaskStepVo.setComment(comment);
-        /** 当前步骤特有步骤信息 **/
-//        IProcessStepUtilHandler startProcessStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(startProcessTaskStepVo.getHandler());
-//        if(startProcessStepUtilHandler == null) {
-//            throw new ProcessStepHandlerNotFoundException(startProcessTaskStepVo.getHandler());
-//        }
-//        startProcessTaskStepVo.setHandlerStepInfo(startProcessStepUtilHandler.getHandlerStepInfo(startProcessTaskStepVo.getId()));
         return startProcessTaskStepVo;
     }
     
