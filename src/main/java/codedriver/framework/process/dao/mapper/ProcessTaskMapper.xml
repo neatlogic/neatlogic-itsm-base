@@ -338,21 +338,22 @@
 	<select id="getFromProcessTaskStepByToId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
 		SELECT
 		a.`id`,
-		a.`process_step_uuid` AS processStepUuid,
 		a.`processtask_id` AS processTaskId,
+		a.`name`,
+		a.`process_step_uuid` AS processStepUuid,
 		a.`status`,
-		a.`start_time` AS startTime,
-		a.`end_time` AS endTime,
-		a.`is_active` AS isActive,
+		a.`result`,
 		a.`type`,
 		a.`handler`,
-		a.`name`
-		FROM
-		processtask_step a
-		JOIN
-		processtask_step_rel b ON a.id = b.from_processtask_step_id and b.is_hit = 1
-		WHERE
-		to_processtask_step_id = #{value}
+		a.`is_active` AS isActive,
+		a.`config_hash` AS configHash,
+		a.`active_time` AS activeTime,
+		a.`start_time` AS startTime,
+		a.`end_time` AS endTime,
+		a.`error`
+		FROM `processtask_step` a
+		JOIN `processtask_step_rel` b ON a.`id` = b.`from_processtask_step_id` AND b.`is_hit` = 1
+		WHERE b.`to_processtask_step_id` = #{value}
 	</select>
 
 	<select id="getProcessTaskStepByConvergeId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
