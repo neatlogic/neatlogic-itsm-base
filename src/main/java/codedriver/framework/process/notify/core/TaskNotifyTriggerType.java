@@ -6,10 +6,10 @@ public enum TaskNotifyTriggerType implements INotifyTriggerType {
 
     STARTPROCESS("startprocess", "上报"),	
 	URGE("urge", "催办"),	
-//	ABORT("abort", "步骤终止"),
-//	RECOVER("recover", "步骤恢复"),
-	PROCESSTASKCOMPLETE("processtaskcomplete", "工单完成"),
-	PROCESSTASKSCORE("processtaskscore", "工单评分"),
+	ABORTPROCESSTASK("abortprocessTask", "取消工单"),
+	RECOVERPROCESSTASK("recoverprocessTask", "恢复工单"),
+	COMPLETEPROCESSTASK("COMPLETEPROCESSTASK", "完成工单"),
+	SCOREPROCESSTASK("SCOREPROCESSTASK", "评分"),
 	;
 
 	private String trigger;

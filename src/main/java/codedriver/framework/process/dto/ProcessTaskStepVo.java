@@ -6,13 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -20,12 +15,14 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
+import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
+import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskStepVo extends BasePageVo {
 
-	private final static Logger logger = LoggerFactory.getLogger(ProcessTaskStepVo.class);
+//	private final static Logger logger = LoggerFactory.getLogger(ProcessTaskStepVo.class);
 	@EntityField(name = "工单步骤id", type = ApiParamType.LONG)
 	private Long id;
 	@ESKey(type = ESKeyType.PKEY, name ="processTaskId")
@@ -56,13 +53,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Date endTime;
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
-	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
+//	@EntityField(name = "步骤配置信息", type = ApiParamType.LONG)
 	@JSONField(serialize=false)
 	private transient String config;
-	@JSONField(serialize=false)
-	private transient JSONObject configObj;
-	@JSONField(serialize=false)
-	private transient JSONObject globalConfig;
+//	@JSONField(serialize=false)
+//	private transient JSONObject configObj;
+//	@JSONField(serialize=false)
+//	private transient JSONObject globalConfig;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
@@ -110,10 +107,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private transient String aliasName;
 	@JSONField(serialize=false)
 	private transient Boolean isAutoGenerateId = false;
-	@JSONField(serialize=false)
-	private transient JSONObject notifyPolicyConfig;
-	@JSONField(serialize=false)
-	private transient JSONArray actionList;
+//	@JSONField(serialize=false)
+//	private transient JSONObject notifyPolicyConfig;
+//	@JSONField(serialize=false)
+//	private transient JSONArray actionList;
 	
 	@EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
 	private JSONObject processTaskStepData;
@@ -133,8 +130,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private List<ProcessTaskStepFormAttributeVo> stepFormConfig = new ArrayList<>();
     
     /** 当前用户在当前步骤中工单干系人列表 **/
-    @JSONField(serialize=false)
-    private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
+//    @JSONField(serialize=false)
+//    private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
     
     @EntityField(name = "提醒列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepRemindVo> processTaskStepRemindList = new ArrayList<>();
@@ -246,36 +243,18 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public ProcessTaskStatusVo getStatusVo() {
-		if(statusVo == null && StringUtils.isNotBlank(status)) {
-			if (MapUtils.isNotEmpty(getConfigObj())) {
-				JSONArray customStatusList = getConfigObj().getJSONArray("customStatusList");
-				if(CollectionUtils.isNotEmpty(customStatusList)) {
-					for(int i = 0; i < customStatusList.size(); i++) {
-						JSONObject customStatus = customStatusList.getJSONObject(i);							
-						if(status.equals(customStatus.getString("name"))) {
-							String value = customStatus.getString("value");
-							if(StringUtils.isNotBlank(value)) {
-								statusVo = new ProcessTaskStatusVo(status, value);
-							}
-						}
-					}
-				}
-			}
-			if(statusVo == null && MapUtils.isNotEmpty(globalConfig)) {
-				JSONArray customStatusList = globalConfig.getJSONArray("customStatusList");
-				if(CollectionUtils.isNotEmpty(customStatusList)) {
-					for(int i = 0; i < customStatusList.size(); i++) {
-						JSONObject customStatus = customStatusList.getJSONObject(i);							
-						if(status.equals(customStatus.getString("name"))) {
-							String value = customStatus.getString("value");
-							if(StringUtils.isNotBlank(value)) {
-								statusVo = new ProcessTaskStatusVo(status, value);
-							}
-						}
-					}
-				}
-			}
-			statusVo = new ProcessTaskStatusVo(status);
+		if(statusVo == null && StringUtils.isNotBlank(status) && StringUtils.isNotBlank(configHash) && StringUtils.isNotBlank(handler)) {
+		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+		    if(processStepUtilHandler != null) {
+		        String statusText = processStepUtilHandler.getStatusTextByConfigHashAndHandler(configHash, handler, status);
+		        if(StringUtils.isNotBlank(statusText)) {
+		            statusVo = new ProcessTaskStatusVo(status, statusText);
+		        }else {
+		            statusVo = new ProcessTaskStatusVo(status);
+		        }
+		    }else {
+		        statusVo = new ProcessTaskStatusVo(status);
+		    }
 		}
 		return statusVo;
 	}
@@ -324,30 +303,30 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.config = config;
 	}
 
-	public JSONObject getConfigObj() {
-		if(configObj == null && StringUtils.isNotBlank(config)) {
-			try {
-				configObj = JSONObject.parseObject(config);
-			} catch (Exception ex) {
-				if(StringUtils.isNotBlank(configHash)) {
-					logger.error("hash为" + configHash + "的processtask_step_config内容不是合法的JSON格式", ex);					
-				}
-			}
-		}
-		return configObj;
-	}
-
-	public void setConfigObj(JSONObject configObj) {
-		this.configObj = configObj;
-	}
-
-	public JSONObject getGlobalConfig() {
-		return globalConfig;
-	}
-
-	public void setGlobalConfig(JSONObject globalConfig) {
-		this.globalConfig = globalConfig;
-	}
+//	public JSONObject getConfigObj() {
+//		if(configObj == null && StringUtils.isNotBlank(config)) {
+//			try {
+//				configObj = JSONObject.parseObject(config);
+//			} catch (Exception ex) {
+//				if(StringUtils.isNotBlank(configHash)) {
+//					logger.error("hash为" + configHash + "的processtask_step_config内容不是合法的JSON格式", ex);					
+//				}
+//			}
+//		}
+//		return configObj;
+//	}
+//
+//	public void setConfigObj(JSONObject configObj) {
+//		this.configObj = configObj;
+//	}
+//
+//	public JSONObject getGlobalConfig() {
+//		return globalConfig;
+//	}
+//
+//	public void setGlobalConfig(JSONObject globalConfig) {
+//		this.globalConfig = globalConfig;
+//	}
 
 	public List<ProcessTaskStepUserVo> getUserList() {
 		return userList;
@@ -358,10 +337,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public Integer getIsRequired() {
-		if(isRequired == null && MapUtils.isNotEmpty(getConfigObj())) {
-			JSONObject workerPolicyConfig = getConfigObj().getJSONObject("workerPolicyConfig");
-			if (MapUtils.isNotEmpty(workerPolicyConfig)) {
-				isRequired = workerPolicyConfig.getInteger("isRequired");
+		if(isRequired == null && StringUtils.isNotBlank(configHash)) {
+		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+            if(processStepUtilHandler != null) {
+				isRequired = processStepUtilHandler.getIsRequiredByConfigHash(configHash);
 			}
 		}
 		return isRequired;
@@ -372,10 +351,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public Integer getIsNeedContent() {
-		if(isNeedContent == null && MapUtils.isNotEmpty(getConfigObj())) {
-			JSONObject workerPolicyConfig = getConfigObj().getJSONObject("workerPolicyConfig");
-			if (MapUtils.isNotEmpty(workerPolicyConfig)) {
-				isNeedContent = workerPolicyConfig.getInteger("isNeedContent");
+		if(isNeedContent == null && StringUtils.isNotBlank(configHash)) {
+		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+            if(processStepUtilHandler != null) {
+				isNeedContent = processStepUtilHandler.getIsNeedContentByConfigHash(configHash);
 			}
 		}
 		return isNeedContent;
@@ -652,35 +631,35 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.isAutoGenerateId = isAutoGenerateId;
 	}
 
-	public JSONObject getNotifyPolicyConfig() {
-		if(notifyPolicyConfig == null && MapUtils.isNotEmpty(getConfigObj())) {
-			notifyPolicyConfig = getConfigObj().getJSONObject("notifyPolicyConfig");
-		}
-		if(MapUtils.isEmpty(notifyPolicyConfig) && MapUtils.isNotEmpty(globalConfig)) {
-			notifyPolicyConfig = globalConfig.getJSONObject("notifyPolicyConfig");
-		}
-		return notifyPolicyConfig;
-	}
-
-	public void setNotifyPolicyConfig(JSONObject notifyPolicyConfig) {
-		this.notifyPolicyConfig = notifyPolicyConfig;
-	}
-
-	public JSONArray getActionList() {
-		if(actionList == null && MapUtils.isNotEmpty(getConfigObj())) {
-		    JSONObject actionConfig = getConfigObj().getJSONObject("actionConfig");
-		    if(MapUtils.isNotEmpty(actionConfig)) {
-	            actionList = actionConfig.getJSONArray("actionList");
-		    }
-		}
-		if(CollectionUtils.isEmpty(actionList) && MapUtils.isNotEmpty(globalConfig)) {
-		    JSONObject actionConfig = globalConfig.getJSONObject("actionConfig");
-		    if(MapUtils.isNotEmpty(actionConfig)) {
-	            actionList = actionConfig.getJSONArray("actionList");
-		    }
-		}
-		return actionList;
-	}
+//	public JSONObject getNotifyPolicyConfig() {
+//		if(notifyPolicyConfig == null && MapUtils.isNotEmpty(getConfigObj())) {
+//			notifyPolicyConfig = getConfigObj().getJSONObject("notifyPolicyConfig");
+//		}
+//		if(MapUtils.isEmpty(notifyPolicyConfig) && MapUtils.isNotEmpty(globalConfig)) {
+//			notifyPolicyConfig = globalConfig.getJSONObject("notifyPolicyConfig");
+//		}
+//		return notifyPolicyConfig;
+//	}
+//
+//	public void setNotifyPolicyConfig(JSONObject notifyPolicyConfig) {
+//		this.notifyPolicyConfig = notifyPolicyConfig;
+//	}
+//
+//	public JSONArray getActionList() {
+//		if(actionList == null && MapUtils.isNotEmpty(getConfigObj())) {
+//		    JSONObject actionConfig = getConfigObj().getJSONObject("actionConfig");
+//		    if(MapUtils.isNotEmpty(actionConfig)) {
+//	            actionList = actionConfig.getJSONArray("actionList");
+//		    }
+//		}
+//		if(CollectionUtils.isEmpty(actionList) && MapUtils.isNotEmpty(globalConfig)) {
+//		    JSONObject actionConfig = globalConfig.getJSONObject("actionConfig");
+//		    if(MapUtils.isNotEmpty(actionConfig)) {
+//	            actionList = actionConfig.getJSONArray("actionList");
+//		    }
+//		}
+//		return actionList;
+//	}
 
 	public JSONObject getProcessTaskStepData() {
 		return processTaskStepData;
@@ -738,13 +717,13 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.stepFormConfig = stepFormConfig;
     }
 
-    public List<String> getCurrentUserProcessUserTypeList() {
-        return currentUserProcessUserTypeList;
-    }
-
-    public void setCurrentUserProcessUserTypeList(List<String> currentUserProcessUserTypeList) {
-        this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
-    }
+//    public List<String> getCurrentUserProcessUserTypeList() {
+//        return currentUserProcessUserTypeList;
+//    }
+//
+//    public void setCurrentUserProcessUserTypeList(List<String> currentUserProcessUserTypeList) {
+//        this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
+//    }
 
     public List<ProcessTaskStepRemindVo> getProcessTaskStepRemindList() {
         return processTaskStepRemindList;

@@ -95,6 +95,7 @@ import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.integration.handler.ProcessRequestFrom;
+import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaNotifyJob;
 import codedriver.framework.process.notify.schedule.plugin.ProcessTaskSlaTransferJob;
 import codedriver.framework.process.score.schedule.plugin.ProcessTaskAutoScoreJob;
@@ -105,6 +106,7 @@ import codedriver.framework.scheduler.dto.JobObject;
 import codedriver.framework.scheduler.exception.ScheduleHandlerNotFoundException;
 import codedriver.framework.transaction.util.TransactionUtil;
 import codedriver.framework.util.ConditionUtil;
+import codedriver.framework.util.JSONUtil;
 import codedriver.framework.util.NotifyPolicyUtil;
 import codedriver.framework.util.RunScriptUtil;
 
@@ -269,15 +271,19 @@ public abstract class ProcessStepHandlerUtilBase {
 				/** 获取步骤配置信息 **/
 				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 				String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
-				stepVo.setConfig(stepConfig);
-                IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
-                if(processStepUtilHandler == null) {
-                    throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
-                }
-				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-                stepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null));
+				JSONArray actionList = JSONUtil.getJSONArray(stepConfig, "actionConfig.actionList");
+				if(CollectionUtils.isEmpty(actionList)) {
+				    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
+	                if(processStepUtilHandler == null) {
+	                    throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
+	                }
+	                ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+	                JSONObject globalConfig = processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null);
+	                actionList = JSONUtil.getJSONArray(globalConfig, "actionConfig.actionList");
+				}
+                
 				/** 从步骤配置信息中获取动作列表 **/
-				JSONArray actionList = stepVo.getActionList();
+//				JSONArray actionList = stepVo.getActionList();
 				if (CollectionUtils.isNotEmpty(actionList)) {
 					for (int i = 0; i < actionList.size(); i++) {
 						JSONObject actionObj = actionList.getJSONObject(i);
@@ -417,19 +423,30 @@ public abstract class ProcessStepHandlerUtilBase {
 		@Override
 		protected void execute() {
 			try {
-				/** 获取步骤配置信息 **/
-				ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
-				String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
-				stepVo.setConfig(stepConfig);
-	            IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
-	            if(processStepUtilHandler == null) {
-	                throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
-	            }
-				ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-				stepVo.setGlobalConfig(processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null));
+			    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+			    JSONObject notifyPolicyConfig = null;
+			    if(notifyTriggerType instanceof TaskStepNotifyTriggerType) {
+			        /** 获取工单配置信息 **/
+			        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
+			        String config = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
+			        notifyPolicyConfig = JSONUtil.getJSONObject(config, "process.processConfig.notifyPolicyConfig");
+			    }else {
+			        /** 获取步骤配置信息 **/
+	                ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+	                processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
+	                if(processStepUtilHandler == null) {
+	                    throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
+	                }
+	                String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
+	                notifyPolicyConfig = JSONUtil.getJSONObject(stepConfig, "notifyPolicyConfig");
+	                if(MapUtils.isEmpty(notifyPolicyConfig)) {
+	                    ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+	                    JSONObject globalConfig = processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null);
+	                    notifyPolicyConfig = JSONUtil.getJSONObject(globalConfig, "notifyPolicyConfig");
+	                }
+			    }				
 
 				/** 从步骤配置信息中获取通知策略信息 **/
-				JSONObject notifyPolicyConfig = stepVo.getNotifyPolicyConfig();
 				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
 					Long policyId = notifyPolicyConfig.getLong("policyId");
 					if (policyId != null) {
@@ -440,7 +457,6 @@ public abstract class ProcessStepHandlerUtilBase {
 						processTaskStepNotifyPolicyVo = processTaskMapper.getProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
 						if (processTaskStepNotifyPolicyVo != null) {
 							policyConfig = JSON.parseObject(processTaskStepNotifyPolicyVo.getPolicyConfig());
-
 						} else {
 							NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(policyId);
 							if (notifyPolicyVo != null) {

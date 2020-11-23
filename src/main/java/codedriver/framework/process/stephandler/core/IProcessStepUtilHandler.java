@@ -201,6 +201,22 @@ public interface IProcessStepUtilHandler {
     * @return void
      */
     public Map<String, String> getCustomButtonMapByProcessTaskStepId(Long processTaskStepId);
+    /**
+     * 
+    * @Time:2020年9月15日
+    * @Description: 根据步骤configHash和handler获取自定义按钮文案映射 
+    * @param processTaskStepId 
+    * @return void
+     */
+    public Map<String, String> getCustomButtonMapByConfigHashAndHandler(String configHash, String handler);
+    /**
+     * 
+    * @Time:2020年9月15日
+    * @Description: 根据步骤configHash和handler、status获取自定义按钮文案
+    * @param processTaskStepId 
+    * @return void
+     */
+    public String getStatusTextByConfigHashAndHandler(String configHash, String handler, String status);
     
     /**
      * 
@@ -220,7 +236,7 @@ public interface IProcessStepUtilHandler {
      * @param processTaskStepId 步骤id
      * @return List<String>
      */
-    public void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo);
+//    public void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo);
     /**
      * 
     * @Author: linbq
@@ -229,5 +245,9 @@ public interface IProcessStepUtilHandler {
     * @param processTaskStepVo 
     * @return void
      */
-    public void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo);
+//    public void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo);
+    
+    public Integer getIsRequiredByConfigHash(String configHash);
+    
+    public Integer getIsNeedContentByConfigHash(String configHash);
 }

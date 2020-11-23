@@ -4,13 +4,10 @@ import codedriver.framework.notify.core.INotifyTriggerType;
 
 public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
 
-//    STARTPROCESS("startprocess", "上报"),
 	ACTIVE("active", "步骤激活"),
 	ASSIGN("assign", "步骤分配处理人"),
-    //ACCEPT("accept", "接管"),
 	START("start", "步骤开始"),
 	TRANSFER("transfer", "步骤转交"),
-//	URGE("urge", "步骤催办"),
 	SUCCEED("succeed", "步骤成功"),
 	BACK("back", "步骤回退"),
 	RETREAT("retreat", "步骤撤回"),
@@ -20,8 +17,6 @@ public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
 	PAUSE("pause", "步骤暂停"),
 	FAILED("failed", "步骤失败"),
 	REDO("redo", "步骤打回"),
-//	PROCESSTASKCOMPLETE("processtaskcomplete", "工单完成"),
-//	PROCESSTASKSCORE("processtaskscore", "工单评分"),
 	;
 
 	private String trigger;

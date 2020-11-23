@@ -742,9 +742,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 				if(this.getHandler().equals(ProcessStepHandlerType.END.getHandler())) {
 				    ProcessTaskScoreTemplateVo processTaskScoreTemplateVo = processTaskMapper.getProcessTaskScoreTemplateByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
 		            if(processTaskScoreTemplateVo != null) {
-		                NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.PROCESSTASKCOMPLETE);
+		                NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
 		            }
-                    ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.PROCESSTASKCOMPLETE);
+                    ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
 				}else {
 				    /** 触发通知 **/
 	                NotifyHandler.notify(currentProcessTaskStepVo, notifyTriggerType);
@@ -913,7 +913,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
 		processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
 		AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.ABORTPROCESSTASK);
-
+		/** 触发通知 **/
+		NotifyHandler.notify(processTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
+		/** 执行动作 **/
+        ActionHandler.action(processTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
 		return 1;
 	}
 
@@ -971,6 +974,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
 		processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
 		AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.RECOVERPROCESSTASK);
+        /** 触发通知 **/
+        NotifyHandler.notify(processTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
+        /** 执行动作 **/
+        ActionHandler.action(processTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
 		return 1;
 	}
 
@@ -1946,7 +1953,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         /** 生成活动 */
         AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
         /** 触发通知 **/
-        NotifyHandler.notify(processTaskStepVo, TaskNotifyTriggerType.PROCESSTASKSCORE);
+        NotifyHandler.notify(processTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
 	    return 1;
 	}
 	
