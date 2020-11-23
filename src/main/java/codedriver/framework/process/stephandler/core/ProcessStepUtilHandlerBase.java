@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.GroupSearch;
@@ -45,7 +46,6 @@ import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType
 import codedriver.framework.process.operationauth.core.OperationAuthHandlerType;
 import codedriver.framework.process.operationauth.core.ProcessOperateManager;
 import codedriver.framework.process.stepremind.core.IProcessTaskStepRemindType;
-import codedriver.framework.util.JSONUtil;
 import codedriver.framework.util.TimeUtil;
 
 public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilBase implements IProcessStepUtilHandler {
@@ -416,7 +416,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         Map<String, String> customButtonMap = new HashMap<>();
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
         /** 节点设置按钮映射 **/
-        JSONArray customButtonList = JSONUtil.getJSONArray(stepConfig, "customButtonList");
+        JSONArray customButtonList = (JSONArray)JSONPath.read(stepConfig, "customButtonList");
         if(CollectionUtils.isNotEmpty(customButtonList)) {
             for(int i = 0; i < customButtonList.size(); i++) {
                 JSONObject customButton = customButtonList.getJSONObject(i);
@@ -433,7 +433,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
         }
         /** 节点管理按钮映射 **/
-        customButtonList = JSONUtil.getJSONArray(globalConfig, "customButtonList");
+        customButtonList = (JSONArray)JSONPath.read(globalConfig.toJSONString(), "customButtonList");
         if(CollectionUtils.isNotEmpty(customButtonList)) {
             for(int i = 0; i < customButtonList.size(); i++) {
                 JSONObject customButton = customButtonList.getJSONObject(i);
@@ -454,7 +454,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     public String getStatusTextByConfigHashAndHandler(String configHash, String handler, String status) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
         /** 节点设置状态映射 **/
-        JSONArray customButtonList = JSONUtil.getJSONArray(stepConfig, "customStatusList");
+        JSONArray customButtonList = (JSONArray)JSONPath.read(stepConfig, "customStatusList");
         if(CollectionUtils.isNotEmpty(customButtonList)) {
             for(int i = 0; i < customButtonList.size(); i++) {
                 JSONObject customButton = customButtonList.getJSONObject(i);
@@ -490,12 +490,12 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     @Override
     public Integer getIsRequiredByConfigHash(String configHash) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
-        return JSONUtil.getInteger(stepConfig, "workerPolicyConfig.isRequired");
+        return (Integer)JSONPath.read(stepConfig, "workerPolicyConfig.isRequired");
     }
     
     @Override
     public Integer getIsNeedContentByConfigHash(String configHash) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
-        return JSONUtil.getInteger(stepConfig, "workerPolicyConfig.isNeedContent");
+        return (Integer)JSONPath.read(stepConfig, "workerPolicyConfig.isNeedContent");
     }
 }
