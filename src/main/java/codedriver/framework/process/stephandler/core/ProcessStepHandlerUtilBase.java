@@ -291,7 +291,6 @@ public abstract class ProcessStepHandlerUtilBase {
 			    }
                 
 				/** 从步骤配置信息中获取动作列表 **/
-//				JSONArray actionList = stepVo.getActionList();
 				if (CollectionUtils.isNotEmpty(actionList)) {
 					for (int i = 0; i < actionList.size(); i++) {
 						JSONObject actionObj = actionList.getJSONObject(i);

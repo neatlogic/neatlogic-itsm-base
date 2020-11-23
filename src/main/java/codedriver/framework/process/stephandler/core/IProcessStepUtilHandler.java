@@ -228,26 +228,21 @@ public interface IProcessStepUtilHandler {
     * @return void
      */
     public int saveStepRemind(ProcessTaskStepVo currentProcessTaskStepVo,Long targerProcessTaskStepId, String reason, IProcessTaskStepRemindType ation);
-    /**
-     * 
-     * @Time:2020年4月3日
-     * @Description: 获取当前用户在当前步骤中工单干系人列表
-     * @param processTaskVo     工单信息
-     * @param processTaskStepId 步骤id
-     * @return List<String>
-     */
-//    public void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo);
-    /**
-     * 
-    * @Author: linbq
-    * @Time:2020年8月24日
-    * @Description: 设置步骤配置、处理器全局配置信息 
-    * @param processTaskStepVo 
-    * @return void
-     */
-//    public void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo);
     
+    /**
+     * 
+    * @Time:2020年11月23日
+    * @Description: 获取步骤配置信息中isRequired(回复是否必填)字段值 
+    * @param configHash
+    * @return Integer
+     */
     public Integer getIsRequiredByConfigHash(String configHash);
-    
+    /**
+     * 
+    * @Time:2020年11月23日
+    * @Description: 获取步骤配置信息中isNeedContent(回复是否启用)字段值 
+    * @param configHash
+    * @return Integer
+     */
     public Integer getIsNeedContentByConfigHash(String configHash);
 }

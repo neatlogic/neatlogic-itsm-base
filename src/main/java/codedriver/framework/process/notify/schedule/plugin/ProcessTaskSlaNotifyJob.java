@@ -87,8 +87,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 	private TeamMapper teamMapper;
 	@Autowired
 	private FileMapper fileMapper;
-//	@Autowired
-//	private ProcessStepHandlerMapper processStepHandlerMapper;
 	@Autowired
 	private SelectContentByHashMapper selectContentByHashMapper;
 	
@@ -210,7 +208,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 					if (notifyPolicyVo != null) {
 						JSONObject policyConfig = notifyPolicyVo.getConfig();
 						List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
-						//IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
 						ProcessTaskVo processTaskVo = getProcessTaskDetailById(processTaskSlaVo.getProcessTaskId());
 						JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 						JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
@@ -321,12 +318,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
         }
 
         ProcessTaskStepVo startProcessTaskStepVo = processTaskStepList.get(0);
-//        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(startProcessTaskStepVo.getConfigHash());
-//        startProcessTaskStepVo.setConfig(stepConfig);
-//        ProcessStepHandlerVo processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerByHandler(startProcessTaskStepVo.getHandler());
-//        if(processStepHandlerConfig != null) {
-//            startProcessTaskStepVo.setGlobalConfig(processStepHandlerConfig.getConfig());
-//        }
         ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo();
         //获取上报描述内容
         List<Long> fileIdList = new ArrayList<>();
@@ -343,12 +334,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
             comment.setFileList(fileMapper.getFileListByIdList(fileIdList));
         }
         startProcessTaskStepVo.setComment(comment);
-        /** 当前步骤特有步骤信息 **/
-//        IProcessStepUtilHandler startProcessStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(startProcessTaskStepVo.getHandler());
-//        if(startProcessStepUtilHandler == null) {
-//            throw new ProcessStepHandlerNotFoundException(startProcessTaskStepVo.getHandler());
-//        }
-//        startProcessTaskStepVo.setHandlerStepInfo(startProcessStepUtilHandler.getHandlerStepInfo(startProcessTaskStepVo.getId()));
         return startProcessTaskStepVo;
     }
     
