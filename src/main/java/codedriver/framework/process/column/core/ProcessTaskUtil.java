@@ -117,7 +117,8 @@ public class ProcessTaskUtil {
 		return resultObj;
 	}
 	
-	public static JSONObject getProcessTaskParamData(ProcessTaskVo processTaskVo) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+    public static JSONObject getProcessTaskParamData(ProcessTaskVo processTaskVo) {
         JSONObject resultObj = new JSONObject();
         /** 工单信息数据 **/
         resultObj.put(ProcessTaskParams.ID.getValue(), processTaskVo.getId());
@@ -184,10 +185,22 @@ public class ProcessTaskUtil {
                             Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
                             
                             resultObj.put(formAttribute.getUuid(), value);
-                            formAttributeMap.put(formAttribute.getLabel(), value.toString());
+                            if(value instanceof List) {
+                                formAttributeMap.put(formAttribute.getLabel(), String.join("、", (List)value));
+                            }else if(value instanceof String){
+                                formAttributeMap.put(formAttribute.getLabel(), (String)value);
+                            }else {
+                                formAttributeMap.put(formAttribute.getLabel(), value.toString());
+                            }
                         }else {
                             resultObj.put(formAttribute.getUuid(), attributeValue);
-                            formAttributeMap.put(formAttribute.getLabel(), attributeValue.toString());
+                            if(attributeValue instanceof List) {
+                                formAttributeMap.put(formAttribute.getLabel(), String.join("、", (List)attributeValue));
+                            }else if(attributeValue instanceof String){
+                                formAttributeMap.put(formAttribute.getLabel(), (String)attributeValue);
+                            }else {
+                                formAttributeMap.put(formAttribute.getLabel(), attributeValue.toString());
+                            }
                         }
                     }
                 }
