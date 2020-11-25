@@ -1,5 +1,8 @@
 package codedriver.framework.process.util;
 
+import codedriver.framework.process.constvalue.FormAttributeAction;
+import codedriver.framework.process.constvalue.FormAttributeAuthRange;
+import codedriver.framework.process.constvalue.FormAttributeAuthType;
 import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -25,20 +28,18 @@ public class ProcessConfigUtil {
             if(MapUtils.isNotEmpty(processConfig) && CollectionUtils.isNotEmpty(stepList)){
                 /** 获取开始节点UUID */
                 String startUuid = "";
-                for(Object obj : stepList){
-                    JSONObject jsonObject = JSONObject.parseObject(obj.toString());
-                    if(ProcessStepHandlerType.START.getHandler().equals(jsonObject.getString("handler"))){
-                        startUuid = jsonObject.getString("uuid");
+                for(int i = 0;i < stepList.size();i++){
+                    if(ProcessStepHandlerType.START.getHandler().equals(stepList.getJSONObject(i).getString("handler"))){
+                        startUuid = stepList.getJSONObject(i).getString("uuid");
                         break;
                     }
                 }
                 JSONArray connectionList = processConfig.getJSONArray("connectionList");
                 /** 获取开始节点后的第一个节点UUID */
                 if(CollectionUtils.isNotEmpty(connectionList)){
-                    for(Object obj : connectionList){
-                        JSONObject jsonObject = JSONObject.parseObject(obj.toString());
-                        if(jsonObject.getString("fromStepUuid").equals(startUuid)){
-                            firstStepUuid = jsonObject.getString("toStepUuid");
+                    for(int i = 0;i < connectionList.size();i++){
+                        if(connectionList.getJSONObject(i).getString("fromStepUuid").equals(startUuid)){
+                            firstStepUuid = connectionList.getJSONObject(i).getString("toStepUuid");
                             break;
                         }
                     }
@@ -58,10 +59,9 @@ public class ProcessConfigUtil {
         String firstStepUuid = getFirstStepUuid(configObj);
         JSONArray stepList = (JSONArray) JSONPath.read(configObj.toJSONString(), "process.stepList");
         if(StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(stepList)){
-            for(Object obj : stepList){
-                JSONObject jsonObject = JSONObject.parseObject(obj.toString());
-                if(jsonObject.getString("uuid").equals(firstStepUuid)){
-                    isNeedContent = jsonObject.getJSONObject("stepConfig").getJSONObject("workerPolicyConfig").getIntValue("isNeedContent");
+            for(int i = 0;i < stepList.size();i++){
+                if(stepList.getJSONObject(i).getString("uuid").equals(firstStepUuid)){
+                    isNeedContent = (int)JSONPath.read(stepList.getJSONObject(i).toJSONString(),"stepConfig.workerPolicyConfig.isNeedContent");
                     break;
                 }
             }
@@ -81,8 +81,8 @@ public class ProcessConfigUtil {
         String firstStepUuid = getFirstStepUuid(configObj);
         JSONArray authorityList = (JSONArray) JSONPath.read(configObj.toJSONString(), "process.formConfig.authorityList");
         if(StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(authorityList)){
-            for(Object o : authorityList){
-                JSONObject object = JSONObject.parseObject(o.toString());
+            for(int i = 0;i < authorityList.size();i++){
+                JSONObject object = authorityList.getJSONObject(i);
                 String action = object.getString("action");
                 JSONArray attributeUuidList = object.getJSONArray("attributeUuidList");
                 JSONArray processStepUuidList = object.getJSONArray("processStepUuidList");
@@ -93,17 +93,17 @@ public class ProcessConfigUtil {
                  * 如果发现有attributeUuidList为"all"的配置项，则退出循环
                  */
                 if(CollectionUtils.isNotEmpty(processStepUuidList) && processStepUuidList.contains(firstStepUuid)
-                        && StringUtils.isNotBlank(action) && "edit".equals(action) && CollectionUtils.isNotEmpty(attributeUuidList)
+                        && StringUtils.isNotBlank(action) && FormAttributeAction.EDIT.getValue().equals(action) && CollectionUtils.isNotEmpty(attributeUuidList)
                         && StringUtils.isNotBlank(type)){
-                    if("component".equals(type)){
-                        if("all".equals(attributeUuidList.get(0).toString())){
+                    if(FormAttributeAuthType.COMPONENT.getValue().equals(type)){
+                        if(FormAttributeAuthRange.ALL.getValue().equals(attributeUuidList.get(0).toString())){
                             allAttrCanEdit = true;
                             editableAttrs.clear();
                             break;
                         }else{
                             editableAttrs.addAll(attributeUuidList.toJavaList(String.class));
                         }
-                    }else if("row".equals(type)){
+                    }else if(FormAttributeAuthType.ROW.getValue().equals(type)){
                         editableAttrRows.addAll(attributeUuidList.toJavaList(Integer.class));
                     }
                 }
