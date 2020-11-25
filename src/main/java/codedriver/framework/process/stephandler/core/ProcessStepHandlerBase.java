@@ -24,6 +24,7 @@ import org.springframework.util.DigestUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
@@ -82,6 +83,8 @@ import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotF
 import codedriver.framework.process.exception.processtask.ProcessTaskStepUnActivedException;
 import codedriver.framework.process.exception.processtask.ProcessTaskStepUserIsExistsException;
 import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
+import codedriver.framework.process.workerpolicy.core.IWorkerPolicyHandler;
+import codedriver.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import codedriver.framework.process.notify.core.TaskNotifyTriggerType;
 
 public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase implements IProcessStepHandler {
@@ -361,6 +364,48 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 	 */
 	protected abstract int myAssign(ProcessTaskStepVo currentProcessTaskStepVo, List<ProcessTaskStepWorkerVo> workerList) throws ProcessTaskException;
 
+	protected int defaultAssign(ProcessTaskStepVo currentProcessTaskStepVo, List<ProcessTaskStepWorkerVo> workerList) throws ProcessTaskException {
+        /** 获取步骤配置信息 **/
+        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+
+        String executeMode = (String)JSONPath.read(stepConfig, "workerPolicyConfig.executeMode");
+        int autoStart = (int)JSONPath.read(stepConfig, "workerPolicyConfig.autoStart");
+        
+        /** 如果workerList.size()>0，说明已经存在过处理人，则继续使用旧处理人，否则启用分派 **/
+        if (CollectionUtils.isEmpty(workerList))  {
+            /** 分配处理人 **/
+            ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo = new ProcessTaskStepWorkerPolicyVo();
+            processTaskStepWorkerPolicyVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+            List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = processTaskMapper.getProcessTaskStepWorkerPolicy(processTaskStepWorkerPolicyVo);
+            if (CollectionUtils.isNotEmpty(workerPolicyList)) {
+                for (ProcessTaskStepWorkerPolicyVo workerPolicyVo : workerPolicyList) {
+                    IWorkerPolicyHandler workerPolicyHandler = WorkerPolicyHandlerFactory.getHandler(workerPolicyVo.getPolicy());
+                    if (workerPolicyHandler != null) {
+                        List<ProcessTaskStepWorkerVo> tmpWorkerList = workerPolicyHandler.execute(workerPolicyVo, currentProcessTaskStepVo);
+                        /** 顺序分配处理人 **/
+                        if ("sort".equals(executeMode) && CollectionUtils.isNotEmpty(tmpWorkerList)) {
+                            // 找到处理人，则退出
+                            workerList.addAll(tmpWorkerList);
+                            break;
+                        } else if ("batch".equals(executeMode)) {
+                            // 去重取并集
+                            tmpWorkerList.removeAll(workerList);
+                            workerList.addAll(tmpWorkerList);
+                        }
+                    }
+                }
+            }
+        }
+        /** 分配策略没有匹配到处理人时，将默认处理人设置为步骤处理人 **/
+        if(CollectionUtils.isEmpty(workerList)) {
+            String defaultWorker = (String)JSONPath.read(stepConfig, "workerPolicyConfig.defaultWorker");
+            String[] split = defaultWorker.split("#");
+            workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), split[0], split[1], ProcessUserType.MAJOR.getValue()));
+        }
+        return autoStart;
+    }
+	
 	/**
 	 * hang操作原则上不允许出现任何异常，所有异常都必须解决以便流程可以顺利挂起，否则流程可能会卡死在某个节点不能前进或后退
 	 */
