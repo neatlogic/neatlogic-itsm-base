@@ -20,6 +20,7 @@ import codedriver.framework.process.constvalue.ConditionProcessTaskOptions;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskParams;
+import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.notify.core.TaskNotifyTriggerType;
 @Component
 public class TaskNotifyPolicyHandler extends NotifyPolicyHandlerBase {
@@ -91,6 +92,9 @@ public class TaskNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 		List<String> groupList = JSON.parseArray(config.getJSONArray("groupList").toJSONString(), String.class);
 		groupList.add(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue());
 		config.put("groupList", groupList);
+		List<String> excludeList = JSON.parseArray(config.getJSONArray("excludeList").toJSONString(), String.class);
+        excludeList.add(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.DEFAULT_WORKER.getValue());
+        config.put("excludeList", excludeList);
 	}
 
 }

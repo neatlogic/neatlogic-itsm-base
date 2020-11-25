@@ -90,7 +90,7 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepWorkerPolicyVo>
         getProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
 
-    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerByProcessTaskStepId(Long processTaskStepId);
+    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(Long processTaskId, Long processTaskStepId);
 
     public Long getProcessTaskLockById(Long processTaskId);
 

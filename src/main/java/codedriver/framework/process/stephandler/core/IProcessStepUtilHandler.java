@@ -191,7 +191,7 @@ public interface IProcessStepUtilHandler {
     * @param receiverMap 工单干系人信息
     * @return void
      */
-    public void getReceiverMap(Long processTaskId, Long processTaskStepId, Map<String, List<NotifyReceiverVo>> receiverMap);
+    public Map<String, List<NotifyReceiverVo>> getReceiverMap(ProcessTaskStepVo currentProcessTaskStepVo);
     
     /**
      * 

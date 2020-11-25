@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.constvalue.GroupSearch;
@@ -213,7 +214,9 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 						JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
 						Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
 						for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
-						    getReceiverMap(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), receiverMap);							
+						    String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+						    processTaskStepVo.setConfig(stepConfig);
+						    getReceiverMap(processTaskStepVo, receiverMap);							
 						}
 						NotifyPolicyUtil.execute(policyConfig, paramMappingList, SlaNotifyTriggerType.TIMEOUT, templateParamData, conditionParamData, receiverMap);
 					}
@@ -337,87 +340,54 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
         return startProcessTaskStepVo;
     }
     
-    private void getReceiverMap(Long processTaskId, Long processTaskStepId,
+    private void getReceiverMap(ProcessTaskStepVo currentProcessTaskStepVo,
         Map<String, List<NotifyReceiverVo>> receiverMap) {
-        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
+        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
         if (processTaskVo != null) {
             /** 上报人 **/
             if(StringUtils.isNotBlank(processTaskVo.getOwner())) {
-                List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.OWNER.getValue());
-                if(notifyReceiverList == null) {
-                    notifyReceiverList = new ArrayList<>();
-                    receiverMap.put(ProcessUserType.OWNER.getValue(), notifyReceiverList);
-                }
-                notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskVo.getOwner()));
+                receiverMap.computeIfAbsent(ProcessUserType.OWNER.getValue(), k -> new ArrayList<>()).add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskVo.getOwner()));
             }
             /** 代报人 **/
             if(StringUtils.isNotBlank(processTaskVo.getReporter())) {
-                List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.REPORTER.getValue());
-                if(notifyReceiverList == null) {
-                    notifyReceiverList = new ArrayList<>();
-                    receiverMap.put(ProcessUserType.REPORTER.getValue(), notifyReceiverList);
-                }
-                notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskVo.getReporter()));
+                receiverMap.computeIfAbsent(ProcessUserType.REPORTER.getValue(), k -> new ArrayList<>()).add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskVo.getReporter()));
             }
         }
+        ProcessTaskStepUserVo processTaskStepUser = new ProcessTaskStepUserVo();
+        processTaskStepUser.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+        processTaskStepUser.setProcessTaskStepId(currentProcessTaskStepVo.getId());
         /** 主处理人 **/
-        List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MAJOR.getValue());
-        if (CollectionUtils.isNotEmpty(majorUserList)) {
-            List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.MAJOR.getValue());
-            if(notifyReceiverList == null) {
-                notifyReceiverList = new ArrayList<>();
-                receiverMap.put(ProcessUserType.MAJOR.getValue(), notifyReceiverList);
-            }
-            notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), majorUserList.get(0).getUserUuid()));
+        processTaskStepUser.setUserType(ProcessUserType.MAJOR.getValue());
+        List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUser);
+        for (ProcessTaskStepUserVo processTaskStepUserVo : majorUserList) {
+            receiverMap.computeIfAbsent(ProcessUserType.MAJOR.getValue(), k -> new ArrayList<>()).add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
         }
         /** 子任务处理人 **/
-        List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
-        if(CollectionUtils.isNotEmpty(minorUserList)) {
-            List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.MINOR.getValue());
-            if(notifyReceiverList == null) {
-                notifyReceiverList = new ArrayList<>();
-                receiverMap.put(ProcessUserType.MINOR.getValue(), notifyReceiverList);
-            }
-            for(ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
-                notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
-            }
-        }
-        /** 待办人 **/
-        List<ProcessTaskStepUserVo> agentUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.AGENT.getValue());
-        if(CollectionUtils.isNotEmpty(agentUserList)) {
-            List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.AGENT.getValue());
-            if(notifyReceiverList == null) {
-                notifyReceiverList = new ArrayList<>();
-                receiverMap.put(ProcessUserType.AGENT.getValue(), notifyReceiverList);
-            }
-            for(ProcessTaskStepUserVo processTaskStepUserVo : agentUserList) {
-                notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
-            }
+        processTaskStepUser.setUserType(ProcessUserType.MINOR.getValue());
+        List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUser);
+        for(ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
+            receiverMap.computeIfAbsent(ProcessUserType.MINOR.getValue(), k -> new ArrayList<>()).add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
         }
         /** 待处理人 **/
-        List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskStepId(processTaskStepId);
-        if(CollectionUtils.isNotEmpty(workerList)) {
-            List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.WORKER.getValue());
-            if(notifyReceiverList == null) {
-                notifyReceiverList = new ArrayList<>();
-                receiverMap.put(ProcessUserType.WORKER.getValue(), notifyReceiverList);
-            }
-            for(ProcessTaskStepWorkerVo processTaskStepWorkerVo : workerList) {
-                notifyReceiverList.add(new NotifyReceiverVo(processTaskStepWorkerVo.getType(), processTaskStepWorkerVo.getUuid()));
+        List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+        for(ProcessTaskStepWorkerVo processTaskStepWorkerVo : workerList) {
+            receiverMap.computeIfAbsent(ProcessUserType.WORKER.getValue(), k -> new ArrayList<>()).add(new NotifyReceiverVo(processTaskStepWorkerVo.getType(), processTaskStepWorkerVo.getUuid()));
+        }
+
+        /** 工单关注人 */
+        List<String> focusUserList = processTaskMapper.getFocusUsersOfProcessTask(currentProcessTaskStepVo.getProcessTaskId());
+        for(String user : focusUserList){
+            String[] split = user.split("#");
+            receiverMap.computeIfAbsent(ProcessUserType.FOCUS_USER.getValue(), k -> new ArrayList<>()).add(new NotifyReceiverVo(split[0], split[1]));
+        }
+        
+        /** 异常处理人 **/
+        if(StringUtils.isNotBlank(currentProcessTaskStepVo.getConfig())) {
+            String defaultWorker = (String)JSONPath.read(currentProcessTaskStepVo.getConfig(), "workerPolicyConfig.defaultWorker");
+            if(StringUtils.isNotBlank(defaultWorker)) {
+                String[] split = defaultWorker.split("#");
+                receiverMap.computeIfAbsent(ProcessUserType.DEFAULT_WORKER.getValue(), k -> new ArrayList<>()).add(new NotifyReceiverVo(split[0], split[1]));
             }
         }
-        /** 工单关注人 */
-		List<String> focusUserList = processTaskMapper.getFocusUsersOfProcessTask(processTaskId);
-		if(CollectionUtils.isNotEmpty(focusUserList)){
-			focusUserList = focusUserList.stream().map(user -> user.replace("user#","")).collect(Collectors.toList());
-			List<NotifyReceiverVo> notifyReceiverList = receiverMap.get(ProcessUserType.FOCUS_USER.getValue());
-			if(notifyReceiverList == null){
-				notifyReceiverList = new ArrayList<>();
-				receiverMap.put(ProcessUserType.FOCUS_USER.getValue(), notifyReceiverList);
-			}
-			for(String user : focusUserList){
-				notifyReceiverList.add(new NotifyReceiverVo(GroupSearch.USER.getValue(),user));
-			}
-		}
 	}
 }

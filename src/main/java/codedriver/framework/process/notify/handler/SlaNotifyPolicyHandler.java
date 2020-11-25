@@ -91,7 +91,7 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 	protected void myAuthorityConfig(JSONObject config) {
 		List<String> groupList = JSON.parseArray(config.getJSONArray("groupList").toJSONString(), String.class);
 		groupList.add(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue());
-		config.put("groupList", groupList);	
+		config.put("groupList", groupList);
 	}
 
 }
