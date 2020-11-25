@@ -117,7 +117,7 @@ public class ProcessTaskUtil {
 		return resultObj;
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	
     public static JSONObject getProcessTaskParamData(ProcessTaskVo processTaskVo) {
         JSONObject resultObj = new JSONObject();
         /** 工单信息数据 **/
@@ -185,22 +185,10 @@ public class ProcessTaskUtil {
                             Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
                             
                             resultObj.put(formAttribute.getUuid(), value);
-                            if(value instanceof List) {
-                                formAttributeMap.put(formAttribute.getLabel(), String.join("、", (List)value));
-                            }else if(value instanceof String){
-                                formAttributeMap.put(formAttribute.getLabel(), (String)value);
-                            }else {
-                                formAttributeMap.put(formAttribute.getLabel(), value.toString());
-                            }
+                            formAttributeMap.put(formAttribute.getLabel(), joinToString(value));
                         }else {
                             resultObj.put(formAttribute.getUuid(), attributeValue);
-                            if(attributeValue instanceof List) {
-                                formAttributeMap.put(formAttribute.getLabel(), String.join("、", (List)attributeValue));
-                            }else if(attributeValue instanceof String){
-                                formAttributeMap.put(formAttribute.getLabel(), (String)attributeValue);
-                            }else {
-                                formAttributeMap.put(formAttribute.getLabel(), attributeValue.toString());
-                            }
+                            formAttributeMap.put(formAttribute.getLabel(), joinToString(attributeValue));
                         }
                     }
                 }
@@ -210,4 +198,15 @@ public class ProcessTaskUtil {
         
         return resultObj;
     }
+	
+	@SuppressWarnings({"rawtypes", "unchecked"})
+    private static String joinToString(Object obj) {
+	    if(obj instanceof List) {
+            return String.join("、", (List)obj);
+        }else if(obj instanceof String){
+            return (String)obj;
+        }else {
+            return obj.toString();
+        }
+	}
 }
