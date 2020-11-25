@@ -319,7 +319,7 @@
 		ORDER BY `sort`
 	</select>
 
-	<select id="getProcessTaskStepWorkerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+	<select id="getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		SELECT
 		ptsw.`processtask_id` AS processTaskId,
 		ptsw.`processtask_step_id` AS processTaskStepId,
@@ -332,7 +332,10 @@
 		ELSE NULL END AS `name`,
 		ptsw.`user_type` AS userType
 		FROM `processtask_step_worker` ptsw
-		WHERE ptsw.processtask_step_id = #{value}
+		WHERE ptsw.`processtask_id` = #{processTaskId}
+		<if test="processTaskStepId != null">
+		AND ptsw.`processtask_step_id` = #{processTaskStepId}
+		</if>
 	</select>
 
 	<select id="getFromProcessTaskStepByToId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
