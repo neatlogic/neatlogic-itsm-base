@@ -53,4 +53,6 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	public Boolean getIsSort() {
 	    return false;
 	}
+
+	public abstract Object getSimpleValue(JSONObject json);
 }

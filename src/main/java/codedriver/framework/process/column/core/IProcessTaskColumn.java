@@ -91,4 +91,11 @@ public interface IProcessTaskColumn {
 	 */
 	public Boolean getIsSort();
 
+	/**
+	 * 暂时用来从getValue()返回的数据抽取导出excel时需要的数据
+	 * @param json
+	 * @return
+	 */
+	Object getSimpleValue(JSONObject json);
+
 }
