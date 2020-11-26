@@ -54,5 +54,5 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	    return false;
 	}
 
-	public abstract Object getSimpleValue(JSONObject json);
+	public abstract Object getSimpleValue(Object json);
 }

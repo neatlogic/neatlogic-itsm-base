@@ -96,6 +96,6 @@ public interface IProcessTaskColumn {
 	 * @param json
 	 * @return
 	 */
-	Object getSimpleValue(JSONObject json);
+	Object getSimpleValue(Object json);
 
 }
