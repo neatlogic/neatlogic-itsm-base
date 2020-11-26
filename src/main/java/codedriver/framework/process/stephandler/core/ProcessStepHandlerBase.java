@@ -1190,7 +1190,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         if(processStepUtilHandler == null) {
             throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
         }
-        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.TRANSFER, true);
+        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessTaskOperationType.TRANSFERCURRENTSTEP, true);
 		ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 		processTaskStepVo.setParamObj(currentProcessTaskStepVo.getParamObj());
 		/** 检查步骤是否 “已激活” **/
