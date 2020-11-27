@@ -286,7 +286,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	                    }
 	                    ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
 	                    JSONObject globalConfig = processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null);
-	                    actionList = (JSONArray)JSONPath.read(globalConfig.toJSONString(), "actionConfig.actionList");
+	                    actionList = (JSONArray)JSONPath.read(JSON.toJSONString(globalConfig), "actionConfig.actionList");
 	                }
 			    }
                 
@@ -450,7 +450,7 @@ public abstract class ProcessStepHandlerUtilBase {
 	                if(MapUtils.isEmpty(notifyPolicyConfig)) {
 	                    ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
 	                    JSONObject globalConfig = processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null);
-	                    notifyPolicyConfig = (JSONObject)JSONPath.read(globalConfig.toJSONString(), "notifyPolicyConfig");
+	                    notifyPolicyConfig = (JSONObject)JSONPath.read(JSON.toJSONString(globalConfig), "notifyPolicyConfig");
 	                }
 			    }				
 
