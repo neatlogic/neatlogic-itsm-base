@@ -53,4 +53,9 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	public Boolean getIsSort() {
 	    return false;
 	}
+
+	@Override
+	public Object getSimpleValue(Object json){
+		return null;
+	}
 }
