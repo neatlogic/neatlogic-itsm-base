@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.collections4.MapUtils;
 
-import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
@@ -37,10 +36,10 @@ public class ProcessOperateManager {
 		this.typeQueue = builder.typeQueue;
 	}
 	
-	public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
+	public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, String userUuid) {
         List<ProcessTaskOperationType> resultList = new ArrayList<>();
         //系统用户拥有所有权限
-        if(SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid())) {
+        if(SystemUser.SYSTEM.getUserUuid().equals(userUuid)) {
             for(IOperationAuthHandlerType type : typeQueue) {
                 for(ProcessTaskOperationType operationType : type.getOperationTypeList()) {
                     if(!resultList.contains(operationType)) {
@@ -52,7 +51,7 @@ public class ProcessOperateManager {
             Map<ProcessTaskOperationType, Boolean> operateMap = new HashMap<>();
             for(IOperationAuthHandlerType type : typeQueue) {
                 IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(type);
-                Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler.getOperateMap(processTaskVo, processTaskStepVo);
+                Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid);
                 if(MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
                     operateMap.putAll(nextOperateMap);
                 }else if(MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
@@ -71,16 +70,16 @@ public class ProcessOperateManager {
         return resultList;
     }
 
-    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, List<ProcessTaskOperationType> operationTypeList) {
+    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, String userUuid, List<ProcessTaskOperationType> operationTypeList) {
         //系统用户拥有所有权限
-        if(SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid())) {
+        if(SystemUser.SYSTEM.getUserUuid().equals(userUuid)) {
             return operationTypeList;
         }
         List<ProcessTaskOperationType> resultList = new ArrayList<>();
         Map<ProcessTaskOperationType, Boolean> operateMap = new HashMap<>();
         for(IOperationAuthHandlerType type : typeQueue) {
             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(type);
-            Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler.getOperateMap(processTaskVo, processTaskStepVo, operationTypeList);
+            Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeList);
             if(MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
                 operateMap.putAll(nextOperateMap);
             }else if(MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
