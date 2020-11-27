@@ -5,13 +5,13 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.notify.core.INotifyTriggerType;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.notify.core.NotifyTriggerType;
 import codedriver.framework.process.stepremind.core.IProcessTaskStepRemindType;
 
 public interface IProcessStepUtilHandler {
@@ -72,8 +72,23 @@ public interface IProcessStepUtilHandler {
 	* @param  trigger 
 	* @return void
 	 */
-	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, NotifyTriggerType trigger);
-
+	public void notify(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger);
+	/**
+	 * 
+	* @Time:2020年11月11日
+	* @Description: 触发计算sla 
+	* @param currentProcessTaskVo 
+	* @return void
+	 */
+	public void calculateSla(ProcessTaskVo currentProcessTaskVo, boolean isAsync);
+	/**
+     * 
+    * @Time:2020年11月11日
+    * @Description: 触发计算sla 
+    * @param currentProcessTaskStepVo 
+    * @return void
+     */
+    public void calculateSla(ProcessTaskStepVo currentProcessTaskStepVo);
     /**
      * 
      * @Time:2020年3月30日
@@ -176,7 +191,7 @@ public interface IProcessStepUtilHandler {
     * @param receiverMap 工单干系人信息
     * @return void
      */
-    public void getReceiverMap(Long processTaskId, Long processTaskStepId, Map<String, List<NotifyReceiverVo>> receiverMap);
+    public Map<String, List<NotifyReceiverVo>> getReceiverMap(ProcessTaskStepVo currentProcessTaskStepVo);
     
     /**
      * 
@@ -186,6 +201,22 @@ public interface IProcessStepUtilHandler {
     * @return void
      */
     public Map<String, String> getCustomButtonMapByProcessTaskStepId(Long processTaskStepId);
+    /**
+     * 
+    * @Time:2020年9月15日
+    * @Description: 根据步骤configHash和handler获取自定义按钮文案映射 
+    * @param processTaskStepId 
+    * @return void
+     */
+    public Map<String, String> getCustomButtonMapByConfigHashAndHandler(String configHash, String handler);
+    /**
+     * 
+    * @Time:2020年9月15日
+    * @Description: 根据步骤configHash和handler、status获取自定义按钮文案
+    * @param processTaskStepId 
+    * @return void
+     */
+    public String getStatusTextByConfigHashAndHandler(String configHash, String handler, String status);
     
     /**
      * 
@@ -197,22 +228,21 @@ public interface IProcessStepUtilHandler {
     * @return void
      */
     public int saveStepRemind(ProcessTaskStepVo currentProcessTaskStepVo,Long targerProcessTaskStepId, String reason, IProcessTaskStepRemindType ation);
+    
     /**
      * 
-     * @Time:2020年4月3日
-     * @Description: 获取当前用户在当前步骤中工单干系人列表
-     * @param processTaskVo     工单信息
-     * @param processTaskStepId 步骤id
-     * @return List<String>
+    * @Time:2020年11月23日
+    * @Description: 获取步骤配置信息中isRequired(回复是否必填)字段值 
+    * @param configHash
+    * @return Integer
      */
-    public void setCurrentUserProcessUserTypeList(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo);
+    public Integer getIsRequiredByConfigHash(String configHash);
     /**
      * 
-    * @Author: linbq
-    * @Time:2020年8月24日
-    * @Description: 设置步骤配置、处理器全局配置信息 
-    * @param processTaskStepVo 
-    * @return void
+    * @Time:2020年11月23日
+    * @Description: 获取步骤配置信息中isNeedContent(回复是否启用)字段值 
+    * @param configHash
+    * @return Integer
      */
-    public void setProcessTaskStepConfig(ProcessTaskStepVo processTaskStepVo);
+    public Integer getIsNeedContentByConfigHash(String configHash);
 }

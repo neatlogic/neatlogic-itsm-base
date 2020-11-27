@@ -27,7 +27,7 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
 	private List<FileVo> fileList = new ArrayList<>();
 	@EntityField(name = "附件id列表", type = ApiParamType.JSONARRAY)
-    private List<Long> fileIdList;
+    private List<Long> fileIdList = new ArrayList<>();
 	
 	@EntityField(name = "是否可编辑", type = ApiParamType.INTEGER)
 	private Integer isEditable;

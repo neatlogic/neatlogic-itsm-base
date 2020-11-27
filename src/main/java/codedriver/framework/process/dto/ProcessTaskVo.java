@@ -98,9 +98,6 @@ public class ProcessTaskVo {
     private String tranferReportDirection;
     @JSONField(serialize=false)
     private transient Boolean isAutoGenerateId = true;
-    /** 当前用户在当前工单中工单干系人列表 **/
-    @JSONField(serialize=false)
-    private transient List<String> currentUserProcessUserTypeList = new ArrayList<>();
     @EntityField(name = "重做步骤列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> redoStepList = new ArrayList<>();
 	@EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
@@ -115,6 +112,8 @@ public class ProcessTaskVo {
     private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
     @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTagVo> tagVoList;
+    @EntityField(name = "移动端表单交互类型，1：下探页面；0：当前页", type = ApiParamType.INTEGER)
+    private Integer mobileFormUIType;
     public ProcessTaskVo() {
 
     }
@@ -398,14 +397,6 @@ public class ProcessTaskVo {
         this.isHasOldFormProp = isHasOldFormProp;
     }
 
-    public List<String> getCurrentUserProcessUserTypeList() {
-        return currentUserProcessUserTypeList;
-    }
-
-    public void setCurrentUserProcessUserTypeList(List<String> currentUserProcessUserTypeList) {
-        this.currentUserProcessUserTypeList = currentUserProcessUserTypeList;
-    }
-
     public String getScoreInfo() {
         return scoreInfo;
     }
@@ -495,6 +486,14 @@ public class ProcessTaskVo {
 
     public void setTagVoList(List<ProcessTagVo> tagVoList) {
         this.tagVoList = tagVoList;
+    }
+
+    public Integer getMobileFormUIType() {
+        return mobileFormUIType;
+    }
+
+    public void setMobileFormUIType(Integer mobileFormUIType) {
+        this.mobileFormUIType = mobileFormUIType;
     }
     
 }

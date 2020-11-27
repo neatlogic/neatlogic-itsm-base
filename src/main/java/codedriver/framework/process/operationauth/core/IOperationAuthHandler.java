@@ -5,31 +5,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.BiPredicate;
 
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 
 public interface IOperationAuthHandler {
-    public Map<ProcessTaskOperationType, BiPredicate<ProcessTaskVo, ProcessTaskStepVo>> getOperationBiPredicateMap();
+    public Map<ProcessTaskOperationType, TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String>> getOperationBiPredicateMap();
     
 	public IOperationAuthHandlerType getHandler();
 
-    default Map<ProcessTaskOperationType, Boolean> getOperateMap(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo) {
+    default Map<ProcessTaskOperationType, Boolean> getOperateMap(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, String userUuid) {
         Map<ProcessTaskOperationType, Boolean> resultMap = new HashMap<>();
-        for(Entry<ProcessTaskOperationType, BiPredicate<ProcessTaskVo, ProcessTaskStepVo>> entry : getOperationBiPredicateMap().entrySet()) {
-            resultMap.put(entry.getKey(), entry.getValue().test(processTaskVo, processTaskStepVo));
+        for(Entry<ProcessTaskOperationType, TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String>> entry : getOperationBiPredicateMap().entrySet()) {
+            resultMap.put(entry.getKey(), entry.getValue().test(processTaskVo, processTaskStepVo, userUuid));
         }
         return resultMap;
     }
 
-    default Map<ProcessTaskOperationType, Boolean> getOperateMap(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, List<ProcessTaskOperationType> operationTypeList) {
+    default Map<ProcessTaskOperationType, Boolean> getOperateMap(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, String userUuid, List<ProcessTaskOperationType> operationTypeList) {
         Map<ProcessTaskOperationType, Boolean> resultMap = new HashMap<>();
         for(ProcessTaskOperationType operationType : operationTypeList) {
-            BiPredicate<ProcessTaskVo, ProcessTaskStepVo> predicate = getOperationBiPredicateMap().get(operationType);
+            TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String> predicate = getOperationBiPredicateMap().get(operationType);
             if(predicate != null) {
-                resultMap.put(operationType, predicate.test(processTaskVo, processTaskStepVo));
+                resultMap.put(operationType, predicate.test(processTaskVo, processTaskStepVo, userUuid));
             }else {
                 resultMap.put(operationType, false);
             }

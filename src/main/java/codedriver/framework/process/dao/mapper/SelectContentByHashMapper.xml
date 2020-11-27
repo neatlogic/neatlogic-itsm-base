@@ -11,6 +11,10 @@
 		WHERE
 		`hash` = #{value}
 	</select>
+	
+	<select id="getProcessTaskConfigStringByHash" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `config` FROM `processtask_config` WHERE `hash` = #{value}
+	</select>
 
 	<select id="getProcessTaskStepConfigByHash" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT
@@ -29,20 +33,20 @@
 		WHERE
 		`hash` = #{value}
 	</select>
-	
+
 	<select id="getProcessTaskContentStringByHash" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT `content` FROM `processtask_content` WHERE `hash` = #{value}
 	</select>
-	
+
 	<select id="getProcessTaskFromContentByHash" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT `content` FROM `processtask_form_content` WHERE `hash` = #{value}
 	</select>
-	
+
 	<select id="checkProcessTaskScoreTempleteConfigIsExists" parameterType="java.lang.String" resultType="int">
-	SELECT COUNT(`hash`) FROM `processtask_score_template_config` WHERE `hash` = #{value}
+		SELECT COUNT(`hash`) FROM `processtask_score_template_config` WHERE `hash` = #{value}
 	</select>
-	
+
 	<select id="getProcessTaskScoreTempleteConfigStringIsByHash" parameterType="java.lang.String" resultType="java.lang.String">
-	SELECT `config` FROM `processtask_score_template_config` WHERE `hash` = #{value}
+		SELECT `config` FROM `processtask_score_template_config` WHERE `hash` = #{value}
 	</select>
 </mapper>

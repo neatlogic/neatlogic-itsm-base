@@ -47,8 +47,11 @@ public class ChannelVo extends BasePageVo implements Serializable{
 	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
 	private String parentUuid;
 	
-	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
+	@EntityField(name = "服务所有父目录名，逗号隔开", type = ApiParamType.STRING)
 	private String parentNames;
+	
+	@EntityField(name = "服务所有父目录uuid，逗号隔开", type = ApiParamType.STRING)
+    private String parentUuids;
 
 	@EntityField(name = "是否收藏，0：未收藏，1：已收藏", type = ApiParamType.INTEGER)
 	private Integer isFavorite;
@@ -414,6 +417,14 @@ public class ChannelVo extends BasePageVo implements Serializable{
 
     public void setSupport(String support) {
         this.support = support;
+    }
+
+    public String getParentUuids() {
+        return parentUuids;
+    }
+
+    public void setParentUuids(String parentUuids) {
+        this.parentUuids = parentUuids;
     }
     
     

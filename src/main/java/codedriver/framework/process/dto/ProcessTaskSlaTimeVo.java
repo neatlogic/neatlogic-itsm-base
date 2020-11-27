@@ -118,4 +118,11 @@ public class ProcessTaskSlaTimeVo {
 		this.realExpireTimeLong = realExpireTimeLong;
 	}
 
+    @Override
+    public String toString() {
+        return "[slaId=" + slaId + ", expireTime=" + expireTime
+            + ", realExpireTime=" + realExpireTime + ", timeSum=" + timeSum + ", timeLeft=" + timeLeft
+            + ", realTimeLeft=" + realTimeLeft  + "]";
+    }
+
 }

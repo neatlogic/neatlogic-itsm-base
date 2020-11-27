@@ -283,33 +283,6 @@
 		</if>
 	</select>
 
-	<select id="searchProcessTaskStep" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
-		SELECT
-		`id`,
-		`processtask_id` AS processTaskId,
-		`name`,
-		`process_step_uuid` AS processStepUuid,
-		`status`,
-		`result`,
-		`type`,
-		`handler`,
-		`is_active` AS isActive,
-		a.`start_time` AS startTime,
-		a.`end_time` AS endTime,
-		a.`expire_time` AS endTime,
-		`error`
-		FROM
-		`processtask_step` a
-		WHERE
-		1=1
-		<if test="processStepUuid != null and processStepUuid != ''">
-			AND `process_step_uuid` = #{processStepUuid}
-		</if>
-		<if test="needPage == true">
-			LIMIT #{startNum}, #{pageSize}
-		</if>
-	</select>
-
 	<select id="getProcessTaskStepTimeoutPolicyByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo">
 		SELECT
 		`processtask_id` as processTaskId,
@@ -346,7 +319,7 @@
 		ORDER BY `sort`
 	</select>
 
-	<select id="getProcessTaskStepWorkerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+	<select id="getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		SELECT
 		ptsw.`processtask_id` AS processTaskId,
 		ptsw.`processtask_step_id` AS processTaskStepId,
@@ -359,27 +332,31 @@
 		ELSE NULL END AS `name`,
 		ptsw.`user_type` AS userType
 		FROM `processtask_step_worker` ptsw
-		WHERE ptsw.processtask_step_id = #{value}
+		WHERE ptsw.`processtask_id` = #{processTaskId}
+		<if test="processTaskStepId != null">
+		AND ptsw.`processtask_step_id` = #{processTaskStepId}
+		</if>
 	</select>
 
 	<select id="getFromProcessTaskStepByToId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
 		SELECT
 		a.`id`,
-		a.`process_step_uuid` AS processStepUuid,
 		a.`processtask_id` AS processTaskId,
+		a.`name`,
+		a.`process_step_uuid` AS processStepUuid,
 		a.`status`,
-		a.`start_time` AS startTime,
-		a.`end_time` AS endTime,
-		a.`is_active` AS isActive,
+		a.`result`,
 		a.`type`,
 		a.`handler`,
-		a.`name`
-		FROM
-		processtask_step a
-		JOIN
-		processtask_step_rel b ON a.id = b.from_processtask_step_id and b.is_hit = 1
-		WHERE
-		to_processtask_step_id = #{value}
+		a.`is_active` AS isActive,
+		a.`config_hash` AS configHash,
+		a.`active_time` AS activeTime,
+		a.`start_time` AS startTime,
+		a.`end_time` AS endTime,
+		a.`error`
+		FROM `processtask_step` a
+		JOIN `processtask_step_rel` b ON a.`id` = b.`from_processtask_step_id` AND b.`is_hit` = 1
+		WHERE b.`to_processtask_step_id` = #{value}
 	</select>
 
 	<select id="getProcessTaskStepByConvergeId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
@@ -422,6 +399,7 @@
 		a.`type`,
 		a.`handler`,
 		a.`is_active` AS isActive,
+		a.`active_time` AS activeTime,
 		a.`start_time` AS startTime,
 		a.`end_time` AS endTime,
 		a.`error`,
@@ -462,6 +440,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -507,6 +486,7 @@
 		ps.`result`,
 		ps.`type`,
 		ps.`handler`,
+		ps.`active_time` AS activeTime,
 		ps.`start_time` AS startTime,
 		ps.`end_time` AS endTime,
 		ps.`error`,
@@ -578,6 +558,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -598,6 +579,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -619,6 +601,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -741,6 +724,7 @@
 	  `type`,
 	  `handler`,
 	  `is_active`,
+	  `active_time`,
 	  `start_time`,
 	  `end_time`,
 	  `error`,
@@ -876,6 +860,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -896,6 +881,7 @@
 		`handler`,
 		`is_active` AS isActive,
 		`config_hash` AS configHash,
+		`active_time` AS activeTime,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`error`
@@ -977,6 +963,7 @@
 	  `type`,
 	  `handler`,
 	  `is_active` AS isActive,
+	  `active_time` AS activeTime,
 	  `start_time` AS startTime,
 	  `end_time` AS endTime,
 	  `error`,
@@ -1097,6 +1084,7 @@
 			<result column="handler" property="handler" />
 			<result column="is_active" property="isActive" />
 			<result column="stepConfigHash" property="configHash" />
+			<result column="stepActiveTime" property="activeTime" />
 			<result column="stepStartTime" property="startTime" />
 			<result column="stepEndTime" property="endTime" />
 		</collection>
@@ -1124,6 +1112,7 @@
 	ps.`handler`,
 	ps.`is_active`,
 	ps.`config_hash` as stepConfigHash,
+	ps.`active_time` as stepActiveTime,
 	ps.`start_time` as stepStartTime,
 	ps.`end_time` as stepEndTime
 	from
@@ -1346,6 +1335,10 @@
 	SELECT `sla_id` FROM `processtask_step_sla` WHERE `processtask_step_id` = #{value}
 	</select>
 	
+	<select id="getSlaIdListByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT `id` FROM `processtask_sla` WHERE `processtask_id` = #{value}
+	</select>
+	
 	<select id="getProcessTaskSlaConfigById" parameterType="java.lang.Long" resultType="java.lang.String">
 	SELECT `config` FROM `processtask_sla` WHERE `id` = #{value}
 	</select>
@@ -1450,22 +1443,26 @@
 		`status` = #{status},
 		`result` = #{result},
 		`is_active` = #{isActive},
-		<if test="isActive == 1">
-			`start_time` = NOW(3),
-			`end_time` = NULL,
+		<if test="updateActiveTime == 1">
+			`active_time` = NOW(3),
 		</if>
-		<if test="isActive == 2">
-			`end_time` = NOW(3),
-		</if>
+		<choose>
+			<when test="updateStartTime == 1">
+				`start_time` = NOW(3),
+			</when>
+			<when test="updateStartTime == -1">
+				`start_time` = NULL,
+			</when>
+		</choose>
+		<choose>
+			<when test="updateEndTime == 1">
+				`end_time` = NOW(3),
+			</when>
+			<when test="updateEndTime == -1">
+				`end_time` = NULL,
+			</when>
+		</choose>
 		`error` = #{error}
-		WHERE `id` = #{id}
-	</update>
-
-	<update id="updateProcessTaskStepExpireTime" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
-		UPDATE
-		`processtask_step`
-		SET
-		`expire_time` = #{expireTime}
 		WHERE `id` = #{id}
 	</update>
 
@@ -1755,6 +1752,7 @@
 		`type`,
 		`handler`,
 		`is_active`,
+		`active_time`,
 		`start_time`,
 		`end_time`,
 		`config_hash`
@@ -1769,6 +1767,7 @@
 		#{type},
 		#{handler},
 		#{isActive},
+		#{activeTime},
 		#{startTime},
 		#{endTime},
 		#{configHash}
@@ -2264,6 +2263,10 @@
 	UPDATE `processtask` SET `is_show` = #{isShow} WHERE id = #{id}
 	</update>
 	
+	<update id="updateProcessTaskPriorityUuidById">
+	UPDATE `processtask` SET `priority_uuid` = #{priorityUuid} WHERE `id` = #{id}
+	</update>
+	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
 		DELETE
 		FROM
@@ -2349,6 +2352,13 @@
 		DELETE
 		FROM
 		`processtask_sla_transfer`
+		WHERE sla_id = #{value}
+	</delete>
+	
+	<delete id="deleteProcessTaskSlaNotifyBySlaId" parameterType="java.lang.Long">
+		DELETE
+		FROM
+		`processtask_sla_notify`
 		WHERE sla_id = #{value}
 	</delete>
 
