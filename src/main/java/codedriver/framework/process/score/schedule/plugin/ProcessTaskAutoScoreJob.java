@@ -105,11 +105,6 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 
 	@Override
 	public void initJob(String tenantUuid) {
-	    try {
-	        /** 休眠3分钟，等待各模块全部加载完毕 **/
-            TimeUnit.MINUTES.sleep(3);
-        } catch (InterruptedException e) {
-        }
 	    List<Long> processTaskIdList = processTaskScoreMapper.getAllProcessTaskAutoScoreProcessTaskIdList();
 	    for(Long processTaskId : processTaskIdList) {
 	        JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskId.toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", processTaskId);
