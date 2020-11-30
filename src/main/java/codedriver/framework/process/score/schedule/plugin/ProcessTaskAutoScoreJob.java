@@ -65,6 +65,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 
 	@Override
 	public void reloadJob(JobObject jobObject) {
+	    System.out.println("2");
 		String tenantUuid = jobObject.getTenantUuid();
 		TenantContext.get().switchTenant(tenantUuid);
 		Long processTaskId = (Long) jobObject.getData("processTaskId");
@@ -90,15 +91,16 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 	                    autoScoreDate = new Date(expireTime);
 	                }else {
 //	                    autoScoreDate = DateUtils.addDays(task.getEndTime(), Integer.parseInt(autoTime.toString()));
-	                    autoScoreDate = new Date(task.getEndTime().getTime() + TimeUnit.DAYS.toMillis(autoTime));
+	                    //autoScoreDate = new Date(task.getEndTime().getTime() + TimeUnit.DAYS.toMillis(autoTime));
+	                    autoScoreDate = new Date(task.getEndTime().getTime() + TimeUnit.MINUTES.toMillis(1));
 	                }
 	                ProcessTaskAutoScoreVo processTaskAutoScoreVo = new ProcessTaskAutoScoreVo();
 	                processTaskAutoScoreVo.setProcessTaskId(processTaskId);
 	                processTaskAutoScoreVo.setTriggerTime(autoScoreDate);
 	                processTaskScoreMapper.updateProcessTaskAutoScoreByProcessTaskId(processTaskAutoScoreVo);
 	                JobObject.Builder newJobObjectBuilder = new JobObject.Builder(processTaskId.toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid())
-	                    //.withBeginTime(autoScoreDate)
-	                    .withBeginTime(new Date(System.currentTimeMillis() + 10 * 1000))
+	                    .withBeginTime(autoScoreDate)
+	                    //.withBeginTime(new Date(System.currentTimeMillis() + 10 * 1000))
 	                    .withIntervalInSeconds(60 * 60)
 	                    .withRepeatCount(0)
 	                    .addData("processTaskId", processTaskId);
@@ -162,6 +164,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 
 	@Override
 	public void initJob(String tenantUuid) {
+	    System.out.println("1");
 	    List<Long> processTaskIdList = processTaskScoreMapper.getAllProcessTaskAutoScoreProcessTaskIdList();
 	    for(Long processTaskId : processTaskIdList) {
 	        JobObject.Builder jobObjectBuilder = new JobObject.Builder(processTaskId.toString(), this.getGroupName(), this.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", processTaskId);
@@ -172,50 +175,60 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 
 	@Override
 	public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
+	    System.out.println("3");
         Long processTaskId = (Long) jobObject.getData("processTaskId");
-	    try {
-    	    List<ProcessTaskScoreVo> processTaskScoreVos = processTaskScoreMapper.searchProcessTaskScoreByProcesstaskId(processTaskId);
-    	    if(CollectionUtils.isEmpty(processTaskScoreVos)) {
-    	        ProcessTaskVo task = processTaskMapper.getProcessTaskById(processTaskId);
-    	        if(task != null) {
-    	            String config = processTaskScoreMapper.getProcessTaskAutoScoreConfigByProcessTaskId(processTaskId);
-    	            Long scoreTemplateId = (Long)JSONPath.read(config, "scoreTemplateId");
-    	            //String config = selectContentByHashMapper.getProcessTaskConfigStringByHash(task.getConfigHash());
-    	            //Long scoreTemplateId = (Long)JSONPath.read(config, "process.scoreConfig.scoreTemplateId");
-    	            ScoreTemplateVo template = scoreTemplateMapper.getScoreTemplateById(scoreTemplateId);
-    	            if(template != null) {
-    	                List<ScoreTemplateDimensionVo> dimensionList = template.getDimensionList();
-    	                if(CollectionUtils.isNotEmpty(dimensionList)){
-    	                    for(ScoreTemplateDimensionVo vo : dimensionList){
-    	                        vo.setScore(5);
-    	                    }
-    	                    JSONObject paramObj = new JSONObject();
-    	                    paramObj.put("scoreTemplateId", scoreTemplateId);
-    	                    paramObj.put("scoreDimensionList", dimensionList);
-    	                    //paramObj.put("content", "系统自动评价");
-    	                    task.setParamObj(paramObj);
-    	                    IProcessStepHandler stepHandler = ProcessStepHandlerFactory.getHandler();
+        System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeee");
+	    List<ProcessTaskScoreVo> processTaskScoreVos = processTaskScoreMapper.searchProcessTaskScoreByProcesstaskId(processTaskId);
+	    if(CollectionUtils.isEmpty(processTaskScoreVos)) {
+	        System.out.println("4");
+	        ProcessTaskVo task = processTaskMapper.getProcessTaskById(processTaskId);
+	        if(task != null) {
+	            System.out.println("5");
+	            String config = processTaskScoreMapper.getProcessTaskAutoScoreConfigByProcessTaskId(processTaskId);
+	            Long scoreTemplateId = (Long)JSONPath.read(config, "scoreTemplateId");
+	            //String config = selectContentByHashMapper.getProcessTaskConfigStringByHash(task.getConfigHash());
+	            //Long scoreTemplateId = (Long)JSONPath.read(config, "process.scoreConfig.scoreTemplateId");
+	            ScoreTemplateVo template = scoreTemplateMapper.getScoreTemplateById(scoreTemplateId);
+	            if(template != null) {
+	                System.out.println("6");
+	                List<ScoreTemplateDimensionVo> dimensionList = template.getDimensionList();
+                    System.out.println("dimensionList:" + dimensionList);
+	                if(CollectionUtils.isNotEmpty(dimensionList)){
+                        System.out.println("7");
+	                    for(ScoreTemplateDimensionVo vo : dimensionList){
+	                        vo.setScore(5);
+	                    }
+	                    JSONObject paramObj = new JSONObject();
+	                    paramObj.put("scoreTemplateId", scoreTemplateId);
+	                    paramObj.put("scoreDimensionList", dimensionList);
+	                    //paramObj.put("content", "系统自动评价");
+	                    task.setParamObj(paramObj);
+	                    System.out.println("8");
+	                    IProcessStepHandler stepHandler = ProcessStepHandlerFactory.getHandler();
+	                    System.out.println(stepHandler);
+	                    System.out.println("9");
     	                    while(stepHandler == null) {
     	                        try {
-                                    TimeUnit.SECONDS.sleep(2);
+                                    TimeUnit.SECONDS.sleep(10);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
     	                        stepHandler = ProcessStepHandlerFactory.getHandler();
     	                        System.out.println("####################################################");
     	                    }
-                            /** 执行转交前，设置当前用户为system,用于权限校验 **/
-                            UserContext.init(SystemUser.SYSTEM.getConfig(), null, SystemUser.SYSTEM.getTimezone(), null, null);
-                            System.out.println("自动评分：" + processTaskId);
-                            stepHandler.scoreProcessTask(task);
-    	                }
-    	            }
-    	        }
-    	    }
-	    }finally {
-	        schedulerManager.unloadJob(jobObject);
-	        processTaskScoreMapper.deleteProcessTaskAutoScoreByProcessTaskId(processTaskId);
+    	                    System.out.println(stepHandler);
+                        /** 执行转交前，设置当前用户为system,用于权限校验 **/
+                        UserContext.init(SystemUser.SYSTEM.getConfig(), null, SystemUser.SYSTEM.getTimezone(), null, null);
+                        System.out.println("自动评分：" + processTaskId);
+                        stepHandler.scoreProcessTask(task);
+                        System.out.println("10");
+	                }
+	            }
+	        }
 	    }
+	    schedulerManager.unloadJob(jobObject);
+        processTaskScoreMapper.deleteProcessTaskAutoScoreByProcessTaskId(processTaskId);
+        System.out.println("####################################################");
 //		Long processTaskId = (Long) jobObject.getData("processTaskId");
 //		ProcessTaskVo task = processTaskMapper.getProcessTaskById(processTaskId);
 //		List<ProcessTaskScoreVo> processTaskScoreVos = processTaskScoreMapper.searchProcessTaskScoreByProcesstaskId(processTaskId);

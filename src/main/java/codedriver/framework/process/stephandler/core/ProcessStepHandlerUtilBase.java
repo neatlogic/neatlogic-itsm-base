@@ -1179,7 +1179,7 @@ public abstract class ProcessStepHandlerUtilBase {
 			        if (jobHandler != null) {
 			            ProcessTaskAutoScoreVo processTaskAutoScoreVo = new ProcessTaskAutoScoreVo();
 			            processTaskAutoScoreVo.setProcessTaskId(task.getId());
-			            processTaskAutoScoreVo.setConfig((String)JSONPath.read(config, "process.scoreConfig"));
+			            processTaskAutoScoreVo.setConfig(JSONPath.read(config, "process.scoreConfig").toString());
 			            processTaskScoreMapper.insertProcessTaskAutoScore(processTaskAutoScoreVo);
 	                    JobObject.Builder jobObjectBuilder = new JobObject.Builder(currentProcessTaskVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", currentProcessTaskVo.getId());
 	                    JobObject jobObject = jobObjectBuilder.build();

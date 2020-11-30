@@ -19,7 +19,7 @@
 	SELECT `processtask_id` FROM `processtask_auto_score` 
 	</select>
 	
-	<select id="getProcessTaskAutoScoreByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+	<select id="getProcessTaskAutoScoreConfigByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
 	SELECT `config` FROM `processtask_auto_score` WHERE `processtask_id` = #{value}
 	</select>
 	
