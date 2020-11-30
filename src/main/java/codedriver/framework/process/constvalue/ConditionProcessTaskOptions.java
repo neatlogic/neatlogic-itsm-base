@@ -7,7 +7,9 @@ public enum ConditionProcessTaskOptions {
     STARTTIME("starttime", "开始时间"),
     OWNER("owner", "上报人"),
     PRIORITY("priority", "优先级"),
-    OWNERCOMPANY("ownercompany", "上报人公司");
+    OWNERCOMPANY("ownercompany", "上报人公司"),
+    OWNERLEVEL("ownerlevel", "上报人等级")
+    ;
     private String value;
     private String text;
     private ConditionProcessTaskOptions(String value, String text) {
