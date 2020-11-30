@@ -42,12 +42,13 @@ public class ProcessTaskUtil {
 		resultObj.put(ProcessField.TITLE.getValue(), processTaskVo.getTitle());
 		resultObj.put(ProcessField.CHANNELTYPE.getValue(), isValue?processTaskVo.getChannelType().getUuid():processTaskVo.getChannelType().getName());
 		resultObj.put(ProcessField.OWNER.getValue(), isValue?processTaskVo.getOwner():processTaskVo.getOwnerName());
+		resultObj.put(ProcessField.OWNERLEVEL.getValue(), processTaskVo.getOwnerVipLevel());
 		resultObj.put(ProcessField.REPORTER.getValue(),isValue?processTaskVo.getReporter():processTaskVo.getReporterName());
 		resultObj.put(ProcessField.PRIORITY.getValue(), isValue?processTaskVo.getPriority().getUuid():processTaskVo.getPriority().getName());
 		resultObj.put(ProcessField.STATUS.getValue(), isValue?processTaskVo.getStatusVo().getStatus():processTaskVo.getStatusVo().getText());
 		resultObj.put(ProcessField.OWNERCOMPANY.getValue(), isValue?processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getUuid).collect(Collectors.toList()):processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
 		resultObj.put(ProcessField.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null?processTaskVo.getCurrentProcessTaskStep().getId():null);
-		
+
 		ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
 		ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
 		if(comment != null && StringUtils.isNotBlank(comment.getContent())) {
