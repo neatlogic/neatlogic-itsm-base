@@ -77,7 +77,6 @@ import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
 import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskConfigVo;
 import codedriver.framework.process.dto.ProcessTaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
@@ -93,6 +92,7 @@ import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.dto.score.ProcessTaskAutoScoreVo;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.integration.handler.ProcessRequestFrom;
@@ -1171,30 +1171,23 @@ public abstract class ProcessStepHandlerUtilBase {
 			 * 如果设置了自动评分，则启动定时器监听工单是否评分，若超时未评分，则系统自动评分
 			 */
 			ProcessTaskVo task = processTaskMapper.getProcessTaskById(currentProcessTaskVo.getId());
-			Integer isAuto = null;
-			Integer autoTime = null;
 			if(task != null){
-				String configHash = task.getConfigHash();
-				ProcessTaskConfigVo taskConfigVo = null;
-				JSONObject scoreConfig = null;
-				if(StringUtils.isNotBlank(configHash) && (taskConfigVo = selectContentByHashMapper.getProcessTaskConfigByHash(configHash)) != null){
-					JSONObject taskConfigObj = JSONObject.parseObject(taskConfigVo.getConfig());
-					JSONObject processConfig = taskConfigObj.getJSONObject("process");
-					if(MapUtils.isNotEmpty(processConfig) && MapUtils.isNotEmpty(scoreConfig = processConfig.getJSONObject("scoreConfig")) && MapUtils.isNotEmpty(scoreConfig.getJSONObject("config"))){
-						isAuto = scoreConfig.getInteger("isAuto");
-						autoTime = scoreConfig.getJSONObject("config").getInteger("autoTime");
-					}
-				}
-			}
-			if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
-				IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
-				if (jobHandler != null) {
-					JobObject.Builder jobObjectBuilder = new JobObject.Builder(currentProcessTaskVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", currentProcessTaskVo.getId());
-					JobObject jobObject = jobObjectBuilder.build();
-					jobHandler.reloadJob(jobObject);
-				} else {
-					throw new ScheduleHandlerNotFoundException(ProcessTaskAutoScoreJob.class.getName());
-				}
+			    String config = selectContentByHashMapper.getProcessTaskConfigStringByHash(task.getConfigHash());
+			    Integer isAuto = (Integer)JSONPath.read(config, "process.scoreConfig.isAuto");
+			    if(Objects.equals(isAuto, 1)) {
+			        IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
+			        if (jobHandler != null) {
+			            ProcessTaskAutoScoreVo processTaskAutoScoreVo = new ProcessTaskAutoScoreVo();
+			            processTaskAutoScoreVo.setProcessTaskId(task.getId());
+			            processTaskAutoScoreVo.setConfig(JSONPath.read(config, "process.scoreConfig").toString());
+			            processTaskScoreMapper.insertProcessTaskAutoScore(processTaskAutoScoreVo);
+	                    JobObject.Builder jobObjectBuilder = new JobObject.Builder(currentProcessTaskVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", currentProcessTaskVo.getId());
+	                    JobObject jobObject = jobObjectBuilder.build();
+	                    jobHandler.reloadJob(jobObject);
+	                } else {
+	                    throw new ScheduleHandlerNotFoundException(ProcessTaskAutoScoreJob.class.getName());
+	                }
+			    }
 			}
 		}
 	}

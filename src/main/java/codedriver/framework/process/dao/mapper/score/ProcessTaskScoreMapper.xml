@@ -14,7 +14,15 @@
 		FROM `processtask_score`
 		where `processtask_id` = #{value}
 	</select>
-
+	
+	<select id="getAllProcessTaskAutoScoreProcessTaskIdList" resultType="java.lang.Long">
+	SELECT `processtask_id` FROM `processtask_auto_score` 
+	</select>
+	
+	<select id="getProcessTaskAutoScoreConfigByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+	SELECT `config` FROM `processtask_auto_score` WHERE `processtask_id` = #{value}
+	</select>
+	
 	<insert id="insertProcessTaskScore" parameterType="codedriver.framework.process.dto.score.ProcessTaskScoreVo" >
 		INSERT INTO `processtask_score` (
 		`processtask_id`,
@@ -49,6 +57,22 @@
 		)
 	</insert>
 	
+	<insert id="insertProcessTaskAutoScore" parameterType="codedriver.framework.process.dto.score.ProcessTaskAutoScoreVo">
+	INSERT INTO `processtask_auto_score` (
+	  `processtask_id`,
+	  `config`
+	) 
+	VALUES
+	  (
+	    #{processTaskId},
+	    #{config}
+	  ) 
+	</insert>
+	
+	<update id="updateProcessTaskAutoScoreByProcessTaskId" parameterType="codedriver.framework.process.dto.score.ProcessTaskAutoScoreVo">
+	UPDATE `processtask_auto_score` SET `trigger_time` = #{triggerTime} WHERE `processtask_id` = #{processTaskId}
+	</update>
+	
 	<delete id="deleteProcessTaskByProcessTaskId" parameterType="java.lang.Long">
 		DELETE ps,psc,pst
 		FROM `processtask_score` ps
@@ -57,4 +81,7 @@
 		WHERE ps.`processtask_id` = #{value}
 	</delete>
 
+	<delete id="deleteProcessTaskAutoScoreByProcessTaskId" parameterType="java.lang.Long">
+	DELETE FROM `processtask_auto_score` WHERE `processtask_id` = #{value}
+	</delete>
 </mapper>
