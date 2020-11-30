@@ -320,16 +320,26 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		}
 		currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
 		int autoStart = myAssign(currentProcessTaskStepVo, workerList);
-
+		boolean isAssignException = false;
+        if(CollectionUtils.isEmpty(workerList)) {
+            /** 获取步骤配置信息 **/
+            ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+            String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+            String defaultWorker = (String)JSONPath.read(stepConfig, "workerPolicyConfig.defaultWorker");
+            String[] split = defaultWorker.split("#");
+            workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), split[0], split[1], ProcessUserType.MAJOR.getValue()));
+            isAssignException = true;
+        }
+        
 		processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
 		if (CollectionUtils.isNotEmpty(workerList)) {
 			for (ProcessTaskStepWorkerVo workerVo : workerList) {
 				processTaskMapper.insertProcessTaskStepWorker(workerVo);
 			}
 		} else {
-			throw new ProcessTaskException("没有匹配到处理人");
+		    throw new ProcessTaskException("没有匹配到处理人");
 		}
-
+		
 		ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo();
 		processTaskStepUserVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 		processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());// 只删除主处理人人
@@ -348,7 +358,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 		}
 		/** 触发通知 **/
 		NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
-		
+		if(isAssignException) {
+		    NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGNEXCEPTION);
+		}
 		/** 执行动作 **/
 		ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
 		return 1;
