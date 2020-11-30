@@ -1989,6 +1989,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         }
         currentProcessTaskVo.setStatus(ProcessTaskStatus.SCORED.getValue());
         processTaskMapper.updateProcessTaskStatus(currentProcessTaskVo);
+        processTaskScoreMapper.deleteProcessTaskAutoScoreByProcessTaskId(currentProcessTaskVo.getId());        
         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
         processTaskStepVo.setParamObj(scoreObj);
