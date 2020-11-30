@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -86,25 +87,11 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             }
         }
         ProcessOperateManager processOperateManager = builder.build();
-        List<ProcessTaskOperationType> resultList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
+        List<ProcessTaskOperationType> resultList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, UserContext.get().getUserUuid(true));
         /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
         String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
         if(StringUtils.isNotBlank(userUuid)) {
-            List<String> roleUuidList = userMapper.getRoleUuidListByUserUuid(userUuid);
-            String currentUserUuid = UserContext.get().getUserUuid(true);
-            String currentUserId = UserContext.get().getUserId(true);
-            String currentUserName = UserContext.get().getUserName();
-            List<String> currentRoleUuidList = UserContext.get().getRoleUuidList();
-            UserContext.get().setUserUuid(userUuid);
-            UserContext.get().setUserId(null);
-            UserContext.get().setUserName(null);
-            UserContext.get().setRoleUuidList(roleUuidList);
-            processTaskVo.getStepList().clear();
-            List<ProcessTaskOperationType> operationTypeList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo);
-            UserContext.get().setUserUuid(currentUserUuid);
-            UserContext.get().setUserId(currentUserId);
-            UserContext.get().setUserName(currentUserName);
-            UserContext.get().setRoleUuidList(currentRoleUuidList);
+            List<ProcessTaskOperationType> operationTypeList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, userUuid);
             for(ProcessTaskOperationType type : operationTypeList) {
                 if(!resultList.contains(type)) {
                     resultList.add(type);
@@ -142,24 +129,11 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                 }
             }
             ProcessOperateManager processOperateManager = builder.build();
-            List<ProcessTaskOperationType> resultList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
+            List<ProcessTaskOperationType> resultList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, UserContext.get().getUserUuid(true), operationTypeList);
             /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
             String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
             if(StringUtils.isNotBlank(userUuid)) {
-                List<String> roleUuidList = userMapper.getRoleUuidListByUserUuid(userUuid);
-                String currentUserUuid = UserContext.get().getUserUuid(true);
-                String currentUserId = UserContext.get().getUserId(true);
-                String currentUserName = UserContext.get().getUserName();
-                List<String> currentRoleUuidList = UserContext.get().getRoleUuidList();
-                UserContext.get().setUserUuid(userUuid);
-                UserContext.get().setUserId(null);
-                UserContext.get().setUserName(null);
-                UserContext.get().setRoleUuidList(roleUuidList);
-                List<ProcessTaskOperationType> typeList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
-                UserContext.get().setUserUuid(currentUserUuid);
-                UserContext.get().setUserId(currentUserId);
-                UserContext.get().setUserName(currentUserName);
-                UserContext.get().setRoleUuidList(currentRoleUuidList);
+                List<ProcessTaskOperationType> typeList = processOperateManager.getOperateList(processTaskVo, processTaskStepVo, userUuid, operationTypeList);
                 for(ProcessTaskOperationType type : typeList) {
                     if(!resultList.contains(type)) {
                         resultList.add(type);
@@ -400,7 +374,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
         }
         /** 节点管理按钮映射 **/
-        customButtonList = (JSONArray)JSONPath.read(globalConfig.toJSONString(), "customButtonList");
+        customButtonList = (JSONArray)JSONPath.read(JSON.toJSONString(globalConfig), "customButtonList");
         if(CollectionUtils.isNotEmpty(customButtonList)) {
             for(int i = 0; i < customButtonList.size(); i++) {
                 JSONObject customButton = customButtonList.getJSONObject(i);
