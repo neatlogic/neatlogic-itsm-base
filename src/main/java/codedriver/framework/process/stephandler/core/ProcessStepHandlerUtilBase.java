@@ -1189,32 +1189,6 @@ public abstract class ProcessStepHandlerUtilBase {
 	                }
 			    }
 			}
-//			ProcessTaskVo task = processTaskMapper.getProcessTaskById(currentProcessTaskVo.getId());
-//			Integer isAuto = null;
-//			Integer autoTime = null;
-//			if(task != null){
-//				String configHash = task.getConfigHash();
-//				ProcessTaskConfigVo taskConfigVo = null;
-//				JSONObject scoreConfig = null;
-//				if(StringUtils.isNotBlank(configHash) && (taskConfigVo = selectContentByHashMapper.getProcessTaskConfigByHash(configHash)) != null){
-//					JSONObject taskConfigObj = JSONObject.parseObject(taskConfigVo.getConfig());
-//					JSONObject processConfig = taskConfigObj.getJSONObject("process");
-//					if(MapUtils.isNotEmpty(processConfig) && MapUtils.isNotEmpty(scoreConfig = processConfig.getJSONObject("scoreConfig")) && MapUtils.isNotEmpty(scoreConfig.getJSONObject("config"))){
-//						isAuto = scoreConfig.getInteger("isAuto");
-//						autoTime = scoreConfig.getJSONObject("config").getInteger("autoTime");
-//					}
-//				}
-//			}
-//			if(isAuto != null && Integer.parseInt(isAuto.toString()) == 1 && autoTime != null){
-//				IJob jobHandler = SchedulerManager.getHandler(ProcessTaskAutoScoreJob.class.getName());
-//				if (jobHandler != null) {
-//					JobObject.Builder jobObjectBuilder = new JobObject.Builder(currentProcessTaskVo.getId().toString(), jobHandler.getGroupName(), jobHandler.getClassName(), TenantContext.get().getTenantUuid()).addData("processTaskId", currentProcessTaskVo.getId());
-//					JobObject jobObject = jobObjectBuilder.build();
-//					jobHandler.reloadJob(jobObject);
-//				} else {
-//					throw new ScheduleHandlerNotFoundException(ProcessTaskAutoScoreJob.class.getName());
-//				}
-//			}
 		}
 	}
 
