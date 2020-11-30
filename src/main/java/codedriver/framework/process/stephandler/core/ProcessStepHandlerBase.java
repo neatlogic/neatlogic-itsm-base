@@ -409,12 +409,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 }
             }
         }
-        /** 分配策略没有匹配到处理人时，将默认处理人设置为步骤处理人 **/
-        if(CollectionUtils.isEmpty(workerList)) {
-            String defaultWorker = (String)JSONPath.read(stepConfig, "workerPolicyConfig.defaultWorker");
-            String[] split = defaultWorker.split("#");
-            workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), split[0], split[1], ProcessUserType.MAJOR.getValue()));
-        }
         return autoStart;
     }
 	
