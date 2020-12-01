@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONPath;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.SystemUser;
+import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
 import codedriver.framework.process.dao.mapper.score.ProcessTaskScoreMapper;
@@ -71,7 +72,7 @@ public class ProcessTaskAutoScoreJob extends JobBase {
 		if(CollectionUtils.isEmpty(processtaskScoreVos)){
 		    /** 如果没有评分记录，那么读取评分配置 */
 		    ProcessTaskVo task = processTaskMapper.getProcessTaskById(processTaskId);
-	        if(task != null) {
+	        if(task != null && task.getStatus().equals(ProcessTaskStatus.SUCCEED.getValue())) {
 	            String config = processTaskScoreMapper.getProcessTaskAutoScoreConfigByProcessTaskId(processTaskId);
 	            Integer autoTime = (Integer)JSONPath.read(config, "config.autoTime");
 	            if(autoTime != null) {
