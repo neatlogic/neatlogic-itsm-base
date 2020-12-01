@@ -15,7 +15,6 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
-import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
 import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
@@ -230,17 +229,12 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public ProcessTaskStatusVo getStatusVo() {
 		if(statusVo == null && StringUtils.isNotBlank(status) && StringUtils.isNotBlank(configHash) && StringUtils.isNotBlank(handler)) {
-		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
-		    if(processStepUtilHandler != null) {
-		        String statusText = processStepUtilHandler.getStatusTextByConfigHashAndHandler(configHash, handler, status);
-		        if(StringUtils.isNotBlank(statusText)) {
-		            statusVo = new ProcessTaskStatusVo(status, statusText);
-		        }else {
-		            statusVo = new ProcessTaskStatusVo(status);
-		        }
-		    }else {
-		        statusVo = new ProcessTaskStatusVo(status);
-		    }
+		    String statusText = ProcessStepUtilHandlerFactory.getHandler().getStatusTextByConfigHashAndHandler(configHash, handler, status);
+            if(StringUtils.isNotBlank(statusText)) {
+                statusVo = new ProcessTaskStatusVo(status, statusText);
+            }else {
+                statusVo = new ProcessTaskStatusVo(status);
+            }
 		}
 		return statusVo;
 	}
@@ -299,10 +293,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsRequired() {
 		if(isRequired == null && StringUtils.isNotBlank(configHash)) {
-		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
-            if(processStepUtilHandler != null) {
-				isRequired = processStepUtilHandler.getIsRequiredByConfigHash(configHash);
-			}
+		    isRequired = ProcessStepUtilHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
 		}
 		return isRequired;
 	}
@@ -313,10 +304,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsNeedContent() {
 		if(isNeedContent == null && StringUtils.isNotBlank(configHash)) {
-		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
-            if(processStepUtilHandler != null) {
-				isNeedContent = processStepUtilHandler.getIsNeedContentByConfigHash(configHash);
-			}
+			isNeedContent = ProcessStepUtilHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
 		}
 		return isNeedContent;
 	}

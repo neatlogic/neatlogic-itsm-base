@@ -383,13 +383,13 @@
 		</if>
 	</select>
 	
-	<select id="getProcessTagByNameList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessTagVo">
+	<select id="getProcessTagByNameList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTagVo">
 		SELECT 
 		`name`,
 		`id` 
 		FROM `process_tag` 
-		WHERE `name` in
-		<foreach collection="tagNameList" item="name" open="(" separator="," close=")">
+		WHERE `name` IN
+		<foreach collection="list" item="name" open="(" separator="," close=")">
 			#{name}
 		</foreach>
 	</select>
@@ -574,12 +574,8 @@
 	</insert>
 	
 	<insert id="insertProcessTag" parameterType="codedriver.framework.process.dto.ProcessTagVo">
-		INSERT ignore INTO `process_tag` (`id`, `name`) 
-		VALUES
-		<foreach collection="processTagList" item="tag" open="(" separator="),(" close=")">
-			#{tag.id}, 
-		  	#{tag.name}
-		</foreach>  
+		INSERT INTO `process_tag` (`id`, `name`) 
+		VALUES (#{id}, #{name})
 	</insert>
 
 	<update id="updateProcess" parameterType="codedriver.framework.process.dto.ProcessVo">
