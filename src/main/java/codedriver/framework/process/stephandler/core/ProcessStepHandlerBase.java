@@ -1918,7 +1918,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             assign(currentProcessTaskStepVo);
             currentProcessTaskStepVo.setIsActive(1);
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
-
+            processTaskScoreMapper.deleteProcessTaskAutoScoreByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             /** 写入时间审计 **/
             TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
             if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
