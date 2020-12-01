@@ -291,8 +291,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     }
     
     @Override
-    public Map<String, List<NotifyReceiverVo>> getReceiverMap(ProcessTaskStepVo currentProcessTaskStepVo) {
-        Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
+    public void getReceiverMap(ProcessTaskStepVo currentProcessTaskStepVo, Map<String, List<NotifyReceiverVo>> receiverMap) {
         ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
         if (processTaskVo != null) {
             /** 上报人 **/
@@ -340,7 +339,6 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
                 receiverMap.computeIfAbsent(ProcessUserType.DEFAULT_WORKER.getValue(), k -> new ArrayList<>()).add(new NotifyReceiverVo(split[0], split[1]));
             }
         }
-        return receiverMap;
     }
     
     @Override

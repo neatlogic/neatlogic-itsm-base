@@ -476,7 +476,8 @@ public abstract class ProcessStepHandlerUtilBase {
 							processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
 							JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 							JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
-							Map<String, List<NotifyReceiverVo>> receiverMap = processStepUtilHandler.getReceiverMap(currentProcessTaskStepVo);
+							Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
+							processStepUtilHandler.getReceiverMap(currentProcessTaskStepVo, receiverMap);
 		                    /** 参数映射列表**/
 		                    List<ParamMappingVo> paramMappingList = JSON.parseArray(JSON.toJSONString(notifyPolicyConfig.getJSONArray("paramMappingList")), ParamMappingVo.class);
 							NotifyPolicyUtil.execute(policyConfig, paramMappingList, notifyTriggerType, templateParamData, conditionParamData, receiverMap);						
