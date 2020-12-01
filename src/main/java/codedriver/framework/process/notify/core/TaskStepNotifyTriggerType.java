@@ -6,6 +6,7 @@ public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
 
 	ACTIVE("active", "步骤激活"),
 	ASSIGN("assign", "步骤分配处理人"),
+	ASSIGNEXCEPTION("assignexception", "分配异常"),
 	START("start", "步骤开始"),
 	TRANSFER("transfer", "步骤转交"),
 	SUCCEED("succeed", "步骤成功"),
