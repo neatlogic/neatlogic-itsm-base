@@ -45,6 +45,7 @@ import codedriver.framework.integration.dto.IntegrationResultVo;
 import codedriver.framework.integration.dto.IntegrationVo;
 import codedriver.framework.notify.core.INotifyTriggerType;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
+import codedriver.framework.notify.dto.NotifyPolicyConfigVo;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.notify.dto.ParamMappingVo;
@@ -458,30 +459,28 @@ public abstract class ProcessStepHandlerUtilBase {
 				if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
 					Long policyId = notifyPolicyConfig.getLong("policyId");
 					if (policyId != null) {
-						JSONObject policyConfig = null;
+						NotifyPolicyConfigVo policyConfig = null;
 						ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
 						processTaskStepNotifyPolicyVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
 						processTaskStepNotifyPolicyVo.setPolicyId(policyId);
 						processTaskStepNotifyPolicyVo = processTaskMapper.getProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
 						if (processTaskStepNotifyPolicyVo != null) {
-							policyConfig = JSON.parseObject(processTaskStepNotifyPolicyVo.getPolicyConfig());
+							policyConfig = JSON.parseObject(processTaskStepNotifyPolicyVo.getPolicyConfig(), NotifyPolicyConfigVo.class);
 						} else {
 							NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(policyId);
 							if (notifyPolicyVo != null) {
 								policyConfig = notifyPolicyVo.getConfig();
 							}
 						}
-						if(MapUtils.isNotEmpty(policyConfig)) {
-							ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
-							processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
-							JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
-							JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
-							Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
-							processStepUtilHandler.getReceiverMap(currentProcessTaskStepVo, receiverMap);
-		                    /** 参数映射列表**/
-		                    List<ParamMappingVo> paramMappingList = JSON.parseArray(JSON.toJSONString(notifyPolicyConfig.getJSONArray("paramMappingList")), ParamMappingVo.class);
-							NotifyPolicyUtil.execute(policyConfig, paramMappingList, notifyTriggerType, templateParamData, conditionParamData, receiverMap);						
-						}
+						ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+						processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
+						JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
+						JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
+						Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
+						processStepUtilHandler.getReceiverMap(currentProcessTaskStepVo, receiverMap);
+	                    /** 参数映射列表**/
+	                    List<ParamMappingVo> paramMappingList = JSON.parseArray(JSON.toJSONString(notifyPolicyConfig.getJSONArray("paramMappingList")), ParamMappingVo.class);
+						NotifyPolicyUtil.execute(policyConfig, paramMappingList, notifyTriggerType, templateParamData, conditionParamData, receiverMap);						
 					}
 				}
 			} catch (Exception ex) {

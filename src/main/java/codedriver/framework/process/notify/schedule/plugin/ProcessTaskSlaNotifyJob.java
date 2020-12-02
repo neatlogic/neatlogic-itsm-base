@@ -168,7 +168,6 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 					Long policyId = notifyPolicyConfig.getLong("policyId");
 					NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(policyId);
 					if (notifyPolicyVo != null) {
-						JSONObject policyConfig = notifyPolicyVo.getConfig();
 						List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
 						ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(processTaskSlaVo.getProcessTaskId());
 						JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
@@ -179,7 +178,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 						    processTaskStepVo.setConfig(stepConfig);
 						    ProcessStepUtilHandlerFactory.getHandler().getReceiverMap(processTaskStepVo, receiverMap);							
 						}
-						NotifyPolicyUtil.execute(policyConfig, paramMappingList, SlaNotifyTriggerType.TIMEOUT, templateParamData, conditionParamData, receiverMap);
+						NotifyPolicyUtil.execute(notifyPolicyVo.getConfig(), paramMappingList, SlaNotifyTriggerType.TIMEOUT, templateParamData, conditionParamData, receiverMap);
 					}
 				}
 				Date nextFireTime = context.getNextFireTime();
