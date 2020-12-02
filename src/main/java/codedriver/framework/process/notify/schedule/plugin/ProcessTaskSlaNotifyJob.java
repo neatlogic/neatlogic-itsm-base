@@ -168,7 +168,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
 					Long policyId = notifyPolicyConfig.getLong("policyId");
 					NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(policyId);
 					if (notifyPolicyVo != null) {
-						List<ParamMappingVo> paramMappingList = JSON.parseArray(notifyPolicyConfig.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
+						List<ParamMappingVo> paramMappingList = JSON.parseArray(JSON.toJSONString(notifyPolicyConfig.getJSONArray("paramMappingList")), ParamMappingVo.class);
 						ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(processTaskSlaVo.getProcessTaskId());
 						JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
 						JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
