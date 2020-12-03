@@ -195,8 +195,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
                     JSONArray notifyPolicyList = slaObj.getJSONArray("notifyPolicyList");
                     if(CollectionUtils.isNotEmpty(notifyPolicyList)) {
                         for(int j = 0; j < notifyPolicyList.size(); j++) {
-//                            JSONObject notifyPolicyObj = notifyPolicyList.getJSONObject(j);
-//                            JSONObject notifyPolicyConfig = notifyPolicyObj.getJSONObject("notifyPolicyConfig");
                             Long policyId = (Long)JSONPath.read(notifyPolicyList.getString(j), "notifyPolicyConfig.policyId");
                             if(policyId != null) {
                                 processSlaVo.getNotifyPolicyIdList().add(policyId);
