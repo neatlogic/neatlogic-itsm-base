@@ -320,8 +320,11 @@ public abstract class ProcessStepHandlerUtilBase {
                             List<ParamMappingVo> paramMappingList = JSON.parseArray(
                                 actionObj.getJSONArray("paramMappingList").toJSONString(), ParamMappingVo.class);
                             if (CollectionUtils.isNotEmpty(paramMappingList)) {
-                                ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler()
-                                    .getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+                                IProcessStepUtilHandler handler = ProcessStepUtilHandlerFactory.getHandler();
+                                ProcessTaskVo processTaskVo =
+                                    handler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+                                processTaskVo.setStartProcessTaskStep(
+                                    handler.getStartProcessTaskStepByProcessTaskId(processTaskVo.getId()));
                                 processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
                                 JSONObject processFieldData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
                                 for (ParamMappingVo paramMappingVo : paramMappingList) {
@@ -502,6 +505,8 @@ public abstract class ProcessStepHandlerUtilBase {
                         }
                         ProcessTaskVo processTaskVo = processStepUtilHandler
                             .getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+                        processTaskVo.setStartProcessTaskStep(
+                            processStepUtilHandler.getStartProcessTaskStepByProcessTaskId(processTaskVo.getId()));
                         processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
                         JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
                         JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
@@ -974,8 +979,10 @@ public abstract class ProcessStepHandlerUtilBase {
                 }
 
                 if (CollectionUtils.isNotEmpty(slaIdList)) {
-                    ProcessTaskVo processTaskVo =
-                        ProcessStepUtilHandlerFactory.getHandler().getProcessTaskDetailById(processTaskId);
+                    IProcessStepUtilHandler handler = ProcessStepUtilHandlerFactory.getHandler();
+                    ProcessTaskVo processTaskVo = handler.getProcessTaskDetailById(processTaskId);
+                    processTaskVo
+                        .setStartProcessTaskStep(handler.getStartProcessTaskStepByProcessTaskId(processTaskId));
                     processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
                     String worktimeUuid = processTaskVo.getWorktimeUuid();
                     for (Long slaId : slaIdList) {

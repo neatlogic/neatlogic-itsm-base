@@ -34,6 +34,7 @@ import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.notify.core.SlaNotifyTriggerType;
+import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
 import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 import codedriver.framework.scheduler.core.JobBase;
 import codedriver.framework.scheduler.dto.JobObject;
@@ -177,8 +178,11 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
                         List<ParamMappingVo> paramMappingList =
                             JSON.parseArray(JSON.toJSONString(notifyPolicyConfig.getJSONArray("paramMappingList")),
                                 ParamMappingVo.class);
-                        ProcessTaskVo processTaskVo = ProcessStepUtilHandlerFactory.getHandler()
-                            .getProcessTaskDetailById(processTaskSlaVo.getProcessTaskId());
+                        IProcessStepUtilHandler handler = ProcessStepUtilHandlerFactory.getHandler();
+                        ProcessTaskVo processTaskVo =
+                            handler.getProcessTaskDetailById(processTaskSlaVo.getProcessTaskId());
+                        processTaskVo.setStartProcessTaskStep(
+                            handler.getStartProcessTaskStepByProcessTaskId(processTaskVo.getId()));
                         JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
                         JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
                         Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
