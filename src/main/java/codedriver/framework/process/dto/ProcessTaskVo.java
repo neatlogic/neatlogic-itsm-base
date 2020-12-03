@@ -25,6 +25,8 @@ public class ProcessTaskVo {
     private Long id;
     @EntityField(name = "父工单id", type = ApiParamType.LONG)
     private Long parentId;
+    @EntityField(name = "工单号", type = ApiParamType.STRING)
+    private String number;
     @EntityField(name = "标题", type = ApiParamType.STRING)
     private String title;
     @EntityField(name = "流程uuid", type = ApiParamType.STRING)
@@ -77,6 +79,8 @@ public class ProcessTaskVo {
     @EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
     private String worktimeUuid;
 
+    @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+    private String channelTypeUuid;
     @EntityField(name = "服务类型信息", type = ApiParamType.JSONOBJECT)
     private ChannelTypeVo channelType;
 
@@ -232,6 +236,17 @@ public class ProcessTaskVo {
 
     public void setStepList(List<ProcessTaskStepVo> stepList) {
         this.stepList = stepList;
+    }
+
+    public String getNumber() {
+        if(StringUtils.isBlank(number) && id != null) {
+            number = id.toString();
+        }
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getTitle() {
