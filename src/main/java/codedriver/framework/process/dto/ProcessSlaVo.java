@@ -6,17 +6,14 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
-
 public class ProcessSlaVo implements Serializable {
 	private static final long serialVersionUID = 2183891795903221664L;
 	private String processUuid;
 	private String uuid;
 	private String name;
 	private String config;
-	private JSONObject configObj;
 	private List<String> processStepUuidList;
-
+	private List<Long> notifyPolicyIdList = new ArrayList<>();
 	public String getUuid() {
 		return uuid;
 	}
@@ -49,17 +46,6 @@ public class ProcessSlaVo implements Serializable {
 		this.config = config;
 	}
 
-	public JSONObject getConfigObj() {
-		if (configObj == null && StringUtils.isNotBlank(config)) {
-			configObj = JSONObject.parseObject(config);
-		}
-		return configObj;
-	}
-
-	public void setConfigObj(JSONObject configObj) {
-		this.configObj = configObj;
-	}
-
 	public List<String> getProcessStepUuidList() {
 		return processStepUuidList;
 	}
@@ -76,5 +62,13 @@ public class ProcessSlaVo implements Serializable {
 			this.processStepUuidList.add(processStepUuid);
 		}
 	}
+
+    public List<Long> getNotifyPolicyIdList() {
+        return notifyPolicyIdList;
+    }
+
+    public void setNotifyPolicyIdList(List<Long> notifyPolicyIdList) {
+        this.notifyPolicyIdList = notifyPolicyIdList;
+    }
 
 }

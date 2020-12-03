@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
@@ -64,7 +65,9 @@ public class ProcessVo extends BasePageVo implements Serializable {
     private transient String fcu;
     @JSONField(serialize = false)
     private transient String keyword;
-
+    @JSONField(serialize=false)
+    private transient Long notifyPolicyId;
+    
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
             uuid = UUID.randomUUID().toString().replace("-", "");
@@ -124,10 +127,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
     }
 
     public void makeupConfigObj() {
-        if (this.getConfigObj() == null) {
-            return;
-        }
-        JSONObject processObj = this.configObj.getJSONObject("process");
+        JSONObject processObj = (JSONObject)JSONPath.read(config, "process");
         if (MapUtils.isEmpty(processObj)) {
             return;
         }
@@ -176,13 +176,13 @@ public class ProcessVo extends BasePageVo implements Serializable {
             }
         }
         JSONArray slaList = processObj.getJSONArray("slaList");
-        if (slaList != null && slaList.size() > 0) {
+        if (CollectionUtils.isNotEmpty(slaList)) {
             this.slaList = new ArrayList<>();
             for (int i = 0; i < slaList.size(); i++) {
                 JSONObject slaObj = slaList.getJSONObject(i);
                 /** 关联了步骤的sla策略才保存 **/
                 JSONArray processStepUuidList = slaObj.getJSONArray("processStepUuidList");
-                if (processStepUuidList != null && processStepUuidList.size() > 0) {
+                if (CollectionUtils.isNotEmpty(processStepUuidList)) {
                     ProcessSlaVo processSlaVo = new ProcessSlaVo();
                     processSlaVo.setProcessUuid(this.getUuid());
                     processSlaVo.setUuid(slaObj.getString("uuid"));
@@ -191,6 +191,17 @@ public class ProcessVo extends BasePageVo implements Serializable {
                     this.slaList.add(processSlaVo);
                     for (int p = 0; p < processStepUuidList.size(); p++) {
                         processSlaVo.addProcessStepUuid(processStepUuidList.getString(p));
+                    }
+                    JSONArray notifyPolicyList = slaObj.getJSONArray("notifyPolicyList");
+                    if(CollectionUtils.isNotEmpty(notifyPolicyList)) {
+                        for(int j = 0; j < notifyPolicyList.size(); j++) {
+//                            JSONObject notifyPolicyObj = notifyPolicyList.getJSONObject(j);
+//                            JSONObject notifyPolicyConfig = notifyPolicyObj.getJSONObject("notifyPolicyConfig");
+                            Long policyId = (Long)JSONPath.read(notifyPolicyList.getString(j), "notifyPolicyConfig.policyId");
+                            if(policyId != null) {
+                                processSlaVo.getNotifyPolicyIdList().add(policyId);
+                            }
+                        }
                     }
                 }
             }
@@ -282,6 +293,8 @@ public class ProcessVo extends BasePageVo implements Serializable {
                 this.processScoreTemplateVo.setProcessUuid(uuid);
             }
         }
+        /** 组装通知策略id **/
+        notifyPolicyId = (Long)JSONPath.read(config, "process.processConfig.notifyPolicyConfig.policyId");
     }
 
     public void setStepList(List<ProcessStepVo> stepList) {
@@ -342,5 +355,13 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     public void setProcessScoreTemplateVo(ProcessScoreTemplateVo processScoreTemplateVo) {
         this.processScoreTemplateVo = processScoreTemplateVo;
+    }
+
+    public Long getNotifyPolicyId() {
+        return notifyPolicyId;
+    }
+
+    public void setNotifyPolicyId(Long notifyPolicyId) {
+        this.notifyPolicyId = notifyPolicyId;
     }
 }
