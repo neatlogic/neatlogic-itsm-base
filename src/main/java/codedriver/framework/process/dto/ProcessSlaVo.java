@@ -7,61 +7,62 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 public class ProcessSlaVo implements Serializable {
-	private static final long serialVersionUID = 2183891795903221664L;
-	private String processUuid;
-	private String uuid;
-	private String name;
-	private String config;
-	private List<String> processStepUuidList;
-	private List<Long> notifyPolicyIdList = new ArrayList<>();
-	public String getUuid() {
-		return uuid;
-	}
+    private static final long serialVersionUID = 2183891795903221664L;
+    private String processUuid;
+    private String uuid;
+    private String name;
+    private String config;
+    private List<String> processStepUuidList;
+    private List<Long> notifyPolicyIdList = new ArrayList<>();
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
+    public String getUuid() {
+        return uuid;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getProcessUuid() {
-		return processUuid;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setProcessUuid(String processUuid) {
-		this.processUuid = processUuid;
-	}
+    public String getProcessUuid() {
+        return processUuid;
+    }
 
-	public String getConfig() {
-		return config;
-	}
+    public void setProcessUuid(String processUuid) {
+        this.processUuid = processUuid;
+    }
 
-	public void setConfig(String config) {
-		this.config = config;
-	}
+    public String getConfig() {
+        return config;
+    }
 
-	public List<String> getProcessStepUuidList() {
-		return processStepUuidList;
-	}
+    public void setConfig(String config) {
+        this.config = config;
+    }
 
-	public void setProcessStepUuidList(List<String> processStepUuidList) {
-		this.processStepUuidList = processStepUuidList;
-	}
+    public List<String> getProcessStepUuidList() {
+        return processStepUuidList;
+    }
 
-	public void addProcessStepUuid(String processStepUuid) {
-		if (this.processStepUuidList == null) {
-			this.processStepUuidList = new ArrayList<>();
-		}
-		if (StringUtils.isNotBlank(processStepUuid) && !this.processStepUuidList.contains(processStepUuid)) {
-			this.processStepUuidList.add(processStepUuid);
-		}
-	}
+    public void setProcessStepUuidList(List<String> processStepUuidList) {
+        this.processStepUuidList = processStepUuidList;
+    }
+
+    public void addProcessStepUuid(String processStepUuid) {
+        if (this.processStepUuidList == null) {
+            this.processStepUuidList = new ArrayList<>();
+        }
+        if (StringUtils.isNotBlank(processStepUuid) && !this.processStepUuidList.contains(processStepUuid)) {
+            this.processStepUuidList.add(processStepUuid);
+        }
+    }
 
     public List<Long> getNotifyPolicyIdList() {
         return notifyPolicyIdList;

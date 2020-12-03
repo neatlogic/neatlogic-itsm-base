@@ -65,9 +65,9 @@ public class ProcessVo extends BasePageVo implements Serializable {
     private transient String fcu;
     @JSONField(serialize = false)
     private transient String keyword;
-    @JSONField(serialize=false)
+    @JSONField(serialize = false)
     private transient Long notifyPolicyId;
-    
+
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
             uuid = UUID.randomUUID().toString().replace("-", "");
@@ -193,10 +193,11 @@ public class ProcessVo extends BasePageVo implements Serializable {
                         processSlaVo.addProcessStepUuid(processStepUuidList.getString(p));
                     }
                     JSONArray notifyPolicyList = slaObj.getJSONArray("notifyPolicyList");
-                    if(CollectionUtils.isNotEmpty(notifyPolicyList)) {
-                        for(int j = 0; j < notifyPolicyList.size(); j++) {
-                            Long policyId = (Long)JSONPath.read(notifyPolicyList.getString(j), "notifyPolicyConfig.policyId");
-                            if(policyId != null) {
+                    if (CollectionUtils.isNotEmpty(notifyPolicyList)) {
+                        for (int j = 0; j < notifyPolicyList.size(); j++) {
+                            Long policyId =
+                                (Long)JSONPath.read(notifyPolicyList.getString(j), "notifyPolicyConfig.policyId");
+                            if (policyId != null) {
                                 processSlaVo.getNotifyPolicyIdList().add(policyId);
                             }
                         }
