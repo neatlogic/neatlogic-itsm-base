@@ -58,4 +58,13 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	public Object getSimpleValue(Object json){
 		return null;
 	}
+	
+	@Override
+	public Boolean getIsExport() {
+	    return getMyIsExport();
+	}
+	
+	public Boolean getMyIsExport() {
+        return true;
+    }
 }
