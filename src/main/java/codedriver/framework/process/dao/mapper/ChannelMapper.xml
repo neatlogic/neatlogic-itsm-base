@@ -301,7 +301,7 @@
 		`sort`,
 		`prefix`,
 		`rule`,
-		`startValue`,
+		`start_value`,
 		`digits`
 		FROM `channel_type`
 		<where>
@@ -348,7 +348,7 @@
 		`sort`,
 		`prefix`,
 		`rule`,
-		`startValue`,
+		`start_value`,
 		`digits`
 		FROM `channel_type`
 		WHERE `uuid` = #{uuid}
@@ -784,7 +784,7 @@
 		`sort`,
 		`prefix`,
 		`rule`,
-		`startValue`,
+		`start_value`,
 		`digits`
 		)
 		VALUES
@@ -798,7 +798,7 @@
 		#{sort},
 		#{prefix},
 		#{rule},
-		#{startValue},
+		#{start_value},
 		#{digits}
 		)
 	</insert>
@@ -906,7 +906,7 @@
 		`sort` = #{sort},
 		`prefix` = #{prefix},
 		`rule` = #{rule},
-		`startValue` = #{startValue},
+		`start_value` = #{startValue},
 		`digits` = #{digits}
 		WHERE `uuid` = #{uuid}
 	</update>
