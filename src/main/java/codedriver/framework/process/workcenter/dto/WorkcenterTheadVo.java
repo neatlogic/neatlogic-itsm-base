@@ -33,6 +33,8 @@ public class WorkcenterTheadVo {
 	private String type ;
 	@EntityField(name = "字段样式", type = ApiParamType.STRING)
 	private String className ;
+	@EntityField(name = "字段是否可导出", type = ApiParamType.INTEGER)
+	private Integer isExport;
 	
 	
 	public WorkcenterTheadVo(JSONObject obj) {
@@ -53,6 +55,7 @@ public class WorkcenterTheadVo {
 		this.className = column.getClassName();
 		this.sort = column.getSort();
 		this.disabled = column.getDisabled() ? 1 : 0;
+		this.isExport = column.getIsExport() ? 1 : 0;
 	}
 	
 	public WorkcenterTheadVo(String _workcenterUuid,String _userUuid) {
@@ -136,5 +139,13 @@ public class WorkcenterTheadVo {
 
 	public void setDisabled(Integer disabled) {
 		this.disabled = disabled;
+	}
+
+	public Integer getIsExport() {
+		return isExport;
+	}
+
+	public void setIsExport(Integer isExport) {
+		this.isExport = isExport;
 	}
 }
