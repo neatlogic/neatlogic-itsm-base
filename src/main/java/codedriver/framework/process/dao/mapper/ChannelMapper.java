@@ -123,6 +123,8 @@ public interface ChannelMapper {
 
     public ProcessTaskSerialNumberPolicyVo getProcessTaskSerialNumberPolicyByChannelTypeUuid(String channelTypeUuid);
 
+    public Long getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(String channelTypeUuid);
+
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
 	public int replaceChannel(ChannelVo channelVo);
@@ -160,6 +162,8 @@ public interface ChannelMapper {
     public int updateChannelTypeRelationById(ChannelTypeRelationVo channelTypeRelationVo);
 
     public int updateProcessTaskSerialNumberPolicyByChannelTypeUuid(ProcessTaskSerialNumberPolicyVo policyVo);
+
+    public int updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(String channelTypeUuid);
 
 	public int deleteChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
 	

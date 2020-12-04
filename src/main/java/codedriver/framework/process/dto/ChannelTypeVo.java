@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
@@ -33,8 +32,6 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	private String prefix;
 	@EntityField(name = "工单号策略", type = ApiParamType.STRING)
 	private String handler;
-	@EntityField(name = "工单号策略配置", type = ApiParamType.JSONOBJECT)
-	private JSONObject config;
 	
 	@JSONField(serialize=false)
 	private transient String keyword;
@@ -114,12 +111,6 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
     }
     public void setHandler(String handler) {
         this.handler = handler;
-    }
-    public JSONObject getConfig() {
-        return config;
-    }
-    public void setConfig(JSONObject config) {
-        this.config = config;
     }
 	
 }

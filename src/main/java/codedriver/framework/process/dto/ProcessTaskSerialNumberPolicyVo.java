@@ -1,22 +1,16 @@
 package codedriver.framework.process.dto;
 
-import com.alibaba.fastjson.JSONObject;
-
-import codedriver.framework.common.constvalue.ApiParamType;
-import codedriver.framework.restful.annotation.EntityField;
+import com.alibaba.fastjson.JSONArray;
 
 public class ProcessTaskSerialNumberPolicyVo {
 
     private String channelTypeUuid;
     private String handler;
+    private String name;
+    private JSONArray formAttributeList;
     private String config;
-    @EntityField(name = "工单号当前值", type = ApiParamType.STRING)
-    private Long autoIncrement;
+    private Long serialNumberSeed;
 
-//    @EntityField(name = "工单号起始值", type = ApiParamType.STRING)
-//    private String startValue;
-//    @EntityField(name = "工单号位数", type = ApiParamType.STRING)
-//    private String digits;
     public String getChannelTypeUuid() {
         return channelTypeUuid;
     }
@@ -29,16 +23,28 @@ public class ProcessTaskSerialNumberPolicyVo {
     public void setHandler(String handler) {
         this.handler = handler;
     }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public JSONArray getFormAttributeList() {
+        return formAttributeList;
+    }
+    public void setFormAttributeList(JSONArray formAttributeList) {
+        this.formAttributeList = formAttributeList;
+    }
     public String getConfig() {
         return config;
     }
     public void setConfig(String config) {
         this.config = config;
     }
-    public Long getAutoIncrement() {
-        return autoIncrement;
+    public Long getSerialNumberSeed() {
+        return serialNumberSeed;
     }
-    public void setAutoIncrement(Long autoIncrement) {
-        this.autoIncrement = autoIncrement;
+    public void setSerialNumberSeed(Long serialNumberSeed) {
+        this.serialNumberSeed = serialNumberSeed;
     }
 }
