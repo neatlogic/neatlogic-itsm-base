@@ -10,7 +10,7 @@ public enum ProcessField {
 	STARTTIME("starttime", "开始时间"),
 	EXPIREDTIME("expiretime", "剩余时间"),
 	OWNER("owner", "上报人"),
-	OWNERLEVEL("ownerlevel", "上报人等级"),
+	OWNERLEVEL("ownerlevel", "上报人级别"),
 	REPORTER("reporter", "代报人"),
 	PRIORITY("priority", "优先级"),
 	STATUS("status", "工单状态"),
