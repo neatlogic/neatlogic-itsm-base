@@ -871,7 +871,7 @@
 	  )
 	</insert>
 	
-	<insert id="insertProcessTaskSerialNumberPolicy" parameterType="">
+	<insert id="insertProcessTaskSerialNumberPolicy" parameterType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
 	INSERT INTO `processtask_serial_number_policy` (
 	  `channel_type_uuid`,
 	  `handler`,
