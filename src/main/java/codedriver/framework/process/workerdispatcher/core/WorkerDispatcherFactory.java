@@ -7,16 +7,16 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.RootComponent;
 import codedriver.framework.dto.ModuleVo;
 import codedriver.framework.process.dto.WorkerDispatcherVo;
 
 @RootComponent
-public class WorkerDispatcherFactory implements ApplicationListener<ContextRefreshedEvent> {
+public class WorkerDispatcherFactory extends ApplicationListenerBase {
 
 	private static Map<String, IWorkerDispatcher> componentMap = new HashMap<String, IWorkerDispatcher>();
 	private static List<WorkerDispatcherVo> workerDispatcherList = new ArrayList<>();
@@ -62,4 +62,9 @@ public class WorkerDispatcherFactory implements ApplicationListener<ContextRefre
 			}
 		}
 	}
+
+    @Override
+    protected void myInit() {
+        
+    }
 }

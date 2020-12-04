@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.common.RootComponent;
 
 @RootComponent
-public class FormAttributeHandlerFactory implements ApplicationListener<ContextRefreshedEvent> {
+public class FormAttributeHandlerFactory extends ApplicationListenerBase {
     private static Map<String, IFormAttributeHandler> handlerMap = new HashMap<>();
     private static List<IFormAttributeHandler> handlerList = new ArrayList<>();
 
@@ -46,5 +46,10 @@ public class FormAttributeHandlerFactory implements ApplicationListener<ContextR
                 }
             }
         }
+    }
+
+    @Override
+    protected void myInit() {
+        
     }
 }

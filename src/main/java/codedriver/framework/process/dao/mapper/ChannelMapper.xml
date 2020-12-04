@@ -299,10 +299,7 @@
 		`color`,
 		`description`,
 		`sort`,
-		`prefix`,
-		`rule`,
-		`start_value`,
-		`digits`
+		`prefix`
 		FROM `channel_type`
 		<where>
 			<if test="keyword != null and keyword != ''">
@@ -346,10 +343,7 @@
 		`color`,
 		`description`,
 		`sort`,
-		`prefix`,
-		`rule`,
-		`start_value`,
-		`digits`
+		`prefix`
 		FROM `channel_type`
 		WHERE `uuid` = #{uuid}
 	</select>
@@ -707,6 +701,16 @@
 	select count(1) from (SELECT `uuid` FROM `channel` WHERE `channel_type_uuid` = #{value} limit 1) a
 	</select>
 	
+	<select id="getProcessTaskSerialNumberPolicyByChannelTypeUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
+	SELECT 
+	  `channel_type_uuid` AS channelTypeUuid,
+	  `handler`,
+	  `config`,
+	  `serial_number_seed` AS serialNumberSeed 
+	FROM `processtask_serial_number_policy` 
+	WHERE `channel_type_uuid` = #{value}
+	</select>
+	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
@@ -782,10 +786,7 @@
 		`color`,
 		`description`,
 		`sort`,
-		`prefix`,
-		`rule`,
-		`start_value`,
-		`digits`
+		`prefix`
 		)
 		VALUES
 		(
@@ -796,10 +797,7 @@
 		#{color},
 		#{description},
 		#{sort},
-		#{prefix},
-		#{rule},
-		#{start_value},
-		#{digits}
+		#{prefix}
 		)
 	</insert>
 
@@ -873,6 +871,22 @@
 	  )
 	</insert>
 	
+	<insert id="insertProcessTaskSerialNumberPolicy" parameterType="">
+	INSERT INTO `processtask_serial_number_policy` (
+	  `channel_type_uuid`,
+	  `handler`,
+	  `config`,
+  	  `serial_number_seed`
+	) 
+	VALUES
+	  (
+	    #{channelTypeUuid},
+	    #{handler},
+	    #{config},
+	    #{serialNumberSeed}
+	  )
+	</insert>
+	
 	<update id="updateChannelForMove" parameterType="codedriver.framework.process.dto.ChannelVo">
 		UPDATE `channel` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
 	</update>
@@ -917,6 +931,15 @@
 	  `name` = #{name},
 	  `is_active` = #{isActive}
 	WHERE `id` = #{id} 
+	</update>
+	
+	<update id="updateProcessTaskSerialNumberPolicyByChannelTypeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
+	UPDATE `processtask_serial_number_policy` 
+	SET
+	  `handler` = #{handler},
+	  `config` = #{config},
+	  `serial_number_seed` = #{serialNumberSeed} 
+	WHERE `channel_type_uuid` = #{channelTypeUuid}
 	</update>
 	
 	<delete id="deleteChannelUser">

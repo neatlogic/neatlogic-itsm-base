@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
@@ -30,14 +31,10 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	private Integer sort;
 	@EntityField(name = "工单号前缀", type = ApiParamType.STRING)
 	private String prefix;
-	@EntityField(name = "工单号规则", type = ApiParamType.STRING)
-	private String rule;
-	@EntityField(name = "工单号起始值", type = ApiParamType.STRING)
-	private String startValue;
-	@EntityField(name = "工单号当前值", type = ApiParamType.STRING)
-	private String currentValue;
-	@EntityField(name = "工单号位数", type = ApiParamType.STRING)
-	private String digits;
+	@EntityField(name = "工单号策略", type = ApiParamType.STRING)
+	private String handler;
+	@EntityField(name = "工单号策略配置", type = ApiParamType.JSONOBJECT)
+	private JSONObject config;
 	
 	@JSONField(serialize=false)
 	private transient String keyword;
@@ -53,10 +50,6 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	        this.description = channelTypeVo.getDescription();
 	        this.sort = channelTypeVo.getSort();
 	        this.prefix = channelTypeVo.getPrefix();
-	        this.rule = channelTypeVo.getRule();
-	        this.startValue = channelTypeVo.getStartValue();
-	        this.currentValue = channelTypeVo.getCurrentValue();
-	        this.digits = channelTypeVo.getDigits();
 	    }      
     }
     public synchronized String getUuid() {
@@ -116,29 +109,17 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
 	}
-    public String getRule() {
-        return rule;
+    public String getHandler() {
+        return handler;
     }
-    public void setRule(String rule) {
-        this.rule = rule;
+    public void setHandler(String handler) {
+        this.handler = handler;
     }
-    public String getStartValue() {
-        return startValue;
+    public JSONObject getConfig() {
+        return config;
     }
-    public void setStartValue(String startValue) {
-        this.startValue = startValue;
-    }
-    public String getCurrentValue() {
-        return currentValue;
-    }
-    public void setCurrentValue(String currentValue) {
-        this.currentValue = currentValue;
-    }
-    public String getDigits() {
-        return digits;
-    }
-    public void setDigits(String digits) {
-        this.digits = digits;
+    public void setConfig(JSONObject config) {
+        this.config = config;
     }
 	
 }

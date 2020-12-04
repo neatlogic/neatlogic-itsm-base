@@ -12,6 +12,7 @@ import codedriver.framework.process.dto.ChannelTypeRelationChannelVo;
 import codedriver.framework.process.dto.ChannelTypeRelationVo;
 import codedriver.framework.process.dto.ChannelTypeVo;
 import codedriver.framework.process.dto.ChannelVo;
+import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 
 public interface ChannelMapper {
 
@@ -120,6 +121,8 @@ public interface ChannelMapper {
 
     public int checkChannelTypeHasReference(String channelTypeUuid);
 
+    public ProcessTaskSerialNumberPolicyVo getProcessTaskSerialNumberPolicyByChannelTypeUuid(String channelTypeUuid);
+
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
 	public int replaceChannel(ChannelVo channelVo);
@@ -144,6 +147,8 @@ public interface ChannelMapper {
 
     public int insertChannelRelationAuthority(ChannelRelationVo channelRelationVo);
 
+    public int insertProcessTaskSerialNumberPolicy(ProcessTaskSerialNumberPolicyVo policyVo);
+
 	public int updateChannelForMove(ChannelVo channelVo);
 
 	public int updateSortIncrement(@Param("parentUuid")String parentUuid, @Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
@@ -153,6 +158,8 @@ public interface ChannelMapper {
 	public int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
 
     public int updateChannelTypeRelationById(ChannelTypeRelationVo channelTypeRelationVo);
+
+    public int updateProcessTaskSerialNumberPolicyByChannelTypeUuid(ProcessTaskSerialNumberPolicyVo policyVo);
 
 	public int deleteChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);
 	
