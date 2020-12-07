@@ -11,18 +11,18 @@ import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 public interface IProcessTaskSerialNumberPolicyHandler {
 
     public String getName();
-    
+
     public JSONArray makeupFormAttributeList();
-    
+
     public JSONObject makeupConfig(JSONObject jsonObj);
-    
+
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo);
-    
+
     @Transactional
     public int batchUpdateHistoryProcessTask(String channelTypeUuid);
-    
+
     public String getSerialNumberSeedResetCron();
-    
+
     public default String getHandler() {
         return ClassUtils.getUserClass(this.getClass()).getName();
     }

@@ -17,18 +17,21 @@ public class ProcessTaskSerialNumberPolicyHandlerFactory extends ApplicationList
 
     private static Map<String, IProcessTaskSerialNumberPolicyHandler> policyMap = new HashMap<>();
     private static List<ProcessTaskSerialNumberPolicyVo> policyList = new ArrayList<>();
+
     public static IProcessTaskSerialNumberPolicyHandler getHandler(String handler) {
         return policyMap.get(handler);
     }
-    
-    public static List<ProcessTaskSerialNumberPolicyVo> getPolicyHandlerList(){
+
+    public static List<ProcessTaskSerialNumberPolicyVo> getPolicyHandlerList() {
         return policyList;
     }
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         ApplicationContext context = event.getApplicationContext();
-        Map<String, IProcessTaskSerialNumberPolicyHandler> map = context.getBeansOfType(IProcessTaskSerialNumberPolicyHandler.class);
-        for(Map.Entry<String, IProcessTaskSerialNumberPolicyHandler> entry : map.entrySet()) {
+        Map<String, IProcessTaskSerialNumberPolicyHandler> map =
+            context.getBeansOfType(IProcessTaskSerialNumberPolicyHandler.class);
+        for (Map.Entry<String, IProcessTaskSerialNumberPolicyHandler> entry : map.entrySet()) {
             IProcessTaskSerialNumberPolicyHandler numberPolicy = entry.getValue();
             policyMap.put(numberPolicy.getHandler(), numberPolicy);
             ProcessTaskSerialNumberPolicyVo policy = new ProcessTaskSerialNumberPolicyVo();
@@ -41,7 +44,7 @@ public class ProcessTaskSerialNumberPolicyHandlerFactory extends ApplicationList
 
     @Override
     protected void myInit() {
-        
+
     }
 
 }

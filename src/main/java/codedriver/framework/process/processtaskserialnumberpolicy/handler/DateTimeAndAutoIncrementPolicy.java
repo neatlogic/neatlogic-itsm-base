@@ -18,12 +18,13 @@ import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
+
 @Service
 public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandler {
 
     @Autowired
     private ChannelMapper channelMapper;
-    
+
     @Autowired
     private ProcessTaskMapper processTaskMapper;
 
@@ -64,7 +65,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     public JSONObject makeupConfig(JSONObject jsonObj) {
         JSONObject resultObj = new JSONObject();
         Long startValue = jsonObj.getLong("startValue");
-        if(startValue == null) {
+        if (startValue == null) {
             startValue = 0L;
         }
         resultObj.put("startValue", startValue);
@@ -74,18 +75,21 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
-        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
+            processTaskSerialNumberPolicyVo.getChannelTypeUuid());
         Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        return sdf.format(new Date()) + String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
+        return sdf.format(new Date())
+            + String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
     }
 
     @Override
     public int batchUpdateHistoryProcessTask(String channelTypeUuid) {
         int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuid(channelTypeUuid);
-        if(rowNum > 0) {
+        if (rowNum > 0) {
             /** 加锁 **/
-            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
+            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
+                channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
             Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
             long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
             long serialNumberSeed = startValue;
@@ -95,12 +99,13 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
             ProcessTaskVo processTaskVo = new ProcessTaskVo();
             processTaskVo.setChannelTypeUuid(channelTypeUuid);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            for(int currentPage = 1; currentPage <= pageCount; currentPage++) {
+            for (int currentPage = 1; currentPage <= pageCount; currentPage++) {
                 processTaskVo.setCurrentPage(currentPage);
-                List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByChannelTypeUuid(processTaskVo);
-                for(ProcessTaskVo processTask : processTaskList) {
+                List<ProcessTaskVo> processTaskList =
+                    processTaskMapper.getProcessTaskListByChannelTypeUuid(processTaskVo);
+                for (ProcessTaskVo processTask : processTaskList) {
                     String startTimeFormat = sdf.format(processTask.getStartTime());
-                    if(!Objects.equals(timeFormat, startTimeFormat)) {
+                    if (!Objects.equals(timeFormat, startTimeFormat)) {
                         serialNumberSeed = startValue;
                         timeFormat = startTimeFormat;
                     }
@@ -118,7 +123,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
     @Override
     public String getSerialNumberSeedResetCron() {
-        return "0 * * * * ?";
+        return "0 0 0 * * ?";
     }
-    
+
 }

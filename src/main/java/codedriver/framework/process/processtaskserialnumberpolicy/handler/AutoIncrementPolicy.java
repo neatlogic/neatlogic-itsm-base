@@ -15,15 +15,16 @@ import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
+
 @Service
 public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandler {
 
     @Autowired
     private ChannelMapper channelMapper;
-    
+
     @Autowired
     private ProcessTaskMapper processTaskMapper;
-    
+
     @Override
     public String getName() {
         return "自增序列";
@@ -61,7 +62,7 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
     public JSONObject makeupConfig(JSONObject jsonObj) {
         JSONObject resultObj = new JSONObject();
         Long startValue = jsonObj.getLong("startValue");
-        if(startValue == null) {
+        if (startValue == null) {
             startValue = 0L;
         }
         resultObj.put("startValue", startValue);
@@ -71,7 +72,8 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
 
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
-        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
+            processTaskSerialNumberPolicyVo.getChannelTypeUuid());
         Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
         return String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
     }
@@ -79,19 +81,21 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
     @Override
     public int batchUpdateHistoryProcessTask(String channelTypeUuid) {
         int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuid(channelTypeUuid);
-        if(rowNum > 0) {
+        if (rowNum > 0) {
             /** 加锁 **/
-            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
+            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
+                channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
             Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
             long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
             int pageSize = 1000;
             int pageCount = PageUtil.getPageCount(rowNum, pageSize);
             ProcessTaskVo processTaskVo = new ProcessTaskVo();
             processTaskVo.setChannelTypeUuid(channelTypeUuid);
-            for(int currentPage = 1; currentPage <= pageCount; currentPage++) {
+            for (int currentPage = 1; currentPage <= pageCount; currentPage++) {
                 processTaskVo.setCurrentPage(currentPage);
-                List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByChannelTypeUuid(processTaskVo);
-                for(ProcessTaskVo processTask : processTaskList) {
+                List<ProcessTaskVo> processTaskList =
+                    processTaskMapper.getProcessTaskListByChannelTypeUuid(processTaskVo);
+                for (ProcessTaskVo processTask : processTaskList) {
                     String serialNumber = String.format("%0" + digits + "d", startValue);
                     processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
                     processTaskMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
@@ -106,7 +110,6 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
 
     @Override
     public String getSerialNumberSeedResetCron() {
-        // TODO Auto-generated method stub
         return null;
     }
 }

@@ -22,363 +22,363 @@ import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ChannelVo extends BasePageVo implements Serializable{
+public class ChannelVo extends BasePageVo implements Serializable {
 
     private static final long serialVersionUID = 7055291271172611259L;
 
     @EntityField(name = "服务通道uuid", type = ApiParamType.STRING)
-	private String uuid;
+    private String uuid;
 
-	@EntityField(name = "服务通道名称", type = ApiParamType.STRING)
-	private String name;
+    @EntityField(name = "服务通道名称", type = ApiParamType.STRING)
+    private String name;
 
-	@EntityField(name = "是否启用，0：禁用，1：启用", type = ApiParamType.INTEGER)
-	private Integer isActive;
+    @EntityField(name = "是否启用，0：禁用，1：启用", type = ApiParamType.INTEGER)
+    private Integer isActive;
 
-	@EntityField(name = "服务说明", type = ApiParamType.STRING)
-	private String desc;
+    @EntityField(name = "服务说明", type = ApiParamType.STRING)
+    private String desc;
 
-	@EntityField(name = "图标", type = ApiParamType.STRING)
-	private String icon;
+    @EntityField(name = "图标", type = ApiParamType.STRING)
+    private String icon;
 
-	@EntityField(name = "颜色", type = ApiParamType.STRING)
-	private String color;
+    @EntityField(name = "颜色", type = ApiParamType.STRING)
+    private String color;
 
-	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
-	private String parentUuid;
-	
-	@EntityField(name = "服务所有父目录名，逗号隔开", type = ApiParamType.STRING)
-	private String parentNames;
-	
-	@EntityField(name = "服务所有父目录uuid，逗号隔开", type = ApiParamType.STRING)
+    @EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
+    private String parentUuid;
+
+    @EntityField(name = "服务所有父目录名，逗号隔开", type = ApiParamType.STRING)
+    private String parentNames;
+
+    @EntityField(name = "服务所有父目录uuid，逗号隔开", type = ApiParamType.STRING)
     private String parentUuids;
 
-	@EntityField(name = "是否收藏，0：未收藏，1：已收藏", type = ApiParamType.INTEGER)
-	private Integer isFavorite;
+    @EntityField(name = "是否收藏，0：未收藏，1：已收藏", type = ApiParamType.INTEGER)
+    private Integer isFavorite;
 
-	@EntityField(name = "类型", type = ApiParamType.STRING)
-	private String type = "channel";
+    @EntityField(name = "类型", type = ApiParamType.STRING)
+    private String type = "channel";
 
-	@EntityField(name = "工作流uuid", type = ApiParamType.STRING)
-	private String processUuid;
+    @EntityField(name = "工作流uuid", type = ApiParamType.STRING)
+    private String processUuid;
 
-	@EntityField(name = "服务窗口uuid", type = ApiParamType.STRING)
-	private String worktimeUuid;
+    @EntityField(name = "服务窗口uuid", type = ApiParamType.STRING)
+    private String worktimeUuid;
 
-	@EntityField(name = "优先级列表", type = ApiParamType.JSONARRAY)
-	private List<String> priorityUuidList;
+    @EntityField(name = "优先级列表", type = ApiParamType.JSONARRAY)
+    private List<String> priorityUuidList;
 
-	@EntityField(name = "默认优先级", type = ApiParamType.STRING)
-	private String defaultPriorityUuid;
+    @EntityField(name = "默认优先级", type = ApiParamType.STRING)
+    private String defaultPriorityUuid;
 
-	@EntityField(name = "是否显示上报页描述", type = ApiParamType.INTEGER)
-	private Integer allowDesc;
+    @EntityField(name = "是否显示上报页描述", type = ApiParamType.INTEGER)
+    private Integer allowDesc;
 
-	@EntityField(name = "描述帮助", type = ApiParamType.STRING)
-	private String help;
+    @EntityField(name = "描述帮助", type = ApiParamType.STRING)
+    private String help;
 
-	@EntityField(name = "是否激活描述帮助", type = ApiParamType.INTEGER)
-	private Integer isActiveHelp;
+    @EntityField(name = "是否激活描述帮助", type = ApiParamType.INTEGER)
+    private Integer isActiveHelp;
 
-	@EntityField(name = "时效", type = ApiParamType.INTEGER)
-	private Integer sla;
-	
-	@EntityField(name = "授权对象", type = ApiParamType.JSONARRAY)
-	private List<String> authorityList;
-	
-	@EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
-	private String channelTypeUuid;
-	
-	@EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
-	private int allowTranferReport;
-	
-	@EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
-	private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
-    
+    @EntityField(name = "时效", type = ApiParamType.INTEGER)
+    private Integer sla;
+
+    @EntityField(name = "授权对象", type = ApiParamType.JSONARRAY)
+    private List<String> authorityList;
+
+    @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+    private String channelTypeUuid;
+
+    @EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
+    private int allowTranferReport;
+
+    @EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
+    private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
+
     @EntityField(name = "类型#uuid", type = ApiParamType.STRING)
     private String typeAndUuid;
-    
+
     @EntityField(name = "使用范围", type = ApiParamType.STRING)
     private String support;
-    
-    @JSONField(serialize=false)
-	private transient boolean isAuthority = false;
-    @JSONField(serialize=false)
-	private transient List<AuthorityVo> authorityVoList;
-    @JSONField(serialize=false)
-	private transient CatalogVo parent;
-    @JSONField(serialize=false)
-	private transient Integer sort;
-    @JSONField(serialize=false)
-	private transient String userUuid;
-    @JSONField(serialize=false)
-	private transient List<String> authorizedUuidList;
 
-	public synchronized String getUuid() {
-		if (StringUtils.isBlank(uuid)) {
-			uuid = UUID.randomUUID().toString().replace("-", "");
-		}
-		return uuid;
-	}
+    @JSONField(serialize = false)
+    private transient boolean isAuthority = false;
+    @JSONField(serialize = false)
+    private transient List<AuthorityVo> authorityVoList;
+    @JSONField(serialize = false)
+    private transient CatalogVo parent;
+    @JSONField(serialize = false)
+    private transient Integer sort;
+    @JSONField(serialize = false)
+    private transient String userUuid;
+    @JSONField(serialize = false)
+    private transient List<String> authorizedUuidList;
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
+    public synchronized String getUuid() {
+        if (StringUtils.isBlank(uuid)) {
+            uuid = UUID.randomUUID().toString().replace("-", "");
+        }
+        return uuid;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Integer getIsActive() {
-		return isActive;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setIsActive(Integer isActive) {
-		this.isActive = isActive;
-	}
+    public Integer getIsActive() {
+        return isActive;
+    }
 
-	public String getDesc() {
-		return desc;
-	}
+    public void setIsActive(Integer isActive) {
+        this.isActive = isActive;
+    }
 
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
+    public String getDesc() {
+        return desc;
+    }
 
-	public String getIcon() {
-		return icon;
-	}
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
+    public String getIcon() {
+        return icon;
+    }
 
-	public String getColor() {
-		return color;
-	}
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
-	public void setColor(String color) {
-		this.color = color;
-	}
+    public String getColor() {
+        return color;
+    }
 
-	public String getParentUuid() {
-		return parentUuid;
-	}
+    public void setColor(String color) {
+        this.color = color;
+    }
 
-	public void setParentUuid(String parentUuid) {
-		this.parentUuid = parentUuid;
-	}
+    public String getParentUuid() {
+        return parentUuid;
+    }
 
-	public Integer getIsFavorite() {
-		return isFavorite;
-	}
+    public void setParentUuid(String parentUuid) {
+        this.parentUuid = parentUuid;
+    }
 
-	public void setIsFavorite(Integer isFavorite) {
-		this.isFavorite = isFavorite;
-	}
+    public Integer getIsFavorite() {
+        return isFavorite;
+    }
 
-	public String getUserUuid() {
-		return userUuid;
-	}
+    public void setIsFavorite(Integer isFavorite) {
+        this.isFavorite = isFavorite;
+    }
 
-	public void setUserUuid(String userUuid) {
-		this.userUuid = userUuid;
-	}
+    public String getUserUuid() {
+        return userUuid;
+    }
 
-	public Integer getSort() {
-		return sort;
-	}
+    public void setUserUuid(String userUuid) {
+        this.userUuid = userUuid;
+    }
 
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
+    public Integer getSort() {
+        return sort;
+    }
 
-	public CatalogVo getParent() {
-		return parent;
-	}
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
 
-	public void setParent(CatalogVo parent) {
-		this.parent = parent;
-		parent.addChildChannel(this);
-	}
+    public CatalogVo getParent() {
+        return parent;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public void setParent(CatalogVo parent) {
+        this.parent = parent;
+        parent.addChildChannel(this);
+    }
 
-	public String getProcessUuid() {
-		return processUuid;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setProcessUuid(String processUuid) {
-		this.processUuid = processUuid;
-	}
+    public String getProcessUuid() {
+        return processUuid;
+    }
 
-	public String getWorktimeUuid() {
-		return worktimeUuid;
-	}
+    public void setProcessUuid(String processUuid) {
+        this.processUuid = processUuid;
+    }
 
-	public void setWorktimeUuid(String worktimeUuid) {
-		this.worktimeUuid = worktimeUuid;
-	}
+    public String getWorktimeUuid() {
+        return worktimeUuid;
+    }
 
-	public List<String> getPriorityUuidList() {
-		return priorityUuidList;
-	}
+    public void setWorktimeUuid(String worktimeUuid) {
+        this.worktimeUuid = worktimeUuid;
+    }
 
-	public void setPriorityUuidList(List<String> priorityUuidList) {
-		this.priorityUuidList = priorityUuidList;
-	}
+    public List<String> getPriorityUuidList() {
+        return priorityUuidList;
+    }
 
-	public String getDefaultPriorityUuid() {
-		return defaultPriorityUuid;
-	}
+    public void setPriorityUuidList(List<String> priorityUuidList) {
+        this.priorityUuidList = priorityUuidList;
+    }
 
-	public void setDefaultPriorityUuid(String defaultPriorityUuid) {
-		this.defaultPriorityUuid = defaultPriorityUuid;
-	}
+    public String getDefaultPriorityUuid() {
+        return defaultPriorityUuid;
+    }
 
-	public Integer getAllowDesc() {
-		return allowDesc;
-	}
+    public void setDefaultPriorityUuid(String defaultPriorityUuid) {
+        this.defaultPriorityUuid = defaultPriorityUuid;
+    }
 
-	public void setAllowDesc(Integer allowDesc) {
-		this.allowDesc = allowDesc;
-	}
+    public Integer getAllowDesc() {
+        return allowDesc;
+    }
 
-	public String getHelp() {
-		return help;
-	}
+    public void setAllowDesc(Integer allowDesc) {
+        this.allowDesc = allowDesc;
+    }
 
-	public void setHelp(String help) {
-		this.help = help;
-	}
+    public String getHelp() {
+        return help;
+    }
 
-	public Integer getIsActiveHelp() {
-		return isActiveHelp;
-	}
+    public void setHelp(String help) {
+        this.help = help;
+    }
 
-	public void setIsActiveHelp(Integer isActiveHelp) {
-		this.isActiveHelp = isActiveHelp;
-	}
+    public Integer getIsActiveHelp() {
+        return isActiveHelp;
+    }
 
-	public Integer getSla() {
-		return sla;
-	}
+    public void setIsActiveHelp(Integer isActiveHelp) {
+        this.isActiveHelp = isActiveHelp;
+    }
 
-	public void setSla(Integer sla) {
-		this.sla = sla;
-	}
+    public Integer getSla() {
+        return sla;
+    }
 
-	public List<String> getAuthorityList() {
-		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
-			authorityList = new ArrayList<>();
-			for(AuthorityVo authorityVo : authorityVoList) {
-				GroupSearch groupSearch = GroupSearch.getGroupSearch(authorityVo.getType());
-				if(groupSearch != null) {
-					authorityList.add(groupSearch.getValuePlugin() + authorityVo.getUuid());
-				}
-			}
-		}
-		return authorityList;
-	}
+    public void setSla(Integer sla) {
+        this.sla = sla;
+    }
 
-	public void setAuthorityList(List<String> authorityList) {
-		this.authorityList = authorityList;
-	}
+    public List<String> getAuthorityList() {
+        if (authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
+            authorityList = new ArrayList<>();
+            for (AuthorityVo authorityVo : authorityVoList) {
+                GroupSearch groupSearch = GroupSearch.getGroupSearch(authorityVo.getType());
+                if (groupSearch != null) {
+                    authorityList.add(groupSearch.getValuePlugin() + authorityVo.getUuid());
+                }
+            }
+        }
+        return authorityList;
+    }
 
-	public List<AuthorityVo> getAuthorityVoList() {
-		if(authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
-			authorityVoList = new ArrayList<>();
-			for(String authority : authorityList) {
-				String[] split = authority.split("#");
-				if(GroupSearch.getGroupSearch(split[0]) != null) {
-					AuthorityVo authorityVo = new AuthorityVo();
-					authorityVo.setType(split[0]);
-					authorityVo.setUuid(split[1]);
-					authorityVoList.add(authorityVo);
-				}
-			}
-		}
-		return authorityVoList;
-	}
+    public void setAuthorityList(List<String> authorityList) {
+        this.authorityList = authorityList;
+    }
 
-	public void setAuthorityVoList(List<AuthorityVo> authorityVoList) {
-		this.authorityVoList = authorityVoList;
-	}
+    public List<AuthorityVo> getAuthorityVoList() {
+        if (authorityVoList == null && CollectionUtils.isNotEmpty(authorityList)) {
+            authorityVoList = new ArrayList<>();
+            for (String authority : authorityList) {
+                String[] split = authority.split("#");
+                if (GroupSearch.getGroupSearch(split[0]) != null) {
+                    AuthorityVo authorityVo = new AuthorityVo();
+                    authorityVo.setType(split[0]);
+                    authorityVo.setUuid(split[1]);
+                    authorityVoList.add(authorityVo);
+                }
+            }
+        }
+        return authorityVoList;
+    }
 
-	public String getChannelTypeUuid() {
-		return channelTypeUuid;
-	}
+    public void setAuthorityVoList(List<AuthorityVo> authorityVoList) {
+        this.authorityVoList = authorityVoList;
+    }
 
-	public void setChannelTypeUuid(String channelTypeUuid) {
-		this.channelTypeUuid = channelTypeUuid;
-	}
+    public String getChannelTypeUuid() {
+        return channelTypeUuid;
+    }
 
-	public List<String> getAuthorizedUuidList() {
-		return authorizedUuidList;
-	}
+    public void setChannelTypeUuid(String channelTypeUuid) {
+        this.channelTypeUuid = channelTypeUuid;
+    }
 
-	public void setAuthorizedUuidList(List<String> authorizedUuidList) {
-		this.authorizedUuidList = authorizedUuidList;
-	}
+    public List<String> getAuthorizedUuidList() {
+        return authorizedUuidList;
+    }
 
-	public String getParentNames() {
-		return parentNames;
-	}
+    public void setAuthorizedUuidList(List<String> authorizedUuidList) {
+        this.authorizedUuidList = authorizedUuidList;
+    }
 
-	public void setParentNames(String parentNames) {
-		this.parentNames = parentNames;
-	}
+    public String getParentNames() {
+        return parentNames;
+    }
 
-	/**
-	 * 
-	* @Time:2020年7月7日
-	* @Description: 判断服务是否最终授权，服务状态为激活，拥有服务权限及所有上级目录权限才是最终授权
-	* @return boolean
-	 */
-	public boolean isAuthority() {
-		if(Objects.equal(isActive, 1) && isAuthority) {
-			if(parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
-				return parent.isAuthority();
-			}
-			return true;
-		}
-		return false;
-	}
+    public void setParentNames(String parentNames) {
+        this.parentNames = parentNames;
+    }
 
-	public void setAuthority(boolean isAuthority) {
-		this.isAuthority = isAuthority;
-	}
+    /**
+     * 
+     * @Time:2020年7月7日
+     * @Description: 判断服务是否最终授权，服务状态为激活，拥有服务权限及所有上级目录权限才是最终授权
+     * @return boolean
+     */
+    public boolean isAuthority() {
+        if (Objects.equal(isActive, 1) && isAuthority) {
+            if (parent != null && !CatalogVo.ROOT_UUID.equals(parent.getUuid())) {
+                return parent.isAuthority();
+            }
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
-		return result;
-	}
+    public void setAuthority(boolean isAuthority) {
+        this.isAuthority = isAuthority;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ChannelVo other = (ChannelVo) obj;
-		if (uuid == null) {
-			if (other.uuid != null)
-				return false;
-		} else if (!uuid.equals(other.uuid))
-			return false;
-		return true;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ChannelVo other = (ChannelVo)obj;
+        if (uuid == null) {
+            if (other.uuid != null)
+                return false;
+        } else if (!uuid.equals(other.uuid))
+            return false;
+        return true;
+    }
 
     public int getAllowTranferReport() {
         return allowTranferReport;
@@ -397,18 +397,20 @@ public class ChannelVo extends BasePageVo implements Serializable{
     }
 
     public String getTypeAndUuid() {
-        if(StringUtils.isBlank(typeAndUuid) && StringUtils.isNotBlank(getUuid())) {
+        if (StringUtils.isBlank(typeAndUuid) && StringUtils.isNotBlank(getUuid())) {
             typeAndUuid = type + "#" + uuid;
         }
         return typeAndUuid;
     }
 
     public String getSupport() {
-        if(support == null && RequestContextHolder.getRequestAttributes() != null && ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest() != null) {
-            HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-            if(DeviceType.MOBILE.getValue().equals(request.getHeader("Device"))) {
+        if (support == null && RequestContextHolder.getRequestAttributes() != null
+            && ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest() != null) {
+            HttpServletRequest request =
+                ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+            if (DeviceType.MOBILE.getValue().equals(request.getHeader("Device"))) {
                 support = DeviceType.MOBILE.getValue();
-            }else {
+            } else {
                 support = DeviceType.PC.getValue();
             }
         }
@@ -426,6 +428,5 @@ public class ChannelVo extends BasePageVo implements Serializable{
     public void setParentUuids(String parentUuids) {
         this.parentUuids = parentUuids;
     }
-    
-    
+
 }
