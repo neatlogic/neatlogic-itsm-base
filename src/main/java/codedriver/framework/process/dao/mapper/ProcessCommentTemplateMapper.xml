@@ -16,7 +16,10 @@
 		`process_comment_template`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				`content` LIKE CONCAT('%', #{keyword}, '%')
+				and `content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type != null and keyword != ''">
+				and `type` = #{type}
 			</if>
 		</where>
 	</select>
@@ -24,13 +27,14 @@
 	<resultMap id="templateMap" type="codedriver.framework.process.dto.ProcessCommentTemplateVo">
 		<id column="id" property="id" />
 		<result column="content" property="content" />
+		<result column="type" property="type" />
 		<result column="fcu" property="fcu" />
 		<result column="fcd" property="fcd" />
 		<result column="lcu" property="lcu" />
 		<result column="lcd" property="lcd" />
 		<collection property="authVoList" ofType="codedriver.framework.process.dto.ProcessCommentTemplateAuthVo">
 			<result column="uuid" property="uuid" />
-			<result column="type" property="type" />
+			<result column="authType" property="type" />
 		</collection>
 	</resultMap>
 
@@ -38,18 +42,22 @@
 		SELECT
 		a.`id`,
 		a.`content`,
+		a.`type`,
 		a.`fcu`,
 		a.`fcd`,
 		a.`lcu`,
 		a.`lcd`,
 		b.`uuid`,
-		b.`type`
+		b.`type` as `authType`
 		FROM `process_comment_template` a
 		left join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				a.`content` LIKE CONCAT('%', #{keyword}, '%')
+				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type != null and keyword != ''">
+				and a.`type` = #{type}
 			</if>
 		</where>
 		ORDER BY a.`lcd` desc
@@ -62,16 +70,94 @@
 		select
 		a.`id`,
 		a.`content`,
+		a.`type`,
 		a.`fcu`,
 		a.`fcd`,
 		a.`lcu`,
 		a.`lcd`,
 		b.`uuid`,
-		b.`type`
+		b.`type` as `authType`
 		from `process_comment_template` a
 		left join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
 		where `id` = #{value}
+	</select>
+
+	<select id="searchTemplateCountForTask" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo" resultType="int" useCache="false">
+		select count(1)
+		from
+		(
+		SELECT
+		distinct(a.`id`)
+		FROM
+		`process_comment_template` a
+		join `process_comment_template_authority` b
+		<where>
+			<if test="keyword != null and keyword != ''">
+				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type != null and keyword != ''">
+				and a.`type` = #{type}
+			</if>
+			<if test="authList != null and authList.size() > 0 ">
+				and b.`uuid` IN
+				<foreach collection="authList" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		) c
+	</select>
+
+	<select id="searchTemplateForTask" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo" resultMap="templateMap" useCache="false">
+		SELECT
+		a.`id`,
+		a.`content`,
+		a.`type`,
+		a.`fcu`,
+		a.`fcd`,
+		a.`lcu`,
+		a.`lcd`
+		FROM `process_comment_template` a
+		join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
+		<where>
+			<if test="keyword != null and keyword != ''">
+				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type != null and keyword != ''">
+				and a.`type` = #{type}
+			</if>
+			<if test="authList != null and authList.size() > 0 ">
+				and b.`uuid` IN
+				<foreach collection="authList" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY a.`lcd` desc
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="searchTemplateForSelect" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
+		SELECT
+		a.`id` as `value`,
+		a.`content` as `text`
+		FROM `process_comment_template` a
+		<where>
+			<if test="keyword != null and keyword != ''">
+				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="type != null and keyword != ''">
+				and a.`type` = #{type}
+			</if>
+		</where>
+		ORDER BY a.`lcd` desc
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
 	</select>
 
 	<update id="updateTemplate" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo">
@@ -88,6 +174,7 @@
 		insert into `process_comment_template`(
 		`id`,
 		`content`,
+		`type`,
 		`fcu`,
 		`fcd`,
 		`lcu`,
@@ -95,6 +182,7 @@
 		values(
 		#{id},
 		#{content},
+		#{type},
 		#{fcu},
 		now(3),
 		#{lcu},
