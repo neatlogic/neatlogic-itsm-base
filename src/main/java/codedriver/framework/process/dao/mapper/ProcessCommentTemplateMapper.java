@@ -1,5 +1,6 @@
 package codedriver.framework.process.dao.mapper;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.dto.ProcessCommentTemplateAuthVo;
 import codedriver.framework.process.dto.ProcessCommentTemplateVo;
 
@@ -13,7 +14,13 @@ public interface ProcessCommentTemplateMapper {
 
     public int searchTemplateCount(ProcessCommentTemplateVo vo);
 
+    public int searchTemplateCountForTask(ProcessCommentTemplateVo vo);
+
     public List<ProcessCommentTemplateVo> searchTemplate(ProcessCommentTemplateVo vo);
+
+    public List<ProcessCommentTemplateVo> searchTemplateForTask(ProcessCommentTemplateVo vo);
+
+    public List<ValueTextVo> searchTemplateForSelect(ProcessCommentTemplateVo vo);
 
     public int updateTemplate(ProcessCommentTemplateVo vo);
 
