@@ -125,8 +125,6 @@ public interface ChannelMapper {
 
     public List<ProcessTaskSerialNumberPolicyVo> getAllProcessTaskSerialNumberPolicyList();
 
-//    public Long getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(String channelTypeUuid);
-
 	public int replaceChannelUser(@Param("userUuid")String userUuid, @Param("channelUuid")String channelUuid);	
 
 	public int replaceChannel(ChannelVo channelVo);

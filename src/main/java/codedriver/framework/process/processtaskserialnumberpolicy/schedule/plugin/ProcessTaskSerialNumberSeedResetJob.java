@@ -9,8 +9,6 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSONPath;
-
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
@@ -78,7 +76,11 @@ public class ProcessTaskSerialNumberSeedResetJob extends JobBase {
         String channelTypeUuid = (String)jobObject.getData("channelTypeUuid");
         ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
         if(processTaskSerialNumberPolicyVo != null) {
-            Long startValue = (long)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "startValue");
+            Long startValue = 1L;
+            Long value = processTaskSerialNumberPolicyVo.getConfig().getLong("startValue");
+            if(value != null) {
+                startValue = value;
+            }
             processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
             channelMapper.updateProcessTaskSerialNumberPolicyByChannelTypeUuid(processTaskSerialNumberPolicyVo);
         }

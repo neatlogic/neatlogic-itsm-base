@@ -720,10 +720,6 @@
 	FROM `processtask_serial_number_policy`
 	</select>
 	
-	<!-- <select id="getProcessTaskSerialNumberPolicyLockByChannelTypeUuid" parameterType="java.lang.String" resultType="java.lang.Long">
-	SELECT `serial_number_seed` FROM `processtask_serial_number_policy` WHERE `channel_type_uuid` = #{value} FOR UPDATE
-	</select> -->
-	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
@@ -895,7 +891,7 @@
 	  (
 	    #{channelTypeUuid},
 	    #{handler},
-	    #{config},
+	    #{configStr},
 	    #{serialNumberSeed}
 	  )
 	</insert>
@@ -950,7 +946,7 @@
 	UPDATE `processtask_serial_number_policy` 
 	SET
 	  `handler` = #{handler},
-	  `config` = #{config},
+	  `config` = #{configStr},
 	  `serial_number_seed` = #{serialNumberSeed} 
 	WHERE `channel_type_uuid` = #{channelTypeUuid}
 	</update>

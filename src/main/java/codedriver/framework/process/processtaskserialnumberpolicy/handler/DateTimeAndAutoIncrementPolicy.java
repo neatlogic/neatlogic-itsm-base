@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.common.util.PageUtil;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
@@ -76,7 +75,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
-        Integer digits = (Integer)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "digits");
+        Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(new Date()) + String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
     }
@@ -87,8 +86,8 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
         if(rowNum > 0) {
             /** 加锁 **/
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
-            Integer digits = (Integer)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "digits");
-            long startValue = (long)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "startValue");
+            Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
+            long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
             long serialNumberSeed = startValue;
             String timeFormat = null;
             int pageSize = 1000;
@@ -119,8 +118,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
     @Override
     public String getSerialNumberSeedResetCron() {
-        // TODO Auto-generated method stub
-        return null;
+        return "0 * * * * ?";
     }
     
 }

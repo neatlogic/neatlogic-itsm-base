@@ -197,7 +197,8 @@
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
 		`error`,
-		`is_show` as isShow
+		`is_show` as isShow,
+		`serial_number` AS serialNumber
 		FROM
 		`processtask`
 		WHERE
@@ -625,7 +626,8 @@
 	  `reporter`,
 	  `expire_time` AS expireTime,
 	  `worktime_uuid` AS worktimeUuid,
-	  `error` 
+	  `error`,
+	  `serial_number` AS serialNumber 
 	FROM `processtask` 
 	WHERE `id`= #{id}
 	</select>
@@ -931,7 +933,8 @@
 	  `reporter`,
 	  `expire_time` AS expireTime,
 	  `worktime_uuid` AS worktimeUuid,
-	  `error`
+	  `error`,
+	  `serial_number` AS serialNumber
 	FROM `processtask`
 	<where>
 		<if test="processTaskIdList != null and processTaskIdList.size() >0">
@@ -1844,7 +1847,8 @@
 		`owner`,
 		`reporter`,
 		`expire_time`,
-		`worktime_uuid`
+		`worktime_uuid`,
+		`serial_number`
 		)
 		VALUES
 		(
@@ -1859,7 +1863,8 @@
 		#{owner},
 		#{reporter},
 		#{expireTime},
-		#{worktimeUuid}
+		#{worktimeUuid},
+		#{serialNumber}
 		)
 	</insert>
 

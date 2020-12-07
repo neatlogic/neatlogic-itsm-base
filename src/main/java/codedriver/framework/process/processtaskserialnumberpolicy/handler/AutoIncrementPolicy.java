@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.common.util.PageUtil;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
@@ -73,7 +72,7 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
-        Integer digits = (Integer)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "digits");
+        Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
         return String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
     }
 
@@ -83,8 +82,8 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
         if(rowNum > 0) {
             /** 加锁 **/
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
-            Integer digits = (Integer)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "digits");
-            long startValue = (long)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "startValue");
+            Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
+            long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
             int pageSize = 1000;
             int pageCount = PageUtil.getPageCount(rowNum, pageSize);
             ProcessTaskVo processTaskVo = new ProcessTaskVo();
