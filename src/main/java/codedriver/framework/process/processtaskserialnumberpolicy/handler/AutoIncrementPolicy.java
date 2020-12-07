@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.process.dao.mapper.ChannelMapper;
-import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicy;
+import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
 @Service
-public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicy {
+public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandler {
 
     @Autowired
     private ChannelMapper channelMapper;
@@ -62,10 +65,10 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicy {
     }
 
     @Override
-    public String genarate(String channelTypeUuid, JSONObject config) {
-        Long serialNumberSeed = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
-        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(channelTypeUuid);
-        Integer digits = config.getInteger("digits");
-        return String.format("%0" + digits + "d", serialNumberSeed);
+    public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo,
+        ProcessTaskVo processTaskVo) {
+        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+        Integer digits = (Integer)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "digits");
+        return String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
     }
 }

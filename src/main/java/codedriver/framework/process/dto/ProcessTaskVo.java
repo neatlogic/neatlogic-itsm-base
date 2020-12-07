@@ -26,7 +26,7 @@ public class ProcessTaskVo {
     @EntityField(name = "父工单id", type = ApiParamType.LONG)
     private Long parentId;
     @EntityField(name = "工单号", type = ApiParamType.STRING)
-    private String number;
+    private String serialNumber;
     @EntityField(name = "标题", type = ApiParamType.STRING)
     private String title;
     @EntityField(name = "流程uuid", type = ApiParamType.STRING)
@@ -238,15 +238,12 @@ public class ProcessTaskVo {
         this.stepList = stepList;
     }
 
-    public String getNumber() {
-        if(StringUtils.isBlank(number) && id != null) {
-            number = id.toString();
-        }
-        return number;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getTitle() {

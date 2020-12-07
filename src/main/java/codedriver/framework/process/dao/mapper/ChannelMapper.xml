@@ -701,7 +701,7 @@
 	select count(1) from (SELECT `uuid` FROM `channel` WHERE `channel_type_uuid` = #{value} limit 1) a
 	</select>
 	
-	<select id="getProcessTaskSerialNumberPolicyByChannelTypeUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
+	<select id="getProcessTaskSerialNumberPolicyLockByChannelTypeUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
 	SELECT 
 	  `channel_type_uuid` AS channelTypeUuid,
 	  `handler`,
@@ -711,9 +711,9 @@
 	WHERE `channel_type_uuid` = #{value}
 	</select>
 	
-	<select id="getProcessTaskSerialNumberPolicyLockByChannelTypeUuid" parameterType="java.lang.String" resultType="java.lang.Long">
+	<!-- <select id="getProcessTaskSerialNumberPolicyLockByChannelTypeUuid" parameterType="java.lang.String" resultType="java.lang.Long">
 	SELECT `serial_number_seed` FROM `processtask_serial_number_policy` WHERE `channel_type_uuid` = #{value} FOR UPDATE
-	</select>
+	</select> -->
 	
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (

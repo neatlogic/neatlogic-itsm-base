@@ -13,11 +13,11 @@ import codedriver.framework.common.RootComponent;
 import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 
 @RootComponent
-public class ProcessTaskSerialNumberPolicyFactory extends ApplicationListenerBase {
+public class ProcessTaskSerialNumberPolicyHandlerFactory extends ApplicationListenerBase {
 
-    private static Map<String, IProcessTaskSerialNumberPolicy> policyMap = new HashMap<>();
+    private static Map<String, IProcessTaskSerialNumberPolicyHandler> policyMap = new HashMap<>();
     private static List<ProcessTaskSerialNumberPolicyVo> policyList = new ArrayList<>();
-    public static IProcessTaskSerialNumberPolicy getHandler(String handler) {
+    public static IProcessTaskSerialNumberPolicyHandler getHandler(String handler) {
         return policyMap.get(handler);
     }
     
@@ -27,9 +27,9 @@ public class ProcessTaskSerialNumberPolicyFactory extends ApplicationListenerBas
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         ApplicationContext context = event.getApplicationContext();
-        Map<String, IProcessTaskSerialNumberPolicy> map = context.getBeansOfType(IProcessTaskSerialNumberPolicy.class);
-        for(Map.Entry<String, IProcessTaskSerialNumberPolicy> entry : map.entrySet()) {
-            IProcessTaskSerialNumberPolicy numberPolicy = entry.getValue();
+        Map<String, IProcessTaskSerialNumberPolicyHandler> map = context.getBeansOfType(IProcessTaskSerialNumberPolicyHandler.class);
+        for(Map.Entry<String, IProcessTaskSerialNumberPolicyHandler> entry : map.entrySet()) {
+            IProcessTaskSerialNumberPolicyHandler numberPolicy = entry.getValue();
             policyMap.put(numberPolicy.getHandler(), numberPolicy);
             ProcessTaskSerialNumberPolicyVo policy = new ProcessTaskSerialNumberPolicyVo();
             policy.setHandler(numberPolicy.getHandler());

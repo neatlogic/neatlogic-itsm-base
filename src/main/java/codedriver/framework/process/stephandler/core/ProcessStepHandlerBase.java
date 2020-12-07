@@ -56,6 +56,7 @@ import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
 import codedriver.framework.process.dto.ProcessTaskFormVo;
 import codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo;
 import codedriver.framework.process.dto.ProcessTaskScoreTemplateVo;
+import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskSlaVo;
 import codedriver.framework.process.dto.ProcessTaskStepAgentVo;
 import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
@@ -83,7 +84,10 @@ import codedriver.framework.process.exception.process.ProcessStepHandlerNotFound
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.exception.processtask.ProcessTaskStepUnActivedException;
 import codedriver.framework.process.exception.processtask.ProcessTaskStepUserIsExistsException;
+import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyNotFoundException;
 import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
+import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
+import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
 import codedriver.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import codedriver.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import codedriver.framework.process.notify.core.TaskNotifyTriggerType;
@@ -1378,6 +1382,16 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			}
 			ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
 			processTaskVo.setWorktimeUuid(channelVo.getWorktimeUuid());
+			/** 生成工单号 **/
+			ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelVo.getChannelTypeUuid());
+			if(processTaskSerialNumberPolicyVo == null) {
+			    // throw new 
+			}
+			IProcessTaskSerialNumberPolicyHandler policyHandler = ProcessTaskSerialNumberPolicyHandlerFactory.getHandler(processTaskSerialNumberPolicyVo.getHandler());
+			if(policyHandler == null) {
+			    throw new ProcessTaskSerialNumberPolicyNotFoundException(processTaskSerialNumberPolicyVo.getHandler());
+			}
+			processTaskVo.setSerialNumber(policyHandler.genarate(processTaskSerialNumberPolicyVo));
 			/** 创建工单 **/
 			processTaskMapper.insertProcessTask(processTaskVo);
 			currentProcessTaskStepVo.setProcessTaskId(processTaskVo.getId());

@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.process.dao.mapper.ChannelMapper;
-import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicy;
+import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
 @Service
-public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberPolicy {
+public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandler {
 
     @Autowired
     private ChannelMapper channelMapper;
@@ -64,12 +67,16 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     }
 
     @Override
-    public String genarate(String channelTypeUuid, JSONObject config) {
-        Long serialNumberSeed = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
-        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(channelTypeUuid);
-        Integer digits = config.getInteger("digits");
+    public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo,
+        ProcessTaskVo processTaskVo) {
+        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+        Integer digits = (Integer)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "digits");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        return sdf.format(new Date()) + String.format("%0" + digits + "d", serialNumberSeed);
+        Date startTime = new Date();
+        if(processTaskVo != null) {
+            startTime = processTaskVo.getStartTime();
+        }
+        return sdf.format(startTime) + String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
     }
-
+    
 }
