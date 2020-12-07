@@ -711,6 +711,15 @@
 	WHERE `channel_type_uuid` = #{value}
 	</select>
 	
+	<select id="getAllProcessTaskSerialNumberPolicyList" resultType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
+	SELECT 
+	  `channel_type_uuid` AS channelTypeUuid,
+	  `handler`,
+	  `config`,
+	  `serial_number_seed` AS serialNumberSeed 
+	FROM `processtask_serial_number_policy`
+	</select>
+	
 	<!-- <select id="getProcessTaskSerialNumberPolicyLockByChannelTypeUuid" parameterType="java.lang.String" resultType="java.lang.Long">
 	SELECT `serial_number_seed` FROM `processtask_serial_number_policy` WHERE `channel_type_uuid` = #{value} FOR UPDATE
 	</select> -->

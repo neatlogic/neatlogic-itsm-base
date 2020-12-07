@@ -1420,6 +1420,60 @@
 	SELECT COUNT(1) FROM `processtask_step_in_operation` WHERE `processtask_id` = #{value}
 	</select>
 	
+	<select id="getProcessTaskCountByChannelTypeUuid" parameterType="java.lang.String" resultType="int">
+	SELECT 
+	COUNT(a.`id`) 
+	FROM processtask a
+	JOIN channel b ON b.`uuid` = a.`channel_uuid`
+	JOIN channel_type c ON c.`uuid` = b.`channel_type_uuid`
+	WHERE c.`uuid` = #{value}
+	</select>
+	
+	<resultMap type="codedriver.framework.process.dto.ProcessTaskVo" id="processTaskMap">
+		<id column="id" property="id"/>
+		<result column="title" property="title"/>
+		<result column="process_uuid" property="processUuid"/>
+		<result column="channel_uuid" property="channelUuid"/>
+		<result column="config_hash" property="configHash"/>
+		<result column="priority_uuid" property="priorityUuid"/>
+		<result column="status" property="status"/>
+		<result column="start_time" property="startTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="owner" property="owner"/>
+		<result column="reporter" property="reporter"/>
+		<result column="expire_time" property="expireTime"/>
+		<result column="worktime_uuid" property="worktimeUuid"/>
+		<result column="is_show" property="isShow"/>
+		<result column="serial_number" property="serialNumber"/>
+	</resultMap>
+	
+	<select id="getProcessTaskListByChannelTypeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultMap="processTaskMap">
+	SELECT 
+	  a.`id`,
+	  a.`title`,
+	  a.`process_uuid`,
+	  a.`channel_uuid`,
+	  a.`config_hash`,
+	  a.`priority_uuid`,
+	  a.`status`,
+	  a.`start_time`,
+	  a.`end_time`,
+	  a.`owner`,
+	  a.`reporter`,
+	  a.`expire_time`,
+	  a.`worktime_uuid`,
+	  a.`is_show`,
+	  a.`serial_number` 
+	FROM `processtask` a
+	JOIN channel b ON b.`uuid` = a.`channel_uuid`
+	JOIN channel_type c ON c.`uuid` = b.`channel_type_uuid`
+	WHERE c.`uuid` = #{channelTypeUuid}
+	ORDER BY a.`id`
+	<if test="needPage">
+	limit #{startNum}, #{pageSize}	
+	</if>
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -2158,6 +2212,10 @@
 	  ) 
 	</insert>
 	
+	<insert id="insertProcessTaskSerialNumber">
+	INSERT IGNORE INTO `processtask_serial_number` (`processtask_id`, `serial_number`) VALUES (#{processTaskId}, #{serialNumber})
+	</insert>
+	
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`
@@ -2265,6 +2323,10 @@
 	
 	<update id="updateProcessTaskPriorityUuidById">
 	UPDATE `processtask` SET `priority_uuid` = #{priorityUuid} WHERE `id` = #{id}
+	</update>
+	
+	<update id="updateProcessTaskSerialNumberById">
+	UPDATE `processtask` SET `serial_number` = #{serialNumber} WHERE `id` = #{id}
 	</update>
 	
 	<delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">

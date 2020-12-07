@@ -3,6 +3,8 @@ package codedriver.framework.process.processtaskserialnumberpolicy.handler;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +13,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 
+import codedriver.framework.common.util.PageUtil;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
@@ -20,6 +24,9 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
     @Autowired
     private ChannelMapper channelMapper;
+    
+    @Autowired
+    private ProcessTaskMapper processTaskMapper;
 
     @Override
     public String getName() {
@@ -67,16 +74,53 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     }
 
     @Override
-    public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo,
-        ProcessTaskVo processTaskVo) {
+    public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
         Integer digits = (Integer)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "digits");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date startTime = new Date();
-        if(processTaskVo != null) {
-            startTime = processTaskVo.getStartTime();
+        return sdf.format(new Date()) + String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
+    }
+
+    @Override
+    public int batchUpdateHistoryProcessTask(String channelTypeUuid) {
+        int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuid(channelTypeUuid);
+        if(rowNum > 0) {
+            /** 加锁 **/
+            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
+            Integer digits = (Integer)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "digits");
+            long startValue = (long)JSONPath.read(processTaskSerialNumberPolicyVo.getConfig(), "startValue");
+            long serialNumberSeed = startValue;
+            String timeFormat = null;
+            int pageSize = 1000;
+            int pageCount = PageUtil.getPageCount(rowNum, pageSize);
+            ProcessTaskVo processTaskVo = new ProcessTaskVo();
+            processTaskVo.setChannelTypeUuid(channelTypeUuid);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            for(int currentPage = 1; currentPage <= pageCount; currentPage++) {
+                processTaskVo.setCurrentPage(currentPage);
+                List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByChannelTypeUuid(processTaskVo);
+                for(ProcessTaskVo processTask : processTaskList) {
+                    String startTimeFormat = sdf.format(processTask.getStartTime());
+                    if(!Objects.equals(timeFormat, startTimeFormat)) {
+                        serialNumberSeed = startValue;
+                        timeFormat = startTimeFormat;
+                    }
+                    String serialNumber = startTimeFormat + String.format("%0" + digits + "d", serialNumberSeed);
+                    processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
+                    processTaskMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
+                    serialNumberSeed++;
+                }
+            }
+            processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
+            channelMapper.updateProcessTaskSerialNumberPolicyByChannelTypeUuid(processTaskSerialNumberPolicyVo);
         }
-        return sdf.format(startTime) + String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
+        return rowNum;
+    }
+
+    @Override
+    public String getSerialNumberSeedResetCron() {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

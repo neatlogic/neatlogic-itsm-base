@@ -237,6 +237,10 @@ public interface ProcessTaskMapper {
     public List<ProcessTagVo> getProcessTaskTagListByProcessTaskId(@Param("processTaskId") Long processTaskId);
 
     public int getProcessTaskStepInOperationCountByProcessTaskId(Long processTaskId);
+
+    public int getProcessTaskCountByChannelTypeUuid(String channelTypeUuid);
+
+    public List<ProcessTaskVo> getProcessTaskListByChannelTypeUuid(ProcessTaskVo processTaskVo);
     
     public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -332,6 +336,8 @@ public interface ProcessTaskMapper {
     
     public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
+    public int insertProcessTaskSerialNumber(@Param("processTaskId") Long processTaskId, @Param("serialNumber") String serialNumber);
+
     @ESSearch
     public int updateProcessTaskStepStatus(@ESParam("processtask") ProcessTaskStepVo processTaskStepVo);
 
@@ -367,6 +373,8 @@ public interface ProcessTaskMapper {
     public int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
 
     public int updateProcessTaskPriorityUuidById(@Param("id") Long processTaskId, @Param("priorityUuid") String priorityUuid);
+
+    public int updateProcessTaskSerialNumberById(@Param("id") Long processTaskId, @Param("serialNumber") String serialNumber);
 
     public int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 

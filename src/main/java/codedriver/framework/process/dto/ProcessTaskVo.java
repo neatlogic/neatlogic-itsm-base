@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
@@ -19,7 +20,7 @@ import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
-public class ProcessTaskVo {
+public class ProcessTaskVo extends BasePageVo {
     @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
     @EntityField(name = "工单id", type = ApiParamType.LONG)
     private Long id;
@@ -359,6 +360,14 @@ public class ProcessTaskVo {
 
     public void setWorktimeUuid(String worktimeUuid) {
         this.worktimeUuid = worktimeUuid;
+    }
+
+    public String getChannelTypeUuid() {
+        return channelTypeUuid;
+    }
+
+    public void setChannelTypeUuid(String channelTypeUuid) {
+        this.channelTypeUuid = channelTypeUuid;
     }
 
     public ChannelTypeVo getChannelType() {

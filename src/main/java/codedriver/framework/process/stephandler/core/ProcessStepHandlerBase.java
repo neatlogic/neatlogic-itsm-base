@@ -1391,7 +1391,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 			if(policyHandler == null) {
 			    throw new ProcessTaskSerialNumberPolicyNotFoundException(processTaskSerialNumberPolicyVo.getHandler());
 			}
-			processTaskVo.setSerialNumber(policyHandler.genarate(processTaskSerialNumberPolicyVo));
+			String serialNumber = policyHandler.genarate(processTaskSerialNumberPolicyVo);
+			processTaskVo.setSerialNumber(serialNumber);
+			processTaskMapper.insertProcessTaskSerialNumber(processTaskVo.getId(), serialNumber);
 			/** 创建工单 **/
 			processTaskMapper.insertProcessTask(processTaskVo);
 			currentProcessTaskStepVo.setProcessTaskId(processTaskVo.getId());
