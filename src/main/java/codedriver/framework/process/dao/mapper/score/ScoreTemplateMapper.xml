@@ -154,7 +154,7 @@
 		 `description` = #{description},
 		 `is_active` = #{isActive},
 		 `lcu` = #{lcu},
-		 `lcd` = NOW()
+		 `lcd` = NOW(3)
 		 WHERE `id` = #{id}
 	</update>
 
@@ -162,7 +162,7 @@
 		UPDATE `score_template` SET
 		 `is_active` = #{isActive},
 		 `lcu` = #{lcu},
-		 `lcd` = NOW()
+		 `lcd` = NOW(3)
 		 WHERE `id` = #{id}
 	</update>
 
@@ -182,9 +182,9 @@
 		#{description},
 		#{isActive},
 		#{fcu},
-		NOW(),
+		NOW(3),
 		#{lcu},
-		NOW()
+		NOW(3)
 		)
 	</insert>
 

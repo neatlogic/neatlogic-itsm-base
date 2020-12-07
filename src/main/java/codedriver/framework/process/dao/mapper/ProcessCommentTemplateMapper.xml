@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.ProcessCommentTemplateMapper">
+
+	<select id="checkTemplateExistsById" parameterType="java.lang.Long" resultType="int">
+		select
+		count(1)
+		from `process_comment_template`
+		where `id` = #{value}
+	</select>
+
+	<select id="searchTemplateCount" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo" resultType="int" useCache="false">
+		SELECT
+		COUNT(1)
+		FROM
+		`process_comment_template`
+		<where>
+			<if test="keyword != null and keyword != ''">
+				`content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="templateMap" type="codedriver.framework.process.dto.ProcessCommentTemplateVo">
+		<id column="id" property="id" />
+		<result column="content" property="content" />
+		<result column="fcu" property="fcu" />
+		<result column="fcd" property="fcd" />
+		<result column="lcu" property="lcu" />
+		<result column="lcd" property="lcd" />
+		<collection property="authVoList" ofType="codedriver.framework.process.dto.ProcessCommentTemplateAuthVo">
+			<result column="uuid" property="uuid" />
+			<result column="type" property="type" />
+		</collection>
+	</resultMap>
+
+	<select id="searchTemplate" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo" resultMap="templateMap" useCache="false">
+		SELECT
+		a.`id`,
+		a.`content`,
+		a.`fcu`,
+		a.`fcd`,
+		a.`lcu`,
+		a.`lcd`,
+		b.`uuid`,
+		b.`type`
+		FROM `process_comment_template` a
+		left join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
+		<where>
+			<if test="keyword != null and keyword != ''">
+				a.`content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+		ORDER BY a.`lcd` desc
+		<if test="needPage == true">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="getTemplateById" parameterType="java.lang.Long" resultMap="templateMap">
+		select
+		a.`id`,
+		a.`content`,
+		a.`fcu`,
+		a.`fcd`,
+		a.`lcu`,
+		a.`lcd`,
+		b.`uuid`,
+		b.`type`
+		from `process_comment_template` a
+		left join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
+		where `id` = #{value}
+	</select>
+
+	<update id="updateTemplate" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo">
+		update
+		`process_comment_template`
+		set
+		`content` = #{content},
+		`lcu` = #{lcu},
+		`lcd` = now(3)
+		where `id` = #{id}
+	</update>
+
+	<insert id="insertTemplate" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo">
+		insert into `process_comment_template`(
+		`id`,
+		`content`,
+		`fcu`,
+		`fcd`,
+		`lcu`,
+		`lcd`)
+		values(
+		#{id},
+		#{content},
+		#{fcu},
+		now(3),
+		#{lcu},
+		now(3)
+		)
+	</insert>
+
+	<insert id="batchInsertAuthority" parameterType="java.util.List">
+		INSERT INTO `process_comment_template_authority`(
+		`comment_template_id`,
+		`type`,
+		`uuid`
+		)
+		VALUES
+		<foreach collection="list" index="index" item="item" separator=",">
+			(
+			#{item.commentTemplateId},
+			#{item.type},
+			#{item.uuid}
+			)
+		</foreach>
+	</insert>
+
+	<delete id="deleteTemplate" parameterType="java.lang.Long">
+		delete
+		from `process_comment_template`
+		where `id` = #{value}
+	</delete>
+
+	<delete id="deleteTemplateAuthority" parameterType="java.lang.Long">
+		delete
+		from `process_comment_template_authority`
+		where `comment_template_id` = #{value}
+	</delete>
+</mapper>

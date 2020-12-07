@@ -39,7 +39,7 @@
 		#{score},
 		#{isAuto},
 		#{fcu},
-		NOW()
+		NOW(3)
 		)
 	</insert>
 
@@ -53,7 +53,7 @@
 		#{processTaskId},
 		#{contentHash},
 		#{fcu},
-		NOW()
+		NOW(3)
 		)
 	</insert>
 	

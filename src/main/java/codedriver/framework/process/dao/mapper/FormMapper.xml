@@ -212,7 +212,7 @@
 		<if test="formConfig != null and formConfig != ''">
 		`form_config` = #{formConfig},
 		</if>
-		`lcd` = NOW(),
+		`lcd` = NOW(3),
 		`lcu` = #{editor}
 		WHERE `uuid` = #{uuid}
 	</update>
@@ -249,7 +249,7 @@
 		#{uuid},
 		#{name},
 		#{isActive},
-		now()
+		now(3)
 		)
 	</insert>
 
@@ -270,7 +270,7 @@
 		#{isActive},
 		#{formUuid},
 		#{formConfig},
-		NOW(),
+		NOW(3),
 		#{editor}
 		)
 	</insert>
