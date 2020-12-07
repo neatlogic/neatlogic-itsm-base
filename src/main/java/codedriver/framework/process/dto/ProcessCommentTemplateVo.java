@@ -17,6 +17,7 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 	private Long id;
 	@EntityField(name = "内容", type = ApiParamType.STRING)
 	private String content;
+	@EntityField(name = "授权对象", type = ApiParamType.STRING)
 	private List<String> authList;
 	@JSONField(serialize = false)
 	private List<ProcessCommentTemplateAuthVo> authVoList;
