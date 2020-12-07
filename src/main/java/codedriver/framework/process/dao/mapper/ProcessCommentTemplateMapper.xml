@@ -14,11 +14,11 @@
 		COUNT(1)
 		FROM
 		`process_comment_template`
-		WHERE
-		1=1
-		<if test="keyword != null and keyword != ''">
-			and `content` LIKE CONCAT('%', #{keyword}, '%')
-		</if>
+		<where>
+			<if test="keyword != null and keyword != ''">
+				`content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
 	</select>
 
 	<resultMap id="templateMap" type="codedriver.framework.process.dto.ProcessCommentTemplateVo">
@@ -47,11 +47,11 @@
 		FROM `process_comment_template` a
 		left join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
-		WHERE
-		1=1
-		<if test="keyword != null and keyword != ''">
-			and a.`content` LIKE CONCAT('%', #{keyword}, '%')
-		</if>
+		<where>
+			<if test="keyword != null and keyword != ''">
+				a.`content` LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
 		ORDER BY a.`lcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
@@ -80,7 +80,7 @@
 		set
 		`content` = #{content},
 		`lcu` = #{lcu},
-		`lcd` = now()
+		`lcd` = now(3)
 		where `id` = #{id}
 	</update>
 
@@ -96,9 +96,9 @@
 		#{id},
 		#{content},
 		#{fcu},
-		now(),
+		now(3),
 		#{lcu},
-		now()
+		now(3)
 		)
 	</insert>
 
