@@ -2066,7 +2066,7 @@
 	    	#{item.status},
 	    	#{item.errorReason},
 	    	#{item.owner},
-	    	NOW()
+	    	NOW(3)
 			)
 		</foreach>
 	</insert>
@@ -2154,7 +2154,7 @@
 	    #{processTaskId},
 	    #{processTaskStepId},
 	    #{operationType},
-	    NOW()
+	    NOW(3)
 	  ) 
 	</insert>
 	
@@ -2237,7 +2237,7 @@
 	UPDATE `processtask_step_content`
 	SET
 	  `content_hash` = #{contentHash},
-	  `lcd` = NOW(),
+	  `lcd` = NOW(3),
 	  `lcu` = #{lcu}
 	WHERE `id` = #{id}
 	</update>

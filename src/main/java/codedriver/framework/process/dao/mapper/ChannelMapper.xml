@@ -738,7 +738,7 @@
 	</insert>
 
 	<insert id="replaceChannelUser">
-		REPLACE INTO `channel_user`(`user_uuid`, `channel_uuid`, `insert_time`) VALUES(#{userUuid}, #{channelUuid}, now())
+		REPLACE INTO `channel_user`(`user_uuid`, `channel_uuid`, `insert_time`) VALUES(#{userUuid}, #{channelUuid}, now(3))
 	</insert>
 
 	<insert id="insertChannelPriority">

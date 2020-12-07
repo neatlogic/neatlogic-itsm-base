@@ -440,7 +440,7 @@
 		#{name},
 		#{isActive},
 		#{config},
-		now(),
+		now(3),
 		#{fcu}
 		)
 	</insert>
@@ -567,7 +567,7 @@
 		#{processUuid},
 		#{name},
 		#{config},
-		now(),
+		now(3),
 		#{fcu},
 		#{md5}
 		)
