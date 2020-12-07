@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,11 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     @Override
     public String getName() {
         return "日期 + 自增序列";
+    }
+    
+    @PostConstruct
+    public void init() {
+        
     }
 
     @Override
