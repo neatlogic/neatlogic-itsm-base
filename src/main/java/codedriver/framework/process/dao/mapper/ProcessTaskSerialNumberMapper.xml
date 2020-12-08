@@ -54,8 +54,8 @@
 	</update>
 
 	<update id="updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid" parameterType="java.lang.String">
-		UPDATE `processtask_serial_number_policy` SET `serial_number_seed` = `serial_number_seed` + 1
-		WHERE `channel_type_uuid` = #{value}
+		UPDATE `processtask_serial_number_policy` SET `serial_number_seed` = #{serialNumberSeed}
+		WHERE `channel_type_uuid` = #{channelTypeUuid}
 	</update>
 
 </mapper>

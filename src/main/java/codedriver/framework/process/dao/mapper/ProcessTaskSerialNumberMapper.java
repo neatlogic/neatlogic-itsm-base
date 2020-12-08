@@ -17,7 +17,7 @@ public interface ProcessTaskSerialNumberMapper {
 
     public int updateProcessTaskSerialNumberPolicyByChannelTypeUuid(ProcessTaskSerialNumberPolicyVo policyVo);
 
-    public int updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(String channelTypeUuid);
+    public int updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(@Param("channelTypeUuid") String channelTypeUuid, @Param("serialNumberSeed") Long serialNumberSeed);
 
     public int insertProcessTaskSerialNumber(@Param("processTaskId") Long processTaskId,
         @Param("serialNumber") String serialNumber);

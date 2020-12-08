@@ -107,13 +107,13 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
-        long max = (long)Math.pow(10, digits);
+        long max = (long)Math.pow(10, digits) - 1;
         long serialNumberSeed = processTaskSerialNumberPolicyVo.getSerialNumberSeed();
         if(serialNumberSeed > max) {
             serialNumberSeed -= max;
         }
         processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
-            processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+            processTaskSerialNumberPolicyVo.getChannelTypeUuid(), serialNumberSeed + 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(new Date())
             + String.format("%0" + digits + "d", serialNumberSeed);
@@ -126,7 +126,8 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
             /** 加锁 **/
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
                 processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
-            Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
+            int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
+            long max = (long)Math.pow(10, digits) - 1;
             long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
             long serialNumberSeed = startValue;
             String timeFormat = null;
@@ -149,10 +150,13 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
                     processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
                     processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
                     serialNumberSeed++;
+                    if(serialNumberSeed > max) {
+                        serialNumberSeed -= max;
+                    }
                 }
             }
             processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
-            processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicyByChannelTypeUuid(processTaskSerialNumberPolicyVo);
+            processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(channelTypeUuid, startValue);
         }
         return rowNum;
     }
@@ -208,7 +212,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
                     startValue = value;
                 }
                 processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
-                processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicyByChannelTypeUuid(processTaskSerialNumberPolicyVo);
+                processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(channelTypeUuid, startValue);
             }
         }
     }

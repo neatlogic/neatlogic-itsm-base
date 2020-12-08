@@ -72,10 +72,15 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
 
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
+        int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
+        long max = (long)Math.pow(10, digits) - 1;
+        long serialNumberSeed = processTaskSerialNumberPolicyVo.getSerialNumberSeed();
+        if(serialNumberSeed > max) {
+            serialNumberSeed -= max;
+        }
         processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
-            processTaskSerialNumberPolicyVo.getChannelTypeUuid());
-        Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
-        return String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
+            processTaskSerialNumberPolicyVo.getChannelTypeUuid(), serialNumberSeed + 1);
+        return String.format("%0" + digits + "d", serialNumberSeed);
     }
 
     @Override
@@ -85,7 +90,8 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
             /** 加锁 **/
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
                 processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
-            Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
+            int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
+            long max = (long)Math.pow(10, digits) - 1;
             long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
             int pageSize = 1000;
             int pageCount = PageUtil.getPageCount(rowNum, pageSize);
@@ -100,10 +106,13 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
                     processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
                     processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
                     startValue++;
+                    if(startValue > max) {
+                        startValue -= max;
+                    }
                 }
             }
             processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
-            processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicyByChannelTypeUuid(processTaskSerialNumberPolicyVo);
+            processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(channelTypeUuid, startValue);
         }
         return rowNum;
     }
