@@ -30,6 +30,8 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	private Integer sort;
 	@EntityField(name = "工单号前缀", type = ApiParamType.STRING)
 	private String prefix;
+	@EntityField(name = "工单号策略", type = ApiParamType.STRING)
+	private String handler;
 	
 	@JSONField(serialize=false)
 	private transient String keyword;
@@ -104,5 +106,11 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
 	}
+    public String getHandler() {
+        return handler;
+    }
+    public void setHandler(String handler) {
+        this.handler = handler;
+    }
 	
 }

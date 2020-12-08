@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.annotation.Order;
 
+import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.RootComponent;
 import codedriver.framework.dto.ModuleVo;
@@ -20,14 +20,9 @@ import codedriver.framework.process.dto.ProcessStepHandlerVo;
 
 @RootComponent
 @Order(10)
-public class ProcessStepHandlerFactory implements ApplicationListener<ContextRefreshedEvent> {
+public class ProcessStepHandlerFactory extends ApplicationListenerBase {
 	private static Map<String, IProcessStepHandler> componentMap = new HashMap<String, IProcessStepHandler>();
 	private static List<ProcessStepHandlerVo> processStepHandlerList = new ArrayList<>();
-
-	// @PostConstruct
-	// public void init() {
-	// processStepHandlerMapper.resetProcessStepHandler();
-	// }
 
 	public static IProcessStepHandler getHandler(String handler) {
 //		if (!componentMap.containsKey(handler) || componentMap.get(handler) == null) {
@@ -81,4 +76,9 @@ public class ProcessStepHandlerFactory implements ApplicationListener<ContextRef
 			}
 		}
 	}
+
+    @Override
+    protected void myInit() {
+        
+    }
 }
