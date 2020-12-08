@@ -45,7 +45,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
     @Autowired
     private ProcessTaskMapper processTaskMapper;
-    
+
     @Autowired
     private TenantMapper tenantMapper;
 
@@ -152,18 +152,20 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     }
 
     @PostConstruct
-    public void init() {       
+    public void init() {
         List<TenantVo> tenantList = tenantMapper.getAllActiveTenant();
         for (TenantVo tenantVo : tenantList) {
-            CachedThreadPool.execute(new ScheduleLoadJobRunner(tenantVo.getUuid()));            
-        }       
+            CachedThreadPool.execute(new ScheduleLoadJobRunner(tenantVo.getUuid()));
+        }
     }
 
     class ScheduleLoadJobRunner extends CodeDriverThread {
         private String tenantUuid;
+
         public ScheduleLoadJobRunner(String _tenantUuid) {
             tenantUuid = _tenantUuid;
         }
+
         @Override
         protected void execute() {
             String oldThreadName = Thread.currentThread().getName();
@@ -173,7 +175,8 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
                 TenantContext.get().switchTenant(tenantUuid).setUseDefaultDatasource(false);
                 IJob job = SchedulerManager.getHandler(ProcessTaskSerialNumberSeedResetJob.class.getName());
                 JobObject.Builder jobObjectBuilder = new JobObject.Builder(UuidUtil.randomUuid(), job.getGroupName(),
-                    job.getClassName(), TenantContext.get().getTenantUuid()).addData("handler", DateTimeAndAutoIncrementPolicy.class.getName());
+                    job.getClassName(), TenantContext.get().getTenantUuid()).addData("handler",
+                        DateTimeAndAutoIncrementPolicy.class.getName());
                 JobObject jobObject = jobObjectBuilder.build();
                 job.reloadJob(jobObject);
             } catch (Exception e) {
@@ -181,8 +184,9 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
             } finally {
                 Thread.currentThread().setName(oldThreadName);
             }
-        }    
+        }
     }
+
     @Component
     private static class ProcessTaskSerialNumberSeedResetJob extends JobBase {
 
@@ -222,7 +226,6 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
         @Override
         public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
-            System.out.println("dddddddddddddd");
             String handler = (String)jobObject.getData("handler");
             List<ProcessTaskSerialNumberPolicyVo> processTaskSerialNumberPolicyList =
                 processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyListByHandler(handler);
