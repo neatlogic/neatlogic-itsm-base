@@ -123,6 +123,8 @@
 		FROM `process_comment_template` a
 		join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
+		left join `process_comment_template_usecount` c
+		on a.`id` = c.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
 				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
@@ -137,7 +139,7 @@
 				</foreach>
 			</if>
 		</where>
-		ORDER BY a.`lcd` desc
+		ORDER BY c.`count` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
@@ -164,8 +166,8 @@
 
 	<select id="getTemplateByStepUuidAndAuth" resultType="codedriver.framework.process.dto.ProcessCommentTemplateVo" useCache="false">
 		SELECT
-		`id`,
-		`content`
+		a.`id`,
+		a.`content`
 		FROM `process_comment_template` a
 		JOIN `process_step_comment_template` b ON a.`id` = b.`comment_template_id`
 		JOIN `process_comment_template_authority` c ON a.id = c.`comment_template_id`
@@ -178,6 +180,18 @@
 		limit 1
 	</select>
 
+	<select id="getTemplateUseCount" resultType="codedriver.framework.process.dto.ProcessCommentTemplateUseCountVo" useCache="false">
+		SELECT
+		`comment_template_id` as commentTemplateId,
+		`user_uuid` as userUuid,
+		`count`
+		FROM `process_comment_template_usecount`
+		WHERE
+		`comment_template_id` = #{templateId}
+		and `user_uuid` = #{userUuid}
+		for update
+	</select>
+
 	<update id="updateTemplate" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo">
 		update
 		`process_comment_template`
@@ -186,6 +200,14 @@
 		`lcu` = #{lcu},
 		`lcd` = now(3)
 		where `id` = #{id}
+	</update>
+
+	<update id="updateTemplateUseCount" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo">
+		update `process_comment_template_usecount`
+		set `count` = `count` + 1
+		WHERE
+		`comment_template_id` = #{templateId}
+		and `user_uuid` = #{userUuid}
 	</update>
 
 	<insert id="insertTemplate" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo">
@@ -222,6 +244,20 @@
 			#{item.uuid}
 			)
 		</foreach>
+	</insert>
+
+	<insert id="insertTemplateUseCount">
+		INSERT INTO `process_comment_template_usecount`(
+		  `comment_template_id`,
+		  `user_uuid`,
+		  `count`
+		)
+		VALUES
+		(
+		  #{templateId},
+		  #{userUuid},
+		  0
+		)
 	</insert>
 
 	<delete id="deleteTemplate" parameterType="java.lang.Long">
