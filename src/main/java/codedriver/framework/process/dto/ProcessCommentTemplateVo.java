@@ -52,6 +52,8 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 	private List<String> authList;
 	@JSONField(serialize = false)
 	private List<ProcessCommentTemplateAuthVo> authVoList;
+	@EntityField(name = "当前用户是否可编辑", type = ApiParamType.INTEGER)
+	private Integer isEditable;
 
 	public ProcessCommentTemplateVo() {}
 
@@ -105,5 +107,13 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 
 	public void setAuthVoList(List<ProcessCommentTemplateAuthVo> authVoList) {
 		this.authVoList = authVoList;
+	}
+
+	public Integer getIsEditable() {
+		return isEditable;
+	}
+
+	public void setIsEditable(Integer isEditable) {
+		this.isEditable = isEditable;
 	}
 }
