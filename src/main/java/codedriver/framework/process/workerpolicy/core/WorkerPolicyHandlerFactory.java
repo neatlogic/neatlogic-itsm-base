@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.common.RootComponent;
 import codedriver.framework.process.dto.WorkerPolicyVo;
 
 @RootComponent
-public class WorkerPolicyHandlerFactory implements ApplicationListener<ContextRefreshedEvent> {
+public class WorkerPolicyHandlerFactory extends ApplicationListenerBase {
 
 	private static Map<String, IWorkerPolicyHandler> componentMap = new HashMap<String, IWorkerPolicyHandler>();
 
@@ -46,4 +46,9 @@ public class WorkerPolicyHandlerFactory implements ApplicationListener<ContextRe
 			}
 		}
 	}
+
+    @Override
+    protected void myInit() {
+        
+    }
 }
