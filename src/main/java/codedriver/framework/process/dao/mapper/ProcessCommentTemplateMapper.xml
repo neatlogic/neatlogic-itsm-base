@@ -162,6 +162,22 @@
 		</if>
 	</select>
 
+	<select id="getTemplateByStepUuidAndAuth" resultType="codedriver.framework.process.dto.ProcessCommentTemplateVo" useCache="false">
+		SELECT
+		`id`,
+		`content`
+		FROM `process_comment_template` a
+		JOIN `process_step_comment_template` b ON a.`id` = b.`comment_template_id`
+		JOIN `process_comment_template_authority` c ON a.id = c.`comment_template_id`
+		WHERE
+		b.`process_step_uuid` = #{stepUuid}
+		AND c.`uuid` IN
+		<foreach collection="authList" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		limit 1
+	</select>
+
 	<update id="updateTemplate" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo">
 		update
 		`process_comment_template`

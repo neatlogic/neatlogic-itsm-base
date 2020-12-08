@@ -102,6 +102,8 @@ public interface ProcessMapper {
 	
 	public int insertProcessTag(ProcessTagVo processTagVo);
 
+	public int insertProcessStepCommentTemplate(ProcessStepVo vo);
+
 	public int updateProcess(ProcessVo processVo);
 
 	public int deleteProcessStepByProcessUuid(String processUuid);

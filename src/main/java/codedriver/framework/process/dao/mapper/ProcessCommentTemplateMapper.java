@@ -3,6 +3,7 @@ package codedriver.framework.process.dao.mapper;
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.dto.ProcessCommentTemplateAuthVo;
 import codedriver.framework.process.dto.ProcessCommentTemplateVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public interface ProcessCommentTemplateMapper {
     public List<ProcessCommentTemplateVo> searchTemplateForTask(ProcessCommentTemplateVo vo);
 
     public List<ValueTextVo> searchTemplateForSelect(ProcessCommentTemplateVo vo);
+
+    public ProcessCommentTemplateVo getTemplateByStepUuidAndAuth(@Param("stepUuid") String uuid,@Param("authList") List<String> authList);
 
     public int updateTemplate(ProcessCommentTemplateVo vo);
 
