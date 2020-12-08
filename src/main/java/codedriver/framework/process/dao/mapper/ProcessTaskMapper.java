@@ -337,9 +337,6 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
-    public int insertProcessTaskSerialNumber(@Param("processTaskId") Long processTaskId,
-        @Param("serialNumber") String serialNumber);
-
     @ESSearch
     public int updateProcessTaskStepStatus(@ESParam("processtask") ProcessTaskStepVo processTaskStepVo);
 

@@ -2234,10 +2234,6 @@
 		)
 	</insert>
 
-	<insert id="insertProcessTaskSerialNumber">
-		INSERT IGNORE INTO `processtask_serial_number` (`processtask_id`, `serial_number`) VALUES (#{processTaskId}, #{serialNumber})
-	</insert>
-
 	<update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		UPDATE
 		`processtask_sla_transfer`

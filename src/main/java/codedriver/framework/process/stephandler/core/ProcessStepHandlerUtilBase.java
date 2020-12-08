@@ -67,6 +67,7 @@ import codedriver.framework.process.dao.mapper.PriorityMapper;
 import codedriver.framework.process.dao.mapper.ProcessMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskSerialNumberMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
 import codedriver.framework.process.dao.mapper.WorktimeMapper;
@@ -137,6 +138,7 @@ public abstract class ProcessStepHandlerUtilBase {
     protected static ScoreTemplateMapper scoreTemplateMapper;
     protected static ProcessTaskScoreMapper processTaskScoreMapper;
     private static TransactionUtil transactionUtil;
+    protected static ProcessTaskSerialNumberMapper processTaskSerialNumberMapper;
 
     @Autowired
     public void setProcessMapper(ProcessMapper _processMapper) {
@@ -226,6 +228,10 @@ public abstract class ProcessStepHandlerUtilBase {
     @Autowired
     public void settransactionUtil(TransactionUtil _transactionUtil) {
         transactionUtil = _transactionUtil;
+    }
+    @Autowired
+    public static void setProcessTaskSerialNumberMapper(ProcessTaskSerialNumberMapper _processTaskSerialNumberMapper) {
+        processTaskSerialNumberMapper = _processTaskSerialNumberMapper;
     }
 
     protected static class ActionHandler extends CodeDriverThread {

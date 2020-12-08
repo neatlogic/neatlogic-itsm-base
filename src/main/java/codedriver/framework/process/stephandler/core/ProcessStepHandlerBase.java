@@ -1502,7 +1502,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             processTaskVo.setWorktimeUuid(channelVo.getWorktimeUuid());
             /** 生成工单号 **/
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
-                channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelVo.getChannelTypeUuid());
+                processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelVo.getChannelTypeUuid());
             if (processTaskSerialNumberPolicyVo == null) {
                 throw new ProcessTaskSerialNumberPolicyNotFoundException(channelVo.getChannelTypeUuid());
             }
@@ -1514,7 +1514,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             }
             String serialNumber = policyHandler.genarate(processTaskSerialNumberPolicyVo);
             processTaskVo.setSerialNumber(serialNumber);
-            processTaskMapper.insertProcessTaskSerialNumber(processTaskVo.getId(), serialNumber);
+            processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTaskVo.getId(), serialNumber);
             /** 创建工单 **/
             processTaskMapper.insertProcessTask(processTaskVo);
             currentProcessTaskStepVo.setProcessTaskId(processTaskVo.getId());

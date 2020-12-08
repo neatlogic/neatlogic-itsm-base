@@ -8,24 +8,33 @@ import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 
+import org.quartz.CronExpression;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.common.util.PageUtil;
-import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskSerialNumberMapper;
 import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
+import codedriver.framework.scheduler.core.IJob;
+import codedriver.framework.scheduler.core.JobBase;
+import codedriver.framework.scheduler.core.SchedulerManager;
+import codedriver.framework.scheduler.dto.JobObject;
 
 @Service
 public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandler {
 
     @Autowired
-    private ChannelMapper channelMapper;
+    private ProcessTaskSerialNumberMapper processTaskSerialNumberMapper;
 
     @Autowired
     private ProcessTaskMapper processTaskMapper;
@@ -35,9 +44,24 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
         return "日期 + 自增序列";
     }
     
+    private static String cron = "0 0 0 * * ?";
+    
     @PostConstruct
     public void init() {
-        
+        System.out.println("111111111111111111");
+        List<ProcessTaskSerialNumberPolicyVo> processTaskSerialNumberPolicyList =
+            processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyListByHandler(this.getHandler());
+        IJob job = SchedulerManager.getHandler(codedriver.framework.process.processtaskserialnumberpolicy.handler.DateTimeAndAutoIncrementPolicy.ProcessTaskSerialNumberSeedResetJob.class.getName());
+        for (ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo : processTaskSerialNumberPolicyList) {
+                if (CronExpression.isValidExpression(cron)) {
+                    JobObject.Builder jobObjectBuilder =
+                        new JobObject.Builder(processTaskSerialNumberPolicyVo.getChannelTypeUuid(), job.getGroupName(),
+                            job.getClassName(), TenantContext.get().getTenantUuid()).addData("channelTypeUuid",
+                                processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+                    JobObject jobObject = jobObjectBuilder.build();
+                    job.reloadJob(jobObject);
+                }
+        }
     }
 
     @Override
@@ -82,12 +106,17 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
-        channelMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
+        int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
+        long max = (long)Math.pow(10, digits);
+        long serialNumberSeed = processTaskSerialNumberPolicyVo.getSerialNumberSeed();
+        if(serialNumberSeed > max) {
+            serialNumberSeed -= max;
+        }
+        processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
             processTaskSerialNumberPolicyVo.getChannelTypeUuid());
-        Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(new Date())
-            + String.format("%0" + digits + "d", processTaskSerialNumberPolicyVo.getSerialNumberSeed());
+            + String.format("%0" + digits + "d", serialNumberSeed);
     }
 
     @Override
@@ -96,7 +125,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
         if (rowNum > 0) {
             /** 加锁 **/
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
-                channelMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
+                processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
             Integer digits = processTaskSerialNumberPolicyVo.getConfig().getInteger("digits");
             long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
             long serialNumberSeed = startValue;
@@ -118,19 +147,69 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
                     }
                     String serialNumber = startTimeFormat + String.format("%0" + digits + "d", serialNumberSeed);
                     processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
-                    processTaskMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
+                    processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
                     serialNumberSeed++;
                 }
             }
             processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
-            channelMapper.updateProcessTaskSerialNumberPolicyByChannelTypeUuid(processTaskSerialNumberPolicyVo);
+            processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicyByChannelTypeUuid(processTaskSerialNumberPolicyVo);
         }
         return rowNum;
     }
 
-    @Override
-    public String getSerialNumberSeedResetCron() {
-        return "0 0 0 * * ?";
-    }
+    @Component
+    private static class ProcessTaskSerialNumberSeedResetJob extends JobBase {
 
+        @Autowired
+        private ProcessTaskSerialNumberMapper processTaskSerialNumberMapper;
+
+        @Override
+        public String getGroupName() {
+            return TenantContext.get().getTenantUuid() + "-PROCESSTASK-SERIALNUMBERSEED-RESET";
+        }
+
+        @Override
+        public Boolean checkCronIsExpired(JobObject jobObject) {
+            return true;
+        }
+
+        @Override
+        public void reloadJob(JobObject jobObject) {
+            String tenantUuid = jobObject.getTenantUuid();
+            TenantContext.get().switchTenant(tenantUuid);
+            String channelTypeUuid = (String)jobObject.getData("channelTypeUuid");
+            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
+                processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
+            if (processTaskSerialNumberPolicyVo != null) {
+                if (CronExpression.isValidExpression(cron)) {
+                    JobObject.Builder newJobObjectBuilder = new JobObject.Builder(channelTypeUuid, this.getGroupName(),
+                        this.getClassName(), TenantContext.get().getTenantUuid()).withCron(cron)
+                            .addData("channelTypeUuid", channelTypeUuid);
+                    JobObject newJobObject = newJobObjectBuilder.build();
+                    schedulerManager.loadJob(newJobObject);
+                }
+            }
+        }
+
+        @Override
+        public void initJob(String tenantUuid) {
+            
+        }
+
+        @Override
+        public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
+            String channelTypeUuid = (String)jobObject.getData("channelTypeUuid");
+            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
+                processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
+            if (processTaskSerialNumberPolicyVo != null) {
+                Long startValue = 1L;
+                Long value = processTaskSerialNumberPolicyVo.getConfig().getLong("startValue");
+                if (value != null) {
+                    startValue = value;
+                }
+                processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
+                processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicyByChannelTypeUuid(processTaskSerialNumberPolicyVo);
+            }
+        }
+    }
 }

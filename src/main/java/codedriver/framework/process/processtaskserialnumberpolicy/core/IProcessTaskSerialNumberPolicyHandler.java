@@ -21,8 +21,6 @@ public interface IProcessTaskSerialNumberPolicyHandler {
     @Transactional
     public int batchUpdateHistoryProcessTask(String channelTypeUuid);
 
-    public String getSerialNumberSeedResetCron();
-
     public default String getHandler() {
         return ClassUtils.getUserClass(this.getClass()).getName();
     }

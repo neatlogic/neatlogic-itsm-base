@@ -718,26 +718,6 @@
 		limit 1) a
 	</select>
 
-	<select id="getProcessTaskSerialNumberPolicyLockByChannelTypeUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
-		SELECT
-		`channel_type_uuid` AS channelTypeUuid,
-		`handler`,
-		`config`,
-		`serial_number_seed` AS serialNumberSeed
-		FROM `processtask_serial_number_policy`
-		WHERE `channel_type_uuid` = #{value}
-	</select>
-
-	<select id="getAllProcessTaskSerialNumberPolicyList" resultType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
-		SELECT
-		`channel_type_uuid` AS channelTypeUuid,
-		`handler`,
-		`config`,
-		`serial_number_seed` AS serialNumberSeed
-		FROM
-		`processtask_serial_number_policy`
-	</select>
-
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
@@ -898,22 +878,6 @@
 		)
 	</insert>
 
-	<insert id="insertProcessTaskSerialNumberPolicy" parameterType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
-		INSERT INTO `processtask_serial_number_policy` (
-		`channel_type_uuid`,
-		`handler`,
-		`config`,
-		`serial_number_seed`
-		)
-		VALUES
-		(
-		#{channelTypeUuid},
-		#{handler},
-		#{configStr},
-		#{serialNumberSeed}
-		)
-	</insert>
-
 	<update id="updateChannelForMove" parameterType="codedriver.framework.process.dto.ChannelVo">
 		UPDATE `channel` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
 	</update>
@@ -956,21 +920,6 @@
 		`name` = #{name},
 		`is_active` = #{isActive}
 		WHERE `id` = #{id}
-	</update>
-
-	<update id="updateProcessTaskSerialNumberPolicyByChannelTypeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
-		UPDATE `processtask_serial_number_policy`
-		SET
-		`handler` = #{handler},
-		`config` = #{configStr},
-		`serial_number_seed`
-		= #{serialNumberSeed}
-		WHERE `channel_type_uuid` = #{channelTypeUuid}
-	</update>
-
-	<update id="updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid" parameterType="java.lang.String">
-		UPDATE `processtask_serial_number_policy` SET `serial_number_seed` = `serial_number_seed` + 1
-		WHERE `channel_type_uuid` = #{value}
 	</update>
 
 	<delete id="deleteChannelUser">
