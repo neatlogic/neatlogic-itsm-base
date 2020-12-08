@@ -54,7 +54,7 @@
 		WHERE `channel_type_uuid` = #{channelTypeUuid}
 	</update>
 
-	<update id="updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid" parameterType="java.lang.String">
+	<update id="updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid">
 		UPDATE `processtask_serial_number_policy` SET `serial_number_seed` = #{serialNumberSeed}
 		WHERE
 		`channel_type_uuid` = #{channelTypeUuid}

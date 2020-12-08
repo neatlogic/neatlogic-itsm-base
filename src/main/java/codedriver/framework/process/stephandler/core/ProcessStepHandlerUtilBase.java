@@ -230,7 +230,7 @@ public abstract class ProcessStepHandlerUtilBase {
         transactionUtil = _transactionUtil;
     }
     @Autowired
-    public static void setProcessTaskSerialNumberMapper(ProcessTaskSerialNumberMapper _processTaskSerialNumberMapper) {
+    public void setProcessTaskSerialNumberMapper(ProcessTaskSerialNumberMapper _processTaskSerialNumberMapper) {
         processTaskSerialNumberMapper = _processTaskSerialNumberMapper;
     }
 

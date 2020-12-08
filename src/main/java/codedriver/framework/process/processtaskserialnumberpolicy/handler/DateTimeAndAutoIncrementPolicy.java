@@ -186,7 +186,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     @Component
     private static class ProcessTaskSerialNumberSeedResetJob extends JobBase {
 
-        private String cron = "0 * * * * ?";
+        private String cron = "0 0 0 * * ?";
 
         @Autowired
         private ProcessTaskSerialNumberMapper processTaskSerialNumberMapper;
