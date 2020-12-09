@@ -166,6 +166,7 @@
 
 	<select id="getTemplateByStepUuidAndAuth" resultType="codedriver.framework.process.dto.ProcessCommentTemplateVo" useCache="false">
 		SELECT
+		DISTINCT
 		a.`id`,
 		a.`content`
 		FROM `process_comment_template` a
@@ -177,7 +178,6 @@
 		<foreach collection="authList" item="item" open="(" separator="," close=")">
 			#{item}
 		</foreach>
-		limit 1
 	</select>
 
 	<select id="getTemplateUseCount" resultType="codedriver.framework.process.dto.ProcessCommentTemplateUseCountVo" useCache="false">

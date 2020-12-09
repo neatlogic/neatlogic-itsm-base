@@ -663,4 +663,8 @@
 	JOIN `process_step_sla` pss ON pss.`sla_uuid`=ps.`uuid`
 	WHERE `process_uuid` = #{processUuid}
 	</delete>
+
+	<delete id="deleteProcessStepCommentTemplate" parameterType="java.lang.String">
+		DELETE FROM `process_step_comment_template` WHERE `process_step_uuid` = #{value}
+	</delete>
 </mapper>
