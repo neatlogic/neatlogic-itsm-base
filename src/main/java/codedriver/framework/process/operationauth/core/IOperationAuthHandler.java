@@ -13,8 +13,16 @@ import codedriver.framework.process.dto.ProcessTaskVo;
 public interface IOperationAuthHandler {
     public Map<ProcessTaskOperationType, TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String>> getOperationBiPredicateMap();
     
-	public IOperationAuthHandlerType getHandler();
+	public String getHandler();
 
+	default Map<ProcessTaskOperationType, Boolean> getOperateMap(ProcessTaskVo processTaskVo, String userUuid) {
+        return getOperateMap(processTaskVo, null, userUuid);
+    }
+
+    default Map<ProcessTaskOperationType, Boolean> getOperateMap(ProcessTaskVo processTaskVo, String userUuid, List<ProcessTaskOperationType> operationTypeList) {    
+        return getOperateMap(processTaskVo, null, userUuid, operationTypeList);
+    }
+    
     default Map<ProcessTaskOperationType, Boolean> getOperateMap(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, String userUuid) {
         Map<ProcessTaskOperationType, Boolean> resultMap = new HashMap<>();
         for(Entry<ProcessTaskOperationType, TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String>> entry : getOperationBiPredicateMap().entrySet()) {
