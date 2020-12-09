@@ -115,7 +115,7 @@ public class ProcessOperateManager {
 	            List<Long> processTaskStepIdList = processTaskStepIdListMap.get(processTaskVo.getId());
 	            if(CollectionUtils.isNotEmpty(processTaskStepIdList)) {
 	                IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.STEP.getValue());
-	                Map<Long, ProcessTaskStepVo> processTaskStepMap = processTaskVo.getProcessTaskStepList().stream().collect(Collectors.toMap(e -> e.getId(), e -> e));
+	                Map<Long, ProcessTaskStepVo> processTaskStepMap = processTaskVo.getStepList().stream().collect(Collectors.toMap(e -> e.getId(), e -> e));
 	                for(Long processTaskStepId : processTaskStepIdList) {
 	                    ProcessTaskStepVo processTaskStepVo = processTaskStepMap.get(processTaskStepId);
 	                    if(processTaskStepVo != null) {

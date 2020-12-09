@@ -37,9 +37,10 @@ public interface IOperationAuthHandler {
             TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String> predicate = getOperationBiPredicateMap().get(operationType);
             if(predicate != null) {
                 resultMap.put(operationType, predicate.test(processTaskVo, processTaskStepVo, userUuid));
-            }else {
-                resultMap.put(operationType, false);
             }
+//            else {
+//                resultMap.put(operationType, false);
+//            }
         }    
         return resultMap;
     }
