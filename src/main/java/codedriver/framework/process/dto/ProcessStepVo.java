@@ -32,6 +32,7 @@ public class ProcessStepVo implements Serializable {
 	private List<ProcessStepWorkerPolicyVo> workerPolicyList;
 	private List<ProcessStepTimeoutPolicyVo> timeoutPolicyList;
 	private List<ProcessStepFormAttributeVo> formAttributeList;
+	private Long commentTemplateId;//回复模版ID
 	@JSONField(serialize=false)
 	private transient Long notifyPolicyId;
 	@JSONField(serialize=false)
@@ -218,4 +219,11 @@ public class ProcessStepVo implements Serializable {
 		this.integrationUuidList = integrationUuidList;
 	}
 
+	public Long getCommentTemplateId() {
+		return commentTemplateId;
+	}
+
+	public void setCommentTemplateId(Long commentTemplateId) {
+		this.commentTemplateId = commentTemplateId;
+	}
 }

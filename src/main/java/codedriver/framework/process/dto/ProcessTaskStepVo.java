@@ -124,6 +124,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private String originalUser;
     @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
     private String originalUserName;
+    @EntityField(name = "回复模版")
+    private ProcessCommentTemplateVo commentTemplate;
     
     private transient int updateActiveTime;
     private transient int updateStartTime;
@@ -692,4 +694,11 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.updateEndTime = updateEndTime;
     }
 
+	public ProcessCommentTemplateVo getCommentTemplate() {
+		return commentTemplate;
+	}
+
+	public void setCommentTemplate(ProcessCommentTemplateVo commentTemplate) {
+		this.commentTemplate = commentTemplate;
+	}
 }

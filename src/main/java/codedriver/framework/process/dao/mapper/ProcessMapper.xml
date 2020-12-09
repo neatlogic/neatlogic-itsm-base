@@ -578,6 +578,11 @@
 		VALUES (#{id}, #{name})
 	</insert>
 
+	<insert id="insertProcessStepCommentTemplate" parameterType="codedriver.framework.process.dto.ProcessStepVo">
+		INSERT INTO `process_step_comment_template` (`process_step_uuid`, `comment_template_id`)
+		VALUES (#{uuid}, #{commentTemplateId})
+	</insert>
+
 	<update id="updateProcess" parameterType="codedriver.framework.process.dto.ProcessVo">
 		UPDATE `process` SET
 		<if test="name != null and name != ''">
@@ -657,5 +662,9 @@
 	FROM `process_sla` ps
 	JOIN `process_step_sla` pss ON pss.`sla_uuid`=ps.`uuid`
 	WHERE `process_uuid` = #{processUuid}
+	</delete>
+
+	<delete id="deleteProcessStepCommentTemplate" parameterType="java.lang.String">
+		DELETE FROM `process_step_comment_template` WHERE `process_step_uuid` = #{value}
 	</delete>
 </mapper>

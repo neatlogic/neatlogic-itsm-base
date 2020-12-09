@@ -102,6 +102,8 @@ public interface ProcessMapper {
 	
 	public int insertProcessTag(ProcessTagVo processTagVo);
 
+	public int insertProcessStepCommentTemplate(ProcessStepVo vo);
+
 	public int updateProcess(ProcessVo processVo);
 
 	public int deleteProcessStepByProcessUuid(String processUuid);
@@ -125,5 +127,7 @@ public interface ProcessMapper {
 	public int deleteProcessDraftByUuid(String uuid);
 
 	public int deleteProcessSlaByProcessUuid(String uuid);
+
+	public int deleteProcessStepCommentTemplate(String stepUuid);
 
 }
