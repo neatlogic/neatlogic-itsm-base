@@ -1,6 +1,7 @@
 package codedriver.framework.process.processtaskserialnumberpolicy.handler;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.asynchronization.thread.CodeDriverThread;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
+import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.common.util.PageUtil;
 import codedriver.framework.dao.mapper.TenantMapper;
 import codedriver.framework.dto.TenantVo;
@@ -51,9 +53,10 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
     @Override
     public String getName() {
-        return "日期 + 自增序列";
+        return "年月日 + 自增序列";
     }
 
+    @SuppressWarnings("serial")
     @Override
     public JSONArray makeupFormAttributeList() {
         JSONArray resultArray = new JSONArray();
@@ -62,21 +65,39 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("type", "text");
             jsonObj.put("name", "startValue");
-            jsonObj.put("label", "起始值");
-            jsonObj.put("validateList", Arrays.asList("required"));
             jsonObj.put("value", "");
-            jsonObj.put("defaultValue", "");
+            jsonObj.put("defaultValue", 1);
+            jsonObj.put("width", 200);
+            jsonObj.put("maxlength", 5);
+            jsonObj.put("label", "起始位");
+            jsonObj.put("validateList", Arrays.asList("required", new JSONObject() {
+                {
+                    this.put("name", "number");
+                    this.put("message", "请输入正整数");
+                }
+            }));
+            jsonObj.put("placeholder", "1-99999");
             resultArray.add(jsonObj);
         }
         {
             /** 位数 **/
             JSONObject jsonObj = new JSONObject();
-            jsonObj.put("type", "text");
+            jsonObj.put("type", "select");
             jsonObj.put("name", "digits");
-            jsonObj.put("label", "位数");
-            jsonObj.put("validateList", Arrays.asList("required"));
             jsonObj.put("value", "");
             jsonObj.put("defaultValue", "");
+            jsonObj.put("width", 200);
+            jsonObj.put("label", "工单号位数");
+            jsonObj.put("maxlength", 5);
+            jsonObj.put("validateList", Arrays.asList("required"));
+            jsonObj.put("dataList", new ArrayList<ValueTextVo>() {
+                {
+                    this.add(new ValueTextVo(13, "13"));
+                    this.add(new ValueTextVo(14, "14"));
+                    this.add(new ValueTextVo(15, "15"));
+                    this.add(new ValueTextVo(16, "16"));
+                }
+            });
             resultArray.add(jsonObj);
         }
         return resultArray;
@@ -97,6 +118,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
+        digits -= 8;
         long max = (long)Math.pow(10, digits) - 1;
         long serialNumberSeed = processTaskSerialNumberPolicyVo.getSerialNumberSeed();
         if (serialNumberSeed > max) {
@@ -116,6 +138,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
                 processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
             int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
+            digits -= 8;
             long max = (long)Math.pow(10, digits) - 1;
             long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
             long serialNumberSeed = startValue;
