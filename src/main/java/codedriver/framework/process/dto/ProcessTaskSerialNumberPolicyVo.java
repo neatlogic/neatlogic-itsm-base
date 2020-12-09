@@ -2,15 +2,18 @@ package codedriver.framework.process.dto;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 
 public class ProcessTaskSerialNumberPolicyVo {
-
-    private String channelTypeUuid;
+    @JSONField(serialize = false)
+    private transient String channelTypeUuid;
     private String handler;
     private String name;
     private JSONArray formAttributeList;
-    private JSONObject config;
-    private Long serialNumberSeed;
+    @JSONField(serialize = false)
+    private transient JSONObject config;
+    @JSONField(serialize = false)
+    private transient Long serialNumberSeed;
 
     public String getChannelTypeUuid() {
         return channelTypeUuid;
@@ -55,6 +58,7 @@ public class ProcessTaskSerialNumberPolicyVo {
         this.config = JSONObject.parseObject(config);
     }
 
+    @JSONField(serialize = false)
     public String getConfigStr() {
         if (config != null) {
             return config.toJSONString();

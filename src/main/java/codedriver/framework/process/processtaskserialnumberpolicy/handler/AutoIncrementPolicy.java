@@ -1,5 +1,6 @@
 package codedriver.framework.process.processtaskserialnumberpolicy.handler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.common.util.PageUtil;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskSerialNumberMapper;
@@ -30,6 +32,7 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
         return "自增序列";
     }
 
+    @SuppressWarnings("serial")
     @Override
     public JSONArray makeupFormAttributeList() {
         JSONArray resultArray = new JSONArray();
@@ -38,21 +41,39 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("type", "text");
             jsonObj.put("name", "startValue");
-            jsonObj.put("label", "起始值");
-            jsonObj.put("validateList", Arrays.asList("required"));
             jsonObj.put("value", "");
-            jsonObj.put("defaultValue", "");
+            jsonObj.put("defaultValue", 1);
+            jsonObj.put("width", 200);
+            jsonObj.put("maxlength", 5);
+            jsonObj.put("label", "起始位");
+            jsonObj.put("validateList", Arrays.asList("required", new JSONObject() {
+                {
+                    this.put("name", "number");
+                    this.put("message", "请输入正整数");
+                }
+            }));
+            jsonObj.put("placeholder", "1-99999");
             resultArray.add(jsonObj);
         }
         {
             /** 位数 **/
             JSONObject jsonObj = new JSONObject();
-            jsonObj.put("type", "text");
+            jsonObj.put("type", "select");
             jsonObj.put("name", "digits");
-            jsonObj.put("label", "位数");
-            jsonObj.put("validateList", Arrays.asList("required"));
             jsonObj.put("value", "");
             jsonObj.put("defaultValue", "");
+            jsonObj.put("width", 200);
+            jsonObj.put("label", "工单号位数");
+            jsonObj.put("maxlength", 5);
+            jsonObj.put("validateList", Arrays.asList("required"));
+            jsonObj.put("dataList", new ArrayList<ValueTextVo>() {
+                {
+                    this.add(new ValueTextVo(5, "5"));
+                    this.add(new ValueTextVo(6, "6"));
+                    this.add(new ValueTextVo(7, "7"));
+                    this.add(new ValueTextVo(8, "8"));
+                }
+            });
             resultArray.add(jsonObj);
         }
         return resultArray;
@@ -75,7 +96,7 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
         int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
         long max = (long)Math.pow(10, digits) - 1;
         long serialNumberSeed = processTaskSerialNumberPolicyVo.getSerialNumberSeed();
-        if(serialNumberSeed > max) {
+        if (serialNumberSeed > max) {
             serialNumberSeed -= max;
         }
         processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
@@ -106,13 +127,14 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
                     processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
                     processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
                     startValue++;
-                    if(startValue > max) {
+                    if (startValue > max) {
                         startValue -= max;
                     }
                 }
             }
             processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
-            processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(channelTypeUuid, startValue);
+            processTaskSerialNumberMapper
+                .updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(channelTypeUuid, startValue);
         }
         return rowNum;
     }
