@@ -3,6 +3,7 @@ package codedriver.framework.process.notify.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import codedriver.framework.notify.dto.NotifyTriggerVo;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
@@ -10,7 +11,6 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.ParamType;
-import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.ConditionParamVo;
@@ -31,10 +31,10 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 	}
 
 	@Override
-	protected List<ValueTextVo> myNotifyTriggerList() {
-		List<ValueTextVo> returnList = new ArrayList<>();
+	protected List<NotifyTriggerVo> myNotifyTriggerList() {
+		List<NotifyTriggerVo> returnList = new ArrayList<>();
 		for (SlaNotifyTriggerType notifyTriggerType : SlaNotifyTriggerType.values()) {
-            returnList.add(new ValueTextVo(notifyTriggerType.getTrigger(), notifyTriggerType.getText()));
+            returnList.add(new NotifyTriggerVo(notifyTriggerType.getTrigger(), notifyTriggerType.getText(),notifyTriggerType.getDescription()));
         }
 		return returnList;
 	}
