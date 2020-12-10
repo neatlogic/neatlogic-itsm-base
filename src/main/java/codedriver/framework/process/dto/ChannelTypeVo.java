@@ -9,6 +9,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
+import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ChannelTypeVo extends BasePageVo implements Serializable{
@@ -32,6 +34,8 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	private String prefix;
 	@EntityField(name = "工单号策略", type = ApiParamType.STRING)
 	private String handler;
+	@EntityField(name = "工单号策略名", type = ApiParamType.STRING)
+	private String handlerName;
 	
 	@JSONField(serialize=false)
 	private transient String keyword;
@@ -111,6 +115,18 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
     }
     public void setHandler(String handler) {
         this.handler = handler;
+    }
+    public String getHandlerName() {
+        if(StringUtils.isBlank(handlerName) && StringUtils.isNotBlank(handler)) {
+            IProcessTaskSerialNumberPolicyHandler policyHandler = ProcessTaskSerialNumberPolicyHandlerFactory.getHandler(handler);
+            if(policyHandler != null) {
+                handlerName = policyHandler.getName();
+            }
+        }
+        return handlerName;
+    }
+    public void setHandlerName(String handlerName) {
+        this.handlerName = handlerName;
     }
 	
 }
