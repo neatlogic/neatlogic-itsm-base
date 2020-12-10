@@ -299,26 +299,28 @@
 
 	<select id="searchChannelTypeList" parameterType="codedriver.framework.process.dto.ChannelTypeVo" resultType="codedriver.framework.process.dto.ChannelTypeVo" useCache="false">
 		SELECT
-		`uuid`,
-		`name`,
-		`is_active` AS isActive,
-		`icon`,
-		`color`,
-		`description`,
-		`sort`,
-		`prefix`
-		FROM `channel_type`
+		a.`uuid`,
+		a.`name`,
+		a.`is_active` AS isActive,
+		a.`icon`,
+		a.`color`,
+		a.`description`,
+		a.`sort`,
+		a.`prefix`,
+		b.`handler`
+		FROM `channel_type` a
+		LEFT JOIN `processtask_serial_number_policy` b ON b.`channel_type_uuid` = a.`uuid`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				AND `name` LIKE CONCAT('%', #{keyword}, '%')
+				AND a.`name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="isActive != null">
-				AND `is_active` = #{isActive}
+				AND a.`is_active` = #{isActive}
 			</if>
 		</where>
-		ORDER BY `sort` desc
+		ORDER BY a.`sort` DESC
 		<if test="needPage">
-			limit #{startNum}, #{pageSize}
+			LIMIT #{startNum}, #{pageSize}
 		</if>
 	</select>
 
