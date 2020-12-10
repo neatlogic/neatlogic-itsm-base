@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.notify.core.INotifyTriggerType;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
-import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -102,7 +101,7 @@ public interface IProcessStepUtilHandler {
      * @param processTaskStepId
      * @return List<String>
      */
-    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId);
+//    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId);
 
     /**
      * 
@@ -112,8 +111,8 @@ public interface IProcessStepUtilHandler {
      * @param processTaskStepId
      * @return List<String>
      */
-    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo,
-        ProcessTaskStepVo processTaskStepVo);
+//    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo,
+//        ProcessTaskStepVo processTaskStepVo);
 
     /**
      * 
@@ -123,8 +122,8 @@ public interface IProcessStepUtilHandler {
      * @param processTaskStepId
      * @return List<String>
      */
-    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId,
-        List<ProcessTaskOperationType> operationTypeList);
+//    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId,
+//        List<ProcessTaskOperationType> operationTypeList);
 
     /**
      * 
@@ -134,8 +133,8 @@ public interface IProcessStepUtilHandler {
      * @param processTaskStepId
      * @return List<String>
      */
-    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo,
-        ProcessTaskStepVo processTaskStepVo, List<ProcessTaskOperationType> operationTypeList);
+//    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo,
+//        ProcessTaskStepVo processTaskStepVo, List<ProcessTaskOperationType> operationTypeList);
 
     /**
      * 
@@ -146,8 +145,8 @@ public interface IProcessStepUtilHandler {
      * @param action
      * @return boolean
      */
-    public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId,
-        ProcessTaskOperationType operationType, boolean isThrowException);
+//    public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId,
+//        ProcessTaskOperationType operationType, boolean isThrowException);
 
     /**
      * 
@@ -158,8 +157,8 @@ public interface IProcessStepUtilHandler {
      * @param action
      * @return boolean
      */
-    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
-        ProcessTaskOperationType operationType, boolean isThrowException);
+//    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
+//        ProcessTaskOperationType operationType, boolean isThrowException);
 
     /**
      * 
@@ -170,8 +169,8 @@ public interface IProcessStepUtilHandler {
      * @param action
      * @return boolean
      */
-    public boolean verifyOperationAuthoriy(Long processTaskId, ProcessTaskOperationType operationType,
-        boolean isThrowException);
+//    public boolean verifyOperationAuthoriy(Long processTaskId, ProcessTaskOperationType operationType,
+//        boolean isThrowException);
 
     /**
      * 
@@ -182,8 +181,8 @@ public interface IProcessStepUtilHandler {
      * @param action
      * @return boolean
      */
-    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskOperationType operationType,
-        boolean isThrowException);
+//    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskOperationType operationType,
+//        boolean isThrowException);
 
     /**
      * 

@@ -87,6 +87,7 @@ import codedriver.framework.process.exception.processtask.ProcessTaskStepUserIsE
 import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyHandlerNotFoundException;
 import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyNotFoundException;
 import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
+import codedriver.framework.process.operationauth.core.ProcessOperateManager;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
 import codedriver.framework.process.workerpolicy.core.IWorkerPolicyHandler;
@@ -620,8 +621,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
-                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.START, true);
+//            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
+//                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.START, true);
+            new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
+            .addOperationType(ProcessTaskOperationType.START)
+            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.START)
+            .withIsThrowException(true)
+            .build()
+            .check();
             stepMajorUserRegulate(currentProcessTaskStepVo);
             ProcessTaskStepVo processTaskStepVo =
                 processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
@@ -716,8 +724,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             if (processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
-            canComplete = processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
-                currentProcessTaskStepVo.getId(), operationType, true);
+//            canComplete = processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
+//                currentProcessTaskStepVo.getId(), operationType, true);
+            canComplete = new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
+            .addOperationType(operationType)
+            .addCheckOperationType(currentProcessTaskStepVo.getId(), operationType)
+            .withIsThrowException(true)
+            .build()
+            .check();
             stepMajorUserRegulate(currentProcessTaskStepVo);
         } else if (this.getMode().equals(ProcessStepMode.AT)) {
             canComplete = true;
@@ -942,8 +957,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             if (processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
-            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
-                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RETREATCURRENTSTEP, true);
+//            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
+//                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RETREATCURRENTSTEP, true);
+            new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
+            .addOperationType(ProcessTaskOperationType.RETREATCURRENTSTEP)
+            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RETREATCURRENTSTEP)
+            .withIsThrowException(true)
+            .build()
+            .check();
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -1023,9 +1045,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /** 校验权限 **/
-        ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(currentProcessTaskVo.getId(),
-            ProcessTaskOperationType.ABORTPROCESSTASK, true);
-
+//        ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(currentProcessTaskVo.getId(),
+//            ProcessTaskOperationType.ABORTPROCESSTASK, true);
+        new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+        .addProcessTaskId(currentProcessTaskVo.getId())
+        .addOperationType(ProcessTaskOperationType.ABORTPROCESSTASK)
+        .addCheckOperationType(currentProcessTaskVo.getId(), ProcessTaskOperationType.ABORTPROCESSTASK)
+        .withIsThrowException(true)
+        .build()
+        .check();
         List<ProcessTaskStepVo> processTaskStepList =
             processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
         for (ProcessTaskStepVo stepVo : processTaskStepList) {
@@ -1088,9 +1116,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /** 校验权限 **/
-        ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(currentProcessTaskVo,
-            ProcessTaskOperationType.RECOVERPROCESSTASK, true);
-
+//        ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(currentProcessTaskVo,
+//            ProcessTaskOperationType.RECOVERPROCESSTASK, true);
+        new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+        .addProcessTaskId(currentProcessTaskVo.getId())
+        .addOperationType(ProcessTaskOperationType.RECOVERPROCESSTASK)
+        .addCheckOperationType(currentProcessTaskVo.getId(), ProcessTaskOperationType.RECOVERPROCESSTASK)
+        .withIsThrowException(true)
+        .build()
+        .check();
         List<ProcessTaskStepVo> processTaskStepList =
             processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
         for (ProcessTaskStepVo stepVo : processTaskStepList) {
@@ -1166,8 +1200,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
-                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RECOVER, true);
+//            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
+//                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RECOVER, true);
+            new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
+            .addOperationType(ProcessTaskOperationType.RECOVER)
+            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RECOVER)
+            .withIsThrowException(true)
+            .build()
+            .check();
             stepMajorUserRegulate(currentProcessTaskStepVo);
             myRecover(currentProcessTaskStepVo);
 
@@ -1205,8 +1246,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
-                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.PAUSE, true);
+//            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
+//                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.PAUSE, true);
+            new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
+            .addOperationType(ProcessTaskOperationType.PAUSE)
+            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.PAUSE)
+            .withIsThrowException(true)
+            .build()
+            .check();
             stepMajorUserRegulate(currentProcessTaskStepVo);
             myPause(currentProcessTaskStepVo);
 
@@ -1252,8 +1300,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             if (processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
-            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
-                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.ACCEPT, true);
+//            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
+//                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.ACCEPT, true);
+            new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
+            .addOperationType(ProcessTaskOperationType.ACCEPT)
+            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.ACCEPT)
+            .withIsThrowException(true)
+            .build()
+            .check();
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 清空worker表，只留下当前处理人 **/
             processTaskMapper
@@ -1301,8 +1356,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         if (processStepUtilHandler == null) {
             throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
         }
-        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
-            currentProcessTaskStepVo.getId(), ProcessTaskOperationType.TRANSFERCURRENTSTEP, true);
+//        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
+//            currentProcessTaskStepVo.getId(), ProcessTaskOperationType.TRANSFERCURRENTSTEP, true);
+        new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+        .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
+        .addOperationType(ProcessTaskOperationType.TRANSFERCURRENTSTEP)
+        .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.TRANSFERCURRENTSTEP)
+        .withIsThrowException(true)
+        .build()
+        .check();
         ProcessTaskStepVo processTaskStepVo =
             processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
         processTaskStepVo.setParamObj(currentProcessTaskStepVo.getParamObj());
@@ -1812,8 +1874,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         try {
             // 锁定当前流程
             processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-            ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(
-                currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.STARTPROCESS, true);
+//            ProcessStepUtilHandlerFactory.getHandler().verifyOperationAuthoriy(
+//                currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.STARTPROCESS, true);
+            new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+            .addProcessTaskId(currentProcessTaskStepVo.getProcessTaskId())
+            .addOperationType(ProcessTaskOperationType.STARTPROCESS)
+            .addCheckOperationType(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.STARTPROCESS)
+            .withIsThrowException(true)
+            .build()
+            .check();
             DataValid.formAttributeDataValidFromDb(currentProcessTaskStepVo);
             DataValid.baseInfoValidFromDb(currentProcessTaskStepVo);
             DataValid.assignWorkerValid(currentProcessTaskStepVo);
@@ -2071,8 +2140,15 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             if (processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
-            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
-                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.REDO, true);
+//            processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskStepVo.getProcessTaskId(),
+//                currentProcessTaskStepVo.getId(), ProcessTaskOperationType.REDO, true);
+            new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+            .addProcessTaskId(currentProcessTaskStepVo.getProcessTaskId())
+            .addOperationType(ProcessTaskOperationType.REDO)
+            .addCheckOperationType(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.REDO)
+            .withIsThrowException(true)
+            .build()
+            .check();
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -2151,9 +2227,16 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
     public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo) {
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
-        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
+//        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
         // 只有上报人才可评分
-        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskVo, ProcessTaskOperationType.SCORE, true);
+//        processStepUtilHandler.verifyOperationAuthoriy(currentProcessTaskVo, ProcessTaskOperationType.SCORE, true);
+        new ProcessOperateManager.Builder(processTaskMapper, userMapper)
+        .addProcessTaskId(currentProcessTaskVo.getId())
+        .addOperationType(ProcessTaskOperationType.REDO)
+        .addCheckOperationType(currentProcessTaskVo.getId(), ProcessTaskOperationType.REDO)
+        .withIsThrowException(true)
+        .build()
+        .check();
         JSONObject paramObj = currentProcessTaskVo.getParamObj();
         Long scoreTemplateId = paramObj.getLong("scoreTemplateId");
         String content = paramObj.getString("content");

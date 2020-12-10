@@ -1543,6 +1543,18 @@
 				<result column="dUserType" property="userType" />
 			</collection>
 		</collection>
+		
+		<collection property="stepRelList" ofType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
+			<id column="fUuid" property="processStepRelUuid" />
+			<result column="bProcessTaskId" property="processTaskId" />
+			<result column="fFromProcessStepUuid" property="fromProcessStepUuid" />
+			<result column="fToProcessStepUuid" property="toProcessStepUuid" />
+			<result column="fFromProcessTaskStepId" property="fromProcessTaskStepId" />
+			<result column="fToProcessTaskStepId" property="toProcessTaskStepId" />
+			<result column="fIsHit" property="isHit" />
+			<result column="fName" property="name" />
+			<result column="fType" property="type" />
+		</collection>
 	</resultMap>
 	<select id="getProcessTaskDetailListByIdList" parameterType="java.lang.Long" resultMap="processTaskDetailMap">
 	SELECT 
@@ -1582,12 +1594,23 @@
 	  d.`user_uuid` AS dUserUuid,
 	  d.`user_type` AS dUserType,
 	  
-	  e.`config`	      
+	  e.`config`,
+	  
+	  f.`processtask_id` AS fProcessTaskId,
+  	  f.`from_process_step_uuid` AS fFromProcessStepUuid,
+      f.`to_process_step_uuid` AS fToProcessStepUuid,
+      f.`from_processtask_step_id` AS fFromProcessTaskStepId,
+      f.`to_processtask_step_id` AS fToProcessTaskStepId,
+      f.`uuid` AS fUuid,
+      f.`is_hit` AS fIsHit,
+      f.`name`AS fName,
+      f.`type` AS fType	      
 	FROM `processtask` a
 	LEFT JOIN `processtask_step` b ON b.`processtask_id` = a.`id`
 	LEFT JOIN `processtask_step_worker` c ON c.`processtask_step_id` = b.`id`
 	LEFT JOIN `processtask_step_user` d ON d.`processtask_step_id` = b.`id`
 	LEFT JOIN `processtask_config` e ON e.`hash` = a.`config_hash`
+	LEFT JOIN `processtask_step_rel` f ON f.`processtask_id` = a.`id`
 	WHERE a.`id` IN 
 	<foreach collection="list" item="id" open="(" separator="," close=")">
 	#{id}

@@ -119,6 +119,8 @@ public class ProcessTaskVo extends BasePageVo {
     private List<ProcessTagVo> tagVoList;
     @EntityField(name = "移动端表单交互类型，1：下探页面；0：当前页", type = ApiParamType.INTEGER)
     private Integer mobileFormUIType;
+    @JSONField(serialize = false)
+    private transient List<ProcessTaskStepRelVo> stepRelList;
     
     public ProcessTaskVo() {
 
@@ -516,6 +518,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setMobileFormUIType(Integer mobileFormUIType) {
         this.mobileFormUIType = mobileFormUIType;
+    }
+
+    public List<ProcessTaskStepRelVo> getStepRelList() {
+        return stepRelList;
+    }
+
+    public void setStepRelList(List<ProcessTaskStepRelVo> stepRelList) {
+        this.stepRelList = stepRelList;
     }
 
 }
