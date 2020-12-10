@@ -96,7 +96,7 @@ public class ProcessOperateManager {
 	    if(processTaskMapper == null) {
 	        return resultMap;
 	    }
-	    List<ProcessTaskVo> processTaskList = new ArrayList<>();//processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
+	    List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskDetailListByIdList(processTaskIdList);
 	    for(ProcessTaskVo processTaskVo : processTaskList) {
 	        if (OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeList)) {
 	            IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());

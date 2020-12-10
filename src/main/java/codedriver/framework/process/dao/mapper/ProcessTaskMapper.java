@@ -243,6 +243,8 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskVo> getProcessTaskListByChannelTypeUuid(ProcessTaskVo processTaskVo);
 
+    public List<ProcessTaskVo> getProcessTaskDetailListByIdList(List<Long> processTaskIdList);
+
     public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
