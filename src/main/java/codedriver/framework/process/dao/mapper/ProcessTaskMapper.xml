@@ -2334,7 +2334,7 @@
 	</insert>
 
 	<insert id="insertProcessTaskStepInOperation" parameterType="codedriver.framework.process.dto.ProcessTaskStepInOperationVo">
-		INSERT INTO `processtask_step_in_operation` (
+		INSERT IGNORE INTO `processtask_step_in_operation` (
 		`processtask_id`,
 		`processtask_step_id`,
 		`operation_type`,

@@ -119,7 +119,7 @@ public class ProcessOperateManager {
 
     private void getOperateMap(ProcessTaskVo processTaskVo, List<String> userUuidList,
         Set<ProcessTaskOperationType> operationTypeSet, Map<Long, Set<ProcessTaskOperationType>> resultMap) {
-        if (CollectionUtils.isNotEmpty(operationTypeSet)
+        if (CollectionUtils.isEmpty(operationTypeSet)
             || OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeSet)) {
             IOperationAuthHandler handler =
                 OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
@@ -144,7 +144,7 @@ public class ProcessOperateManager {
                 resultMap.put(processTaskVo.getId(), resultSet);
             }
         }
-        if (CollectionUtils.isNotEmpty(operationTypeSet)
+        if (CollectionUtils.isEmpty(operationTypeSet)
             || OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeSet)) {
             Set<Long> processTaskStepIdList = processTaskStepIdSetMap.get(processTaskVo.getId());
             if (CollectionUtils.isNotEmpty(processTaskStepIdList)) {
