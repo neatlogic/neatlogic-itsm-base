@@ -30,7 +30,6 @@ public class ProcessOperateManager {
 	private List<Long> processTaskIdList;
 	private Map<Long, List<Long>> processTaskStepIdListMap;
 	private List<ProcessTaskOperationType> operationTypeList;
-//	private List<String> userUuidList;
 	private ProcessTaskMapper processTaskMapper;
 	private UserMapper userMapper;
 	private boolean isThrowException;
@@ -41,7 +40,6 @@ public class ProcessOperateManager {
 	    private List<Long> processTaskIdList = new ArrayList<>();
 	    private Map<Long, List<Long>> processTaskStepIdListMap = new HashMap<>();
 	    private List<ProcessTaskOperationType> operationTypeList = new ArrayList<>();
-//	    private List<String> userUuidList = new ArrayList<>();
 	    private ProcessTaskMapper processTaskMapper;
 	    private UserMapper userMapper;
 	    private boolean isThrowException;
@@ -87,16 +85,6 @@ public class ProcessOperateManager {
 	        this.isThrowException = isThrowException;
 	        return this;
 	    }
-//	    public Builder addUserUuid(String userUuid) {
-//	        if(!userUuidList.contains(userUuid)) {
-//	            userUuidList.add(userUuid);
-//	        }
-//	        return this;
-//	    }
-//		public Builder setProcessTaskMapper(ProcessTaskMapper processTaskMapper) {
-//            this.processTaskMapper = processTaskMapper;
-//            return this;
-//        }
         public ProcessOperateManager build() {
 			return new ProcessOperateManager(this);
 		}
@@ -111,7 +99,6 @@ public class ProcessOperateManager {
 		this.userMapper = builder.userMapper;
 		this.isThrowException = builder.isThrowException;
 		this.checkOperationTypeSetMap = builder.checkOperationTypeSetMap;
-//		this.userUuidList = builder.userUuidList;
 	}
 	
 	public Map<Long, Set<ProcessTaskOperationType>> getOperateMap() {
@@ -119,9 +106,6 @@ public class ProcessOperateManager {
 	    if(CollectionUtils.isEmpty(processTaskIdList)) {
 	        return resultMap;
 	    }
-//	    if(CollectionUtils.isEmpty(userUuidList)) {
-//	        return resultMap;
-//	    }
 	    if(processTaskMapper == null) {
 	        return resultMap;
 	    }
@@ -130,52 +114,95 @@ public class ProcessOperateManager {
 	        List<String> userUuidList = new ArrayList<>();
 	        userUuidList.add(UserContext.get().getUserUuid(true));
 	        /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-	        String uuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
-	        if (StringUtils.isNotBlank(uuid)) {
-	            userUuidList.add(uuid);
-	        }
-	        if (OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeList)) {
-	            IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
-	            Set<ProcessTaskOperationType> resultSet = new HashSet<>();
-	            for(String userUuid : userUuidList) {
-	                Map<ProcessTaskOperationType, Boolean> operateMap = handler.getOperateMap(processTaskVo, userUuid, operationTypeList);
-                    for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
-                        if(entry.getValue() == Boolean.TRUE) {
-                            resultSet.add(entry.getKey());
-                        }
-                    }
-                    resultMap.put(processTaskVo.getId(), resultSet);
+//	        String uuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
+//	        if (StringUtils.isNotBlank(uuid)) {
+//	            userUuidList.add(uuid);
+//	        }
+	        if(CollectionUtils.isNotEmpty(operationTypeList)) {
+	            if (OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeList)) {
+	                IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
+	                Set<ProcessTaskOperationType> resultSet = new HashSet<>();
+	                for(String userUuid : userUuidList) {
+	                    Map<ProcessTaskOperationType, Boolean> operateMap = handler.getOperateMap(processTaskVo, userUuid, operationTypeList);
+	                    for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
+	                        if(entry.getValue() == Boolean.TRUE) {
+	                            resultSet.add(entry.getKey());
+	                        }
+	                    }
+	                    resultMap.put(processTaskVo.getId(), resultSet);
+	                }
 	            }
-	        }
-	        if (OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeList)) {
-	            List<Long> processTaskStepIdList = processTaskStepIdListMap.get(processTaskVo.getId());
-	            if(CollectionUtils.isNotEmpty(processTaskStepIdList)) {
-	                IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.STEP.getValue());
-	                Map<Long, ProcessTaskStepVo> processTaskStepMap = processTaskVo.getStepList().stream().collect(Collectors.toMap(e -> e.getId(), e -> e));
-	                for(Long processTaskStepId : processTaskStepIdList) {
-	                    ProcessTaskStepVo processTaskStepVo = processTaskStepMap.get(processTaskStepId);
-	                    if(processTaskStepVo != null) {
-	                        Set<ProcessTaskOperationType> resultSet = new HashSet<>();
-	                        for(String userUuid : userUuidList) {
-	                            Map<ProcessTaskOperationType, Boolean> operateMap = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeList);
-	                            IOperationAuthHandler handler2 = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
-	                            Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler2.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeList);
-	                            if(MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
-	                                operateMap.putAll(nextOperateMap);
-	                            }else if(MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
-	                                operateMap = nextOperateMap;
-	                            }
-	                            for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
-	                                if(entry.getValue() == Boolean.TRUE) {
-	                                    resultSet.add(entry.getKey());
+	            if (OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeList)) {
+	                List<Long> processTaskStepIdList = processTaskStepIdListMap.get(processTaskVo.getId());
+	                if(CollectionUtils.isNotEmpty(processTaskStepIdList)) {
+	                    IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.STEP.getValue());
+	                    Map<Long, ProcessTaskStepVo> processTaskStepMap = processTaskVo.getStepList().stream().collect(Collectors.toMap(e -> e.getId(), e -> e));
+	                    for(Long processTaskStepId : processTaskStepIdList) {
+	                        ProcessTaskStepVo processTaskStepVo = processTaskStepMap.get(processTaskStepId);
+	                        if(processTaskStepVo != null) {
+	                            Set<ProcessTaskOperationType> resultSet = new HashSet<>();
+	                            for(String userUuid : userUuidList) {
+	                                Map<ProcessTaskOperationType, Boolean> operateMap = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeList);
+	                                IOperationAuthHandler handler2 = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
+	                                Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler2.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeList);
+	                                if(MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+	                                    operateMap.putAll(nextOperateMap);
+	                                }else if(MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+	                                    operateMap = nextOperateMap;
 	                                }
+	                                for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
+	                                    if(entry.getValue() == Boolean.TRUE) {
+	                                        resultSet.add(entry.getKey());
+	                                    }
+	                                }
+	                                resultMap.put(processTaskStepVo.getId(), resultSet);
 	                            }
-	                            resultMap.put(processTaskVo.getId(), resultSet);
 	                        }
 	                    }
 	                }
 	            }
+	        }else {
+	            IOperationAuthHandler taskHandler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
+                Set<ProcessTaskOperationType> resultSet1 = new HashSet<>();
+                for(String userUuid : userUuidList) {
+                    Map<ProcessTaskOperationType, Boolean> operateMap = taskHandler.getOperateMap(processTaskVo, userUuid);
+                    for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
+                        if(entry.getValue() == Boolean.TRUE) {
+                            resultSet1.add(entry.getKey());
+                        }
+                    }
+                    resultMap.put(processTaskVo.getId(), resultSet1);
+                }
+                
+                List<Long> processTaskStepIdList = processTaskStepIdListMap.get(processTaskVo.getId());
+                if(CollectionUtils.isNotEmpty(processTaskStepIdList)) {
+                    IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.STEP.getValue());
+                    Map<Long, ProcessTaskStepVo> processTaskStepMap = processTaskVo.getStepList().stream().collect(Collectors.toMap(e -> e.getId(), e -> e));
+                    for(Long processTaskStepId : processTaskStepIdList) {
+                        ProcessTaskStepVo processTaskStepVo = processTaskStepMap.get(processTaskStepId);
+                        if(processTaskStepVo != null) {
+                            Set<ProcessTaskOperationType> resultSet = new HashSet<>();
+                            for(String userUuid : userUuidList) {
+                                Map<ProcessTaskOperationType, Boolean> operateMap = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid);
+                                IOperationAuthHandler handler2 = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
+                                Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler2.getOperateMap(processTaskVo, processTaskStepVo, userUuid);
+                                if(MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+                                    operateMap.putAll(nextOperateMap);
+                                }else if(MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+                                    operateMap = nextOperateMap;
+                                }
+                                for(Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
+                                    if(entry.getValue() == Boolean.TRUE) {
+                                        resultSet.add(entry.getKey());
+                                    }
+                                }
+                                resultMap.put(processTaskStepVo.getId(), resultSet);
+                            }
+                        }
+                    }
+                }
 	        }
+	        
 	    }
 	    return resultMap;
 	}
