@@ -42,6 +42,12 @@ public class WorkcenterFieldBuilder {
 		dataJson.put(ProcessWorkcenterField.ID.getValue(), id);
 		return this;
 	}
+	
+	public WorkcenterFieldBuilder setSerialNumber(String serialNumber) {
+        dataJson.put(ProcessWorkcenterField.SERIAL_NUMBER.getValue(), serialNumber);
+        return this;
+    }
+	
 	public WorkcenterFieldBuilder setTitle(String title) {
 		dataJson.put(ProcessWorkcenterField.TITLE.getValue(), title);
 		return this;
