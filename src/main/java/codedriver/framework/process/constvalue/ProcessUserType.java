@@ -1,6 +1,12 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessUserType {
+import codedriver.framework.common.constvalue.IUserType;
+import codedriver.framework.dto.UserTypeVo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public enum ProcessUserType implements IUserType {
 	MAJOR("major", "处理人",true), 
 	MINOR("minor", "协助处理人",true),
 	AGENT("agent","代办人",true),
@@ -51,4 +57,21 @@ public enum ProcessUserType {
 		return "";
 	}
 
+
+	@Override
+	public UserTypeVo getUserType() {
+		UserTypeVo vo = new UserTypeVo();
+		vo.setModuleId(getModuleId());
+		Map<String,String> map = new HashMap<>();
+		for(ProcessUserType type : ProcessUserType.values()){
+			map.put(type.getValue(),type.getText());
+		}
+		vo.setValues(map);
+		return vo;
+	}
+
+	@Override
+	public String getModuleId() {
+		return "process";
+	}
 }
