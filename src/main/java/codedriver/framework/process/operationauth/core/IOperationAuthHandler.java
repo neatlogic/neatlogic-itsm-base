@@ -38,9 +38,6 @@ public interface IOperationAuthHandler {
             if(predicate != null) {
                 resultMap.put(operationType, predicate.test(processTaskVo, processTaskStepVo, userUuid));
             }
-//            else {
-//                resultMap.put(operationType, false);
-//            }
         }    
         return resultMap;
     }
