@@ -1610,7 +1610,7 @@
 	LEFT JOIN `processtask_step_worker` c ON c.`processtask_step_id` = b.`id`
 	LEFT JOIN `processtask_step_user` d ON d.`processtask_step_id` = b.`id`
 	LEFT JOIN `processtask_config` e ON e.`hash` = a.`config_hash`
-	LEFT JOIN `processtask_step_rel` f ON f.`processtask_id` = a.`id`
+	JOIN `processtask_step_rel` f ON f.`processtask_id` = a.`id`
 	WHERE a.`id` IN 
 	<foreach collection="list" item="id" open="(" separator="," close=")">
 	#{id}
