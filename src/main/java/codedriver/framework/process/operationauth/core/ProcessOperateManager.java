@@ -15,9 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.SystemUser;
-import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
-import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
@@ -27,8 +25,6 @@ public class ProcessOperateManager {
     private Set<Long> processTaskIdSet;
     private Map<Long, Set<Long>> processTaskStepIdSetMap;
     private Set<ProcessTaskOperationType> operationTypeSet;
-    private ProcessTaskMapper processTaskMapper;
-    private UserMapper userMapper;
     private boolean isThrowException;
     private Map<Long, Set<ProcessTaskOperationType>> checkOperationTypeSetMap;
 
@@ -36,14 +32,13 @@ public class ProcessOperateManager {
         private Set<Long> processTaskIdSet = new HashSet<>();
         private Map<Long, Set<Long>> processTaskStepIdSetMap = new HashMap<>();
         private Set<ProcessTaskOperationType> operationTypeSet = new HashSet<>();
-        private ProcessTaskMapper processTaskMapper;
-        private UserMapper userMapper;
         private boolean isThrowException;
         private Map<Long, Set<ProcessTaskOperationType>> checkOperationTypeSetMap = new HashMap<>();
 
-        public Builder(ProcessTaskMapper processTaskMapper, UserMapper userMapper) {
-            this.processTaskMapper = processTaskMapper;
-            this.userMapper = userMapper;
+        public Builder(Long ...processTaskIds) {
+            for(Long processTaskId : processTaskIds) {
+                processTaskIdSet.add(processTaskId);
+            }
         }
 
         public Builder addProcessTaskId(Long processTaskId) {
@@ -83,8 +78,6 @@ public class ProcessOperateManager {
         this.processTaskIdSet = builder.processTaskIdSet;
         this.processTaskStepIdSetMap = builder.processTaskStepIdSetMap;
         this.operationTypeSet = builder.operationTypeSet;
-        this.processTaskMapper = builder.processTaskMapper;
-        this.userMapper = builder.userMapper;
         this.isThrowException = builder.isThrowException;
         this.checkOperationTypeSetMap = builder.checkOperationTypeSetMap;
     }
@@ -94,23 +87,19 @@ public class ProcessOperateManager {
         if (CollectionUtils.isEmpty(processTaskIdSet)) {
             return resultMap;
         }
-        if (processTaskMapper == null) {
-            return resultMap;
-        }
-        if (userMapper == null) {
-            return resultMap;
-        }
+        OperationAuthHandlerBase handler =
+            (OperationAuthHandlerBase)OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
         List<String> userUuidList = new ArrayList<>();
         userUuidList.add(UserContext.get().getUserUuid(true));
         /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
         if (!SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid(true))) {
-            String uuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
+            String uuid = handler.getUserMapper().getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
             if (StringUtils.isNotBlank(uuid)) {
                 userUuidList.add(uuid);
             }
         }
 
-        List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskDetailListByIdList(new ArrayList<>(processTaskIdSet));
+        List<ProcessTaskVo> processTaskList = handler.getProcessTaskMapper().getProcessTaskDetailListByIdList(new ArrayList<>(processTaskIdSet));
         for (ProcessTaskVo processTaskVo : processTaskList) {
             getOperateMap(processTaskVo, userUuidList, operationTypeSet, resultMap);
         }

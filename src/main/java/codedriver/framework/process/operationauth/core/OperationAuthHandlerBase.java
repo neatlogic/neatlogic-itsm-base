@@ -22,6 +22,7 @@ import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -35,7 +36,7 @@ import codedriver.framework.process.stephandler.core.ProcessStepHandlerFactory;
 import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 
 public abstract class OperationAuthHandlerBase implements IOperationAuthHandler {
-    // protected static SelectContentByHashMapper selectContentByHashMapper;
+    protected static ProcessTaskMapper processTaskMapper;
     protected static UserMapper userMapper;
     protected static TeamMapper teamMapper;
     protected static ProcessStepHandlerMapper processStepHandlerMapper;
@@ -55,10 +56,18 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         userMapper = _userMapper;
     }
 
-    // @Autowired
-    // public void setSelectContentByHashMapper(SelectContentByHashMapper _selectContentByHashMapper) {
-    // selectContentByHashMapper = _selectContentByHashMapper;
-    // }
+     @Autowired
+     public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
+         processTaskMapper = _processTaskMapper;
+     }
+     
+     public ProcessTaskMapper getProcessTaskMapper() {
+         return processTaskMapper;
+     }
+     
+     public UserMapper getUserMapper() {
+         return userMapper;
+     }
 
     protected boolean checkIsWorker(ProcessTaskVo processTaskVo, String userType, String userUuid) {
         List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
