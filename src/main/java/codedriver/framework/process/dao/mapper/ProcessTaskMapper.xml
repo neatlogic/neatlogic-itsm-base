@@ -188,6 +188,7 @@
 	<select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		SELECT
 		`id`,
+		`serial_number` AS serialNumber,
 		`title`,
 		`process_uuid` AS processUuid,
 		`channel_uuid` AS channelUuid,

@@ -376,7 +376,8 @@ public interface ProcessTaskMapper {
     public int updateProcessTaskPriorityUuidById(@Param("id") Long processTaskId,
         @Param("priorityUuid") String priorityUuid);
 
-    public int updateProcessTaskSerialNumberById(@Param("id") Long processTaskId,
+    @ESSearch
+    public int updateProcessTaskSerialNumberById(@ESParam("processtask") @Param("id") Long processTaskId,
         @Param("serialNumber") String serialNumber);
 
     public int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
