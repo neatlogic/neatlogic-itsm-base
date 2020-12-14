@@ -979,23 +979,22 @@
 		</where>
 	</select>
 
-	<select id="getProcessTaskStepListByIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+	<select id="getProcessTaskStepListByIdList" parameterType="java.util.List" resultType="processTaskStepMap">
 		SELECT
 		`id`,
-		`processtask_id` AS processTaskId,
+		`processtask_id`,
 		`name`,
-		`process_step_uuid` AS processStepUuid,
+		`process_step_uuid`,
 		`status`,
 		`result`,
 		`type`,
 		`handler`,
-		`is_active` AS isActive,
-		`active_time` AS activeTime,
-		`start_time` AS startTime,
-		`end_time` AS endTime,
-		`error`,
-		`expire_time` AS expireTime,
-		`config_hash` AS configHash
+		`is_active`,
+		`active_time`,
+		`start_time`,
+		`end_time`,
+		`expire_time`,
+		`config_hash`
 		FROM `processtask_step`
 		WHERE `id` IN
 		<foreach collection="list" item="id" open="(" separator="," close=")">

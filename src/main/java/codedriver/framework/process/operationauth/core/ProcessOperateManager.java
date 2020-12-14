@@ -37,34 +37,31 @@ public class ProcessOperateManager {
     }
 
     private Set<Long> processTaskIdSet;
+    private Set<Long> processTaskStepIdSet;
     private Map<Long, Set<Long>> processTaskStepIdSetMap;
     private Set<ProcessTaskOperationType> operationTypeSet;
-    private boolean isThrowException;
-    private Map<Long, Set<ProcessTaskOperationType>> checkOperationTypeSetMap;
+    private Map<Long, ProcessTaskOperationType> checkOperationTypeMap;
 
     public static class Builder {
         private Set<Long> processTaskIdSet = new HashSet<>();
+        private Set<Long> processTaskStepIdSet = new HashSet<>();
         private Map<Long, Set<Long>> processTaskStepIdSetMap = new HashMap<>();
         private Set<ProcessTaskOperationType> operationTypeSet = new HashSet<>();
-        private boolean isThrowException;
-        private Map<Long, Set<ProcessTaskOperationType>> checkOperationTypeSetMap = new HashMap<>();
 
-        public Builder(Long... processTaskIds) {
-            for (Long processTaskId : processTaskIds) {
-                processTaskIdSet.add(processTaskId);
-            }
+        public Builder() {
         }
 
-        public Builder addProcessTaskId(Long processTaskId) {
-            processTaskIdSet.add(processTaskId);
+        public Builder addProcessTaskId(Long ... processTaskIds) {
+            for(Long processTaskId : processTaskIds) {
+                processTaskIdSet.add(processTaskId);
+            }
             return this;
         }
 
-        public Builder addProcessTaskStepId(Long processTaskId, Long processTaskStepId) {
-            if (processTaskStepId != null) {
-                processTaskStepIdSetMap.computeIfAbsent(processTaskId, k -> new HashSet<>()).add(processTaskStepId);
+        public Builder addProcessTaskStepId(Long ...processTaskStepIds) {
+            for(Long processTaskStepId : processTaskStepIds) {
+                processTaskStepIdSet.add(processTaskStepId);
             }
-            processTaskIdSet.add(processTaskId);
             return this;
         }
 
@@ -73,32 +70,56 @@ public class ProcessOperateManager {
             return this;
         }
 
-        public Builder addCheckOperationType(Long id, ProcessTaskOperationType operationType) {
-            checkOperationTypeSetMap.computeIfAbsent(id, k -> new HashSet<>()).add(operationType);
-            return this;
-        }
-
-        public Builder withIsThrowException(boolean isThrowException) {
-            this.isThrowException = isThrowException;
-            return this;
-        }
-
         public ProcessOperateManager build() {
             return new ProcessOperateManager(this);
         }
     }
 
+    public static class TaskOperationChecker {
+        private Long processTaskId;
+        private Map<Long, ProcessTaskOperationType> checkOperationTypeMap = new HashMap<>();
+        public TaskOperationChecker(Long processTaskId, ProcessTaskOperationType operationType) {
+            this.processTaskId = processTaskId;
+            this.checkOperationTypeMap.put(processTaskId, operationType);
+        }
+        public ProcessOperateManager build() {
+            return new ProcessOperateManager(this);
+        }
+    }
+    
+    public static class StepOperationChecker {
+        private Long processTaskStepId;
+        private Map<Long, ProcessTaskOperationType> checkOperationTypeMap = new HashMap<>();
+        public StepOperationChecker(Long processTaskStepId, ProcessTaskOperationType operationType) {
+            this.processTaskStepId = processTaskStepId;
+            checkOperationTypeMap.put(processTaskStepId, operationType);
+        }
+        public ProcessOperateManager build() {
+            return new ProcessOperateManager(this);
+        }
+    }
+    
     private ProcessOperateManager(Builder builder) {
         this.processTaskIdSet = builder.processTaskIdSet;
         this.processTaskStepIdSetMap = builder.processTaskStepIdSetMap;
         this.operationTypeSet = builder.operationTypeSet;
-        this.isThrowException = builder.isThrowException;
-        this.checkOperationTypeSetMap = builder.checkOperationTypeSetMap;
+    }
+    
+    private ProcessOperateManager(TaskOperationChecker checker) {
+        this.processTaskIdSet = new HashSet<>();
+        processTaskIdSet.add(checker.processTaskId);
+        this.checkOperationTypeMap = checker.checkOperationTypeMap;
+    }
+    
+    private ProcessOperateManager(StepOperationChecker checker) {
+        this.processTaskStepIdSet = new HashSet<>();
+        processTaskStepIdSet.add(checker.processTaskStepId);
+        this.checkOperationTypeMap = checker.checkOperationTypeMap;
     }
 
     public Map<Long, Set<ProcessTaskOperationType>> getOperateMap() {
         Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
-        if (CollectionUtils.isEmpty(processTaskIdSet)) {
+        if (CollectionUtils.isEmpty(processTaskIdSet) && CollectionUtils.isEmpty(processTaskStepIdSet)) {
             return resultMap;
         }
 
@@ -112,6 +133,19 @@ public class ProcessOperateManager {
             }
         }
 
+        if(CollectionUtils.isNotEmpty(processTaskStepIdSet)) {
+            if(processTaskIdSet == null) {
+                processTaskIdSet = new HashSet<>();
+            }
+            if(processTaskStepIdSetMap == null) {
+                processTaskStepIdSetMap = new HashMap<>();
+            }
+            List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepListByIdList(new ArrayList<>(processTaskStepIdSet));
+            for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
+                processTaskIdSet.add(processTaskStepVo.getProcessTaskId());
+                processTaskStepIdSetMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new HashSet<>()).add(processTaskStepVo.getId());
+            }
+        }
         List<ProcessTaskVo> processTaskList =
             processTaskMapper.getProcessTaskDetailListByIdList(new ArrayList<>(processTaskIdSet));
         for (ProcessTaskVo processTaskVo : processTaskList) {
@@ -194,28 +228,21 @@ public class ProcessOperateManager {
     }
 
     public boolean check() {
-        if (MapUtils.isNotEmpty(checkOperationTypeSetMap)) {
+        if (MapUtils.isNotEmpty(checkOperationTypeMap)) {
             Map<Long, Set<ProcessTaskOperationType>> resultMap = getOperateMap();
-            for (Map.Entry<Long, Set<ProcessTaskOperationType>> entry : checkOperationTypeSetMap.entrySet()) {
-                Set<ProcessTaskOperationType> value = entry.getValue();
-                Set<ProcessTaskOperationType> resultSet = resultMap.get(entry.getKey());
-                if (CollectionUtils.isNotEmpty(resultSet)) {
-                    value.removeAll(resultSet);
-                }
-                if (CollectionUtils.isNotEmpty(value)) {
-                    if (isThrowException) {
-                        List<String> operationTypeTextList = new ArrayList<>();
-                        for (ProcessTaskOperationType operationType : value) {
-                            operationTypeTextList.add(operationType.getText());
-                        }
-                        throw new ProcessTaskNoPermissionException(String.join("、", operationTypeTextList));
-                    } else {
-                        return false;
-                    }
-                }
+            for (Map.Entry<Long, ProcessTaskOperationType> entry : checkOperationTypeMap.entrySet()) {
+                return resultMap.computeIfAbsent(entry.getKey(), k -> new HashSet<>()).contains(entry.getValue());
+            }
+        }
+        return false;
+    }
+
+    public boolean checkAndNoPermissionThrowException() {
+        if (!check()) {
+            for (Map.Entry<Long, ProcessTaskOperationType> entry : checkOperationTypeMap.entrySet()) {
+                throw new ProcessTaskNoPermissionException(entry.getValue().getText());
             }
         }
         return true;
     }
-
 }

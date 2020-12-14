@@ -621,14 +621,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
-            .addOperationType(ProcessTaskOperationType.START)
-            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.START)
-            .withIsThrowException(true)
-            .build()
-            .check();
-            
+            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.START).build().checkAndNoPermissionThrowException();
+
             stepMajorUserRegulate(currentProcessTaskStepVo);
             ProcessTaskStepVo processTaskStepVo =
                 processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
@@ -724,14 +719,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
 
-            canComplete = new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
-            .addOperationType(operationType)
-            .addCheckOperationType(currentProcessTaskStepVo.getId(), operationType)
-            .withIsThrowException(true)
-            .build()
-            .check();
-            
+            canComplete =
+                new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(), operationType).build()
+                    .checkAndNoPermissionThrowException();
+
             stepMajorUserRegulate(currentProcessTaskStepVo);
         } else if (this.getMode().equals(ProcessStepMode.AT)) {
             canComplete = true;
@@ -957,14 +948,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
 
-            new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
-            .addOperationType(ProcessTaskOperationType.RETREATCURRENTSTEP)
-            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RETREATCURRENTSTEP)
-            .withIsThrowException(true)
-            .build()
-            .check();
-            
+            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.RETREATCURRENTSTEP).build().checkAndNoPermissionThrowException();
+
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -1044,13 +1030,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /** 校验权限 **/
-        new ProcessOperateManager.Builder(currentProcessTaskVo.getId())
-        .addOperationType(ProcessTaskOperationType.ABORTPROCESSTASK)
-        .addCheckOperationType(currentProcessTaskVo.getId(), ProcessTaskOperationType.ABORTPROCESSTASK)
-        .withIsThrowException(true)
-        .build()
-        .check();
-        
+        new ProcessOperateManager.TaskOperationChecker(currentProcessTaskVo.getId(),
+            ProcessTaskOperationType.ABORTPROCESSTASK).build().checkAndNoPermissionThrowException();
+
         List<ProcessTaskStepVo> processTaskStepList =
             processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
         for (ProcessTaskStepVo stepVo : processTaskStepList) {
@@ -1113,13 +1095,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /** 校验权限 **/
-        new ProcessOperateManager.Builder(currentProcessTaskVo.getId())
-        .addOperationType(ProcessTaskOperationType.RECOVERPROCESSTASK)
-        .addCheckOperationType(currentProcessTaskVo.getId(), ProcessTaskOperationType.RECOVERPROCESSTASK)
-        .withIsThrowException(true)
-        .build()
-        .check();
-        
+        new ProcessOperateManager.TaskOperationChecker(currentProcessTaskVo.getId(),
+            ProcessTaskOperationType.RECOVERPROCESSTASK).build().checkAndNoPermissionThrowException();
+
         List<ProcessTaskStepVo> processTaskStepList =
             processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
         for (ProcessTaskStepVo stepVo : processTaskStepList) {
@@ -1195,14 +1173,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
-            .addOperationType(ProcessTaskOperationType.RECOVER)
-            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.RECOVER)
-            .withIsThrowException(true)
-            .build()
-            .check();
-            
+            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.RECOVER).build().checkAndNoPermissionThrowException();
+
             stepMajorUserRegulate(currentProcessTaskStepVo);
             myRecover(currentProcessTaskStepVo);
 
@@ -1240,14 +1213,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
-            .addOperationType(ProcessTaskOperationType.PAUSE)
-            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.PAUSE)
-            .withIsThrowException(true)
-            .build()
-            .check();
-            
+            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.PAUSE).build().checkAndNoPermissionThrowException();
+
             stepMajorUserRegulate(currentProcessTaskStepVo);
             myPause(currentProcessTaskStepVo);
 
@@ -1293,15 +1261,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             if (processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
-            
-            new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-            .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
-            .addOperationType(ProcessTaskOperationType.ACCEPT)
-            .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.ACCEPT)
-            .withIsThrowException(true)
-            .build()
-            .check();
-            
+
+            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.ACCEPT).build().checkAndNoPermissionThrowException();
+
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 清空worker表，只留下当前处理人 **/
             processTaskMapper
@@ -1350,14 +1313,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
         }
 
-        new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-        .addProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId())
-        .addOperationType(ProcessTaskOperationType.TRANSFERCURRENTSTEP)
-        .addCheckOperationType(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.TRANSFERCURRENTSTEP)
-        .withIsThrowException(true)
-        .build()
-        .check();
-        
+        new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+            ProcessTaskOperationType.TRANSFERCURRENTSTEP).build().checkAndNoPermissionThrowException();
+
         ProcessTaskStepVo processTaskStepVo =
             processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
         processTaskStepVo.setParamObj(currentProcessTaskStepVo.getParamObj());
@@ -1556,8 +1514,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
             processTaskVo.setWorktimeUuid(channelVo.getWorktimeUuid());
             /** 生成工单号 **/
-            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
-                processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelVo.getChannelTypeUuid());
+            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = processTaskSerialNumberMapper
+                .getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelVo.getChannelTypeUuid());
             if (processTaskSerialNumberPolicyVo == null) {
                 throw new ProcessTaskSerialNumberPolicyNotFoundException(channelVo.getChannelTypeUuid());
             }
@@ -1867,14 +1825,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         try {
             // 锁定当前流程
             processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-            
-            new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-            .addOperationType(ProcessTaskOperationType.STARTPROCESS)
-            .addCheckOperationType(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.STARTPROCESS)
-            .withIsThrowException(true)
-            .build()
-            .check();
-            
+
+            new ProcessOperateManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(),
+                ProcessTaskOperationType.STARTPROCESS).build().checkAndNoPermissionThrowException();
+
             DataValid.formAttributeDataValidFromDb(currentProcessTaskStepVo);
             DataValid.baseInfoValidFromDb(currentProcessTaskStepVo);
             DataValid.assignWorkerValid(currentProcessTaskStepVo);
@@ -2133,13 +2087,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
 
-            new ProcessOperateManager.Builder(currentProcessTaskStepVo.getProcessTaskId())
-            .addOperationType(ProcessTaskOperationType.REDO)
-            .addCheckOperationType(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.REDO)
-            .withIsThrowException(true)
-            .build()
-            .check();
-            
+            new ProcessOperateManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(),
+                ProcessTaskOperationType.REDO).build().checkAndNoPermissionThrowException();
+
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -2219,13 +2169,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         // 只有上报人才可评分
-        new ProcessOperateManager.Builder(currentProcessTaskVo.getId())
-        .addOperationType(ProcessTaskOperationType.SCORE)
-        .addCheckOperationType(currentProcessTaskVo.getId(), ProcessTaskOperationType.SCORE)
-        .withIsThrowException(true)
-        .build()
-        .check();
-        
+        new ProcessOperateManager.TaskOperationChecker(currentProcessTaskVo.getId(), ProcessTaskOperationType.SCORE)
+            .build().checkAndNoPermissionThrowException();
+
         JSONObject paramObj = currentProcessTaskVo.getParamObj();
         Long scoreTemplateId = paramObj.getLong("scoreTemplateId");
         String content = paramObj.getString("content");
