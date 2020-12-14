@@ -12,15 +12,29 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.SystemUser;
+import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
+import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 
+@Component
 public class ProcessOperateManager {
+
+    private static UserMapper userMapper;
+    private static ProcessTaskMapper processTaskMapper;
+
+    @Autowired
+    private ProcessOperateManager(UserMapper _userMapper, ProcessTaskMapper _processTaskMapper) {
+        userMapper = _userMapper;
+        processTaskMapper = _processTaskMapper;
+    }
 
     private Set<Long> processTaskIdSet;
     private Map<Long, Set<Long>> processTaskStepIdSetMap;
@@ -35,8 +49,8 @@ public class ProcessOperateManager {
         private boolean isThrowException;
         private Map<Long, Set<ProcessTaskOperationType>> checkOperationTypeSetMap = new HashMap<>();
 
-        public Builder(Long ...processTaskIds) {
-            for(Long processTaskId : processTaskIds) {
+        public Builder(Long... processTaskIds) {
+            for (Long processTaskId : processTaskIds) {
                 processTaskIdSet.add(processTaskId);
             }
         }
@@ -87,19 +101,19 @@ public class ProcessOperateManager {
         if (CollectionUtils.isEmpty(processTaskIdSet)) {
             return resultMap;
         }
-        OperationAuthHandlerBase handler =
-            (OperationAuthHandlerBase)OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
+
         List<String> userUuidList = new ArrayList<>();
         userUuidList.add(UserContext.get().getUserUuid(true));
         /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
         if (!SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid(true))) {
-            String uuid = handler.getUserMapper().getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
+            String uuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
             if (StringUtils.isNotBlank(uuid)) {
                 userUuidList.add(uuid);
             }
         }
 
-        List<ProcessTaskVo> processTaskList = handler.getProcessTaskMapper().getProcessTaskDetailListByIdList(new ArrayList<>(processTaskIdSet));
+        List<ProcessTaskVo> processTaskList =
+            processTaskMapper.getProcessTaskDetailListByIdList(new ArrayList<>(processTaskIdSet));
         for (ProcessTaskVo processTaskVo : processTaskList) {
             getOperateMap(processTaskVo, userUuidList, operationTypeSet, resultMap);
         }
@@ -158,8 +172,8 @@ public class ProcessOperateManager {
                                     .getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
                                 IOperationAuthHandler handler =
                                     OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
-                                Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler
-                                    .getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
+                                Map<ProcessTaskOperationType, Boolean> nextOperateMap =
+                                    handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
                                 if (MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
                                     operateMap.putAll(nextOperateMap);
                                 } else if (MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
