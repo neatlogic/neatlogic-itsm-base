@@ -45,21 +45,19 @@ public class ProcessOperateManager {
     public static class Builder {
         private Set<Long> processTaskIdSet = new HashSet<>();
         private Set<Long> processTaskStepIdSet = new HashSet<>();
-        private Map<Long, Set<Long>> processTaskStepIdSetMap = new HashMap<>();
         private Set<ProcessTaskOperationType> operationTypeSet = new HashSet<>();
 
-        public Builder() {
-        }
+        public Builder() {}
 
-        public Builder addProcessTaskId(Long ... processTaskIds) {
-            for(Long processTaskId : processTaskIds) {
+        public Builder addProcessTaskId(Long... processTaskIds) {
+            for (Long processTaskId : processTaskIds) {
                 processTaskIdSet.add(processTaskId);
             }
             return this;
         }
 
-        public Builder addProcessTaskStepId(Long ...processTaskStepIds) {
-            for(Long processTaskStepId : processTaskStepIds) {
+        public Builder addProcessTaskStepId(Long... processTaskStepIds) {
+            for (Long processTaskStepId : processTaskStepIds) {
                 processTaskStepIdSet.add(processTaskStepId);
             }
             return this;
@@ -77,44 +75,54 @@ public class ProcessOperateManager {
 
     public static class TaskOperationChecker {
         private Long processTaskId;
-        private Map<Long, ProcessTaskOperationType> checkOperationTypeMap = new HashMap<>();
+        private ProcessTaskOperationType operationType;
+
         public TaskOperationChecker(Long processTaskId, ProcessTaskOperationType operationType) {
             this.processTaskId = processTaskId;
-            this.checkOperationTypeMap.put(processTaskId, operationType);
+            this.operationType = operationType;
         }
+
         public ProcessOperateManager build() {
             return new ProcessOperateManager(this);
         }
     }
-    
+
     public static class StepOperationChecker {
         private Long processTaskStepId;
-        private Map<Long, ProcessTaskOperationType> checkOperationTypeMap = new HashMap<>();
+        private ProcessTaskOperationType operationType;
+
         public StepOperationChecker(Long processTaskStepId, ProcessTaskOperationType operationType) {
             this.processTaskStepId = processTaskStepId;
-            checkOperationTypeMap.put(processTaskStepId, operationType);
+            this.operationType = operationType;
         }
+
         public ProcessOperateManager build() {
             return new ProcessOperateManager(this);
         }
     }
-    
+
     private ProcessOperateManager(Builder builder) {
         this.processTaskIdSet = builder.processTaskIdSet;
-        this.processTaskStepIdSetMap = builder.processTaskStepIdSetMap;
+        this.processTaskStepIdSet = builder.processTaskStepIdSet;
         this.operationTypeSet = builder.operationTypeSet;
     }
-    
+
     private ProcessOperateManager(TaskOperationChecker checker) {
         this.processTaskIdSet = new HashSet<>();
         processTaskIdSet.add(checker.processTaskId);
-        this.checkOperationTypeMap = checker.checkOperationTypeMap;
+        this.operationTypeSet = new HashSet<>();
+        operationTypeSet.add(checker.operationType);
+        this.checkOperationTypeMap = new HashMap<>();
+        checkOperationTypeMap.put(checker.processTaskId, checker.operationType);
     }
-    
+
     private ProcessOperateManager(StepOperationChecker checker) {
         this.processTaskStepIdSet = new HashSet<>();
         processTaskStepIdSet.add(checker.processTaskStepId);
-        this.checkOperationTypeMap = checker.checkOperationTypeMap;
+        this.operationTypeSet = new HashSet<>();
+        operationTypeSet.add(checker.operationType);
+        this.checkOperationTypeMap = new HashMap<>();
+        checkOperationTypeMap.put(checker.processTaskStepId, checker.operationType);
     }
 
     public Map<Long, Set<ProcessTaskOperationType>> getOperateMap() {
@@ -133,17 +141,19 @@ public class ProcessOperateManager {
             }
         }
 
-        if(CollectionUtils.isNotEmpty(processTaskStepIdSet)) {
-            if(processTaskIdSet == null) {
+        if (CollectionUtils.isNotEmpty(processTaskStepIdSet)) {
+            if (processTaskIdSet == null) {
                 processTaskIdSet = new HashSet<>();
             }
-            if(processTaskStepIdSetMap == null) {
+            if (processTaskStepIdSetMap == null) {
                 processTaskStepIdSetMap = new HashMap<>();
             }
-            List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepListByIdList(new ArrayList<>(processTaskStepIdSet));
-            for(ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
+            List<ProcessTaskStepVo> processTaskStepList =
+                processTaskMapper.getProcessTaskStepListByIdList(new ArrayList<>(processTaskStepIdSet));
+            for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
                 processTaskIdSet.add(processTaskStepVo.getProcessTaskId());
-                processTaskStepIdSetMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new HashSet<>()).add(processTaskStepVo.getId());
+                processTaskStepIdSetMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new HashSet<>())
+                    .add(processTaskStepVo.getId());
             }
         }
         List<ProcessTaskVo> processTaskList =

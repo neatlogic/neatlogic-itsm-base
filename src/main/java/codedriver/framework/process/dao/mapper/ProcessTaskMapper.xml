@@ -979,7 +979,7 @@
 		</where>
 	</select>
 
-	<select id="getProcessTaskStepListByIdList" parameterType="java.util.List" resultType="processTaskStepMap">
+	<select id="getProcessTaskStepListByIdList" parameterType="java.lang.Long" resultMap="processTaskStepMap">
 		SELECT
 		`id`,
 		`processtask_id`,
