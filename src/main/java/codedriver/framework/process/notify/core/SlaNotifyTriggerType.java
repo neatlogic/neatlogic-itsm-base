@@ -3,7 +3,7 @@ package codedriver.framework.process.notify.core;
 import codedriver.framework.notify.core.INotifyTriggerType;
 
 public enum SlaNotifyTriggerType implements INotifyTriggerType {
-	TIMEOUT("timeout", "超时","超时");
+	TIMEOUT("timeout", "超时","满足SLA策略规则时触发通知");
 
 	private String trigger;
 	private String text;

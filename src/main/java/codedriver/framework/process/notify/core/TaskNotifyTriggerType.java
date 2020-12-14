@@ -4,12 +4,12 @@ import codedriver.framework.notify.core.INotifyTriggerType;
 
 public enum TaskNotifyTriggerType implements INotifyTriggerType {
 
-    STARTPROCESS("startprocess", "上报","上报"),
-	URGE("urge", "催办","催办"),
-	ABORTPROCESSTASK("abortprocessTask", "取消工单","取消工单"),
-	RECOVERPROCESSTASK("recoverprocessTask", "恢复工单","恢复工单"),
-	COMPLETEPROCESSTASK("COMPLETEPROCESSTASK", "完成工单","完成工单"),
-	SCOREPROCESSTASK("SCOREPROCESSTASK", "评分","评分"),
+    STARTPROCESS("startprocess", "上报","用户上报提交工单时触发通知"),
+	URGE("urge", "催办","工单完成前，用户对工单进行催办时触发通知"),
+	ABORTPROCESSTASK("abortprocessTask", "取消工单","工单完成前，有权限用户取消工单时触发通知"),
+	RECOVERPROCESSTASK("recoverprocessTask", "恢复工单","工单完成前，有权限用户恢复工单时触发通知"),
+	COMPLETEPROCESSTASK("COMPLETEPROCESSTASK", "完成工单","工单流转至结束时触发通知"),
+	SCOREPROCESSTASK("SCOREPROCESSTASK", "评分","工单完成后，有权限用户进行评分时触发通知"),
 	;
 
 	private String trigger;
@@ -34,7 +34,7 @@ public enum TaskNotifyTriggerType implements INotifyTriggerType {
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public static String getText(String trigger) {
 		for(TaskNotifyTriggerType n : TaskNotifyTriggerType.values()) {
 			if(n.getTrigger().equals(trigger)) {
