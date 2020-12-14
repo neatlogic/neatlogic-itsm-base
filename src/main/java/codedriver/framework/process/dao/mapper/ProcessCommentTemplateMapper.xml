@@ -49,21 +49,32 @@
 		a.`lcd`,
 		b.`uuid`,
 		b.`type` as `authType`
-		FROM `process_comment_template` a
-		left join `process_comment_template_authority` b
-		on a.`id` = b.`comment_template_id`
+		FROM
+		(
+		SELECT
+		`id`,
+		`content`,
+		`type`,
+		`fcu`,
+		`fcd`,
+		`lcu`,
+		`lcd`
+		from `process_comment_template`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+				and `content` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type != null and keyword != ''">
-				and a.`type` = #{type}
+				and `type` = #{type}
 			</if>
 		</where>
-		ORDER BY a.`lcd` desc
+		ORDER BY `lcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
+		) a
+		left join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
 	</select>
 
 	<select id="getTemplateById" parameterType="java.lang.Long" resultMap="templateMap">
