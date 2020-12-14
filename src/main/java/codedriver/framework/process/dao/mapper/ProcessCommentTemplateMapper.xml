@@ -64,7 +64,7 @@
 			<if test="keyword != null and keyword != ''">
 				and `content` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			<if test="type != null and keyword != ''">
+			<if test="type != null and type != ''">
 				and `type` = #{type}
 			</if>
 		</where>
@@ -75,6 +75,7 @@
 		) a
 		left join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
+		ORDER BY a.`lcd` desc
 	</select>
 
 	<select id="getTemplateById" parameterType="java.lang.Long" resultMap="templateMap">
