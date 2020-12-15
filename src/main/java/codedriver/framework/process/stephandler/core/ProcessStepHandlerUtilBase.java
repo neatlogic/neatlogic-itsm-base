@@ -1052,14 +1052,14 @@ public abstract class ProcessStepHandlerUtilBase {
             ProcessTaskStepTimeAuditVo newAuditVo = new ProcessTaskStepTimeAuditVo();
             newAuditVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
             switch (action) {
-                case ACTIVE:
+                case STEP_ACTIVE:
                     newAuditVo.setActiveTime("now");
                     if (processTaskStepTimeAuditVo == null
                         || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getActiveTime())) {
                         processTaskStepTimeAuditMapper.insertProcessTaskStepTimeAudit(newAuditVo);
                     }
                     break;
-                case START:
+                case STEP_START:
                     newAuditVo.setStartTime("now");
                     if (processTaskStepTimeAuditVo == null
                         || StringUtils.isNotBlank(processTaskStepTimeAuditVo.getStartTime())) {
@@ -1069,7 +1069,7 @@ public abstract class ProcessStepHandlerUtilBase {
                         processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
                     }
                     break;
-                case COMPLETE:
+                case STEP_COMPLETE:
                     /** 如果找不到审计记录并且completetime不为空，则新建审计记录 **/
                     newAuditVo.setCompleteTime("now");
                     if (processTaskStepTimeAuditVo == null
@@ -1080,7 +1080,7 @@ public abstract class ProcessStepHandlerUtilBase {
                         processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
                     }
                     break;
-                case ABORTPROCESSTASK:
+                case TASK_ABORT:
                     /** 如果找不到审计记录并且aborttime不为空，则新建审计记录 **/
                     newAuditVo.setAbortTime("now");
                     if (processTaskStepTimeAuditVo == null
@@ -1091,7 +1091,7 @@ public abstract class ProcessStepHandlerUtilBase {
                         processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
                     }
                     break;
-                case BACK:
+                case STEP_BACK:
                     /** 如果找不到审计记录并且backtime不为空，则新建审计记录 **/
                     newAuditVo.setBackTime("now");
                     if (processTaskStepTimeAuditVo == null
@@ -1102,7 +1102,7 @@ public abstract class ProcessStepHandlerUtilBase {
                         processTaskStepTimeAuditMapper.updateProcessTaskStepTimeAudit(newAuditVo);
                     }
                     break;
-                case RECOVERPROCESSTASK:
+                case TASK_RECOVER:
                     if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.PENDING.getValue())) {
                         newAuditVo.setActiveTime("now");
                         if (processTaskStepTimeAuditVo == null
@@ -1120,7 +1120,7 @@ public abstract class ProcessStepHandlerUtilBase {
                         }
                     }
                     break;
-                case PAUSE:
+                case STEP_PAUSE:
                     /** 如果找不到审计记录并且pausetime不为空，则新建审计记录 **/
                     newAuditVo.setPauseTime("now");
                     if (processTaskStepTimeAuditVo == null
@@ -1436,7 +1436,7 @@ public abstract class ProcessStepHandlerUtilBase {
             List<ProcessTaskStepContentVo> processTaskStepContentList =
                 processTaskMapper.getProcessTaskStepContentByProcessTaskStepId(currentProcessTaskStepVo.getId());
             for (ProcessTaskStepContentVo processTaskStepContent : processTaskStepContentList) {
-                if (ProcessTaskOperationType.STARTPROCESS.getValue().equals(processTaskStepContent.getType())) {
+                if (ProcessTaskOperationType.TASK_START.getValue().equals(processTaskStepContent.getType())) {
                     paramObj.put(ProcessTaskAuditDetailType.CONTENT.getParamName(), selectContentByHashMapper
                         .getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
                     fileIdList = processTaskMapper.getFileIdListByContentId(processTaskStepContent.getId());

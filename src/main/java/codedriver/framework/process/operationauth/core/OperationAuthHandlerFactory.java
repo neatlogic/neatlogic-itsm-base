@@ -18,9 +18,9 @@ import codedriver.framework.common.RootComponent;
  */
 @RootComponent
 public class OperationAuthHandlerFactory extends ApplicationListenerBase {
-	private static Map<IOperationAuthHandlerType, IOperationAuthHandler> componentMap = new HashMap<>();
+	private static Map<String, IOperationAuthHandler> componentMap = new HashMap<>();
 
-	public static IOperationAuthHandler getHandler(IOperationAuthHandlerType handler) {
+	public static IOperationAuthHandler getHandler(String handler) {
 		return componentMap.get(handler);
 	}
 

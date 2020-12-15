@@ -979,23 +979,22 @@
 		</where>
 	</select>
 
-	<select id="getProcessTaskStepListByIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+	<select id="getProcessTaskStepListByIdList" parameterType="java.lang.Long" resultMap="processTaskStepMap">
 		SELECT
 		`id`,
-		`processtask_id` AS processTaskId,
+		`processtask_id`,
 		`name`,
-		`process_step_uuid` AS processStepUuid,
+		`process_step_uuid`,
 		`status`,
 		`result`,
 		`type`,
 		`handler`,
-		`is_active` AS isActive,
-		`active_time` AS activeTime,
-		`start_time` AS startTime,
-		`end_time` AS endTime,
-		`error`,
-		`expire_time` AS expireTime,
-		`config_hash` AS configHash
+		`is_active`,
+		`active_time`,
+		`start_time`,
+		`end_time`,
+		`expire_time`,
+		`config_hash`
 		FROM `processtask_step`
 		WHERE `id` IN
 		<foreach collection="list" item="id" open="(" separator="," close=")">
@@ -1503,6 +1502,121 @@
 		</if>
 	</select>
 
+	<resultMap type="codedriver.framework.process.dto.ProcessTaskVo" id="processTaskDetailMap">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="process_uuid" property="processUuid" />
+		<result column="channel_uuid" property="channelUuid" />
+		<result column="config_hash" property="configHash" />
+		<result column="priority_uuid" property="priorityUuid" />
+		<result column="status" property="status" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="owner" property="owner" />
+		<result column="reporter" property="reporter" />
+		<result column="expire_time" property="expireTime" />
+		<result column="worktime_uuid" property="worktimeUuid" />
+		<result column="is_show" property="isShow" />
+		<result column="serial_number" property="serialNumber" />
+		<result column="config" property="config" />
+		
+		<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
+			<id column="bId" property="id" />
+			<result column="bProcessTaskId" property="processTaskId" />
+			<result column="bName" property="name" />
+			<result column="bProcessStepUuid" property="processStepUuid" />
+			<result column="bStatus" property="status" />
+			<result column="bType" property="type" />
+			<result column="bHandler" property="handler" />
+			<result column="bIsActive" property="isActive" />
+			<collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+				<id column="cUuid" property="uuid" />
+				<result column="cProcessTaskId" property="processTaskId" />
+				<result column="cProcessTaskStepId" property="processTaskStepId" />
+				<result column="cType" property="type" />
+				<result column="cUserType" property="userType" />
+			</collection>
+			<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+				<id column="dUserUuid" property="userUuid" />
+				<result column="dProcessTaskId" property="processTaskId" />
+				<result column="dProcessTaskStepId" property="processTaskStepId" />
+				<result column="dUserType" property="userType" />
+			</collection>
+		</collection>
+		
+		<collection property="stepRelList" ofType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
+			<id column="fUuid" property="processStepRelUuid" />
+			<result column="bProcessTaskId" property="processTaskId" />
+			<result column="fFromProcessStepUuid" property="fromProcessStepUuid" />
+			<result column="fToProcessStepUuid" property="toProcessStepUuid" />
+			<result column="fFromProcessTaskStepId" property="fromProcessTaskStepId" />
+			<result column="fToProcessTaskStepId" property="toProcessTaskStepId" />
+			<result column="fIsHit" property="isHit" />
+			<result column="fName" property="name" />
+			<result column="fType" property="type" />
+		</collection>
+	</resultMap>
+	<select id="getProcessTaskDetailListByIdList" parameterType="java.lang.Long" resultMap="processTaskDetailMap">
+	SELECT 
+	  a.`id`,
+	  a.`title`,
+	  a.`process_uuid`,
+	  a.`channel_uuid`,
+	  a.`config_hash`,
+	  a.`priority_uuid`,
+	  a.`status`,
+	  a.`start_time`,
+	  a.`end_time`,
+	  a.`owner`,
+	  a.`reporter`,
+	  a.`expire_time`,
+	  a.`worktime_uuid`,
+	  a.`is_show`,
+	  a.`serial_number`,
+	  
+	  b.`id` AS bId,
+	  b.`processtask_id` AS bProcessTaskId,
+	  b.`name` AS bName,
+	  b.`process_step_uuid` AS bProcessStepUuid,
+	  b.`status` AS bStatus,
+	  b.`type` AS bType,
+	  b.`handler` AS bHandler,
+	  b.`is_active` AS bIsActive,
+	  
+	  c.`processtask_id` AS cProcessTaskId,
+	  c.`processtask_step_id` AS cProcessTaskStepId,
+	  c.`type` AS cType,
+	  c.`uuid` AS cUuid,
+	  c.`user_type` AS cUserType,
+	  
+	  d.`processtask_id` AS dProcessTaskId,
+	  d.`processtask_step_id` AS dProcessTaskStepId,
+	  d.`user_uuid` AS dUserUuid,
+	  d.`user_type` AS dUserType,
+	  
+	  e.`config`,
+	  
+	  f.`processtask_id` AS fProcessTaskId,
+  	  f.`from_process_step_uuid` AS fFromProcessStepUuid,
+      f.`to_process_step_uuid` AS fToProcessStepUuid,
+      f.`from_processtask_step_id` AS fFromProcessTaskStepId,
+      f.`to_processtask_step_id` AS fToProcessTaskStepId,
+      f.`uuid` AS fUuid,
+      f.`is_hit` AS fIsHit,
+      f.`name`AS fName,
+      f.`type` AS fType	      
+	FROM `processtask` a
+	LEFT JOIN `processtask_step` b ON b.`processtask_id` = a.`id`
+	LEFT JOIN `processtask_step_worker` c ON c.`processtask_step_id` = b.`id`
+	LEFT JOIN `processtask_step_user` d ON d.`processtask_step_id` = b.`id`
+	LEFT JOIN `processtask_config` e ON e.`hash` = a.`config_hash`
+	JOIN `processtask_step_rel` f ON f.`processtask_id` = a.`id`
+	WHERE a.`id` IN 
+	<foreach collection="list" item="id" open="(" separator="," close=")">
+	#{id}
+	</foreach>
+	</select>
+	
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -2220,7 +2334,7 @@
 	</insert>
 
 	<insert id="insertProcessTaskStepInOperation" parameterType="codedriver.framework.process.dto.ProcessTaskStepInOperationVo">
-		INSERT INTO `processtask_step_in_operation` (
+		INSERT IGNORE INTO `processtask_step_in_operation` (
 		`processtask_id`,
 		`processtask_step_id`,
 		`operation_type`,

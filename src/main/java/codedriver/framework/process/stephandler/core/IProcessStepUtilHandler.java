@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONObject;
 import codedriver.framework.notify.core.INotifyTriggerType;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.audithandler.core.IProcessTaskAuditType;
-import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
@@ -93,97 +92,6 @@ public interface IProcessStepUtilHandler {
      * @return void
      */
     public void calculateSla(ProcessTaskStepVo currentProcessTaskStepVo);
-
-    /**
-     * 
-     * @Time:2020年3月30日
-     * @Description: 获取当前用户对当前步骤的所有操作权限列表
-     * @param processTaskId
-     * @param processTaskStepId
-     * @return List<String>
-     */
-    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId);
-
-    /**
-     * 
-     * @Time:2020年3月30日
-     * @Description: 获取当前用户对当前步骤的所有操作权限列表
-     * @param processTaskId
-     * @param processTaskStepId
-     * @return List<String>
-     */
-    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo,
-        ProcessTaskStepVo processTaskStepVo);
-
-    /**
-     * 
-     * @Time:2020年3月30日
-     * @Description: 获取当前用户对当前步骤的部分操作权限列表（operationTypeList包含的那部分）
-     * @param processTaskId
-     * @param processTaskStepId
-     * @return List<String>
-     */
-    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId,
-        List<ProcessTaskOperationType> operationTypeList);
-
-    /**
-     * 
-     * @Time:2020年3月30日
-     * @Description: 获取当前用户对当前步骤的部分操作权限列表（operationTypeList包含的那部分）
-     * @param processTaskId
-     * @param processTaskStepId
-     * @return List<String>
-     */
-    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo,
-        ProcessTaskStepVo processTaskStepVo, List<ProcessTaskOperationType> operationTypeList);
-
-    /**
-     * 
-     * @Time:2020年3月30日
-     * @Description: 判断当前用户对当前步骤的某个操作是否有权限
-     * @param processTaskId
-     * @param processTaskStepId
-     * @param action
-     * @return boolean
-     */
-    public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId,
-        ProcessTaskOperationType operationType, boolean isThrowException);
-
-    /**
-     * 
-     * @Time:2020年3月30日
-     * @Description: 判断当前用户对当前步骤的某个操作是否有权限
-     * @param processTaskId
-     * @param processTaskStepId
-     * @param action
-     * @return boolean
-     */
-    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
-        ProcessTaskOperationType operationType, boolean isThrowException);
-
-    /**
-     * 
-     * @Time:2020年3月30日
-     * @Description: 判断当前用户对当前步骤的某个操作是否有权限
-     * @param processTaskId
-     * @param processTaskStepId
-     * @param action
-     * @return boolean
-     */
-    public boolean verifyOperationAuthoriy(Long processTaskId, ProcessTaskOperationType operationType,
-        boolean isThrowException);
-
-    /**
-     * 
-     * @Time:2020年3月30日
-     * @Description: 判断当前用户对当前步骤的某个操作是否有权限
-     * @param processTaskId
-     * @param processTaskStepId
-     * @param action
-     * @return boolean
-     */
-    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskOperationType operationType,
-        boolean isThrowException);
 
     /**
      * 
