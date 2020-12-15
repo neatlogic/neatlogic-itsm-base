@@ -161,12 +161,12 @@ public class ProcessAuthManager {
             }
         }
 
+        if (processTaskStepIdSetMap == null) {
+            processTaskStepIdSetMap = new HashMap<>();
+        }
         if (CollectionUtils.isNotEmpty(processTaskStepIdSet)) {
             if (processTaskIdSet == null) {
                 processTaskIdSet = new HashSet<>();
-            }
-            if (processTaskStepIdSetMap == null) {
-                processTaskStepIdSetMap = new HashMap<>();
             }
             List<ProcessTaskStepVo> processTaskStepList =
                 processTaskMapper.getProcessTaskStepListByIdList(new ArrayList<>(processTaskStepIdSet));
