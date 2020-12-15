@@ -7,7 +7,9 @@
 		`channel_type_uuid` AS channelTypeUuid,
 		`handler`,
 		`config`,
-		`serial_number_seed` AS serialNumberSeed
+		`serial_number_seed` AS serialNumberSeed,
+		`start_time` AS startTime,
+		`end_time` AS endTime
 		FROM `processtask_serial_number_policy`
 		WHERE `channel_type_uuid` = #{value}
 	</select>
@@ -17,8 +19,9 @@
 		`channel_type_uuid` AS channelTypeUuid,
 		`handler`,
 		`config`,
-		`serial_number_seed` AS
-		serialNumberSeed
+		`serial_number_seed` AS serialNumberSeed,
+		`start_time` AS startTime,
+		`end_time` AS endTime
 		FROM
 		`processtask_serial_number_policy`
 		WHERE `handler` = #{value}
@@ -56,6 +59,18 @@
 
 	<update id="updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid">
 		UPDATE `processtask_serial_number_policy` SET `serial_number_seed` = #{serialNumberSeed}
+		WHERE
+		`channel_type_uuid` = #{channelTypeUuid}
+	</update>
+	
+	<update id="updateProcessTaskSerialNumberPolicyStartTimeByChannelTypeUuid">
+		UPDATE `processtask_serial_number_policy` SET `start_time` = NOW(3), `end_time` = NULL
+		WHERE
+		`channel_type_uuid` = #{channelTypeUuid}
+	</update>
+	
+	<update id="updateProcessTaskSerialNumberPolicyEndTimeByChannelTypeUuid">
+		UPDATE `processtask_serial_number_policy` SET `end_time` = NOW(3)
 		WHERE
 		`channel_type_uuid` = #{channelTypeUuid}
 	</update>

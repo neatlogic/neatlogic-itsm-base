@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import java.util.Date;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -15,6 +17,9 @@ public class ProcessTaskSerialNumberPolicyVo {
     @JSONField(serialize = false)
     private transient Long serialNumberSeed;
 
+    private Date startTime;
+    private Date endTime;
+    
     public String getChannelTypeUuid() {
         return channelTypeUuid;
     }
@@ -72,5 +77,21 @@ public class ProcessTaskSerialNumberPolicyVo {
 
     public void setSerialNumberSeed(Long serialNumberSeed) {
         this.serialNumberSeed = serialNumberSeed;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

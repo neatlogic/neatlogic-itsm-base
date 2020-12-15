@@ -239,9 +239,9 @@ public interface ProcessTaskMapper {
 
     public int getProcessTaskStepInOperationCountByProcessTaskId(Long processTaskId);
 
-    public int getProcessTaskCountByChannelTypeUuid(String channelTypeUuid);
+    public int getProcessTaskCountByChannelTypeUuidAndStartTime(ProcessTaskVo processTaskVo);
 
-    public List<ProcessTaskVo> getProcessTaskListByChannelTypeUuid(ProcessTaskVo processTaskVo);
+    public List<ProcessTaskVo> getProcessTaskListByChannelTypeUuidAndStartTime(ProcessTaskVo processTaskVo);
 
     public List<ProcessTaskVo> getProcessTaskDetailListByIdList(List<Long> processTaskIdList);
 

@@ -1448,13 +1448,16 @@
 		SELECT COUNT(1) FROM `processtask_step_in_operation` WHERE `processtask_id` = #{value}
 	</select>
 
-	<select id="getProcessTaskCountByChannelTypeUuid" parameterType="java.lang.String" resultType="int">
+	<select id="getProcessTaskCountByChannelTypeUuidAndStartTime" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultType="int">
 		SELECT
 		COUNT(a.`id`)
 		FROM processtask a
 		JOIN channel b ON b.`uuid` = a.`channel_uuid`
 		JOIN channel_type c ON c.`uuid` = b.`channel_type_uuid`
-		WHERE c.`uuid` = #{value}
+		WHERE c.`uuid` = #{channelTypeUuid}
+		<if test="startTime != null">
+			AND a.`start_time` &gt;= #{startTime}
+		</if>
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ProcessTaskVo" id="processTaskMap">
@@ -1475,7 +1478,7 @@
 		<result column="serial_number" property="serialNumber" />
 	</resultMap>
 
-	<select id="getProcessTaskListByChannelTypeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultMap="processTaskMap">
+	<select id="getProcessTaskListByChannelTypeUuidAndStartTime" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultMap="processTaskMap">
 		SELECT
 		a.`id`,
 		a.`title`,
@@ -1496,6 +1499,9 @@
 		JOIN channel b ON b.`uuid` = a.`channel_uuid`
 		JOIN channel_type c ON c.`uuid` = b.`channel_type_uuid`
 		WHERE c.`uuid` = #{channelTypeUuid}
+		<if test="startTime != null">
+			AND a.`start_time` &gt;= #{startTime}
+		</if>
 		ORDER BY a.`id`
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
