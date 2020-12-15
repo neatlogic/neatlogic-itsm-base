@@ -957,7 +957,6 @@
 		`reporter`,
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
-		`error`,
 		`serial_number` AS serialNumber
 		FROM `processtask`
 		<where>
@@ -1258,7 +1257,7 @@
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
-		`error`
+		`serial_number` AS serialNumber
 		FROM `processtask`
 		WHERE `status` != 'draft'
 		AND `channel_uuid` IN
