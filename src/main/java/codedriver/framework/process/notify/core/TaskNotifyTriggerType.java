@@ -6,10 +6,10 @@ public enum TaskNotifyTriggerType implements INotifyTriggerType {
 
     STARTPROCESS("startprocess", "上报","用户上报提交工单时触发通知"),
 	URGE("urge", "催办","工单完成前，用户对工单进行催办时触发通知"),
-	ABORTPROCESSTASK("abortprocessTask", "取消工单","工单完成前，有权限用户取消工单时触发通知"),
-	RECOVERPROCESSTASK("recoverprocessTask", "恢复工单","工单完成前，有权限用户恢复工单时触发通知"),
-	COMPLETEPROCESSTASK("COMPLETEPROCESSTASK", "完成工单","工单流转至结束时触发通知"),
-	SCOREPROCESSTASK("SCOREPROCESSTASK", "评分","工单完成后，有权限用户进行评分时触发通知"),
+	ABORTPROCESSTASK("abortprocesstask", "取消工单","工单完成前，有权限用户取消工单时触发通知"),
+	RECOVERPROCESSTASK("recoverprocesstask", "恢复工单","工单完成前，有权限用户恢复工单时触发通知"),
+	COMPLETEPROCESSTASK("completeprocesstask", "完成工单","工单流转至结束时触发通知"),
+	SCOREPROCESSTASK("scoreprocesstask", "评分","工单完成后，有权限用户进行评分时触发通知"),
 	;
 
 	private String trigger;

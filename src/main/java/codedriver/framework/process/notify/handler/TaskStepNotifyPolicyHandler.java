@@ -2,8 +2,18 @@ package codedriver.framework.process.notify.handler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import codedriver.framework.common.dto.ValueTextVo;
+import codedriver.framework.notify.core.NotifyHandlerFactory;
+import codedriver.framework.notify.core.NotifyHandlerType;
+import codedriver.framework.notify.dto.NotifyTriggerTemplateVo;
 import codedriver.framework.notify.dto.NotifyTriggerVo;
+import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
+import codedriver.framework.process.notify.template.IDefaultTemplate;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
@@ -42,7 +52,37 @@ public class TaskStepNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 		return returnList;
 	}
 
-	@Override
+    @Override
+    protected List<NotifyTriggerTemplateVo> myNotifyTriggerTemplateList(NotifyHandlerType type) {
+        List<NotifyTriggerTemplateVo> list = new ArrayList<>();
+        /** 根据type获取通知handler全类名 */
+        String handler = null;
+        List<ValueTextVo> notifyHandlerTypeList = NotifyHandlerFactory.getNotifyHandlerNameList();
+        Optional<ValueTextVo> first = notifyHandlerTypeList.stream().filter(o -> o.getText().equals(type.getValue())).findFirst();
+        if(first != null){
+            ValueTextVo notifyHandlerClass = first.get();
+            handler = notifyHandlerClass.getValue().toString();
+        }
+        List<IDefaultTemplate> templateList = NotifyDefaultTemplateFactory.getTemplate(type.getValue());
+        if(CollectionUtils.isNotEmpty(templateList)){
+            Map<String, List<IDefaultTemplate>> map = templateList.stream().collect(Collectors.groupingBy(IDefaultTemplate::getTrigger));
+            for (TaskStepNotifyTriggerType notifyTriggerType : TaskStepNotifyTriggerType.values()) {
+                List<IDefaultTemplate> templates = map.get(notifyTriggerType.getTrigger().toLowerCase());
+                for(IDefaultTemplate vo : templates){
+                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),vo.getTitle(),vo.getContent(),handler));
+                }
+            }
+            for (SubtaskNotifyTriggerType notifyTriggerType : SubtaskNotifyTriggerType.values()) {
+                List<IDefaultTemplate> templates = map.get(notifyTriggerType.getTrigger().toLowerCase());
+                for(IDefaultTemplate vo : templates){
+                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),vo.getTitle(),vo.getContent(),handler));
+                }
+            }
+        }
+        return list;
+    }
+
+    @Override
 	protected List<ConditionParamVo> mySystemParamList() {
 		List<ConditionParamVo> notifyPolicyParamList = new ArrayList<>();
 		for(ProcessTaskParams processTaskParams : ProcessTaskParams.values()) {
