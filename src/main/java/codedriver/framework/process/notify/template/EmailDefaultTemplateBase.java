@@ -1,14 +1,179 @@
 package codedriver.framework.process.notify.template;
 
 import codedriver.framework.notify.core.NotifyHandlerType;
+import org.springframework.stereotype.Component;
 
+// TODO 文案待重新梳理 --laiwt
 public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 	
-	@Override
-	public String getNotifyHandlerType() {
-		return NotifyHandlerType.EMAIL.getValue();
+//	@Override
+//	public String getNotifyHandlerType() {
+//		return NotifyHandlerType.EMAIL.getValue();
+//	}
+
+	@Component
+	public static class StartProcess extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "工单上报完成提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
+	public static class Urge extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "您收到了一条催办提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.currentUserName}】发起了一条催办通知，请尽快处理；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知催办默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class AbortProcessTask extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "步骤激活提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class RecoverProcessTask extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "步骤激活提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class CompleteProcessTask extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "步骤激活提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class ScoreProcessTask extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "步骤激活提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
 	public static class Active extends EmailDefaultTemplateBase {
 
 		@Override
@@ -28,9 +193,68 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知步骤激活默认模板";
 		}
-		
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
+	public static class Assign extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "步骤激活提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class AssignException extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "步骤激活提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
 	public static class Start extends EmailDefaultTemplateBase {
 
 		@Override
@@ -50,9 +274,14 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知步骤激活默认模板";
 		}
-		
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
 	public static class Transfer extends EmailDefaultTemplateBase {
 
 		@Override
@@ -73,30 +302,14 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知步骤激活默认模板";
 		}
-		
-	}
-	
-	public static class Urge extends EmailDefaultTemplateBase {
 
 		@Override
-		public String getTitle() {
-			return "您收到了一条催办提醒——" + PROCESSTASK_ID_TITLE;
-		}
-
-		@Override
-		public String getContent() {
-			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.currentUserName}】发起了一条催办通知，请尽快处理；<br>")
-					.append(PROCESSTASK_DETAILS_LINK)
-					.toString();
-		}
-
-		@Override
-		public String description() {
-			return "邮件通知催办默认模板";
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
 		}
 	}
-	
+
+	@Component
 	public static class Succeed extends EmailDefaultTemplateBase {
 
 		@Override
@@ -116,8 +329,14 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知成功默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
 	public static class Back extends EmailDefaultTemplateBase {
 
 		@Override
@@ -138,8 +357,14 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知退回默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
 	public static class Retreat extends EmailDefaultTemplateBase {
 
 		@Override
@@ -160,8 +385,14 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知撤回默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
 	public static class Hang extends EmailDefaultTemplateBase {
 
 		@Override
@@ -182,8 +413,14 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知挂起默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
 	public static class Abort extends EmailDefaultTemplateBase {
 
 		@Override
@@ -203,8 +440,14 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知取消默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
 	public static class Recover extends EmailDefaultTemplateBase {
 
 		@Override
@@ -224,8 +467,41 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知恢复默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
+	public static class Pause extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "步骤激活提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
 	public static class Failed extends EmailDefaultTemplateBase {
 
 		@Override
@@ -246,8 +522,41 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知失败默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
+	public static class Redo extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "步骤打回提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("工单" + PROCESSTASK_ID_TITLE + "已流转至【${DATA.step.name}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知步骤激活默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
 	public static class CreateSubtask extends EmailDefaultTemplateBase {
 
 		@Override
@@ -267,8 +576,14 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知子任务创建默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
+
+	@Component
 	public static class EditSubtask extends EmailDefaultTemplateBase {
 
 		@Override
@@ -289,19 +604,25 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知更新子任务默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
-	public static class CompleteSubtask extends EmailDefaultTemplateBase {
+
+	@Component
+	public static class AbortSubtask extends EmailDefaultTemplateBase {
 
 		@Override
 		public String getTitle() {
-			return "子任务完成提醒——" + PROCESSTASK_ID_TITLE;
+			return "取消子任务提醒——" + PROCESSTASK_ID_TITLE;
 		}
 
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.ownerName}】取消了分配给【${DATA.subtask.userName}】的任务：<br>")
 					.append("【${DATA.subtask.content}】；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
@@ -309,10 +630,16 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
 		@Override
 		public String description() {
-			return "邮件通知子任务完成默认模板";
+			return "邮件通知取消子任务默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
 		}
 	}
-	
+
+	@Component
 	public static class RedoSubtask extends EmailDefaultTemplateBase {
 
 		@Override
@@ -334,19 +661,25 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		public String description() {
 			return "邮件通知退回子任务默认模板";
 		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
 	}
-	
-	public static class AbortSubtask extends EmailDefaultTemplateBase {
+
+	@Component
+	public static class CompleteSubtask extends EmailDefaultTemplateBase {
 
 		@Override
 		public String getTitle() {
-			return "取消子任务提醒——" + PROCESSTASK_ID_TITLE;
+			return "子任务完成提醒——" + PROCESSTASK_ID_TITLE;
 		}
 
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("【${DATA.subtask.ownerName}】取消了分配给【${DATA.subtask.userName}】的任务：<br>")
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
 					.append("【${DATA.subtask.content}】；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
@@ -354,7 +687,265 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
 		@Override
 		public String description() {
-			return "邮件通知取消子任务默认模板";
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
 		}
 	}
+
+	@Component
+	public static class Timeout extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class StartChangeStep extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class CompleteChangeStep extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class AbortChangeStep extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class CommentChangeStep extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class StartChange extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class PauseChange extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class RecoverChange extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
+	@Component
+	public static class RestartChange extends EmailDefaultTemplateBase {
+
+		@Override
+		public String getTitle() {
+			return "超时提醒——" + PROCESSTASK_ID_TITLE;
+		}
+
+		@Override
+		public String getContent() {
+			return new StringBuilder()
+					.append("【${DATA.subtask.userName}】完成了【${DATA.subtask.ownerName}】分配的任务：<br>")
+					.append("【${DATA.subtask.content}】；<br>")
+					.append(PROCESSTASK_DETAILS_LINK)
+					.toString();
+		}
+
+		@Override
+		public String description() {
+			return "邮件通知子任务完成默认模板";
+		}
+
+		@Override
+		public String getNotifyHandlerType() {
+			return NotifyHandlerType.EMAIL.getValue();
+		}
+	}
+
 }
