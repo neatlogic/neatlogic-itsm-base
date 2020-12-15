@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 
+import org.joda.time.LocalDate;
 import org.quartz.CronExpression;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -111,15 +112,18 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
             startValue = 0L;
         }
         resultObj.put("startValue", startValue);
-        resultObj.put("digits", jsonObj.getInteger("digits"));
+        Integer digits = jsonObj.getInteger("digits");
+        if(digits != null) {
+            resultObj.put("digits", digits);
+            resultObj.put("numberOfDigits", digits - 8);
+        }
         return resultObj;
     }
 
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
-        int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
-        digits -= 8;
-        long max = (long)Math.pow(10, digits) - 1;
+        int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
+        long max = (long)Math.pow(10, numberOfDigits) - 1;
         long serialNumberSeed = processTaskSerialNumberPolicyVo.getSerialNumberSeed();
         if (serialNumberSeed > max) {
             serialNumberSeed -= max;
@@ -127,53 +131,68 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
         processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
             processTaskSerialNumberPolicyVo.getChannelTypeUuid(), serialNumberSeed + 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        return sdf.format(new Date()) + String.format("%0" + digits + "d", serialNumberSeed);
+        return sdf.format(new Date()) + String.format("%0" + numberOfDigits + "d", serialNumberSeed);
     }
 
     @Override
-    public int batchUpdateHistoryProcessTask(String channelTypeUuid) {
-        int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuid(channelTypeUuid);
-        if (rowNum > 0) {
-            /** 加锁 **/
-            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo =
-                processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelTypeUuid);
-            int digits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("digits");
-            digits -= 8;
-            long max = (long)Math.pow(10, digits) - 1;
-            long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
-            long serialNumberSeed = startValue;
-            String timeFormat = null;
-            int pageSize = 1000;
-            int pageCount = PageUtil.getPageCount(rowNum, pageSize);
+    public int batchUpdateHistoryProcessTask(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
+        try {
             ProcessTaskVo processTaskVo = new ProcessTaskVo();
-            processTaskVo.setChannelTypeUuid(channelTypeUuid);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            for (int currentPage = 1; currentPage <= pageCount; currentPage++) {
-                processTaskVo.setCurrentPage(currentPage);
-                List<ProcessTaskVo> processTaskList =
-                    processTaskMapper.getProcessTaskListByChannelTypeUuid(processTaskVo);
-                for (ProcessTaskVo processTask : processTaskList) {
-                    String startTimeFormat = sdf.format(processTask.getStartTime());
-                    if (!Objects.equals(timeFormat, startTimeFormat)) {
-                        serialNumberSeed = startValue;
-                        timeFormat = startTimeFormat;
-                    }
-                    String serialNumber = startTimeFormat + String.format("%0" + digits + "d", serialNumberSeed);
-                    processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
-                    processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
-                    serialNumberSeed++;
-                    if (serialNumberSeed > max) {
-                        serialNumberSeed -= max;
+            processTaskVo.setChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+            int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuidAndStartTime(processTaskVo);
+            if (rowNum > 0) {
+                int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
+                long max = (long)Math.pow(10, numberOfDigits) - 1;
+                long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
+                long serialNumberSeed = startValue;
+                String timeFormat = null;
+                int pageSize = 1000;
+                int pageCount = PageUtil.getPageCount(rowNum, pageSize);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                for (int currentPage = 1; currentPage <= pageCount; currentPage++) {
+                    processTaskVo.setCurrentPage(currentPage);
+                    processTaskVo.setPageSize(pageSize);
+                    List<ProcessTaskVo> processTaskList =
+                        processTaskMapper.getProcessTaskListByChannelTypeUuidAndStartTime(processTaskVo);
+                    for (ProcessTaskVo processTask : processTaskList) {
+                        String startTimeFormat = sdf.format(processTask.getStartTime());
+                        if (!Objects.equals(timeFormat, startTimeFormat)) {
+                            serialNumberSeed = startValue;
+                            timeFormat = startTimeFormat;
+                        }
+                        String serialNumber = startTimeFormat + String.format("%0" + numberOfDigits + "d", serialNumberSeed);
+                        processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
+                        processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTask.getId(), serialNumber);
+                        serialNumberSeed++;
+                        if (serialNumberSeed > max) {
+                            serialNumberSeed -= max;
+                        }
                     }
                 }
             }
-            processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
-            processTaskSerialNumberMapper
-                .updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(channelTypeUuid, startValue);
+            return rowNum;
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+        }finally {
+            processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicyEndTimeByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
         }
-        return rowNum;
+        return 0;
     }
 
+
+    @Override
+    public Long calculateSerialNumberSeedAfterBatchUpdateHistoryProcessTask(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
+        int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
+        long max = (long)Math.pow(10, numberOfDigits) - 1;
+        long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
+        ProcessTaskVo processTaskVo = new ProcessTaskVo();
+        processTaskVo.setChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+        processTaskVo.setStartTime(LocalDate.now().toDate());
+        int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuidAndStartTime(processTaskVo);
+        rowNum += startValue;        
+        return rowNum % max;
+    }
+    
     @PostConstruct
     public void init() {
         List<TenantVo> tenantList = tenantMapper.getAllActiveTenant();

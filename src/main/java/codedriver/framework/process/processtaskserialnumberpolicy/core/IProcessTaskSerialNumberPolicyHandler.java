@@ -1,6 +1,5 @@
 package codedriver.framework.process.processtaskserialnumberpolicy.core;
 
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ClassUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -17,10 +16,11 @@ public interface IProcessTaskSerialNumberPolicyHandler {
     public JSONObject makeupConfig(JSONObject jsonObj);
 
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo);
+    
+    public int batchUpdateHistoryProcessTask(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo);
 
-    @Transactional
-    public int batchUpdateHistoryProcessTask(String channelTypeUuid);
-
+    public Long calculateSerialNumberSeedAfterBatchUpdateHistoryProcessTask(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo);
+    
     public default String getHandler() {
         return ClassUtils.getUserClass(this.getClass()).getName();
     }
