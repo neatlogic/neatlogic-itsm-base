@@ -49,21 +49,33 @@
 		a.`lcd`,
 		b.`uuid`,
 		b.`type` as `authType`
-		FROM `process_comment_template` a
-		left join `process_comment_template_authority` b
-		on a.`id` = b.`comment_template_id`
+		FROM
+		(
+		SELECT
+		`id`,
+		`content`,
+		`type`,
+		`fcu`,
+		`fcd`,
+		`lcu`,
+		`lcd`
+		from `process_comment_template`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+				and `content` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			<if test="type != null and keyword != ''">
-				and a.`type` = #{type}
+			<if test="type != null and type != ''">
+				and `type` = #{type}
 			</if>
 		</where>
-		ORDER BY a.`lcd` desc
+		ORDER BY `lcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
+		) a
+		left join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
+		ORDER BY a.`lcd` desc
 	</select>
 
 	<select id="getTemplateById" parameterType="java.lang.Long" resultMap="templateMap">
@@ -92,6 +104,7 @@
 		FROM
 		`process_comment_template` a
 		join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
 				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
@@ -111,26 +124,25 @@
 
 	<select id="searchTemplateForTask" parameterType="codedriver.framework.process.dto.ProcessCommentTemplateVo" resultMap="templateMap" useCache="false">
 		SELECT
+		distinct
 		a.`id`,
 		a.`content`,
 		a.`type`,
 		a.`fcu`,
 		a.`fcd`,
 		a.`lcu`,
-		a.`lcd`,
-		b.`uuid`,
-		b.`type` as `authType`
-		FROM `process_comment_template` a
+		a.`lcd`
+		from `process_comment_template` a
 		join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
 		left join `process_comment_template_usecount` c
 		on a.`id` = c.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+				and `content` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type != null and keyword != ''">
-				and a.`type` = #{type}
+				and `type` = #{type}
 			</if>
 			<if test="authList != null and authList.size() > 0 ">
 				and b.`uuid` IN
