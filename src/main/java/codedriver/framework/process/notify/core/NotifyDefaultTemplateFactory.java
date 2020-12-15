@@ -1,12 +1,45 @@
 package codedriver.framework.process.notify.core;
 
-public class NotifyDefaultTemplateFactory {
+import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
+import codedriver.framework.common.RootComponent;
+import codedriver.framework.process.notify.template.IDefaultTemplate;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ContextRefreshedEvent;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@RootComponent
+public class NotifyDefaultTemplateFactory extends ApplicationListenerBase {
 	
 //	private static List<NotifyTemplateVo> defaultTemplateList = new ArrayList<>();	
 //
 	private static int number;
     public static synchronized long nextNum() {
         return number++;
+    }
+
+
+    private static Map<String, List<IDefaultTemplate>> templateMap = new HashMap<>();
+
+    public static List<IDefaultTemplate> getTemplate(String handler) {
+        return templateMap.get(handler);
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        ApplicationContext context = event.getApplicationContext();
+        Map<String, IDefaultTemplate> map = context.getBeansOfType(IDefaultTemplate.class);
+        Collection<IDefaultTemplate> values = map.values();
+        templateMap.putAll(values.stream().collect(Collectors.groupingBy(IDefaultTemplate::getNotifyHandlerType)));
+    }
+
+    @Override
+    protected void myInit() {
+
     }
 //    
 //	static {
