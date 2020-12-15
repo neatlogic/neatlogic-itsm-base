@@ -131,7 +131,8 @@
 		a.`fcu`,
 		a.`fcd`,
 		a.`lcu`,
-		a.`lcd`
+		a.`lcd`,
+		c.`count`
 		from `process_comment_template` a
 		join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
