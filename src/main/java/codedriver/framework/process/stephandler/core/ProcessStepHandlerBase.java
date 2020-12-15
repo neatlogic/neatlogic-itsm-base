@@ -1080,10 +1080,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         SlaHandler.calculate(currentProcessTaskStepVo);
 
         /** 触发通知 **/
-        NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ABORT);
+        NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
 
         /** 执行动作 **/
-        ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ABORT);
+        ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
         return 1;
     }
 
@@ -1191,10 +1191,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         SlaHandler.calculate(currentProcessTaskStepVo);
 
         /** 触发通知 **/
-        NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.RECOVER);
+        NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
 
         /** 执行动作 **/
-        ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.RECOVER);
+        ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
         return 1;
     }
 
@@ -2146,10 +2146,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             SlaHandler.calculate(currentProcessTaskStepVo);
 
             /** 触发通知 **/
-            NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.REDO);
+            NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.REOPENPROCESSTASK);
 
             /** 执行动作 **/
-            ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.REDO);
+            ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.REOPENPROCESSTASK);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setError(ex.getMessage());
