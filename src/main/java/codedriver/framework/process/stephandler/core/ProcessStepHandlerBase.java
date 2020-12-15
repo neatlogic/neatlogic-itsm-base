@@ -87,7 +87,7 @@ import codedriver.framework.process.exception.processtask.ProcessTaskStepUserIsE
 import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyHandlerNotFoundException;
 import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyNotFoundException;
 import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
-import codedriver.framework.process.operationauth.core.ProcessOperateManager;
+import codedriver.framework.process.operationauth.core.ProcessAuthManager;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
 import codedriver.framework.process.workerpolicy.core.IWorkerPolicyHandler;
@@ -245,7 +245,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                             // 标记挂起操作的发起步骤，避免出现死循环
                             nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                             if (handler != null) {
-                                doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
+                                doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
                                     @Override
                                     public void myExecute() {
                                         handler.hang(nextProcessTaskStepVo);
@@ -268,9 +268,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
                     /** 写入时间审计 **/
-                    TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
+                    TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_ACTIVE);
                     if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
-                        TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+                        TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_START);
                         NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.START);
                     }
 
@@ -288,7 +288,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
                     /** 自动处理 **/
                     IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
-                    doNext(ProcessTaskOperationType.HANDLE, new ProcessStepThread(currentProcessTaskStepVo) {
+                    doNext(ProcessTaskOperationType.STEP_HANDLE, new ProcessStepThread(currentProcessTaskStepVo) {
                         @Override
                         public void myExecute() {
                             handler.handle(currentProcessTaskStepVo);
@@ -311,7 +311,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                  * 发生异常不能激活当前步骤，执行当前步骤的回退操作
                  */
                 IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
-                doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(currentProcessTaskStepVo) {
+                doNext(ProcessTaskOperationType.STEP_BACK, new ProcessStepThread(currentProcessTaskStepVo) {
                     @Override
                     public void myExecute() {
                         handler.back(currentProcessTaskStepVo);
@@ -478,7 +478,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                                 .setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
                             toProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
                             if (handler != null) {
-                                doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(toProcessTaskStepVo) {
+                                doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(toProcessTaskStepVo) {
                                     @Override
                                     public void myExecute() {
                                         handler.hang(toProcessTaskStepVo);
@@ -533,9 +533,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 /** 如果步骤被标记为全部完成，则触发完成 **/
                 if (currentProcessTaskStepVo.getIsAllDone()) {
                     /** 记录时间审计 **/
-                    TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
+                    TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_COMPLETE);
                     IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
-                    doNext(ProcessTaskOperationType.COMPLETE, new ProcessStepThread(currentProcessTaskStepVo) {
+                    doNext(ProcessTaskOperationType.STEP_COMPLETE, new ProcessStepThread(currentProcessTaskStepVo) {
                         @Override
                         public void myExecute() {
                             handler.complete(currentProcessTaskStepVo);
@@ -563,9 +563,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                         myHandle(currentProcessTaskStepVo);
                         if (currentProcessTaskStepVo.getIsAllDone()) {
                             /** 记录时间审计 **/
-                            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
+                            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_COMPLETE);
 
-                            doNext(ProcessTaskOperationType.COMPLETE, new ProcessStepThread(currentProcessTaskStepVo) {
+                            doNext(ProcessTaskOperationType.STEP_COMPLETE, new ProcessStepThread(currentProcessTaskStepVo) {
                                 @Override
                                 public void myExecute() {
                                     handler.complete(currentProcessTaskStepVo);
@@ -621,8 +621,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
-                ProcessTaskOperationType.START).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.STEP_START).build().checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
             ProcessTaskStepVo processTaskStepVo =
@@ -648,7 +648,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 currentProcessTaskStepVo.getId());
 
             /** 写入时间审计 **/
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_START);
 
             /** 计算SLA **/
             SlaHandler.calculate(currentProcessTaskStepVo);
@@ -702,14 +702,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             throw new ProcessTaskRuntimeException("请先开始步骤");
         }
         TaskStepNotifyTriggerType notifyTriggerType = TaskStepNotifyTriggerType.SUCCEED;
-        ProcessTaskOperationType operationType = ProcessTaskOperationType.COMPLETE;
+        ProcessTaskOperationType operationType = ProcessTaskOperationType.STEP_COMPLETE;
         boolean canComplete = false;
         if (this.getMode().equals(ProcessStepMode.MT)) {
             JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
             if (MapUtils.isNotEmpty(paramObj)) {
                 String action = paramObj.getString("action");
-                if (ProcessTaskOperationType.BACK.getValue().equals(action)) {
-                    operationType = ProcessTaskOperationType.BACK;
+                if (ProcessTaskOperationType.STEP_BACK.getValue().equals(action)) {
+                    operationType = ProcessTaskOperationType.STEP_BACK;
                     notifyTriggerType = TaskStepNotifyTriggerType.BACK;
                 }
             }
@@ -720,7 +720,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             }
 
             canComplete =
-                new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(), operationType).build()
+                new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(), operationType).build()
                     .checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
@@ -819,7 +819,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                                 JSON.toJSONString(processTaskFormAttributeDataList));
                         }
                     }
-                    if (operationType == ProcessTaskOperationType.COMPLETE) {
+                    if (operationType == ProcessTaskOperationType.STEP_COMPLETE) {
                         DataValid.formAttributeDataValidFromDb(currentProcessTaskStepVo);
                         DataValid.assignWorkerValid(currentProcessTaskStepVo);
                     }
@@ -854,7 +854,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                         nextStep.setStartProcessTaskStepId(startProcessTaskStepId);
 
                         if (nextStepHandler != null) {
-                            doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(nextStep) {
+                            doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(nextStep) {
                                 @Override
                                 public void myExecute() {
                                     nextStepHandler.active(nextStep);
@@ -880,7 +880,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 /** 回退提醒 **/
                 if (this.getMode().equals(ProcessStepMode.MT)) {
                     JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
-                    if (ProcessTaskOperationType.BACK.getValue().equals(paramObj.getString("action"))) {
+                    if (ProcessTaskOperationType.STEP_BACK.getValue().equals(paramObj.getString("action"))) {
                         processTaskMapper
                             .deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
                         ProcessStepUtilHandlerFactory.getHandler().saveStepRemind(currentProcessTaskStepVo,
@@ -912,7 +912,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                      * 发生异常不能完成当前步骤，执行当前步骤的回退操作
                      */
                     IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
-                    doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(currentProcessTaskStepVo) {
+                    doNext(ProcessTaskOperationType.STEP_BACK, new ProcessStepThread(currentProcessTaskStepVo) {
                         @Override
                         public void myExecute() {
                             handler.back(currentProcessTaskStepVo);
@@ -948,14 +948,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
 
-            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
-                ProcessTaskOperationType.RETREATCURRENTSTEP).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.STEP_RETREAT).build().checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
             /** 保存撤回原因 **/
-            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.RETREAT);
+            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_RETREAT);
             myRetreat(currentProcessTaskStepVo);
 
             /** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
@@ -977,7 +977,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                         // 标记挂起操作的发起步骤，避免出现死循环
                         nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                         if (handler != null) {
-                            doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
+                            doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
                                 @Override
                                 public void myExecute() {
                                     handler.hang(nextProcessTaskStepVo);
@@ -997,9 +997,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
             /** 写入时间审计 **/
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.RETREAT);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_RETREAT);
             if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
-                TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+                TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_START);
             }
 
             /** 计算SLA并触发超时警告 **/
@@ -1030,8 +1030,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /** 校验权限 **/
-        new ProcessOperateManager.TaskOperationChecker(currentProcessTaskVo.getId(),
-            ProcessTaskOperationType.ABORTPROCESSTASK).build().checkAndNoPermissionThrowException();
+        new ProcessAuthManager.TaskOperationChecker(currentProcessTaskVo.getId(),
+            ProcessTaskOperationType.TASK_ABORT).build().checkAndNoPermissionThrowException();
 
         List<ProcessTaskStepVo> processTaskStepList =
             processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
@@ -1074,7 +1074,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
         /** 写入时间审计 **/
-        TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ABORTPROCESSTASK);
+        TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_ABORT);
 
         /** 计算SLA **/
         SlaHandler.calculate(currentProcessTaskStepVo);
@@ -1095,8 +1095,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /** 校验权限 **/
-        new ProcessOperateManager.TaskOperationChecker(currentProcessTaskVo.getId(),
-            ProcessTaskOperationType.RECOVERPROCESSTASK).build().checkAndNoPermissionThrowException();
+        new ProcessAuthManager.TaskOperationChecker(currentProcessTaskVo.getId(),
+            ProcessTaskOperationType.TASK_RECOVER).build().checkAndNoPermissionThrowException();
 
         List<ProcessTaskStepVo> processTaskStepList =
             processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
@@ -1173,8 +1173,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
-                ProcessTaskOperationType.RECOVER).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.STEP_RECOVER).build().checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
             myRecover(currentProcessTaskStepVo);
@@ -1185,7 +1185,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         }
 
         /** 写入时间审计 **/
-        TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.RECOVERPROCESSTASK);
+        TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_RECOVER);
 
         /** 计算SLA **/
         SlaHandler.calculate(currentProcessTaskStepVo);
@@ -1213,8 +1213,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
             /** 检查处理人是否合法 **/
-            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
-                ProcessTaskOperationType.PAUSE).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.STEP_PAUSE).build().checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
             myPause(currentProcessTaskStepVo);
@@ -1226,7 +1226,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             // currentProcessTaskStepVo.getId());
 
             /** 写入时间审计 **/
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.PAUSE);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_PAUSE);
 
             /** 计算SLA **/
             SlaHandler.calculate(currentProcessTaskStepVo);
@@ -1262,8 +1262,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
 
-            new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
-                ProcessTaskOperationType.ACCEPT).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+                ProcessTaskOperationType.STEP_ACCEPT).build().checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 清空worker表，只留下当前处理人 **/
@@ -1313,8 +1313,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
         }
 
-        new ProcessOperateManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
-            ProcessTaskOperationType.TRANSFERCURRENTSTEP).build().checkAndNoPermissionThrowException();
+        new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(),
+            ProcessTaskOperationType.STEP_TRANSFER).build().checkAndNoPermissionThrowException();
 
         ProcessTaskStepVo processTaskStepVo =
             processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
@@ -1348,7 +1348,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             }
 
             /** 保存描述内容 **/
-            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TRANSFER);
+            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_TRANSFER);
 
             /** 根据子类需要把最终处理人放进来，引擎将自动写入数据库，也可能为空，例如一些特殊的流程节点 **/
             processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -1386,7 +1386,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.TRANSFER);
 
             /** 处理时间审计 **/
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.TRANSFER);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_TRANSFER);
             /** 转交提醒 **/
 
             processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(),
@@ -1439,7 +1439,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                                 ProcessStepHandlerFactory.getHandler(fromProcessTaskStepVo.getHandler());
                             if (handler != null) {
                                 fromProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                                doNext(ProcessTaskOperationType.BACK, new ProcessStepThread(fromProcessTaskStepVo) {
+                                doNext(ProcessTaskOperationType.STEP_BACK, new ProcessStepThread(fromProcessTaskStepVo) {
                                     @Override
                                     public void myExecute() {
                                         handler.back(fromProcessTaskStepVo);
@@ -1452,7 +1452,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                                 ProcessStepHandlerFactory.getHandler(fromProcessTaskStepVo.getHandler());
                             if (handler != null) {
                                 fromProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                                doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(fromProcessTaskStepVo) {
+                                doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(fromProcessTaskStepVo) {
                                     @Override
                                     public void myExecute() {
                                         handler.active(fromProcessTaskStepVo);
@@ -1464,7 +1464,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 }
             }
             /** 处理时间审计 **/
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.BACK);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_BACK);
 
             /** 触发通知 **/
             NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.BACK);
@@ -1778,7 +1778,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             processTaskMapper.updateProcessTaskTitleOwnerPriorityUuid(processTaskVo);
 
             /** 保存描述内容和附件 **/
-            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STARTPROCESS);
+            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_START);
 
             /** 写入“标签”信息 **/
             processTaskMapper.deleteProcessTaskTagByProcessTaskId(processTaskVo.getId());
@@ -1826,8 +1826,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             // 锁定当前流程
             processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
 
-            new ProcessOperateManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(),
-                ProcessTaskOperationType.STARTPROCESS).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(),
+                ProcessTaskOperationType.TASK_START).build().checkAndNoPermissionThrowException();
 
             DataValid.formAttributeDataValidFromDb(currentProcessTaskStepVo);
             DataValid.baseInfoValidFromDb(currentProcessTaskStepVo);
@@ -1864,7 +1864,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
                 nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                 if (nextStepHandler != null) {
-                    doNext(ProcessTaskOperationType.ACTIVE, new ProcessStepThread(nextStep) {
+                    doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(nextStep) {
                         @Override
                         public void myExecute() {
                             nextStepHandler.active(nextStep);
@@ -1874,9 +1874,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 }
             }
             /** 写入时间审计 **/
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.ACTIVE);
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.COMPLETE);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_ACTIVE);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_START);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_COMPLETE);
 
             /** 计算SLA并触发超时警告 **/
             SlaHandler.calculate(currentProcessTaskStepVo);
@@ -2087,14 +2087,14 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
 
-            new ProcessOperateManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(),
-                ProcessTaskOperationType.REDO).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(),
+                ProcessTaskOperationType.TASK_REDO).build().checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /** 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
             /** 保存打回原因 **/
-            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
+            saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_REDO);
             // myRedo(currentProcessTaskStepVo);
 
             /** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
@@ -2116,7 +2116,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                         // 标记挂起操作的发起步骤，避免出现死循环
                         nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                         if (handler != null) {
-                            doNext(ProcessTaskOperationType.HANG, new ProcessStepThread(nextProcessTaskStepVo) {
+                            doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
                                 @Override
                                 public void myExecute() {
                                     handler.hang(nextProcessTaskStepVo);
@@ -2137,9 +2137,9 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             processTaskScoreMapper
                 .deleteProcessTaskAutoScoreByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             /** 写入时间审计 **/
-            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.REDO);
+            TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_REDO);
             if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
-                TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.START);
+                TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_START);
             }
 
             /** 计算SLA并触发超时警告 **/
@@ -2169,7 +2169,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         // 只有上报人才可评分
-        new ProcessOperateManager.TaskOperationChecker(currentProcessTaskVo.getId(), ProcessTaskOperationType.SCORE)
+        new ProcessAuthManager.TaskOperationChecker(currentProcessTaskVo.getId(), ProcessTaskOperationType.TASK_SCORE)
             .build().checkAndNoPermissionThrowException();
 
         JSONObject paramObj = currentProcessTaskVo.getParamObj();

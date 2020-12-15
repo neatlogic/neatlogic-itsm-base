@@ -23,15 +23,20 @@ import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
-
+/**
+ * 
+* @Time:2020年12月15日
+* @ClassName: ProcessOperateManager 
+* @Description: 权限判断管理类，给步骤操作页面返回操作按钮列表，校验操作是否有权限
+ */
 @Component
-public class ProcessOperateManager {
+public class ProcessAuthManager {
 
     private static UserMapper userMapper;
     private static ProcessTaskMapper processTaskMapper;
 
     @Autowired
-    private ProcessOperateManager(UserMapper _userMapper, ProcessTaskMapper _processTaskMapper) {
+    private ProcessAuthManager(UserMapper _userMapper, ProcessTaskMapper _processTaskMapper) {
         userMapper = _userMapper;
         processTaskMapper = _processTaskMapper;
     }
@@ -51,14 +56,18 @@ public class ProcessOperateManager {
 
         public Builder addProcessTaskId(Long... processTaskIds) {
             for (Long processTaskId : processTaskIds) {
-                processTaskIdSet.add(processTaskId);
+                if(processTaskId != null) {
+                    processTaskIdSet.add(processTaskId);
+                }
             }
             return this;
         }
 
         public Builder addProcessTaskStepId(Long... processTaskStepIds) {
             for (Long processTaskStepId : processTaskStepIds) {
-                processTaskStepIdSet.add(processTaskStepId);
+                if(processTaskStepId != null) {
+                    processTaskStepIdSet.add(processTaskStepId);
+                }
             }
             return this;
         }
@@ -68,11 +77,17 @@ public class ProcessOperateManager {
             return this;
         }
 
-        public ProcessOperateManager build() {
-            return new ProcessOperateManager(this);
+        public ProcessAuthManager build() {
+            return new ProcessAuthManager(this);
         }
     }
 
+    /**
+     * 
+    * @Time:2020年12月15日
+    * @ClassName: TaskOperationChecker 
+    * @Description: 校验工单级权限
+     */
     public static class TaskOperationChecker {
         private Long processTaskId;
         private ProcessTaskOperationType operationType;
@@ -82,11 +97,16 @@ public class ProcessOperateManager {
             this.operationType = operationType;
         }
 
-        public ProcessOperateManager build() {
-            return new ProcessOperateManager(this);
+        public ProcessAuthManager build() {
+            return new ProcessAuthManager(this);
         }
     }
-
+    /**
+     * 
+    * @Time:2020年12月15日
+    * @ClassName: StepOperationChecker 
+    * @Description: 校验步骤级权限
+     */
     public static class StepOperationChecker {
         private Long processTaskStepId;
         private ProcessTaskOperationType operationType;
@@ -96,18 +116,18 @@ public class ProcessOperateManager {
             this.operationType = operationType;
         }
 
-        public ProcessOperateManager build() {
-            return new ProcessOperateManager(this);
+        public ProcessAuthManager build() {
+            return new ProcessAuthManager(this);
         }
     }
 
-    private ProcessOperateManager(Builder builder) {
+    private ProcessAuthManager(Builder builder) {
         this.processTaskIdSet = builder.processTaskIdSet;
         this.processTaskStepIdSet = builder.processTaskStepIdSet;
         this.operationTypeSet = builder.operationTypeSet;
     }
 
-    private ProcessOperateManager(TaskOperationChecker checker) {
+    private ProcessAuthManager(TaskOperationChecker checker) {
         this.processTaskIdSet = new HashSet<>();
         processTaskIdSet.add(checker.processTaskId);
         this.operationTypeSet = new HashSet<>();
@@ -116,7 +136,7 @@ public class ProcessOperateManager {
         checkOperationTypeMap.put(checker.processTaskId, checker.operationType);
     }
 
-    private ProcessOperateManager(StepOperationChecker checker) {
+    private ProcessAuthManager(StepOperationChecker checker) {
         this.processTaskStepIdSet = new HashSet<>();
         processTaskStepIdSet.add(checker.processTaskStepId);
         this.operationTypeSet = new HashSet<>();

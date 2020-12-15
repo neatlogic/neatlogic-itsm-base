@@ -285,7 +285,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                 if (handler != null) {
                     if (ProcessStepMode.MT == handler.getMode()) {// 手动处理节点
                         if (checkOperationAuthIsConfigured(processTaskVo, processTaskStepVo,
-                            ProcessTaskOperationType.RETREATCURRENTSTEP, userUuid)) {
+                            ProcessTaskOperationType.STEP_RETREAT, userUuid)) {
                             return true;
                         }
                     } else {// 自动处理节点，继续找前置节点

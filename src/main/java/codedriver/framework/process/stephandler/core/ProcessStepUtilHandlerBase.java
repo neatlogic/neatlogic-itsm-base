@@ -68,139 +68,6 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         SlaHandler.calculate(currentProcessTaskStepVo);
     }
 
-//    @Override
-//    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId) {
-//        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
-//        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
-//        return getOperateList(processTaskVo, processTaskStepVo);
-//    }
-//
-//    @Override
-//    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo,
-//        ProcessTaskStepVo processTaskStepVo) {
-//        ProcessOperateManager.Builder builder =
-//            new ProcessOperateManager.Builder().setNext(OperationAuthHandlerType.TASK);
-//        if (processTaskStepVo != null) {
-//            builder.setNext(OperationAuthHandlerType.STEP);
-//            IOperationAuthHandlerType type = MyOperationAuthHandlerType();
-//            if (type != null) {
-//                builder.setNext(type);
-//            }
-//        }
-//        ProcessOperateManager processOperateManager = builder.build();
-//        List<ProcessTaskOperationType> resultList =
-//            processOperateManager.getOperateList(processTaskVo, processTaskStepVo, UserContext.get().getUserUuid(true));
-//        /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-//        String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
-//        if (StringUtils.isNotBlank(userUuid)) {
-//            List<ProcessTaskOperationType> operationTypeList =
-//                processOperateManager.getOperateList(processTaskVo, processTaskStepVo, userUuid);
-//            for (ProcessTaskOperationType type : operationTypeList) {
-//                if (!resultList.contains(type)) {
-//                    resultList.add(type);
-//                }
-//            }
-//        }
-//        return resultList;
-//    }
-//
-//    @Override
-//    public List<ProcessTaskOperationType> getOperateList(Long processTaskId, Long processTaskStepId,
-//        List<ProcessTaskOperationType> operationTypeList) {
-//        ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
-//        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
-//        if (CollectionUtils.isNotEmpty(operationTypeList)) {
-//            return getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
-//        } else {
-//            return getOperateList(processTaskVo, processTaskStepVo);
-//        }
-//    }
-//
-//    @Override
-//    public List<ProcessTaskOperationType> getOperateList(ProcessTaskVo processTaskVo,
-//        ProcessTaskStepVo processTaskStepVo, List<ProcessTaskOperationType> operationTypeList) {
-//        if (CollectionUtils.isNotEmpty(operationTypeList)) {
-//            ProcessOperateManager.Builder builder = new ProcessOperateManager.Builder();
-//            if (OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeList)) {
-//                builder.setNext(OperationAuthHandlerType.TASK);
-//            }
-//            if (processTaskStepVo != null) {
-//                if (OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeList)) {
-//                    builder.setNext(OperationAuthHandlerType.STEP);
-//                }
-//                IOperationAuthHandlerType type = MyOperationAuthHandlerType();
-//                if (type != null && CollectionUtils.isNotEmpty(type.getOperationTypeList())
-//                    && type.getOperationTypeList().removeAll(operationTypeList)) {
-//                    builder.setNext(type);
-//                }
-//            }
-//            ProcessOperateManager processOperateManager = builder.build();
-//            List<ProcessTaskOperationType> resultList = processOperateManager.getOperateList(processTaskVo,
-//                processTaskStepVo, UserContext.get().getUserUuid(true), operationTypeList);
-//            /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-//            String userUuid =
-//                userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
-//            if (StringUtils.isNotBlank(userUuid)) {
-//                List<ProcessTaskOperationType> typeList =
-//                    processOperateManager.getOperateList(processTaskVo, processTaskStepVo, userUuid, operationTypeList);
-//                for (ProcessTaskOperationType type : typeList) {
-//                    if (!resultList.contains(type)) {
-//                        resultList.add(type);
-//                    }
-//                }
-//            }
-//            return resultList;
-//        } else {
-//            return getOperateList(processTaskVo, processTaskStepVo);
-//        }
-//    }
-//
-//    @Override
-//    public boolean verifyOperationAuthoriy(Long processTaskId, Long processTaskStepId,
-//        ProcessTaskOperationType operationType, boolean isThrowException) {
-//        List<ProcessTaskOperationType> operationTypeList = new ArrayList<>();
-//        operationTypeList.add(operationType);
-//        List<ProcessTaskOperationType> resultList = getOperateList(processTaskId, processTaskStepId, operationTypeList);
-//        if (resultList.contains(operationType)) {
-//            return true;
-//        } else {
-//            if (isThrowException) {
-//                throw new ProcessTaskNoPermissionException(operationType.getText());
-//            } else {
-//                return false;
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
-//        ProcessTaskOperationType operationType, boolean isThrowException) {
-//        List<ProcessTaskOperationType> operationTypeList = new ArrayList<>();
-//        operationTypeList.add(operationType);
-//        List<ProcessTaskOperationType> resultList = getOperateList(processTaskVo, processTaskStepVo, operationTypeList);
-//        if (resultList.contains(operationType)) {
-//            return true;
-//        } else {
-//            if (isThrowException) {
-//                throw new ProcessTaskNoPermissionException(operationType.getText());
-//            } else {
-//                return false;
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public boolean verifyOperationAuthoriy(Long processTaskId, ProcessTaskOperationType operationType,
-//        boolean isThrowException) {
-//        return verifyOperationAuthoriy(processTaskId, null, operationType, isThrowException);
-//    }
-//
-//    @Override
-//    public boolean verifyOperationAuthoriy(ProcessTaskVo processTaskVo, ProcessTaskOperationType operationType,
-//        boolean isThrowException) {
-//        return verifyOperationAuthoriy(processTaskVo, null, operationType, isThrowException);
-//    }
-
     protected abstract IOperationAuthHandlerType MyOperationAuthHandlerType();
 
     @Override
@@ -325,7 +192,7 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         List<ProcessTaskStepContentVo> processTaskStepContentList =
             processTaskMapper.getProcessTaskStepContentByProcessTaskStepId(startProcessTaskStepVo.getId());
         for (ProcessTaskStepContentVo processTaskStepContent : processTaskStepContentList) {
-            if (ProcessTaskOperationType.STARTPROCESS.getValue().equals(processTaskStepContent.getType())) {
+            if (ProcessTaskOperationType.TASK_START.getValue().equals(processTaskStepContent.getType())) {
                 fileIdList = processTaskMapper.getFileIdListByContentId(processTaskStepContent.getId());
                 comment.setContent(selectContentByHashMapper
                     .getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
