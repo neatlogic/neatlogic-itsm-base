@@ -176,10 +176,11 @@ public class ProcessAuthManager {
                     .add(processTaskStepVo.getId());
             }
         }
-        List<ProcessTaskVo> processTaskList =
-            processTaskMapper.getProcessTaskDetailListByIdList(new ArrayList<>(processTaskIdSet));
-        for (ProcessTaskVo processTaskVo : processTaskList) {
-            getOperateMap(processTaskVo, userUuidList, operationTypeSet, resultMap);
+        if(CollectionUtils.isNotEmpty(processTaskIdSet)) {
+            List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskDetailListByIdList(new ArrayList<>(processTaskIdSet));
+            for (ProcessTaskVo processTaskVo : processTaskList) {
+                getOperateMap(processTaskVo, userUuidList, operationTypeSet, resultMap);
+            }
         }
         return resultMap;
     }
