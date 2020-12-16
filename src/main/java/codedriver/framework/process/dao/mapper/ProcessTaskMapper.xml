@@ -191,14 +191,16 @@
 		`serial_number` AS serialNumber,
 		`title`,
 		`process_uuid` AS processUuid,
-		`channel_uuid` AS channelUuid,
+		`channel_uuid` AS
+		channelUuid,
 		`config_hash` AS configHash,
 		`priority_uuid` AS priorityUuid,
 		`status`,
 		`start_time` AS startTime,
 		`end_time` AS endTime,
 		`owner`,
-		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
+		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS
+		ownerName,
 		(SELECT vip_level FROM `user` x
 		WHERE x.uuid = `owner`) AS ownerVipLevel,
 		`reporter`,
@@ -339,7 +341,8 @@
 		ptsw.`type`,
 		ptsw.`uuid`,
 		CASE `type`
-		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` = ptsw.`uuid`)
+		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` =
+		ptsw.`uuid`)
 		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`)
 		WHEN 'role' THEN (SELECT r.`name` FROM `role` r WHERE r.`uuid` = ptsw.`uuid`)
 		ELSE NULL END AS `name`,
@@ -648,7 +651,8 @@
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
 		`error`,
-		`serial_number` AS serialNumber
+		`serial_number` AS
+		serialNumber
 		FROM `processtask`
 		WHERE `id`= #{id}
 	</select>
@@ -693,7 +697,8 @@
 		ps.`name` AS processTaskStepName,
 		psa.`user_uuid`,
 		(SELECT user_name FROM `user` x WHERE x.uuid = psa.`user_uuid`) AS userName,
-		(SELECT user_info FROM `user` x WHERE x.uuid = psa.`user_uuid`) as userInfo,
+		(SELECT
+		user_info FROM `user` x WHERE x.uuid = psa.`user_uuid`) as userInfo,
 		(SELECT vip_level FROM `user` x WHERE x.uuid = psa.`user_uuid`) as vipLevel,
 		psa.`action_time`,
 		psa.`action`,
@@ -704,10 +709,12 @@
 		psad.`type`,
 		psad.`old_content`,
 		psad.`new_content`
-		FROM `processtask_step_audit` psa
+		FROM
+		`processtask_step_audit` psa
 		LEFT JOIN `processtask_step_audit_detail` psad ON psad.`audit_id` = psa.`id`
 		LEFT JOIN `processtask_step` ps on ps.`id` = psa.`processtask_step_id`
-		WHERE psa.`processtask_id` = #{processTaskId}
+		WHERE
+		psa.`processtask_id` = #{processTaskId}
 		<if test="processTaskStepId != null">
 			AND psa.`processtask_step_id` = #{processTaskStepId}
 		</if>
@@ -762,7 +769,8 @@
 		COUNT(DISTINCT a.`processtask_step_id`)
 		FROM `processtask_step_worker` a
 		JOIN `processtask` b ON b.`id` = a.`processtask_id`
-		JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
+		JOIN `processtask_serial_number` c ON c.`processtask_id` =
+		a.`processtask_id`
 		WHERE ((`type` = 'user' AND `uuid` = #{userUuid})
 		<if test="teamUuidList != null and teamUuidList.size() > 0">
 			OR (`type` = 'team' AND `uuid` in
@@ -783,15 +791,16 @@
 			AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
 		</if>
 	</select>
-	
+
 	<select id="getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		(SELECT
 		a.`processtask_id` AS processTaskId,
 		a.`processtask_step_id` AS processTaskStepId
 		FROM `processtask_step_worker` a
 		JOIN `processtask` b ON b.`id` = a.`processtask_id`
-		JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
-		WHERE a.`processtask_id` = #{processTaskId} 
+		JOIN
+		`processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
+		WHERE a.`processtask_id` = #{processTaskId}
 		<if test="keyword != null and keyword != ''">
 			AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
 		</if>
@@ -812,14 +821,15 @@
 		</if>
 		)
 		ORDER BY a.`processtask_step_id` DESC)
-		UNION 
+		UNION
 		(SELECT
 		a.`processtask_id` AS processTaskId,
 		a.`processtask_step_id` AS processTaskStepId
 		FROM `processtask_step_worker` a
 		JOIN `processtask` b ON b.`id` = a.`processtask_id`
-		JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
-		WHERE a.`processtask_id` != #{processTaskId} 
+		JOIN `processtask_serial_number` c
+		ON c.`processtask_id` = a.`processtask_id`
+		WHERE a.`processtask_id` != #{processTaskId}
 		<if test="keyword != null and keyword != ''">
 			AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
 		</if>
@@ -841,8 +851,8 @@
 		)
 		ORDER BY a.`processtask_step_id` DESC)
 		<if test="needPage">
-		LIMIT #{startNum}, #{pageSize}
-		</if>		
+			LIMIT #{startNum}, #{pageSize}
+		</if>
 	</select>
 
 	<select id="getProcessTaskActiveStepListByStepIdList" resultType="java.util.HashMap">
@@ -868,7 +878,8 @@
 
 	<select id="getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo" resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
 		SELECT
-		`processtask_id` AS processTaskId,
+		`processtask_id` AS
+		processTaskId,
 		`type`,
 		`attribute_uuid` AS attributeUuid,
 		`data`
@@ -924,7 +935,8 @@
 	<select id="getPrcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo" resultType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
 		SELECT
 		`processtask_id` AS processTaskId,
-		`processtask_step_id` AS processTaskStepId,
+		`processtask_step_id` AS
+		processTaskStepId,
 		`from_processtask_step_id` AS fromProcessTaskStepId,
 		`from_process_step_uuid` AS fromProcessStepUuid,
 		`type`,
@@ -932,7 +944,8 @@
 		`fcu`,
 		`fcd`
 		FROM `processtask_assignworker`
-		WHERE `processtask_id` = #{processTaskId}
+		WHERE `processtask_id` =
+		#{processTaskId}
 		AND `processtask_step_id` = #{processTaskStepId}
 		AND `from_process_step_uuid` = #{fromProcessStepUuid}
 	</select>
@@ -1058,7 +1071,8 @@
 		`expire_time`,
 		`config_hash`
 		FROM `processtask_step`
-		WHERE `id` IN
+		WHERE
+		`id` IN
 		<foreach collection="list" item="id" open="(" separator="," close=")">
 			#{id}
 		</foreach>
@@ -1072,7 +1086,8 @@
 		a.`policy_config_hash` AS policyConfigHash,
 		b.`config` AS policyConfig
 		FROM `processtask_step_notify_policy` a
-		JOIN `processtask_step_notify_policy_config` b ON b.`hash` = a.`policy_config_hash`
+		JOIN
+		`processtask_step_notify_policy_config` b ON b.`hash` = a.`policy_config_hash`
 		WHERE a.`processtask_step_id` = #{processTaskStepId}
 		AND a.`policy_id` = #{policyId}
 	</select>
@@ -1087,7 +1102,8 @@
 		COUNT(c.`uuid`) AS count
 		FROM `user_team` a
 		JOIN `user` b ON b.`uuid`=a.`user_uuid`
-		JOIN `processtask_step_worker` c ON c.`uuid`=b.`uuid` AND c.`type` = 'user' AND c.`user_type`='major'
+		JOIN
+		`processtask_step_worker` c ON c.`uuid`=b.`uuid` AND c.`type` = 'user' AND c.`user_type`='major'
 		WHERE a.`team_uuid` = #{value}
 		GROUP BY c.`uuid`
 		ORDER BY COUNT(c.`uuid`) ASC
@@ -1102,7 +1118,8 @@
 		`id`,
 		`processtask_id` AS processTaskId,
 		`processtask_step_id` AS processTaskStepId,
-		`content_hash` AS contentHash,
+		`content_hash` AS
+		contentHash,
 		`type`,
 		`fcd`,
 		`fcu`,
@@ -1125,7 +1142,8 @@
 		`status` as status,
 		`action`,
 		`start_time` AS startTime,
-		`end_time` AS endTime,
+		`end_time` AS
+		endTime,
 		`active_time` AS activeTime
 		FROM `processtask_step_user`
 		WHERE `processtask_id`= #{processTaskId}
@@ -1205,7 +1223,8 @@
 		ps.`end_time` as stepEndTime
 		from
 		`processtask` p
-		left join `processtask_step` ps
+		left join
+		`processtask_step` ps
 		on p.`id` = ps.`processtask_id`
 		where p.`id` = #{value}
 	</select>
@@ -1215,12 +1234,14 @@
 	</select>
 
 	<select id="getToProcessTaskIdListByFromProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
-		SELECT `to_processtask_id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} ORDER BY `id` DESC
+		SELECT `to_processtask_id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` =
+		#{value} ORDER BY `id` DESC
 	</select>
 
 	<select id="getProcessTaskRelationCountByProcessTaskId" parameterType="java.lang.Long" resultType="int">
 		select count(1) from (
-		SELECT `id` FROM `processtask_relation` WHERE `source` = #{value} OR `target` = #{value}
+		SELECT `id` FROM `processtask_relation` WHERE `source` = #{value} OR
+		`target` = #{value}
 		UNION
 		SELECT `id` FROM `processtask_tranfer_report` WHERE `from_processtask_id` = #{value} OR
 		`to_processtask_id` = #{value}
@@ -1241,7 +1262,8 @@
 		`channel_type_relation_id` AS channelTypeRelationId,
 		`source`,
 		`target`,
-		`target` AS processTaskId,
+		`target` AS
+		processTaskId,
 		'relation' AS action
 		FROM `processtask_relation`
 		WHERE `source` = #{processTaskId}
@@ -1251,7 +1273,8 @@
 		`channel_type_relation_id` AS channelTypeRelationId,
 		`source`,
 		`target`,
-		`source` AS processTaskId,
+		`source` AS
+		processTaskId,
 		'relation' AS action
 		FROM `processtask_relation`
 		WHERE `target` = #{processTaskId}
@@ -1273,7 +1296,8 @@
 		`to_processtask_id` AS target,
 		`from_processtask_id` AS processTaskId,
 		'tranferreport' AS action
-		FROM `processtask_tranfer_report`
+		FROM
+		`processtask_tranfer_report`
 		WHERE `to_processtask_id` = #{processTaskId}
 		) a
 		ORDER BY a.id DESC
@@ -1340,7 +1364,8 @@
 		SELECT
 		`id`,
 		`channel_type_relation_id` AS channelTypeRelationId,
-		`from_processtask_id` AS fromProcessTaskId,
+		`from_processtask_id` AS
+		fromProcessTaskId,
 		`to_processtask_id` AS toProcessTaskId
 		FROM `processtask_tranfer_report`
 		WHERE `to_processtask_id` = #{value}
@@ -1415,7 +1440,8 @@
 		SELECT
 		`processtask_id` AS processTaskId,
 		`score_template_id` AS scoreTemplateId,
-		`is_auto` AS isAuto,
+		`is_auto` AS
+		isAuto,
 		`config_hash` AS configHash
 		FROM `processtask_score_template`
 		WHERE `processtask_id` = #{value}
@@ -1445,7 +1471,8 @@
 		`trigger_time` triggerTime,
 		`config`
 		FROM `processtask_sla_notify`
-		WHERE `sla_id` = #{value}
+		WHERE
+		`sla_id` = #{value}
 	</select>
 
 	<select id="getProcessTaskSlaTransferBySlaId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
@@ -1503,7 +1530,8 @@
 		b.`name`
 		FROM `processtask_tag` a
 		LEFT JOIN `process_tag` b ON a.`tag_id` = b.`id`
-		WHERE a.`processtask_id` = #{processTaskId}
+		WHERE
+		a.`processtask_id` = #{processTaskId}
 	</select>
 
 	<select id="getProcessTaskStepInOperationCountByProcessTaskId" parameterType="java.lang.Long" resultType="int">
@@ -1587,7 +1615,7 @@
 		<result column="is_show" property="isShow" />
 		<result column="serial_number" property="serialNumber" />
 		<result column="config" property="config" />
-		
+
 		<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
 			<id column="bId" property="id" />
 			<result column="bProcessTaskId" property="processTaskId" />
@@ -1611,7 +1639,7 @@
 				<result column="dUserType" property="userType" />
 			</collection>
 		</collection>
-		
+
 		<collection property="stepRelList" ofType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
 			<id column="fUuid" property="processStepRelUuid" />
 			<result column="bProcessTaskId" property="processTaskId" />
@@ -1625,66 +1653,66 @@
 		</collection>
 	</resultMap>
 	<select id="getProcessTaskDetailListByIdList" parameterType="java.lang.Long" resultMap="processTaskDetailMap">
-	SELECT 
-	  a.`id`,
-	  a.`title`,
-	  a.`process_uuid`,
-	  a.`channel_uuid`,
-	  a.`config_hash`,
-	  a.`priority_uuid`,
-	  a.`status`,
-	  a.`start_time`,
-	  a.`end_time`,
-	  a.`owner`,
-	  a.`reporter`,
-	  a.`expire_time`,
-	  a.`worktime_uuid`,
-	  a.`is_show`,
-	  a.`serial_number`,
-	  
-	  b.`id` AS bId,
-	  b.`processtask_id` AS bProcessTaskId,
-	  b.`name` AS bName,
-	  b.`process_step_uuid` AS bProcessStepUuid,
-	  b.`status` AS bStatus,
-	  b.`type` AS bType,
-	  b.`handler` AS bHandler,
-	  b.`is_active` AS bIsActive,
-	  
-	  c.`processtask_id` AS cProcessTaskId,
-	  c.`processtask_step_id` AS cProcessTaskStepId,
-	  c.`type` AS cType,
-	  c.`uuid` AS cUuid,
-	  c.`user_type` AS cUserType,
-	  
-	  d.`processtask_id` AS dProcessTaskId,
-	  d.`processtask_step_id` AS dProcessTaskStepId,
-	  d.`user_uuid` AS dUserUuid,
-	  d.`user_type` AS dUserType,
-	  
-	  e.`config`,
-	  
-	  f.`processtask_id` AS fProcessTaskId,
-  	  f.`from_process_step_uuid` AS fFromProcessStepUuid,
-      f.`to_process_step_uuid` AS fToProcessStepUuid,
-      f.`from_processtask_step_id` AS fFromProcessTaskStepId,
-      f.`to_processtask_step_id` AS fToProcessTaskStepId,
-      f.`uuid` AS fUuid,
-      f.`is_hit` AS fIsHit,
-      f.`name`AS fName,
-      f.`type` AS fType	      
-	FROM `processtask` a
-	LEFT JOIN `processtask_step` b ON b.`processtask_id` = a.`id`
-	LEFT JOIN `processtask_step_worker` c ON c.`processtask_step_id` = b.`id`
-	LEFT JOIN `processtask_step_user` d ON d.`processtask_step_id` = b.`id`
-	LEFT JOIN `processtask_config` e ON e.`hash` = a.`config_hash`
-	JOIN `processtask_step_rel` f ON f.`processtask_id` = a.`id`
-	WHERE a.`id` IN 
-	<foreach collection="list" item="id" open="(" separator="," close=")">
-	#{id}
-	</foreach>
+		SELECT
+		a.`id`,
+		a.`title`,
+		a.`process_uuid`,
+		a.`channel_uuid`,
+		a.`config_hash`,
+		a.`priority_uuid`,
+		a.`status`,
+		a.`start_time`,
+		a.`end_time`,
+		a.`owner`,
+		a.`reporter`,
+		a.`expire_time`,
+		a.`worktime_uuid`,
+		a.`is_show`,
+		a.`serial_number`,
+
+		b.`id` AS bId,
+		b.`processtask_id` AS bProcessTaskId,
+		b.`name` AS bName,
+		b.`process_step_uuid` AS bProcessStepUuid,
+		b.`status` AS bStatus,
+		b.`type` AS bType,
+		b.`handler` AS bHandler,
+		b.`is_active` AS bIsActive,
+
+		c.`processtask_id` AS cProcessTaskId,
+		c.`processtask_step_id` AS cProcessTaskStepId,
+		c.`type` AS cType,
+		c.`uuid` AS cUuid,
+		c.`user_type` AS cUserType,
+
+		d.`processtask_id` AS dProcessTaskId,
+		d.`processtask_step_id` AS dProcessTaskStepId,
+		d.`user_uuid` AS dUserUuid,
+		d.`user_type` AS dUserType,
+
+		e.`config`,
+
+		f.`processtask_id` AS fProcessTaskId,
+		f.`from_process_step_uuid` AS fFromProcessStepUuid,
+		f.`to_process_step_uuid` AS fToProcessStepUuid,
+		f.`from_processtask_step_id` AS fFromProcessTaskStepId,
+		f.`to_processtask_step_id` AS fToProcessTaskStepId,
+		f.`uuid` AS fUuid,
+		f.`is_hit` AS fIsHit,
+		f.`name`AS fName,
+		f.`type` AS fType
+		FROM `processtask` a
+		LEFT JOIN `processtask_step` b ON b.`processtask_id` = a.`id`
+		LEFT JOIN `processtask_step_worker` c ON c.`processtask_step_id` = b.`id`
+		LEFT JOIN `processtask_step_user` d ON d.`processtask_step_id` = b.`id`
+		LEFT JOIN `processtask_config` e ON e.`hash` = a.`config_hash`
+		JOIN `processtask_step_rel` f ON f.`processtask_id` = a.`id`
+		WHERE a.`id` IN
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
 	</select>
-	
+
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}
@@ -2506,7 +2534,8 @@
 		SET `uuid` = #{newUuid}
 		WHERE `processtask_step_id` = #{processTaskStepId}
 		AND `type` = #{type}
-		AND `uuid` = #{uuid}
+		AND
+		`uuid` = #{uuid}
 		AND `user_type` = #{userType}
 	</update>
 
@@ -2514,7 +2543,8 @@
 		UPDATE `processtask_step_user`
 		SET `user_uuid` = #{userUuid}
 		WHERE `processtask_step_id` = #{processTaskStepId}
-		AND `user_uuid` = #{userUuid}
+		AND `user_uuid` =
+		#{userUuid}
 		AND `user_type` = #{userType}
 	</update>
 
@@ -2629,20 +2659,23 @@
 		DELETE psa, psad
 		FROM `processtask_step_audit` psa
 		LEFT JOIN `processtask_step_audit_detail` psad ON psad.`audit_id` = psa.`id`
-		WHERE `id` = #{id}
+		WHERE
+		`id` = #{id}
 	</delete>
 
 	<delete id="deleteProcessTaskStepAuditByProcessTaskId" parameterType="java.lang.Long">
 		DELETE psa, psad
 		FROM `processtask_step_audit` psa
-		LEFT JOIN `processtask_step_audit_detail` psad ON psad.`audit_id` = psa.`id`
+		LEFT JOIN `processtask_step_audit_detail` psad ON psad.`audit_id` =
+		psa.`id`
 		WHERE `processtask_id` = #{id}
 	</delete>
 
 	<delete id="deleteProcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
 		DELETE FROM`processtask_assignworker`
 		WHERE `processtask_step_id` = #{processTaskStepId}
-		AND `from_processtask_step_id` = #{fromProcessTaskStepId}
+		AND `from_processtask_step_id` =
+		#{fromProcessTaskStepId}
 	</delete>
 
 	<delete id="deleteProcessTaskAssignWorkerByProcessTaskId" parameterType="java.lang.Long">
@@ -2716,24 +2749,35 @@
 		DELETE ps,psa,psau,psaud,psc,psnp,psco,psd,psf,psr,psrl,pss,pssu,pssc,pst,pstp,psu,psw,pswp
 		FROM
 		`processtask_step` ps
-		LEFT JOIN `processtask_step_agent`psa ON psa.`processtask_id` = ps.`processtask_id` AND psa.`processtask_step_id` = ps.id
-		LEFT JOIN `processtask_step_audit` psau ON psau.`processtask_id` = ps.`processtask_id` AND psau.`processtask_step_id` = ps.id
+		LEFT JOIN
+		`processtask_step_agent`psa ON psa.`processtask_id` = ps.`processtask_id` AND psa.`processtask_step_id` = ps.id
+		LEFT JOIN `processtask_step_audit` psau ON psau.`processtask_id` = ps.`processtask_id`
+		AND psau.`processtask_step_id` = ps.id
 		LEFT JOIN `processtask_step_audit_detail` psaud ON psau.id = psaud.audit_id
-		LEFT JOIN `processtask_step_content` psc ON psc.`processtask_id` = ps.`processtask_id` AND psc.`processtask_step_id` = ps.id
+		LEFT JOIN `processtask_step_content` psc ON psc.`processtask_id` =
+		ps.`processtask_id` AND psc.`processtask_step_id` = ps.id
 		LEFT JOIN `processtask_step_notify_policy` psnp ON psnp.`processtask_step_id` = ps.id
-		LEFT JOIN `processtask_step_comment` psco ON psco.`processtask_id` = ps.`processtask_id` AND psco.`processtask_step_id` = ps.id
-		LEFT JOIN `processtask_step_data` psd ON psd.`processtask_id` = ps.`processtask_id` AND psd.`processtask_step_id` = ps.id
+		LEFT JOIN `processtask_step_comment` psco ON
+		psco.`processtask_id` = ps.`processtask_id` AND psco.`processtask_step_id` = ps.id
+		LEFT JOIN `processtask_step_data` psd ON psd.`processtask_id` = ps.`processtask_id` AND psd.`processtask_step_id` =
+		ps.id
 		LEFT JOIN `processtask_step_formattribute` psf ON psf.`processtask_id` = ps.`processtask_id` AND psf.`processtask_step_id` = ps.id
-		LEFT JOIN `processtask_step_remind` psr ON psr.`processtask_id` = ps.`processtask_id` AND psr.`processtask_step_id` = ps.id
+		LEFT JOIN `processtask_step_remind` psr ON psr.`processtask_id`
+		= ps.`processtask_id` AND psr.`processtask_step_id` = ps.id
 		LEFT JOIN `processtask_step_rel` psrl ON psrl.`processtask_id` = ps.`processtask_id`
-		LEFT JOIN `processtask_step_sla` pss ON pss.`processtask_step_id` = ps.id
+		LEFT JOIN `processtask_step_sla` pss ON
+		pss.`processtask_step_id` = ps.id
 		LEFT JOIN `processtask_step_subtask` pssu ON pssu.`processtask_id` = ps.`processtask_id` AND pssu.`processtask_step_id` = ps.id
-		LEFT JOIN `processtask_step_subtask_content` pssc ON pssu.`id` = pssc.`processtask_step_subtask_id`
+		LEFT JOIN
+		`processtask_step_subtask_content` pssc ON pssu.`id` = pssc.`processtask_step_subtask_id`
 		LEFT JOIN `processtask_step_timeaudit` pst ON pst.`processtask_step_id` = ps.id
-		LEFT JOIN `processtask_step_timeout_policy` pstp ON pstp.`processtask_id` = ps.`processtask_id` AND pstp.`processtask_step_id` = ps.id
-		LEFT JOIN `processtask_step_user` psu ON psu.`processtask_id` = ps.`processtask_id` AND psu.`processtask_step_id` = ps.id
+		LEFT JOIN
+		`processtask_step_timeout_policy` pstp ON pstp.`processtask_id` = ps.`processtask_id` AND pstp.`processtask_step_id` = ps.id
+		LEFT JOIN `processtask_step_user` psu ON psu.`processtask_id` =
+		ps.`processtask_id` AND psu.`processtask_step_id` = ps.id
 		LEFT JOIN `processtask_step_worker` psw ON psw.`processtask_id` = ps.`processtask_id` AND psw.`processtask_step_id` = ps.id
-		LEFT JOIN `processtask_step_worker_policy` pswp ON pswp.`processtask_id` = ps.`processtask_id` AND pswp.`processtask_step_id` = ps.id
+		LEFT JOIN
+		`processtask_step_worker_policy` pswp ON pswp.`processtask_id` = ps.`processtask_id` AND pswp.`processtask_step_id` = ps.id
 		WHERE ps.`processtask_id` = #{value}
 	</delete>
 
@@ -2752,6 +2796,7 @@
 	</delete>
 
 	<delete id="deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType" parameterType="codedriver.framework.process.dto.ProcessTaskStepInOperationVo">
-		DELETE FROM `processtask_step_in_operation` WHERE `processtask_step_id` = #{processTaskStepId} and `operation_type` = #{operationType}
+		DELETE FROM `processtask_step_in_operation` WHERE `processtask_step_id` = #{processTaskStepId}
+		and `operation_type` = #{operationType}
 	</delete>
 </mapper>

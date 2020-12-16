@@ -130,9 +130,11 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
-    public int getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+    public int getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
+        ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
-    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
+        ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
     public List<Map<String, Object>> getProcessTaskActiveStepListByStepIdList(@Param("keyword") String keyword,
         @Param("processTaskStepIdList") List<Long> processTaskStepIdList);
