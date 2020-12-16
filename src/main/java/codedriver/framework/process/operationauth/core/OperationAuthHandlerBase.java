@@ -142,11 +142,11 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
         ProcessTaskOperationType operationType, String userUuid) {
         String stepConfig = processTaskStepVo.getConfig();
-        if (StringUtils.isNotBlank(stepConfig)) {
+        if (StringUtils.isBlank(stepConfig)) {
             JSONArray stepList = (JSONArray)JSONPath.read(processTaskVo.getConfig(), "process.stepList");
             for (int i = 0; i < stepList.size(); i++) {
                 JSONObject stepObj = stepList.getJSONObject(i);
-                if (processTaskStepVo.getProcessUuid().equals(stepObj.getString("uuid"))) {
+                if (processTaskStepVo.getProcessStepUuid().equals(stepObj.getString("uuid"))) {
                     stepConfig = stepObj.getString("stepConfig");
                     processTaskStepVo.setConfig(stepConfig);
                 }
