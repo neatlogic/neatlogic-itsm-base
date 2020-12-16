@@ -1301,6 +1301,7 @@
 		SELECT
 		`id`,
 		`processtask_id` as processTaskId,
+		(select `serial_number` from `processtask` where `id` = `processtask_id`) as serialNumber,
 		`title`,
 		`channel_uuid` as channelUuid,
 		(select `name` from `channel` where `uuid` = `channel_uuid`) as channelName,
