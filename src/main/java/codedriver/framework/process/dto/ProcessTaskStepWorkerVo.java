@@ -1,6 +1,9 @@
 package codedriver.framework.process.dto;
 
+import java.util.List;
+
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 
@@ -10,7 +13,7 @@ import codedriver.framework.elasticsearch.constvalue.ESKeyType;
  * @ClassName: ProcessTaskStepWorkerVo
  * @Description: 记录当前流程任务谁可以处理
  */
-public class ProcessTaskStepWorkerVo {
+public class ProcessTaskStepWorkerVo extends BasePageVo {
     @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
@@ -19,8 +22,10 @@ public class ProcessTaskStepWorkerVo {
 	private String name;
 	private String userType;
 
-	private String newUuid;
-	
+	private transient String newUuid;
+	private transient String userUuid;
+	private transient List<String> teamUuidList;
+	private transient List<String> roleUuidList;
 	public ProcessTaskStepWorkerVo() {
 
 	}
@@ -154,5 +159,23 @@ public class ProcessTaskStepWorkerVo {
 
     public void setNewUuid(String newUuid) {
         this.newUuid = newUuid;
+    }
+    public String getUserUuid() {
+        return userUuid;
+    }
+    public void setUserUuid(String userUuid) {
+        this.userUuid = userUuid;
+    }
+    public List<String> getTeamUuidList() {
+        return teamUuidList;
+    }
+    public void setTeamUuidList(List<String> teamUuidList) {
+        this.teamUuidList = teamUuidList;
+    }
+    public List<String> getRoleUuidList() {
+        return roleUuidList;
+    }
+    public void setRoleUuidList(List<String> roleUuidList) {
+        this.roleUuidList = roleUuidList;
     }
 }

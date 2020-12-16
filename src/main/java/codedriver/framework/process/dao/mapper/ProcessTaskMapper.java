@@ -130,9 +130,9 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
-    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByUserUuidTeamUuidListRoleUuidList(
-        @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList,
-        @Param("roleUuidList") List<String> roleUuidList);
+    public int getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+
+    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
     public List<Map<String, Object>> getProcessTaskActiveStepListByStepIdList(@Param("keyword") String keyword,
         @Param("processTaskStepIdList") List<Long> processTaskStepIdList);
@@ -158,7 +158,7 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
-    public List<ProcessTaskVo> getProcessTaskListByKeywordAndIdList(@Param("keyword") String keyword,
+    public List<ProcessTaskVo> getProcessTaskListByIdListAndStartTime(
         @Param("processTaskIdList") List<Long> processTaskIdList, @Param("fromDate") String fromDate,
         @Param("toDate") String toDate);
 
