@@ -13,6 +13,8 @@ public class ProcessTaskImportAuditVo extends BasePageVo {
 	private Long id;
 	@EntityField(name = "工单ID", type = ApiParamType.LONG)
 	private Long processTaskId;
+	@EntityField(name = "工单号", type = ApiParamType.STRING)
+	private String serialNumber;
 	@EntityField(name = "标题", type = ApiParamType.STRING)
 	private String title;
 	@JSONField(serialize = false)
@@ -57,6 +59,14 @@ public class ProcessTaskImportAuditVo extends BasePageVo {
 
 	public void setProcessTaskId(Long processTaskId) {
 		this.processTaskId = processTaskId;
+	}
+
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 
 	public String getTitle() {
