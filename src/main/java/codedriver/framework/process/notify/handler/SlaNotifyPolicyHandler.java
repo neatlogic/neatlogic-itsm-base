@@ -110,7 +110,7 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
                     param.setParamTypeName(paramType.getText());
                     param.setDefaultExpression(paramType.getDefaultExpression().getExpression());
                     for(Expression expression : paramType.getExpressionList()) {
-                        param.getExpressionList().add(new ExpressionVo(expression.getExpression(), expression.getExpressionName()));
+                        param.getExpressionList().add(new ExpressionVo(expression.getExpression(), expression.getExpressionName(),expression.getIsShowConditionValue()));
                     }
                 }
                 
