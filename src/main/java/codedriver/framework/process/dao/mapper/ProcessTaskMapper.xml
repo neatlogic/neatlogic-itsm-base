@@ -967,7 +967,7 @@
 				</foreach>
 			</if>
 			<if test="keyword != null and keyword != ''">
-				AND (`title` LIKE CONCAT('%', #{keyword}, '%') OR `id` LIKE CONCAT('%', #{keyword}, '%'))
+				AND (`title` LIKE CONCAT('%', #{keyword}, '%') OR `serial_number` LIKE CONCAT('%', #{keyword}, '%'))
 			</if>
 			<if test="fromDate != null and fromDate != ''">
 				AND `start_time` >= #{fromDate}
