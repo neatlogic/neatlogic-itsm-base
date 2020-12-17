@@ -123,6 +123,10 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         return false;
     }
 
+    protected boolean checkIsProcessTaskStepUser(ProcessTaskVo processTaskVo, String userUuid) {
+        return checkIsProcessTaskStepUser(processTaskVo, null, userUuid);
+    }
+
     protected boolean checkIsProcessTaskStepUser(ProcessTaskStepVo processTaskStepVo, String userType,
         String userUuid) {
         for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepVo.getUserList()) {

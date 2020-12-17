@@ -414,7 +414,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
 
         String executeMode = (String)JSONPath.read(stepConfig, "workerPolicyConfig.executeMode");
-        int autoStart = (int)JSONPath.read(stepConfig, "workerPolicyConfig.autoStart");
+        Integer autoStart = (Integer)JSONPath.read(stepConfig, "workerPolicyConfig.autoStart");
 
         /** 如果workerList.size()>0，说明已经存在过处理人，则继续使用旧处理人，否则启用分派 **/
         if (CollectionUtils.isEmpty(workerList)) {
@@ -444,7 +444,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 }
             }
         }
-        return autoStart;
+        return autoStart != null ? autoStart : 0;
     }
 
     /**
