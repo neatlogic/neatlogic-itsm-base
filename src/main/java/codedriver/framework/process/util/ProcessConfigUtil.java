@@ -55,18 +55,18 @@ public class ProcessConfigUtil {
      * 3、从stepList获取开始节点后的第一个节点是否启用描述框
      */
     public static int getIsNeedContent(JSONObject configObj){
-        int isNeedContent = 0;
+        Integer isNeedContent = 0;
         String firstStepUuid = getFirstStepUuid(configObj);
         JSONArray stepList = (JSONArray) JSONPath.read(configObj.toJSONString(), "process.stepList");
         if(StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(stepList)){
             for(int i = 0;i < stepList.size();i++){
                 if(stepList.getJSONObject(i).getString("uuid").equals(firstStepUuid)){
-                    isNeedContent = (int)JSONPath.read(stepList.getJSONObject(i).toJSONString(),"stepConfig.workerPolicyConfig.isNeedContent");
+                    isNeedContent = (Integer)JSONPath.read(stepList.getJSONObject(i).toJSONString(),"stepConfig.workerPolicyConfig.isNeedContent");
                     break;
                 }
             }
         }
-        return isNeedContent;
+        return isNeedContent != null ? isNeedContent : 0;
     }
 
     /**
