@@ -366,8 +366,8 @@
 	
 	<resultMap id="processTaskStepWorkerMap" type="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		<id column="uuid" property="uuid" />
-		<result column="processtask_id" property="processTaskId" />
-		<result column="processtask_step_id" property="processTaskStepId" />
+		<id column="processtask_step_id" property="processTaskStepId" />
+		<id column="processtask_id" property="processTaskId" />
 		<result column="type" property="type" />
 		<result column="name" property="name" />
 		<result column="user_type" property="userType" />
@@ -1257,9 +1257,9 @@
 		</if>
 	</select>
 	<resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
-		<id column="processtask_id" property="processTaskId" />
-		<id column="processtask_step_id" property="processTaskStepId" />
 		<id column="user_uuid" property="userUuid" />
+		<id column="processtask_step_id" property="processTaskStepId" />
+		<id column="processtask_id" property="processTaskId" />
 		<id column="user_type" property="userType" />
 	</resultMap>
 	<select id="getProcessTaskStepUserListByProcessTaskIdList" parameterType="java.lang.Long" resultMap="processTaskStepUserMap">
