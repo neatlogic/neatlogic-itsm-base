@@ -287,15 +287,14 @@ public class ProcessAuthManager {
                                     .getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
                                 IOperationAuthHandler handler =
                                     OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
-                                Map<ProcessTaskOperationType, Boolean> nextOperateMap = new HashMap<>();
                                 if (handler != null) {
-                                    nextOperateMap = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid,
-                                        operationTypeSet);
-                                }
-                                if (MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
-                                    operateMap.putAll(nextOperateMap);
-                                } else if (MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
-                                    operateMap = nextOperateMap;
+                                    Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler
+                                        .getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
+                                    if (MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+                                        operateMap.putAll(nextOperateMap);
+                                    } else if (MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+                                        operateMap = nextOperateMap;
+                                    }
                                 }
                                 for (Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
                                     if (entry.getValue() == Boolean.TRUE) {
