@@ -111,7 +111,7 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelByToId(Long toProcessTaskStepId);
 
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelByProcessTaskId(Long processTaskId);
-    
+
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelListByProcessTaskIdList(List<Long> processTaskIdList);
 
     public List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndType(@Param("processTaskId") Long processTaskId,
@@ -133,7 +133,7 @@ public interface ProcessTaskMapper {
     public ProcessTaskStepAuditVo getProcessTaskStepAuditById(Long auditId);
 
     public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
-    
+
     public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdList(List<Long> processTaskIdList);
 
     public int getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
@@ -171,7 +171,7 @@ public interface ProcessTaskMapper {
         @Param("toDate") String toDate);
 
     public List<ProcessTaskVo> getProcessTaskListByIdList(List<Long> processTaskIdList);
-    
+
     public List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 
     public ProcessTaskStepNotifyPolicyVo
