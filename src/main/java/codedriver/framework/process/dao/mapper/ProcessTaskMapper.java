@@ -93,6 +93,8 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(
         @Param("processTaskId") Long processTaskId, @Param("processTaskStepId") Long processTaskStepId);
 
+    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdList(List<Long> processTaskIdList);
+
     public Long getProcessTaskLockById(Long processTaskId);
 
     public int checkProcessTaskConvergeIsExists(ProcessTaskConvergeVo processTaskStepConvergeVo);
@@ -109,6 +111,8 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelByToId(Long toProcessTaskStepId);
 
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelByProcessTaskId(Long processTaskId);
+    
+    public List<ProcessTaskStepRelVo> getProcessTaskStepRelListByProcessTaskIdList(List<Long> processTaskIdList);
 
     public List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndType(@Param("processTaskId") Long processTaskId,
         @Param("type") String type);
@@ -129,6 +133,8 @@ public interface ProcessTaskMapper {
     public ProcessTaskStepAuditVo getProcessTaskStepAuditById(Long auditId);
 
     public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
+    
+    public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdList(List<Long> processTaskIdList);
 
     public int getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
         ProcessTaskStepWorkerVo processTaskStepWorkerVo);
@@ -164,6 +170,8 @@ public interface ProcessTaskMapper {
         @Param("processTaskIdList") List<Long> processTaskIdList, @Param("fromDate") String fromDate,
         @Param("toDate") String toDate);
 
+    public List<ProcessTaskVo> getProcessTaskListByIdList(List<Long> processTaskIdList);
+    
     public List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 
     public ProcessTaskStepNotifyPolicyVo
@@ -180,6 +188,8 @@ public interface ProcessTaskMapper {
     public int checkProcessTaskhasForm(Long processTaskId);
 
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserList(ProcessTaskStepUserVo processTaskStepUserVo);
+
+    public List<ProcessTaskStepUserVo> getProcessTaskStepUserListByProcessTaskIdList(List<Long> processTaskIdList);
 
     public String getProcessTaskScoreInfoById(Long processtaskId);
 
