@@ -1615,7 +1615,6 @@
 		<result column="worktime_uuid" property="worktimeUuid" />
 		<result column="is_show" property="isShow" />
 		<result column="serial_number" property="serialNumber" />
-		<result column="config" property="config" />
 
 		<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
 			<id column="bId" property="id" />
@@ -1656,20 +1655,20 @@
 	<select id="getProcessTaskDetailListByIdList" parameterType="java.lang.Long" resultMap="processTaskDetailMap">
 		SELECT
 		a.`id`,
-		a.`title`,
-		a.`process_uuid`,
+		<!-- a.`title`, -->
+		<!-- a.`process_uuid`, -->
 		a.`channel_uuid`,
 		a.`config_hash`,
-		a.`priority_uuid`,
+		<!-- a.`priority_uuid`, -->
 		a.`status`,
-		a.`start_time`,
-		a.`end_time`,
+		<!-- a.`start_time`, -->
+		<!-- a.`end_time`, -->
 		a.`owner`,
 		a.`reporter`,
-		a.`expire_time`,
-		a.`worktime_uuid`,
+		<!-- a.`expire_time`, -->
+		<!-- a.`worktime_uuid`, -->
 		a.`is_show`,
-		a.`serial_number`,
+		<!-- a.`serial_number`, -->
 
 		b.`id` AS bId,
 		b.`processtask_id` AS bProcessTaskId,
@@ -1691,8 +1690,6 @@
 		d.`user_uuid` AS dUserUuid,
 		d.`user_type` AS dUserType,
 
-		e.`config`,
-
 		f.`processtask_id` AS fProcessTaskId,
 		f.`from_process_step_uuid` AS fFromProcessStepUuid,
 		f.`to_process_step_uuid` AS fToProcessStepUuid,
@@ -1700,13 +1697,12 @@
 		f.`to_processtask_step_id` AS fToProcessTaskStepId,
 		f.`uuid` AS fUuid,
 		f.`is_hit` AS fIsHit,
-		f.`name`AS fName,
+		<!-- f.`name`AS fName, -->
 		f.`type` AS fType
 		FROM `processtask` a
 		LEFT JOIN `processtask_step` b ON b.`processtask_id` = a.`id`
 		LEFT JOIN `processtask_step_worker` c ON c.`processtask_step_id` = b.`id`
 		LEFT JOIN `processtask_step_user` d ON d.`processtask_step_id` = b.`id`
-		LEFT JOIN `processtask_config` e ON e.`hash` = a.`config_hash`
 		JOIN `processtask_step_rel` f ON f.`processtask_id` = a.`id`
 		WHERE a.`id` IN
 		<foreach collection="list" item="id" open="(" separator="," close=")">

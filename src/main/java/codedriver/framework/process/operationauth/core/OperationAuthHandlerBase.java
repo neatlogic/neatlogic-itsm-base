@@ -22,6 +22,7 @@ import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
+import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
@@ -38,7 +39,8 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     protected static UserMapper userMapper;
     protected static TeamMapper teamMapper;
     protected static ProcessStepHandlerMapper processStepHandlerMapper;
-
+    protected static SelectContentByHashMapper selectContentByHashMapper;
+    
     @Autowired
     public void setTeamMapper(TeamMapper _teamMapper) {
         teamMapper = _teamMapper;
@@ -52,6 +54,11 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     @Autowired
     public void setUserMapper(UserMapper _userMapper) {
         userMapper = _userMapper;
+    }
+    
+    @Autowired
+    public void setSelectContentByHashMapper(SelectContentByHashMapper _selectContentByHashMapper) {
+        selectContentByHashMapper = _selectContentByHashMapper;
     }
 
     protected boolean checkIsWorker(ProcessTaskVo processTaskVo, String userType, String userUuid) {
@@ -147,7 +154,8 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         ProcessTaskOperationType operationType, String userUuid) {
         String stepConfig = processTaskStepVo.getConfig();
         if (StringUtils.isBlank(stepConfig)) {
-            JSONArray stepList = (JSONArray)JSONPath.read(processTaskVo.getConfig(), "process.stepList");
+            String taskConfig = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
+            JSONArray stepList = (JSONArray)JSONPath.read(taskConfig, "process.stepList");
             for (int i = 0; i < stepList.size(); i++) {
                 JSONObject stepObj = stepList.getJSONObject(i);
                 if (processTaskStepVo.getProcessStepUuid().equals(stepObj.getString("uuid"))) {
@@ -180,8 +188,9 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
 
     protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo,
         ProcessTaskOperationType operationType, String userUuid) {
+        String taskConfig = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
         JSONArray authorityList =
-            (JSONArray)JSONPath.read(processTaskVo.getConfig(), "process.processConfig.authorityList");
+            (JSONArray)JSONPath.read(taskConfig, "process.processConfig.authorityList");
         if (CollectionUtils.isNotEmpty(authorityList)) {
             return checkOperationAuthIsConfigured(processTaskVo, null, operationType, authorityList, userUuid);
         }
