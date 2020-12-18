@@ -63,13 +63,26 @@
 		#{value}
 	</select>
 
-	<select id="getProcessTaskStepRelByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
+	<resultMap id="processTaskStepRelMap" type="codedriver.framework.process.dto.ProcessTaskStepRelVo">
+			<id column="uuid" property="processStepRelUuid" />
+			<result column="processtask_id" property="processTaskId" />
+			<result column="from_process_step_uuid" property="fromProcessStepUuid" />
+			<result column="to_process_step_uuid" property="toProcessStepUuid" />
+			<result column="from_processtask_step_id" property="fromProcessTaskStepId" />
+			<result column="to_processtask_step_id" property="toProcessTaskStepId" />
+			<result column="toProcessStepHandler" property="toProcessStepHandler" />
+			<result column="condition" property="condition" />
+			<result column="is_hit" property="isHit" />
+			<result column="name" property="name" />
+			<result column="type" property="type" />
+	</resultMap>
+	<select id="getProcessTaskStepRelByProcessTaskId" parameterType="java.lang.Long" resultMap="processTaskStepRelMap">
 		SELECT
-		`processtask_id` AS processTaskId,
-		`from_process_step_uuid` AS fromProcessStepUuid,
-		`to_process_step_uuid` AS toProcessStepUuid,
-		`from_processtask_step_id` AS fromProcessTaskStepId,
-		`to_processtask_step_id` AS toProcessTaskStepId,
+		`processtask_id`,
+		`from_process_step_uuid`,
+		`to_process_step_uuid`,
+		`from_processtask_step_id`,
+		`to_processtask_step_id`,
 		(SELECT xx.`handler` FROM `processtask_step` xx WHERE
 		xx.id = `to_processtask_step_id`) AS toProcessStepHandler,
 		`condition`,
@@ -80,6 +93,23 @@
 		FROM
 		`processtask_step_rel`
 		WHERE processtask_id = #{value}
+	</select>
+
+	<select id="getProcessTaskStepRelListByProcessTaskIdList" parameterType="java.lang.Long" resultMap="processTaskStepRelMap">
+		SELECT
+		`processtask_id`,
+		`from_process_step_uuid`,
+		`to_process_step_uuid`,
+		`from_processtask_step_id`,
+		`to_processtask_step_id`,
+		`uuid`,
+		`is_hit`,
+		`type`
+		FROM `processtask_step_rel`
+		WHERE `processtask_id` IN
+		<foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+			#{processTaskId}
+		</foreach>
 	</select>
 
 	<resultMap id="processTaskSlaMap" type="codedriver.framework.process.dto.ProcessTaskSlaVo">
@@ -333,11 +363,19 @@
 		</where>
 		ORDER BY `sort`
 	</select>
-
-	<select id="getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+	
+	<resultMap id="processTaskStepWorkerMap" type="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+		<id column="uuid" property="uuid" />
+		<id column="processtask_step_id" property="processTaskStepId" />
+		<id column="processtask_id" property="processTaskId" />
+		<result column="type" property="type" />
+		<result column="name" property="name" />
+		<result column="user_type" property="userType" />
+	</resultMap>
+	<select id="getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId" resultMap="processTaskStepWorkerMap">
 		SELECT
-		ptsw.`processtask_id` AS processTaskId,
-		ptsw.`processtask_step_id` AS processTaskStepId,
+		ptsw.`processtask_id`,
+		ptsw.`processtask_step_id`,
 		ptsw.`type`,
 		ptsw.`uuid`,
 		CASE `type`
@@ -346,12 +384,26 @@
 		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`)
 		WHEN 'role' THEN (SELECT r.`name` FROM `role` r WHERE r.`uuid` = ptsw.`uuid`)
 		ELSE NULL END AS `name`,
-		ptsw.`user_type` AS userType
+		ptsw.`user_type`
 		FROM `processtask_step_worker` ptsw
 		WHERE ptsw.`processtask_id` = #{processTaskId}
 		<if test="processTaskStepId != null">
 			AND ptsw.`processtask_step_id` = #{processTaskStepId}
 		</if>
+	</select>
+
+	<select id="getProcessTaskStepWorkerListByProcessTaskIdList" parameterType="java.lang.Long" resultMap="processTaskStepWorkerMap">
+		SELECT
+		`processtask_id`,
+		`processtask_step_id`,
+		`type`,
+		`uuid`,
+		`user_type`
+		FROM `processtask_step_worker`
+		WHERE `processtask_id` IN
+		<foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+			#{processTaskId}
+		</foreach>
 	</select>
 
 	<select id="getFromProcessTaskStepByToId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
@@ -764,6 +816,29 @@
 		WHERE pts.`processtask_id` = #{processTaskId}
 	</select>
 
+	<select id="getProcessTaskStepListByProcessTaskIdList" parameterType="java.lang.Long" resultMap="processTaskStepMap">
+		SELECT
+		`id`,
+		`processtask_id`,
+		`name`,
+		`process_step_uuid`,
+		`status`,
+		`result`,
+		`type`,
+		`handler`,
+		`is_active`,
+		`active_time`,
+		`start_time`,
+		`end_time`,
+		`expire_time`,
+		`config_hash`
+		FROM `processtask_step`
+		WHERE `processtask_id` IN
+		<foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+			#{processTaskId}
+		</foreach>
+	</select>
+
 	<select id="getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo" resultType="int">
 		SELECT
 		COUNT(DISTINCT a.`processtask_step_id`)
@@ -826,7 +901,8 @@
 		a.`processtask_id` AS processTaskId,
 		a.`processtask_step_id` AS processTaskStepId
 		FROM `processtask_step_worker` a
-		JOIN `processtask` b ON b.`id` = a.`processtask_id`
+		JOIN `processtask` b ON b.`id` =
+		a.`processtask_id`
 		JOIN `processtask_serial_number` c
 		ON c.`processtask_id` = a.`processtask_id`
 		WHERE a.`processtask_id` != #{processTaskId}
@@ -1021,22 +1097,22 @@
 		</if>
 	</select>
 
-	<select id="getProcessTaskListByIdListAndStartTime" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<select id="getProcessTaskListByIdListAndStartTime" resultMap="processTaskMap">
 		SELECT
 		`id`,
 		`title`,
-		`process_uuid` AS processUuid,
-		`channel_uuid` AS channelUuid,
-		`config_hash` AS configHash,
-		`priority_uuid` AS priorityUuid,
+		`process_uuid`,
+		`channel_uuid`,
+		`config_hash`,
+		`priority_uuid`,
 		`status`,
-		`start_time` AS startTime,
-		`end_time` AS endTime,
+		`start_time`,
+		`end_time`,
 		`owner`,
 		`reporter`,
-		`expire_time` AS expireTime,
-		`worktime_uuid` AS worktimeUuid,
-		`serial_number` AS serialNumber
+		`expire_time`,
+		`worktime_uuid`,
+		`serial_number`
 		FROM `processtask`
 		<where>
 			<if test="processTaskIdList != null and processTaskIdList.size() >0">
@@ -1052,6 +1128,29 @@
 				AND `start_time` &lt;= #{toDate}
 			</if>
 		</where>
+	</select>
+
+	<select id="getProcessTaskListByIdList" parameterType="java.lang.Long" resultMap="processTaskMap">
+		SELECT
+		`id`,
+		`title`,
+		`process_uuid`,
+		`channel_uuid`,
+		`config_hash`,
+		`priority_uuid`,
+		`status`,
+		`start_time`,
+		`end_time`,
+		`owner`,
+		`reporter`,
+		`expire_time`,
+		`worktime_uuid`,
+		`serial_number`
+		FROM `processtask`
+		WHERE `id` IN
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
 	</select>
 
 	<select id="getProcessTaskStepListByIdList" parameterType="java.lang.Long" resultMap="processTaskStepMap">
@@ -1156,6 +1255,24 @@
 		<if test="userUuid != null and userUuid != ''">
 			AND user_uuid = #{userUuid}
 		</if>
+	</select>
+	<resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+		<id column="user_uuid" property="userUuid" />
+		<id column="processtask_step_id" property="processTaskStepId" />
+		<id column="processtask_id" property="processTaskId" />
+		<id column="user_type" property="userType" />
+	</resultMap>
+	<select id="getProcessTaskStepUserListByProcessTaskIdList" parameterType="java.lang.Long" resultMap="processTaskStepUserMap">
+		SELECT
+		`processtask_id`,
+		`processtask_step_id`,
+		`user_uuid`,
+		`user_type`
+		FROM `processtask_step_user`
+		WHERE `processtask_id` IN
+		<foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+			#{processTaskId}
+		</foreach>
 	</select>
 
 	<select id="getProcessTaskScoreInfoById" parameterType="java.lang.Long" resultType="java.lang.String">
@@ -1392,12 +1509,14 @@
 		(select `serial_number` from `processtask` where `id` = `processtask_id`) as serialNumber,
 		`title`,
 		`channel_uuid` as channelUuid,
-		(select `name` from `channel` where `uuid` = `channel_uuid`) as channelName,
+		(select `name` from
+		`channel` where `uuid` = `channel_uuid`) as channelName,
 		`status`,
 		`error_reason` as errorReason,
 		`owner`,
 		(select u.`user_name` from `user` u where u.`uuid` = `owner`) as ownerName,
-		`import_time` as importTime
+		`import_time` as
+		importTime
 		FROM
 		`processtask_import_audit`
 		WHERE 1=1
@@ -1677,7 +1796,8 @@
 		b.`status` AS bStatus,
 		b.`type` AS bType,
 		b.`handler` AS bHandler,
-		b.`is_active` AS bIsActive,
+		b.`is_active` AS
+		bIsActive,
 
 		c.`processtask_id` AS cProcessTaskId,
 		c.`processtask_step_id` AS cProcessTaskStepId,
@@ -1702,7 +1822,8 @@
 		FROM `processtask` a
 		LEFT JOIN `processtask_step` b ON b.`processtask_id` = a.`id`
 		LEFT JOIN `processtask_step_worker` c ON c.`processtask_step_id` = b.`id`
-		LEFT JOIN `processtask_step_user` d ON d.`processtask_step_id` = b.`id`
+		LEFT JOIN
+		`processtask_step_user` d ON d.`processtask_step_id` = b.`id`
 		JOIN `processtask_step_rel` f ON f.`processtask_id` = a.`id`
 		WHERE a.`id` IN
 		<foreach collection="list" item="id" open="(" separator="," close=")">

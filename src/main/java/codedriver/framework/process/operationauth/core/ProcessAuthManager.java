@@ -20,14 +20,18 @@ import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dto.ProcessTaskStepRelVo;
+import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
+
 /**
  * 
-* @Time:2020年12月15日
-* @ClassName: ProcessOperateManager 
-* @Description: 权限判断管理类，给步骤操作页面返回操作按钮列表，校验操作是否有权限
+ * @Time:2020年12月15日
+ * @ClassName: ProcessOperateManager
+ * @Description: 权限判断管理类，给步骤操作页面返回操作按钮列表，校验操作是否有权限
  */
 @Component
 public class ProcessAuthManager {
@@ -56,7 +60,7 @@ public class ProcessAuthManager {
 
         public Builder addProcessTaskId(Long... processTaskIds) {
             for (Long processTaskId : processTaskIds) {
-                if(processTaskId != null) {
+                if (processTaskId != null) {
                     processTaskIdSet.add(processTaskId);
                 }
             }
@@ -65,7 +69,7 @@ public class ProcessAuthManager {
 
         public Builder addProcessTaskStepId(Long... processTaskStepIds) {
             for (Long processTaskStepId : processTaskStepIds) {
-                if(processTaskStepId != null) {
+                if (processTaskStepId != null) {
                     processTaskStepIdSet.add(processTaskStepId);
                 }
             }
@@ -84,9 +88,9 @@ public class ProcessAuthManager {
 
     /**
      * 
-    * @Time:2020年12月15日
-    * @ClassName: TaskOperationChecker 
-    * @Description: 校验工单级权限
+     * @Time:2020年12月15日
+     * @ClassName: TaskOperationChecker
+     * @Description: 校验工单级权限
      */
     public static class TaskOperationChecker {
         private Long processTaskId;
@@ -101,11 +105,12 @@ public class ProcessAuthManager {
             return new ProcessAuthManager(this);
         }
     }
+
     /**
      * 
-    * @Time:2020年12月15日
-    * @ClassName: StepOperationChecker 
-    * @Description: 校验步骤级权限
+     * @Time:2020年12月15日
+     * @ClassName: StepOperationChecker
+     * @Description: 校验步骤级权限
      */
     public static class StepOperationChecker {
         private Long processTaskStepId;
@@ -178,11 +183,52 @@ public class ProcessAuthManager {
                     .add(processTaskStepVo.getId());
             }
         }
-        if(CollectionUtils.isNotEmpty(processTaskIdSet)) {
+        if (CollectionUtils.isNotEmpty(processTaskIdSet)) {
+            List<Long> processTaskIdList = new ArrayList<>(processTaskIdSet);
             long startTime = System.currentTimeMillis();
-            List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskDetailListByIdList(new ArrayList<>(processTaskIdSet));
+            List<ProcessTaskStepWorkerVo> processTaskStepWorkerList =
+                processTaskMapper.getProcessTaskStepWorkerListByProcessTaskIdList(processTaskIdList);
+            Map<Long, List<ProcessTaskStepWorkerVo>> processTaskStepWorkerListMap = new HashMap<>();
+            for (ProcessTaskStepWorkerVo processTaskStepWorkerVo : processTaskStepWorkerList) {
+                processTaskStepWorkerListMap
+                    .computeIfAbsent(processTaskStepWorkerVo.getProcessTaskStepId(), k -> new ArrayList<>())
+                    .add(processTaskStepWorkerVo);
+            }
+            List<ProcessTaskStepUserVo> processTaskStepUserList =
+                processTaskMapper.getProcessTaskStepUserListByProcessTaskIdList(processTaskIdList);
+            Map<Long, List<ProcessTaskStepUserVo>> processTaskStepUserListMap = new HashMap<>();
+            for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepUserList) {
+                processTaskStepUserListMap
+                    .computeIfAbsent(processTaskStepUserVo.getProcessTaskStepId(), k -> new ArrayList<>())
+                    .add(processTaskStepUserVo);
+            }
+            List<ProcessTaskStepVo> processTaskStepList =
+                processTaskMapper.getProcessTaskStepListByProcessTaskIdList(processTaskIdList);
+            Map<Long, List<ProcessTaskStepVo>> processTaskStepListMap = new HashMap<>();
+            for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
+                processTaskStepVo.setWorkerList(
+                    processTaskStepWorkerListMap.computeIfAbsent(processTaskStepVo.getId(), k -> new ArrayList<>()));
+                processTaskStepVo.setUserList(
+                    processTaskStepUserListMap.computeIfAbsent(processTaskStepVo.getId(), k -> new ArrayList<>()));
+                processTaskStepListMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new ArrayList<>())
+                    .add(processTaskStepVo);
+            }
+            List<ProcessTaskStepRelVo> processTaskStepRelList =
+                processTaskMapper.getProcessTaskStepRelListByProcessTaskIdList(processTaskIdList);
+            Map<Long, List<ProcessTaskStepRelVo>> processTaskStepRelListMap = new HashMap<>();
+            for (ProcessTaskStepRelVo processTaskStepRelVo : processTaskStepRelList) {
+                processTaskStepRelListMap
+                    .computeIfAbsent(processTaskStepRelVo.getProcessTaskId(), k -> new ArrayList<>())
+                    .add(processTaskStepRelVo);
+            }
+
+            List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
             System.out.println("getProcessTaskDetailListByIdList：" + (System.currentTimeMillis() - startTime));
             for (ProcessTaskVo processTaskVo : processTaskList) {
+                processTaskVo
+                    .setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
+                processTaskVo.setStepRelList(
+                    processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 getOperateMap(processTaskVo, userUuidList, operationTypeSet, resultMap);
             }
         }
@@ -241,14 +287,14 @@ public class ProcessAuthManager {
                                     .getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
                                 IOperationAuthHandler handler =
                                     OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
-                                Map<ProcessTaskOperationType, Boolean> nextOperateMap = new HashMap<>();
-                                if(handler != null) {
-                                    nextOperateMap = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
-                                }
-                                if (MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
-                                    operateMap.putAll(nextOperateMap);
-                                } else if (MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
-                                    operateMap = nextOperateMap;
+                                if (handler != null) {
+                                    Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler
+                                        .getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
+                                    if (MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+                                        operateMap.putAll(nextOperateMap);
+                                    } else if (MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
+                                        operateMap = nextOperateMap;
+                                    }
                                 }
                                 for (Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
                                     if (entry.getValue() == Boolean.TRUE) {
