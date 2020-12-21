@@ -60,7 +60,15 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     public void setSelectContentByHashMapper(SelectContentByHashMapper _selectContentByHashMapper) {
         selectContentByHashMapper = _selectContentByHashMapper;
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 判断当前用户是不是工单任意一个步骤的待处理人 
+    * @param processTaskVo 工单信息
+    * @param userType 处理人类型，major主处理人或minor协助处理人
+    * @param userUuid 用户
+    * @return boolean 
+     */
     protected boolean checkIsWorker(ProcessTaskVo processTaskVo, String userType, String userUuid) {
         List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
         List<String> roleUuidList = userMapper.getRoleUuidListByUserUuid(userUuid);
@@ -89,7 +97,15 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     protected boolean checkIsWorker(ProcessTaskVo processTaskVo, String userUuid) {
         return checkIsWorker(processTaskVo, null, userUuid);
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 判断当前用户是不是步骤的待处理人 
+    * @param processTaskStepVo 步骤信息
+    * @param userType 处理人类型，major主处理人或minor协助处理人
+    * @param userUuid 用户
+    * @return boolean
+     */
     protected boolean checkIsWorker(ProcessTaskStepVo processTaskStepVo, String userType, String userUuid) {
         List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
         List<String> roleUuidList = userMapper.getRoleUuidListByUserUuid(userUuid);
@@ -116,7 +132,15 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     protected boolean checkIsWorker(ProcessTaskStepVo processTaskStepVo, String userUuid) {
         return checkIsWorker(processTaskStepVo, null, userUuid);
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 判断当前用户是不是工单任意一个步骤的处理人 
+    * @param processTaskVo 工单信息
+    * @param userType 处理人类型，major主处理人或minor协助处理人
+    * @param userUuid 用户
+    * @return boolean 
+     */
     protected boolean checkIsProcessTaskStepUser(ProcessTaskVo processTaskVo, String userType, String userUuid) {
         for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
             for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepVo.getUserList()) {
@@ -133,7 +157,16 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     protected boolean checkIsProcessTaskStepUser(ProcessTaskVo processTaskVo, String userUuid) {
         return checkIsProcessTaskStepUser(processTaskVo, null, userUuid);
     }
-
+    
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 判断当前用户是不是步骤的待处理人 
+    * @param processTaskStepVo 步骤信息
+    * @param userType 处理人类型，major主处理人或minor协助处理人
+    * @param userUuid 用户
+    * @return boolean
+     */
     protected boolean checkIsProcessTaskStepUser(ProcessTaskStepVo processTaskStepVo, String userType,
         String userUuid) {
         for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepVo.getUserList()) {
@@ -149,7 +182,16 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     protected boolean checkIsProcessTaskStepUser(ProcessTaskStepVo processTaskStepVo, String userUuid) {
         return checkIsProcessTaskStepUser(processTaskStepVo, null, userUuid);
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 判断userUuid用户是否在流程节点（或节点管理）设置中获得operationType权限的授权
+    * @param processTaskVo 工单信息
+    * @param processTaskStepVo 步骤信息
+    * @param operationType 权限类型
+    * @param userUuid 用户
+    * @return boolean
+     */
     protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
         ProcessTaskOperationType operationType, String userUuid) {
         String stepConfig = processTaskStepVo.getConfig();
@@ -185,7 +227,15 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         }
         return false;
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 判断userUuid用户是否在流程设置中获得operationType权限的授权
+    * @param processTaskVo 工单信息
+    * @param operationType 权限类型
+    * @param userUuid 用户
+    * @return boolean
+     */
     protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo,
         ProcessTaskOperationType operationType, String userUuid) {
         String taskConfig = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
@@ -267,7 +317,15 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         }
         return false;
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 根据流程图连线，判断当前步骤是否有flowDirection方向的连线 
+    * @param processTaskVo 工单信息
+    * @param processTaskStepId 步骤id
+    * @param flowDirection 流转方向，forward（前进）或backward（后退）
+    * @return boolean
+     */
     protected boolean checkNextStepIsExistsByProcessTaskStepIdAndProcessFlowDirection(ProcessTaskVo processTaskVo,
         Long processTaskStepId, ProcessFlowDirection flowDirection) {
         for (ProcessTaskStepRelVo processTaskStepRelVo : processTaskVo.getStepRelList()) {
@@ -279,7 +337,15 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         }
         return false;
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 判断userUuid用户是否拥有工单的任意一个步骤的撤回权限 
+    * @param processTaskVo 工单信息
+    * @param processTaskStepId 步骤id
+    * @param userUuid 用户
+    * @return boolean
+     */
     protected boolean checkIsRetractableStepByProcessTaskStepId(ProcessTaskVo processTaskVo, Long processTaskStepId,
         String userUuid) {
         /** 所有前置步骤id **/
@@ -310,7 +376,15 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         }
         return false;
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 判断userUuid用户是否拥有pProcessTaskStepId步骤的撤回权限 
+    * @param processTaskVo 工单信息
+    * @param processTaskStepId 步骤id
+    * @param userUuid 用户
+    * @return boolean
+     */
     protected boolean checkCurrentStepIsRetractableByProcessTaskStepId(ProcessTaskVo processTaskVo,
         Long processTaskStepId, String userUuid) {
         /** 所有后置置步骤id **/

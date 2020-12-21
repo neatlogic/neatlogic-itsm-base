@@ -703,6 +703,7 @@
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
 		`error`,
+		`is_show` as isShow,
 		`serial_number` AS
 		serialNumber
 		FROM `processtask`
@@ -1112,6 +1113,7 @@
 		`reporter`,
 		`expire_time`,
 		`worktime_uuid`,
+		`is_show`,
 		`serial_number`
 		FROM `processtask`
 		<where>
@@ -1145,6 +1147,7 @@
 		`reporter`,
 		`expire_time`,
 		`worktime_uuid`,
+		`is_show`,
 		`serial_number`
 		FROM `processtask`
 		WHERE `id` IN
