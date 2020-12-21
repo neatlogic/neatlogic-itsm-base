@@ -149,7 +149,12 @@ public class ProcessAuthManager {
         this.checkOperationTypeMap = new HashMap<>();
         checkOperationTypeMap.put(checker.processTaskStepId, checker.operationType);
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 返回多个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表 
+    * @return Map<Long,Set<ProcessTaskOperationType>>
+     */
     public Map<Long, Set<ProcessTaskOperationType>> getOperateMap() {
         Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
         if (CollectionUtils.isEmpty(processTaskIdSet) && CollectionUtils.isEmpty(processTaskStepIdSet)) {
@@ -229,14 +234,20 @@ public class ProcessAuthManager {
                     .setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 processTaskVo.setStepRelList(
                     processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
-                getOperateMap(processTaskVo, userUuidList, operationTypeSet, resultMap);
+                resultMap.putAll(getOperateMap(processTaskVo, userUuidList, operationTypeSet));
             }
         }
         return resultMap;
     }
-
-    private void getOperateMap(ProcessTaskVo processTaskVo, List<String> userUuidList,
-        Set<ProcessTaskOperationType> operationTypeSet, Map<Long, Set<ProcessTaskOperationType>> resultMap) {
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 返回一个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表 
+    * @return Map<Long,Set<ProcessTaskOperationType>>
+     */
+    private Map<Long, Set<ProcessTaskOperationType>> getOperateMap(ProcessTaskVo processTaskVo, List<String> userUuidList,
+        Set<ProcessTaskOperationType> operationTypeSet) {
+        Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
         if (CollectionUtils.isEmpty(operationTypeSet)
             || OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeSet)) {
             IOperationAuthHandler handler =
@@ -308,8 +319,14 @@ public class ProcessAuthManager {
                 }
             }
         }
+        return resultMap;
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 检查是否拥有某个权限 
+    * @return boolean
+     */
     public boolean check() {
         if (MapUtils.isNotEmpty(checkOperationTypeMap)) {
             Map<Long, Set<ProcessTaskOperationType>> resultMap = getOperateMap();
@@ -319,7 +336,12 @@ public class ProcessAuthManager {
         }
         return false;
     }
-
+    /**
+     * 
+    * @Time:2020年12月21日
+    * @Description: 检查是否拥有某个权限，如果有，则返回true，没有则抛异常  
+    * @return boolean
+     */
     public boolean checkAndNoPermissionThrowException() {
         if (!check()) {
             for (Map.Entry<Long, ProcessTaskOperationType> entry : checkOperationTypeMap.entrySet()) {
