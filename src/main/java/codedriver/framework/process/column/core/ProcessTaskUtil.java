@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.process.constvalue.ProcessField;
 import codedriver.framework.process.constvalue.ProcessTaskParams;
@@ -131,8 +132,7 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessTaskParams.PRIORITYNAME.getValue(), processTaskVo.getPriority().getName());
         resultObj.put(ProcessTaskParams.STATUSTEXT.getValue(), processTaskVo.getStatusVo().getText());
         resultObj.put(ProcessTaskParams.OWNERCOMPANYLIST.getValue(), processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
-        resultObj.put(ProcessTaskParams.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);
-        resultObj.put(ProcessTaskParams.STEPNAME.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getName() : null);
+        resultObj.put(ProcessTaskParams.OPERATOR.getValue(), UserContext.get().getUserUuid(true));
         
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
@@ -154,12 +154,6 @@ public class ProcessTaskUtil {
         }else {
             resultObj.put(ProcessTaskParams.STARTTIME.getValue(), "");
         }
-//        Date expireTime = processTaskVo.getExpireTime();
-//        if(expireTime != null) {
-//            resultObj.put(ProcessTaskParams.EXPIREDTIME.getValue(), sdf.format(expireTime));
-//        }else {
-//            resultObj.put(ProcessTaskParams.EXPIREDTIME.getValue(), "");
-//        }
         
         /** 表单信息数据 **/
         Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
@@ -196,7 +190,11 @@ public class ProcessTaskUtil {
                 resultObj.put(ProcessTaskParams.FORM.getValue(), formAttributeMap);
             }
         }
-        
+        ProcessTaskStepVo currentProcessTaskStep = processTaskVo.getCurrentProcessTaskStep();
+        if(currentProcessTaskStep != null) {
+            resultObj.put(ProcessTaskParams.STEPID.getValue(), currentProcessTaskStep.getId());
+            resultObj.put(ProcessTaskParams.STEPNAME.getValue(), currentProcessTaskStep.getName());
+        }
         return resultObj;
     }
 	
