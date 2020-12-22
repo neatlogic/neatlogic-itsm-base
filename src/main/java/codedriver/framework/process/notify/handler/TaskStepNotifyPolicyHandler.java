@@ -69,13 +69,13 @@ public class TaskStepNotifyPolicyHandler extends NotifyPolicyHandlerBase {
             for (TaskStepNotifyTriggerType notifyTriggerType : TaskStepNotifyTriggerType.values()) {
                 List<IDefaultTemplate> templates = map.get(notifyTriggerType.getTrigger().toLowerCase());
                 for(IDefaultTemplate vo : templates){
-                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),vo.getTitle(),vo.getContent(),handler));
+                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),notifyTriggerType.getDescription(),vo.getTitle(),vo.getContent(),handler));
                 }
             }
             for (SubtaskNotifyTriggerType notifyTriggerType : SubtaskNotifyTriggerType.values()) {
                 List<IDefaultTemplate> templates = map.get(notifyTriggerType.getTrigger().toLowerCase());
                 for(IDefaultTemplate vo : templates){
-                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),vo.getTitle(),vo.getContent(),handler));
+                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),notifyTriggerType.getDescription(),vo.getTitle(),vo.getContent(),handler));
                 }
             }
         }
