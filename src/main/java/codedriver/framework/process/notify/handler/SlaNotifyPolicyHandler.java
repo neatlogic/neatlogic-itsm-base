@@ -66,7 +66,7 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
             for (SlaNotifyTriggerType notifyTriggerType : SlaNotifyTriggerType.values()) {
                 List<IDefaultTemplate> templates = map.get(notifyTriggerType.getTrigger().toLowerCase());
                 for(IDefaultTemplate vo : templates){
-                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),vo.getTitle(),vo.getContent(),handler));
+                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),notifyTriggerType.getDescription(),vo.getTitle(),vo.getContent(),handler));
                 }
             }
         }
