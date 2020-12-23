@@ -1080,10 +1080,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         SlaHandler.calculate(currentProcessTaskStepVo);
 
         /** 触发通知 **/
-        NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
+//        NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
 
         /** 执行动作 **/
-        ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
+//        ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
         return 1;
     }
 
@@ -1182,6 +1182,12 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             /** 更新工单步骤状态为 “进行中” **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
+
+            /** 触发通知 **/
+            NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
+
+            /** 执行动作 **/
+            ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
         }
 
         /** 写入时间审计 **/
@@ -1189,12 +1195,6 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
         /** 计算SLA **/
         SlaHandler.calculate(currentProcessTaskStepVo);
-
-        /** 触发通知 **/
-        NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
-
-        /** 执行动作 **/
-        ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
         return 1;
     }
 

@@ -106,6 +106,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	//@EntityField(name = "当前子任务Id", type = ApiParamType.LONG)
 	@JSONField(serialize=false)
 	private transient Long currentSubtaskId;
+    //@EntityField(name = "当前子任务", type = ApiParamType.JSONOBJECT)
+	@JSONField(serialize=false)
+    private transient ProcessTaskStepSubtaskVo currentSubtaskVo;
 	@EntityField(name = "处理器特有的步骤信息", type = ApiParamType.JSONOBJECT)
 	private Object handlerStepInfo;
 	@EntityField(name = "向前步骤列表", type = ApiParamType.JSONARRAY)
@@ -124,9 +127,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private String originalUser;
     @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
     private String originalUserName;
-    @EntityField(name = "回复模版")
+    @EntityField(name = "回复模版", type = ApiParamType.JSONOBJECT)
     private ProcessCommentTemplateVo commentTemplate;
-    
     private transient int updateActiveTime;
     private transient int updateStartTime;
     private transient int updateEndTime;
@@ -598,7 +600,15 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.currentSubtaskId = currentSubtaskId;
 	}
 
-	public Object getHandlerStepInfo() {
+	public ProcessTaskStepSubtaskVo getCurrentSubtaskVo() {
+        return currentSubtaskVo;
+    }
+
+    public void setCurrentSubtaskVo(ProcessTaskStepSubtaskVo currentSubtaskVo) {
+        this.currentSubtaskVo = currentSubtaskVo;
+    }
+
+    public Object getHandlerStepInfo() {
 		return handlerStepInfo;
 	}
 
