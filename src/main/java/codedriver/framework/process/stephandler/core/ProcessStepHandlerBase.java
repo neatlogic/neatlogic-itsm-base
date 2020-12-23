@@ -869,7 +869,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 
                 if (this.getHandler().equals(ProcessStepHandlerType.END.getHandler())) {
                     NotifyHandler.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
-                    ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
+                    ActionHandler.action(currentProcessTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
                 } else {
                     /** 触发通知 **/
                     NotifyHandler.notify(currentProcessTaskStepVo, notifyTriggerType);
@@ -2214,6 +2214,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
         /** 触发通知 **/
         NotifyHandler.notify(processTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
+        ActionHandler.action(processTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
         return 1;
     }
 
