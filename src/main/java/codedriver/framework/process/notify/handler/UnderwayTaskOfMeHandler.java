@@ -1,5 +1,6 @@
 package codedriver.framework.process.notify.handler;
 
+import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.FormHandlerType;
 import codedriver.framework.common.constvalue.ParamType;
 import codedriver.framework.common.dto.ValueTextVo;
@@ -24,13 +25,15 @@ import java.util.*;
 public class UnderwayTaskOfMeHandler extends NotifyContentHandlerBase {
 
 	public enum ConditionOptions{
-		STEPTEAM("stepteam","处理组");
+		STEPTEAM("stepteam","处理组",Expression.INCLUDE.getExpression());
 
 		private String value;
 		private String text;
-		private ConditionOptions(String value, String text) {
+		private String expression;
+		private ConditionOptions(String value, String text, String expression) {
 			this.value = value;
 			this.text = text;
+			this.expression = expression;
 		}
 		public String getValue() {
 			return value;
