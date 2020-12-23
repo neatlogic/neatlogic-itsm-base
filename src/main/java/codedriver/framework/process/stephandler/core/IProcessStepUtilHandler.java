@@ -121,6 +121,14 @@ public interface IProcessStepUtilHandler {
      * @return ProcessTaskStepVo
      */
     public ProcessTaskStepVo getStartProcessTaskStepByProcessTaskId(Long processTaskId);
+    /**
+     * 
+    * @Time:2020年12月23日
+    * @Description: 返回当前步骤详情 
+    * @param currentProcessTaskStep 当前步骤基本信息
+    * @return ProcessTaskStepVo 
+     */
+    public ProcessTaskStepVo getCurrentProcessTaskStepDetail(ProcessTaskStepVo currentProcessTaskStep);
 
     /**
      * 
