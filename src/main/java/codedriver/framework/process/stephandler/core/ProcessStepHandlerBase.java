@@ -2214,7 +2214,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         AuditHandler.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
         /** 触发通知 **/
         NotifyHandler.notify(processTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
-        ActionHandler.action(processTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
+        ActionHandler.action(processTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
         return 1;
     }
 
