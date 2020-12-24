@@ -13,11 +13,8 @@ public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
 	BACK("back", "步骤回退","工单完成前，由处理人手动回退工单至前面的某个步骤时触发通知"),
 	RETREAT("retreat", "步骤撤回","工单完成前，由上一步骤有权限的用户手动撤回工单时触发通知，重新处理上一步骤"),
 	HANG("hang", "步骤挂起","当前步骤被回退或撤回时触发通知，当前步骤将处于挂起状态"),
-//	ABORT("abort", "步骤终止","步骤终止"),
-//	RECOVER("recover", "步骤恢复","步骤恢复"),
 	PAUSE("pause", "步骤暂停","有权限的用户暂停当前步骤时触发通知"),
 	FAILED("failed", "步骤失败","当前步骤出现分配异常、流转异常、系统异常导致步骤失败时触发通知"),
-//	REDO("redo", "步骤打回","步骤打回"),
 	;
 
 	private String trigger;
