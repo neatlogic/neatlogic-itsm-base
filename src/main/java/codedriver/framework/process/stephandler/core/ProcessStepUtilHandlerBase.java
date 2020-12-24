@@ -214,6 +214,24 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             .setHandlerStepInfo(startProcessStepUtilHandler.getHandlerStepInfo(startProcessTaskStepVo));
         return startProcessTaskStepVo;
     }
+    
+    @Override
+    public ProcessTaskStepVo getCurrentProcessTaskStepDetail(ProcessTaskStepVo currentProcessTaskStep) {
+        // 获取步骤信息
+        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStep.getId());
+        processTaskStepVo.setParamObj(currentProcessTaskStep.getParamObj());
+        List<ProcessTaskStepWorkerVo> workerList =
+            processTaskMapper.getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(
+                processTaskStepVo.getProcessTaskId(), currentProcessTaskStep.getId());
+        processTaskStepVo.setWorkerList(workerList);
+        IProcessStepUtilHandler handler = ProcessStepUtilHandlerFactory.getHandler(processTaskStepVo.getHandler());
+        if (handler == null) {
+            throw new ProcessStepHandlerNotFoundException(processTaskStepVo.getHandler());
+        }
+        processTaskStepVo.setHandlerStepInfo(handler.getHandlerStepInitInfo(processTaskStepVo));
+        processTaskStepVo.setCurrentSubtaskVo(currentProcessTaskStep.getCurrentSubtaskVo());
+        return processTaskStepVo;
+    }
 
     @Override
     public ProcessTaskVo getFromProcessTasById(Long processTaskId) {

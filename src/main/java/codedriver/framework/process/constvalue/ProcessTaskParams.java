@@ -11,7 +11,7 @@ public enum ProcessTaskParams {
     CONTENT("content", "上报内容", ParamType.STRING),
     STARTTIME("starttime", "开始时间", ParamType.DATE),
     ENDTIME("endtime", "结束时间", ParamType.DATE),
-    EXPIREDTIME("expiretime", "剩余时间",ParamType.STRING),
+//    EXPIREDTIME("expiretime", "剩余时间",ParamType.STRING),
     OWNERNAME("ownername", "上报人", ParamType.STRING),
     REPORTERNAME("reportername", "代报人", ParamType.STRING),
     OWNERCOMPANYLIST("ownercompanylist", "上报人公司列表", ParamType.ARRAY),

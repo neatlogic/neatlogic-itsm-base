@@ -513,7 +513,7 @@ public abstract class ProcessStepHandlerUtilBase {
                             .getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
                         processTaskVo.setStartProcessTaskStep(
                             processStepUtilHandler.getStartProcessTaskStepByProcessTaskId(processTaskVo.getId()));
-                        processTaskVo.setCurrentProcessTaskStep(currentProcessTaskStepVo);
+                        processTaskVo.setCurrentProcessTaskStep(processStepUtilHandler.getCurrentProcessTaskStepDetail(currentProcessTaskStepVo));
                         JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
                         JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
                         Map<String, List<NotifyReceiverVo>> receiverMap = new HashMap<>();
