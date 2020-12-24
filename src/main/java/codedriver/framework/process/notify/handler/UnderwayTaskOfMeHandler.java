@@ -7,13 +7,20 @@ import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.ConditionParamVo;
+import codedriver.framework.notify.core.INotifyHandler;
 import codedriver.framework.notify.core.NotifyContentHandlerBase;
+import codedriver.framework.notify.core.NotifyHandlerFactory;
+import codedriver.framework.notify.dao.mapper.NotifyJobMapper;
+import codedriver.framework.notify.dto.NotifyVo;
+import codedriver.framework.notify.dto.job.NotifyJobVo;
+import codedriver.framework.notify.exception.NotifyHandlerNotFoundException;
 import codedriver.framework.notify.handler.EmailNotifyHandler;
 import codedriver.framework.process.column.core.IProcessTaskColumn;
 import codedriver.framework.process.column.core.ProcessTaskColumnFactory;
 import codedriver.framework.process.constvalue.ProcessConditionModel;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -23,6 +30,9 @@ import java.util.*;
  */
 @Component
 public class UnderwayTaskOfMeHandler extends NotifyContentHandlerBase {
+
+	@Autowired
+	private NotifyJobMapper notifyJobMapper;
 
 	public enum ConditionOptions{
 		STEPTEAM("stepteam","处理组",Expression.INCLUDE.getExpression());
@@ -158,5 +168,20 @@ public class UnderwayTaskOfMeHandler extends NotifyContentHandlerBase {
 			}
 		});
 		return result;
+	}
+
+	/**
+	 * 获取待发送数据
+	 * @param id
+	 */
+	@Override
+	protected List<NotifyVo> getMyNotifyData(Long id) {
+		NotifyJobVo job = notifyJobMapper.getJobBaseInfoById(id);
+		INotifyHandler notifyHandler = NotifyHandlerFactory.getHandler(job.getNotifyHandler());
+		if(notifyHandler == null){
+			throw new NotifyHandlerNotFoundException(job.getNotifyHandler());
+		}
+		// TODO 根据通知方式和配置获取工单数据，最后要按接收人分类
+		return null;
 	}
 }
