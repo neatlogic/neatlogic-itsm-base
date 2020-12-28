@@ -72,7 +72,7 @@
 	WHERE a.`processtask_step_id` = #{value}
 	</select>
 
-	<resultMap id="ProcessTaskStepSubtaskContentMap" type="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
+	<resultMap id="processTaskStepSubtaskContentMap" type="codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo">
 		<result column="id" property="id" />
 		<result column="processTaskStepSubtaskId" property="processTaskStepSubtaskId" />
 		<result column="contentHash" property="contentHash" />
@@ -96,7 +96,7 @@
 		</association>
 	</resultMap>
 	
-	<select id="getProcessTaskStepSubtaskContentBySubtaskId" parameterType="java.lang.Long" resultMap="ProcessTaskStepSubtaskContentMap">
+	<select id="getProcessTaskStepSubtaskContentBySubtaskId" parameterType="java.lang.Long" resultMap="processTaskStepSubtaskContentMap">
 	SELECT 
 	  a.`id`,
 	  a.`processtask_step_subtask_id` AS processTaskStepSubtaskId,
