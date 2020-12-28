@@ -303,7 +303,28 @@
 		ORDER BY id
 	</select>
 
-	<select id="getProcessTaskStepUserByStepId" resultType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+	<resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+		<!--<id column="user_uuid" property="userUuid" />-->
+		<!--<id column="processtask_step_id" property="processTaskStepId" />-->
+		<!--<id column="processtask_id" property="processTaskId" />-->
+		<!--<id column="user_type" property="userType" />-->
+		<result column="processTaskId" property="processTaskId" />
+		<result column="processTaskStepId" property="processTaskStepId" />
+		<result column="userType" property="userType" />
+		<result column="status" property="status" />
+		<result column="action" property="action" />
+		<result column="startTime" property="startTime" />
+		<result column="endTime" property="endTime" />
+		<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="userUuid" />
+			<result property="userName" column="userName" />
+			<result property="userInfo" column="userInfo" />
+			<result property="vipLevel" column="userVipLevel" />
+			<result property="pinyin" column="userPinyin" />
+		</association>
+	</resultMap>
+
+	<select id="getProcessTaskStepUserByStepId" resultMap="processTaskStepUserMap">
 		SELECT
 		`processtask_id` as processTaskId,
 		`processtask_step_id` as processTaskStepId,
@@ -313,6 +334,7 @@
 		userName,
 		(SELECT `user_info` from `user` WHERE `uuid` = `user_uuid`) as userInfo,
 		(SELECT `vip_level` from `user` WHERE `uuid` = `user_uuid`) as userVipLevel,
+		(SELECT `pinyin` from `user` WHERE `uuid` = `user_uuid`) as userPinyin,
 		`status` as status,
 		`action`,
 		`start_time`
@@ -541,8 +563,10 @@
 		</collection>
 		<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 			<result column="userType" property="userType" />
-			<result column="user_uuid" property="userUuid" />
 			<result column="userStatus" property="status" />
+			<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+				<result column="user_uuid" property="uuid" />
+			</association>
 		</collection>
 	</resultMap>
 
@@ -1000,7 +1024,7 @@
 		COUNT(1)
 		FROM `processtask_step_user`
 		WHERE `processtask_id` = #{processTaskId}
-		AND `user_uuid` = #{userUuid}
+		AND `user_uuid` = #{userVo.uuid}
 		<if test="processTaskStepId != null">
 			AND `processtask_step_id` = #{processTaskStepId}
 		</if>
@@ -1235,7 +1259,7 @@
 		SELECT COUNT(`processtask_id`) FROM `processtask_form` WHERE `processtask_id` = #{value}
 	</select>
 
-	<select id="getProcessTaskStepUserList" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo" resultType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+	<select id="getProcessTaskStepUserList" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo" resultMap="processTaskStepUserMap">
 		SELECT
 		`processtask_id` as processTaskId,
 		`processtask_step_id` as processTaskStepId,
@@ -1255,22 +1279,17 @@
 		<if test="userType != null and userType != ''">
 			AND `user_type` = #{userType}
 		</if>
-		<if test="userUuid != null and userUuid != ''">
-			AND user_uuid = #{userUuid}
+		<if test="userVo.uuid != null and userVo.uuid != ''">
+			AND user_uuid = #{userVo.uuid}
 		</if>
 	</select>
-	<resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
-		<id column="user_uuid" property="userUuid" />
-		<id column="processtask_step_id" property="processTaskStepId" />
-		<id column="processtask_id" property="processTaskId" />
-		<id column="user_type" property="userType" />
-	</resultMap>
+
 	<select id="getProcessTaskStepUserListByProcessTaskIdList" parameterType="java.lang.Long" resultMap="processTaskStepUserMap">
 		SELECT
-		`processtask_id`,
-		`processtask_step_id`,
-		`user_uuid`,
-		`user_type`
+		`processtask_id` as processTaskId,
+		`processtask_step_id` as processTaskStepId,
+		`user_uuid` as userUuid,
+		`user_type` as userType
 		FROM `processtask_step_user`
 		WHERE `processtask_id` IN
 		<foreach collection="list" item="processTaskId" open="(" separator="," close=")">
@@ -1755,10 +1774,13 @@
 				<result column="cUserType" property="userType" />
 			</collection>
 			<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
-				<id column="dUserUuid" property="userUuid" />
+				<!--<id column="dUserUuid" property="userUuid" />-->
 				<result column="dProcessTaskId" property="processTaskId" />
 				<result column="dProcessTaskStepId" property="processTaskStepId" />
 				<result column="dUserType" property="userType" />
+				<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+					<result column="dUserUuid" property="uuid" />
+				</association>
 			</collection>
 		</collection>
 
@@ -2295,9 +2317,9 @@
 		(
 		#{processTaskId},
 		#{processTaskStepId},
-		#{userUuid},
+		#{userVo.uuid},
 		#{userType},
-		#{userName},
+		#{userVo.userName},
 		#{status},
 		NOW(3),
 		NOW(3)
@@ -2610,7 +2632,7 @@
 		`status` = #{status}
 		WHERE
 		`processtask_step_id` = #{processTaskStepId}
-		AND `user_uuid` = #{userUuid}
+		AND `user_uuid` = #{userVo.uuid}
 		AND `user_type` = #{userType}
 	</update>
 
@@ -2662,10 +2684,10 @@
 
 	<update id="updateProcessTaskStepUserUserUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 		UPDATE `processtask_step_user`
-		SET `user_uuid` = #{userUuid}
+		SET `user_uuid` = #{newUserUuid}
 		WHERE `processtask_step_id` = #{processTaskStepId}
 		AND `user_uuid` =
-		#{userUuid}
+		#{userVo.uuid}
 		AND `user_type` = #{userType}
 	</update>
 
@@ -2736,8 +2758,8 @@
 		<if test="userType != null and userType != ''">
 			AND `user_type` = #{userType}
 		</if>
-		<if test="userUuid != null and userUuid != ''">
-			AND `user_uuid` = #{userUuid}
+		<if test="userVo != null and userVo.uuid != null and userVo.uuid != ''">
+			AND `user_uuid` = #{userVo.uuid}
 		</if>
 	</delete>
 

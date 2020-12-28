@@ -2,6 +2,7 @@ package codedriver.framework.process.dto;
 
 import java.util.Date;
 
+import codedriver.framework.dto.UserVo;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,12 +15,13 @@ public class ProcessTaskStepUserVo {
     @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
-	private String userUuid;
-	private String userName;
+	private UserVo userVo;
+//	private String userUuid;
+//	private String userName;
 	private String userType;
-	private String userInfo;
-	private String userAvatar;
-	private Integer userVipLevel;
+//	private String userInfo;
+//	private String userAvatar;
+//	private Integer userVipLevel;
 	private String status = ProcessTaskStepUserStatus.DOING.getValue();
 	private String statusName;
 	private Date startTime;
@@ -39,16 +41,16 @@ public class ProcessTaskStepUserVo {
     	this.setUserUuid(_userUuid);
     }*/
 
-	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid) {
+	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, UserVo userVo) {
 		this.setProcessTaskId(_processTaskId);
 		this.setProcessTaskStepId(_processTaskStepId);
-		this.setUserUuid(_userUuid);
+		this.setUserVo(userVo);
 	}
 
-	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid, String userType) {
+	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, UserVo userVo, String userType) {
         this.setProcessTaskId(_processTaskId);
         this.setProcessTaskStepId(_processTaskStepId);
-        this.setUserUuid(_userUuid);
+        this.setUserVo(userVo);
         this.setUserType(userType);
     }
 	
@@ -57,11 +59,11 @@ public class ProcessTaskStepUserVo {
 //		this.setUserName(processStepUserVo.getUserName());
 //	}
 
-	public ProcessTaskStepUserVo(Long processTaskId, Long processTaskStepId, String userUuid, String userType,
+	public ProcessTaskStepUserVo(Long processTaskId, Long processTaskStepId, UserVo userVo, String userType,
         String newUserUuid) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
-        this.userUuid = userUuid;
+        this.setUserVo(userVo);
         this.userType = userType;
         this.newUserUuid = newUserUuid;
     }
@@ -74,22 +76,30 @@ public class ProcessTaskStepUserVo {
 		this.processTaskStepId = processTaskStepId;
 	}
 
-	public String getUserUuid() {
-		return userUuid;
+	public UserVo getUserVo() {
+		return userVo;
 	}
 
-	public void setUserUuid(String userUuid) {
-		this.userUuid = userUuid;
+	public void setUserVo(UserVo userVo) {
+		this.userVo = userVo;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
+	//	public String getUserUuid() {
+//		return userUuid;
+//	}
+//
+//	public void setUserUuid(String userUuid) {
+//		this.userUuid = userUuid;
+//	}
+//
+//	public String getUserName() {
+//		return userName;
+//	}
+//
+//	public void setUserName(String userName) {
+//		this.userName = userName;
+//	}
+//
 	public String getUserType() {
 		return userType;
 	}
@@ -165,21 +175,21 @@ public class ProcessTaskStepUserVo {
 		this.action = action;
 	}
 
-	public String getUserInfo() {
-		return userInfo;
-	}
+//	public String getUserInfo() {
+//		return userInfo;
+//	}
+//
+//	public void setUserInfo(String userInfo) {
+//		this.userInfo = userInfo;
+//	}
 
-	public void setUserInfo(String userInfo) {
-		this.userInfo = userInfo;
-	}
-
-	public String getUserAvatar() {
-		if (StringUtils.isBlank(userAvatar) && StringUtils.isNotBlank(userInfo)) {
-			JSONObject jsonObject = JSONObject.parseObject(userInfo);
-			userAvatar = jsonObject.getString("avatar");
-		}
-		return userAvatar;
-	}
+//	public String getUserAvatar() {
+//		if (StringUtils.isBlank(userAvatar) && StringUtils.isNotBlank(userInfo)) {
+//			JSONObject jsonObject = JSONObject.parseObject(userInfo);
+//			userAvatar = jsonObject.getString("avatar");
+//		}
+//		return userAvatar;
+//	}
 
     public String getNewUserUuid() {
         return newUserUuid;
@@ -189,11 +199,11 @@ public class ProcessTaskStepUserVo {
         this.newUserUuid = newUserUuid;
     }
 
-	public Integer getUserVipLevel() {
-		return userVipLevel;
-	}
-
-	public void setUserVipLevel(Integer userVipLevel) {
-		this.userVipLevel = userVipLevel;
-	}
+//	public Integer getUserVipLevel() {
+//		return userVipLevel;
+//	}
+//
+//	public void setUserVipLevel(Integer userVipLevel) {
+//		this.userVipLevel = userVipLevel;
+//	}
 }

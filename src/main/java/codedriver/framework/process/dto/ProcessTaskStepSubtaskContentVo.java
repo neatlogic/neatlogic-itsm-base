@@ -1,11 +1,8 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.dto.UserVo;
+
 import java.util.Date;
-
-import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-
-import codedriver.framework.asynchronization.threadlocal.UserContext;
 
 public class ProcessTaskStepSubtaskContentVo {
 	private Long id;
@@ -14,16 +11,16 @@ public class ProcessTaskStepSubtaskContentVo {
 	private String content;
 	private String action;
 	private Date fcd;
-	private String fcu;
-	private String fcuName;
-	private String fcuInfo;
-	private String fcuAvatar;
-	private Integer fcuVipLevel;
+	private UserVo fcuVo;
+//	private String fcuName;
+//	private String fcuInfo;
+//	private String fcuAvatar;
+//	private Integer fcuVipLevel;
 	private Date lcd;
-	private String lcu;
-	private String lcuInfo;
-	private String lcuAvatar;
-	private Integer lcuVipLevel;
+	private UserVo lcuVo;
+//	private String lcuInfo;
+//	private String lcuAvatar;
+//	private Integer lcuVipLevel;
 
 	public ProcessTaskStepSubtaskContentVo() {
 
@@ -88,25 +85,6 @@ public class ProcessTaskStepSubtaskContentVo {
 		this.fcd = fcd;
 	}
 
-	public String getFcu() {
-		if (StringUtils.isBlank(fcu)) {
-			fcu = UserContext.get().getUserUuid();
-		}
-		return fcu;
-	}
-
-	public void setFcu(String fcu) {
-		this.fcu = fcu;
-	}
-
-	public String getFcuName() {
-		return fcuName;
-	}
-
-	public void setFcuName(String fcuName) {
-		this.fcuName = fcuName;
-	}
-
 	public Date getLcd() {
 		return lcd;
 	}
@@ -115,62 +93,19 @@ public class ProcessTaskStepSubtaskContentVo {
 		this.lcd = lcd;
 	}
 
-	public String getLcu() {
-		if (StringUtils.isBlank(lcu)) {
-			lcu = UserContext.get().getUserUuid();
-		}
-		return lcu;
+	public UserVo getFcuVo() {
+		return fcuVo;
 	}
 
-	public void setLcu(String lcu) {
-		this.lcu = lcu;
+	public void setFcuVo(UserVo fcuVo) {
+		this.fcuVo = fcuVo;
 	}
 
-	public String getFcuInfo() {
-		return fcuInfo;
+	public UserVo getLcuVo() {
+		return lcuVo;
 	}
 
-	public void setFcuInfo(String fcuInfo) {
-		this.fcuInfo = fcuInfo;
-	}
-
-	public String getFcuAvatar() {
-		if (StringUtils.isBlank(fcuAvatar) && StringUtils.isNotBlank(fcuInfo)) {
-			JSONObject jsonObject = JSONObject.parseObject(fcuInfo);
-			fcuAvatar = jsonObject.getString("avatar");
-		}
-		return fcuAvatar;
-	}
-
-	public String getLcuInfo() {
-		return lcuInfo;
-	}
-
-	public void setLcuInfo(String lcuInfo) {
-		this.lcuInfo = lcuInfo;
-	}
-
-	public String getLcuAvatar() {
-		if (StringUtils.isBlank(lcuAvatar) && StringUtils.isNotBlank(lcuInfo)) {
-			JSONObject jsonObject = JSONObject.parseObject(lcuInfo);
-			lcuAvatar = jsonObject.getString("avatar");
-		}
-		return lcuAvatar;
-	}
-
-	public Integer getFcuVipLevel() {
-		return fcuVipLevel;
-	}
-
-	public void setFcuVipLevel(Integer fcuVipLevel) {
-		this.fcuVipLevel = fcuVipLevel;
-	}
-
-	public Integer getLcuVipLevel() {
-		return lcuVipLevel;
-	}
-
-	public void setLcuVipLevel(Integer lcuVipLevel) {
-		this.lcuVipLevel = lcuVipLevel;
+	public void setLcuVo(UserVo lcuVo) {
+		this.lcuVo = lcuVo;
 	}
 }

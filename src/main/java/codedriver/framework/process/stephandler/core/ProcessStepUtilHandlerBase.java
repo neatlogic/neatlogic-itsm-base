@@ -293,14 +293,14 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
         List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUser);
         for (ProcessTaskStepUserVo processTaskStepUserVo : majorUserList) {
             receiverMap.computeIfAbsent(ProcessUserType.MAJOR.getValue(), k -> new ArrayList<>())
-                .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
+                .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserVo().getUuid()));
         }
         /** 子任务处理人 **/
         processTaskStepUser.setUserType(ProcessUserType.MINOR.getValue());
         List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUser);
         for (ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
             receiverMap.computeIfAbsent(ProcessUserType.MINOR.getValue(), k -> new ArrayList<>())
-                .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
+                .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserVo().getUuid()));
         }
         /** 待处理人 **/
         List<ProcessTaskStepWorkerVo> workerList =
