@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import java.util.Date;
 import java.util.List;
 
+import codedriver.framework.dto.UserVo;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,16 +20,18 @@ public class ProcessTaskStepAuditVo {
 	private Long processTaskStepId;
 	@EntityField(name = "步骤名称", type = ApiParamType.STRING)
 	private String processTaskStepName;
-	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
-	private String userUuid;
-	@EntityField(name = "用户名", type = ApiParamType.STRING)
-	private String userName;
-	@EntityField(name = "用户其他属性", type = ApiParamType.STRING)
-	private String userInfo;
-	@EntityField(name = "用户头像", type = ApiParamType.STRING)
-	private String avatar;
-	@EntityField(name = "用户VIP等级", type = ApiParamType.INTEGER)
-	private Integer vipLevel;
+	@EntityField(name = "用户")
+	private UserVo userVo;
+//	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
+//	private String userUuid;
+//	@EntityField(name = "用户名", type = ApiParamType.STRING)
+//	private String userName;
+//	@EntityField(name = "用户其他属性", type = ApiParamType.STRING)
+//	private String userInfo;
+//	@EntityField(name = "用户头像", type = ApiParamType.STRING)
+//	private String avatar;
+//	@EntityField(name = "用户VIP等级", type = ApiParamType.INTEGER)
+//	private Integer vipLevel;
 	@EntityField(name = "创建时间", type = ApiParamType.LONG)
 	private Date actionTime;
 	@EntityField(name = "活动类型，startprocess(上报)、complete(完成)、retreat(撤回)、abort(终止)、recover(恢复)、transfer(转交)、updateTitle(更新标题)、updatePriority(更新优先级)、updateContent(更新上报描述内容)、comment(评论)", type = ApiParamType.STRING)
@@ -59,10 +62,10 @@ public class ProcessTaskStepAuditVo {
 		this.action = _action;
 	}
 
-	public ProcessTaskStepAuditVo(Long processTaskId, Long processTaskStepId, String userUuid, String action) {
+	public ProcessTaskStepAuditVo(Long processTaskId, Long processTaskStepId, UserVo userVo, String action) {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
-		this.userUuid = userUuid;
+		this.userVo = userVo;
 		this.action = action;
 	}
 
@@ -98,27 +101,35 @@ public class ProcessTaskStepAuditVo {
 		this.processTaskStepName = processTaskStepName;
 	}
 
-	public String getUserUuid() {
-		return userUuid;
+	public UserVo getUserVo() {
+		return userVo;
 	}
 
-	public void setUserUuid(String userUuid) {
-		this.userUuid = userUuid;
+	public void setUserVo(UserVo userVo) {
+		this.userVo = userVo;
 	}
 
-	public String getUserName() {
-		if(StringUtils.isBlank(userName) && StringUtils.isNotBlank(userUuid)) {
-			userName = SystemUser.getUserName(userUuid);
-			if(StringUtils.isBlank(userName)) {
-				userName = userUuid;
-			}
-		}
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+	//	public String getUserUuid() {
+//		return userUuid;
+//	}
+//
+//	public void setUserUuid(String userUuid) {
+//		this.userUuid = userUuid;
+//	}
+//
+//	public String getUserName() {
+//		if(StringUtils.isBlank(userName) && StringUtils.isNotBlank(userUuid)) {
+//			userName = SystemUser.getUserName(userUuid);
+//			if(StringUtils.isBlank(userName)) {
+//				userName = userUuid;
+//			}
+//		}
+//		return userName;
+//	}
+//
+//	public void setUserName(String userName) {
+//		this.userName = userName;
+//	}
 
 	public Date getActionTime() {
 		return actionTime;
@@ -187,21 +198,21 @@ public class ProcessTaskStepAuditVo {
 		this.description = description;
 	}
 
-	public String getUserInfo() {
-		return userInfo;
-	}
+//	public String getUserInfo() {
+//		return userInfo;
+//	}
 
-	public void setUserInfo(String userInfo) {
-		this.userInfo = userInfo;
-	}
-
-	public String getAvatar(){
-		if (StringUtils.isBlank(avatar) && StringUtils.isNotBlank(userInfo)) {
-			JSONObject jsonObject = JSONObject.parseObject(userInfo);
-			avatar = jsonObject.getString("avatar");
-		}
-		return avatar;
-	}
+//	public void setUserInfo(String userInfo) {
+//		this.userInfo = userInfo;
+//	}
+//
+//	public String getAvatar(){
+//		if (StringUtils.isBlank(avatar) && StringUtils.isNotBlank(userInfo)) {
+//			JSONObject jsonObject = JSONObject.parseObject(userInfo);
+//			avatar = jsonObject.getString("avatar");
+//		}
+//		return avatar;
+//	}
 
     public String getOriginalUser() {
         return originalUser;
@@ -219,11 +230,11 @@ public class ProcessTaskStepAuditVo {
         this.originalUserName = originalUserName;
     }
 
-	public Integer getVipLevel() {
-		return vipLevel;
-	}
-
-	public void setVipLevel(Integer vipLevel) {
-		this.vipLevel = vipLevel;
-	}
+//	public Integer getVipLevel() {
+//		return vipLevel;
+//	}
+//
+//	public void setVipLevel(Integer vipLevel) {
+//		this.vipLevel = vipLevel;
+//	}
 }

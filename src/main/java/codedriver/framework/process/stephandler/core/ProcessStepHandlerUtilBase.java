@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
 
+import codedriver.framework.dto.UserVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -1183,7 +1184,7 @@ public abstract class ProcessStepHandlerUtilBase {
                 processTaskStepAuditVo.setAction(action.getValue());
                 processTaskStepAuditVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
                 processTaskStepAuditVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-                processTaskStepAuditVo.setUserUuid(UserContext.get().getUserUuid());// 兼容automatic作业无用户
+                processTaskStepAuditVo.setUserVo(new UserVo(UserContext.get().getUserUuid()));// 兼容automatic作业无用户
                 processTaskStepAuditVo.setStepStatus(currentProcessTaskStepVo.getStatus());
                 processTaskStepAuditVo.setOriginalUser(currentProcessTaskStepVo.getOriginalUser());
                 processTaskMapper.insertProcessTaskStepAudit(processTaskStepAuditVo);
