@@ -215,31 +215,56 @@
 		WHERE sla_id = #{value}
 	</select>
 
-	<select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<resultMap id="processTaskMap" type="codedriver.framework.process.dto.ProcessTaskVo">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="process_uuid" property="processUuid" />
+		<result column="channel_uuid" property="channelUuid" />
+		<result column="config_hash" property="configHash" />
+		<result column="priority_uuid" property="priorityUuid" />
+		<result column="status" property="status" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="owner" property="ownerUuid" />
+		<result column="reporter" property="reporter" />
+		<result column="reporterName" property="reporterName" />
+		<result column="expire_time" property="expireTime" />
+		<result column="worktime_uuid" property="worktimeUuid" />
+		<result column="error" property="error" />
+		<result column="is_show" property="isShow" />
+		<result column="serial_number" property="serialNumber" />
+		<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="ownerUuid" />
+			<result property="userName" column="ownerName" />
+			<result property="userInfo" column="ownerInfo" />
+			<result property="vipLevel" column="ownerVipLevel" />
+			<result property="pinyin" column="ownerPinyin" />
+		</association>
+	</resultMap>
+
+	<select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultMap="processTaskMap">
 		SELECT
 		`id`,
-		`serial_number` AS serialNumber,
+		`serial_number`,
 		`title`,
-		`process_uuid` AS processUuid,
-		`channel_uuid` AS
-		channelUuid,
-		`config_hash` AS configHash,
-		`priority_uuid` AS priorityUuid,
+		`process_uuid`,
+		`channel_uuid`,
+		`config_hash`,
+		`priority_uuid`,
 		`status`,
-		`start_time` AS startTime,
-		`end_time` AS endTime,
-		`owner`,
+		`start_time`,
+		`end_time`,
+		`owner` as ownerUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS
 		ownerName,
 		(SELECT vip_level FROM `user` x
 		WHERE x.uuid = `owner`) AS ownerVipLevel,
 		`reporter`,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
-		`expire_time` AS expireTime,
-		`worktime_uuid` AS worktimeUuid,
+		`expire_time`,
+		`worktime_uuid`,
 		`error`,
-		`is_show` as isShow,
-		`serial_number` AS serialNumber
+		`is_show`
 		FROM
 		`processtask`
 		WHERE
@@ -1140,7 +1165,7 @@
 		`status`,
 		`start_time`,
 		`end_time`,
-		`owner`,
+		`owner` as ownerUuid,
 		`reporter`,
 		`expire_time`,
 		`worktime_uuid`,
@@ -1174,7 +1199,7 @@
 		`status`,
 		`start_time`,
 		`end_time`,
-		`owner`,
+		`owner` as onwerUuid,
 		`reporter`,
 		`expire_time`,
 		`worktime_uuid`,
@@ -1699,23 +1724,23 @@
 		</if>
 	</select>
 
-	<resultMap type="codedriver.framework.process.dto.ProcessTaskVo" id="processTaskMap">
-		<id column="id" property="id" />
-		<result column="title" property="title" />
-		<result column="process_uuid" property="processUuid" />
-		<result column="channel_uuid" property="channelUuid" />
-		<result column="config_hash" property="configHash" />
-		<result column="priority_uuid" property="priorityUuid" />
-		<result column="status" property="status" />
-		<result column="start_time" property="startTime" />
-		<result column="end_time" property="endTime" />
-		<result column="owner" property="owner" />
-		<result column="reporter" property="reporter" />
-		<result column="expire_time" property="expireTime" />
-		<result column="worktime_uuid" property="worktimeUuid" />
-		<result column="is_show" property="isShow" />
-		<result column="serial_number" property="serialNumber" />
-	</resultMap>
+	<!--<resultMap type="codedriver.framework.process.dto.ProcessTaskVo" id="processTaskMap">-->
+		<!--<id column="id" property="id" />-->
+		<!--<result column="title" property="title" />-->
+		<!--<result column="process_uuid" property="processUuid" />-->
+		<!--<result column="channel_uuid" property="channelUuid" />-->
+		<!--<result column="config_hash" property="configHash" />-->
+		<!--<result column="priority_uuid" property="priorityUuid" />-->
+		<!--<result column="status" property="status" />-->
+		<!--<result column="start_time" property="startTime" />-->
+		<!--<result column="end_time" property="endTime" />-->
+		<!--<result column="owner" property="owner" />-->
+		<!--<result column="reporter" property="reporter" />-->
+		<!--<result column="expire_time" property="expireTime" />-->
+		<!--<result column="worktime_uuid" property="worktimeUuid" />-->
+		<!--<result column="is_show" property="isShow" />-->
+		<!--<result column="serial_number" property="serialNumber" />-->
+	<!--</resultMap>-->
 
 	<select id="getProcessTaskListByChannelTypeUuidAndStartTime" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultMap="processTaskMap">
 		SELECT
@@ -1728,7 +1753,7 @@
 		a.`status`,
 		a.`start_time`,
 		a.`end_time`,
-		a.`owner`,
+		a.`owner` as ownerUuid,
 		a.`reporter`,
 		a.`expire_time`,
 		a.`worktime_uuid`,

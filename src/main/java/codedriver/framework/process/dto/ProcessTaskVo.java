@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import codedriver.framework.dto.UserVo;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -48,10 +49,12 @@ public class ProcessTaskVo extends BasePageVo {
     private ProcessTaskStatusVo statusVo;
     @EntityField(name = "上报人userUuid", type = ApiParamType.STRING)
     private String owner;
-    @EntityField(name = "上报人", type = ApiParamType.STRING)
-    private String ownerName;
-    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
-    private Integer ownerVipLevel;
+    @EntityField(name = "上报人")
+    private UserVo ownerVo;
+//    @EntityField(name = "上报人", type = ApiParamType.STRING)
+//    private String ownerName;
+//    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
+//    private Integer ownerVipLevel;
     @EntityField(name = "代报人userUuid", type = ApiParamType.STRING)
     private String reporter;
     @EntityField(name = "代报人", type = ApiParamType.STRING)
@@ -178,13 +181,21 @@ public class ProcessTaskVo extends BasePageVo {
         this.owner = owner;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public UserVo getOwnerVo() {
+        return ownerVo;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setOwnerVo(UserVo ownerVo) {
+        this.ownerVo = ownerVo;
     }
+
+    //    public String getOwnerName() {
+//        return ownerName;
+//    }
+//
+//    public void setOwnerName(String ownerName) {
+//        this.ownerName = ownerName;
+//    }
 
     public String getReporter() {
         return reporter;
@@ -472,13 +483,13 @@ public class ProcessTaskVo extends BasePageVo {
         this.paramObj = paramObj;
     }
 
-    public Integer getOwnerVipLevel() {
-        return ownerVipLevel;
-    }
-
-    public void setOwnerVipLevel(Integer ownerVipLevel) {
-        this.ownerVipLevel = ownerVipLevel;
-    }
+//    public Integer getOwnerVipLevel() {
+//        return ownerVipLevel;
+//    }
+//
+//    public void setOwnerVipLevel(Integer ownerVipLevel) {
+//        this.ownerVipLevel = ownerVipLevel;
+//    }
 
     public Integer getIsShow() {
         return isShow;
