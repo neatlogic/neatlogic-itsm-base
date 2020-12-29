@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
@@ -19,12 +20,14 @@ import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
-public class ProcessTaskVo {
-    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
+public class ProcessTaskVo extends BasePageVo {
+    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
     @EntityField(name = "工单id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "父工单id", type = ApiParamType.LONG)
     private Long parentId;
+    @EntityField(name = "工单号", type = ApiParamType.STRING)
+    private String serialNumber;
     @EntityField(name = "标题", type = ApiParamType.STRING)
     private String title;
     @EntityField(name = "流程uuid", type = ApiParamType.STRING)
@@ -65,7 +68,7 @@ public class ProcessTaskVo {
     private String configHash;
 
     private List<ProcessTaskStepVo> stepList = new ArrayList<>();
-    
+
     @EntityField(name = "优先级信息", type = ApiParamType.JSONOBJECT)
     private PriorityVo priority;
     @EntityField(name = "工单表单信息", type = ApiParamType.STRING)
@@ -77,6 +80,8 @@ public class ProcessTaskVo {
     @EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
     private String worktimeUuid;
 
+    @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+    private String channelTypeUuid;
     @EntityField(name = "服务类型信息", type = ApiParamType.JSONOBJECT)
     private ChannelTypeVo channelType;
 
@@ -84,9 +89,9 @@ public class ProcessTaskVo {
     ProcessTaskStepVo startProcessTaskStep;
     @EntityField(name = "工单当前步骤信息", type = ApiParamType.JSONOBJECT)
     ProcessTaskStepVo currentProcessTaskStep;
-    
+
     @EntityField(name = "上报人公司列表", type = ApiParamType.JSONARRAY)
-    @JSONField(serialize=false)
+    @JSONField(serialize = false)
     private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
 
     @EntityField(name = "评分信息", type = ApiParamType.STRING)
@@ -96,24 +101,27 @@ public class ProcessTaskVo {
     private List<ProcessTaskVo> tranferReportProcessTaskList = new ArrayList<>();
     @EntityField(name = "评分信息", type = ApiParamType.STRING)
     private String tranferReportDirection;
-    @JSONField(serialize=false)
+    @JSONField(serialize = false)
     private transient Boolean isAutoGenerateId = true;
     @EntityField(name = "重做步骤列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> redoStepList = new ArrayList<>();
-	@EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
-	private ScoreTemplateVo scoreTemplateVo;
-	@JSONField(serialize=false)
+    @EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
+    private ScoreTemplateVo scoreTemplateVo;
+    @JSONField(serialize = false)
     private transient JSONObject paramObj;
-	@EntityField(name = "是否显示，1：显示，0：隐藏", type = ApiParamType.INTEGER)
-	private Integer isShow;
+    @EntityField(name = "是否显示，1：显示，0：隐藏", type = ApiParamType.INTEGER)
+    private Integer isShow;
     @EntityField(name = "是否已关注，1：是，0：否", type = ApiParamType.INTEGER)
-    private Integer isFocus = 0;    
+    private Integer isFocus = 0;
     @EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
     @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTagVo> tagVoList;
     @EntityField(name = "移动端表单交互类型，1：下探页面；0：当前页", type = ApiParamType.INTEGER)
     private Integer mobileFormUIType;
+    @JSONField(serialize = false)
+    private transient List<ProcessTaskStepRelVo> stepRelList;
+    
     public ProcessTaskVo() {
 
     }
@@ -128,7 +136,7 @@ public class ProcessTaskVo {
     }
 
     public synchronized Long getId() {
-        if(id == null && isAutoGenerateId) {
+        if (id == null && isAutoGenerateId) {
             id = SnowflakeUtil.uniqueLong();
         }
         return id;
@@ -234,6 +242,14 @@ public class ProcessTaskVo {
         this.stepList = stepList;
     }
 
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -259,7 +275,7 @@ public class ProcessTaskVo {
     }
 
     public ProcessTaskStatusVo getStatusVo() {
-        if(statusVo == null && StringUtils.isNotBlank(status)) {
+        if (statusVo == null && StringUtils.isNotBlank(status)) {
             statusVo = new ProcessTaskStatusVo(status);
         }
         return statusVo;
@@ -349,6 +365,14 @@ public class ProcessTaskVo {
         this.worktimeUuid = worktimeUuid;
     }
 
+    public String getChannelTypeUuid() {
+        return channelTypeUuid;
+    }
+
+    public void setChannelTypeUuid(String channelTypeUuid) {
+        this.channelTypeUuid = channelTypeUuid;
+    }
+
     public ChannelTypeVo getChannelType() {
         return channelType;
     }
@@ -436,9 +460,9 @@ public class ProcessTaskVo {
     public void setScoreTemplateVo(ScoreTemplateVo scoreTemplateVo) {
         this.scoreTemplateVo = scoreTemplateVo;
     }
-    
+
     public JSONObject getParamObj() {
-        if(paramObj == null) {
+        if (paramObj == null) {
             paramObj = new JSONObject();
         }
         return paramObj;
@@ -455,7 +479,7 @@ public class ProcessTaskVo {
     public void setOwnerVipLevel(Integer ownerVipLevel) {
         this.ownerVipLevel = ownerVipLevel;
     }
-    
+
     public Integer getIsShow() {
         return isShow;
     }
@@ -495,5 +519,13 @@ public class ProcessTaskVo {
     public void setMobileFormUIType(Integer mobileFormUIType) {
         this.mobileFormUIType = mobileFormUIType;
     }
-    
+
+    public List<ProcessTaskStepRelVo> getStepRelList() {
+        return stepRelList;
+    }
+
+    public void setStepRelList(List<ProcessTaskStepRelVo> stepRelList) {
+        this.stepRelList = stepRelList;
+    }
+
 }

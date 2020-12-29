@@ -90,7 +90,10 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepWorkerPolicyVo>
         getProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
 
-    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(@Param("processTaskId")Long processTaskId, @Param("processTaskStepId")Long processTaskStepId);
+    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(
+        @Param("processTaskId") Long processTaskId, @Param("processTaskStepId") Long processTaskStepId);
+
+    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdList(List<Long> processTaskIdList);
 
     public Long getProcessTaskLockById(Long processTaskId);
 
@@ -108,6 +111,8 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelByToId(Long toProcessTaskStepId);
 
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelByProcessTaskId(Long processTaskId);
+
+    public List<ProcessTaskStepRelVo> getProcessTaskStepRelListByProcessTaskIdList(List<Long> processTaskIdList);
 
     public List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndType(@Param("processTaskId") Long processTaskId,
         @Param("type") String type);
@@ -129,9 +134,13 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
-    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByUserUuidTeamUuidListRoleUuidList(
-        @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList,
-        @Param("roleUuidList") List<String> roleUuidList);
+    public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdList(List<Long> processTaskIdList);
+
+    public int getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
+        ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+
+    public List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
+        ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
     public List<Map<String, Object>> getProcessTaskActiveStepListByStepIdList(@Param("keyword") String keyword,
         @Param("processTaskStepIdList") List<Long> processTaskStepIdList);
@@ -157,9 +166,11 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
-    public List<ProcessTaskVo> getProcessTaskListByKeywordAndIdList(@Param("keyword") String keyword,
+    public List<ProcessTaskVo> getProcessTaskListByIdListAndStartTime(
         @Param("processTaskIdList") List<Long> processTaskIdList, @Param("fromDate") String fromDate,
         @Param("toDate") String toDate);
+
+    public List<ProcessTaskVo> getProcessTaskListByIdList(List<Long> processTaskIdList);
 
     public List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 
@@ -177,6 +188,8 @@ public interface ProcessTaskMapper {
     public int checkProcessTaskhasForm(Long processTaskId);
 
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserList(ProcessTaskStepUserVo processTaskStepUserVo);
+
+    public List<ProcessTaskStepUserVo> getProcessTaskStepUserListByProcessTaskIdList(List<Long> processTaskIdList);
 
     public String getProcessTaskScoreInfoById(Long processtaskId);
 
@@ -212,7 +225,7 @@ public interface ProcessTaskMapper {
     public ProcessTaskScoreTemplateVo getProcessTaskScoreTemplateByProcessTaskId(Long processTaskId);
 
     public List<Long> getSlaIdListByProcessTaskStepId(Long processTaskStepId);
-    
+
     public List<Long> getSlaIdListByProcessTaskId(Long processTaskId);
 
     public String getProcessTaskSlaConfigById(Long id);
@@ -233,11 +246,17 @@ public interface ProcessTaskMapper {
     public List<String> getFocusUsersOfProcessTask(Long processTaskId);
 
     public List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskId(Long processTaskId);
-    
+
     public List<ProcessTagVo> getProcessTaskTagListByProcessTaskId(@Param("processTaskId") Long processTaskId);
 
     public int getProcessTaskStepInOperationCountByProcessTaskId(Long processTaskId);
-    
+
+    public int getProcessTaskCountByChannelTypeUuidAndStartTime(ProcessTaskVo processTaskVo);
+
+    public List<ProcessTaskVo> getProcessTaskListByChannelTypeUuidAndStartTime(ProcessTaskVo processTaskVo);
+
+    public List<ProcessTaskVo> getProcessTaskDetailListByIdList(List<Long> processTaskIdList);
+
     public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -325,11 +344,11 @@ public interface ProcessTaskMapper {
     @ESSearch
     public int insertProcessTaskFocus(@Param("processTask") @ESParam("processtask") ProcessTaskVo processTask,
         @Param("userUuid") String userUuid);
-    
+
     public int insertProcessTaskTag(@Param("processTaskTagList") List<ProcessTaskTagVo> processTaskTagList);
 
     public int replaceProcesssTaskStepAgent(ProcessTaskStepAgentVo processTaskStepAgentVo);
-    
+
     public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
     @ESSearch
@@ -353,7 +372,7 @@ public interface ProcessTaskMapper {
 
     @ESSearch
     public int updateProcessTaskStepUserStatus(@ESParam("processtask") ProcessTaskStepUserVo processTaskStepUserVo);
-    
+
     @ESSearch
     public int updateProcessTaskIsShow(@ESParam("processtask") ProcessTaskVo processTaskVo);
 
@@ -366,7 +385,12 @@ public interface ProcessTaskMapper {
 
     public int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
 
-    public int updateProcessTaskPriorityUuidById(@Param("id") Long processTaskId, @Param("priorityUuid") String priorityUuid);
+    public int updateProcessTaskPriorityUuidById(@Param("id") Long processTaskId,
+        @Param("priorityUuid") String priorityUuid);
+
+    @ESSearch
+    public int updateProcessTaskSerialNumberById(@ESParam("processtask") @Param("id") Long processTaskId,
+        @Param("serialNumber") String serialNumber);
 
     public int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
@@ -431,8 +455,9 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskByProcessTaskId(Long processTaskId);
 
     public int deleteProcessTaskFocusByProcessTaskId(Long processTaskId);
-    
+
     public int deleteProcessTaskTagByProcessTaskId(Long processTaskId);
-    
-    public int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
+
+    public int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(
+        ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 }

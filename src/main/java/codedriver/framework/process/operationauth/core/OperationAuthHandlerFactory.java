@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.common.RootComponent;
 
 /**
@@ -17,10 +17,10 @@ import codedriver.framework.common.RootComponent;
  * @Description: 操作处理器工厂，根据当前节点状态返回操作列表，控制前端显示的操作按钮
  */
 @RootComponent
-public class OperationAuthHandlerFactory implements ApplicationListener<ContextRefreshedEvent> {
-	private static Map<IOperationAuthHandlerType, IOperationAuthHandler> componentMap = new HashMap<>();
+public class OperationAuthHandlerFactory extends ApplicationListenerBase {
+	private static Map<String, IOperationAuthHandler> componentMap = new HashMap<>();
 
-	public static IOperationAuthHandler getHandler(IOperationAuthHandlerType handler) {
+	public static IOperationAuthHandler getHandler(String handler) {
 		return componentMap.get(handler);
 	}
 
@@ -38,4 +38,9 @@ public class OperationAuthHandlerFactory implements ApplicationListener<ContextR
 			}
 		}
 	}
+
+    @Override
+    protected void myInit() {
+        
+    }
 }

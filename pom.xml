@@ -34,5 +34,10 @@
 			<version>[1.0.0,)</version>
 			<optional>true</optional>
 		</dependency>
-	</dependencies> 
+			<dependency>
+			<groupId>com.techsure</groupId>
+			<artifactId>codedriver-knowledge-base</artifactId>
+			<version>0.1.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project> 

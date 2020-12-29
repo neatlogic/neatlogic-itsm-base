@@ -2,7 +2,18 @@ package codedriver.framework.process.notify.handler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import codedriver.framework.common.dto.ValueTextVo;
+import codedriver.framework.notify.core.NotifyHandlerFactory;
+import codedriver.framework.notify.core.NotifyHandlerType;
+import codedriver.framework.notify.dto.NotifyTriggerTemplateVo;
+import codedriver.framework.notify.dto.NotifyTriggerVo;
+import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
+import codedriver.framework.process.notify.template.IDefaultTemplate;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
@@ -10,7 +21,6 @@ import com.alibaba.fastjson.JSONObject;
 
 import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.ParamType;
-import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.ConditionParamVo;
@@ -31,15 +41,39 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 	}
 
 	@Override
-	protected List<ValueTextVo> myNotifyTriggerList() {
-		List<ValueTextVo> returnList = new ArrayList<>();
+	protected List<NotifyTriggerVo> myNotifyTriggerList() {
+		List<NotifyTriggerVo> returnList = new ArrayList<>();
 		for (SlaNotifyTriggerType notifyTriggerType : SlaNotifyTriggerType.values()) {
-            returnList.add(new ValueTextVo(notifyTriggerType.getTrigger(), notifyTriggerType.getText()));
+            returnList.add(new NotifyTriggerVo(notifyTriggerType.getTrigger(), notifyTriggerType.getText(),notifyTriggerType.getDescription()));
         }
 		return returnList;
 	}
 
-	@Override
+    @Override
+    protected List<NotifyTriggerTemplateVo> myNotifyTriggerTemplateList(NotifyHandlerType type) {
+        List<NotifyTriggerTemplateVo> list = new ArrayList<>();
+        /** 根据type获取通知handler全类名 */
+        String handler = null;
+        List<ValueTextVo> notifyHandlerTypeList = NotifyHandlerFactory.getNotifyHandlerNameList();
+        Optional<ValueTextVo> first = notifyHandlerTypeList.stream().filter(o -> o.getText().equals(type.getValue())).findFirst();
+        if(first != null){
+            ValueTextVo notifyHandlerClass = first.get();
+            handler = notifyHandlerClass.getValue().toString();
+        }
+        List<IDefaultTemplate> templateList = NotifyDefaultTemplateFactory.getTemplate(type.getValue());
+        if(CollectionUtils.isNotEmpty(templateList)){
+            Map<String, List<IDefaultTemplate>> map = templateList.stream().collect(Collectors.groupingBy(IDefaultTemplate::getTrigger));
+            for (SlaNotifyTriggerType notifyTriggerType : SlaNotifyTriggerType.values()) {
+                List<IDefaultTemplate> templates = map.get(notifyTriggerType.getTrigger().toLowerCase());
+                for(IDefaultTemplate vo : templates){
+                    list.add(new NotifyTriggerTemplateVo(notifyTriggerType.getText(),notifyTriggerType.getDescription(),vo.getTitle(),vo.getContent(),handler));
+                }
+            }
+        }
+        return list;
+    }
+
+    @Override
 	protected List<ConditionParamVo> mySystemParamList() {
 		List<ConditionParamVo> notifyPolicyParamList = new ArrayList<>();
 		for(ProcessTaskParams processTaskParams : ProcessTaskParams.values()) {
@@ -76,7 +110,7 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
                     param.setParamTypeName(paramType.getText());
                     param.setDefaultExpression(paramType.getDefaultExpression().getExpression());
                     for(Expression expression : paramType.getExpressionList()) {
-                        param.getExpressionList().add(new ExpressionVo(expression.getExpression(), expression.getExpressionName()));
+                        param.getExpressionList().add(new ExpressionVo(expression.getExpression(), expression.getExpressionName(),expression.getIsShowConditionValue()));
                     }
                 }
                 

@@ -11,13 +11,21 @@ public enum ProcessTaskParams {
     CONTENT("content", "上报内容", ParamType.STRING),
     STARTTIME("starttime", "开始时间", ParamType.DATE),
     ENDTIME("endtime", "结束时间", ParamType.DATE),
-//    EXPIREDTIME("expiretime", "剩余时间"),
+//    EXPIREDTIME("expiretime", "剩余时间",ParamType.STRING),
     OWNERNAME("ownername", "上报人", ParamType.STRING),
     REPORTERNAME("reportername", "代报人", ParamType.STRING),
     OWNERCOMPANYLIST("ownercompanylist", "上报人公司列表", ParamType.ARRAY),
     STATUSTEXT("statustext", "工单状态", ParamType.STRING),
     STEPID("stepid", "步骤id", ParamType.NUMBER),
     STEPNAME("stepName", "步骤名", ParamType.STRING),
+    CHANGESTEPNAME("changestepname", "变更步骤步骤名", ParamType.STRING),
+    STEPWORKER("stepworker", "步骤处理人", ParamType.STRING),
+    CHANGESTEPWORKER("changestepworker", "变更步骤处理人", ParamType.STRING),
+    SUBTASKWORKER("subtaskworker", "子任务处理人", ParamType.STRING),
+    SUBTASKCONTENT("subtaskcontent", "子任务内容", ParamType.STRING),
+    SUBTASKDEADLINE("subtaskdeadline", "子任务期望完成时间", ParamType.DATE),
+    OPERATOR("operator", "操作人", ParamType.STRING),
+    REASON("reason", "原因", ParamType.STRING),
     FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??><#list DATA.form?keys as key>${key}：${DATA.form[key]}<#if key_has_next><br></#if></#list></#if>")
     ;
     private String value;

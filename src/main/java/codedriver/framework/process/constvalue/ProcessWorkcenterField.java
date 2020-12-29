@@ -1,7 +1,8 @@
 package codedriver.framework.process.constvalue;
 
 public enum ProcessWorkcenterField {
-	ID("id", "工单号"),
+	ID("id", "工单id"),
+	SERIAL_NUMBER("serialnumber","工单号"),
 	TITLE("title", "标题"),
 	CHANNELTYPE("channeltype", "服务类型"),
 	CHANNEL("channel", "服务"),

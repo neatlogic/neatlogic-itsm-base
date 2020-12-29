@@ -15,7 +15,6 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
-import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
 import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
@@ -107,6 +106,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	//@EntityField(name = "当前子任务Id", type = ApiParamType.LONG)
 	@JSONField(serialize=false)
 	private transient Long currentSubtaskId;
+    //@EntityField(name = "当前子任务", type = ApiParamType.JSONOBJECT)
+	@JSONField(serialize=false)
+    private transient ProcessTaskStepSubtaskVo currentSubtaskVo;
 	@EntityField(name = "处理器特有的步骤信息", type = ApiParamType.JSONOBJECT)
 	private Object handlerStepInfo;
 	@EntityField(name = "向前步骤列表", type = ApiParamType.JSONARRAY)
@@ -125,7 +127,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private String originalUser;
     @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
     private String originalUserName;
-    
+    @EntityField(name = "回复模版", type = ApiParamType.JSONOBJECT)
+    private ProcessCommentTemplateVo commentTemplate;
     private transient int updateActiveTime;
     private transient int updateStartTime;
     private transient int updateEndTime;
@@ -230,17 +233,12 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public ProcessTaskStatusVo getStatusVo() {
 		if(statusVo == null && StringUtils.isNotBlank(status) && StringUtils.isNotBlank(configHash) && StringUtils.isNotBlank(handler)) {
-		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
-		    if(processStepUtilHandler != null) {
-		        String statusText = processStepUtilHandler.getStatusTextByConfigHashAndHandler(configHash, handler, status);
-		        if(StringUtils.isNotBlank(statusText)) {
-		            statusVo = new ProcessTaskStatusVo(status, statusText);
-		        }else {
-		            statusVo = new ProcessTaskStatusVo(status);
-		        }
-		    }else {
-		        statusVo = new ProcessTaskStatusVo(status);
-		    }
+		    String statusText = ProcessStepUtilHandlerFactory.getHandler().getStatusTextByConfigHashAndHandler(configHash, handler, status);
+            if(StringUtils.isNotBlank(statusText)) {
+                statusVo = new ProcessTaskStatusVo(status, statusText);
+            }else {
+                statusVo = new ProcessTaskStatusVo(status);
+            }
 		}
 		return statusVo;
 	}
@@ -299,10 +297,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsRequired() {
 		if(isRequired == null && StringUtils.isNotBlank(configHash)) {
-		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
-            if(processStepUtilHandler != null) {
-				isRequired = processStepUtilHandler.getIsRequiredByConfigHash(configHash);
-			}
+		    isRequired = ProcessStepUtilHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
 		}
 		return isRequired;
 	}
@@ -313,10 +308,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsNeedContent() {
 		if(isNeedContent == null && StringUtils.isNotBlank(configHash)) {
-		    IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler();
-            if(processStepUtilHandler != null) {
-				isNeedContent = processStepUtilHandler.getIsNeedContentByConfigHash(configHash);
-			}
+			isNeedContent = ProcessStepUtilHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
 		}
 		return isNeedContent;
 	}
@@ -608,7 +600,15 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.currentSubtaskId = currentSubtaskId;
 	}
 
-	public Object getHandlerStepInfo() {
+	public ProcessTaskStepSubtaskVo getCurrentSubtaskVo() {
+        return currentSubtaskVo;
+    }
+
+    public void setCurrentSubtaskVo(ProcessTaskStepSubtaskVo currentSubtaskVo) {
+        this.currentSubtaskVo = currentSubtaskVo;
+    }
+
+    public Object getHandlerStepInfo() {
 		return handlerStepInfo;
 	}
 
@@ -704,4 +704,11 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.updateEndTime = updateEndTime;
     }
 
+	public ProcessCommentTemplateVo getCommentTemplate() {
+		return commentTemplate;
+	}
+
+	public void setCommentTemplate(ProcessCommentTemplateVo commentTemplate) {
+		this.commentTemplate = commentTemplate;
+	}
 }

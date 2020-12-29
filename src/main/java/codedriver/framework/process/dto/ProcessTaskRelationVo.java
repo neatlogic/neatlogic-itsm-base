@@ -17,6 +17,7 @@ public class ProcessTaskRelationVo extends BasePageVo {
     private String channelTypeRelationName;
     private Long processTaskId;
     private String tilte;
+    private String serialNumber;
     private ProcessTaskStatusVo statusVo;
     private ChannelTypeVo channelTypeVo;
     @JSONField(serialize=false)
@@ -87,6 +88,12 @@ public class ProcessTaskRelationVo extends BasePageVo {
     public void setTilte(String tilte) {
         this.tilte = tilte;
     }
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
     public ProcessTaskStatusVo getStatusVo() {
         return statusVo;
     }
@@ -101,7 +108,7 @@ public class ProcessTaskRelationVo extends BasePageVo {
     }
     public Integer getIsDeletable() {
         if(isDeletable == null) {
-            if(ProcessTaskOperationType.TRANFERREPORT.getValue().equals(action)) {
+            if(ProcessTaskOperationType.TASK_TRANFERREPORT.getValue().equals(action)) {
                 isDeletable = 0;
             }else {
                 isDeletable = 1;

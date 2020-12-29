@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,14 +15,18 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.process.constvalue.ProcessField;
 import codedriver.framework.process.constvalue.ProcessTaskParams;
+import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dto.AttributeDataVo;
 import codedriver.framework.process.dto.FormAttributeVo;
 import codedriver.framework.process.dto.FormVersionVo;
 import codedriver.framework.process.dto.ProcessTaskStepReplyVo;
+import codedriver.framework.process.dto.ProcessTaskStepSubtaskVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
 import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
@@ -42,12 +47,13 @@ public class ProcessTaskUtil {
 		resultObj.put(ProcessField.TITLE.getValue(), processTaskVo.getTitle());
 		resultObj.put(ProcessField.CHANNELTYPE.getValue(), isValue?processTaskVo.getChannelType().getUuid():processTaskVo.getChannelType().getName());
 		resultObj.put(ProcessField.OWNER.getValue(), isValue?processTaskVo.getOwner():processTaskVo.getOwnerName());
+		resultObj.put(ProcessField.OWNERLEVEL.getValue(), processTaskVo.getOwnerVipLevel());
 		resultObj.put(ProcessField.REPORTER.getValue(),isValue?processTaskVo.getReporter():processTaskVo.getReporterName());
 		resultObj.put(ProcessField.PRIORITY.getValue(), isValue?processTaskVo.getPriority().getUuid():processTaskVo.getPriority().getName());
 		resultObj.put(ProcessField.STATUS.getValue(), isValue?processTaskVo.getStatusVo().getStatus():processTaskVo.getStatusVo().getText());
 		resultObj.put(ProcessField.OWNERCOMPANY.getValue(), isValue?processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getUuid).collect(Collectors.toList()):processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
 		resultObj.put(ProcessField.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null?processTaskVo.getCurrentProcessTaskStep().getId():null);
-		
+
 		ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
 		ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
 		if(comment != null && StringUtils.isNotBlank(comment.getContent())) {
@@ -130,8 +136,7 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessTaskParams.PRIORITYNAME.getValue(), processTaskVo.getPriority().getName());
         resultObj.put(ProcessTaskParams.STATUSTEXT.getValue(), processTaskVo.getStatusVo().getText());
         resultObj.put(ProcessTaskParams.OWNERCOMPANYLIST.getValue(), processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
-        resultObj.put(ProcessTaskParams.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);
-        resultObj.put(ProcessTaskParams.STEPNAME.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getName() : null);
+        resultObj.put(ProcessTaskParams.OPERATOR.getValue(), UserContext.get().getUserName());
         
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
@@ -153,12 +158,6 @@ public class ProcessTaskUtil {
         }else {
             resultObj.put(ProcessTaskParams.STARTTIME.getValue(), "");
         }
-//        Date expireTime = processTaskVo.getExpireTime();
-//        if(expireTime != null) {
-//            resultObj.put(ProcessTaskParams.EXPIREDTIME.getValue(), sdf.format(expireTime));
-//        }else {
-//            resultObj.put(ProcessTaskParams.EXPIREDTIME.getValue(), "");
-//        }
         
         /** 表单信息数据 **/
         Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
@@ -195,7 +194,43 @@ public class ProcessTaskUtil {
                 resultObj.put(ProcessTaskParams.FORM.getValue(), formAttributeMap);
             }
         }
-        
+        ProcessTaskStepVo currentProcessTaskStep = processTaskVo.getCurrentProcessTaskStep();
+        if(currentProcessTaskStep != null) {
+            resultObj.put(ProcessTaskParams.STEPID.getValue(), currentProcessTaskStep.getId());
+            resultObj.put(ProcessTaskParams.STEPNAME.getValue(), currentProcessTaskStep.getName());
+            List<ProcessTaskStepWorkerVo> processTaskStepWorkerList = currentProcessTaskStep.getWorkerList();
+            if(CollectionUtils.isNotEmpty(processTaskStepWorkerList)) {
+                List<String> workerNameList = processTaskStepWorkerList.stream().filter(e -> e.getUserType().equals(ProcessUserType.MAJOR.getValue())).map(ProcessTaskStepWorkerVo::getName).collect(Collectors.toList());
+                resultObj.put(ProcessTaskParams.STEPWORKER.getValue(), String.join("、", workerNameList));
+            }
+            ProcessTaskStepSubtaskVo subtaskVo = currentProcessTaskStep.getCurrentSubtaskVo();
+            if(subtaskVo != null) {
+                resultObj.put(ProcessTaskParams.SUBTASKWORKER.getValue(), subtaskVo.getUserName());
+                resultObj.put(ProcessTaskParams.SUBTASKCONTENT.getValue(), subtaskVo.getContent());
+                resultObj.put(ProcessTaskParams.SUBTASKDEADLINE.getValue(), sdf.format(subtaskVo.getTargetTime()));
+            }
+            JSONObject paramObj = currentProcessTaskStep.getParamObj();
+            if(MapUtils.isNotEmpty(paramObj)) {
+                resultObj.put(ProcessTaskParams.REASON.getValue(), paramObj.get("content"));
+                Long changeStepId = paramObj.getLong("changeStepId");
+                if(changeStepId != null) {
+                    Object handlerStepInfo = currentProcessTaskStep.getHandlerStepInfo();
+                    if(handlerStepInfo != null) {
+                        JSONObject jsonObj = (JSONObject)JSON.toJSON(handlerStepInfo);
+                        JSONArray changeStepList = jsonObj.getJSONArray("changeStepList");
+                        if(CollectionUtils.isNotEmpty(changeStepList)) {
+                            for(int i = 0; i < changeStepList.size(); i++) {
+                                JSONObject changeStepObj = changeStepList.getJSONObject(i);
+                                if(changeStepId.equals(changeStepObj.getLong("id"))) {
+                                    resultObj.put(ProcessTaskParams.CHANGESTEPNAME.getValue(), changeStepObj.getString("name"));
+                                    resultObj.put(ProcessTaskParams.CHANGESTEPWORKER.getValue(), changeStepObj.getString("workerName"));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return resultObj;
     }
 	

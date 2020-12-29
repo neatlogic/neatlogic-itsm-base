@@ -3,14 +3,16 @@ package codedriver.framework.process.notify.core;
 import codedriver.framework.notify.core.INotifyTriggerType;
 
 public enum SlaNotifyTriggerType implements INotifyTriggerType {
-	TIMEOUT("timeout", "超时");
+	TIMEOUT("timeout", "超时","满足SLA策略规则时触发通知");
 
 	private String trigger;
 	private String text;
+	private String description;
 
-	private SlaNotifyTriggerType(String _trigger, String _text) {
+	private SlaNotifyTriggerType(String _trigger, String _text, String _description) {
 		this.trigger = _trigger;
 		this.text = _text;
+		this.description = _description;
 	}
 
 	@Override
@@ -20,6 +22,10 @@ public enum SlaNotifyTriggerType implements INotifyTriggerType {
 	@Override
 	public String getText() {
 		return text;
+	}
+	@Override
+	public String getDescription() {
+		return description;
 	}
 	
 	public static String getText(String trigger) {

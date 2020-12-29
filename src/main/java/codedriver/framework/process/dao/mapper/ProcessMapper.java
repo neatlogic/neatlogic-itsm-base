@@ -74,7 +74,7 @@ public interface ProcessMapper {
     
     public List<ValueTextVo> getProcessTagForSelect(ProcessTagVo processTagVo);
     
-    public List<ProcessTagVo> getProcessTagByNameList(@Param("tagNameList")List<String> tagNameList);
+    public List<ProcessTagVo> getProcessTagByNameList(List<String> tagNameList);
     
     public int getProcessTagCount(ProcessTagVo processTagVo);
 
@@ -100,7 +100,9 @@ public interface ProcessMapper {
 
 	public int insertProcessDraft(ProcessDraftVo processDraftVo);
 	
-	public int insertProcessTag(@Param("processTagList") List<ProcessTagVo> processTagList);
+	public int insertProcessTag(ProcessTagVo processTagVo);
+
+	public int insertProcessStepCommentTemplate(ProcessStepVo vo);
 
 	public int updateProcess(ProcessVo processVo);
 
@@ -125,5 +127,7 @@ public interface ProcessMapper {
 	public int deleteProcessDraftByUuid(String uuid);
 
 	public int deleteProcessSlaByProcessUuid(String uuid);
+
+	public int deleteProcessStepCommentTemplate(String stepUuid);
 
 }

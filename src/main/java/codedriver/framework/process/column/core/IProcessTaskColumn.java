@@ -97,5 +97,14 @@ public interface IProcessTaskColumn {
 	 * @return
 	 */
 	Object getSimpleValue(Object json);
+	
+	/**
+	* @Author 89770
+	* @Time 2020年12月3日  
+	* @Description: 导出excel，是否需要导出该字段 
+	* @Param 
+	* @return
+	 */
+	public Boolean getIsExport();
 
 }
