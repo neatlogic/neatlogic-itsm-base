@@ -144,7 +144,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
     }
 
     /**
-     * 
+     *
      * @Time:2020年7月28日
      * @Description: 保存描述内容和附件
      * @param currentProcessTaskStepVo
@@ -377,7 +377,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                 && GroupSearch.USER.getValue().equals(workerList.get(0).getType())) {
                 processTaskMapper.insertProcessTaskStepUser(new ProcessTaskStepUserVo(
                     currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
-                    new UserVo(workerList.get(0).getUuid()), ProcessUserType.MAJOR.getValue()));
+                    workerList.get(0).getUuid(), ProcessUserType.MAJOR.getValue()));
                 /** 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
                 if (autoStart == 1) {
                     currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
@@ -396,7 +396,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
     }
 
     /**
-     * 
+     *
      * @Time:2020年7月29日
      * @Description: 子类分配处理人
      * @param currentProcessTaskStepVo
@@ -827,7 +827,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     /** 更新处理人状态 **/
                     ProcessTaskStepUserVo processTaskMajorUser =
                         new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(),
-                            currentProcessTaskStepVo.getId(), new UserVo(UserContext.get().getUserUuid()));// 兼容automatic作业无用户
+                            currentProcessTaskStepVo.getId(), UserContext.get().getUserUuid());// 兼容automatic作业无用户
                     processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
                     processTaskMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
                     /** 清空worker表 **/
@@ -1363,7 +1363,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     && GroupSearch.USER.getValue().equals(workerList.get(0).getType())) {
                     processTaskMapper.insertProcessTaskStepUser(new ProcessTaskStepUserVo(
                         currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
-                        new UserVo(workerList.get(0).getUuid()), ProcessUserType.MAJOR.getValue()));
+                        workerList.get(0).getUuid(), ProcessUserType.MAJOR.getValue()));
                     /** 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
                     int autoStart = myAssign(processTaskStepVo, workerList);
                     if (autoStart == 1) {
@@ -1688,7 +1688,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             /** 加入上报人为处理人 **/
             ProcessTaskStepUserVo processTaskStepUserVo =
                 new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
-                    new UserVo(UserContext.get().getUserUuid(true)), ProcessUserType.MAJOR.getValue());
+                    UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue());
             processTaskMapper.insertProcessTaskStepUser(processTaskStepUserVo);
             processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(
                 currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
@@ -1846,7 +1846,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             /** 更新处理人状态 **/
             ProcessTaskStepUserVo processTaskMajorUser =
                 new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
-                    new UserVo(UserContext.get().getUserUuid(true)));
+                    UserContext.get().getUserUuid(true));
             processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
             processTaskMajorUser.setUserType(ProcessUserType.MAJOR.getValue());
             processTaskMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
@@ -2220,7 +2220,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
     }
 
     /**
-     * 
+     *
      * @Time:2020年9月30日
      * @Description: 步骤主处理人校正操作 判断当前用户是否是代办人，如果不是就什么都不做，如果是，进行下面3个操作 1.往processtask_step_agent表中插入一条数据，记录该步骤的原主处理人和代办人
      *               2.将processtask_step_worker表中该步骤的主处理人uuid改为代办人(当前用户)
@@ -2250,7 +2250,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                             currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), userUuid,
                             ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
                     processTaskMapper.updateProcessTaskStepUserUserUuid(new ProcessTaskStepUserVo(
-                        currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), new UserVo(userUuid),
+                        currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), userUuid,
                         ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
                     currentProcessTaskStepVo.setOriginalUser(userUuid);
                 }
@@ -2266,7 +2266,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
                 processTaskMapper.updateProcessTaskStepUserUserUuid(
                     new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(),
-                        currentProcessTaskStepVo.getId(), new UserVo(processTaskStepAgentVo.getAgentUuid()),
+                        currentProcessTaskStepVo.getId(), processTaskStepAgentVo.getAgentUuid(),
                         ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
             } else if (UserContext.get().getUserUuid(true).equals(processTaskStepAgentVo.getAgentUuid())) {
                 // 当前用户是B
@@ -2282,7 +2282,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
                 processTaskMapper.updateProcessTaskStepUserUserUuid(
                     new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(),
-                        currentProcessTaskStepVo.getId(), new UserVo(processTaskStepAgentVo.getAgentUuid()),
+                        currentProcessTaskStepVo.getId(), processTaskStepAgentVo.getAgentUuid(),
                         ProcessUserType.MAJOR.getValue(), UserContext.get().getUserUuid(true)));
                 currentProcessTaskStepVo.setOriginalUser(processTaskStepAgentVo.getAgentUuid());
             }

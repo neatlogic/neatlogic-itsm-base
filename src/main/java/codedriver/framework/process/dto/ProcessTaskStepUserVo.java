@@ -41,16 +41,16 @@ public class ProcessTaskStepUserVo {
     	this.setUserUuid(_userUuid);
     }*/
 
-	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, UserVo userVo) {
+	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid) {
 		this.setProcessTaskId(_processTaskId);
 		this.setProcessTaskStepId(_processTaskStepId);
-		this.setUserVo(userVo);
+		this.userVo = new UserVo(_userUuid);
 	}
 
-	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, UserVo userVo, String userType) {
+	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid, String userType) {
         this.setProcessTaskId(_processTaskId);
         this.setProcessTaskStepId(_processTaskStepId);
-        this.setUserVo(userVo);
+		this.userVo = new UserVo(_userUuid);
         this.setUserType(userType);
     }
 	
@@ -59,11 +59,11 @@ public class ProcessTaskStepUserVo {
 //		this.setUserName(processStepUserVo.getUserName());
 //	}
 
-	public ProcessTaskStepUserVo(Long processTaskId, Long processTaskStepId, UserVo userVo, String userType,
+	public ProcessTaskStepUserVo(Long processTaskId, Long processTaskStepId, String userUuid, String userType,
         String newUserUuid) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
-        this.setUserVo(userVo);
+		this.userVo = new UserVo(userUuid);
         this.userType = userType;
         this.newUserUuid = newUserUuid;
     }
