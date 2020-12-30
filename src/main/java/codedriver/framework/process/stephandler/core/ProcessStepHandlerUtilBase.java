@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
 
+import codedriver.framework.dao.mapper.RoleMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -130,6 +131,7 @@ public abstract class ProcessStepHandlerUtilBase {
     protected static NotifyMapper notifyMapper;
     protected static FileMapper fileMapper;
     protected static TeamMapper teamMapper;
+    protected static RoleMapper roleMapper;
     protected static ProcessStepHandlerMapper processStepHandlerMapper;
     protected static PriorityMapper priorityMapper;
     private static IntegrationMapper integrationMapper;
@@ -188,6 +190,11 @@ public abstract class ProcessStepHandlerUtilBase {
     @Autowired
     public void setTeamMapper(TeamMapper _teamMapper) {
         teamMapper = _teamMapper;
+    }
+
+    @Autowired
+    public void setRoleMapper(RoleMapper _roleMapper) {
+        roleMapper = _roleMapper;
     }
 
     @Autowired
