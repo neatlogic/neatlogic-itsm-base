@@ -386,12 +386,12 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             }
         }
         /** 触发通知 **/
-        NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
+//        NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
         if (isAssignException) {
             NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGNEXCEPTION);
         }
         /** 执行动作 **/
-        ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
+//        ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
         return 1;
     }
 
@@ -498,10 +498,10 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.HANG.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
             /** 触发通知 **/
-            NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.HANG);
+//            NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.HANG);
 
             /** 执行动作 **/
-            ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.HANG);
+//            ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.HANG);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             currentProcessTaskStepVo.setIsActive(2);
