@@ -438,7 +438,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                                 ProcessTaskStepWorkerVo workerVo = iterator.next();
                                 if(workerVo.getType().equals(GroupSearch.USER.getValue())){
                                     UserVo userVo = userMapper.getUserBaseInfoByUuid(workerVo.getUuid());
-                                    if(userVo == null || userVo.getIsActive() == 0 || userVo.getIsDelete() == 1){
+                                    if(userVo == null || userVo.getIsActive() == 0){
                                         iterator.remove();
                                     }
                                 }else if(workerVo.getType().equals(GroupSearch.TEAM.getValue())){
