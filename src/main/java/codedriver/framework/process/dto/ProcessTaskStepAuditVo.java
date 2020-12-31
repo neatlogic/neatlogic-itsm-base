@@ -22,8 +22,8 @@ public class ProcessTaskStepAuditVo {
 	private String processTaskStepName;
 	@EntityField(name = "用户")
 	private UserVo userVo;
-//	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
-//	private String userUuid;
+	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
+	private String userUuid;
 //	@EntityField(name = "用户名", type = ApiParamType.STRING)
 //	private String userName;
 //	@EntityField(name = "用户其他属性", type = ApiParamType.STRING)
@@ -111,13 +111,13 @@ public class ProcessTaskStepAuditVo {
 		this.userVo = userVo;
 	}
 
-	//	public String getUserUuid() {
-//		return userUuid;
-//	}
-//
-//	public void setUserUuid(String userUuid) {
-//		this.userUuid = userUuid;
-//	}
+	public String getUserUuid() {
+		return userUuid;
+	}
+
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
+	}
 //
 //	public String getUserName() {
 //		if(StringUtils.isBlank(userName) && StringUtils.isNotBlank(userUuid)) {
