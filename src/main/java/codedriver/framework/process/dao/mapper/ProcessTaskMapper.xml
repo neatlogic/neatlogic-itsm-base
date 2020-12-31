@@ -782,11 +782,18 @@
 		<result column="action_time" property="actionTime" />
 		<result column="action" property="action" />
 		<result column="step_status" property="stepStatus" />
-		<result column="original_user" property="originalUser" />
-		<result column="originalUserName" property="originalUserName" />
+		<!--<result column="original_user" property="originalUser" />-->
+		<!--<result column="originalUserName" property="originalUserName" />-->
 		<association property="userVo" javaType="codedriver.framework.dto.UserVo">
 			<result property="uuid" column="userUuid" />
 			<result property="userName" column="userName" />
+			<result property="userInfo" column="userInfo" />
+			<result property="vipLevel" column="userVipLevel" />
+			<result property="pinyin" column="userPinyin" />
+		</association>
+		<association property="originalUserVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="originalUserUuid" />
+			<result property="userName" column="originalUserName" />
 			<result property="userInfo" column="userInfo" />
 			<result property="vipLevel" column="userVipLevel" />
 			<result property="pinyin" column="userPinyin" />
@@ -812,7 +819,7 @@
 		psa.`action_time`,
 		psa.`action`,
 		psa.`step_status`,
-		psa.`original_user`,
+		psa.`original_user` as originalUserUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = psa.`original_user`) AS originalUserName,
 		psad.`audit_id`,
 		psad.`type`,
@@ -1311,7 +1318,7 @@
 		<if test="userType != null and userType != ''">
 			AND `user_type` = #{userType}
 		</if>
-		<if test="userVo.uuid != null and userVo.uuid != ''">
+		<if test="userVo != null and userVo.uuid != null and userVo.uuid != ''">
 			AND user_uuid = #{userVo.uuid}
 		</if>
 	</select>

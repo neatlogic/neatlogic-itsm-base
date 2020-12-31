@@ -49,10 +49,12 @@ public class ProcessTaskStepAuditVo {
 	private ProcessTaskStatusVo stepStatusVo;
 	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String description;
-    @EntityField(name = "原始处理人", type = ApiParamType.STRING)
+	@EntityField(name = "原始处理人Vo")
+	private UserVo originalUserVo;
+    @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
     private String originalUser;
-    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
-    private String originalUserName;
+//    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
+//    private String originalUserName;
 	
 	public ProcessTaskStepAuditVo() { 
 	}
@@ -214,6 +216,15 @@ public class ProcessTaskStepAuditVo {
 //		return avatar;
 //	}
 
+	public UserVo getOriginalUserVo() {
+		return originalUserVo;
+	}
+
+	public void setOriginalUserVo(UserVo originalUserVo) {
+		this.originalUserVo = originalUserVo;
+	}
+
+
     public String getOriginalUser() {
         return originalUser;
     }
@@ -221,14 +232,14 @@ public class ProcessTaskStepAuditVo {
     public void setOriginalUser(String originalUser) {
         this.originalUser = originalUser;
     }
-
-    public String getOriginalUserName() {
-        return originalUserName;
-    }
-
-    public void setOriginalUserName(String originalUserName) {
-        this.originalUserName = originalUserName;
-    }
+//
+//    public String getOriginalUserName() {
+//        return originalUserName;
+//    }
+//
+//    public void setOriginalUserName(String originalUserName) {
+//        this.originalUserName = originalUserName;
+//    }
 
 //	public Integer getVipLevel() {
 //		return vipLevel;
