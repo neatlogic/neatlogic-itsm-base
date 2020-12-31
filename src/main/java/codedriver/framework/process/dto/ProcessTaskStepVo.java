@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import codedriver.framework.dto.UserVo;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -123,10 +124,12 @@ public class ProcessTaskStepVo extends BasePageVo {
     
     @EntityField(name = "提醒列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepRemindVo> processTaskStepRemindList = new ArrayList<>();
-    @EntityField(name = "原始处理人", type = ApiParamType.STRING)
+    @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
     private String originalUser;
-    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
-    private String originalUserName;
+	@EntityField(name = "原始处理人")
+	private UserVo originalUserVo;
+//    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
+//    private String originalUserName;
     @EntityField(name = "回复模版", type = ApiParamType.JSONOBJECT)
     private ProcessCommentTemplateVo commentTemplate;
     private transient int updateActiveTime;
@@ -672,13 +675,21 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.originalUser = originalUser;
     }
 
-    public String getOriginalUserName() {
-        return originalUserName;
-    }
+	public UserVo getOriginalUserVo() {
+		return originalUserVo;
+	}
 
-    public void setOriginalUserName(String originalUserName) {
-        this.originalUserName = originalUserName;
-    }
+	public void setOriginalUserVo(UserVo originalUserVo) {
+		this.originalUserVo = originalUserVo;
+	}
+
+	//    public String getOriginalUserName() {
+//        return originalUserName;
+//    }
+//
+//    public void setOriginalUserName(String originalUserName) {
+//        this.originalUserName = originalUserName;
+//    }
 
     public int getUpdateActiveTime() {
         return updateActiveTime;
