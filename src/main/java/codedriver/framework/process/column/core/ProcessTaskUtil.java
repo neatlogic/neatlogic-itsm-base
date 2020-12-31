@@ -48,7 +48,7 @@ public class ProcessTaskUtil {
 		resultObj.put(ProcessField.CHANNELTYPE.getValue(), isValue?processTaskVo.getChannelType().getUuid():processTaskVo.getChannelType().getName());
 		resultObj.put(ProcessField.OWNER.getValue(), isValue?processTaskVo.getOwner():processTaskVo.getOwnerVo().getUserName());
 		resultObj.put(ProcessField.OWNERLEVEL.getValue(), processTaskVo.getOwnerVo().getVipLevel());
-		resultObj.put(ProcessField.REPORTER.getValue(),isValue?processTaskVo.getReporter():processTaskVo.getReporterName());
+		resultObj.put(ProcessField.REPORTER.getValue(),isValue?processTaskVo.getReporter():processTaskVo.getReporterVo().getUserName());
 		resultObj.put(ProcessField.PRIORITY.getValue(), isValue?processTaskVo.getPriority().getUuid():processTaskVo.getPriority().getName());
 		resultObj.put(ProcessField.STATUS.getValue(), isValue?processTaskVo.getStatusVo().getStatus():processTaskVo.getStatusVo().getText());
 		resultObj.put(ProcessField.OWNERCOMPANY.getValue(), isValue?processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getUuid).collect(Collectors.toList()):processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
@@ -132,7 +132,7 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessTaskParams.CHANNELTYPENAME.getValue(), processTaskVo.getChannelType().getName());
         resultObj.put(ProcessTaskParams.CHANNELPATH.getValue(), processTaskVo.getChannelPath());
         resultObj.put(ProcessTaskParams.OWNERNAME.getValue(), processTaskVo.getOwnerVo().getUserName());
-        resultObj.put(ProcessTaskParams.REPORTERNAME.getValue(), processTaskVo.getReporterName());
+        resultObj.put(ProcessTaskParams.REPORTERNAME.getValue(), processTaskVo.getReporterVo().getUserName());
         resultObj.put(ProcessTaskParams.PRIORITYNAME.getValue(), processTaskVo.getPriority().getName());
         resultObj.put(ProcessTaskParams.STATUSTEXT.getValue(), processTaskVo.getStatusVo().getText());
         resultObj.put(ProcessTaskParams.OWNERCOMPANYLIST.getValue(), processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));

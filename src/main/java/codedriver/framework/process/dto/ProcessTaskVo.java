@@ -57,8 +57,10 @@ public class ProcessTaskVo extends BasePageVo {
 //    private Integer ownerVipLevel;
     @EntityField(name = "代报人userUuid", type = ApiParamType.STRING)
     private String reporter;
-    @EntityField(name = "代报人", type = ApiParamType.STRING)
-    private String reporterName;
+    @EntityField(name = "代报人")
+    private UserVo reporterVo;
+//    @EntityField(name = "代报人", type = ApiParamType.STRING)
+//    private String reporterName;
     @EntityField(name = "开始时间", type = ApiParamType.LONG)
     private Date startTime;
     @EntityField(name = "结束时间", type = ApiParamType.LONG)
@@ -205,13 +207,21 @@ public class ProcessTaskVo extends BasePageVo {
         this.reporter = reporter;
     }
 
-    public String getReporterName() {
-        return reporterName;
+    public UserVo getReporterVo() {
+        return reporterVo;
     }
 
-    public void setReporterName(String reporterName) {
-        this.reporterName = reporterName;
+    public void setReporterVo(UserVo reporterVo) {
+        this.reporterVo = reporterVo;
     }
+
+    //    public String getReporterName() {
+//        return reporterName;
+//    }
+//
+//    public void setReporterName(String reporterName) {
+//        this.reporterName = reporterName;
+//    }
 
     public Date getStartTime() {
         return startTime;

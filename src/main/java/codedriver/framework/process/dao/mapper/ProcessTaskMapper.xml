@@ -226,8 +226,8 @@
 		<result column="start_time" property="startTime" />
 		<result column="end_time" property="endTime" />
 		<result column="owner" property="ownerUuid" />
-		<result column="reporter" property="reporter" />
-		<result column="reporterName" property="reporterName" />
+		<result column="reporterUuid" property="reporter" />
+		<!--<result column="reporterName" property="reporterName" />-->
 		<result column="expire_time" property="expireTime" />
 		<result column="worktime_uuid" property="worktimeUuid" />
 		<result column="error" property="error" />
@@ -239,6 +239,13 @@
 			<result property="userInfo" column="ownerInfo" />
 			<result property="vipLevel" column="ownerVipLevel" />
 			<result property="pinyin" column="ownerPinyin" />
+		</association>
+		<association property="reporterVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="reporterUuid" />
+			<result property="userName" column="reporterName" />
+			<result property="userInfo" column="reporterInfo" />
+			<result property="vipLevel" column="reporterVipLevel" />
+			<result property="pinyin" column="reporterPinyin" />
 		</association>
 	</resultMap>
 
@@ -259,7 +266,7 @@
 		ownerName,
 		(SELECT vip_level FROM `user` x
 		WHERE x.uuid = `owner`) AS ownerVipLevel,
-		`reporter`,
+		`reporter` as reporterUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time`,
 		`worktime_uuid`,
@@ -1173,7 +1180,7 @@
 		`start_time`,
 		`end_time`,
 		`owner` as ownerUuid,
-		`reporter`,
+		`reporter` as reporterUuid,
 		`expire_time`,
 		`worktime_uuid`,
 		`is_show`,
@@ -1207,7 +1214,7 @@
 		`start_time`,
 		`end_time`,
 		`owner` as onwerUuid,
-		`reporter`,
+		`reporter` as reporterUuid,
 		`expire_time`,
 		`worktime_uuid`,
 		`is_show`,
@@ -1563,7 +1570,7 @@
 	</select>
 
 	<select id="searchProcessTaskImportAudit" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="codedriver.framework.process.dto.ProcessTaskImportAuditVo"
-		useCache="false">
+			useCache="false">
 		SELECT
 		`id`,
 		`processtask_id` as processTaskId,
@@ -1761,7 +1768,7 @@
 		a.`start_time`,
 		a.`end_time`,
 		a.`owner` as ownerUuid,
-		a.`reporter`,
+		a.`reporter` as reporterUuid,
 		a.`expire_time`,
 		a.`worktime_uuid`,
 		a.`is_show`,
