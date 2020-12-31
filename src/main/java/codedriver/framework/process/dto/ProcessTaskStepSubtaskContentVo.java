@@ -1,23 +1,21 @@
 package codedriver.framework.process.dto;
 
-import codedriver.framework.dto.UserVo;
+import codedriver.framework.common.dto.BaseEditorVo;
 
-import java.util.Date;
-
-public class ProcessTaskStepSubtaskContentVo {
+public class ProcessTaskStepSubtaskContentVo extends BaseEditorVo {
 	private Long id;
 	private Long processTaskStepSubtaskId;
 	private String contentHash;
 	private String content;
 	private String action;
-	private Date fcd;
-	private UserVo fcuVo;
+//	private Date fcd;
+//	private UserVo fcuVo;
 //	private String fcuName;
 //	private String fcuInfo;
 //	private String fcuAvatar;
 //	private Integer fcuVipLevel;
-	private Date lcd;
-	private UserVo lcuVo;
+//	private Date lcd;
+//	private UserVo lcuVo;
 //	private String lcuInfo;
 //	private String lcuAvatar;
 //	private Integer lcuVipLevel;
@@ -77,35 +75,35 @@ public class ProcessTaskStepSubtaskContentVo {
 		this.action = action;
 	}
 
-	public Date getFcd() {
-		return fcd;
-	}
-
-	public void setFcd(Date fcd) {
-		this.fcd = fcd;
-	}
-
-	public Date getLcd() {
-		return lcd;
-	}
-
-	public void setLcd(Date lcd) {
-		this.lcd = lcd;
-	}
-
-	public UserVo getFcuVo() {
-		return fcuVo;
-	}
-
-	public void setFcuVo(UserVo fcuVo) {
-		this.fcuVo = fcuVo;
-	}
-
-	public UserVo getLcuVo() {
-		return lcuVo;
-	}
-
-	public void setLcuVo(UserVo lcuVo) {
-		this.lcuVo = lcuVo;
-	}
+//	public Date getFcd() {
+//		return fcd;
+//	}
+//
+//	public void setFcd(Date fcd) {
+//		this.fcd = fcd;
+//	}
+//
+//	public Date getLcd() {
+//		return lcd;
+//	}
+//
+//	public void setLcd(Date lcd) {
+//		this.lcd = lcd;
+//	}
+//
+//	public UserVo getFcuVo() {
+//		return fcuVo;
+//	}
+//
+//	public void setFcuVo(UserVo fcuVo) {
+//		this.fcuVo = fcuVo;
+//	}
+//
+//	public UserVo getLcuVo() {
+//		return lcuVo;
+//	}
+//
+//	public void setLcuVo(UserVo lcuVo) {
+//		this.lcuVo = lcuVo;
+//	}
 }

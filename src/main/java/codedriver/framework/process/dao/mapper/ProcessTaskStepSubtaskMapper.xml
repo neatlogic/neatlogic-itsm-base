@@ -24,6 +24,13 @@
 			<result property="vipLevel" column="ownerVipLevel" />
 			<result property="pinyin" column="ownerPinyin" />
 		</association>
+		<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="userUuid" />
+			<result property="userName" column="userName" />
+			<result property="userInfo" column="userInfo" />
+			<result property="vipLevel" column="userVipLevel" />
+			<result property="pinyin" column="userPinyin" />
+		</association>
 	</resultMap>
 
 	<select id="getProcessTaskStepSubtaskById" parameterType="java.lang.Long" resultMap="processTaskStepSubtaskMap">
@@ -112,6 +119,7 @@
 	  a.`lcd`,
 	  a.`lcu` as lcuUuid,
 	  (SELECT `user_info` from `user` WHERE `uuid` = a.`lcu`) as lcuInfo,
+	  (SELECT `user_name` from `user` WHERE `uuid` = a.`lcu`) as lcuName,
 	  (SELECT `vip_level` from `user` WHERE `uuid` = a.`lcu`) as lcuVipLevel,
 	  (SELECT `pinyin` from `user` WHERE `uuid` = a.`lcu`) as lcuPinyin
 	FROM `processtask_step_subtask_content` a
@@ -165,9 +173,9 @@
 	    #{contentHash},
 	    #{action},
 	    NOW(3),
-	    #{fcuVo.uuid},
+	    #{fcu},
 	    NOW(3),
-	    #{fcuVo.uuid}
+	    #{fcu}
 	  ) 
 	</insert>
 	
@@ -196,7 +204,7 @@
 	UPDATE `processtask_step_subtask_content` 
 	SET `content_hash` = #{contentHash},
 	  `lcd` = NOW(3),
-	  `lcu` = #{lcuVo.uuid}
+	  `lcu` = #{lcu}
 	<where>
 		<if test="id != null">
 		AND `id` = #{id}

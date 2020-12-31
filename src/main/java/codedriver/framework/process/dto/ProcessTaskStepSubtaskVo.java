@@ -40,10 +40,12 @@ public class ProcessTaskStepSubtaskVo {
 	private String status;
 	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStatusVo statusVo;
-	@EntityField(name = "处理人", type = ApiParamType.STRING)
+	@EntityField(name = "处理人uuid", type = ApiParamType.STRING)
 	private String userUuid;
 	@EntityField(name = "处理人名称", type = ApiParamType.STRING)
 	private String userName;
+	@EntityField(name = "处理人Vo")
+	private UserVo userVo;
 	@EntityField(name = "期望完成时间", type = ApiParamType.LONG)
 	private Date targetTime;
 	@EntityField(name = "创建时间", type = ApiParamType.LONG)
@@ -148,6 +150,15 @@ public class ProcessTaskStepSubtaskVo {
 	public void setUserUuid(String userUuid) {
 		this.userUuid = userUuid;
 	}
+
+	public UserVo getUserVo() {
+		return userVo;
+	}
+
+	public void setUserVo(UserVo userVo) {
+		this.userVo = userVo;
+	}
+
 	public String getUserName() {
 		return userName;
 	}
