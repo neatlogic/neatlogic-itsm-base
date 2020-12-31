@@ -431,15 +431,38 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     if (workerPolicyHandler != null) {
                         List<ProcessTaskStepWorkerVo> tmpWorkerList =
                             workerPolicyHandler.execute(workerPolicyVo, currentProcessTaskStepVo);
-                        /** 顺序分配处理人 **/
-                        if ("sort".equals(executeMode) && CollectionUtils.isNotEmpty(tmpWorkerList)) {
-                            // 找到处理人，则退出
-                            workerList.addAll(tmpWorkerList);
-                            break;
-                        } else if ("batch".equals(executeMode)) {
-                            // 去重取并集
-                            tmpWorkerList.removeAll(workerList);
-                            workerList.addAll(tmpWorkerList);
+                        if(CollectionUtils.isNotEmpty(tmpWorkerList)) {
+                            /** 删除不存在的用户、组、角色 **/
+                            Iterator<ProcessTaskStepWorkerVo> iterator = tmpWorkerList.iterator();
+                            while (iterator.hasNext()){
+                                ProcessTaskStepWorkerVo workerVo = iterator.next();
+                                if(workerVo.getType().equals(GroupSearch.USER.getValue())){
+                                    UserVo userVo = userMapper.getUserBaseInfoByUuid(workerVo.getUuid());
+                                    if(userVo == null || userVo.getIsActive() == 0){
+                                        iterator.remove();
+                                    }
+                                }else if(workerVo.getType().equals(GroupSearch.TEAM.getValue())){
+                                    if(teamMapper.checkTeamIsExists(workerVo.getUuid()) == 0){
+                                        iterator.remove();
+                                    }
+                                }else if(workerVo.getType().equals(GroupSearch.ROLE.getValue())){
+                                    if(roleMapper.checkRoleIsExists(workerVo.getUuid()) == 0){
+                                        iterator.remove();
+                                    }
+                                }
+                            }
+                        }
+                        if(CollectionUtils.isNotEmpty(tmpWorkerList)){
+                            /** 顺序分配处理人 **/
+                            if ("sort".equals(executeMode)) {
+                                // 找到处理人，则退出
+                                workerList.addAll(tmpWorkerList);
+                                break;
+                            } else if ("batch".equals(executeMode)) {
+                                // 去重取并集
+                                tmpWorkerList.removeAll(workerList);
+                                workerList.addAll(tmpWorkerList);
+                            }
                         }
                     }
                 }
