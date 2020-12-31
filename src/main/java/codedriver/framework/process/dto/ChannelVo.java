@@ -1,26 +1,23 @@
 package codedriver.framework.process.dto;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import com.alibaba.fastjson.annotation.JSONField;
-import com.google.common.base.Objects;
-
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.DeviceType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.google.common.base.Objects;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class ChannelVo extends BasePageVo implements Serializable {
 
@@ -65,8 +62,11 @@ public class ChannelVo extends BasePageVo implements Serializable {
     @EntityField(name = "服务窗口uuid", type = ApiParamType.STRING)
     private String worktimeUuid;
 
-    @EntityField(name = "优先级列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "优先级uuid列表", type = ApiParamType.JSONARRAY)
     private List<String> priorityUuidList;
+
+    @EntityField(name = "优先级列表", type = ApiParamType.JSONARRAY)
+    private List<PriorityVo> priorityList;
 
     @EntityField(name = "默认优先级", type = ApiParamType.STRING)
     private String defaultPriorityUuid;
@@ -429,4 +429,11 @@ public class ChannelVo extends BasePageVo implements Serializable {
         this.parentUuids = parentUuids;
     }
 
+    public List<PriorityVo> getPriorityList() {
+        return priorityList;
+    }
+
+    public void setPriorityList(List<PriorityVo> priorityList) {
+        this.priorityList = priorityList;
+    }
 }
