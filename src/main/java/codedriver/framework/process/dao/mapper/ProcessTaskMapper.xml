@@ -410,7 +410,7 @@
 		</where>
 		ORDER BY `sort`
 	</select>
-	
+
 	<resultMap id="processTaskStepWorkerMap" type="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		<id column="uuid" property="uuid" />
 		<id column="processtask_step_id" property="processTaskStepId" />
@@ -794,9 +794,9 @@
 		<association property="originalUserVo" javaType="codedriver.framework.dto.UserVo">
 			<result property="uuid" column="originalUserUuid" />
 			<result property="userName" column="originalUserName" />
-			<result property="userInfo" column="userInfo" />
-			<result property="vipLevel" column="userVipLevel" />
-			<result property="pinyin" column="userPinyin" />
+			<result property="userInfo" column="originalUserInfo" />
+			<result property="vipLevel" column="originalUserVipLevel" />
+			<result property="pinyin" column="originalUserPinyin" />
 		</association>
 		<collection property="auditDetailList" ofType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
 			<result column="audit_id" property="auditId" />
