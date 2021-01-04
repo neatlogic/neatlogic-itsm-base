@@ -64,10 +64,11 @@ public class ProcessTaskStepAuditVo {
 		this.action = _action;
 	}
 
-	public ProcessTaskStepAuditVo(Long processTaskId, Long processTaskStepId, UserVo userVo, String action) {
+	public ProcessTaskStepAuditVo(Long processTaskId, Long processTaskStepId, String userUuid, String action) {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
-		this.userVo = userVo;
+		this.userUuid = userUuid;
+		this.userVo = new UserVo(userUuid);
 		this.action = action;
 	}
 
