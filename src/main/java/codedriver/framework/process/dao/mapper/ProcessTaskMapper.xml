@@ -13,6 +13,19 @@
 		`processtask_sla_transfer`
 	</select>
 
+	<select id="getProcessTaskByStatusList" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+		SELECT
+		`id`,
+		`status`
+		from
+		`processtask`
+		where `status` in
+		<foreach collection="statusList" item="status" open="(" separator="," close=")">
+			#{status}
+		</foreach>
+		ORDER BY RAND() LIMIT #{count}
+	</select>
+
 	<select id="getProcessTaskSlaTransferById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		SELECT
 		`id`,
@@ -673,6 +686,24 @@
 		`type`
 		FROM
 		`processtask_step_rel`
+		WHERE from_processtask_step_id = #{value}
+	</select>
+
+	<select id="getProcessTaskStepRelListByFromIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
+		SELECT
+			`processtask_id` AS processTaskId,
+			`from_process_step_uuid` AS fromProcessStepUuid,
+			`to_process_step_uuid` AS toProcessStepUuid,
+			`from_processtask_step_id` AS fromProcessTaskStepId,
+			`to_processtask_step_id` AS toProcessTaskStepId,
+			(SELECT xx.`handler` FROM `processtask_step` xx WHERE
+				xx.id = `to_processtask_step_id`) AS toProcessStepHandler,
+			`condition`,
+			`is_hit` AS isHit,
+			`name`,
+			`type`
+		FROM
+			`processtask_step_rel`
 		WHERE from_processtask_step_id = #{value}
 	</select>
 
@@ -1340,6 +1371,23 @@
 		WHERE `processtask_id` IN
 		<foreach collection="list" item="processTaskId" open="(" separator="," close=")">
 			#{processTaskId}
+		</foreach>
+	</select>
+
+	<select id="getProcessTaskStepUserListByProcessTaskIdListAndStatusList" parameterType="java.lang.Long" resultMap="processTaskStepUserMap">
+		SELECT
+		`processtask_id`,
+		`processtask_step_id`,
+		`user_uuid`,
+		`user_type`
+		FROM `processtask_step_user`
+		WHERE `processtask_id` IN
+		<foreach collection="processTaskIdList" item="processTaskId" open="(" separator="," close=")">
+			#{processTaskId}
+		</foreach>
+		and `status` IN
+		<foreach collection="statusList" item="status" open="(" separator="," close=")">
+			#{status}
 		</foreach>
 	</select>
 
