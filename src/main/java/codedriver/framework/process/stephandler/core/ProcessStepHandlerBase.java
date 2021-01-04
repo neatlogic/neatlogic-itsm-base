@@ -144,7 +144,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
     }
 
     /**
-     * 
+     *
      * @Time:2020年7月28日
      * @Description: 保存描述内容和附件
      * @param currentProcessTaskStepVo
@@ -337,7 +337,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
         if (oldUserList.size() > 0) {
             ProcessTaskStepUserVo oldUserVo = oldUserList.get(0);
             workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(),
-                currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(),
+                currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserVo().getUuid(),
                 ProcessUserType.MAJOR.getValue()));
             currentProcessTaskStepVo.setUpdateActiveTime(0);
         }
@@ -396,7 +396,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
     }
 
     /**
-     * 
+     *
      * @Time:2020年7月29日
      * @Description: 子类分配处理人
      * @param currentProcessTaskStepVo
@@ -1165,7 +1165,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             if (oldUserList.size() > 0) {
                 ProcessTaskStepUserVo oldUserVo = oldUserList.get(0);
                 workerList.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(),
-                    currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserUuid(),
+                    currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), oldUserVo.getUserVo().getUuid(),
                     ProcessUserType.MAJOR.getValue()));
             } else {
                 try {
@@ -1301,7 +1301,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
             ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo();
             processTaskStepUserVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             processTaskStepUserVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-            processTaskStepUserVo.setUserUuid(UserContext.get().getUserUuid(true));
+            processTaskStepUserVo.setUserVo(new UserVo(UserContext.get().getUserUuid(true)));
             processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());
             processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
             processTaskMapper.insertProcessTaskStepUser(processTaskStepUserVo);
@@ -1360,8 +1360,8 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     }
                 }
                 for (ProcessTaskStepUserVo oldUser : oldUserList) {
-                    if (workerUserUuidList.contains(oldUser.getUserUuid())) {
-                        throw new ProcessTaskStepUserIsExistsException(oldUser.getUserName());
+                    if (workerUserUuidList.contains(oldUser.getUserVo().getUuid())) {
+                        throw new ProcessTaskStepUserIsExistsException(oldUser.getUserVo().getUserName());
                     }
                 }
                 /** 清空user表 **/
@@ -2243,7 +2243,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
     }
 
     /**
-     * 
+     *
      * @Time:2020年9月30日
      * @Description: 步骤主处理人校正操作 判断当前用户是否是代办人，如果不是就什么都不做，如果是，进行下面3个操作 1.往processtask_step_agent表中插入一条数据，记录该步骤的原主处理人和代办人
      *               2.将processtask_step_worker表中该步骤的主处理人uuid改为代办人(当前用户)

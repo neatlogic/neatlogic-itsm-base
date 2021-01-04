@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import java.util.Date;
 import java.util.List;
 
+import codedriver.framework.dto.UserVo;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,16 +20,18 @@ public class ProcessTaskStepAuditVo {
 	private Long processTaskStepId;
 	@EntityField(name = "步骤名称", type = ApiParamType.STRING)
 	private String processTaskStepName;
+	@EntityField(name = "用户")
+	private UserVo userVo;
 	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
 	private String userUuid;
-	@EntityField(name = "用户名", type = ApiParamType.STRING)
-	private String userName;
-	@EntityField(name = "用户其他属性", type = ApiParamType.STRING)
-	private String userInfo;
-	@EntityField(name = "用户头像", type = ApiParamType.STRING)
-	private String avatar;
-	@EntityField(name = "用户VIP等级", type = ApiParamType.INTEGER)
-	private Integer vipLevel;
+//	@EntityField(name = "用户名", type = ApiParamType.STRING)
+//	private String userName;
+//	@EntityField(name = "用户其他属性", type = ApiParamType.STRING)
+//	private String userInfo;
+//	@EntityField(name = "用户头像", type = ApiParamType.STRING)
+//	private String avatar;
+//	@EntityField(name = "用户VIP等级", type = ApiParamType.INTEGER)
+//	private Integer vipLevel;
 	@EntityField(name = "创建时间", type = ApiParamType.LONG)
 	private Date actionTime;
 	@EntityField(name = "活动类型，startprocess(上报)、complete(完成)、retreat(撤回)、abort(终止)、recover(恢复)、transfer(转交)、updateTitle(更新标题)、updatePriority(更新优先级)、updateContent(更新上报描述内容)、comment(评论)", type = ApiParamType.STRING)
@@ -46,10 +49,12 @@ public class ProcessTaskStepAuditVo {
 	private ProcessTaskStatusVo stepStatusVo;
 	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String description;
-    @EntityField(name = "原始处理人", type = ApiParamType.STRING)
+	@EntityField(name = "原始处理人Vo")
+	private UserVo originalUserVo;
+    @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
     private String originalUser;
-    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
-    private String originalUserName;
+//    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
+//    private String originalUserName;
 	
 	public ProcessTaskStepAuditVo() { 
 	}
@@ -63,6 +68,7 @@ public class ProcessTaskStepAuditVo {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
 		this.userUuid = userUuid;
+		this.userVo = new UserVo(userUuid);
 		this.action = action;
 	}
 
@@ -98,6 +104,14 @@ public class ProcessTaskStepAuditVo {
 		this.processTaskStepName = processTaskStepName;
 	}
 
+	public UserVo getUserVo() {
+		return userVo;
+	}
+
+	public void setUserVo(UserVo userVo) {
+		this.userVo = userVo;
+	}
+
 	public String getUserUuid() {
 		return userUuid;
 	}
@@ -105,20 +119,20 @@ public class ProcessTaskStepAuditVo {
 	public void setUserUuid(String userUuid) {
 		this.userUuid = userUuid;
 	}
-
-	public String getUserName() {
-		if(StringUtils.isBlank(userName) && StringUtils.isNotBlank(userUuid)) {
-			userName = SystemUser.getUserName(userUuid);
-			if(StringUtils.isBlank(userName)) {
-				userName = userUuid;
-			}
-		}
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+//
+//	public String getUserName() {
+//		if(StringUtils.isBlank(userName) && StringUtils.isNotBlank(userUuid)) {
+//			userName = SystemUser.getUserName(userUuid);
+//			if(StringUtils.isBlank(userName)) {
+//				userName = userUuid;
+//			}
+//		}
+//		return userName;
+//	}
+//
+//	public void setUserName(String userName) {
+//		this.userName = userName;
+//	}
 
 	public Date getActionTime() {
 		return actionTime;
@@ -187,21 +201,30 @@ public class ProcessTaskStepAuditVo {
 		this.description = description;
 	}
 
-	public String getUserInfo() {
-		return userInfo;
+//	public String getUserInfo() {
+//		return userInfo;
+//	}
+
+//	public void setUserInfo(String userInfo) {
+//		this.userInfo = userInfo;
+//	}
+//
+//	public String getAvatar(){
+//		if (StringUtils.isBlank(avatar) && StringUtils.isNotBlank(userInfo)) {
+//			JSONObject jsonObject = JSONObject.parseObject(userInfo);
+//			avatar = jsonObject.getString("avatar");
+//		}
+//		return avatar;
+//	}
+
+	public UserVo getOriginalUserVo() {
+		return originalUserVo;
 	}
 
-	public void setUserInfo(String userInfo) {
-		this.userInfo = userInfo;
+	public void setOriginalUserVo(UserVo originalUserVo) {
+		this.originalUserVo = originalUserVo;
 	}
 
-	public String getAvatar(){
-		if (StringUtils.isBlank(avatar) && StringUtils.isNotBlank(userInfo)) {
-			JSONObject jsonObject = JSONObject.parseObject(userInfo);
-			avatar = jsonObject.getString("avatar");
-		}
-		return avatar;
-	}
 
     public String getOriginalUser() {
         return originalUser;
@@ -210,20 +233,20 @@ public class ProcessTaskStepAuditVo {
     public void setOriginalUser(String originalUser) {
         this.originalUser = originalUser;
     }
+//
+//    public String getOriginalUserName() {
+//        return originalUserName;
+//    }
+//
+//    public void setOriginalUserName(String originalUserName) {
+//        this.originalUserName = originalUserName;
+//    }
 
-    public String getOriginalUserName() {
-        return originalUserName;
-    }
-
-    public void setOriginalUserName(String originalUserName) {
-        this.originalUserName = originalUserName;
-    }
-
-	public Integer getVipLevel() {
-		return vipLevel;
-	}
-
-	public void setVipLevel(Integer vipLevel) {
-		this.vipLevel = vipLevel;
-	}
+//	public Integer getVipLevel() {
+//		return vipLevel;
+//	}
+//
+//	public void setVipLevel(Integer vipLevel) {
+//		this.vipLevel = vipLevel;
+//	}
 }

@@ -108,7 +108,7 @@ public class WorkcenterFieldBuilder {
 	public WorkcenterFieldBuilder setTransferFromUserList(List<ProcessTaskStepAuditVo> transferAuditList) {
 		List<String> transferUserUuidList = new ArrayList<String>();
 		for(ProcessTaskStepAuditVo auditVo : transferAuditList) {
-			 transferUserUuidList.add(auditVo.getUserUuid());
+			 transferUserUuidList.add(auditVo.getUserVo().getUuid());
 		}
 		dataJson.put(ProcessWorkcenterField.TRANSFER_FROM_USER.getValue(), transferUserUuidList);
 		return this;
@@ -157,7 +157,7 @@ public class WorkcenterFieldBuilder {
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
-					 String user = String.format("%s%s", GroupSearch.USER.getValuePlugin(),userVo.getUserUuid());
+					 String user = String.format("%s%s", GroupSearch.USER.getValuePlugin(),userVo.getUserVo().getUuid());
 					 JSONObject userTypeJson = userTypeMap.get(userVo.getUserType());
 					 userTypeJson.getJSONArray("userlist").add(user);
 					 JSONObject userStatusJson = new JSONObject();
