@@ -238,7 +238,7 @@
 		<result column="status" property="status" />
 		<result column="start_time" property="startTime" />
 		<result column="end_time" property="endTime" />
-		<result column="owner" property="ownerUuid" />
+		<result column="ownerUuid" property="owner" />
 		<result column="reporterUuid" property="reporter" />
 		<!--<result column="reporterName" property="reporterName" />-->
 		<result column="expire_time" property="expireTime" />
@@ -1244,7 +1244,7 @@
 		`status`,
 		`start_time`,
 		`end_time`,
-		`owner` as onwerUuid,
+		`owner` as ownerUuid,
 		`reporter` as reporterUuid,
 		`expire_time`,
 		`worktime_uuid`,
@@ -1560,20 +1560,20 @@
 		</if>
 	</select>
 
-	<select id="getProcessTaskListByKeywordAndChannelUuidList" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<select id="getProcessTaskListByKeywordAndChannelUuidList" resultMap="processTaskMap">
 		SELECT
 		`id`,
 		`title`,
-		`process_uuid` AS processUuid,
-		`channel_uuid` AS channelUuid,
-		`config_hash` AS configHash,
-		`priority_uuid` AS priorityUuid,
+		`process_uuid`,
+		`channel_uuid`,
+		`config_hash`,
+		`priority_uuid`,
 		`status`,
-		`start_time` AS startTime,
-		`end_time` AS endTime,
-		`owner`,
+		`start_time`,
+		`end_time`,
+		`owner` as ownerUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
-		`reporter`,
+		`reporter` as reporterUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
