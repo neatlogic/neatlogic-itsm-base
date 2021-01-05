@@ -1,17 +1,11 @@
 package codedriver.framework.process.dao.mapper;
 
-import java.util.List;
-
 import codedriver.framework.common.dto.ValueTextVo;
+import codedriver.framework.dto.AuthorityVo;
+import codedriver.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
 
-import codedriver.framework.dto.AuthorityVo;
-import codedriver.framework.process.dto.ChannelPriorityVo;
-import codedriver.framework.process.dto.ChannelRelationVo;
-import codedriver.framework.process.dto.ChannelTypeRelationChannelVo;
-import codedriver.framework.process.dto.ChannelTypeRelationVo;
-import codedriver.framework.process.dto.ChannelTypeVo;
-import codedriver.framework.process.dto.ChannelVo;
+import java.util.List;
 
 public interface ChannelMapper {
 
@@ -26,6 +20,8 @@ public interface ChannelMapper {
     public ChannelVo getChannelByName(String channelName);
 
     public List<ChannelVo> getChannelByUuidList(@Param("channelUuidList") List<String> channelUuidList);
+
+    public List<ChannelVo> getAllChannelPriorityList();
 
     public int getMaxSortByParentUuid(String parentUuid);
 

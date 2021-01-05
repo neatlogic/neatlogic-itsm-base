@@ -13,6 +13,19 @@
 		`processtask_sla_transfer`
 	</select>
 
+	<select id="getProcessTaskByStatusList" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+		SELECT
+		`id`,
+		`status`
+		from
+		`processtask`
+		where `status` in
+		<foreach collection="statusList" item="status" open="(" separator="," close=")">
+			#{status}
+		</foreach>
+		ORDER BY RAND() LIMIT #{count}
+	</select>
+
 	<select id="getProcessTaskSlaTransferById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
 		SELECT
 		`id`,
@@ -215,31 +228,63 @@
 		WHERE sla_id = #{value}
 	</select>
 
-	<select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<resultMap id="processTaskMap" type="codedriver.framework.process.dto.ProcessTaskVo">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="process_uuid" property="processUuid" />
+		<result column="channel_uuid" property="channelUuid" />
+		<result column="config_hash" property="configHash" />
+		<result column="priority_uuid" property="priorityUuid" />
+		<result column="status" property="status" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="ownerUuid" property="owner" />
+		<result column="reporterUuid" property="reporter" />
+		<!--<result column="reporterName" property="reporterName" />-->
+		<result column="expire_time" property="expireTime" />
+		<result column="worktime_uuid" property="worktimeUuid" />
+		<result column="error" property="error" />
+		<result column="is_show" property="isShow" />
+		<result column="serial_number" property="serialNumber" />
+		<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="ownerUuid" />
+			<result property="userName" column="ownerName" />
+			<result property="userInfo" column="ownerInfo" />
+			<result property="vipLevel" column="ownerVipLevel" />
+			<result property="pinyin" column="ownerPinyin" />
+		</association>
+		<association property="reporterVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="reporterUuid" />
+			<result property="userName" column="reporterName" />
+			<result property="userInfo" column="reporterInfo" />
+			<result property="vipLevel" column="reporterVipLevel" />
+			<result property="pinyin" column="reporterPinyin" />
+		</association>
+	</resultMap>
+
+	<select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultMap="processTaskMap">
 		SELECT
 		`id`,
-		`serial_number` AS serialNumber,
+		`serial_number`,
 		`title`,
-		`process_uuid` AS processUuid,
-		`channel_uuid` AS
-		channelUuid,
-		`config_hash` AS configHash,
-		`priority_uuid` AS priorityUuid,
+		`process_uuid`,
+		`channel_uuid`,
+		`config_hash`,
+		`priority_uuid`,
 		`status`,
-		`start_time` AS startTime,
-		`end_time` AS endTime,
-		`owner`,
+		`start_time`,
+		`end_time`,
+		`owner` as ownerUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS
 		ownerName,
 		(SELECT vip_level FROM `user` x
 		WHERE x.uuid = `owner`) AS ownerVipLevel,
-		`reporter`,
+		`reporter` as reporterUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
-		`expire_time` AS expireTime,
-		`worktime_uuid` AS worktimeUuid,
+		`expire_time`,
+		`worktime_uuid`,
 		`error`,
-		`is_show` as isShow,
-		`serial_number` AS serialNumber
+		`is_show`
 		FROM
 		`processtask`
 		WHERE
@@ -303,7 +348,28 @@
 		ORDER BY id
 	</select>
 
-	<select id="getProcessTaskStepUserByStepId" resultType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+	<resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+		<!--<id column="user_uuid" property="userUuid" />-->
+		<!--<id column="processtask_step_id" property="processTaskStepId" />-->
+		<!--<id column="processtask_id" property="processTaskId" />-->
+		<!--<id column="user_type" property="userType" />-->
+		<result column="processTaskId" property="processTaskId" />
+		<result column="processTaskStepId" property="processTaskStepId" />
+		<result column="userType" property="userType" />
+		<result column="status" property="status" />
+		<result column="action" property="action" />
+		<result column="startTime" property="startTime" />
+		<result column="endTime" property="endTime" />
+		<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="userUuid" />
+			<result property="userName" column="userName" />
+			<result property="userInfo" column="userInfo" />
+			<result property="vipLevel" column="userVipLevel" />
+			<result property="pinyin" column="userPinyin" />
+		</association>
+	</resultMap>
+
+	<select id="getProcessTaskStepUserByStepId" resultMap="processTaskStepUserMap">
 		SELECT
 		`processtask_id` as processTaskId,
 		`processtask_step_id` as processTaskStepId,
@@ -313,6 +379,7 @@
 		userName,
 		(SELECT `user_info` from `user` WHERE `uuid` = `user_uuid`) as userInfo,
 		(SELECT `vip_level` from `user` WHERE `uuid` = `user_uuid`) as userVipLevel,
+		(SELECT `pinyin` from `user` WHERE `uuid` = `user_uuid`) as userPinyin,
 		`status` as status,
 		`action`,
 		`start_time`
@@ -363,7 +430,7 @@
 		</where>
 		ORDER BY `sort`
 	</select>
-	
+
 	<resultMap id="processTaskStepWorkerMap" type="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 		<id column="uuid" property="uuid" />
 		<id column="processtask_step_id" property="processTaskStepId" />
@@ -541,8 +608,10 @@
 		</collection>
 		<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 			<result column="userType" property="userType" />
-			<result column="user_uuid" property="userUuid" />
 			<result column="userStatus" property="status" />
+			<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+				<result column="user_uuid" property="uuid" />
+			</association>
 		</collection>
 	</resultMap>
 
@@ -617,6 +686,24 @@
 		`type`
 		FROM
 		`processtask_step_rel`
+		WHERE from_processtask_step_id = #{value}
+	</select>
+
+	<select id="getProcessTaskStepRelListByFromIdList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
+		SELECT
+			`processtask_id` AS processTaskId,
+			`from_process_step_uuid` AS fromProcessStepUuid,
+			`to_process_step_uuid` AS toProcessStepUuid,
+			`from_processtask_step_id` AS fromProcessTaskStepId,
+			`to_processtask_step_id` AS toProcessTaskStepId,
+			(SELECT xx.`handler` FROM `processtask_step` xx WHERE
+				xx.id = `to_processtask_step_id`) AS toProcessStepHandler,
+			`condition`,
+			`is_hit` AS isHit,
+			`name`,
+			`type`
+		FROM
+			`processtask_step_rel`
 		WHERE from_processtask_step_id = #{value}
 	</select>
 
@@ -726,15 +813,29 @@
 		<result column="processtask_id" property="processTaskId" />
 		<result column="processtask_step_id" property="processTaskStepId" />
 		<result column="processTaskStepName" property="processTaskStepName" />
-		<result column="user_uuid" property="userUuid" />
-		<result column="userName" property="userName" />
-		<result column="userInfo" property="userInfo" />
-		<result column="vipLevel" property="vipLevel" />
+		<!--<result column="user_uuid" property="userUuid" />-->
+		<!--<result column="userName" property="userName" />-->
+		<!--<result column="userInfo" property="userInfo" />-->
+		<!--<result column="vipLevel" property="vipLevel" />-->
 		<result column="action_time" property="actionTime" />
 		<result column="action" property="action" />
 		<result column="step_status" property="stepStatus" />
-		<result column="original_user" property="originalUser" />
-		<result column="originalUserName" property="originalUserName" />
+		<!--<result column="original_user" property="originalUser" />-->
+		<!--<result column="originalUserName" property="originalUserName" />-->
+		<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="userUuid" />
+			<result property="userName" column="userName" />
+			<result property="userInfo" column="userInfo" />
+			<result property="vipLevel" column="userVipLevel" />
+			<result property="pinyin" column="userPinyin" />
+		</association>
+		<association property="originalUserVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="originalUserUuid" />
+			<result property="userName" column="originalUserName" />
+			<result property="userInfo" column="originalUserInfo" />
+			<result property="vipLevel" column="originalUserVipLevel" />
+			<result property="pinyin" column="originalUserPinyin" />
+		</association>
 		<collection property="auditDetailList" ofType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
 			<result column="audit_id" property="auditId" />
 			<result column="type" property="type" />
@@ -748,15 +849,15 @@
 		psa.`processtask_id`,
 		psa.`processtask_step_id`,
 		ps.`name` AS processTaskStepName,
-		psa.`user_uuid`,
+		psa.`user_uuid` as userUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = psa.`user_uuid`) AS userName,
-		(SELECT
-		user_info FROM `user` x WHERE x.uuid = psa.`user_uuid`) as userInfo,
-		(SELECT vip_level FROM `user` x WHERE x.uuid = psa.`user_uuid`) as vipLevel,
+		(SELECT user_info FROM `user` x WHERE x.uuid = psa.`user_uuid`) as userInfo,
+		(SELECT vip_level FROM `user` x WHERE x.uuid = psa.`user_uuid`) as userVipLevel,
+		(SELECT pinyin FROM `user` x WHERE x.uuid = psa.`user_uuid`) as userPinyin,
 		psa.`action_time`,
 		psa.`action`,
 		psa.`step_status`,
-		psa.`original_user`,
+		psa.`original_user` as originalUserUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = psa.`original_user`) AS originalUserName,
 		psad.`audit_id`,
 		psad.`type`,
@@ -774,8 +875,8 @@
 		<if test="action != null and action != ''">
 			AND psa.`action` = #{action}
 		</if>
-		<if test="userUuid != null and userUuid != ''">
-			AND psa.`user_uuid` = #{userUuid}
+		<if test="userVo != null and userVo.uuid != null and userVo.uuid != ''">
+			AND psa.`user_uuid` = #{userVo.uuid}
 		</if>
 		ORDER BY psa.`id` DESC
 	</select>
@@ -1000,7 +1101,7 @@
 		COUNT(1)
 		FROM `processtask_step_user`
 		WHERE `processtask_id` = #{processTaskId}
-		AND `user_uuid` = #{userUuid}
+		AND `user_uuid` = #{userVo.uuid}
 		<if test="processTaskStepId != null">
 			AND `processtask_step_id` = #{processTaskStepId}
 		</if>
@@ -1109,8 +1210,8 @@
 		`status`,
 		`start_time`,
 		`end_time`,
-		`owner`,
-		`reporter`,
+		`owner` as ownerUuid,
+		`reporter` as reporterUuid,
 		`expire_time`,
 		`worktime_uuid`,
 		`is_show`,
@@ -1143,8 +1244,8 @@
 		`status`,
 		`start_time`,
 		`end_time`,
-		`owner`,
-		`reporter`,
+		`owner` as ownerUuid,
+		`reporter` as reporterUuid,
 		`expire_time`,
 		`worktime_uuid`,
 		`is_show`,
@@ -1235,7 +1336,7 @@
 		SELECT COUNT(`processtask_id`) FROM `processtask_form` WHERE `processtask_id` = #{value}
 	</select>
 
-	<select id="getProcessTaskStepUserList" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo" resultType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+	<select id="getProcessTaskStepUserList" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo" resultMap="processTaskStepUserMap">
 		SELECT
 		`processtask_id` as processTaskId,
 		`processtask_step_id` as processTaskStepId,
@@ -1255,17 +1356,25 @@
 		<if test="userType != null and userType != ''">
 			AND `user_type` = #{userType}
 		</if>
-		<if test="userUuid != null and userUuid != ''">
-			AND user_uuid = #{userUuid}
+		<if test="userVo != null and userVo.uuid != null and userVo.uuid != ''">
+			AND user_uuid = #{userVo.uuid}
 		</if>
 	</select>
-	<resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
-		<id column="user_uuid" property="userUuid" />
-		<id column="processtask_step_id" property="processTaskStepId" />
-		<id column="processtask_id" property="processTaskId" />
-		<id column="user_type" property="userType" />
-	</resultMap>
+
 	<select id="getProcessTaskStepUserListByProcessTaskIdList" parameterType="java.lang.Long" resultMap="processTaskStepUserMap">
+		SELECT
+		`processtask_id` as processTaskId,
+		`processtask_step_id` as processTaskStepId,
+		`user_uuid` as userUuid,
+		`user_type` as userType
+		FROM `processtask_step_user`
+		WHERE `processtask_id` IN
+		<foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+			#{processTaskId}
+		</foreach>
+	</select>
+
+	<select id="getProcessTaskStepUserListByProcessTaskIdListAndStatusList" parameterType="java.lang.Long" resultMap="processTaskStepUserMap">
 		SELECT
 		`processtask_id`,
 		`processtask_step_id`,
@@ -1273,8 +1382,12 @@
 		`user_type`
 		FROM `processtask_step_user`
 		WHERE `processtask_id` IN
-		<foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+		<foreach collection="processTaskIdList" item="processTaskId" open="(" separator="," close=")">
 			#{processTaskId}
+		</foreach>
+		and `status` IN
+		<foreach collection="statusList" item="status" open="(" separator="," close=")">
+			#{status}
 		</foreach>
 	</select>
 
@@ -1447,20 +1560,20 @@
 		</if>
 	</select>
 
-	<select id="getProcessTaskListByKeywordAndChannelUuidList" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<select id="getProcessTaskListByKeywordAndChannelUuidList" resultMap="processTaskMap">
 		SELECT
 		`id`,
 		`title`,
-		`process_uuid` AS processUuid,
-		`channel_uuid` AS channelUuid,
-		`config_hash` AS configHash,
-		`priority_uuid` AS priorityUuid,
+		`process_uuid`,
+		`channel_uuid`,
+		`config_hash`,
+		`priority_uuid`,
 		`status`,
-		`start_time` AS startTime,
-		`end_time` AS endTime,
-		`owner`,
+		`start_time`,
+		`end_time`,
+		`owner` as ownerUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
-		`reporter`,
+		`reporter` as reporterUuid,
 		(SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
 		`expire_time` AS expireTime,
 		`worktime_uuid` AS worktimeUuid,
@@ -1505,7 +1618,7 @@
 	</select>
 
 	<select id="searchProcessTaskImportAudit" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="codedriver.framework.process.dto.ProcessTaskImportAuditVo"
-		useCache="false">
+			useCache="false">
 		SELECT
 		`id`,
 		`processtask_id` as processTaskId,
@@ -1673,23 +1786,23 @@
 		</if>
 	</select>
 
-	<resultMap type="codedriver.framework.process.dto.ProcessTaskVo" id="processTaskMap">
-		<id column="id" property="id" />
-		<result column="title" property="title" />
-		<result column="process_uuid" property="processUuid" />
-		<result column="channel_uuid" property="channelUuid" />
-		<result column="config_hash" property="configHash" />
-		<result column="priority_uuid" property="priorityUuid" />
-		<result column="status" property="status" />
-		<result column="start_time" property="startTime" />
-		<result column="end_time" property="endTime" />
-		<result column="owner" property="owner" />
-		<result column="reporter" property="reporter" />
-		<result column="expire_time" property="expireTime" />
-		<result column="worktime_uuid" property="worktimeUuid" />
-		<result column="is_show" property="isShow" />
-		<result column="serial_number" property="serialNumber" />
-	</resultMap>
+	<!--<resultMap type="codedriver.framework.process.dto.ProcessTaskVo" id="processTaskMap">-->
+		<!--<id column="id" property="id" />-->
+		<!--<result column="title" property="title" />-->
+		<!--<result column="process_uuid" property="processUuid" />-->
+		<!--<result column="channel_uuid" property="channelUuid" />-->
+		<!--<result column="config_hash" property="configHash" />-->
+		<!--<result column="priority_uuid" property="priorityUuid" />-->
+		<!--<result column="status" property="status" />-->
+		<!--<result column="start_time" property="startTime" />-->
+		<!--<result column="end_time" property="endTime" />-->
+		<!--<result column="owner" property="owner" />-->
+		<!--<result column="reporter" property="reporter" />-->
+		<!--<result column="expire_time" property="expireTime" />-->
+		<!--<result column="worktime_uuid" property="worktimeUuid" />-->
+		<!--<result column="is_show" property="isShow" />-->
+		<!--<result column="serial_number" property="serialNumber" />-->
+	<!--</resultMap>-->
 
 	<select id="getProcessTaskListByChannelTypeUuidAndStartTime" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultMap="processTaskMap">
 		SELECT
@@ -1702,8 +1815,8 @@
 		a.`status`,
 		a.`start_time`,
 		a.`end_time`,
-		a.`owner`,
-		a.`reporter`,
+		a.`owner` as ownerUuid,
+		a.`reporter` as reporterUuid,
 		a.`expire_time`,
 		a.`worktime_uuid`,
 		a.`is_show`,
@@ -1755,10 +1868,13 @@
 				<result column="cUserType" property="userType" />
 			</collection>
 			<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
-				<id column="dUserUuid" property="userUuid" />
+				<!--<id column="dUserUuid" property="userUuid" />-->
 				<result column="dProcessTaskId" property="processTaskId" />
 				<result column="dProcessTaskStepId" property="processTaskStepId" />
 				<result column="dUserType" property="userType" />
+				<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+					<result column="dUserUuid" property="uuid" />
+				</association>
 			</collection>
 		</collection>
 
@@ -1974,7 +2090,7 @@
 		(
 		#{processTaskId},
 		#{processTaskStepId},
-		#{userUuid},
+		#{userVo.uuid},
 		NOW(3),
 		#{action},
 		#{stepStatus},
@@ -2295,9 +2411,9 @@
 		(
 		#{processTaskId},
 		#{processTaskStepId},
-		#{userUuid},
+		#{userVo.uuid},
 		#{userType},
-		#{userName},
+		#{userVo.userName},
 		#{status},
 		NOW(3),
 		NOW(3)
@@ -2610,7 +2726,7 @@
 		`status` = #{status}
 		WHERE
 		`processtask_step_id` = #{processTaskStepId}
-		AND `user_uuid` = #{userUuid}
+		AND `user_uuid` = #{userVo.uuid}
 		AND `user_type` = #{userType}
 	</update>
 
@@ -2662,10 +2778,10 @@
 
 	<update id="updateProcessTaskStepUserUserUuid" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 		UPDATE `processtask_step_user`
-		SET `user_uuid` = #{userUuid}
+		SET `user_uuid` = #{newUserUuid}
 		WHERE `processtask_step_id` = #{processTaskStepId}
 		AND `user_uuid` =
-		#{userUuid}
+		#{userVo.uuid}
 		AND `user_type` = #{userType}
 	</update>
 
@@ -2736,8 +2852,8 @@
 		<if test="userType != null and userType != ''">
 			AND `user_type` = #{userType}
 		</if>
-		<if test="userUuid != null and userUuid != ''">
-			AND `user_uuid` = #{userUuid}
+		<if test="userVo != null and userVo.uuid != null and userVo.uuid != ''">
+			AND `user_uuid` = #{userVo.uuid}
 		</if>
 	</delete>
 

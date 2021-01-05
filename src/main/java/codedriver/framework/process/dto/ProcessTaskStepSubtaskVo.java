@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import codedriver.framework.dto.UserVo;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -23,24 +24,28 @@ public class ProcessTaskStepSubtaskVo {
 	private Long processTaskStepId;
 	@EntityField(name = "子任务id", type = ApiParamType.LONG)
 	private Long id;
-	@EntityField(name = "创建人", type = ApiParamType.STRING)
-	private String owner;
-	@EntityField(name = "创建人名称", type = ApiParamType.STRING)
-	private String ownerName;
-	@EntityField(name = "创建人额外信息", type = ApiParamType.STRING)
-	private String ownerInfo;
-	@EntityField(name = "创建人名称", type = ApiParamType.STRING)
-	private String ownerAvatar;
-	@EntityField(name = "创建人VIP等级", type = ApiParamType.INTEGER)
-	private Integer ownerVipLevel;
+	@EntityField(name = "创建人")
+	private UserVo ownerVo;
+//	@EntityField(name = "创建人", type = ApiParamType.STRING)
+//	private String owner;
+//	@EntityField(name = "创建人名称", type = ApiParamType.STRING)
+//	private String ownerName;
+//	@EntityField(name = "创建人额外信息", type = ApiParamType.STRING)
+//	private String ownerInfo;
+//	@EntityField(name = "创建人名称", type = ApiParamType.STRING)
+//	private String ownerAvatar;
+//	@EntityField(name = "创建人VIP等级", type = ApiParamType.INTEGER)
+//	private Integer ownerVipLevel;
 	@EntityField(name = "状态", type = ApiParamType.STRING)
 	private String status;
 	@EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStatusVo statusVo;
-	@EntityField(name = "处理人", type = ApiParamType.STRING)
+	@EntityField(name = "处理人uuid", type = ApiParamType.STRING)
 	private String userUuid;
 	@EntityField(name = "处理人名称", type = ApiParamType.STRING)
 	private String userName;
+	@EntityField(name = "处理人Vo")
+	private UserVo userVo;
 	@EntityField(name = "期望完成时间", type = ApiParamType.LONG)
 	private Date targetTime;
 	@EntityField(name = "创建时间", type = ApiParamType.LONG)
@@ -103,18 +108,27 @@ public class ProcessTaskStepSubtaskVo {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getOwner() {
-		return owner;
+
+	public UserVo getOwnerVo() {
+		return ownerVo;
 	}
-	public void setOwner(String owner) {
-		this.owner = owner;
+
+	public void setOwnerVo(UserVo ownerVo) {
+		this.ownerVo = ownerVo;
 	}
-	public String getOwnerName() {
-		return ownerName;
-	}
-	public void setOwnerName(String ownerName) {
-		this.ownerName = ownerName;
-	}
+
+	//	public String getOwner() {
+//		return owner;
+//	}
+//	public void setOwner(String owner) {
+//		this.owner = owner;
+//	}
+//	public String getOwnerName() {
+//		return ownerName;
+//	}
+//	public void setOwnerName(String ownerName) {
+//		this.ownerName = ownerName;
+//	}
 	public String getStatus() {
 		return status;
 	}
@@ -136,6 +150,15 @@ public class ProcessTaskStepSubtaskVo {
 	public void setUserUuid(String userUuid) {
 		this.userUuid = userUuid;
 	}
+
+	public UserVo getUserVo() {
+		return userVo;
+	}
+
+	public void setUserVo(UserVo userVo) {
+		this.userVo = userVo;
+	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -345,29 +368,29 @@ public class ProcessTaskStepSubtaskVo {
 		this.workerList = workerList;
 	}
 
-	public String getOwnerInfo() {
-		return ownerInfo;
-	}
-
-	public void setOwnerInfo(String ownerInfo) {
-		this.ownerInfo = ownerInfo;
-	}
-
-	public String getOwnerAvatar() {
-		if (StringUtils.isBlank(ownerAvatar) && StringUtils.isNotBlank(ownerInfo)) {
-			JSONObject jsonObject = JSONObject.parseObject(ownerInfo);
-			ownerAvatar = jsonObject.getString("avatar");
-		}
-		return ownerAvatar;
-	}
-
-	public Integer getOwnerVipLevel() {
-		return ownerVipLevel;
-	}
-
-	public void setOwnerVipLevel(Integer ownerVipLevel) {
-		this.ownerVipLevel = ownerVipLevel;
-	}
+//	public String getOwnerInfo() {
+//		return ownerInfo;
+//	}
+//
+//	public void setOwnerInfo(String ownerInfo) {
+//		this.ownerInfo = ownerInfo;
+//	}
+//
+//	public String getOwnerAvatar() {
+//		if (StringUtils.isBlank(ownerAvatar) && StringUtils.isNotBlank(ownerInfo)) {
+//			JSONObject jsonObject = JSONObject.parseObject(ownerInfo);
+//			ownerAvatar = jsonObject.getString("avatar");
+//		}
+//		return ownerAvatar;
+//	}
+//
+//	public Integer getOwnerVipLevel() {
+//		return ownerVipLevel;
+//	}
+//
+//	public void setOwnerVipLevel(Integer ownerVipLevel) {
+//		this.ownerVipLevel = ownerVipLevel;
+//	}
 
 	@Override
 	public int hashCode() {
