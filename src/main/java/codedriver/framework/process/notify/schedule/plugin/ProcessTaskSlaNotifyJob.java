@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import codedriver.framework.process.news.handler.ProcessTaskNewsHandler;
+import codedriver.framework.process.news.handler.ProcessTaskMessageHandler;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.JobExecutionContext;
@@ -193,7 +193,7 @@ public class ProcessTaskSlaNotifyJob extends JobBase {
                             processTaskStepVo.setConfig(stepConfig);
                             ProcessStepUtilHandlerFactory.getHandler().getReceiverMap(processTaskStepVo, receiverMap);
                         }
-                        NotifyPolicyUtil.execute(SlaNotifyTriggerType.TIMEOUT, ProcessTaskNewsHandler.class, notifyPolicyVo.getConfig(), paramMappingList,
+                        NotifyPolicyUtil.execute(SlaNotifyTriggerType.TIMEOUT, ProcessTaskMessageHandler.class, notifyPolicyVo.getConfig(), paramMappingList,
                             templateParamData, conditionParamData, receiverMap);
                     }
                 }

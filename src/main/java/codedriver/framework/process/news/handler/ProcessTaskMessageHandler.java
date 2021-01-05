@@ -1,6 +1,6 @@
 package codedriver.framework.process.news.handler;
 
-import codedriver.framework.news.core.NewsHandlerBase;
+import codedriver.framework.message.core.MessageHandlerBase;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * @Date: 2020/12/31 14:28
  **/
 @Service
-public class ProcessTaskNewsHandler extends NewsHandlerBase {
+public class ProcessTaskMessageHandler extends MessageHandlerBase {
 
     @Override
     public String getName() {
