@@ -12,6 +12,7 @@ import java.util.Stack;
 
 import codedriver.framework.dao.mapper.RoleMapper;
 import codedriver.framework.dto.UserVo;
+import codedriver.framework.process.news.handler.ProcessTaskNewsHandler;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -530,7 +531,7 @@ public abstract class ProcessStepHandlerUtilBase {
                         List<ParamMappingVo> paramMappingList =
                             JSON.parseArray(JSON.toJSONString(notifyPolicyConfig.getJSONArray("paramMappingList")),
                                 ParamMappingVo.class);
-                        NotifyPolicyUtil.execute(policyConfig, paramMappingList, notifyTriggerType, templateParamData,
+                        NotifyPolicyUtil.execute(notifyTriggerType, ProcessTaskNewsHandler.class, policyConfig, paramMappingList, templateParamData,
                             conditionParamData, receiverMap);
                     }
                 }
