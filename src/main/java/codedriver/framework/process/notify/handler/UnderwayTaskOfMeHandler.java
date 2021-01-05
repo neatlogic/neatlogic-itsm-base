@@ -2,7 +2,7 @@ package codedriver.framework.process.notify.handler;
 
 import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.FormHandlerType;
-import codedriver.framework.common.constvalue.ParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.condition.core.IConditionHandler;
@@ -74,27 +74,26 @@ public class UnderwayTaskOfMeHandler extends NotifyContentHandlerBase {
 			{
 				this.add(new JSONObject(){
 					{
-						this.put("text","标题");
-						this.put("value","title");
-						this.put("isEditable",1);
-						this.put("controller", FormHandlerType.INPUT.toString());
+						this.put("label","标题");
+						this.put("name","title");
+						this.put("type", "text");
+						this.put("validateList", "['required']");
 					}
 				});
 				this.add(new JSONObject(){
 					{
-						this.put("text","内容");
-						this.put("value","content");
-						this.put("isEditable",1);
-						this.put("controller", FormHandlerType.TEXTAREA.toString());
+						this.put("label","内容");
+						this.put("name","content");
+						this.put("type", FormHandlerType.TEXTAREA.toString());
 					}
 				});
 				this.add(new JSONObject(){
 					{
-						this.put("text","接收人");
-						this.put("value","to");
-						this.put("controller", FormHandlerType.USERSELECT.toString());
-						this.put("defaultValue","工单内容对应的处理人");
-						this.put("isEditable",0);
+						this.put("label","接收人");
+						this.put("name","toList");
+						this.put("type", FormHandlerType.SELECT.toString());
+						this.put("placeholder","工单内容对应的处理人");
+						this.put("disabled",true);
 					}
 				});
 			}
@@ -116,31 +115,29 @@ public class UnderwayTaskOfMeHandler extends NotifyContentHandlerBase {
 	 * @return
 	 */
 	@Override
-	protected List<ConditionParamVo> getMyConditionOptionList() {
-		List<ConditionParamVo> notifyPolicyParamList = new ArrayList<>();
-		String conditionModel = ProcessConditionModel.SIMPLE.getValue();
+	protected JSONArray getMyConditionOptionList() {
+		JSONArray params = new JSONArray();
 		for(ConditionOptions option : ConditionOptions.values()) {
 			IConditionHandler condition = ConditionHandlerFactory.getHandler(option.getValue());
 			if(condition != null) {
-				ConditionParamVo param = new ConditionParamVo();
-				param.setName(condition.getName());
-				param.setLabel(condition.getDisplayName());
-				param.setController(condition.getHandler(conditionModel));
-				if(condition.getConfig() != null) {
-					param.setConfig(condition.getConfig().toJSONString());
+				JSONObject obj = condition.getConfig();
+				obj.put("type",condition.getHandler(ProcessConditionModel.SIMPLE.getValue()));
+				obj.put("name",condition.getName());
+				obj.put("label",condition.getDisplayName());
+				/** 不同的条件有其特殊的表单属性，根据需要自行添加 */
+				if(ConditionOptions.STEPTEAM.getValue().equals(option.getValue())){
+					obj.put("groupList",new JSONArray(){
+						{
+							this.add(GroupSearch.TEAM.getValue());
+						}
+					});
+					obj.put("multiple", true);
+					obj.put("search", true);
 				}
-				param.setType(condition.getType());
-				ParamType paramType = condition.getParamType();
-				if(paramType != null) {
-					param.setParamType(paramType.getName());
-					param.setParamTypeName(paramType.getText());
-				}
-
-				param.setIsEditable(0);
-				notifyPolicyParamList.add(param);
+				params.add(obj);
 			}
 		}
-		return notifyPolicyParamList;
+		return params;
 	}
 
 	/**
