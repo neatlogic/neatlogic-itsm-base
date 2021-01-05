@@ -178,10 +178,8 @@ public class ProcessAuthManager {
             if (processTaskIdSet == null) {
                 processTaskIdSet = new HashSet<>();
             }
-            long startTime = System.currentTimeMillis();
             List<ProcessTaskStepVo> processTaskStepList =
                 processTaskMapper.getProcessTaskStepListByIdList(new ArrayList<>(processTaskStepIdSet));
-            System.out.println("getProcessTaskStepListByIdList：" + (System.currentTimeMillis() - startTime));
             for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
                 processTaskIdSet.add(processTaskStepVo.getProcessTaskId());
                 processTaskStepIdSetMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new HashSet<>())
@@ -190,7 +188,6 @@ public class ProcessAuthManager {
         }
         if (CollectionUtils.isNotEmpty(processTaskIdSet)) {
             List<Long> processTaskIdList = new ArrayList<>(processTaskIdSet);
-            long startTime = System.currentTimeMillis();
             List<ProcessTaskStepWorkerVo> processTaskStepWorkerList =
                 processTaskMapper.getProcessTaskStepWorkerListByProcessTaskIdList(processTaskIdList);
             Map<Long, List<ProcessTaskStepWorkerVo>> processTaskStepWorkerListMap = new HashMap<>();
@@ -228,7 +225,6 @@ public class ProcessAuthManager {
             }
 
             List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
-            System.out.println("getProcessTaskDetailListByIdList：" + (System.currentTimeMillis() - startTime));
             for (ProcessTaskVo processTaskVo : processTaskList) {
                 processTaskVo
                     .setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
