@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import codedriver.framework.process.news.handler.ProcessTaskMessageHandler;
+import codedriver.framework.process.message.handler.ProcessTaskMessageHandler;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.JobExecutionContext;

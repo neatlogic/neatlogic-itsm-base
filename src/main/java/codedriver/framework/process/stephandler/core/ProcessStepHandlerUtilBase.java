@@ -12,7 +12,7 @@ import java.util.Stack;
 
 import codedriver.framework.dao.mapper.RoleMapper;
 import codedriver.framework.dto.UserVo;
-import codedriver.framework.process.news.handler.ProcessTaskMessageHandler;
+import codedriver.framework.process.message.handler.ProcessTaskMessageHandler;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;

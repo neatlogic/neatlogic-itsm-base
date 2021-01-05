@@ -1,11 +1,11 @@
-package codedriver.framework.process.news.handler;
+package codedriver.framework.process.message.handler;
 
 import codedriver.framework.message.core.MessageHandlerBase;
 import org.springframework.stereotype.Service;
 
 /**
- * @Title: ProcessTaskNewsHandler
- * @Package codedriver.framework.process.news.handler
+ * @Title: ProcessTaskMessageHandler
+ * @Package codedriver.framework.process.message.handler
  * @Description: 工单消息处理器
  * @Author: linbq
  * @Date: 2020/12/31 14:28
