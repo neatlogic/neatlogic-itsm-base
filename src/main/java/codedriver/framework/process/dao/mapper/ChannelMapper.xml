@@ -46,6 +46,8 @@
 		<result column="channel_type_uuid" property="channelTypeUuid" />
 		<result column="isFavorite" property="isFavorite" />
 		<result column="sort" property="sort" />
+		<result column="parentUuids" property="parentUuids" />
+		<result column="parentNames" property="parentNames" />
 		<collection property="priorityList" ofType="codedriver.framework.process.dto.PriorityVo">
 			<result column="priorityUuid" property="uuid" />
 			<result column="priorityName" property="name" />
