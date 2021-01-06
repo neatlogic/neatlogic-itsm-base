@@ -66,6 +66,7 @@ public class UnderwayTaskOfMeHandler extends NotifyContentHandlerBase {
 						this.put("label","标题");
 						this.put("name","title");
 						this.put("type", "text");
+						this.put("validateList", "['required']");
 					}
 				});
 				this.add(new JSONObject(){
@@ -112,14 +113,11 @@ public class UnderwayTaskOfMeHandler extends NotifyContentHandlerBase {
 				obj.put("type",condition.getHandler(ProcessConditionModel.SIMPLE.getValue()));
 				obj.put("name",condition.getName());
 				obj.put("label",condition.getDisplayName());
+				/** 不同的条件有其特殊的表单属性，根据需要自行添加 */
 				if(ConditionOptions.STEPTEAM.getValue().equals(option.getValue())){
-					obj.put("initConfig",new JSONObject(){
+					obj.put("groupList",new JSONArray(){
 						{
-							this.put("groupList",new JSONArray(){
-								{
-									this.add(GroupSearch.TEAM.getValue());
-								}
-							});
+							this.add(GroupSearch.TEAM.getValue());
 						}
 					});
 					obj.put("multiple", true);
