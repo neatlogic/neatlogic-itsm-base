@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import codedriver.framework.auth.core.AuthFactory;
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.notify.core.NotifyHandlerFactory;
 import codedriver.framework.notify.core.NotifyHandlerType;
@@ -131,4 +132,8 @@ public class TaskNotifyPolicyHandler extends NotifyPolicyHandlerBase {
         config.put("excludeList", excludeList);
 	}
 
+    @Override
+    public String getAuthName() {
+        return AuthFactory.getAuthInstance("PROCESS_MODIFY").getAuthName();
+    }
 }
