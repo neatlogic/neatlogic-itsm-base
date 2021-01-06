@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import codedriver.framework.auth.core.AuthFactory;
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.notify.core.NotifyHandlerFactory;
 import codedriver.framework.notify.core.NotifyHandlerType;
@@ -128,4 +129,8 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 		config.put("groupList", groupList);
 	}
 
+    @Override
+    public String getAuthName() {
+        return AuthFactory.getAuthInstance("SLA_MODIFY").getAuthName();
+    }
 }
