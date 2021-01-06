@@ -131,6 +131,6 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 
     @Override
     public String getAuthName() {
-        return AuthFactory.getAuthInstance("SLA_MODIFY").getAuthName();
+        return AuthFactory.getAuthInstance("PROCESS_MODIFY").getAuthName();
     }
 }
