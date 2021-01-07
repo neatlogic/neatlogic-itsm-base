@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
  * @Description: 工单消息处理器
  * @Author: linbq
  * @Date: 2020/12/31 14:28
+ * Copyright(c) 2020 TechSureCo.,Ltd.AllRightsReserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  **/
 @Service
 public class ProcessTaskMessageHandler extends MessageHandlerBase {
