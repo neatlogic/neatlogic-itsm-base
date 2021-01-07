@@ -113,7 +113,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
         }
         resultObj.put("startValue", startValue);
         Integer digits = jsonObj.getInteger("digits");
-        if(digits != null) {
+        if (digits != null) {
             resultObj.put("digits", digits);
             resultObj.put("numberOfDigits", digits - 8);
         }
@@ -123,13 +123,13 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
-        long max = (long)Math.pow(10, numberOfDigits) - 1;
+        long max = (long) Math.pow(10, numberOfDigits) - 1;
         long serialNumberSeed = processTaskSerialNumberPolicyVo.getSerialNumberSeed();
         if (serialNumberSeed > max) {
             serialNumberSeed -= max;
         }
         processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
-            processTaskSerialNumberPolicyVo.getChannelTypeUuid(), serialNumberSeed + 1);
+                processTaskSerialNumberPolicyVo.getChannelTypeUuid(), serialNumberSeed + 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(new Date()) + String.format("%0" + numberOfDigits + "d", serialNumberSeed);
     }
@@ -142,7 +142,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
             int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuidAndStartTime(processTaskVo);
             if (rowNum > 0) {
                 int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
-                long max = (long)Math.pow(10, numberOfDigits) - 1;
+                long max = (long) Math.pow(10, numberOfDigits) - 1;
                 long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
                 long serialNumberSeed = startValue;
                 String timeFormat = null;
@@ -153,7 +153,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
                     processTaskVo.setCurrentPage(currentPage);
                     processTaskVo.setPageSize(pageSize);
                     List<ProcessTaskVo> processTaskList =
-                        processTaskMapper.getProcessTaskListByChannelTypeUuidAndStartTime(processTaskVo);
+                            processTaskMapper.getProcessTaskListByChannelTypeUuidAndStartTime(processTaskVo);
                     for (ProcessTaskVo processTask : processTaskList) {
                         String startTimeFormat = sdf.format(processTask.getStartTime());
                         if (!Objects.equals(timeFormat, startTimeFormat)) {
@@ -171,9 +171,9 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
                 }
             }
             return rowNum;
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
-        }finally {
+        } finally {
             processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicyEndTimeByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
         }
         return 0;
@@ -183,16 +183,16 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
     @Override
     public Long calculateSerialNumberSeedAfterBatchUpdateHistoryProcessTask(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
-        long max = (long)Math.pow(10, numberOfDigits) - 1;
+        long max = (long) Math.pow(10, numberOfDigits) - 1;
         long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
         ProcessTaskVo processTaskVo = new ProcessTaskVo();
         processTaskVo.setChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
         processTaskVo.setStartTime(LocalDate.now().toDate());
         int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuidAndStartTime(processTaskVo);
-        rowNum += startValue;        
+        rowNum += startValue;
         return rowNum % max;
     }
-    
+
     @PostConstruct
     public void init() {
         List<TenantVo> tenantList = tenantMapper.getAllActiveTenant();
@@ -217,7 +217,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
                 TenantContext.get().switchTenant(tenantUuid).setUseDefaultDatasource(false);
                 IJob job = SchedulerManager.getHandler(ProcessTaskSerialNumberSeedResetJob.class.getName());
                 JobObject.Builder jobObjectBuilder = new JobObject.Builder(UuidUtil.randomUuid(), job.getGroupName(),
-                    job.getClassName(), TenantContext.get().getTenantUuid()).addData("handler",
+                        job.getClassName(), TenantContext.get().getTenantUuid()).addData("handler",
                         DateTimeAndAutoIncrementPolicy.class.getName());
                 JobObject jobObject = jobObjectBuilder.build();
                 job.reloadJob(jobObject);
@@ -251,11 +251,11 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
         public void reloadJob(JobObject jobObject) {
             String tenantUuid = jobObject.getTenantUuid();
             TenantContext.get().switchTenant(tenantUuid);
-            String handler = (String)jobObject.getData("handler");
+            String handler = (String) jobObject.getData("handler");
             if (CronExpression.isValidExpression(cron)) {
                 JobObject.Builder newJobObjectBuilder =
-                    new JobObject.Builder(jobObject.getJobName(), this.getGroupName(), this.getClassName(),
-                        TenantContext.get().getTenantUuid()).withCron(cron).addData("handler", handler);
+                        new JobObject.Builder(jobObject.getJobName(), this.getGroupName(), this.getClassName(),
+                                TenantContext.get().getTenantUuid()).withCron(cron).addData("handler", handler);
                 JobObject newJobObject = newJobObjectBuilder.build();
                 schedulerManager.loadJob(newJobObject);
             }
@@ -268,13 +268,13 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
 
         @Override
         public void executeInternal(JobExecutionContext context, JobObject jobObject) throws JobExecutionException {
-            String handler = (String)jobObject.getData("handler");
+            String handler = (String) jobObject.getData("handler");
             List<ProcessTaskSerialNumberPolicyVo> processTaskSerialNumberPolicyList =
-                processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyListByHandler(handler);
+                    processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyListByHandler(handler);
             for (ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo : processTaskSerialNumberPolicyList) {
                 ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicy =
-                    processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(
-                        processTaskSerialNumberPolicyVo.getChannelTypeUuid());
+                        processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(
+                                processTaskSerialNumberPolicyVo.getChannelTypeUuid());
                 Long startValue = 1L;
                 Long value = processTaskSerialNumberPolicy.getConfig().getLong("startValue");
                 if (value != null) {
@@ -282,7 +282,7 @@ public class DateTimeAndAutoIncrementPolicy implements IProcessTaskSerialNumberP
                 }
                 processTaskSerialNumberPolicyVo.setSerialNumberSeed(startValue);
                 processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
-                    processTaskSerialNumberPolicyVo.getChannelTypeUuid(), startValue);
+                        processTaskSerialNumberPolicyVo.getChannelTypeUuid(), startValue);
             }
         }
     }

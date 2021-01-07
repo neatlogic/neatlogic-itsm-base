@@ -91,7 +91,7 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
         }
         resultObj.put("startValue", startValue);
         Integer digits = jsonObj.getInteger("digits");
-        if(digits != null) {
+        if (digits != null) {
             resultObj.put("digits", digits);
             resultObj.put("numberOfDigits", digits);
         }
@@ -101,13 +101,13 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
     @Override
     public String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
-        long max = (long)Math.pow(10, numberOfDigits) - 1;
+        long max = (long) Math.pow(10, numberOfDigits) - 1;
         long serialNumberSeed = processTaskSerialNumberPolicyVo.getSerialNumberSeed();
         if (serialNumberSeed > max) {
             serialNumberSeed -= max;
         }
         processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
-            processTaskSerialNumberPolicyVo.getChannelTypeUuid(), serialNumberSeed + 1);
+                processTaskSerialNumberPolicyVo.getChannelTypeUuid(), serialNumberSeed + 1);
         return String.format("%0" + numberOfDigits + "d", serialNumberSeed);
     }
 
@@ -119,7 +119,7 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
             int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuidAndStartTime(processTaskVo);
             if (rowNum > 0) {
                 int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
-                long max = (long)Math.pow(10, numberOfDigits) - 1;
+                long max = (long) Math.pow(10, numberOfDigits) - 1;
                 long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
                 int pageSize = 1000;
                 int pageCount = PageUtil.getPageCount(rowNum, pageSize);
@@ -127,7 +127,7 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
                     processTaskVo.setCurrentPage(currentPage);
                     processTaskVo.setPageSize(pageSize);
                     List<ProcessTaskVo> processTaskList =
-                        processTaskMapper.getProcessTaskListByChannelTypeUuidAndStartTime(processTaskVo);
+                            processTaskMapper.getProcessTaskListByChannelTypeUuidAndStartTime(processTaskVo);
                     for (ProcessTaskVo processTask : processTaskList) {
                         String serialNumber = String.format("%0" + numberOfDigits + "d", startValue);
                         processTaskMapper.updateProcessTaskSerialNumberById(processTask.getId(), serialNumber);
@@ -140,23 +140,23 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
                 }
             }
             return rowNum;
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
-        }finally {
+        } finally {
             processTaskSerialNumberMapper.updateProcessTaskSerialNumberPolicyEndTimeByChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
-        }      
+        }
         return 0;
     }
 
     @Override
     public Long calculateSerialNumberSeedAfterBatchUpdateHistoryProcessTask(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo) {
         int numberOfDigits = processTaskSerialNumberPolicyVo.getConfig().getIntValue("numberOfDigits");
-        long max = (long)Math.pow(10, numberOfDigits) - 1;
+        long max = (long) Math.pow(10, numberOfDigits) - 1;
         long startValue = processTaskSerialNumberPolicyVo.getConfig().getLongValue("startValue");
         ProcessTaskVo processTaskVo = new ProcessTaskVo();
         processTaskVo.setChannelTypeUuid(processTaskSerialNumberPolicyVo.getChannelTypeUuid());
         int rowNum = processTaskMapper.getProcessTaskCountByChannelTypeUuidAndStartTime(processTaskVo);
-        rowNum += startValue;        
+        rowNum += startValue;
         return rowNum % max;
     }
 }
