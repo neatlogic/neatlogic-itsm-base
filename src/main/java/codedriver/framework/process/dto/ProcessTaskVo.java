@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import codedriver.framework.dto.UserVo;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -48,14 +49,18 @@ public class ProcessTaskVo extends BasePageVo {
     private ProcessTaskStatusVo statusVo;
     @EntityField(name = "上报人userUuid", type = ApiParamType.STRING)
     private String owner;
-    @EntityField(name = "上报人", type = ApiParamType.STRING)
-    private String ownerName;
-    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
-    private Integer ownerVipLevel;
+    @EntityField(name = "上报人")
+    private UserVo ownerVo;
+//    @EntityField(name = "上报人", type = ApiParamType.STRING)
+//    private String ownerName;
+//    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
+//    private Integer ownerVipLevel;
     @EntityField(name = "代报人userUuid", type = ApiParamType.STRING)
     private String reporter;
-    @EntityField(name = "代报人", type = ApiParamType.STRING)
-    private String reporterName;
+    @EntityField(name = "代报人")
+    private UserVo reporterVo;
+//    @EntityField(name = "代报人", type = ApiParamType.STRING)
+//    private String reporterName;
     @EntityField(name = "开始时间", type = ApiParamType.LONG)
     private Date startTime;
     @EntityField(name = "结束时间", type = ApiParamType.LONG)
@@ -178,13 +183,21 @@ public class ProcessTaskVo extends BasePageVo {
         this.owner = owner;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public UserVo getOwnerVo() {
+        return ownerVo;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setOwnerVo(UserVo ownerVo) {
+        this.ownerVo = ownerVo;
     }
+
+    //    public String getOwnerName() {
+//        return ownerName;
+//    }
+//
+//    public void setOwnerName(String ownerName) {
+//        this.ownerName = ownerName;
+//    }
 
     public String getReporter() {
         return reporter;
@@ -194,13 +207,21 @@ public class ProcessTaskVo extends BasePageVo {
         this.reporter = reporter;
     }
 
-    public String getReporterName() {
-        return reporterName;
+    public UserVo getReporterVo() {
+        return reporterVo;
     }
 
-    public void setReporterName(String reporterName) {
-        this.reporterName = reporterName;
+    public void setReporterVo(UserVo reporterVo) {
+        this.reporterVo = reporterVo;
     }
+
+    //    public String getReporterName() {
+//        return reporterName;
+//    }
+//
+//    public void setReporterName(String reporterName) {
+//        this.reporterName = reporterName;
+//    }
 
     public Date getStartTime() {
         return startTime;
@@ -472,13 +493,13 @@ public class ProcessTaskVo extends BasePageVo {
         this.paramObj = paramObj;
     }
 
-    public Integer getOwnerVipLevel() {
-        return ownerVipLevel;
-    }
-
-    public void setOwnerVipLevel(Integer ownerVipLevel) {
-        this.ownerVipLevel = ownerVipLevel;
-    }
+//    public Integer getOwnerVipLevel() {
+//        return ownerVipLevel;
+//    }
+//
+//    public void setOwnerVipLevel(Integer ownerVipLevel) {
+//        this.ownerVipLevel = ownerVipLevel;
+//    }
 
     public Integer getIsShow() {
         return isShow;

@@ -46,6 +46,12 @@
 		<result column="channel_type_uuid" property="channelTypeUuid" />
 		<result column="isFavorite" property="isFavorite" />
 		<result column="sort" property="sort" />
+		<result column="parentUuids" property="parentUuids" />
+		<result column="parentNames" property="parentNames" />
+		<collection property="priorityList" ofType="codedriver.framework.process.dto.PriorityVo">
+			<result column="priorityUuid" property="uuid" />
+			<result column="priorityName" property="name" />
+		</collection>
 	</resultMap>
 
 	<select id="searchChannelList" parameterType="codedriver.framework.process.dto.ChannelVo" resultMap="channelMap" useCache="false">
@@ -112,10 +118,12 @@
 		c.`name` as `text`
 		FROM
 		`channel` c
-		<if test="isFavorite != 1">
+		<if test="isFavorite != 1 and userUuid != null and userUuid != ''">
 			LEFT
 		</if>
+		<if test="userUuid != null and userUuid != ''">
 		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.`user_uuid` = #{userUuid}
+		</if>
 		WHERE 1=1
 		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
 			AND c.`uuid` IN
@@ -139,7 +147,7 @@
 			AND c.`support` != 'mobile'
 		</if>
 		<choose>
-			<when test="isFavorite == 1">
+			<when test="isFavorite == 1 and userUuid != null and userUuid != ''">
 				ORDER BY cu.`insert_time` DESC
 			</when>
 			<otherwise>
@@ -236,6 +244,17 @@
 		`is_default` AS isDefault
 		FROM `channel_priority`
 		WHERE channel_uuid = #{channelUuid}
+	</select>
+
+	<select id="getAllChannelPriorityList" resultMap="channelMap" useCache="false">
+		SELECT
+			a.`uuid` ,
+			a.`name` ,
+			b.`priority_uuid` AS priorityUuid,
+			c.`name` AS priorityName
+		FROM channel a
+		LEFT JOIN channel_priority b ON a.`uuid` = b.`channel_uuid`
+		LEFT JOIN priority c ON b.`priority_uuid` = c.`uuid`
 	</select>
 
 	<select id="checkChannelIsExists" parameterType="java.lang.String" resultType="int" useCache="false">

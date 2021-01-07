@@ -1,50 +1,18 @@
 package codedriver.framework.process.dao.mapper;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
-
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ESParam;
 import codedriver.framework.elasticsearch.annotation.ESSearch;
-import codedriver.framework.process.dto.ProcessTagVo;
-import codedriver.framework.process.dto.ProcessTaskAssignWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskConfigVo;
-import codedriver.framework.process.dto.ProcessTaskContentVo;
-import codedriver.framework.process.dto.ProcessTaskConvergeVo;
-import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
-import codedriver.framework.process.dto.ProcessTaskFormVo;
-import codedriver.framework.process.dto.ProcessTaskImportAuditVo;
-import codedriver.framework.process.dto.ProcessTaskRelationVo;
-import codedriver.framework.process.dto.ProcessTaskScoreTemplateConfigVo;
-import codedriver.framework.process.dto.ProcessTaskScoreTemplateVo;
-import codedriver.framework.process.dto.ProcessTaskSlaNotifyVo;
-import codedriver.framework.process.dto.ProcessTaskSlaTimeVo;
-import codedriver.framework.process.dto.ProcessTaskSlaTransferVo;
-import codedriver.framework.process.dto.ProcessTaskSlaVo;
-import codedriver.framework.process.dto.ProcessTaskStepAgentVo;
-import codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo;
-import codedriver.framework.process.dto.ProcessTaskStepAuditVo;
-import codedriver.framework.process.dto.ProcessTaskStepConfigVo;
-import codedriver.framework.process.dto.ProcessTaskStepContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepFileVo;
-import codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo;
-import codedriver.framework.process.dto.ProcessTaskStepInOperationVo;
-import codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo;
-import codedriver.framework.process.dto.ProcessTaskStepRelVo;
-import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
-import codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo;
-import codedriver.framework.process.dto.ProcessTaskStepUserVo;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskTagVo;
-import codedriver.framework.process.dto.ProcessTaskTranferReportVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.dto.*;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 public interface ProcessTaskMapper {
     public ProcessTaskSlaVo getProcessTaskSlaById(Long slaId);
+
+    public List<ProcessTaskVo> getProcessTaskByStatusList(@Param("statusList") List<String> statusList,@Param("count") Integer count);
 
     public List<ProcessTaskSlaNotifyVo> getAllProcessTaskSlaNotify();
 
@@ -107,6 +75,8 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepVo> getProcessTaskStepByConvergeId(Long convergeId);
 
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelByFromId(Long fromProcessTaskStepId);
+
+    public List<ProcessTaskStepRelVo> getProcessTaskStepRelListByFromIdList(List<Long> fromProcessTaskStepIdList);
 
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelByToId(Long toProcessTaskStepId);
 
@@ -190,6 +160,8 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserList(ProcessTaskStepUserVo processTaskStepUserVo);
 
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserListByProcessTaskIdList(List<Long> processTaskIdList);
+
+    public List<ProcessTaskStepUserVo> getProcessTaskStepUserListByProcessTaskIdListAndStatusList(@Param("processTaskIdList") List<Long> processTaskIdList,@Param("statusList") List<String> statusList);
 
     public String getProcessTaskScoreInfoById(Long processtaskId);
 
@@ -460,4 +432,5 @@ public interface ProcessTaskMapper {
 
     public int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(
         ProcessTaskStepInOperationVo processTaskStepInOperationVo);
+
 }

@@ -179,7 +179,7 @@
 	</delete>
 
 	<insert id="insertWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
-		INSERT INTO `process_workcenter` (
+		REPLACE INTO `process_workcenter` (
 		  `uuid`,
 		  `name`,
 		  `type`,
