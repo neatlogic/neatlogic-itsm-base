@@ -51,7 +51,7 @@ public class AutoIncrementPolicy implements IProcessTaskSerialNumberPolicyHandle
             jsonObj.put("label", "起始位");
             jsonObj.put("validateList", Arrays.asList("required", new JSONObject() {
                 {
-                    this.put("name", "number");
+                    this.put("name", "integer_p");
                     this.put("message", "请输入正整数");
                 }
             }));
