@@ -37,6 +37,8 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);
 
+    public List<ProcessTaskVo> getProcessTaskListByStepTeamUuidList(@Param("stepTeamUuidList")List<String> stepTeamUuidList);
+
     public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskId(Long processTaskId);
 
     public List<Long> getProcessTaskStepIdByConvergeId(Long convergeId);
