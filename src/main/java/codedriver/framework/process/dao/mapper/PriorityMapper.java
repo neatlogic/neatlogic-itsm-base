@@ -25,6 +25,8 @@ public interface PriorityMapper {
 
 	public Integer getMaxSort();
 
+	public int checkPriorityIsInvoked(String uuid);
+
 	public int insertPriority(PriorityVo priorityVo);
 
 	public int updatePriority(PriorityVo priorityVo);
@@ -48,5 +50,4 @@ public interface PriorityMapper {
 	public int updateSortDecrement(@Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 
 	public int deletePriorityByUuid(String uuid);
-
 }
