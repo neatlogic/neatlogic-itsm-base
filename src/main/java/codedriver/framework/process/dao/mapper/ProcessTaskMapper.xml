@@ -2452,7 +2452,7 @@
 	</insert>
 
 	<insert id="replaceProcessTaskStepConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepConfigVo">
-		REPLACE INTO `processtask_step_config` (`hash`, `config`)
+		insert ignore INTO `processtask_step_config` (`hash`, `config`)
 		VALUES
 		(#{hash}, #{config})
 	</insert>
