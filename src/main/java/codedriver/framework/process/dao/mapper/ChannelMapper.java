@@ -97,7 +97,7 @@ public interface ChannelMapper {
 
     public List<Long> getAuthorizedChannelTypeRelationIdListBySourceChannelUuid(@Param("source") String source,
         @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList,
-        @Param("roleUuidList") List<String> roleUuidList);
+        @Param("roleUuidList") List<String> roleUuidList, @Param("processUserTypeList") List<String> processUserTypeList);
 
     public List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
 
