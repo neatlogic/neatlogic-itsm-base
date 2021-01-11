@@ -291,7 +291,7 @@
 		id = #{value}
 	</select>
 
-	<select id="getProcessTaskListByStepTeamUuidList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<select id="getPendingProcessTaskListByStepTeamUuidList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		select
 		DISTINCT
 		a.`id`,
