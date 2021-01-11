@@ -126,6 +126,25 @@ public class ProcessTaskVo extends BasePageVo {
     private Integer mobileFormUIType;
     @JSONField(serialize = false)
     private transient List<ProcessTaskStepRelVo> stepRelList;
+
+    @JSONField(serialize = false)
+    @EntityField(name = "上报人userName", type = ApiParamType.STRING)
+    private String ownerName;
+    @JSONField(serialize = false)
+    @EntityField(name = "代报人userName", type = ApiParamType.STRING)
+    private String reporterName;
+    @JSONField(serialize = false)
+    @EntityField(name = "优先级名称", type = ApiParamType.STRING)
+    private String priorityName;
+    @JSONField(serialize = false)
+    @EntityField(name = "工作时间窗口名称", type = ApiParamType.STRING)
+    private String worktimeName;
+    @JSONField(serialize = false)
+    @EntityField(name = "服务类型名称", type = ApiParamType.STRING)
+    private String channelTypeName;
+    @JSONField(serialize = false)
+    @EntityField(name = "服务名称", type = ApiParamType.STRING)
+    private String channelName;
     
     public ProcessTaskVo() {
 
@@ -549,4 +568,51 @@ public class ProcessTaskVo extends BasePageVo {
         this.stepRelList = stepRelList;
     }
 
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getReporterName() {
+        return reporterName;
+    }
+
+    public void setReporterName(String reporterName) {
+        this.reporterName = reporterName;
+    }
+
+    public String getPriorityName() {
+        return priorityName;
+    }
+
+    public void setPriorityName(String priorityName) {
+        this.priorityName = priorityName;
+    }
+
+    public String getWorktimeName() {
+        return worktimeName;
+    }
+
+    public void setWorktimeName(String worktimeName) {
+        this.worktimeName = worktimeName;
+    }
+
+    public String getChannelTypeName() {
+        return channelTypeName;
+    }
+
+    public void setChannelTypeName(String channelTypeName) {
+        this.channelTypeName = channelTypeName;
+    }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
 }
