@@ -224,6 +224,8 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
             processTaskMapper.getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(
                 processTaskStepVo.getProcessTaskId(), currentProcessTaskStep.getId());
         processTaskStepVo.setWorkerList(workerList);
+        List<ProcessTaskStepUserVo> userList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStep.getId(), null);
+        processTaskStepVo.setUserList(userList);
         IProcessStepUtilHandler handler = ProcessStepUtilHandlerFactory.getHandler(processTaskStepVo.getHandler());
         if (handler == null) {
             throw new ProcessStepHandlerNotFoundException(processTaskStepVo.getHandler());

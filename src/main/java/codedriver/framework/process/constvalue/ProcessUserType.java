@@ -13,7 +13,7 @@ public enum ProcessUserType implements IUserType {
 	OWNER("owner","上报人",true),
 	REPORTER("reporter","代报人",true),
 	WORKER("worker", "待处理人",true),
-	DEFAULT_WORKER("defaultworker", "异常处理人",true),
+	DEFAULT_WORKER("defaultworker", "异常处理人",false),
 	FOCUS_USER("focususer","关注人",false)
 	;
 
