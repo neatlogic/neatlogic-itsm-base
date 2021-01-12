@@ -12,6 +12,7 @@ import codedriver.framework.notify.core.NotifyHandlerFactory;
 import codedriver.framework.notify.core.NotifyHandlerType;
 import codedriver.framework.notify.dto.NotifyTriggerTemplateVo;
 import codedriver.framework.notify.dto.NotifyTriggerVo;
+import codedriver.framework.process.constvalue.*;
 import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
 import codedriver.framework.process.notify.template.IDefaultTemplate;
 import org.apache.commons.collections4.CollectionUtils;
@@ -27,10 +28,6 @@ import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.ConditionParamVo;
 import codedriver.framework.dto.ExpressionVo;
 import codedriver.framework.notify.core.NotifyPolicyHandlerBase;
-import codedriver.framework.process.constvalue.ConditionProcessTaskOptions;
-import codedriver.framework.process.constvalue.ProcessConditionModel;
-import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
-import codedriver.framework.process.constvalue.ProcessTaskParams;
 import codedriver.framework.process.notify.core.SlaNotifyTriggerType;
 
 @Component
@@ -127,6 +124,9 @@ public class SlaNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 		List<String> groupList = JSON.parseArray(config.getJSONArray("groupList").toJSONString(), String.class);
 		groupList.add(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue());
 		config.put("groupList", groupList);
+        List<String> includeList = JSON.parseArray(config.getJSONArray("includeList").toJSONString(), String.class);
+        includeList.add(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.DEFAULT_WORKER.getValue());
+        config.put("includeList", includeList);
 	}
 
     @Override
