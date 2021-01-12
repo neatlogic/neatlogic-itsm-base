@@ -179,7 +179,7 @@ public class ProcessTaskSlaTransferJob extends JobBase {
 									IProcessStepHandler stepHandler = ProcessStepHandlerFactory.getHandler(processTaskStepVo.getHandler());
 									if (stepHandler != null) {
 										/** 执行转交前，设置当前用户为system,用于权限校验 **/
-										UserContext.init(SystemUser.SYSTEM.getConfig(), null, SystemUser.SYSTEM.getTimezone(), null, null);
+										UserContext.init(SystemUser.SYSTEM.getUserVo(), SystemUser.SYSTEM.getTimezone());
 										stepHandler.transfer(processTaskStepVo, workerList);
 									}
 								}

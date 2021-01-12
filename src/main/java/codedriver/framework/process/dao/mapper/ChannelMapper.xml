@@ -670,6 +670,13 @@
 			</foreach>
 			)
 		</if>
+		<if test="processUserTypeList != null and processUserTypeList.size() > 0">
+			OR (`type` = 'processUserType' AND `uuid` IN
+			<foreach collection="processUserTypeList" item="processUserType" open="(" separator="," close=")">
+				#{processUserType}
+			</foreach>
+			)
+		</if>
 		)
 	</select>
 

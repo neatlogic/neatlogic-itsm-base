@@ -9,7 +9,7 @@ import java.util.Map;
 public enum ProcessUserType implements IUserType {
 	MAJOR("major", "处理人",true), 
 	MINOR("minor", "协助处理人",true),
-	AGENT("agent","代办人",true),
+//	AGENT("agent","代办人",true),
 	OWNER("owner","上报人",true),
 	REPORTER("reporter","代报人",true),
 	WORKER("worker", "待处理人",true),

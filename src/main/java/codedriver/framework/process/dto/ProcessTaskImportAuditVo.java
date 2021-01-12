@@ -2,6 +2,7 @@ package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -31,6 +32,8 @@ public class ProcessTaskImportAuditVo extends BasePageVo {
 	private Date importTime;
 	@EntityField(name = "上报人用户名", type = ApiParamType.STRING)
 	private String ownerName;
+	@EntityField(name = "上报人vo")
+	private UserVo ownerVo;
 	@EntityField(name = "服务名称", type = ApiParamType.STRING)
 	private String channelName;
 
@@ -131,5 +134,13 @@ public class ProcessTaskImportAuditVo extends BasePageVo {
 
 	public void setChannelName(String channelName) {
 		this.channelName = channelName;
+	}
+
+	public UserVo getOwnerVo() {
+		return ownerVo;
+	}
+
+	public void setOwnerVo(UserVo ownerVo) {
+		this.ownerVo = ownerVo;
 	}
 }

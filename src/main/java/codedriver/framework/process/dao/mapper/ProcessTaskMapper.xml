@@ -291,6 +291,37 @@
 		id = #{value}
 	</select>
 
+	<select id="getPendingProcessTaskListByStepTeamUuidList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+		select
+		DISTINCT
+		a.`id`,
+		a.`title`,
+		a.`process_uuid` as processUuid,
+		(select `name` from `channel` where `uuid` = a.`channel_uuid`) as channelName,
+		(select `name` from `priority` where `uuid` = a.`priority_uuid`) as priorityName,
+		a.`status`,
+		a.`start_time` as startTime,
+		a.`end_time` as endTime,
+		(select `user_name` from `user` where `uuid` = a.`owner`) as ownerName,
+		(select `user_name` from `user` where `uuid` = a.`reporter`) as reporterName,
+		a.`worktime_uuid` as worktimeUuid,
+		(select `name` from `worktime` where `uuid` = a.`worktime_uuid`) as worktimeName,
+		a.`serial_number` as serialNumber
+		from `processtask` a
+		left join `processtask_step` b
+		on a.`id` = b.`processtask_id` and b.`status` = 'pending'
+		left join `processtask_step_worker` c
+		on a.`id` = c.`processtask_id`
+		<where>
+			<if test="stepTeamUuidList != null and stepTeamUuidList.size()>0">
+				and c.`uuid` in
+				<foreach collection="stepTeamUuidList" item="uuid" open="(" separator="," close=")">
+					#{uuid}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
 	<select id="getProcessTaskFormByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
 		SELECT
 		a.`processtask_id` as processTaskId,
@@ -2421,7 +2452,7 @@
 	</insert>
 
 	<insert id="replaceProcessTaskStepConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepConfigVo">
-		REPLACE INTO `processtask_step_config` (`hash`, `config`)
+		insert ignore INTO `processtask_step_config` (`hash`, `config`)
 		VALUES
 		(#{hash}, #{config})
 	</insert>

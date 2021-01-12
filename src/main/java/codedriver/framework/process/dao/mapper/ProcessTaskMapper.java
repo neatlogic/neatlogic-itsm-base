@@ -37,6 +37,15 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);
 
+    /**
+     * @Description: 根据组uuid查询待处理的工单
+     * @Author: laiwt
+     * @Date: 2021/1/11 12:01
+     * @Params: [stepTeamUuidList]
+     * @Returns: java.util.List<codedriver.framework.process.dto.ProcessTaskVo>
+    **/
+    public List<ProcessTaskVo> getPendingProcessTaskListByStepTeamUuidList(@Param("stepTeamUuidList")List<String> stepTeamUuidList);
+
     public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskId(Long processTaskId);
 
     public List<Long> getProcessTaskStepIdByConvergeId(Long convergeId);

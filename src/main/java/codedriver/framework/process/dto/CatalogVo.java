@@ -23,7 +23,6 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Seria
     private static final long serialVersionUID = 9045187703084309757L;
     public final static String ROOT_UUID = "0";
 	public final static String ROOT_PARENTUUID = "-1";
-	public final static String UNCATEGORIZED_CATALOG_UUID = "1";
 	@EntityField(name = "服务目录uuid", type = ApiParamType.STRING)
 	private String uuid;
 	
@@ -52,7 +51,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Seria
 	private String type = "catalog";
 	
 	@EntityField(name = "授权对象", type = ApiParamType.JSONARRAY)
-	private List<String> authorityList;
+	private List<String> authorityList = new ArrayList<>();
 	
 	@EntityField(name = "左编码", type = ApiParamType.INTEGER)
 	private Integer lft;
@@ -212,8 +211,7 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Seria
 	}
 
 	public List<String> getAuthorityList() {
-		if(authorityList == null && CollectionUtils.isNotEmpty(authorityVoList)) {
-			authorityList = new ArrayList<>();
+		if(CollectionUtils.isEmpty(authorityList) && CollectionUtils.isNotEmpty(authorityVoList)) {
 			for(AuthorityVo authorityVo : authorityVoList) {
 				GroupSearch groupSearch = GroupSearch.getGroupSearch(authorityVo.getType());
 				if(groupSearch != null) {

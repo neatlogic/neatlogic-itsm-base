@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import codedriver.framework.process.dto.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,14 +21,6 @@ import codedriver.framework.dto.TeamVo;
 import codedriver.framework.process.constvalue.ProcessField;
 import codedriver.framework.process.constvalue.ProcessTaskParams;
 import codedriver.framework.process.constvalue.ProcessUserType;
-import codedriver.framework.process.dto.AttributeDataVo;
-import codedriver.framework.process.dto.FormAttributeVo;
-import codedriver.framework.process.dto.FormVersionVo;
-import codedriver.framework.process.dto.ProcessTaskStepReplyVo;
-import codedriver.framework.process.dto.ProcessTaskStepSubtaskVo;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
 import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
 
@@ -202,6 +195,9 @@ public class ProcessTaskUtil {
             if(CollectionUtils.isNotEmpty(processTaskStepWorkerList)) {
                 List<String> workerNameList = processTaskStepWorkerList.stream().filter(e -> e.getUserType().equals(ProcessUserType.MAJOR.getValue())).map(ProcessTaskStepWorkerVo::getName).collect(Collectors.toList());
                 resultObj.put(ProcessTaskParams.STEPWORKER.getValue(), String.join("、", workerNameList));
+            } else if(CollectionUtils.isNotEmpty(currentProcessTaskStep.getUserList())){
+                List<String> userNameList = currentProcessTaskStep.getUserList().stream().filter(e -> e.getUserType().equals(ProcessUserType.MAJOR.getValue())).map(e -> e.getUserVo().getUserName()).collect(Collectors.toList());
+                resultObj.put(ProcessTaskParams.STEPWORKER.getValue(), String.join("、", userNameList));
             }
             ProcessTaskStepSubtaskVo subtaskVo = currentProcessTaskStep.getCurrentSubtaskVo();
             if(subtaskVo != null) {
