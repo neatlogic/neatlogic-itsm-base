@@ -1,7 +1,10 @@
 package codedriver.framework.process.message.handler;
 
 import codedriver.framework.message.core.MessageHandlerBase;
+import codedriver.framework.notify.dto.NotifyVo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Title: ProcessTaskMessageHandler
@@ -23,5 +26,15 @@ public class ProcessTaskMessageHandler extends MessageHandlerBase {
     @Override
     public String getDescription() {
         return "实时显示待处理工单信息，支持快速审批";
+    }
+
+    @Override
+    public boolean getNeedCompression() {
+        return false;
+    }
+
+    @Override
+    public NotifyVo compress(List<NotifyVo> notifyVoList) {
+        return null;
     }
 }
