@@ -63,7 +63,7 @@ public abstract class RemindDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.currentUserName}】已将【${DATA.step.name}】步骤转交给" + PROCESSTASK_STEP_MOJOR_OR_WORKERLIST + "处理；<br>")
+					.append("工单" + PROCESSTASK_ID_TITLE + "中，【${DATA.currentUserName}】已将【${DATA.step.name}】步骤转交给" + PROCESSTASK_STEP_WORKER + "处理；<br>")
 					.append("原因：【${DATA.content}】 ；<br>")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();

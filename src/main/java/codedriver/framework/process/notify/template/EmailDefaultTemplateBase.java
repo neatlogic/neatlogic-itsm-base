@@ -317,7 +317,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 		@Override
 		public String getContent() {
 			return new StringBuilder()
-					.append(OPERATOR + "已将" + PROCESSTASK_STEP_NAME + "转交给" + PROCESSTASK_STEP_MOJOR_OR_WORKERLIST + "处理。\n")
+					.append(OPERATOR + "已将" + PROCESSTASK_STEP_NAME + "转交给" + PROCESSTASK_STEP_WORKER + "处理。\n")
 					.append(PROCESSTASK_DETAILS_LINK)
 					.toString();
 		}
