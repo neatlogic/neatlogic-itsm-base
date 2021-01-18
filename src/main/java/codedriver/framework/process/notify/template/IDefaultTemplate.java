@@ -23,7 +23,7 @@ public interface IDefaultTemplate {
     String CHANGE_STEP_WORKER = "【" + ProcessTaskParams.CHANGESTEPWORKER.getFreemarkerTemplate() + "】";
 
     String PROCESSTASK_DETAILS_URL = "${homeUrl}/process.html#/task-detail?processTaskId=${DATA.id}";
-    String PROCESSTASK_ID_TITLE = "【" + ProcessTaskParams.ID.getFreemarkerTemplate() + "-" + ProcessTaskParams.TITLE.getFreemarkerTemplate() + "】";
+    String PROCESSTASK_SERIALNUMBER_TITLE = "【" + ProcessTaskParams.SERIALNUMBER.getFreemarkerTemplate() + "-" + ProcessTaskParams.TITLE.getFreemarkerTemplate() + "】";
     String PROCESSTASK_DETAILS_LINK = "查看详情：<a href=" + PROCESSTASK_DETAILS_URL + "><b>【工单链接】</b></a>";
 
     public default Long getId() {

@@ -14,13 +14,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "工单上报完成提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "工单上报完成提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append("【${DATA.ownername}】上报工单" + PROCESSTASK_ID_TITLE + "。\n")
+                    .append("【${DATA.ownername}】上报工单" + PROCESSTASK_SERIALNUMBER_TITLE + "。\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -41,13 +41,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "催办工单提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "催办工单提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append(OPERATOR + "对工单" + PROCESSTASK_ID_TITLE + "发起催办。\n")
+                    .append(OPERATOR + "对工单" + PROCESSTASK_SERIALNUMBER_TITLE + "发起催办。\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -68,13 +68,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "取消工单提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "取消工单提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append(OPERATOR + "取消了工单" + PROCESSTASK_ID_TITLE + "\n")
+                    .append(OPERATOR + "取消了工单" + PROCESSTASK_SERIALNUMBER_TITLE + "\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -95,13 +95,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "恢复工单提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "恢复工单提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append(OPERATOR + "恢复了工单" + PROCESSTASK_ID_TITLE + "\n")
+                    .append(OPERATOR + "恢复了工单" + PROCESSTASK_SERIALNUMBER_TITLE + "\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -122,13 +122,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "工单完成提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "工单完成提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append(OPERATOR + "完成了工单" + PROCESSTASK_ID_TITLE + "\n")
+                    .append(OPERATOR + "完成了工单" + PROCESSTASK_SERIALNUMBER_TITLE + "\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -149,13 +149,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "重新打开提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "重新打开提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append(OPERATOR + "重新打开了工单" + PROCESSTASK_ID_TITLE + "\n")
+                    .append(OPERATOR + "重新打开了工单" + PROCESSTASK_SERIALNUMBER_TITLE + "\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -176,13 +176,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "工单评分提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "工单评分提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append(OPERATOR + "对工单" + PROCESSTASK_ID_TITLE + "进行了评分。\n")
+                    .append(OPERATOR + "对工单" + PROCESSTASK_SERIALNUMBER_TITLE + "进行了评分。\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -207,13 +207,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤激活提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤激活提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append("工单" + PROCESSTASK_ID_TITLE + "已流转至" + PROCESSTASK_STEP_NAME + "\n")
+                    .append("工单" + PROCESSTASK_SERIALNUMBER_TITLE + "已流转至" + PROCESSTASK_STEP_NAME + "\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -234,7 +234,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤分配处理人提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤分配处理人提醒";
         }
 
         @Override
@@ -261,7 +261,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤处理人分配异常提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤处理人分配异常提醒";
         }
 
         @Override
@@ -288,7 +288,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "处理人响应提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "处理人响应提醒";
         }
 
         @Override
@@ -315,7 +315,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤转交提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤转交提醒";
         }
 
         @Override
@@ -342,7 +342,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤完成提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤完成提醒";
         }
 
         @Override
@@ -369,7 +369,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤回退提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤回退提醒";
         }
 
         @Override
@@ -397,7 +397,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤撤回提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤撤回提醒";
         }
 
         @Override
@@ -425,7 +425,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤挂起提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤挂起提醒";
         }
 
         @Override
@@ -453,7 +453,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤暂停提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤暂停提醒";
         }
 
         @Override
@@ -481,7 +481,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "步骤失败提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "步骤失败提醒";
         }
 
         @Override
@@ -513,7 +513,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "子任务创建提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "子任务创建提醒";
         }
 
         @Override
@@ -543,7 +543,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "子任务更新提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "子任务更新提醒";
         }
 
         @Override
@@ -573,7 +573,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "子任务取消提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "子任务取消提醒";
         }
 
         @Override
@@ -602,7 +602,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "子任务打回重做提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "子任务打回重做提醒";
         }
 
         @Override
@@ -630,7 +630,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "子任务完成提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "子任务完成提醒";
         }
 
         @Override
@@ -658,7 +658,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "所有子任务完成提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "所有子任务完成提醒";
         }
 
         @Override
@@ -689,13 +689,13 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "工单超时提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "工单超时提醒";
         }
 
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append("工单" + PROCESSTASK_ID_TITLE + "即将在【${DATA.expiretime}】后超时\n")
+                    .append("工单" + PROCESSTASK_SERIALNUMBER_TITLE + "即将在【${DATA.expiretime}】后超时\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
@@ -720,7 +720,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "变更步骤处理人响应提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "变更步骤处理人响应提醒";
         }
 
         @Override
@@ -747,7 +747,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "变更步骤完成提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "变更步骤完成提醒";
         }
 
         @Override
@@ -774,7 +774,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "变更步骤取消提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "变更步骤取消提醒";
         }
 
         @Override
@@ -801,7 +801,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "变更步骤新增评论提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "变更步骤新增评论提醒";
         }
 
         @Override
@@ -828,7 +828,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "所有变更步骤完成提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "所有变更步骤完成提醒";
         }
 
         @Override
@@ -855,7 +855,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "变更开始提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "变更开始提醒";
         }
 
         @Override
@@ -882,7 +882,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "变更暂停提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "变更暂停提醒";
         }
 
         @Override
@@ -909,7 +909,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "变更恢复提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "变更恢复提醒";
         }
 
         @Override
@@ -936,7 +936,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
 
         @Override
         public String getTitle() {
-            return PROCESSTASK_ID_TITLE + "变更重新开始提醒";
+            return PROCESSTASK_SERIALNUMBER_TITLE + "变更重新开始提醒";
         }
 
         @Override
