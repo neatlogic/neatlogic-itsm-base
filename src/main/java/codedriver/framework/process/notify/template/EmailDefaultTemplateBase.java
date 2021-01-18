@@ -267,7 +267,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append("工单步骤" + PROCESSTASK_STEP_NAME + "分配处理人异常，原因" + REASON)
+                    .append("工单步骤" + PROCESSTASK_STEP_NAME + "分配处理人异常，原因：根据分配策略没有找到处理人")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
