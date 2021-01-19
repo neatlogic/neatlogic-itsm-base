@@ -358,50 +358,53 @@ public abstract class ProcessStepHandlerUtilBase {
                                 }
                             }
                             boolean isSucceed = false;
+                            System.out.println(triggerType.getText() + ":url-" + integrationVo.getUrl());
                             IntegrationResultVo integrationResultVo =
                                 iIntegrationHandler.sendRequest(integrationVo, ProcessRequestFrom.PROCESS);
                             if (StringUtils.isNotBlank(integrationResultVo.getError())) {
                                 logger.error(integrationResultVo.getError());
-                                throw new IntegrationSendRequestException(integrationVo.getUuid());
-                            }
-                            JSONObject successConditionObj = actionObj.getJSONObject("successCondition");
-                            if (MapUtils.isNotEmpty(successConditionObj)) {
-                                String name = successConditionObj.getString("name");
-                                if (StringUtils.isNotBlank(name)) {
-                                    String resultValue = null;
-                                    String transformedResult = integrationResultVo.getTransformedResult();
-                                    if (StringUtils.isNotBlank(transformedResult)) {
-                                        JSONObject transformedResultObj = JSON.parseObject(transformedResult);
-                                        if (MapUtils.isNotEmpty(transformedResultObj)) {
-                                            resultValue = transformedResultObj.getString(name);
-                                        }
-                                    }
-                                    if (resultValue == null) {
-                                        String rawResult = integrationResultVo.getRawResult();
-                                        if (StringUtils.isNotEmpty(rawResult)) {
-                                            JSONObject rawResultObj = JSON.parseObject(rawResult);
-                                            if (MapUtils.isNotEmpty(rawResultObj)) {
-                                                resultValue = rawResultObj.getString(name);
+//                                throw new IntegrationSendRequestException(integrationVo.getUuid());
+                            }else {
+                                JSONObject successConditionObj = actionObj.getJSONObject("successCondition");
+                                if (MapUtils.isNotEmpty(successConditionObj)) {
+                                    String name = successConditionObj.getString("name");
+                                    if (StringUtils.isNotBlank(name)) {
+                                        String resultValue = null;
+                                        String transformedResult = integrationResultVo.getTransformedResult();
+                                        if (StringUtils.isNotBlank(transformedResult)) {
+                                            JSONObject transformedResultObj = JSON.parseObject(transformedResult);
+                                            if (MapUtils.isNotEmpty(transformedResultObj)) {
+                                                resultValue = transformedResultObj.getString(name);
                                             }
                                         }
+                                        if (resultValue == null) {
+                                            String rawResult = integrationResultVo.getRawResult();
+                                            if (StringUtils.isNotEmpty(rawResult)) {
+                                                JSONObject rawResultObj = JSON.parseObject(rawResult);
+                                                if (MapUtils.isNotEmpty(rawResultObj)) {
+                                                    resultValue = rawResultObj.getString(name);
+                                                }
+                                            }
+                                        }
+                                        if (resultValue != null) {
+                                            List<String> curentValueList = new ArrayList<>();
+                                            curentValueList.add(resultValue);
+                                            String value = successConditionObj.getString("value");
+                                            List<String> targetValueList = new ArrayList<>();
+                                            targetValueList.add(value);
+                                            String expression = successConditionObj.getString("expression");
+                                            isSucceed =
+                                                    ConditionUtil.predicate(curentValueList, expression, targetValueList);
+                                        }
                                     }
-                                    if (resultValue != null) {
-                                        List<String> curentValueList = new ArrayList<>();
-                                        curentValueList.add(resultValue);
-                                        String value = successConditionObj.getString("value");
-                                        List<String> targetValueList = new ArrayList<>();
-                                        targetValueList.add(value);
-                                        String expression = successConditionObj.getString("expression");
-                                        isSucceed =
-                                            ConditionUtil.predicate(curentValueList, expression, targetValueList);
+                                } else {
+                                    String statusCode = String.valueOf(integrationResultVo.getStatusCode());
+                                    if (statusCode.startsWith("2") || statusCode.startsWith("3")) {
+                                        isSucceed = true;
                                     }
-                                }
-                            } else {
-                                String statusCode = String.valueOf(integrationResultVo.getStatusCode());
-                                if (statusCode.startsWith("2") || statusCode.startsWith("3")) {
-                                    isSucceed = true;
                                 }
                             }
+
                             ActionVo actionVo = new ActionVo();
                             actionVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
                             actionVo.setProcessTaskStepName(currentProcessTaskStepVo.getName());
