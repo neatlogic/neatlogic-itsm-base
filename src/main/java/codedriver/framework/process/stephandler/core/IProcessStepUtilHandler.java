@@ -74,6 +74,14 @@ public interface IProcessStepUtilHandler {
      * @return void
      */
     public void notify(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger);
+    /**
+     * @Description: 动作
+     * @Author: linbq
+     * @Date: 2021/1/19 15:30
+     * @Params:[currentProcessTaskStepVo, trigger]
+     * @Returns:void
+     **/
+    public void action(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger);
 
     /**
      * 

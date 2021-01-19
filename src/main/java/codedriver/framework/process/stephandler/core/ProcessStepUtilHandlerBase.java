@@ -59,6 +59,11 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     }
 
     @Override
+    public void action(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger) {
+        ActionHandler.action(currentProcessTaskStepVo, trigger);
+    }
+
+    @Override
     public void calculateSla(ProcessTaskVo currentProcessTaskVo, boolean isAsync) {
         SlaHandler.calculate(currentProcessTaskVo, isAsync);
     }
