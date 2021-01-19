@@ -695,7 +695,7 @@ public abstract class EmailDefaultTemplateBase implements IDefaultTemplate {
         @Override
         public String getContent() {
             return new StringBuilder()
-                    .append("工单" + PROCESSTASK_SERIALNUMBER_TITLE + "即将在【${DATA.expiretime}】后超时\n")
+                    .append("工单" + PROCESSTASK_SERIALNUMBER_TITLE + "即将超时\n")
                     .append(PROCESSTASK_DETAILS_LINK)
                     .toString();
         }
