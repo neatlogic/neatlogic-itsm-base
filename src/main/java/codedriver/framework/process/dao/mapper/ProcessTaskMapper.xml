@@ -1651,29 +1651,30 @@
 	<select id="searchProcessTaskImportAudit" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="codedriver.framework.process.dto.ProcessTaskImportAuditVo"
 			useCache="false">
 		SELECT
-		`id`,
-		`processtask_id` as processTaskId,
-		(select `serial_number` from `processtask` where `id` = `processtask_id`) as serialNumber,
-		`title`,
-		`channel_uuid` as channelUuid,
-		(select `name` from
-		`channel` where `uuid` = `channel_uuid`) as channelName,
-		`status`,
-		`error_reason` as errorReason,
-		`owner`,
-		(select u.`user_name` from `user` u where u.`uuid` = `owner`) as ownerName,
-		`import_time` as
-		importTime
+		a.`id`,
+		a.`processtask_id` as processTaskId,
+		b.`serial_number` as serialNumber,
+		a.`title`,
+		(select `name` from `channel` where `uuid` = a.`channel_uuid`) as channelName,
+		a.`status`,
+		a.`error_reason` as errorReason,
+		a.`owner`,
+		(select u.`user_name` from `user` u where u.`uuid` = a.`owner`) as ownerName,
+		a.`import_time` as importTime
 		FROM
-		`processtask_import_audit`
-		WHERE 1=1
+		`processtask_import_audit` a
+		left join `processtask` b
+		on a.`processtask_id` = b.`id`
+		<where>
 		<if test="status != null">
-			and `status` = #{status}
+			and a.`status` = #{status}
 		</if>
 		<if test="keyword != null and keyword != ''">
-			and (`title` like CONCAT('%', #{keyword}, '%') or `processtask_id` like CONCAT('%', #{keyword}, '%'))
+			and (a.`title` like CONCAT('%', #{keyword}, '%')
+			or b.`serial_number` like CONCAT('%', #{keyword}, '%'))
 		</if>
-		order by `import_time` desc
+		</where>
+		order by a.`import_time` desc
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
 		</if>
