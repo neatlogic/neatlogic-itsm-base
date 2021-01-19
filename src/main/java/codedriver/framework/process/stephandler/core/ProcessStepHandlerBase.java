@@ -273,6 +273,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
                     if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
                         TimeAuditHandler.audit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_START);
                         NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.START);
+                        ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.START);
                     }
 
                     /** 计算SLA并触发超时警告 **/
@@ -391,6 +392,7 @@ public abstract class ProcessStepHandlerBase extends ProcessStepHandlerUtilBase 
 //        NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
         if (isAssignException) {
             NotifyHandler.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGNEXCEPTION);
+            ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGNEXCEPTION);
         }
         /** 执行动作 **/
 //        ActionHandler.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
