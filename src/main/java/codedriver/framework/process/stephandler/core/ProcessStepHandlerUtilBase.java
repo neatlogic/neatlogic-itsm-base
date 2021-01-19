@@ -358,7 +358,6 @@ public abstract class ProcessStepHandlerUtilBase {
                                 }
                             }
                             boolean isSucceed = false;
-                            System.out.println(triggerType.getText() + ":url-" + integrationVo.getUrl());
                             IntegrationResultVo integrationResultVo =
                                 iIntegrationHandler.sendRequest(integrationVo, ProcessRequestFrom.PROCESS);
                             if (StringUtils.isNotBlank(integrationResultVo.getError())) {
