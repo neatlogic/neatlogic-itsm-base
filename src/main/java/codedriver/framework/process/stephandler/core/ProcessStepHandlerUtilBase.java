@@ -518,10 +518,8 @@ public abstract class ProcessStepHandlerUtilBase {
                                 policyConfig = notifyPolicyVo.getConfig();
                             }
                         }
-                        ProcessTaskVo processTaskVo = processStepUtilHandler
-                            .getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
-                        processTaskVo.setStartProcessTaskStep(
-                            processStepUtilHandler.getStartProcessTaskStepByProcessTaskId(processTaskVo.getId()));
+                        ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+                        processTaskVo.setStartProcessTaskStep(processStepUtilHandler.getStartProcessTaskStepByProcessTaskId(processTaskVo.getId()));
                         processTaskVo.setCurrentProcessTaskStep(processStepUtilHandler.getCurrentProcessTaskStepDetail(currentProcessTaskStepVo));
                         JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
                         JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);
