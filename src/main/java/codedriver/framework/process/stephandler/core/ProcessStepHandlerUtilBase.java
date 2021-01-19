@@ -364,7 +364,6 @@ public abstract class ProcessStepHandlerUtilBase {
                                 logger.error(integrationResultVo.getError());
                                 throw new IntegrationSendRequestException(integrationVo.getUuid());
                             }
-                            System.out.println("工单处理触发动作：" + triggerType.getText() + ":url-" + integrationVo.getUrl());
                             JSONObject successConditionObj = actionObj.getJSONObject("successCondition");
                             if (MapUtils.isNotEmpty(successConditionObj)) {
                                 String name = successConditionObj.getString("name");
