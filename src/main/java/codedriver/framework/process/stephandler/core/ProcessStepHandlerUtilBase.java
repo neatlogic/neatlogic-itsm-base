@@ -899,7 +899,6 @@ public abstract class ProcessStepHandlerUtilBase {
                         // }
                     }
                 }
-                System.out.println("adjustJob...");
                 /** 作业需要启动，且未启动时，加载定时作业 **/
                 if (isStartJob && !jobStarted) {
                     // 加载定时作业，执行超时通知操作
