@@ -67,4 +67,7 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	public Boolean getMyIsExport() {
         return true;
     }
+
+    @Override
+	public String getSqlTableName(){return null;}
 }

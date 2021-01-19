@@ -107,4 +107,12 @@ public interface IProcessTaskColumn {
 	 */
 	public Boolean getIsExport();
 
+	/**
+	 * @Description: 获取对应数据库表名
+	 * @Author: 89770
+	 * @Date: 2021/1/19 20:01
+	 * @Params: []
+	 * @Returns: java.lang.String
+	 **/
+	public String getSqlTableName();
 }

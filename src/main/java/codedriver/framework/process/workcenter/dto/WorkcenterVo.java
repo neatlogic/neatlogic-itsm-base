@@ -1,27 +1,24 @@
 package codedriver.framework.process.workcenter.dto;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
-
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.DeviceType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	private static final long serialVersionUID = 1952066708451908924L;
@@ -64,6 +61,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
 	//params
 	private List<String> channelUuidList;
 	private JSONArray resultColumnList;
+
+	private String sqlFieldType;
 	
 	public WorkcenterVo() {
 	}
@@ -252,5 +251,12 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable{
     public void setSortList(JSONArray sortList) {
         this.sortList = sortList;
     }
-	
+
+	public String getSqlFieldType() {
+		return sqlFieldType;
+	}
+
+	public void setSqlFieldType(String sqlFieldType) {
+		this.sqlFieldType = sqlFieldType;
+	}
 }
