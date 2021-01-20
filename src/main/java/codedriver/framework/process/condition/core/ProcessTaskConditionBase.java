@@ -1,22 +1,23 @@
 package codedriver.framework.process.condition.core;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
+import codedriver.framework.process.workcenter.table.ISqlTable;
 import codedriver.framework.util.TimeUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 public abstract class ProcessTaskConditionBase implements IProcessTaskCondition {
 
@@ -120,5 +121,42 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
     public String getEsPath(String... values) {
         String esName = getEsName(values);
         return esName;
+    }
+
+    @Override
+    public List<ISqlTable> getSqlTableList(){
+        return getMySqlTableList();
+    }
+
+    public  List<ISqlTable> getMySqlTableList(){
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void getSqlConditionWhere(List<ConditionVo> conditionList,Integer index,StringBuilder sqlSb){
+        ConditionVo condition = conditionList.get(index);
+        if (!getMySqlConditionWhere(conditionList, index,sqlSb)) {
+            Object value = StringUtils.EMPTY;
+            if (condition.getValueList() instanceof String) {
+                value = condition.getValueList();
+            } else if (condition.getValueList() instanceof List) {
+                List<String> values = JSON.parseArray(JSON.toJSONString(condition.getValueList()), String.class);
+                value = String.join("','", values);
+            }
+            if (StringUtils.isNotBlank(value.toString())) {
+                value = String.format("'%s'", value);
+            }
+            IProcessTaskCondition conditionHandler =(IProcessTaskCondition)ConditionHandlerFactory.getHandler(condition.getName());
+            String tableShortName = StringUtils.EMPTY;
+            if(CollectionUtils.isNotEmpty(conditionHandler.getSqlTableList())){
+                tableShortName = conditionHandler.getSqlTableList().get(0).getShortName();
+            }
+            sqlSb.append( String.format(Objects.requireNonNull(Expression.getExpressionSql(condition.getExpression())),tableShortName,conditionHandler.getName(), value));
+
+        }
+    }
+
+    public Boolean getMySqlConditionWhere(List<ConditionVo> conditionList,Integer index,StringBuilder sqlSb){
+        return false;
     }
 }

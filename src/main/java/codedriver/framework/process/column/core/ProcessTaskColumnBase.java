@@ -1,10 +1,13 @@
 package codedriver.framework.process.column.core;
 
 
-import org.apache.commons.collections4.CollectionUtils;
-
+import codedriver.framework.process.workcenter.table.ISqlTable;
 import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
 
 public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 
@@ -69,5 +72,11 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
     }
 
     @Override
-	public String getSqlTableName(){return null;}
+	public Map<ISqlTable,List<String>> getSqlTableColumnMap(){
+		return getMySqlTableColumnMap();
+	}
+
+	public Map<ISqlTable,List<String>> getMySqlTableColumnMap(){
+		return  null;
+	}
 }

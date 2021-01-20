@@ -1,8 +1,10 @@
 package codedriver.framework.process.condition.core;
 
-import java.util.List;
 import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.condition.ConditionVo;
+import codedriver.framework.process.workcenter.table.ISqlTable;
+
+import java.util.List;
 
 public interface IProcessTaskCondition extends IConditionHandler { 
 	
@@ -42,5 +44,22 @@ public interface IProcessTaskCondition extends IConditionHandler {
     * @return
      */
     public String  getEsName(String... values);
-    
+
+	/**
+	 * @Description: 获取关联数据库表
+	 * @Author: 89770
+	 * @Date: 2021/1/19 20:01
+	 * @Params: []
+	 * @Returns: java.lang.String
+	 **/
+	public List<ISqlTable> getSqlTableList();
+
+	/**
+	 * @Description: 根据conditionVo 转成对应的sql
+	 * @Author: 89770
+	 * @Date: 2021/1/20 18:27
+	 * @Params: []
+	 * @Returns: void
+	 **/
+	public void getSqlConditionWhere(List<ConditionVo> conditionList,Integer index,StringBuilder sqlSb);
 }

@@ -1,7 +1,11 @@
 package codedriver.framework.process.column.core;
 
+import codedriver.framework.process.workcenter.table.ISqlTable;
 import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
+
+import java.util.List;
+import java.util.Map;
 
 public interface IProcessTaskColumn {
 	
@@ -108,11 +112,11 @@ public interface IProcessTaskColumn {
 	public Boolean getIsExport();
 
 	/**
-	 * @Description: 获取对应数据库表名
+	 * @Description: 获取对应数据库表名,以及要显示的字段
 	 * @Author: 89770
 	 * @Date: 2021/1/19 20:01
 	 * @Params: []
 	 * @Returns: java.lang.String
 	 **/
-	public String getSqlTableName();
+	public Map<ISqlTable,List<String>> getSqlTableColumnMap();
 }
