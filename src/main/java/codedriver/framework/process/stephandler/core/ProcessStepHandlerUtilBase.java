@@ -289,30 +289,22 @@ public abstract class ProcessStepHandlerUtilBase {
                 JSONArray actionList = null;
                 if (triggerType instanceof TaskNotifyTriggerType) {
                     /** 获取工单配置信息 **/
-                    ProcessTaskVo processTaskVo =
-                        processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-                    String config =
-                        selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
-                    actionList = (JSONArray)JSONPath.read(config, "process.processConfig.actionList");
+                    ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
+                    String config = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
+                    actionList = (JSONArray)JSONPath.read(config, "process.processConfig.actionConfig.actionList");
                 } else {
                     /** 获取步骤配置信息 **/
-                    ProcessTaskStepVo stepVo =
-                        processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
-                    String stepConfig =
-                        selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
+                    ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+                    String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
                     actionList = (JSONArray)JSONPath.read(stepConfig, "actionConfig.actionList");
                     if (CollectionUtils.isEmpty(actionList)) {
-                        IProcessStepUtilHandler processStepUtilHandler =
-                            ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
+                        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
                         if (processStepUtilHandler == null) {
                             throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
                         }
-                        ProcessStepHandlerVo processStepHandlerVo =
-                            processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-                        JSONObject globalConfig = processStepUtilHandler
-                            .makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null);
-                        actionList =
-                            (JSONArray)JSONPath.read(JSON.toJSONString(globalConfig), "actionConfig.actionList");
+                        ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+                        JSONObject globalConfig = processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null);
+                        actionList = (JSONArray)JSONPath.read(JSON.toJSONString(globalConfig), "actionConfig.actionList");
                     }
                 }
 
