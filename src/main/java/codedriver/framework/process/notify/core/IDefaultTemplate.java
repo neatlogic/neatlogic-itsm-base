@@ -1,11 +1,10 @@
-package codedriver.framework.process.notify.template;
+package codedriver.framework.process.notify.core;
 
 import codedriver.framework.process.constvalue.ProcessTaskParams;
 import org.springframework.util.ClassUtils;
 
 import codedriver.framework.notify.core.NotifyHandlerType;
-import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
-import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
+import codedriver.framework.process.notify.constvalue.TaskStepNotifyTriggerType;
 
 public interface IDefaultTemplate {
 
