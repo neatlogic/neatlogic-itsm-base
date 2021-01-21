@@ -1,54 +1,26 @@
 package codedriver.framework.process.stephandler.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.file.dao.mapper.FileMapper;
-import codedriver.framework.process.dao.mapper.*;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-
+import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
+import codedriver.framework.process.dao.mapper.WorktimeMapper;
+import codedriver.framework.process.dto.ProcessStepHandlerVo;
+import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
-
-import codedriver.framework.asynchronization.threadlocal.UserContext;
-import codedriver.framework.common.constvalue.GroupSearch;
-import codedriver.framework.common.constvalue.TeamLevel;
-import codedriver.framework.dto.TeamVo;
-import codedriver.framework.notify.dto.NotifyReceiverVo;
-import codedriver.framework.process.constvalue.ProcessStepType;
-import codedriver.framework.process.constvalue.ProcessTaskOperationType;
-import codedriver.framework.process.constvalue.ProcessUserType;
-import codedriver.framework.process.dto.CatalogVo;
-import codedriver.framework.process.dto.ChannelTypeVo;
-import codedriver.framework.process.dto.ChannelVo;
-import codedriver.framework.process.dto.PriorityVo;
-import codedriver.framework.process.dto.ProcessStepHandlerVo;
-import codedriver.framework.process.dto.ProcessTaskConfigVo;
-import codedriver.framework.process.dto.ProcessTaskContentVo;
-import codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo;
-import codedriver.framework.process.dto.ProcessTaskFormVo;
-import codedriver.framework.process.dto.ProcessTaskStepReplyVo;
-import codedriver.framework.process.dto.ProcessTaskStepContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepRemindVo;
-import codedriver.framework.process.dto.ProcessTaskStepUserVo;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
-import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
-import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType;
-import codedriver.framework.process.stepremind.core.IProcessTaskStepRemindType;
-import codedriver.framework.util.TimeUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class ProcessStepUtilHandlerBase implements IProcessStepUtilHandler {
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class ProcessStepInternalHandlerBase implements IProcessStepInternalHandler {
     protected static ProcessTaskMapper processTaskMapper;
     protected static SelectContentByHashMapper selectContentByHashMapper;
     protected static TeamMapper teamMapper;
@@ -116,7 +88,7 @@ public abstract class ProcessStepUtilHandlerBase implements IProcessStepUtilHand
         ProcessStepHandlerVo processStepHandlerConfig =
             processStepHandlerMapper.getProcessStepHandlerByHandler(handler);
         JSONObject globalConfig = processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null;
-        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(handler);
+        IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
         if (processStepUtilHandler != null) {
             globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
         }

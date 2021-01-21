@@ -1,32 +1,35 @@
 package codedriver.framework.process.stephandler.core;
 
-import java.util.List;
-import java.util.Map;
-
-import com.alibaba.fastjson.JSONObject;
-
-import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.dto.ProcessStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
-import codedriver.framework.process.stepremind.core.IProcessTaskStepRemindType;
+import com.alibaba.fastjson.JSONObject;
 
-public interface IProcessStepUtilHandler {
+import java.util.Map;
+
+/**
+ * @Title: IProcessStepInternalHandler
+ * @Package codedriver.framework.process.stephandler.core
+ * @Description: 处理流程组件内部业务逻辑
+ * @Author: chenqiwei
+ * @Date: 2021/1/20 15:55
+ * Copyright(c) 2021 TechSureCo.,Ltd.AllRightsReserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ **/
+public interface IProcessStepInternalHandler {
 
     public String getHandler();
 
     /**
-     * 
-     * @Time:2020年7月27日
-     * @Description: 处理器特有的步骤信息
      * @param @return
      * @return Object
+     * @Time: 2020年7月27日
+     * @Description: 处理器特有的步骤信息
      */
     public Object getHandlerStepInfo(ProcessTaskStepVo currentProcessTaskStepVo);
 
     /**
-     * 
-     * @Time:2020年8月12日
+     *
+     * @Time: 2020年8月12日
      * @Description: 处理器特有的步骤初始化信息
      * @param @return
      * @return Object
@@ -35,7 +38,7 @@ public interface IProcessStepUtilHandler {
 
     /**
      * @Author: chenqiwei
-     * @Time:Feb 10, 2020
+     * @Time: Feb 10, 2020
      * @Description: 组装步骤节点信息
      * @param @param
      *            processStepVo
@@ -55,8 +58,8 @@ public interface IProcessStepUtilHandler {
     public void updateProcessTaskStepUserAndWorker(Long processTaskId, Long processTaskStepId);
 
     /**
-     * 
-     * @Time:2020年6月30日
+     *
+     * @Time: 2020年6月30日
      * @Description: 构造节点管理配置数据
      * @param configObj
      * @return JSONObject

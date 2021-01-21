@@ -12,14 +12,14 @@ import codedriver.framework.common.RootComponent;
 
 @RootComponent
 @Order(10)
-public class ProcessStepUtilHandlerFactory extends ApplicationListenerBase {
-	private static Map<String, IProcessStepUtilHandler> componentMap = new HashMap<String, IProcessStepUtilHandler>();
+public class ProcessStepInternalHandlerFactory extends ApplicationListenerBase {
+	private static Map<String, IProcessStepInternalHandler> componentMap = new HashMap<String, IProcessStepInternalHandler>();
 
-	public static IProcessStepUtilHandler getHandler(String handler) {
+	public static IProcessStepInternalHandler getHandler(String handler) {
 		return componentMap.get(handler);
 	}
 
-	public static IProcessStepUtilHandler getHandler() {
+	public static IProcessStepInternalHandler getHandler() {
 		/** 随便返回一个handler，主要用来处理作业级操作 **/
 		return componentMap.values().iterator().next();
 	}
@@ -27,9 +27,9 @@ public class ProcessStepUtilHandlerFactory extends ApplicationListenerBase {
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		ApplicationContext context = event.getApplicationContext();
-		Map<String, IProcessStepUtilHandler> myMap = context.getBeansOfType(IProcessStepUtilHandler.class);
-		for (Map.Entry<String, IProcessStepUtilHandler> entry : myMap.entrySet()) {
-			IProcessStepUtilHandler component = entry.getValue();
+		Map<String, IProcessStepInternalHandler> myMap = context.getBeansOfType(IProcessStepInternalHandler.class);
+		for (Map.Entry<String, IProcessStepInternalHandler> entry : myMap.entrySet()) {
+			IProcessStepInternalHandler component = entry.getValue();
 			if (component.getHandler() != null) {
 				componentMap.put(component.getHandler(), component);
 			}
