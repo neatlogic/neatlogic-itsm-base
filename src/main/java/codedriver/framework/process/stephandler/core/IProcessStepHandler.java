@@ -277,7 +277,7 @@ public interface IProcessStepHandler {
 
 	/**
      * @Description: 重新激活步骤
-     * @param  processTaskStepVo
+     * @param  currentProcessTaskStepVo
      * @return int
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
@@ -285,7 +285,7 @@ public interface IProcessStepHandler {
     
     /**
      * @Description: 评分
-     * @param  processTaskStepVo
+     * @param  currentProcessTaskVo
      * @return int
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)

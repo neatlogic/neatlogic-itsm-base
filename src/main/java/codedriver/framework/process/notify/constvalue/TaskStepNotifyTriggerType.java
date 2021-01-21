@@ -1,4 +1,4 @@
-package codedriver.framework.process.notify.core;
+package codedriver.framework.process.notify.constvalue;
 
 import codedriver.framework.notify.core.INotifyTriggerType;
 
