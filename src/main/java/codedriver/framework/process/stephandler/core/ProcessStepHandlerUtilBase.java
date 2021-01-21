@@ -289,30 +289,22 @@ public abstract class ProcessStepHandlerUtilBase {
                 JSONArray actionList = null;
                 if (triggerType instanceof TaskNotifyTriggerType) {
                     /** 获取工单配置信息 **/
-                    ProcessTaskVo processTaskVo =
-                        processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
-                    String config =
-                        selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
-                    actionList = (JSONArray)JSONPath.read(config, "process.processConfig.actionList");
+                    ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(currentProcessTaskStepVo.getProcessTaskId());
+                    String config = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
+                    actionList = (JSONArray)JSONPath.read(config, "process.processConfig.actionConfig.actionList");
                 } else {
                     /** 获取步骤配置信息 **/
-                    ProcessTaskStepVo stepVo =
-                        processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
-                    String stepConfig =
-                        selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
+                    ProcessTaskStepVo stepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+                    String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(stepVo.getConfigHash());
                     actionList = (JSONArray)JSONPath.read(stepConfig, "actionConfig.actionList");
                     if (CollectionUtils.isEmpty(actionList)) {
-                        IProcessStepUtilHandler processStepUtilHandler =
-                            ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
+                        IProcessStepUtilHandler processStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(stepVo.getHandler());
                         if (processStepUtilHandler == null) {
                             throw new ProcessStepUtilHandlerNotFoundException(stepVo.getHandler());
                         }
-                        ProcessStepHandlerVo processStepHandlerVo =
-                            processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
-                        JSONObject globalConfig = processStepUtilHandler
-                            .makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null);
-                        actionList =
-                            (JSONArray)JSONPath.read(JSON.toJSONString(globalConfig), "actionConfig.actionList");
+                        ProcessStepHandlerVo processStepHandlerVo = processStepHandlerMapper.getProcessStepHandlerByHandler(stepVo.getHandler());
+                        JSONObject globalConfig = processStepUtilHandler.makeupConfig(processStepHandlerVo != null ? processStepHandlerVo.getConfig() : null);
+                        actionList = (JSONArray)JSONPath.read(JSON.toJSONString(globalConfig), "actionConfig.actionList");
                     }
                 }
 
@@ -362,46 +354,48 @@ public abstract class ProcessStepHandlerUtilBase {
                                 iIntegrationHandler.sendRequest(integrationVo, ProcessRequestFrom.PROCESS);
                             if (StringUtils.isNotBlank(integrationResultVo.getError())) {
                                 logger.error(integrationResultVo.getError());
-                                throw new IntegrationSendRequestException(integrationVo.getUuid());
-                            }
-                            JSONObject successConditionObj = actionObj.getJSONObject("successCondition");
-                            if (MapUtils.isNotEmpty(successConditionObj)) {
-                                String name = successConditionObj.getString("name");
-                                if (StringUtils.isNotBlank(name)) {
-                                    String resultValue = null;
-                                    String transformedResult = integrationResultVo.getTransformedResult();
-                                    if (StringUtils.isNotBlank(transformedResult)) {
-                                        JSONObject transformedResultObj = JSON.parseObject(transformedResult);
-                                        if (MapUtils.isNotEmpty(transformedResultObj)) {
-                                            resultValue = transformedResultObj.getString(name);
-                                        }
-                                    }
-                                    if (resultValue == null) {
-                                        String rawResult = integrationResultVo.getRawResult();
-                                        if (StringUtils.isNotEmpty(rawResult)) {
-                                            JSONObject rawResultObj = JSON.parseObject(rawResult);
-                                            if (MapUtils.isNotEmpty(rawResultObj)) {
-                                                resultValue = rawResultObj.getString(name);
+//                                throw new IntegrationSendRequestException(integrationVo.getUuid());
+                            }else {
+                                JSONObject successConditionObj = actionObj.getJSONObject("successCondition");
+                                if (MapUtils.isNotEmpty(successConditionObj)) {
+                                    String name = successConditionObj.getString("name");
+                                    if (StringUtils.isNotBlank(name)) {
+                                        String resultValue = null;
+                                        String transformedResult = integrationResultVo.getTransformedResult();
+                                        if (StringUtils.isNotBlank(transformedResult)) {
+                                            JSONObject transformedResultObj = JSON.parseObject(transformedResult);
+                                            if (MapUtils.isNotEmpty(transformedResultObj)) {
+                                                resultValue = transformedResultObj.getString(name);
                                             }
                                         }
+                                        if (resultValue == null) {
+                                            String rawResult = integrationResultVo.getRawResult();
+                                            if (StringUtils.isNotEmpty(rawResult)) {
+                                                JSONObject rawResultObj = JSON.parseObject(rawResult);
+                                                if (MapUtils.isNotEmpty(rawResultObj)) {
+                                                    resultValue = rawResultObj.getString(name);
+                                                }
+                                            }
+                                        }
+                                        if (resultValue != null) {
+                                            List<String> curentValueList = new ArrayList<>();
+                                            curentValueList.add(resultValue);
+                                            String value = successConditionObj.getString("value");
+                                            List<String> targetValueList = new ArrayList<>();
+                                            targetValueList.add(value);
+                                            String expression = successConditionObj.getString("expression");
+                                            isSucceed =
+                                                    ConditionUtil.predicate(curentValueList, expression, targetValueList);
+                                        }
                                     }
-                                    if (resultValue != null) {
-                                        List<String> curentValueList = new ArrayList<>();
-                                        curentValueList.add(resultValue);
-                                        String value = successConditionObj.getString("value");
-                                        List<String> targetValueList = new ArrayList<>();
-                                        targetValueList.add(value);
-                                        String expression = successConditionObj.getString("expression");
-                                        isSucceed =
-                                            ConditionUtil.predicate(curentValueList, expression, targetValueList);
+                                } else {
+                                    String statusCode = String.valueOf(integrationResultVo.getStatusCode());
+                                    if (statusCode.startsWith("2") || statusCode.startsWith("3")) {
+                                        isSucceed = true;
                                     }
-                                }
-                            } else {
-                                String statusCode = String.valueOf(integrationResultVo.getStatusCode());
-                                if (statusCode.startsWith("2") || statusCode.startsWith("3")) {
-                                    isSucceed = true;
                                 }
                             }
+
                             ActionVo actionVo = new ActionVo();
                             actionVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
                             actionVo.setProcessTaskStepName(currentProcessTaskStepVo.getName());
@@ -518,10 +512,8 @@ public abstract class ProcessStepHandlerUtilBase {
                                 policyConfig = notifyPolicyVo.getConfig();
                             }
                         }
-                        ProcessTaskVo processTaskVo = processStepUtilHandler
-                            .getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
-                        processTaskVo.setStartProcessTaskStep(
-                            processStepUtilHandler.getStartProcessTaskStepByProcessTaskId(processTaskVo.getId()));
+                        ProcessTaskVo processTaskVo = processStepUtilHandler.getProcessTaskDetailById(currentProcessTaskStepVo.getProcessTaskId());
+                        processTaskVo.setStartProcessTaskStep(processStepUtilHandler.getStartProcessTaskStepByProcessTaskId(processTaskVo.getId()));
                         processTaskVo.setCurrentProcessTaskStep(processStepUtilHandler.getCurrentProcessTaskStepDetail(currentProcessTaskStepVo));
                         JSONObject conditionParamData = ProcessTaskUtil.getProcessFieldData(processTaskVo, true);
                         JSONObject templateParamData = ProcessTaskUtil.getProcessTaskParamData(processTaskVo);

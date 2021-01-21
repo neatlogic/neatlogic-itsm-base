@@ -59,6 +59,11 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     }
 
     @Override
+    public void action(ProcessTaskStepVo currentProcessTaskStepVo, INotifyTriggerType trigger) {
+        ActionHandler.action(currentProcessTaskStepVo, trigger);
+    }
+
+    @Override
     public void calculateSla(ProcessTaskVo currentProcessTaskVo, boolean isAsync) {
         SlaHandler.calculate(currentProcessTaskVo, isAsync);
     }
@@ -217,8 +222,14 @@ public abstract class ProcessStepUtilHandlerBase extends ProcessStepHandlerUtilB
     
     @Override
     public ProcessTaskStepVo getCurrentProcessTaskStepDetail(ProcessTaskStepVo currentProcessTaskStep) {
+        if(currentProcessTaskStep.getId() == null){
+            return null;
+        }
         // 获取步骤信息
         ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStep.getId());
+        if(processTaskStepVo == null){
+            return null;
+        }
         processTaskStepVo.setParamObj(currentProcessTaskStep.getParamObj());
         List<ProcessTaskStepWorkerVo> workerList =
             processTaskMapper.getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(
