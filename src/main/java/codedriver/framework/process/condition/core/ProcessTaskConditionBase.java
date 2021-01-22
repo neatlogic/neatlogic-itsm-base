@@ -5,7 +5,7 @@ import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
-import codedriver.framework.process.workcenter.table.ISqlTable;
+import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.util.TimeUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -17,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class ProcessTaskConditionBase implements IProcessTaskCondition {
 
@@ -37,7 +36,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
                 value = String.format("'%s'", value);
             }
             where = String.format(Expression.getExpressionEs(condition.getExpression()),
-                ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(condition.getName())).getEsName(), value);
+                    ((IProcessTaskCondition) ConditionHandlerFactory.getHandler(condition.getName())).getEsName(), value);
 
         }
         return where;
@@ -70,8 +69,8 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
                 expression = Expression.GREATERTHAN.getExpression();
             }
             where = String.format(Expression.getExpressionEs(expression),
-                ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(condition.getName())).getEsName(), startTime,
-                endTime);
+                    ((IProcessTaskCondition) ConditionHandlerFactory.getHandler(condition.getName())).getEsName(), startTime,
+                    endTime);
 
         }
         return where;
@@ -98,10 +97,10 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         String name = String.format("%s.%s ", ProcessFieldType.COMMON.getValue(), this.getName());
         String myName = StringUtils.EMPTY;
         myName = this.getMyEsName();
-        if(StringUtils.isBlank(myName)) {
+        if (StringUtils.isBlank(myName)) {
             myName = this.getMyEsName(values);
         }
-            
+
         if (StringUtils.isNotBlank(myName)) {
             name = myName;
         }
@@ -123,40 +122,48 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         return esName;
     }
 
-    @Override
-    public List<ISqlTable> getSqlTableList(){
-        return getMySqlTableList();
+    protected void getSimpleSqlConditionWhere(ConditionVo condition,StringBuilder sqlSb,String tableShortName,String columnName){
+        Object value = StringUtils.EMPTY;
+        if (condition.getValueList() instanceof String) {
+            value = condition.getValueList();
+        } else if (condition.getValueList() instanceof List) {
+            List<String> values = JSON.parseArray(JSON.toJSONString(condition.getValueList()), String.class);
+            value = String.join("','", values);
+        }
+        sqlSb.append(Expression.getExpressionSql(condition.getExpression(), tableShortName, columnName, value.toString()));
     }
 
-    public  List<ISqlTable> getMySqlTableList(){
-        return new ArrayList<>();
-    }
-
-    @Override
-    public void getSqlConditionWhere(List<ConditionVo> conditionList,Integer index,StringBuilder sqlSb){
-        ConditionVo condition = conditionList.get(index);
-        if (!getMySqlConditionWhere(conditionList, index,sqlSb)) {
-            Object value = StringUtils.EMPTY;
-            if (condition.getValueList() instanceof String) {
-                value = condition.getValueList();
-            } else if (condition.getValueList() instanceof List) {
-                List<String> values = JSON.parseArray(JSON.toJSONString(condition.getValueList()), String.class);
-                value = String.join("','", values);
+    public void getDateSqlWhere(ConditionVo condition, StringBuilder sqlSb,String tableShortName,String columnName) {
+        JSONArray dateJSONArray = JSONArray.parseArray(JSON.toJSONString(condition.getValueList()));
+        if (CollectionUtils.isNotEmpty(dateJSONArray)) {
+            JSONObject dateValue = JSONObject.parseObject(dateJSONArray.get(0).toString());
+            SimpleDateFormat format = new SimpleDateFormat(TimeUtil.YYYY_MM_DD_HH_MM_SS);
+            String startTime = StringUtils.EMPTY;
+            String endTime = StringUtils.EMPTY;
+            String expression = condition.getExpression();
+            if (dateValue.containsKey(ProcessWorkcenterField.STARTTIME.getValue())) {
+                startTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.STARTTIME.getValue())));
+                endTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.ENDTIME.getValue())));
+            } else {
+                startTime = TimeUtil.timeTransfer(dateValue.getInteger("timeRange"), dateValue.getString("timeUnit"));
+                endTime = TimeUtil.timeNow();
             }
-            if (StringUtils.isNotBlank(value.toString())) {
-                value = String.format("'%s'", value);
+            if (StringUtils.isEmpty(startTime)) {
+                expression = Expression.LESSTHAN.getExpression();
+                startTime = endTime;
+            } else if (StringUtils.isEmpty(endTime)) {
+                expression = Expression.GREATERTHAN.getExpression();
             }
-            IProcessTaskCondition conditionHandler =(IProcessTaskCondition)ConditionHandlerFactory.getHandler(condition.getName());
-            String tableShortName = StringUtils.EMPTY;
-            if(CollectionUtils.isNotEmpty(conditionHandler.getSqlTableList())){
-                tableShortName = conditionHandler.getSqlTableList().get(0).getShortName();
-            }
-            sqlSb.append( String.format(Objects.requireNonNull(Expression.getExpressionSql(condition.getExpression())),tableShortName,conditionHandler.getName(), value));
-
+            sqlSb.append(Expression.getExpressionSql(condition.getExpression(), tableShortName, columnName, startTime, endTime));
         }
     }
 
-    public Boolean getMySqlConditionWhere(List<ConditionVo> conditionList,Integer index,StringBuilder sqlSb){
-        return false;
+    @Override
+    public List<JoinTableColumnVo> getJoinTableColumnList() {
+        return getMyJoinTableColumnList();
+    }
+
+    public List<JoinTableColumnVo> getMyJoinTableColumnList() {
+        return new ArrayList<>();
     }
 }

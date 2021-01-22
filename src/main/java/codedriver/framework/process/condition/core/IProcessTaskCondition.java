@@ -2,7 +2,7 @@ package codedriver.framework.process.condition.core;
 
 import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.condition.ConditionVo;
-import codedriver.framework.process.workcenter.table.ISqlTable;
+import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 
 import java.util.List;
 
@@ -46,15 +46,6 @@ public interface IProcessTaskCondition extends IConditionHandler {
     public String  getEsName(String... values);
 
 	/**
-	 * @Description: 获取关联数据库表
-	 * @Author: 89770
-	 * @Date: 2021/1/19 20:01
-	 * @Params: []
-	 * @Returns: java.lang.String
-	 **/
-	public List<ISqlTable> getSqlTableList();
-
-	/**
 	 * @Description: 根据conditionVo 转成对应的sql
 	 * @Author: 89770
 	 * @Date: 2021/1/20 18:27
@@ -62,4 +53,14 @@ public interface IProcessTaskCondition extends IConditionHandler {
 	 * @Returns: void
 	 **/
 	public void getSqlConditionWhere(List<ConditionVo> conditionList,Integer index,StringBuilder sqlSb);
+
+	/**
+	 * @Description: 获取对应条件需要关联的表和字段
+	 * @Author: 89770
+	 * @Date: 2021/1/22 16:59
+	 * @Params: * @param null:
+	 * @Returns: * @return: null
+	 **/
+	public List<JoinTableColumnVo> getJoinTableColumnList();
+
 }
