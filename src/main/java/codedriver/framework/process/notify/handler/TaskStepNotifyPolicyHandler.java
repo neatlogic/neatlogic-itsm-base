@@ -14,7 +14,7 @@ import codedriver.framework.notify.dto.NotifyTriggerTemplateVo;
 import codedriver.framework.notify.dto.NotifyTriggerVo;
 import codedriver.framework.process.constvalue.*;
 import codedriver.framework.process.notify.core.NotifyDefaultTemplateFactory;
-import codedriver.framework.process.notify.template.IDefaultTemplate;
+import codedriver.framework.process.notify.core.IDefaultTemplate;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +28,8 @@ import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.ConditionParamVo;
 import codedriver.framework.dto.ExpressionVo;
 import codedriver.framework.notify.core.NotifyPolicyHandlerBase;
-import codedriver.framework.process.notify.core.TaskStepNotifyTriggerType;
-import codedriver.framework.process.notify.core.SubtaskNotifyTriggerType;
+import codedriver.framework.process.notify.constvalue.TaskStepNotifyTriggerType;
+import codedriver.framework.process.notify.constvalue.SubtaskNotifyTriggerType;
 @Component
 public class TaskStepNotifyPolicyHandler extends NotifyPolicyHandlerBase {
 

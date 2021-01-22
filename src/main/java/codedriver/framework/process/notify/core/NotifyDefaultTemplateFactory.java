@@ -2,7 +2,6 @@ package codedriver.framework.process.notify.core;
 
 import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.common.RootComponent;
-import codedriver.framework.process.notify.template.IDefaultTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -43,7 +42,7 @@ public class NotifyDefaultTemplateFactory extends ApplicationListenerBase {
     }
 //    
 //	static {
-//		Reflections reflections = new Reflections("codedriver.framework.process.notify.template");
+//		Reflections reflections = new Reflections("codedriver.module.process.notify.template");
 //		Set<Class<? extends IDefaultTemplate>> defaultTemplateClassSet = reflections.getSubTypesOf(IDefaultTemplate.class);
 //		for(Class<? extends IDefaultTemplate> clazz : defaultTemplateClassSet) {
 //			try {

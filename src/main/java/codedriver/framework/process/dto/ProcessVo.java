@@ -25,8 +25,8 @@ import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
-import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
-import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
+import codedriver.framework.process.stephandler.core.IProcessStepInternalHandler;
+import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessVo extends BasePageVo implements Serializable {
@@ -239,7 +239,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
                         type = "process";
                     }
                     processStepVo.setType(type);
-                    IProcessStepUtilHandler procssStepUtilHandler = ProcessStepUtilHandlerFactory.getHandler(handler);
+                    IProcessStepInternalHandler procssStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
                     if (procssStepUtilHandler != null) {
                         JSONObject stepConfigObj = stepObj.getJSONObject("stepConfig");
                         if (stepConfigObj != null) {

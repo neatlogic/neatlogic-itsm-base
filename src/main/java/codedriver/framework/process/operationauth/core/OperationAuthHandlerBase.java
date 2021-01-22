@@ -31,9 +31,9 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.stephandler.core.IProcessStepHandler;
-import codedriver.framework.process.stephandler.core.IProcessStepUtilHandler;
+import codedriver.framework.process.stephandler.core.IProcessStepInternalHandler;
 import codedriver.framework.process.stephandler.core.ProcessStepHandlerFactory;
-import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
+import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 
 public abstract class OperationAuthHandlerBase implements IOperationAuthHandler {
     protected static UserMapper userMapper;
@@ -209,16 +209,16 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         JSONArray authorityList = (JSONArray)JSONPath.read(stepConfig, "authorityList");
         // 如果步骤自定义权限设置为空，则用组件的全局权限设置
         if (CollectionUtils.isEmpty(authorityList)) {
-            IProcessStepUtilHandler processStepUtilHandler =
-                ProcessStepUtilHandlerFactory.getHandler(processTaskStepVo.getHandler());
+            IProcessStepInternalHandler processStepUtilHandler =
+                    ProcessStepInternalHandlerFactory.getHandler(processTaskStepVo.getHandler());
             if (processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(processTaskStepVo.getHandler());
             }
             ProcessStepHandlerVo processStepHandlerConfig =
-                processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
+                    processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
             JSONObject globalConfig = processStepUtilHandler
-                .makeupConfig(processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null);
-            authorityList = (JSONArray)JSONPath.read(JSON.toJSONString(globalConfig), "authorityList");
+                    .makeupConfig(processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null);
+            authorityList = (JSONArray) JSONPath.read(JSON.toJSONString(globalConfig), "authorityList");
         }
 
         if (CollectionUtils.isNotEmpty(authorityList)) {
