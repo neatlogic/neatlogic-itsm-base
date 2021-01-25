@@ -1,11 +1,14 @@
 package codedriver.framework.process.condition.core;
 
 import codedriver.framework.common.constvalue.Expression;
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
+import codedriver.framework.process.workcenter.table.ProcessTaskStepUserSqlTable;
+import codedriver.framework.process.workcenter.table.ProcessTaskStepWorkerSqlTable;
 import codedriver.framework.util.TimeUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -165,5 +168,37 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 
     public List<JoinTableColumnVo> getMyJoinTableColumnList() {
         return new ArrayList<>();
+    }
+
+    /**
+     * @Description: 拼接待处理sql
+     * @Author: 89770
+     * @Date: 2021/1/25 18:21
+     * @Params: [sqlSb, userList, teamList, roleList]
+     * @Returns: void
+     **/
+    protected void getProcessingTaskOfMineSql(StringBuilder sqlSb, List<String> userList, List<String> teamList, List<String> roleList) {
+        sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(),new ProcessTaskStepUserSqlTable().getShortName(),ProcessTaskStepUserSqlTable.FieldEnum.USER_UUID.getValue(),String.join("','",userList)));
+        //worker-team
+        if(CollectionUtils.isNotEmpty(teamList)) {
+            sqlSb.append(" or ");
+            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.UUID.getValue(), String.join("','", teamList)));
+            sqlSb.append(" and ");
+            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(), GroupSearch.TEAM.getValue()));
+        }
+        //worker-role
+        if(CollectionUtils.isNotEmpty(roleList)) {
+            sqlSb.append(" or ");
+            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.UUID.getValue(), String.join("','", roleList)));
+            sqlSb.append(" and ");
+            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(), GroupSearch.ROLE.getValue()));
+        }
+        //worker-user
+        if(CollectionUtils.isNotEmpty(userList)) {
+            sqlSb.append(" or ");
+            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.UUID.getValue(), String.join("','", userList)));
+            sqlSb.append(" and ");
+            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(), GroupSearch.USER.getValue()));
+        }
     }
 }

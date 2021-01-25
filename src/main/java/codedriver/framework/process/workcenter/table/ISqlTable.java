@@ -31,16 +31,6 @@ public interface ISqlTable {
      **/
     public String getShortName();
 
-
-    /**
-     * @Description: 当前表的关联key
-     * @Author: 89770
-     * @Date: 2021/1/15 16:01
-     * @Params: []
-     * @Returns: java.lang.String
-     **/
-    public String getJoinKey();
-
     /**
      * @Description: 与关联表字段关系
      * 如果包含关联表，则返回关联表和对应关联表的字段
