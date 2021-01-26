@@ -37,7 +37,8 @@ public class ProcessTaskStepWorkerSqlTable implements ISqlTable {
         PROCESSTASK_ID("processtask_id", "工单ID"),
         PROCESSTASK_STEP_ID("processtask_step_id", "工单步骤ID"),
         TYPE("type","用户/组/角色 类型"),
-        UUID("uuid","用户/组/角色 uuid")
+        UUID("uuid","用户/组/角色 uuid"),
+        USER_TYPE("user_type","处理人类型")
         ;
         private final String name;
         private final String text;

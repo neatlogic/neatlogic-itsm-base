@@ -18,12 +18,28 @@ import java.util.Map;
  **/
 public class JoinTableColumnVo {
     private ISqlTable leftTable;
+    private String leftTableShortName;
     private ISqlTable rightTable;
+    private String rightTableShortName;
     private Map<String, String> onColumnMap;
 
     public JoinTableColumnVo(ISqlTable _leftTable, ISqlTable _rightTable, Map<String, String> _onColumnMap) {
+        new JoinTableColumnVo(_leftTable, _leftTable.getShortName(), _rightTable, _rightTable.getShortName(), _onColumnMap);
+    }
+
+    public JoinTableColumnVo(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, Map<String, String> _onColumnMap) {
+        new JoinTableColumnVo(_leftTable, _leftTableShortName, _rightTable, _rightTable.getShortName(), _onColumnMap);
+    }
+
+    public JoinTableColumnVo(ISqlTable _leftTable, ISqlTable _rightTable, String _rightTableShortName, Map<String, String> _onColumnMap) {
+        new JoinTableColumnVo(_leftTable, _leftTable.getShortName(), _rightTable, _rightTableShortName, _onColumnMap);
+    }
+
+    public JoinTableColumnVo(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, String _rightTableShortName, Map<String, String> _onColumnMap) {
         this.leftTable = _leftTable;
+        this.leftTableShortName = _leftTableShortName;
         this.rightTable = _rightTable;
+        this.rightTableShortName = _rightTableShortName;
         this.onColumnMap = _onColumnMap;
     }
 
@@ -51,13 +67,29 @@ public class JoinTableColumnVo {
         this.onColumnMap = onColumnMap;
     }
 
+    public String getLeftTableShortName() {
+        return leftTableShortName;
+    }
+
+    public void setLeftTableShortName(String leftTableShortName) {
+        this.leftTableShortName = leftTableShortName;
+    }
+
+    public String getRightTableShortName() {
+        return rightTableShortName;
+    }
+
+    public void setRightTableShortName(String rightTableShortName) {
+        this.rightTableShortName = rightTableShortName;
+    }
+
     @Override
     public String toString() {
         List<String> onList = new ArrayList<>();
         for (Map.Entry<String, String> depend : onColumnMap.entrySet()) {
-            onList.add(String.format(" %s.%s = %s.%s ", leftTable.getShortName(), depend.getKey(), rightTable.getShortName(), depend.getValue()));
+            onList.add(String.format(" %s.%s = %s.%s ", leftTableShortName, depend.getKey(), rightTableShortName, depend.getValue()));
         }
-        return String.format(" LEFT JOIN %s %s ON %s", rightTable.getName(), rightTable.getShortName(), String.join(" and ", onList));
+        return String.format(" LEFT JOIN %s %s ON %s", rightTable.getName(), rightTableShortName, String.join(" and ", onList));
     }
 
     public String getHash() {

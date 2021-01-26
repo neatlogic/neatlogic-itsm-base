@@ -16,16 +16,16 @@ import java.util.Map;
  * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  **/
 @Component
-public class ChannelTypeSqlTable implements ISqlTable {
+public class ProcessTaskScoreSqlTable implements ISqlTable {
 
     @Override
     public String getName() {
-        return "channel_type";
+        return "processtask_score";
     }
 
     @Override
     public String getShortName() {
-        return "ct";
+        return "ptsc";
     }
 
     @Override
@@ -34,9 +34,8 @@ public class ChannelTypeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", "服务类型UUID"),
-        NAME("name",""),
-        COLOR("color","")
+        PROCESSTASK_ID("processtask_id", "工单ID"),
+        SCORE("serial_number", "评分"),
         ;
         private final String name;
         private final String text;

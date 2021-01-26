@@ -16,16 +16,16 @@ import java.util.Map;
  * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  **/
 @Component
-public class ChannelTypeSqlTable implements ISqlTable {
+public class WorkTimeSqlTable implements ISqlTable {
 
     @Override
     public String getName() {
-        return "channel_type";
+        return "worktime";
     }
 
     @Override
     public String getShortName() {
-        return "ct";
+        return "wt";
     }
 
     @Override
@@ -34,9 +34,8 @@ public class ChannelTypeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", "服务类型UUID"),
-        NAME("name",""),
-        COLOR("color","")
+        UUID("uuid", "时间窗口UUID"),
+         NAME("name","时间窗口名")
         ;
         private final String name;
         private final String text;

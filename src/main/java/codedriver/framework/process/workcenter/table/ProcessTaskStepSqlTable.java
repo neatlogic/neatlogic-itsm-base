@@ -39,6 +39,7 @@ public class ProcessTaskStepSqlTable implements ISqlTable {
 
     public enum FieldEnum {
         ID("id", "步骤ID"),
+        NAME("name", "步骤名称"),
         PROCESSTASK_ID("processtask_id","工单id"),
         TYPE("type","节点类型"),
         STATUS("status", "步骤状态"),

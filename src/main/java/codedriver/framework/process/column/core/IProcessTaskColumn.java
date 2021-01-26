@@ -1,11 +1,13 @@
 package codedriver.framework.process.column.core;
 
+import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
+import codedriver.framework.process.workcenter.dto.TableSelectColumnVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
 import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IProcessTaskColumn {
 	
@@ -112,11 +114,47 @@ public interface IProcessTaskColumn {
 	public Boolean getIsExport();
 
 	/**
-	 * @Description: 获取对应数据库表名,以及要显示的字段
+	 * @Description: 获取需要关联的表和字段
 	 * @Author: 89770
-	 * @Date: 2021/1/19 20:01
+	 * @Date: 2021/1/26 10:41
+	 * @Params: []
+	 * @Returns: java.util.List<codedriver.framework.process.workcenter.dto.JoinTableColumnVo>
+	 **/
+	public List<JoinTableColumnVo> getJoinTableColumnList();
+
+	/**
+	 * @Description: 主table  用于sort distinct
+	 * @Author: 89770
+	 * @Date: 2021/1/26 12:08
+	 * @Params: []
+	 * @Returns: codedriver.framework.process.workcenter.table.ISqlTable
+	 **/
+	public ISqlTable getSortSqlTable();
+
+	/**
+	 * @Description: 主column 用于sort distinct
+	 * @Author: 89770
+	 * @Date: 2021/1/26 12:08
 	 * @Params: []
 	 * @Returns: java.lang.String
 	 **/
-	public Map<ISqlTable,List<String>> getSqlTableColumnMap();
+	public String getSortSqlColumn();
+
+	/**
+	 * @Description: 重新渲染字段
+	 * @Author: 89770
+	 * @Date: 2021/1/26 15:29
+	 * @Params: [processTaskVo]
+	 * @Returns: java.lang.Object
+	 **/
+	public Object getValue(ProcessTaskVo processTaskVo);
+
+	/**
+	 * @Description: 获取table 需要 select 出来的 column
+	 * @Author: 89770
+	 * @Date: 2021/1/26 16:27
+	 * @Params: [workcenterVo]
+	 * @Returns: java.util.Map<codedriver.framework.process.workcenter.table.ISqlTable,java.lang.String>
+	 **/
+	public List<TableSelectColumnVo> getTableSelectColumn();
 }

@@ -37,6 +37,7 @@ public class ProcessTaskSqlTable implements ISqlTable {
         ID("id", "工单ID"),
         SERIAL_NUMBER("serial_number", "工单号"),
         START_TIME("start_time", "创建时间"),
+        END_TIME("end_time", "结束时间"),
         OWNER("owner", "上报人"),
         STATUS("status", "工单状态"),
         PRIORITY_UUID("priority_uuid", "工单状态"),

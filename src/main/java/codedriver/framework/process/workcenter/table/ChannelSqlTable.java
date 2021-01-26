@@ -35,7 +35,9 @@ public class ChannelSqlTable implements ISqlTable {
 
     public enum FieldEnum {
         UUID("uuid", "服务类型UUID"),
-        CHANNEL_TYPE_UUID("channel_type_uuid", "服务类型UUID")
+        CHANNEL_TYPE_UUID("channel_type_uuid", "服务类型UUID"),
+        PARENT_UUID("parent_uuid", "服务目录UUID"),
+        NAME("name","服务名")
         ;
         private final String name;
         private final String text;

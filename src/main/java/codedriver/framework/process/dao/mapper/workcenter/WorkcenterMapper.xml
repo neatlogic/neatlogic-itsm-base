@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.workcenter.WorkcenterMapper">
+
+	<select id="getWorkcenterProcessTaskIdBySql" parameterType="java.lang.String" resultType="java.lang.Integer">
+		#{value}
+	</select>
+
+	<resultMap id="workcenterProcessTaskMap" type="codedriver.framework.process.dto.ProcessTaskVo" >
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="process_uuid" property="processUuid" />
+		<result column="channel_uuid" property="channelUuid" />
+		<result column="config_hash" property="configHash" />
+		<result column="priority_uuid" property="priorityUuid" />
+		<result column="status" property="status" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="ownerUuid" property="owner" />
+		<result column="reporterUuid" property="reporter" />
+		<!--<result column="reporterName" property="reporterName" />-->
+		<result column="expire_time" property="expireTime" />
+		<result column="worktime_uuid" property="worktimeUuid" />
+		<result column="error" property="error" />
+		<result column="is_show" property="isShow" />
+		<result column="serial_number" property="serialNumber" />
+		<association property="channelVo" javaType="codedriver.framework.process.dto.ChannelVo">
+			<result property="uuid" column="channelUuid" />
+			<result property="name" column="channelName" />
+		</association>
+		<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="ownerUuid" />
+			<result property="userName" column="ownerName" />
+			<result property="userInfo" column="ownerInfo" />
+			<result property="vipLevel" column="ownerVipLevel" />
+			<result property="pinyin" column="ownerPinyin" />
+		</association>
+		<association property="reporterVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="reporterUuid" />
+			<result property="userName" column="reporterName" />
+			<result property="userInfo" column="reporterInfo" />
+			<result property="vipLevel" column="reporterVipLevel" />
+			<result property="pinyin" column="reporterPinyin" />
+		</association>
+	</resultMap>
+
+	<select id="getWorkcenterProcessTaskInfoBySql" parameterType="java.lang.String" resultMap="workcenterProcessTaskMap">
+		#{value }
+	</select>
 	
 	<resultMap id="workcenterMap" type="codedriver.framework.process.workcenter.dto.WorkcenterVo">
 		<id column="uuid" property="uuid" />

@@ -1,13 +1,16 @@
 package codedriver.framework.process.column.core;
 
 
+import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
 import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 
@@ -71,12 +74,36 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
         return true;
     }
 
-    @Override
-	public Map<ISqlTable,List<String>> getSqlTableColumnMap(){
-		return getMySqlTableColumnMap();
+	@Override
+	public List<JoinTableColumnVo> getJoinTableColumnList(){ return getMyJoinTableColumnList();}
+
+	public List<JoinTableColumnVo> getMyJoinTableColumnList(){ return new ArrayList<>();}
+
+	@Override
+	public String getSortSqlColumn(){
+		return getMySortSqlColumn();
 	}
 
-	public Map<ISqlTable,List<String>> getMySqlTableColumnMap(){
-		return  null;
+	protected String getMySortSqlColumn(){
+		return StringUtils.EMPTY;
 	}
+
+	@Override
+	public ISqlTable getSortSqlTable(){
+		return getMySortSqlTable();
+	}
+
+	protected ISqlTable getMySortSqlTable(){
+		return null;
+	}
+
+	@Override
+	public Object getValue(ProcessTaskVo processTaskVo){
+		return getMyValue(processTaskVo);
+	}
+
+	public Object getMyValue(ProcessTaskVo processTaskVo){
+		return null;
+	}
+
 }

@@ -39,6 +39,7 @@ public class UserTable implements ISqlTable {
         USER_NAME("user_name", "用户名"),
         USER_INFO("user_info", "用户信息"),
         VIP_LEVEL("vip_level", "vip等级"),
+        PINYIN("pinyin", "拼音")
         ;
         private final String name;
         private final String text;
