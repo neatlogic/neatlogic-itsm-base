@@ -16,7 +16,7 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
-import codedriver.framework.process.stephandler.core.ProcessStepUtilHandlerFactory;
+import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
@@ -236,12 +236,12 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public ProcessTaskStatusVo getStatusVo() {
 		if(statusVo == null && StringUtils.isNotBlank(status) && StringUtils.isNotBlank(configHash) && StringUtils.isNotBlank(handler)) {
-		    String statusText = ProcessStepUtilHandlerFactory.getHandler().getStatusTextByConfigHashAndHandler(configHash, handler, status);
-            if(StringUtils.isNotBlank(statusText)) {
-                statusVo = new ProcessTaskStatusVo(status, statusText);
-            }else {
-                statusVo = new ProcessTaskStatusVo(status);
-            }
+			String statusText = ProcessStepInternalHandlerFactory.getHandler().getStatusTextByConfigHashAndHandler(configHash, handler, status);
+			if (StringUtils.isNotBlank(statusText)) {
+				statusVo = new ProcessTaskStatusVo(status, statusText);
+			} else {
+				statusVo = new ProcessTaskStatusVo(status);
+			}
 		}
 		return statusVo;
 	}
@@ -300,7 +300,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsRequired() {
 		if(isRequired == null && StringUtils.isNotBlank(configHash)) {
-		    isRequired = ProcessStepUtilHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
+			isRequired = ProcessStepInternalHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
 		}
 		return isRequired;
 	}
@@ -311,7 +311,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsNeedContent() {
 		if(isNeedContent == null && StringUtils.isNotBlank(configHash)) {
-			isNeedContent = ProcessStepUtilHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
+			isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
 		}
 		return isNeedContent;
 	}
