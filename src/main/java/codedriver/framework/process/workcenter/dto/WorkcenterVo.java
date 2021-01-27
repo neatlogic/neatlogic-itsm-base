@@ -64,7 +64,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     private List<WorkcenterTheadVo> theadVoList;
 
-    private List<Integer> processTaskIdList;
+    private List<Long> processTaskIdList;
 
     private String sqlFieldType;
 
@@ -272,11 +272,11 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.sqlFieldType = sqlFieldType;
     }
 
-    public List<Integer> getProcessTaskIdList() {
+    public List<Long> getProcessTaskIdList() {
         return processTaskIdList;
     }
 
-    public void setProcessTaskIdList(List<Integer> processTaskIdList) {
+    public void setProcessTaskIdList(List<Long> processTaskIdList) {
         this.processTaskIdList = processTaskIdList;
     }
 

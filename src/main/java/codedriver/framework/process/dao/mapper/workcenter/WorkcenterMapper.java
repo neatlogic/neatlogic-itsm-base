@@ -12,7 +12,9 @@ import java.util.Map;
 
 public interface WorkcenterMapper {
 
-	public List<Integer> getWorkcenterProcessTaskIdBySql(String searchSql);
+	public Integer getWorkcenterProcessTaskCountBySql(String searchSql);
+
+	public List<ProcessTaskVo> getWorkcenterProcessTaskIdBySql(String searchSql);
 
 	public List<ProcessTaskVo> getWorkcenterProcessTaskInfoBySql(String searchSql);
 	

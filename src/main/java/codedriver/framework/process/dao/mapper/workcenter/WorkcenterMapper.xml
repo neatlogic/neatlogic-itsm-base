@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.workcenter.WorkcenterMapper">
+	<select id="getWorkcenterProcessTaskCountBySql" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+		${value}
+	</select>
 
-	<select id="getWorkcenterProcessTaskIdBySql" parameterType="java.lang.String" resultType="java.lang.Integer">
-		#{value}
+	<select id="getWorkcenterProcessTaskIdBySql" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+		${value}
 	</select>
 
 	<resultMap id="workcenterProcessTaskMap" type="codedriver.framework.process.dto.ProcessTaskVo" >
@@ -45,7 +48,7 @@
 	</resultMap>
 
 	<select id="getWorkcenterProcessTaskInfoBySql" parameterType="java.lang.String" resultMap="workcenterProcessTaskMap">
-		#{value }
+		${value }
 	</select>
 	
 	<resultMap id="workcenterMap" type="codedriver.framework.process.workcenter.dto.WorkcenterVo">

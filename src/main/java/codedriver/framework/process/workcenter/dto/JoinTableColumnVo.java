@@ -24,18 +24,22 @@ public class JoinTableColumnVo {
     private Map<String, String> onColumnMap;
 
     public JoinTableColumnVo(ISqlTable _leftTable, ISqlTable _rightTable, Map<String, String> _onColumnMap) {
-        new JoinTableColumnVo(_leftTable, _leftTable.getShortName(), _rightTable, _rightTable.getShortName(), _onColumnMap);
+        construct( _leftTable,  _leftTable.getShortName(),  _rightTable, _rightTable.getShortName(),  _onColumnMap);
     }
 
     public JoinTableColumnVo(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, Map<String, String> _onColumnMap) {
-        new JoinTableColumnVo(_leftTable, _leftTableShortName, _rightTable, _rightTable.getShortName(), _onColumnMap);
+        construct( _leftTable,  _leftTableShortName,  _rightTable, _rightTable.getShortName(),  _onColumnMap);
     }
 
     public JoinTableColumnVo(ISqlTable _leftTable, ISqlTable _rightTable, String _rightTableShortName, Map<String, String> _onColumnMap) {
-        new JoinTableColumnVo(_leftTable, _leftTable.getShortName(), _rightTable, _rightTableShortName, _onColumnMap);
+        construct( _leftTable, _leftTable.getShortName(),  _rightTable,  _rightTableShortName,  _onColumnMap);
     }
 
     public JoinTableColumnVo(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, String _rightTableShortName, Map<String, String> _onColumnMap) {
+        construct( _leftTable,  _leftTableShortName,  _rightTable,  _rightTableShortName,  _onColumnMap);
+    }
+
+    private void construct(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, String _rightTableShortName, Map<String, String> _onColumnMap){
         this.leftTable = _leftTable;
         this.leftTableShortName = _leftTableShortName;
         this.rightTable = _rightTable;
@@ -83,8 +87,8 @@ public class JoinTableColumnVo {
         this.rightTableShortName = rightTableShortName;
     }
 
-    @Override
-    public String toString() {
+
+    public String toSqlString() {
         List<String> onList = new ArrayList<>();
         for (Map.Entry<String, String> depend : onColumnMap.entrySet()) {
             onList.add(String.format(" %s.%s = %s.%s ", leftTableShortName, depend.getKey(), rightTableShortName, depend.getValue()));
