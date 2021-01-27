@@ -28,8 +28,6 @@ public interface ProcessMapper {
 
 	public ProcessFormVo getProcessFormByProcessUuid(String processUuid);
 
-	public String getProcessFormUuidByProcessUuid(String processUuid);
-
 	public List<ProcessStepRelVo> getProcessStepRelByProcessUuid(String processUuid);
 
 	public List<ProcessSlaVo> getProcessSlaByProcessUuid(String processUuid);

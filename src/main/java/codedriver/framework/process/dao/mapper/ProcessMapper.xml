@@ -32,10 +32,6 @@
 		process_uuid = #{value}
 	</select>
 
-	<select id="getProcessFormUuidByProcessUuid" parameterType="java.lang.String" resultType="java.lang.String">
-		SELECT `form_uuid` FROM `process_form` WHERE process_uuid = #{value}
-	</select>
-
 	<select id="checkProcessIsExists" parameterType="java.lang.String" resultType="int">
 		SELECT
 		count(1)
