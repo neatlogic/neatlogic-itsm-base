@@ -93,6 +93,8 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepRelVo> getProcessTaskStepRelListByProcessTaskIdList(List<Long> processTaskIdList);
 
+    public ProcessTaskStepVo getStartProcessTaskStepByProcessTaskId(Long processTaskId);
+
     public List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndType(@Param("processTaskId") Long processTaskId,
         @Param("type") String type);
 
@@ -238,7 +240,7 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskVo> getProcessTaskDetailListByIdList(List<Long> processTaskIdList);
 
-    public int replaceProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
+    public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
         @Param("prop") String prop);
@@ -246,7 +248,7 @@ public interface ProcessTaskMapper {
     public int insertProcessTaskForm(ProcessTaskFormVo processTaskFormVo);
 
     @ESSearch
-    public int replaceProcessTaskFormContent(@ESParam("processtask") ProcessTaskFormVo processTaskFormVo);
+    public int insertIgnoreProcessTaskFormContent(@ESParam("processtask") ProcessTaskFormVo processTaskFormVo);
 
     @ESSearch
     public int insertProcessTask(@ESParam("processtask") ProcessTaskVo processTaskVo);
@@ -305,7 +307,7 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
-    public int replaceProcessTaskStepNotifyPolicyConfig(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
+    public int insertIgnoreProcessTaskStepNotifyPolicyConfig(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 
     public int insertProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 

@@ -18,27 +18,20 @@ public class ProcessTaskStepDataVo {
     private JSONObject data;
     private String type;
     private String fcu;
-    @JSONField(serialize = false)
-    private transient Boolean isAutoGenerateId = false;
 
     public ProcessTaskStepDataVo() {
 
-    }
-
-    public ProcessTaskStepDataVo(boolean _isAutoGenerateId) {
-        this.isAutoGenerateId = _isAutoGenerateId;
     }
 
     public ProcessTaskStepDataVo(Long processTaskId, Long processTaskStepId, String type,String fcu) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
         this.type = type;
-        this.isAutoGenerateId = true;
         this.fcu = fcu;
     }
 
     public synchronized Long getId() {
-        if (id == null && isAutoGenerateId) {
+        if (id == null) {
             id = SnowflakeUtil.uniqueLong();
         }
         return id;
@@ -103,14 +96,6 @@ public class ProcessTaskStepDataVo {
 
     public void setFcu(String fcu) {
         this.fcu = fcu;
-    }
-
-    public Boolean getIsAutoGenerateId() {
-        return isAutoGenerateId;
-    }
-
-    public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
-        this.isAutoGenerateId = isAutoGenerateId;
     }
 
 }

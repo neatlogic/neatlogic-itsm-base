@@ -49,13 +49,6 @@ public class FormAttributeVo implements Serializable {
 
     }
 
-    // public FormAttributeVo(String _formUuid, String _formVersionUuid, String _uuid, String _config) {
-    // this.formUuid = _formUuid;
-    // this.formVersionUuid = _formVersionUuid;
-    // this.uuid = uuid;
-    // this.config = _config;
-    // }
-
     public FormAttributeVo(String formUuid) {
         this.formUuid = formUuid;
     }

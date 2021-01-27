@@ -596,6 +596,27 @@
 		processtask_step_id = #{processTaskStepId}
 	</select>
 
+	<select id="getStartProcessTaskStepByProcessTaskId" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+		SELECT
+		`id`,
+		`processtask_id` AS processTaskId,
+		`name`,
+		`process_step_uuid` AS processStepUuid,
+		`status`,
+		`result`,
+		`type`,
+		`handler`,
+		`is_active` AS isActive,
+		`active_time` AS activeTime,
+		`start_time` AS startTime,
+		`end_time` AS endTime,
+		`error`,
+		`config_hash` AS configHash
+		FROM `processtask_step`
+		WHERE `processtask_id` = #{value}
+		AND `type` = 'start'
+	</select>
+
 	<select id="getProcessTaskStepByProcessTaskIdAndType" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
 		SELECT
 		`id`,
@@ -2146,8 +2167,8 @@
 		)
 	</insert>
 
-	<insert id="replaceProcessTaskFormContent" parameterType="codedriver.framework.process.dto.ProcessTaskFormVo">
-		REPLACE INTO `processtask_form_content` (`hash`, `content`)
+	<insert id="insertIgnoreProcessTaskFormContent" parameterType="codedriver.framework.process.dto.ProcessTaskFormVo">
+		INSERT IGNORE INTO `processtask_form_content` (`hash`, `content`)
 		VALUES
 		(#{formContentHash}, #{formContent});
 	</insert>
@@ -2476,8 +2497,8 @@
 		)
 	</insert>
 
-	<insert id="replaceProcessTaskConfig" parameterType="codedriver.framework.process.dto.ProcessTaskConfigVo">
-		REPLACE INTO `processtask_config` (`hash`, `config`)
+	<insert id="insertIgnoreProcessTaskConfig" parameterType="codedriver.framework.process.dto.ProcessTaskConfigVo">
+		INSERT IGNORE INTO `processtask_config` (`hash`, `config`)
 		VALUES
 		(#{hash}, #{config})
 	</insert>
@@ -2542,8 +2563,8 @@
 		)
 	</insert>
 
-	<insert id="replaceProcessTaskStepNotifyPolicyConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">
-		REPLACE INTO `processtask_step_notify_policy_config` (`hash`, `config`)
+	<insert id="insertIgnoreProcessTaskStepNotifyPolicyConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">
+		INSERT IGNORE INTO `processtask_step_notify_policy_config` (`hash`, `config`)
 		VALUES (#{policyConfigHash}, #{policyConfig})
 	</insert>
 

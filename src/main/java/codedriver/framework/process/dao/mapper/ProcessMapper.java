@@ -78,6 +78,8 @@ public interface ProcessMapper {
     
     public int getProcessTagCount(ProcessTagVo processTagVo);
 
+	public ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
+
 	public int insertProcess(ProcessVo processVo);
 
 	public int insertProcessStep(ProcessStepVo processStepVo);
@@ -129,5 +131,4 @@ public interface ProcessMapper {
 	public int deleteProcessSlaByProcessUuid(String uuid);
 
 	public int deleteProcessStepCommentTemplate(String stepUuid);
-
 }
