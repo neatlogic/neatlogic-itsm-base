@@ -32,6 +32,10 @@
 		process_uuid = #{value}
 	</select>
 
+	<select id="getProcessFormUuidByProcessUuid" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `form_uuid` FROM `process_form` WHERE process_uuid = #{value}
+	</select>
+
 	<select id="checkProcessIsExists" parameterType="java.lang.String" resultType="int">
 		SELECT
 		count(1)
@@ -402,7 +406,19 @@
 			WHERE `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 	</select>
-	
+
+	<select id="getStartProcessStepByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepVo">
+		SELECT
+			`process_uuid` AS processUuid,
+			`uuid`,
+			`name`,
+			`type`,
+			`handler`
+		FROM `process_step`
+		WHERE `process_uuid` = #{value}
+		  AND `type` = 'start'
+	</select>
+
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,

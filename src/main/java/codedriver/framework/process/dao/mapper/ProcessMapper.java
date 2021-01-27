@@ -28,6 +28,8 @@ public interface ProcessMapper {
 
 	public ProcessFormVo getProcessFormByProcessUuid(String processUuid);
 
+	public String getProcessFormUuidByProcessUuid(String processUuid);
+
 	public List<ProcessStepRelVo> getProcessStepRelByProcessUuid(String processUuid);
 
 	public List<ProcessSlaVo> getProcessSlaByProcessUuid(String processUuid);
@@ -77,6 +79,8 @@ public interface ProcessMapper {
     public List<ProcessTagVo> getProcessTagByNameList(List<String> tagNameList);
     
     public int getProcessTagCount(ProcessTagVo processTagVo);
+
+	public ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
 
 	public int insertProcess(ProcessVo processVo);
 
@@ -129,5 +133,4 @@ public interface ProcessMapper {
 	public int deleteProcessSlaByProcessUuid(String uuid);
 
 	public int deleteProcessStepCommentTemplate(String stepUuid);
-
 }

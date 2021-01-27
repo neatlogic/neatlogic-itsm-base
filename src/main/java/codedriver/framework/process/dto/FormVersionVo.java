@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -98,17 +99,14 @@ public class FormVersionVo extends BasePageVo implements Serializable {
 	public List<FormAttributeVo> getFormAttributeList() {
 		if(formAttributeList == null) {
 			if(StringUtils.isNotBlank(this.formConfig)) {
-				JSONObject formConfigObj = JSONObject.parseObject(this.formConfig);
-				if(MapUtils.isNotEmpty(formConfigObj)) {
-					JSONArray controllerList = formConfigObj.getJSONArray("controllerList");
-					if(CollectionUtils.isNotEmpty(controllerList)) {
-						formAttributeList = new ArrayList<>();
-						for(int i = 0; i < controllerList.size(); i++) {
-							JSONObject controllerObj = controllerList.getJSONObject(i);
-							JSONObject config = controllerObj.getJSONObject("config");
-							if(MapUtils.isNotEmpty(config)) {
-								formAttributeList.add(new FormAttributeVo(this.getFormUuid(), this.getUuid(), controllerObj.getString("uuid"), controllerObj.getString("label"), controllerObj.getString("type"), controllerObj.getString("handler"), config.getBooleanValue("isRequired"), controllerObj.getString("config"), config.getString("defaultValueList")));
-							}
+				JSONArray controllerList = (JSONArray) JSONPath.read(this.formConfig,"controllerList");
+				if(CollectionUtils.isNotEmpty(controllerList)) {
+					formAttributeList = new ArrayList<>();
+					for(int i = 0; i < controllerList.size(); i++) {
+						JSONObject controllerObj = controllerList.getJSONObject(i);
+						JSONObject config = controllerObj.getJSONObject("config");
+						if(MapUtils.isNotEmpty(config)) {
+							formAttributeList.add(new FormAttributeVo(this.getFormUuid(), this.getUuid(), controllerObj.getString("uuid"), controllerObj.getString("label"), controllerObj.getString("type"), controllerObj.getString("handler"), config.getBooleanValue("isRequired"), controllerObj.getString("config"), config.getString("defaultValueList")));
 						}
 					}
 				}

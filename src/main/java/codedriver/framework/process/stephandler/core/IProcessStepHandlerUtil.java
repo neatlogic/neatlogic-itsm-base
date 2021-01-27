@@ -138,4 +138,31 @@ public interface IProcessStepHandlerUtil {
      * @Returns:int
      **/
     public int saveStepRemind(ProcessTaskStepVo currentProcessTaskStepVo, Long targerProcessTaskStepId, String reason, IProcessTaskStepRemindType ation);
+
+    /**
+     * @Description: 保存描述内容和附件
+     * @Author: linbq
+     * @Date: 2021/1/27 11:41
+     * @Params:[currentProcessTaskStepVo, action]
+     * @Returns:void
+     **/
+    public void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskOperationType action);
+
+    /**
+     * @Description: 保存标签列表
+     * @Author: linbq
+     * @Date: 2021/1/27 11:42
+     * @Params:[currentProcessTaskStepVo]
+     * @Returns:void
+     **/
+    public void saveTagList(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    /**
+     * @Description: 保存表单属性值
+     * @Author: linbq
+     * @Date: 2021/1/27 11:42
+     * @Params:[currentProcessTaskStepVo]
+     * @Returns:void
+     **/
+    public void saveForm(ProcessTaskStepVo currentProcessTaskStepVo);
 }
