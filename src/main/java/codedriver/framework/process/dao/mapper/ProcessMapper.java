@@ -56,7 +56,7 @@ public interface ProcessMapper {
 
 	public int getProcessReferenceCount(String processUuid);
 
-	public List<ChannelVo> getProcessReferenceList(ChannelProcessVo channelProcessVo);
+	public List<String> getProcessReferenceUuidList(String processUuid);
 
 	public int checkProcessDraftIsExists(ProcessDraftVo processDraftVo);
 
