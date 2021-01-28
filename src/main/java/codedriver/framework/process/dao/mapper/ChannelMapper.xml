@@ -233,6 +233,27 @@
 		</foreach>
 	</select>
 
+	<select id="getChannelVoByUuidList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ChannelVo" useCache="false">
+		SELECT
+		`uuid`,
+		`name`,
+		`parent_uuid` AS parentUuid,
+		`is_active` AS isActive,
+		`icon`,
+		`color`,
+		`sort`,
+		`sla`,
+		`allow_desc` AS allowDesc,
+		`is_active_help` AS isActiveHelp,
+		`channel_type_uuid` AS channelTypeUuid,
+		`support`
+		FROM `channel`
+		WHERE `uuid` IN
+		<foreach collection="list" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</select>
+
 	<select id="getMaxSortByParentUuid" parameterType="java.lang.String" resultType="int" useCache="false">
 		SELECT IFNULL(MAX(`sort`), 0) FROM `channel` WHERE `parent_uuid` = #{parentUuid}
 	</select>

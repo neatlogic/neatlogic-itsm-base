@@ -259,16 +259,11 @@
 		JOIN `channel_process` cp ON cp.`channel_uuid` = c.`uuid` AND cp.`process_uuid` = #{processUuid}
 	</select>
 
-	<select id="getProcessReferenceList" parameterType="codedriver.framework.process.dto.ChannelProcessVo" resultType="codedriver.framework.process.dto.ChannelVo">
+	<select id="getProcessReferenceUuidList" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT
-		c.`uuid`,
-		c.`name`
-		FROM `channel` c
-		JOIN `channel_process` cp ON cp.`channel_uuid` = c.`uuid` AND cp.`process_uuid` = #{processUuid}
-		ORDER BY c.`parent_uuid`, c.`sort`
-		<if test="needPage">
-			limit #{startNum}, #{pageSize}
-		</if>
+			`channel_uuid`
+		FROM `channel_process`
+		WHERE `process_uuid` = #{processUuid}
 	</select>
 
 	<select id="checkProcessDraftIsExists" parameterType="codedriver.framework.process.dto.ProcessDraftVo" resultType="int">
