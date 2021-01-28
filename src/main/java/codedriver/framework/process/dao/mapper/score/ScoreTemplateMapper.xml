@@ -31,24 +31,27 @@
 		st.`name`,
 		st.`description`,
 		st.`is_active` as isActive,
+		st.`fcd`,
 		std.`name` as dimensionName
 		from
 		(SELECT
 		`id`,
 		`name`,
 		`description`,
-		`is_active`
+		`is_active`,
+		`fcd`
 		FROM `score_template`
-		WHERE
-		1=1
+		<where>
 		<if test="keyword != null and keyword != ''">
 			and `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
+		</where>
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
 		) st
 		left join `score_template_dimension` std on st.`id` = std.`score_template_id`
+		order by st.`fcd` desc
 	</select>
 
 	<select id="searchScoreTemplateCount" parameterType="codedriver.framework.process.dto.score.ScoreTemplateVo" resultType="int">
