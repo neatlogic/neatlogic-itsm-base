@@ -89,6 +89,9 @@ public class ChannelVo extends BasePageVo implements Serializable {
     @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
     private String channelTypeUuid;
 
+    @EntityField(name = "服务类型", type = ApiParamType.JSONOBJECT)
+    private ChannelTypeVo channelTypeVo;
+
     @EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
     private int allowTranferReport;
 
@@ -433,7 +436,17 @@ public class ChannelVo extends BasePageVo implements Serializable {
         return priorityList;
     }
 
+    public ChannelTypeVo getChannelTypeVo() {
+        return channelTypeVo;
+    }
+
+    public void setChannelTypeVo(ChannelTypeVo channelTypeVo) {
+        this.channelTypeVo = channelTypeVo;
+    }
+
     public void setPriorityList(List<PriorityVo> priorityList) {
         this.priorityList = priorityList;
     }
+
+
 }

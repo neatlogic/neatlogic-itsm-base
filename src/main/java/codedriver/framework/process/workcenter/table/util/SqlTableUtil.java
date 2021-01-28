@@ -32,6 +32,9 @@ public class SqlTableUtil {
                     put(ProcessTaskStepSqlTable.FieldEnum.PROCESSTASK_ID.getValue(), ProcessTaskStepWorkerSqlTable.FieldEnum.PROCESSTASK_ID.getValue());
                     put(ProcessTaskStepSqlTable.FieldEnum.ID.getValue(), ProcessTaskStepWorkerSqlTable.FieldEnum.PROCESSTASK_STEP_ID.getValue());
                 }}));
+                add(new JoinTableColumnVo(new ProcessTaskStepUserSqlTable(), new UserTable(),"ptsuser", new HashMap<String, String>() {{
+                    put(ProcessTaskStepUserSqlTable.FieldEnum.USER_UUID.getValue(), UserTable.FieldEnum.UUID.getValue());
+                }}));
             }
         };
     }

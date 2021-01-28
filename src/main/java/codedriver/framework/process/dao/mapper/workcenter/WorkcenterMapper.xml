@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.workcenter.WorkcenterMapper">
-	<select id="getWorkcenterProcessTaskCountBySql" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<select id="getWorkcenterProcessTaskCountBySql" parameterType="java.lang.String" resultType="java.lang.Integer">
 		${value}
 	</select>
 
@@ -30,6 +30,15 @@
 		<association property="channelVo" javaType="codedriver.framework.process.dto.ChannelVo">
 			<result property="uuid" column="channelUuid" />
 			<result property="name" column="channelName" />
+			<association property="channelTypeVo" javaType="codedriver.framework.process.dto.ChannelTypeVo">
+				<result property="uuid" column="channelTypeUuid" />
+				<result property="color" column="channelTypeColor" />
+				<result property="name" column="channelTypeName" />
+			</association>
+			<association property="parent" javaType="codedriver.framework.process.dto.CatalogVo">
+				<result property="uuid" column="catalogUuid" />
+				<result property="name" column="catalogName" />
+			</association>
 		</association>
 		<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
 			<result property="uuid" column="ownerUuid" />
@@ -45,6 +54,34 @@
 			<result property="vipLevel" column="reporterVipLevel" />
 			<result property="pinyin" column="reporterPinyin" />
 		</association>
+		<collection property="stepList" javaType="codedriver.framework.process.dto.ProcessTaskStepVo">
+			<result column="id" property="processTaskStepId" />
+			<result column="processtask_id" property="id" />
+			<result column="name" property="processTaskStepName" />
+			<result column="process_step_uuid" property="processStepUuid" />
+			<result column="status" property="processTaskStepStatus" />
+			<result column="type" property="processTaskStepType" />
+			<result column="handler" property="processTaskStepHandler" />
+			<result column="is_active" property="processTaskStepIsActive" />
+			<result column="start_time" property="processTaskStepStartTime" />
+			<result column="config_hash" property="processTaskStepConfigHash" />
+			<result column="end_time" property="processTaskStepEndTime" />
+			<collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+				<result column="workerType" property="stepWorkerType" />
+				<result column="uuid" property="stepWorkerUuid" />
+			</collection>
+			<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+				<result column="userType" property="stepUserUserType" />
+				<result column="userStatus" property="stepUserUserStatus" />
+				<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+					<result column="stepUserUserUuid" property="uuid" />
+					<result column="stepUserUserName" property="userName" />
+					<result column="stepUserUserInfo" property="userInfo" />
+					<result column="stepUserUserVipLevel" property="vipLevel" />
+					<result column="stepUserUserPinyin" property="pinyin" />
+				</association>
+			</collection>
+		</collection>
 	</resultMap>
 
 	<select id="getWorkcenterProcessTaskInfoBySql" parameterType="java.lang.String" resultMap="workcenterProcessTaskMap">

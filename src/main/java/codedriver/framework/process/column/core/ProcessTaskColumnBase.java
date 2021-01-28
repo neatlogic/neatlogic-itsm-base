@@ -1,7 +1,6 @@
 package codedriver.framework.process.column.core;
 
 
-import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
 import com.alibaba.fastjson.JSONObject;
@@ -94,15 +93,6 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 	}
 
 	protected ISqlTable getMySortSqlTable(){
-		return null;
-	}
-
-	@Override
-	public Object getValue(ProcessTaskVo processTaskVo){
-		return getMyValue(processTaskVo);
-	}
-
-	public Object getMyValue(ProcessTaskVo processTaskVo){
 		return null;
 	}
 
