@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import java.io.Serializable;
 import java.util.UUID;
 
+import codedriver.framework.message.dto.MessageHandlerVo;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -13,7 +14,7 @@ import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessT
 import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 
-public class ChannelTypeVo extends BasePageVo implements Serializable{
+public class ChannelTypeVo extends BasePageVo implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -3747925860575582286L;
     @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
@@ -41,18 +42,18 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
 	private transient String keyword;
 	
 	public ChannelTypeVo() {}
-	public ChannelTypeVo(ChannelTypeVo channelTypeVo) {
-	    if(channelTypeVo != null) {
-	        this.uuid = channelTypeVo.getUuid();
-	        this.name = channelTypeVo.getName();
-	        this.isActive = channelTypeVo.getIsActive();
-	        this.icon = channelTypeVo.getIcon();
-	        this.color = channelTypeVo.getColor();
-	        this.description = channelTypeVo.getDescription();
-	        this.sort = channelTypeVo.getSort();
-	        this.prefix = channelTypeVo.getPrefix();
-	    }      
-    }
+//	public ChannelTypeVo(ChannelTypeVo channelTypeVo) {
+//	    if(channelTypeVo != null) {
+//	        this.uuid = channelTypeVo.getUuid();
+//	        this.name = channelTypeVo.getName();
+//	        this.isActive = channelTypeVo.getIsActive();
+//	        this.icon = channelTypeVo.getIcon();
+//	        this.color = channelTypeVo.getColor();
+//	        this.description = channelTypeVo.getDescription();
+//	        this.sort = channelTypeVo.getSort();
+//	        this.prefix = channelTypeVo.getPrefix();
+//	    }
+//    }
     public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
@@ -127,6 +128,10 @@ public class ChannelTypeVo extends BasePageVo implements Serializable{
     }
     public void setHandlerName(String handlerName) {
         this.handlerName = handlerName;
-    }
+    }@Override
+
+	public ChannelTypeVo clone() throws CloneNotSupportedException {
+		return (ChannelTypeVo) super.clone();
+	}
 	
 }

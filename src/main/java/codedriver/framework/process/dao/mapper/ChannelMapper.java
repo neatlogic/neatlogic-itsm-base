@@ -21,6 +21,8 @@ public interface ChannelMapper {
 
     public List<ChannelVo> getChannelByUuidList(@Param("channelUuidList") List<String> channelUuidList);
 
+    public List<ChannelVo> getChannelVoByUuidList(List<String> uuidList);
+
     public List<ChannelVo> getAllChannelPriorityList();
 
     public int getMaxSortByParentUuid(String parentUuid);

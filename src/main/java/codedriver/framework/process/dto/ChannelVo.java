@@ -447,6 +447,4 @@ public class ChannelVo extends BasePageVo implements Serializable {
     public void setPriorityList(List<PriorityVo> priorityList) {
         this.priorityList = priorityList;
     }
-
-
 }
