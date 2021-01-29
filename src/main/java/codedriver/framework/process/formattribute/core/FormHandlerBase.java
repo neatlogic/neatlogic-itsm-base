@@ -8,6 +8,29 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
 public abstract class FormHandlerBase implements IFormAttributeHandler {
+
+    public enum ConversionType{
+
+        TOVALUE("toValue","text转换成value"),
+        TOTEXT("toText","value转换成text");
+
+        private String value;
+        private String text;
+
+        public String getValue(){
+            return value;
+        }
+
+        public String getText(){
+            return text;
+        }
+
+        private ConversionType(String _value,String _text){
+            value = _value;
+            text = _text;
+        }
+    }
+
     @Override
     public final String getType() {
         return "form";
