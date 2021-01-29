@@ -52,6 +52,9 @@ public abstract class FormHandlerBase implements IFormAttributeHandler {
             for (int i = 0; i < columnDataList.size(); i++) {
                 JSONObject firstObj = columnDataList.getJSONObject(i);
                 JSONObject valueObj = firstObj.getJSONObject((String)mapping.getValue());
+                if(mapping.getValue().equals(mapping.getText())){
+                    return valueObj.getString("value") + IFormAttributeHandler.SELECT_COMPOSE_JOINER + valueObj.getString("value");
+                }
                 if (valueObj.getString("compose").contains(value)) {
                     return valueObj.getString("compose");
                 }
