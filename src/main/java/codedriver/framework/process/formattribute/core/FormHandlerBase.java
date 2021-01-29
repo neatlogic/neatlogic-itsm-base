@@ -28,9 +28,9 @@ public abstract class FormHandlerBase implements IFormAttributeHandler {
             JSONArray columnDataList = resultObj.getJSONArray("columnDataList");
             for (int i = 0; i < columnDataList.size(); i++) {
                 JSONObject firstObj = columnDataList.getJSONObject(i);
-                JSONObject textObj = firstObj.getJSONObject((String)mapping.getValue());
-                if (textObj.getString("compose").contains(value)) {
-                    return textObj.getString("compose");
+                JSONObject valueObj = firstObj.getJSONObject((String)mapping.getValue());
+                if (valueObj.getString("compose").contains(value)) {
+                    return valueObj.getString("compose");
                 }
             }
         } catch (Exception e) {
