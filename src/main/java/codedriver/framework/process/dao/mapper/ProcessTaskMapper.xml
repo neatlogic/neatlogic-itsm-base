@@ -1658,15 +1658,19 @@
 
 	<select id="searchProcessTaskImportAuditCount" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="int" useCache="false">
 		SELECT
-		COUNT(p.`id`)
-		FROM `processtask_import_audit` p
-		WHERE 1=1
+		COUNT(distinct a.`id`)
+		FROM `processtask_import_audit` a
+		left join `processtask` b
+		on a.`processtask_id` = b.`id`
+		<where>
 		<if test="status != null">
-			and `status` = #{status}
+			and a.`status` = #{status}
 		</if>
 		<if test="keyword != null and keyword != ''">
-			and (`title` like CONCAT('%', #{keyword}, '%') or `processtask_id` like CONCAT('%', #{keyword}, '%'))
+			and (a.`title` like CONCAT('%', #{keyword}, '%')
+			or b.`serial_number` like CONCAT('%', #{keyword}, '%'))
 		</if>
+		</where>
 	</select>
 
 	<select id="searchProcessTaskImportAudit" parameterType="codedriver.framework.process.dto.ProcessTaskImportAuditVo" resultType="codedriver.framework.process.dto.ProcessTaskImportAuditVo"
