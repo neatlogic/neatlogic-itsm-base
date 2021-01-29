@@ -3,6 +3,7 @@ package codedriver.framework.process.stephandler.core;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.TransactionSynchronizationPool;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.util.PageUtil;
 import codedriver.framework.dao.mapper.RoleMapper;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
@@ -1507,30 +1508,35 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             Map<Long, NotifyPolicyVo> notifyPolicyMap = new HashMap<>();
             NotifyPolicyInvokerVo notifyPolicyInvokerVo = new NotifyPolicyInvokerVo();
             notifyPolicyInvokerVo.setInvoker(currentProcessTaskStepVo.getProcessUuid());
-            notifyPolicyInvokerVo.setPageSize(1000);
-            List<NotifyPolicyInvokerVo> notifyPolicyInvokerList = notifyMapper.getNotifyPolicyInvokerList(notifyPolicyInvokerVo);
-            for (NotifyPolicyInvokerVo notifyPolicyInvoker : notifyPolicyInvokerList) {
-                JSONObject config = notifyPolicyInvoker.getConfig();
-                if (MapUtils.isNotEmpty(config)) {
-                    String processStepUuid = config.getString("processStepUuid");
-                    if (StringUtils.isNotBlank(processStepUuid)) {
-                        Long stepId = stepIdMap.get(processStepUuid);
-                        if (stepId != null) {
-                            NotifyPolicyVo notifyPolicyVo = notifyPolicyMap.get(notifyPolicyInvoker.getPolicyId());
-                            if (notifyPolicyVo == null) {
-                                notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyInvoker.getPolicyId());
+            notifyPolicyInvokerVo.setPageSize(100);
+            int rowNum = notifyMapper.getNotifyPolicyInvokerCountByInvoker(currentProcessTaskStepVo.getProcessUuid());
+            int pageCount = PageUtil.getPageCount(rowNum, notifyPolicyInvokerVo.getPageSize());
+            for(int currentPage = 1; currentPage <= pageCount; currentPage++){
+                notifyPolicyInvokerVo.setCurrentPage(currentPage);
+                List<NotifyPolicyInvokerVo> notifyPolicyInvokerList = notifyMapper.getNotifyPolicyInvokerList(notifyPolicyInvokerVo);
+                for (NotifyPolicyInvokerVo notifyPolicyInvoker : notifyPolicyInvokerList) {
+                    JSONObject config = notifyPolicyInvoker.getConfig();
+                    if (MapUtils.isNotEmpty(config)) {
+                        String processStepUuid = config.getString("processStepUuid");
+                        if (StringUtils.isNotBlank(processStepUuid)) {
+                            Long stepId = stepIdMap.get(processStepUuid);
+                            if (stepId != null) {
+                                NotifyPolicyVo notifyPolicyVo = notifyPolicyMap.get(notifyPolicyInvoker.getPolicyId());
                                 if (notifyPolicyVo == null) {
-                                    continue;
+                                    notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyInvoker.getPolicyId());
+                                    if (notifyPolicyVo == null) {
+                                        continue;
+                                    }
+                                    notifyPolicyMap.put(notifyPolicyVo.getId(), notifyPolicyVo);
                                 }
-                                notifyPolicyMap.put(notifyPolicyVo.getId(), notifyPolicyVo);
+                                ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
+                                processTaskStepNotifyPolicyVo.setProcessTaskStepId(stepId);
+                                processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyInvoker.getPolicyId());
+                                processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
+                                processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
+                                processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
+                                processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
                             }
-                            ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
-                            processTaskStepNotifyPolicyVo.setProcessTaskStepId(stepId);
-                            processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyInvoker.getPolicyId());
-                            processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
-                            processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
-                            processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
-                            processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
                         }
                     }
                 }

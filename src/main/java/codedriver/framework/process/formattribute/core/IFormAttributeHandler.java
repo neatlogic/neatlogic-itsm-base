@@ -7,6 +7,8 @@ import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.process.dto.AttributeDataVo;
 import codedriver.framework.process.exception.form.AttributeValidException;
 
+import java.util.List;
+
 /**
  * @Author:chenqiwei
  * @Time:2020年11月19日
@@ -177,6 +179,15 @@ public interface IFormAttributeHandler {
      * @return Object
      */
     public Object valueConversionText(AttributeDataVo attributeDataVo, JSONObject configObj);
+
+    /**
+     * @Description: 将text转换成表单属性值，暂时用于批量导入工单
+     * @Author: laiwt
+     * @Date: 2021/1/28 17:06
+     * @Params: [values, config]
+     * @Returns: java.lang.Object
+    **/
+    public Object textConversionValue(List<String> values,JSONObject config);
 
     /**
      * @Author: chenqiwei
