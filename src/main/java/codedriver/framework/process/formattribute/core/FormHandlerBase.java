@@ -58,7 +58,8 @@ public abstract class FormHandlerBase implements IFormAttributeHandler {
                 if(mapping.getValue().equals(mapping.getText())
                         && (GroupSearch.USER.getValue().equals(valueObj.getString("type"))
                         || GroupSearch.ROLE.getValue().equals(valueObj.getString("type"))
-                        || GroupSearch.TEAM.getValue().equals(valueObj.getString("type")) || FormHandlerType.SELECT.toString().equals(valueObj.getString("type")))
+                        || GroupSearch.TEAM.getValue().equals(valueObj.getString("type"))
+                        || FormHandlerType.SELECT.toString().equals(valueObj.getString("type")))
                         && value.equals(valueObj.getString("text"))){
                     return valueObj.getString("value") + IFormAttributeHandler.SELECT_COMPOSE_JOINER + valueObj.getString("text");
                 }else if(mapping.getValue().equals(mapping.getText()) && value.equals(valueObj.getString("text"))){
