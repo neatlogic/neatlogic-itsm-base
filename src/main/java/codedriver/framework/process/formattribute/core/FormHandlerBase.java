@@ -1,5 +1,6 @@
 package codedriver.framework.process.formattribute.core;
 
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.restful.core.IApiComponent;
 import codedriver.framework.restful.dto.ApiVo;
@@ -52,7 +53,14 @@ public abstract class FormHandlerBase implements IFormAttributeHandler {
             for (int i = 0; i < columnDataList.size(); i++) {
                 JSONObject firstObj = columnDataList.getJSONObject(i);
                 JSONObject valueObj = firstObj.getJSONObject((String)mapping.getValue());
-                if(mapping.getValue().equals(mapping.getText())){
+                /** 当text与value字段相同时，不同类型的矩阵字段，拼接value的逻辑不同，用户、组、角色，按uuid&=&text拼接，其余按value&=&value拼接 **/
+                if(mapping.getValue().equals(mapping.getText())
+                        && (GroupSearch.USER.getValue().equals(valueObj.getString("type"))
+                        || GroupSearch.ROLE.getValue().equals(valueObj.getString("type"))
+                        || GroupSearch.TEAM.getValue().equals(valueObj.getString("type")))
+                        && value.equals(valueObj.getString("text"))){
+                    return valueObj.getString("value") + IFormAttributeHandler.SELECT_COMPOSE_JOINER + valueObj.getString("text");
+                }else if(mapping.getValue().equals(mapping.getText()) && value.equals(valueObj.getString("text"))){
                     return valueObj.getString("value") + IFormAttributeHandler.SELECT_COMPOSE_JOINER + valueObj.getString("value");
                 }
                 if (valueObj.getString("compose").contains(value)) {
