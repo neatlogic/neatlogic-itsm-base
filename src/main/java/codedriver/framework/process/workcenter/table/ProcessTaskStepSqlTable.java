@@ -44,6 +44,7 @@ public class ProcessTaskStepSqlTable implements ISqlTable {
         TYPE("type","节点类型"),
         HANDLER("handler","步骤处理器"),
         STATUS("status", "步骤状态"),
+        IS_ACTIVE("is_active", "步骤状态")
         ;
         private final String name;
         private final String text;

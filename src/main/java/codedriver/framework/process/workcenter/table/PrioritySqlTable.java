@@ -37,6 +37,7 @@ public class PrioritySqlTable implements ISqlTable {
         UUID("uuid", "服务目录UUID"),
         NAME("name", "服务目录名"),
         COLOR("color", "颜色"),
+        SORT("sort", "排序"),
         ;
         private final String name;
         private final String text;

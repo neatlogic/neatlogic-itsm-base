@@ -35,7 +35,9 @@ public class ProcessTaskSlaSqlTable implements ISqlTable {
 
     public enum FieldEnum {
         PROCESSTASK_ID("processtask_id", "工单ID"),
-        ID("id", "sla ID")
+        ID("id", "sla ID"),
+        NAME("name", "sla 名"),
+        CONFIG("config", "sla 配置")
         ;
         private final String name;
         private final String text;

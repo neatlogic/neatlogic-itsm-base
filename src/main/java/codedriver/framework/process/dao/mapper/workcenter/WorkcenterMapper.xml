@@ -24,6 +24,7 @@
 		<!--<result column="reporterName" property="reporterName" />-->
 		<result column="expire_time" property="expireTime" />
 		<result column="worktime_uuid" property="worktimeUuid" />
+		<result column="worktimeName" property="worktimeName" />
 		<result column="error" property="error" />
 		<result column="is_show" property="isShow" />
 		<result column="serial_number" property="serialNumber" />
@@ -54,25 +55,29 @@
 			<result property="vipLevel" column="reporterVipLevel" />
 			<result property="pinyin" column="reporterPinyin" />
 		</association>
-		<collection property="stepList" javaType="codedriver.framework.process.dto.ProcessTaskStepVo">
-			<result column="id" property="processTaskStepId" />
-			<result column="processtask_id" property="id" />
-			<result column="name" property="processTaskStepName" />
-			<result column="process_step_uuid" property="processStepUuid" />
-			<result column="status" property="processTaskStepStatus" />
-			<result column="type" property="processTaskStepType" />
-			<result column="handler" property="processTaskStepHandler" />
-			<result column="is_active" property="processTaskStepIsActive" />
-			<result column="start_time" property="processTaskStepStartTime" />
-			<result column="config_hash" property="processTaskStepConfigHash" />
-			<result column="end_time" property="processTaskStepEndTime" />
+		<association property="priority" javaType="codedriver.framework.process.dto.PriorityVo">
+			<result property="uuid" column="priorityUuid" />
+			<result property="name" column="priorityName" />
+			<result property="color" column="priorityColor" />
+		</association>
+		<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
+			<id column="processTaskStepId" property="id" />
+			<result column="processTaskStepName" property="name" />
+			<result column="processTaskStepStatus" property="status" />
+			<result column="processTaskStepType" property="type" />
+			<result column="processTaskStepHandler" property="handler" />
+			<result column="processTaskStepIsActive" property="isActive" />
+			<result column="processTaskStepStartTime" property="startTime" />
+			<result column="processTaskStepConfigHash" property="configHash" />
+			<result column="processTaskStepIsActive" property="isActive" />
+			<result column="processTaskStepEndTime" property="endTime" />
 			<collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
-				<result column="workerType" property="stepWorkerType" />
-				<result column="uuid" property="stepWorkerUuid" />
+				<result column="stepWorkerType" property="type" />
+				<result column="stepWorkerUuid" property="uuid" />
 			</collection>
 			<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
 				<result column="userType" property="stepUserUserType" />
-				<result column="userStatus" property="stepUserUserStatus" />
+				<result column="stepUserUserStatus" property="status" />
 				<association property="userVo" javaType="codedriver.framework.dto.UserVo">
 					<result column="stepUserUserUuid" property="uuid" />
 					<result column="stepUserUserName" property="userName" />
@@ -82,6 +87,25 @@
 				</association>
 			</collection>
 		</collection>
+		<collection property="focusUserList" ofType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="focusUuid" />
+			<result property="userName" column="focusName" />
+			<result property="userInfo" column="focusInfo" />
+			<result property="vipLevel" column="focusVipLevel" />
+			<result property="pinyin" column="focusPinyin" />
+		</collection>
+		<collection property="processTaskSlaVoList" ofType="codedriver.framework.process.dto.ProcessTaskSlaVo">
+			<result column="ProcessTaskSlaId" property="id" />
+			<result column="ProcessTaskSlaName" property="name" />
+			<result column="ProcessTaskSlaConfig" property="config" />
+			<association property="slaTimeVo" javaType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
+				<result column="expireTime" property="expireTime" />
+				<result column="realExpireTime" property="realExpireTime" />
+				<result column="timeLeft" property="timeLeft" />
+				<result column="realTimeLeft" property="realTimeLeft" />
+			</association>
+		</collection>
+
 	</resultMap>
 
 	<select id="getWorkcenterProcessTaskInfoBySql" parameterType="java.lang.String" resultMap="workcenterProcessTaskMap">
