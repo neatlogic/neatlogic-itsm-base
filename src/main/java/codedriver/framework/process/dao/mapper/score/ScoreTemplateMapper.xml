@@ -46,6 +46,7 @@
 			and `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
 		</where>
+		order by `fcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
