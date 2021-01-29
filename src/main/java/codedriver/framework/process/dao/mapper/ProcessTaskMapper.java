@@ -95,6 +95,8 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskStepVo getStartProcessTaskStepByProcessTaskId(Long processTaskId);
 
+    public ProcessTaskStepVo getEndProcessTaskStepByProcessTaskId(Long processTaskId);
+
     public List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndType(@Param("processTaskId") Long processTaskId,
         @Param("type") String type);
 
@@ -141,9 +143,6 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskStepVo getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuid(
         @Param("processTaskId") Long processTaskId, @Param("processStepUuid") String processStepUuid);
-
-    public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskIdAndProcessStepUuidList(
-        @Param("processTaskId") Long processTaskId, @Param("processStepUuidList") List<String> processStepUuidList);
 
     public List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
