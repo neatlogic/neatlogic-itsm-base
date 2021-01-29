@@ -1,6 +1,5 @@
 package codedriver.framework.process.formattribute.core;
 
-import codedriver.framework.common.constvalue.FormHandlerType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.restful.core.IApiComponent;
