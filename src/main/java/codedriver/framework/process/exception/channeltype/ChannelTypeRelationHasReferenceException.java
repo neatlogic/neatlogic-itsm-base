@@ -5,7 +5,7 @@ import codedriver.framework.exception.core.ApiRuntimeException;
 /**
  * @Title: ChannelTypeRelationHasReferenceException
  * @Package codedriver.framework.process.exception.channeltype
- * @Description: TODO
+ * @Description: 服务类型关系已被引用异常
  * @Author: linbq
  * @Date: 2021/1/31 15:34
  * Copyright(c) 2021 TechSureCo.,Ltd.AllRightsReserved.
