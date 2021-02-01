@@ -3,6 +3,7 @@ package codedriver.framework.process.condition.core;
 import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
+import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 
 import java.util.List;
 
@@ -61,6 +62,6 @@ public interface IProcessTaskCondition extends IConditionHandler {
 	 * @Params: * @param null:
 	 * @Returns: * @return: null
 	 **/
-	public List<JoinTableColumnVo> getJoinTableColumnList();
+	public List<JoinTableColumnVo> getJoinTableColumnList(WorkcenterVo workcenterVo);
 
 }

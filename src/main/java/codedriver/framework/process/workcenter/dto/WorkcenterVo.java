@@ -50,13 +50,15 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     @EntityField(name = "是否拥有授权权限", type = ApiParamType.INTEGER)
     private Integer isCanRole;
     @EntityField(name = "是否附加待我处理条件", type = ApiParamType.INTEGER)
-    private Integer isMeWillDo = 0;
-    @EntityField(name = "附加待我处理的数量", type = ApiParamType.STRING)
-    private String meWillDoCount;
+    private Integer isProcessingOfMine = 0;
+    @EntityField(name = "待我处理的数量", type = ApiParamType.STRING)
+    private String processingOfMineCount;
     @EntityField(name = "设备类型", type = ApiParamType.STRING)
     private String device;
     @EntityField(name = "排序的字段", type = ApiParamType.JSONARRAY)
     private JSONArray sortList;
+    @EntityField(name = "上报时间条件", type = ApiParamType.JSONOBJECT)
+    private JSONObject startTimeCondition;
 
     //params
     private List<String> channelUuidList;
@@ -77,7 +79,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     public WorkcenterVo(JSONObject jsonObj) {
         super(jsonObj);
-        this.isMeWillDo = jsonObj.getInteger("isMeWillDo") != null ? jsonObj.getInteger("isMeWillDo") : 0;
+        this.isProcessingOfMine = jsonObj.getInteger("isProcessingOfMine") != null ? jsonObj.getInteger("isProcessingOfMine") : 0;
         this.sortList = jsonObj.getJSONArray("sortList");
         this.uuid = jsonObj.getString("uuid");
         this.setCurrentPage(jsonObj.getInteger("currentPage"));
@@ -95,6 +97,12 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
                 }
                 channelUuidList.addAll(channelUuidListTmp);
             }
+        }
+        //上报时间过滤条件
+        if(jsonObj.containsKey("startTimeCondition")) {
+            startTimeCondition = jsonObj.getJSONObject("startTimeCondition");
+        }else{
+            startTimeCondition = JSONObject.parseObject("{\"timeRange\":\"1\",\"timeUnit\":\"year\"}");//默认展示一年
         }
     }
 
@@ -216,20 +224,20 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.channelUuidList = channelUuidList;
     }
 
-    public Integer getIsMeWillDo() {
-        return isMeWillDo;
+    public Integer getIsProcessingOfMine() {
+        return isProcessingOfMine;
     }
 
-    public void setIsMeWillDo(Integer isMeWillDo) {
-        this.isMeWillDo = isMeWillDo;
+    public void setIsProcessingOfMine(Integer isProcessingOfMine) {
+        this.isProcessingOfMine = isProcessingOfMine;
     }
 
-    public String getMeWillDoCount() {
-        return meWillDoCount;
+    public String getProcessingOfMineCount() {
+        return processingOfMineCount;
     }
 
-    public void setMeWillDoCount(String meWillDoCount) {
-        this.meWillDoCount = meWillDoCount;
+    public void setProcessingOfMineCount(String processingOfMineCount) {
+        this.processingOfMineCount = processingOfMineCount;
     }
 
     public JSONArray getResultColumnList() {
@@ -286,5 +294,13 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     public void setTheadVoList(List<WorkcenterTheadVo> theadVoList) {
         this.theadVoList = theadVoList;
+    }
+
+    public JSONObject getStartTimeCondition() {
+        return startTimeCondition;
+    }
+
+    public void setStartTimeCondition(JSONObject startTimeCondition) {
+        this.startTimeCondition = startTimeCondition;
     }
 }

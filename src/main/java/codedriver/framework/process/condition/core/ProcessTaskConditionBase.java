@@ -1,12 +1,19 @@
 package codedriver.framework.process.condition.core;
 
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
+import codedriver.framework.dao.mapper.UserMapper;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.process.constvalue.ProcessFieldType;
+import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
+import codedriver.framework.process.workcenter.dto.WorkcenterVo;
+import codedriver.framework.process.workcenter.table.ProcessTaskSqlTable;
+import codedriver.framework.process.workcenter.table.ProcessTaskStepSqlTable;
 import codedriver.framework.process.workcenter.table.ProcessTaskStepUserSqlTable;
 import codedriver.framework.process.workcenter.table.ProcessTaskStepWorkerSqlTable;
 import codedriver.framework.util.TimeUtil;
@@ -15,13 +22,21 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class ProcessTaskConditionBase implements IProcessTaskCondition {
+    protected static UserMapper userMapper;
+    @Autowired
+    public void setUserMapper(UserMapper _userMapper) {
+        userMapper = _userMapper;
+    }
 
     @Override
     public String getEsWhere(List<ConditionVo> conditionList, Integer index) {
@@ -136,37 +151,44 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         sqlSb.append(Expression.getExpressionSql(condition.getExpression(), tableShortName, columnName, value.toString()));
     }
 
-    public void getDateSqlWhere(ConditionVo condition, StringBuilder sqlSb,String tableShortName,String columnName) {
+    public void getDateSqlWhereByValueList(ConditionVo condition, StringBuilder sqlSb,String tableShortName,String columnName) {
         JSONArray dateJSONArray = JSONArray.parseArray(JSON.toJSONString(condition.getValueList()));
         if (CollectionUtils.isNotEmpty(dateJSONArray)) {
             JSONObject dateValue = JSONObject.parseObject(dateJSONArray.get(0).toString());
-            SimpleDateFormat format = new SimpleDateFormat(TimeUtil.YYYY_MM_DD_HH_MM_SS);
-            String startTime = StringUtils.EMPTY;
-            String endTime = StringUtils.EMPTY;
-            String expression = condition.getExpression();
-            if (dateValue.containsKey(ProcessWorkcenterField.STARTTIME.getValue())) {
-                startTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.STARTTIME.getValue())));
-                endTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.ENDTIME.getValue())));
-            } else {
-                startTime = TimeUtil.timeTransfer(dateValue.getInteger("timeRange"), dateValue.getString("timeUnit"));
-                endTime = TimeUtil.timeNow();
-            }
-            if (StringUtils.isEmpty(startTime)) {
-                expression = Expression.LESSTHAN.getExpression();
-                startTime = endTime;
-            } else if (StringUtils.isEmpty(endTime)) {
-                expression = Expression.GREATERTHAN.getExpression();
-            }
-            sqlSb.append(Expression.getExpressionSql(condition.getExpression(), tableShortName, columnName, startTime, endTime));
+            getDateSqlWhere(dateValue,sqlSb,tableShortName,columnName);
         }
     }
 
-    @Override
-    public List<JoinTableColumnVo> getJoinTableColumnList() {
-        return getMyJoinTableColumnList();
+    public void getDateSqlWhere(JSONObject dateValue, StringBuilder sqlSb,String tableShortName,String columnName) {
+        SimpleDateFormat format = new SimpleDateFormat(TimeUtil.YYYY_MM_DD_HH_MM_SS);
+        String startTime = StringUtils.EMPTY;
+        String endTime = StringUtils.EMPTY;
+        String expression = Expression.BETWEEN.getExpression();
+        if (dateValue.containsKey(ProcessWorkcenterField.STARTTIME.getValue())) {
+            startTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.STARTTIME.getValue())));
+            endTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.ENDTIME.getValue())));
+        } else {
+            startTime = TimeUtil.timeTransfer(dateValue.getInteger("timeRange"), dateValue.getString("timeUnit"));
+            endTime = TimeUtil.timeNow();
+        }
+        if (StringUtils.isEmpty(startTime)) {
+            expression = Expression.LESSTHAN.getExpression();
+            startTime = endTime;
+        } else if (StringUtils.isEmpty(endTime)) {
+            expression = Expression.GREATERTHAN.getExpression();
+        }
+        sqlSb.append(" ( ");
+        sqlSb.append(Expression.getExpressionSql(expression, tableShortName, columnName, startTime, endTime));
+        sqlSb.append(" ) ");
+
     }
 
-    public List<JoinTableColumnVo> getMyJoinTableColumnList() {
+    @Override
+    public List<JoinTableColumnVo> getJoinTableColumnList(WorkcenterVo workcenterVo) {
+        return getMyJoinTableColumnList(workcenterVo);
+    }
+
+    public List<JoinTableColumnVo> getMyJoinTableColumnList(WorkcenterVo workcenterVo) {
         return new ArrayList<>();
     }
 
@@ -177,7 +199,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
      * @Params: [sqlSb, userList, teamList, roleList]
      * @Returns: void
      **/
-    protected void getProcessingTaskOfMineSql(StringBuilder sqlSb, List<String> userList, List<String> teamList, List<String> roleList) {
+    protected void getProcessingTaskOfMineSqlWhere(StringBuilder sqlSb, List<String> userList, List<String> teamList, List<String> roleList) {
         sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(),new ProcessTaskStepUserSqlTable().getShortName(),ProcessTaskStepUserSqlTable.FieldEnum.USER_UUID.getValue(),String.join("','",userList)));
         //worker-team
         if(CollectionUtils.isNotEmpty(teamList)) {
@@ -200,5 +222,40 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
             sqlSb.append(" and ");
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(), GroupSearch.USER.getValue()));
         }
+    }
+
+    /**
+     * @Description: 拼接待我处理条件sql
+     * @Author: 89770
+     * @Date: 2021/2/1 11:08
+     * @Params: [sqlSb]
+     * @Returns: void
+     **/
+    public void getProcessingOfMineConditionSqlWhere(StringBuilder sqlSb){
+        sqlSb.append(" ( ");
+        // status
+        List<String> statusList = Stream.of(ProcessTaskStatus.DRAFT.getValue(), ProcessTaskStatus.RUNNING.getValue())
+                .map(String::toString).collect(Collectors.toList());
+        sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskSqlTable().getShortName(), ProcessTaskSqlTable.FieldEnum.STATUS.getValue(), String.join("','", statusList)));
+        sqlSb.append(" ) and ( ");
+        // step.status
+        List<String> stepStatusList =
+                Stream.of(ProcessTaskStatus.DRAFT.getValue(), ProcessTaskStatus.PENDING.getValue(), ProcessTaskStatus.RUNNING.getValue())
+                        .map(String::toString).collect(Collectors.toList());
+        sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepSqlTable().getShortName(), ProcessTaskStepSqlTable.FieldEnum.STATUS.getValue(), String.join("','", statusList)));
+        sqlSb.append(" ) and ( ");
+        // step.user
+        List<String> userList = new ArrayList<String>();
+        List<String> teamList = new ArrayList<String>();
+        List<String> roleList = new ArrayList<String>();
+        userList.add(UserContext.get().getUserUuid());
+        // 如果是待处理状态，则需额外匹配角色和组
+        UserVo userVo = userMapper.getUserByUuid(UserContext.get().getUserUuid());
+        if (userVo != null) {
+            teamList = userVo.getTeamUuidList();
+            roleList = userVo.getRoleUuidList();
+        }
+        getProcessingTaskOfMineSqlWhere(sqlSb,userList,teamList,roleList);
+        sqlSb.append(" ) ");
     }
 }
