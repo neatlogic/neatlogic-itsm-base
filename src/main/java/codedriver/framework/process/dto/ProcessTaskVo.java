@@ -122,6 +122,8 @@ public class ProcessTaskVo extends BasePageVo {
     private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
     @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTagVo> tagVoList;
+    @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
+    private List<String> tagList;
     @EntityField(name = "移动端表单交互类型，1：下探页面；0：当前页", type = ApiParamType.INTEGER)
     private Integer mobileFormUIType;
     @JSONField(serialize = false)
@@ -614,5 +616,13 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setChannelName(String channelName) {
         this.channelName = channelName;
+    }
+
+    public List<String> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<String> tagList) {
+        this.tagList = tagList;
     }
 }
