@@ -9,7 +9,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
 import codedriver.framework.common.RootComponent;
-import codedriver.framework.process.constvalue.ProcessTaskAuditDetailType;
 @RootComponent
 public class ProcessTaskStepAuditDetailHandlerFactory extends ApplicationListenerBase{
 
@@ -17,9 +16,6 @@ public class ProcessTaskStepAuditDetailHandlerFactory extends ApplicationListene
 	
 	public static IProcessTaskStepAuditDetailHandler getHandler(String type) {
 		IProcessTaskStepAuditDetailHandler handler = handlerMap.get(type);
-		if(handler == null) {
-			handler = handlerMap.get(ProcessTaskAuditDetailType.CONTENT.getValue());
-		}
 		return handler;
 	}
 	

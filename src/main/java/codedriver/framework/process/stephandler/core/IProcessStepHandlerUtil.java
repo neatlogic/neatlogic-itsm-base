@@ -90,22 +90,6 @@ public interface IProcessStepHandlerUtil {
      **/
     public void autoScore(ProcessTaskVo currentProcessTaskVo);
     /**
-     * @Description: 获取需要验证表单数据，并校验
-     * @Author: linbq
-     * @Date: 2021/1/20 16:20
-     * @Params:[currentProcessTaskStepVo]
-     * @Returns:boolean
-     **/
-    public boolean formAttributeDataValidFromDb(ProcessTaskStepVo currentProcessTaskStepVo);
-    /**
-     * @Description: 验证表单数据是否合法
-     * @Author: linbq
-     * @Date: 2021/1/20 16:20
-     * @Params:[currentProcessTaskStepVo]
-     * @Returns:boolean
-     **/
-    public boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo);
-    /**
      * @Description: 获取验证基本信息数据是否合法，并验证
      * @Author: linbq
      * @Date: 2021/1/20 16:21
