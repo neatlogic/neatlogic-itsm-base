@@ -55,4 +55,12 @@ public class ProcessTaskAuditDetailTypeFactory {
 		}
 		return "";
 	}
+	public static boolean getNeedCompression(String _value) {
+		for (IProcessTaskAuditDetailType s : getAuditDetailTypeList()) {
+			if (s.getValue().equals(_value)) {
+				return s.getNeedCompression();
+			}
+		}
+		return false;
+	}
 }

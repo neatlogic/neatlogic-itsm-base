@@ -239,6 +239,8 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskVo> getProcessTaskDetailListByIdList(List<Long> processTaskIdList);
 
+    public String getProcessTaskStepNameById(Long id);
+
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -255,7 +257,7 @@ public interface ProcessTaskMapper {
     @ESSearch
     public int replaceProcessTask(@ESParam("processtask") ProcessTaskVo processTaskVo);
 
-    public int replaceProcessTaskContent(ProcessTaskContentVo processTaskContentVo);
+    public int insertIgnoreProcessTaskContent(ProcessTaskContentVo processTaskContentVo);
 
     public int insertProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
 
@@ -442,5 +444,4 @@ public interface ProcessTaskMapper {
 
     public int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(
         ProcessTaskStepInOperationVo processTaskStepInOperationVo);
-
 }

@@ -9,6 +9,9 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.process.audithandler.core.ProcessTaskAuditDetailTypeFactory;
 import codedriver.framework.restful.annotation.EntityField;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepAuditDetailVo>{
 	@EntityField(name = "活动id", type = ApiParamType.LONG)
 	private Long auditId;
@@ -20,8 +23,6 @@ public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepA
 	private String oldContent;
 	@EntityField(name = "新内容", type = ApiParamType.STRING)
 	private String newContent;
-	@JSONField(serialize=false)
-	private transient JSONObject paramObj = new JSONObject();
 
 	public ProcessTaskStepAuditDetailVo() {
 
@@ -71,14 +72,6 @@ public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepA
 		return Integer.compare(ProcessTaskAuditDetailTypeFactory.getSort(type), ProcessTaskAuditDetailTypeFactory.getSort(auditDetail.getType()));
 	}
 
-	public JSONObject getParamObj() {
-		return paramObj;
-	}
-
-	public void setParamObj(JSONObject paramObj) {
-		this.paramObj = paramObj;
-	}
-
 	public String getTypeName() {
 		if(StringUtils.isBlank(typeName) && StringUtils.isNotBlank(type)) {
 			typeName = ProcessTaskAuditDetailTypeFactory.getText(type);
@@ -90,4 +83,14 @@ public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepA
 		this.typeName = typeName;
 	}
 
+	public String getChangeType() {
+		if(oldContent != null && newContent != null){
+			return "update";
+		}else if(oldContent != null){
+			return "clear";
+		}else if(newContent != null){
+			return "new";
+		}
+		return null;
+	}
 }
