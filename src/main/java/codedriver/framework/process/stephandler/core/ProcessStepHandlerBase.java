@@ -1982,7 +1982,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
          */
         if (StringUtils.isNotBlank(content)) {
             ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
-            processTaskMapper.replaceProcessTaskContent(contentVo);
+            processTaskMapper.insertIgnoreProcessTaskContent(contentVo);
             processtaskScoreVo.setContentHash(contentVo.getHash());
             processTaskScoreMapper.insertProcessTaskScoreContent(processtaskScoreVo);
         }

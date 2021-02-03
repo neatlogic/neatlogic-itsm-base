@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import codedriver.framework.dto.UserVo;
-import com.alibaba.fastjson.JSONObject;
+import codedriver.framework.dto.WorkAssignmentUnitVo;
+import codedriver.framework.util.SnowflakeUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.common.constvalue.ApiParamType;
-import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepAuditVo {
@@ -18,31 +18,16 @@ public class ProcessTaskStepAuditVo {
 	private Long processTaskId;
 	@EntityField(name = "步骤id", type = ApiParamType.LONG)
 	private Long processTaskStepId;
-	@EntityField(name = "步骤名称", type = ApiParamType.STRING)
-	private String processTaskStepName;
 	@EntityField(name = "用户")
-	private UserVo userVo;
+	private WorkAssignmentUnitVo userVo;
 	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
 	private String userUuid;
-//	@EntityField(name = "用户名", type = ApiParamType.STRING)
-//	private String userName;
-//	@EntityField(name = "用户其他属性", type = ApiParamType.STRING)
-//	private String userInfo;
-//	@EntityField(name = "用户头像", type = ApiParamType.STRING)
-//	private String avatar;
-//	@EntityField(name = "用户VIP等级", type = ApiParamType.INTEGER)
-//	private Integer vipLevel;
 	@EntityField(name = "创建时间", type = ApiParamType.LONG)
 	private Date actionTime;
-	@EntityField(name = "活动类型，startprocess(上报)、complete(完成)、retreat(撤回)、abort(终止)、recover(恢复)、transfer(转交)、updateTitle(更新标题)、updatePriority(更新优先级)、updateContent(更新上报描述内容)、comment(评论)", type = ApiParamType.STRING)
+	@EntityField(name = "活动类型", type = ApiParamType.STRING)
 	private String action;
 	//@EntityField(name = "活动详情列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepAuditDetailVo> auditDetailList;
-	
-	@EntityField(name = "目标步骤id", type = ApiParamType.LONG)
-	private Long nextStepId;
-	@EntityField(name = "目标步骤名称", type = ApiParamType.STRING)
-	private String nextStepName;
 	@EntityField(name = "步骤状态", type = ApiParamType.STRING)
 	private String stepStatus;
 	@EntityField(name = "步骤状态信息", type = ApiParamType.JSONOBJECT)
@@ -50,12 +35,11 @@ public class ProcessTaskStepAuditVo {
 	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String description;
 	@EntityField(name = "原始处理人Vo")
-	private UserVo originalUserVo;
+	private WorkAssignmentUnitVo originalUserVo;
     @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
     private String originalUser;
-//    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
-//    private String originalUserName;
-	
+	private transient String descriptionHash;
+
 	public ProcessTaskStepAuditVo() { 
 	}
 	
@@ -68,11 +52,13 @@ public class ProcessTaskStepAuditVo {
 		this.processTaskId = processTaskId;
 		this.processTaskStepId = processTaskStepId;
 		this.userUuid = userUuid;
-		this.userVo = new UserVo(userUuid);
 		this.action = action;
 	}
 
 	public Long getId() {
+		if(id == null){
+			id = SnowflakeUtil.uniqueLong();
+		}
 		return id;
 	}
 
@@ -96,19 +82,11 @@ public class ProcessTaskStepAuditVo {
 		this.processTaskStepId = processTaskStepId;
 	}
 
-	public String getProcessTaskStepName() {
-		return processTaskStepName;
-	}
-
-	public void setProcessTaskStepName(String processTaskStepName) {
-		this.processTaskStepName = processTaskStepName;
-	}
-
-	public UserVo getUserVo() {
+	public WorkAssignmentUnitVo getUserVo() {
 		return userVo;
 	}
 
-	public void setUserVo(UserVo userVo) {
+	public void setUserVo(WorkAssignmentUnitVo userVo) {
 		this.userVo = userVo;
 	}
 
@@ -119,20 +97,6 @@ public class ProcessTaskStepAuditVo {
 	public void setUserUuid(String userUuid) {
 		this.userUuid = userUuid;
 	}
-//
-//	public String getUserName() {
-//		if(StringUtils.isBlank(userName) && StringUtils.isNotBlank(userUuid)) {
-//			userName = SystemUser.getUserName(userUuid);
-//			if(StringUtils.isBlank(userName)) {
-//				userName = userUuid;
-//			}
-//		}
-//		return userName;
-//	}
-//
-//	public void setUserName(String userName) {
-//		this.userName = userName;
-//	}
 
 	public Date getActionTime() {
 		return actionTime;
@@ -156,22 +120,6 @@ public class ProcessTaskStepAuditVo {
 
 	public void setAuditDetailList(List<ProcessTaskStepAuditDetailVo> auditDetailList) {
 		this.auditDetailList = auditDetailList;
-	}
-
-	public Long getNextStepId() {
-		return nextStepId;
-	}
-
-	public void setNextStepId(Long nextStepId) {
-		this.nextStepId = nextStepId;
-	}
-
-	public String getNextStepName() {
-		return nextStepName;
-	}
-
-	public void setNextStepName(String nextStepName) {
-		this.nextStepName = nextStepName;
 	}
 
 	public String getStepStatus() {
@@ -201,27 +149,11 @@ public class ProcessTaskStepAuditVo {
 		this.description = description;
 	}
 
-//	public String getUserInfo() {
-//		return userInfo;
-//	}
-
-//	public void setUserInfo(String userInfo) {
-//		this.userInfo = userInfo;
-//	}
-//
-//	public String getAvatar(){
-//		if (StringUtils.isBlank(avatar) && StringUtils.isNotBlank(userInfo)) {
-//			JSONObject jsonObject = JSONObject.parseObject(userInfo);
-//			avatar = jsonObject.getString("avatar");
-//		}
-//		return avatar;
-//	}
-
-	public UserVo getOriginalUserVo() {
+	public WorkAssignmentUnitVo getOriginalUserVo() {
 		return originalUserVo;
 	}
 
-	public void setOriginalUserVo(UserVo originalUserVo) {
+	public void setOriginalUserVo(WorkAssignmentUnitVo originalUserVo) {
 		this.originalUserVo = originalUserVo;
 	}
 
@@ -233,20 +165,12 @@ public class ProcessTaskStepAuditVo {
     public void setOriginalUser(String originalUser) {
         this.originalUser = originalUser;
     }
-//
-//    public String getOriginalUserName() {
-//        return originalUserName;
-//    }
-//
-//    public void setOriginalUserName(String originalUserName) {
-//        this.originalUserName = originalUserName;
-//    }
 
-//	public Integer getVipLevel() {
-//		return vipLevel;
-//	}
-//
-//	public void setVipLevel(Integer vipLevel) {
-//		this.vipLevel = vipLevel;
-//	}
+	public String getDescriptionHash() {
+		return descriptionHash;
+	}
+
+	public void setDescriptionHash(String descriptionHash) {
+		this.descriptionHash = descriptionHash;
+	}
 }
