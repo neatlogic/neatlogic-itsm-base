@@ -43,8 +43,9 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private JSONArray headerList;
     @JSONField(serialize = false)
     private List<AuthorityVo> authorityList;
+    @JSONField(serialize = false)
     @EntityField(name = "角色列表", type = ApiParamType.JSONARRAY)
-    private List<String> valueList;
+    private transient List<String> valueList;
     @EntityField(name = "是否拥有编辑权限", type = ApiParamType.INTEGER)
     private Integer isCanEdit;
     @EntityField(name = "是否拥有授权权限", type = ApiParamType.INTEGER)
@@ -53,8 +54,9 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private Integer isProcessingOfMine = 0;
     @EntityField(name = "待我处理的数量", type = ApiParamType.STRING)
     private String processingOfMineCount;
+    @JSONField(serialize = false)
     @EntityField(name = "设备类型", type = ApiParamType.STRING)
-    private String device;
+    private transient String device;
     @EntityField(name = "排序的字段", type = ApiParamType.JSONARRAY)
     private JSONArray sortList;
     @EntityField(name = "上报时间条件", type = ApiParamType.JSONOBJECT)
@@ -78,14 +80,15 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     }
 
     public WorkcenterVo(JSONObject jsonObj) {
-        super(jsonObj);
-        this.isProcessingOfMine = jsonObj.getInteger("isProcessingOfMine") != null ? jsonObj.getInteger("isProcessingOfMine") : 0;
-        this.sortList = jsonObj.getJSONArray("sortList");
+        super(jsonObj.getJSONObject("conditionConfig"));
+        JSONObject conditionConfig = jsonObj.getJSONObject("conditionConfig");
+        this.isProcessingOfMine = conditionConfig.getInteger("isProcessingOfMine") != null ? conditionConfig.getInteger("isProcessingOfMine") : 0;
+        this.sortList = conditionConfig.getJSONArray("sortList");
         this.uuid = jsonObj.getString("uuid");
-        this.setCurrentPage(jsonObj.getInteger("currentPage"));
-        this.setPageSize(jsonObj.getInteger("pageSize"));
-        this.resultColumnList = jsonObj.getJSONArray("resultColumnList");
-        JSONArray conditionGroupArray = jsonObj.getJSONArray("conditionGroupList");
+        this.setCurrentPage(conditionConfig.getInteger("currentPage"));
+        this.setPageSize(conditionConfig.getInteger("pageSize"));
+        this.resultColumnList = conditionConfig.getJSONArray("resultColumnList");
+        JSONArray conditionGroupArray = conditionConfig.getJSONArray("conditionGroupList");
         if (CollectionUtils.isNotEmpty(conditionGroupArray)) {
             channelUuidList = new ArrayList<String>();
             for (Object conditionGroup : conditionGroupArray) {
@@ -99,8 +102,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
             }
         }
         //上报时间过滤条件
-        if(jsonObj.containsKey("startTimeCondition")) {
-            startTimeCondition = jsonObj.getJSONObject("startTimeCondition");
+        if(conditionConfig.containsKey("startTimeCondition")) {
+            startTimeCondition = conditionConfig.getJSONObject("startTimeCondition");
         }else{
             startTimeCondition = JSONObject.parseObject("{\"timeRange\":\"1\",\"timeUnit\":\"year\"}");//默认展示一年
         }
@@ -198,6 +201,10 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
             }
         }
         return valueList;
+    }
+
+    public void setValueList(List<String> valueList) {
+        this.valueList = valueList;
     }
 
     public Integer getIsCanEdit() {

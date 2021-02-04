@@ -161,8 +161,8 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
 
     public void getDateSqlWhere(JSONObject dateValue, StringBuilder sqlSb,String tableShortName,String columnName) {
         SimpleDateFormat format = new SimpleDateFormat(TimeUtil.YYYY_MM_DD_HH_MM_SS);
-        String startTime = StringUtils.EMPTY;
-        String endTime = StringUtils.EMPTY;
+        String startTime;
+        String endTime;
         String expression = Expression.BETWEEN.getExpression();
         if (dateValue.containsKey(ProcessWorkcenterField.STARTTIME.getValue())) {
             startTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.STARTTIME.getValue())));

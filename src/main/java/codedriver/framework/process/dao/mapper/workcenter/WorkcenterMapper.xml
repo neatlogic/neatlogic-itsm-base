@@ -73,6 +73,7 @@
 			<result column="processTaskStepEndTime" property="endTime" />
 			<collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
 				<result column="stepWorkerType" property="type" />
+				<result column="stepWorkerUserType" property="userType" />
 				<result column="stepWorkerUuid" property="uuid" />
 			</collection>
 			<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
@@ -126,13 +127,14 @@
 	</resultMap>
 	
 	<select id="getAuthorizedWorkcenterUuidList" resultType="java.lang.String">
-		SELECT 
+		SELECT
 		  pw.`uuid`
 		FROM
 		  `process_workcenter` pw 
 		   LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
 		   LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
 		<where>
+			pw.type = 'factory' OR
 			(pwa.type = 'common' AND pwa.`uuid` = 'alluser')
 			<if test="userUuid != null and userUuid != ''">
 			  	OR	(pwa.type = 'user' AND pwa.`uuid` = #{userUuid})
