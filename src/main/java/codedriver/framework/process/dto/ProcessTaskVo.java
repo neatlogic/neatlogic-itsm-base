@@ -1,25 +1,19 @@
 package codedriver.framework.process.dto;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import codedriver.framework.dto.UserVo;
-import org.apache.commons.lang3.StringUtils;
-
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
-
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.TeamVo;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
 
 public class ProcessTaskVo extends BasePageVo {
     @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
@@ -33,6 +27,8 @@ public class ProcessTaskVo extends BasePageVo {
     private String title;
     @EntityField(name = "流程uuid", type = ApiParamType.STRING)
     private String processUuid;
+    @EntityField(name = "服务")
+    private ChannelVo channelVo;
     @EntityField(name = "服务uuid", type = ApiParamType.STRING)
     private String channelUuid;
     @EntityField(name = "服务路径", type = ApiParamType.STRING)
@@ -147,7 +143,13 @@ public class ProcessTaskVo extends BasePageVo {
     @JSONField(serialize = false)
     @EntityField(name = "服务名称", type = ApiParamType.STRING)
     private String channelName;
-    
+
+    @EntityField(name = "关注人列表", type = ApiParamType.JSONARRAY)
+    private List<UserVo> focusUserList;
+
+    @EntityField(name = "sla列表", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskSlaVo> processTaskSlaVoList;
+
     public ProcessTaskVo() {
 
     }
@@ -616,6 +618,30 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setChannelName(String channelName) {
         this.channelName = channelName;
+    }
+
+    public ChannelVo getChannelVo() {
+        return channelVo;
+    }
+
+    public void setChannelVo(ChannelVo channelVo) {
+        this.channelVo = channelVo;
+    }
+
+    public List<UserVo> getFocusUserList() {
+        return focusUserList;
+    }
+
+    public void setFocusUserList(List<UserVo> focusUserList) {
+        this.focusUserList = focusUserList;
+    }
+
+    public List<ProcessTaskSlaVo> getProcessTaskSlaVoList() {
+        return processTaskSlaVoList;
+    }
+
+    public void setProcessTaskSlaVoList(List<ProcessTaskSlaVo> processTaskSlaVoList) {
+        this.processTaskSlaVoList = processTaskSlaVoList;
     }
 
     public List<String> getTagList() {

@@ -93,7 +93,7 @@ public class ChannelVo extends BasePageVo implements Serializable {
     private ChannelTypeVo channelTypeVo;
 
     @EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
-    private Integer allowTranferReport;
+    private int allowTranferReport;
 
     @EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
     private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
@@ -383,11 +383,11 @@ public class ChannelVo extends BasePageVo implements Serializable {
         return true;
     }
 
-    public Integer getAllowTranferReport() {
+    public int getAllowTranferReport() {
         return allowTranferReport;
     }
 
-    public void setAllowTranferReport(Integer allowTranferReport) {
+    public void setAllowTranferReport(int allowTranferReport) {
         this.allowTranferReport = allowTranferReport;
     }
 
@@ -436,15 +436,15 @@ public class ChannelVo extends BasePageVo implements Serializable {
         return priorityList;
     }
 
-    public void setPriorityList(List<PriorityVo> priorityList) {
-        this.priorityList = priorityList;
-    }
-
     public ChannelTypeVo getChannelTypeVo() {
         return channelTypeVo;
     }
 
     public void setChannelTypeVo(ChannelTypeVo channelTypeVo) {
         this.channelTypeVo = channelTypeVo;
+    }
+
+    public void setPriorityList(List<PriorityVo> priorityList) {
+        this.priorityList = priorityList;
     }
 }

@@ -1,16 +1,22 @@
 package codedriver.framework.process.dao.mapper.workcenter;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
-
 import codedriver.framework.dto.AuthorityVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterTheadVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 public interface WorkcenterMapper {
+
+	public Integer getWorkcenterProcessTaskCountBySql(String searchSql);
+
+	public List<ProcessTaskVo> getWorkcenterProcessTaskIdBySql(String searchSql);
+
+	public List<ProcessTaskVo> getWorkcenterProcessTaskInfoBySql(String searchSql);
 	
 	public List<String> getAuthorizedWorkcenterUuidList(
 			@Param("userUuid")String userUuid, 
