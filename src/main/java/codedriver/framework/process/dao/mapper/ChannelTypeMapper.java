@@ -82,6 +82,8 @@ public interface ChannelTypeMapper {
 
 //    public List<ChannelTypeRelationVo> getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
 
+    public Long checkChannelTypeRelationIsUsedByChannelTypeRelationId(Long channelTypeRelationId);
+
     public Set<String> getChannelTypeRelationReferenceUuidListByChannelTypeRelationId(Long channelTypeRelationId);
 
     public int checkChannelTypeRelationHasReference(Long channelTypeRelationId);
@@ -107,6 +109,8 @@ public interface ChannelTypeMapper {
     public int updateChannelTypeRelationById(ChannelTypeRelationVo channelTypeRelationVo);
 
     public int updateChannelTypeRelationIsActiveById(Long channelTypeRelationId);
+
+    public int updateChannelTypeRelationToDeleteById(Long channelTypeRelationId);
 
     public int deleteChannelTypeByUuid(String uuid);
 
