@@ -15,4 +15,6 @@ public interface IProcessTaskAuditDetailType {
 	public String getOldDataParamName();
 
 	public int getSort();
+
+	public boolean getNeedCompression();
 }

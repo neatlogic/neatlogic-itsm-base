@@ -4,22 +4,21 @@ import codedriver.framework.process.audithandler.core.IProcessTaskAuditDetailTyp
 
 public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 
-    CHANNELTYPERELATION("channeltyperelation", "关系类型", "channelTypeRelationId", "oldChannelTypeRelationId", 1),
-    PROCESSTASKLIST("processtasklist", "工单", "processTaskIdList", "oldProcessTaskIdList", 2),
-    PROCESSTASK("fromprocesstask", "原工单", "fromProcessTaskId", "oldFromProcessTaskId", 3),
-	CONTENT("content", "内容", "content", "oldContent", 4),
-	TITLE("title", "标题", "title", "oldTitle", 5),
-	PRIORITY("priority", "优先级", "priorityUuid", "oldPriorityUuid", 6),
-	FORM("form", "表单", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 7),
-	WORKERLIST("workerlist", "处理人", "workerList", "oldWorkerList", 8),
-	SUBTASK("subtask", "子任务", "subtask", "oldSubtask", 9),
-	FILE("file", "上传文件", "fileIdList", "oldFileIdList", 10),
-	TASKSTEP("taskstep", "工单步骤", "nextStepId", "oldNextStepId", 11),
-	RESTFULACTION("restfulaction", "RESTFUL动作", "restfulAction", "oldRestfulAction", 12),
-	CAUSE("cause", "原因", "cause", "oldCause", 13),
-	RULE("rule", "流转规则", "rule", "oldRule", 14),
-	SCORE("score", "评分", "score", "oldScore", 15),
-	TAGLIST("taglist","标签","tagList","oldTagList",16)
+    CHANNELTYPERELATION("channeltyperelation", "关系类型", "channelTypeRelationId", "oldChannelTypeRelationId", 1, false),
+    PROCESSTASKLIST("processtasklist", "工单", "processTaskIdList", "oldProcessTaskIdList", 2, false),
+    PROCESSTASK("fromprocesstask", "原工单", "fromProcessTaskId", "oldFromProcessTaskId", 3, false),
+	CONTENT("content", "内容", "content", "oldContent", 4, true),
+	TITLE("title", "标题", "title", "oldTitle", 5, true),
+	PRIORITY("priority", "优先级", "priorityUuid", "oldPriorityUuid", 6, false),
+	FORM("form", "表单", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 7, false),
+	WORKERLIST("workerlist", "处理人", "workerList", "oldWorkerList", 8, false),
+	SUBTASK("subtask", "子任务", "subtask", "oldSubtask", 9, false),
+	FILE("file", "上传文件", "fileIdList", "oldFileIdList", 10, false),
+	RESTFULACTION("restfulaction", "RESTFUL动作", "restfulAction", "oldRestfulAction", 12, false),
+	CAUSE("cause", "原因", "cause", "oldCause", 13, true),
+	RULE("rule", "流转规则", "rule", "oldRule", 14, false),
+	SCORE("score", "评分", "score", "oldScore", 15, false),
+	TAGLIST("taglist","标签","tagList","oldTagList",16, false)
 	;
 	
 	private String value;
@@ -27,13 +26,15 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	private String paramName;
 	private String oldDataParamName;
 	private int sort;
+	private boolean needCompression;
 	
-	private ProcessTaskAuditDetailType(String _value, String _text, String _paramName, String _oldDataParamName, int _sort) {
+	private ProcessTaskAuditDetailType(String _value, String _text, String _paramName, String _oldDataParamName, int _sort, boolean _needCompression) {
 		this.value = _value;
 		this.text = _text;
 		this.paramName = _paramName;
 		this.oldDataParamName = _oldDataParamName;
 		this.sort = _sort;
+		this.needCompression = _needCompression;
 	}
 
 	public String getValue() {
@@ -54,6 +55,11 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 
 	public int getSort() {
 		return sort;
+	}
+
+	@Override
+	public boolean getNeedCompression() {
+		return needCompression;
 	}
 
 }

@@ -14,6 +14,7 @@ public class ChannelTypeRelationVo extends BasePageVo {
     private String name;
     private Integer isActive;
     private int referenceCount;
+    private List<ChannelVo> referenceList;
     private List<String> sourceList = new ArrayList<>();
     private List<String> targetList = new ArrayList<>();
     private List<ChannelTypeVo> sourceVoList = new ArrayList<>();
@@ -93,5 +94,13 @@ public class ChannelTypeRelationVo extends BasePageVo {
     }
     public void setUseIdList(boolean useIdList) {
         this.useIdList = useIdList;
+    }
+
+    public List<ChannelVo> getReferenceList() {
+        return referenceList;
+    }
+
+    public void setReferenceList(List<ChannelVo> referenceList) {
+        this.referenceList = referenceList;
     }
 }

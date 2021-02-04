@@ -21,6 +21,8 @@ public interface ChannelMapper {
 
     public List<ChannelVo> getChannelByUuidList(@Param("channelUuidList") List<String> channelUuidList);
 
+    public List<ChannelVo> getChannelVoByUuidList(List<String> uuidList);
+
     public List<ChannelVo> getAllChannelPriorityList();
 
     public int getMaxSortByParentUuid(String parentUuid);
@@ -37,20 +39,6 @@ public interface ChannelMapper {
 
     public List<AuthorityVo> getChannelAuthorityListByChannelUuid(String uuid);
 
-    public int searchChannelTypeCount(ChannelTypeVo channelTypeVo);
-
-    public List<ChannelTypeVo> searchChannelTypeList(ChannelTypeVo channelTypeVo);
-
-    public List<ValueTextVo> searchChannelTypeListForSelect(ChannelTypeVo channelTypeVo);
-
-    public ChannelTypeVo getChannelTypeByUuid(String uuid);
-
-    public int checkChannelTypeIsExists(String uuid);
-
-    public int checkChannelTypeNameIsRepeat(ChannelTypeVo channelTypeVo);
-
-    public Integer getChannelTypeMaxSort();
-
     public List<String> getAuthorizedChannelUuidList(@Param("userUuid") String userUuid,
         @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
         @Param("channelUuid") String channelUuid);
@@ -63,52 +51,13 @@ public interface ChannelMapper {
 
     public int checkChannelIsFavorite(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
-    public int checkChannelTypeRelationIsExists(Long id);
-
-    public int checkChannelTypeRelationNameIsRepeat(ChannelTypeRelationVo channelTypeRelationVo);
-
-    public ChannelTypeRelationVo getChannelTypeRelationById(Long channelTypeRelationId);
-
-    public List<ChannelTypeRelationVo> getChannelTypeRelationList(ChannelTypeRelationVo channelTypeRelationVo);
-
-    public int getChannelTypeRelationCount(ChannelTypeRelationVo channelTypeRelationVo);
-
-    public List<ValueTextVo> getChannelTypeRelationListForSelect(ChannelTypeRelationVo channelTypeRelationVo);
-
-    public int getChannelTypeRelationCountForSelect(ChannelTypeRelationVo channelTypeRelationVo);
-
-    public List<String> getChannelTypeRelationSourceListByChannelTypeRelationId(Long channelTypeRelationId);
-
-    public List<String> getChannelTypeRelationTargetListByChannelTypeRelationId(Long channelTypeRelationId);
+    public List<ChannelVo> getChannelListByChannelTypeUuidList(List<String> channelTypeUuidList);
 
     public List<ChannelRelationVo> getChannelRelationListBySource(String channelUuid);
 
     public List<ChannelRelationVo> getChannelRelationAuthorityListBySource(String channelUuid);
 
-    public List<ChannelVo> getChannelListByChannelTypeUuidList(List<String> channelTypeUuidList);
-
-    public List<ChannelTypeRelationChannelVo>
-        getChannelTypeRelationSourceListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
-
-    public List<ChannelTypeRelationChannelVo>
-        getChannelTypeRelationTargetListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
-
-    public List<Long> getChannelTypeRelationIdListBySourceChannelTypeUuid(String sourceChannelTypeUuid);
-
-    public List<Long> getAuthorizedChannelTypeRelationIdListBySourceChannelUuid(@Param("source") String source,
-        @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList,
-        @Param("roleUuidList") List<String> roleUuidList, @Param("processUserTypeList") List<String> processUserTypeList);
-
     public List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
-
-    public List<String> getChannelUuidListByParentUuidListAndChannelTypeUuidList(
-        @Param("parentUuidList") List<String> parentUuidList,
-        @Param("channelTypeUuidList") List<String> channelTypeUuidList);
-
-    public int getActiveChannelCountByParentUuidAndChannelTypeUuidList(@Param("parentUuid") String parentUuid,
-        @Param("channelTypeUuidList") List<String> channelTypeUuidList);
-
-    public int checkChannelTypeHasReference(String channelTypeUuid);
 
     public int replaceChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
@@ -125,16 +74,6 @@ public interface ChannelMapper {
     public int insertChannelAuthority(@Param("authorityVo") AuthorityVo authority,
         @Param("channelUuid") String channelUuid);
 
-    public int insertChannelType(ChannelTypeVo channelTypeVo);
-
-    public int insertChannelTypeRelation(ChannelTypeRelationVo channelTypeRelationVo);
-
-    public int insertChannelTypeRelationSource(@Param("channelTypeRelationId") Long channelTypeRelationId,
-        @Param("channelTypeUuid") String channelTypeUuid);
-
-    public int insertChannelTypeRelationTarget(@Param("channelTypeRelationId") Long channelTypeRelationId,
-        @Param("channelTypeUuid") String channelTypeUuid);
-
     public int insertChannelRelation(ChannelRelationVo channelRelationVo);
 
     public int insertChannelRelationAuthority(ChannelRelationVo channelRelationVo);
@@ -146,10 +85,6 @@ public interface ChannelMapper {
 
     public int updateSortDecrement(@Param("parentUuid") String parentUuid, @Param("fromSort") Integer fromSort,
         @Param("toSort") Integer toSort);
-
-    public int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
-
-    public int updateChannelTypeRelationById(ChannelTypeRelationVo channelTypeRelationVo);
 
     public int deleteChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
@@ -165,18 +100,7 @@ public interface ChannelMapper {
 
     public int deleteChannelAuthorityByChannelUuid(String uuid);
 
-    public int deleteChannelTypeByUuid(String uuid);
-
-    public int deleteChannelTypeRelationById(Long channelTypeRelationId);
-
-    public int deleteChannelTypeRelationSourceByChannelTypeRelationId(Long id);
-
-    public int deleteChannelTypeRelationTargetByChannelTypeRelationId(Long id);
-
     public int deleteChannelRelationBySource(String channelUuid);
 
     public int deleteChannelRelationAuthorityBySource(String channelUuid);
-
-    public List<ChannelTypeRelationVo>
-        getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
 }

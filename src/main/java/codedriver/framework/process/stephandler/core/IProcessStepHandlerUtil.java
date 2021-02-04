@@ -90,22 +90,6 @@ public interface IProcessStepHandlerUtil {
      **/
     public void autoScore(ProcessTaskVo currentProcessTaskVo);
     /**
-     * @Description: 获取需要验证表单数据，并校验
-     * @Author: linbq
-     * @Date: 2021/1/20 16:20
-     * @Params:[currentProcessTaskStepVo]
-     * @Returns:boolean
-     **/
-    public boolean formAttributeDataValidFromDb(ProcessTaskStepVo currentProcessTaskStepVo);
-    /**
-     * @Description: 验证表单数据是否合法
-     * @Author: linbq
-     * @Date: 2021/1/20 16:20
-     * @Params:[currentProcessTaskStepVo]
-     * @Returns:boolean
-     **/
-    public boolean formAttributeDataValid(ProcessTaskStepVo currentProcessTaskStepVo);
-    /**
      * @Description: 获取验证基本信息数据是否合法，并验证
      * @Author: linbq
      * @Date: 2021/1/20 16:21
@@ -138,4 +122,31 @@ public interface IProcessStepHandlerUtil {
      * @Returns:int
      **/
     public int saveStepRemind(ProcessTaskStepVo currentProcessTaskStepVo, Long targerProcessTaskStepId, String reason, IProcessTaskStepRemindType ation);
+
+    /**
+     * @Description: 保存描述内容和附件
+     * @Author: linbq
+     * @Date: 2021/1/27 11:41
+     * @Params:[currentProcessTaskStepVo, action]
+     * @Returns:void
+     **/
+    public void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskOperationType action);
+
+    /**
+     * @Description: 保存标签列表
+     * @Author: linbq
+     * @Date: 2021/1/27 11:42
+     * @Params:[currentProcessTaskStepVo]
+     * @Returns:void
+     **/
+    public void saveTagList(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    /**
+     * @Description: 保存表单属性值
+     * @Author: linbq
+     * @Date: 2021/1/27 11:42
+     * @Params:[currentProcessTaskStepVo]
+     * @Returns:void
+     **/
+    public void saveForm(ProcessTaskStepVo currentProcessTaskStepVo);
 }

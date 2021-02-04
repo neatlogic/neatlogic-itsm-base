@@ -56,7 +56,7 @@ public interface ProcessMapper {
 
 	public int getProcessReferenceCount(String processUuid);
 
-	public List<ChannelVo> getProcessReferenceList(ChannelProcessVo channelProcessVo);
+	public List<String> getProcessReferenceUuidList(String processUuid);
 
 	public int checkProcessDraftIsExists(ProcessDraftVo processDraftVo);
 
@@ -77,6 +77,8 @@ public interface ProcessMapper {
     public List<ProcessTagVo> getProcessTagByNameList(List<String> tagNameList);
     
     public int getProcessTagCount(ProcessTagVo processTagVo);
+
+	public ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
 
 	public int insertProcess(ProcessVo processVo);
 
@@ -129,5 +131,4 @@ public interface ProcessMapper {
 	public int deleteProcessSlaByProcessUuid(String uuid);
 
 	public int deleteProcessStepCommentTemplate(String stepUuid);
-
 }
