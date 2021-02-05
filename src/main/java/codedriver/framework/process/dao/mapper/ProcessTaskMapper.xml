@@ -1407,7 +1407,7 @@
 
 	<select id="getProcessTaskScoreInfoById" parameterType="java.lang.Long" resultType="java.lang.String">
 		SELECT
-		pc.`content`
+		psaa.`new_content`
 		FROM `processtask` p
 		left join `processtask_step_audit` psa on p.`id` = psa.`processtask_id`
 		left join `processtask_step_audit_detail` psaa on psa.`id` = psaa.`audit_id`
