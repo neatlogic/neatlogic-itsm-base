@@ -1,19 +1,16 @@
 package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
-import codedriver.framework.common.constvalue.DeviceType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.common.util.CommonUtil;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -407,15 +404,8 @@ public class ChannelVo extends BasePageVo implements Serializable {
     }
 
     public String getSupport() {
-        if (support == null && RequestContextHolder.getRequestAttributes() != null
-            && ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest() != null) {
-            HttpServletRequest request =
-                ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-            if (DeviceType.MOBILE.getValue().equals(request.getHeader("Device"))) {
-                support = DeviceType.MOBILE.getValue();
-            } else {
-                support = DeviceType.PC.getValue();
-            }
+        if (support == null) {
+            support = CommonUtil.getDevice();
         }
         return support;
     }

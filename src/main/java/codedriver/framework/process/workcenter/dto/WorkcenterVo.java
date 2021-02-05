@@ -1,8 +1,8 @@
 package codedriver.framework.process.workcenter.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
-import codedriver.framework.common.constvalue.DeviceType;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.util.CommonUtil;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -11,10 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -256,13 +253,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     }
 
     public String getDevice() {
-        if (device == null && RequestContextHolder.getRequestAttributes() != null && ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest() != null) {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            if (DeviceType.MOBILE.getValue().equals(request.getHeader("Device"))) {
-                device = DeviceType.MOBILE.getValue();
-            } else {
-                device = DeviceType.PC.getValue();
-            }
+        if (device == null) {
+            device = CommonUtil.getDevice();
         }
         return device;
     }
