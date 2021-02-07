@@ -242,7 +242,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         List<String> stepStatusList =
                 Stream.of(ProcessTaskStatus.DRAFT.getValue(), ProcessTaskStatus.PENDING.getValue(), ProcessTaskStatus.RUNNING.getValue())
                         .map(String::toString).collect(Collectors.toList());
-        sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepSqlTable().getShortName(), ProcessTaskStepSqlTable.FieldEnum.STATUS.getValue(), String.join("','", statusList)));
+        sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepSqlTable().getShortName(), ProcessTaskStepSqlTable.FieldEnum.STATUS.getValue(), String.join("','", stepStatusList)));
         sqlSb.append(" ) and ( ");
         // step.user
         List<String> userList = new ArrayList<String>();
