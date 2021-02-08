@@ -40,9 +40,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private JSONArray headerList;
     @JSONField(serialize = false)
     private List<AuthorityVo> authorityList;
-    @JSONField(serialize = false)
     @EntityField(name = "角色列表", type = ApiParamType.JSONARRAY)
-    private transient List<String> valueList;
+    private List<String> valueList;
     @EntityField(name = "是否拥有编辑权限", type = ApiParamType.INTEGER)
     private Integer isCanEdit;
     @EntityField(name = "是否拥有授权权限", type = ApiParamType.INTEGER)
