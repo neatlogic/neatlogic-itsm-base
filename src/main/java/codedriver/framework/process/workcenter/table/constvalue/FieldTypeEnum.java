@@ -10,7 +10,7 @@ package codedriver.framework.process.workcenter.table.constvalue;
  * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  **/
 public enum FieldTypeEnum {
-    DISTINCT_ID("distinctId", "去重工单ID"), FIELD("field", "选择字段"), TOTAL_COUNT("totalCount", "总个数"), LIMIT_COUNT("limitCount", "部分个数");
+    DISTINCT_ID("distinctId", "去重工单ID"), FIELD("field", "选择字段"), TOTAL_COUNT("totalCount", "总个数"), LIMIT_COUNT("limitCount", "部分个数"),FULL_TEXT("fullText","全文检索");
     private final String name;
     private final String text;
 

@@ -27,7 +27,7 @@
 		<result column="worktimeName" property="worktimeName" />
 		<result column="error" property="error" />
 		<result column="is_show" property="isShow" />
-		<result column="serial_number" property="serialNumber" />
+		<result column="serialNumber" property="serialNumber" />
 		<association property="channelVo" javaType="codedriver.framework.process.dto.ChannelVo">
 			<result property="uuid" column="channelUuid" />
 			<result property="name" column="channelName" />

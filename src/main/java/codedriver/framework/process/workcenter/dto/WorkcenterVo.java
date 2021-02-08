@@ -68,6 +68,15 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     private String sqlFieldType;
 
+    //关键字全文检索字段名（工单号、工单标题、工单内容）
+    private String keywordHandler;
+
+    private String keywordPro;
+
+    private String keywordColumn;
+
+    private String keywordText;
+
     public WorkcenterVo() {
     }
 
@@ -78,6 +87,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     public WorkcenterVo(JSONObject jsonObj) {
         super(jsonObj.getJSONObject("conditionConfig"));
         JSONObject conditionConfig = jsonObj.getJSONObject("conditionConfig");
+        super.setKeyword(jsonObj.getString("keyword"));
         this.isProcessingOfMine = conditionConfig.getInteger("isProcessingOfMine") != null ? conditionConfig.getInteger("isProcessingOfMine") : 0;
         this.sortList = jsonObj.getJSONArray("sortList");
         this.uuid = jsonObj.getString("uuid");
@@ -300,5 +310,37 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     public void setStartTimeCondition(JSONObject startTimeCondition) {
         this.startTimeCondition = startTimeCondition;
+    }
+
+    public String getKeywordHandler() {
+        return keywordHandler;
+    }
+
+    public void setKeywordHandler(String keywordHandler) {
+        this.keywordHandler = keywordHandler;
+    }
+
+    public String getKeywordPro() {
+        return keywordPro;
+    }
+
+    public void setKeywordPro(String keywordPro) {
+        this.keywordPro = keywordPro;
+    }
+
+    public String getKeywordColumn() {
+        return keywordColumn;
+    }
+
+    public void setKeywordColumn(String keywordColumn) {
+        this.keywordColumn = keywordColumn;
+    }
+
+    public String getKeywordText() {
+        return keywordText;
+    }
+
+    public void setKeywordText(String keywordText) {
+        this.keywordText = keywordText;
     }
 }

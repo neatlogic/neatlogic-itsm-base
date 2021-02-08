@@ -35,7 +35,7 @@ public class ProcessTaskSqlTable implements ISqlTable {
 
     public enum FieldEnum {
         ID("id", "工单ID"),
-        SERIAL_NUMBER("serial_number", "工单号"),
+        SERIAL_NUMBER("serial_number", "工单号", "serialNumber","serialnumber"),
         START_TIME("start_time", "创建时间"),
         END_TIME("end_time", "结束时间"),
         OWNER("owner", "上报人"),
@@ -47,10 +47,20 @@ public class ProcessTaskSqlTable implements ISqlTable {
         TITLE("title", "标题");
         private final String name;
         private final String text;
+        private final String proName;
+        private final String handlerName;
 
         private FieldEnum(String _value, String _text) {
             this.name = _value;
             this.text = _text;
+            this.handlerName = _value;
+            this.proName = _value;
+        }
+        private FieldEnum(String _value, String _text,String _proName,String _handlerName) {
+            this.name = _value;
+            this.text = _text;
+            this.proName = _proName;
+            this.handlerName = _handlerName;
         }
 
         public String getValue() {
@@ -59,6 +69,14 @@ public class ProcessTaskSqlTable implements ISqlTable {
 
         public String getText() {
             return text;
+        }
+
+        public String getProValue() {
+            return proName;
+        }
+
+        public String getHandlerName() {
+            return handlerName;
         }
 
         public static String getText(String value) {
