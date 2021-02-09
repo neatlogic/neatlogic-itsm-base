@@ -58,7 +58,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     @EntityField(name = "上报时间条件", type = ApiParamType.JSONOBJECT)
     private JSONObject startTimeCondition;
     @EntityField(name = "关键字搜索条件", type = ApiParamType.JSONOBJECT)
-    private JSONObject keywordCondition;
+    private JSONArray keywordConditionList;
+
 
 
     //params
@@ -117,7 +118,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
             startTimeCondition = JSONObject.parseObject("{\"timeRange\":\"1\",\"timeUnit\":\"year\"}");//默认展示一年
         }
 
-        this.keywordCondition = conditionConfig.getJSONObject("keywordConditionList");
+        this.keywordConditionList = conditionConfig.getJSONArray("keywordConditionList");
     }
 
     public String getUuid() {
@@ -349,11 +350,11 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.keywordText = keywordText;
     }
 
-    public JSONObject getKeywordCondition() {
-        return keywordCondition;
+    public JSONArray getKeywordConditionList() {
+        return keywordConditionList;
     }
 
-    public void setKeywordCondition(JSONObject keywordCondition) {
-        this.keywordCondition = keywordCondition;
+    public void setKeywordConditionList(JSONArray keywordConditionList) {
+        this.keywordConditionList = keywordConditionList;
     }
 }
