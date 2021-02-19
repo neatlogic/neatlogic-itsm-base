@@ -467,7 +467,7 @@
 		<id column="processtask_step_id" property="processTaskStepId" />
 		<id column="processtask_id" property="processTaskId" />
 		<result column="type" property="type" />
-		<result column="name" property="name" />
+		<!-- <result column="name" property="name" /> -->
 		<result column="user_type" property="userType" />
 	</resultMap>
 	<select id="getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId" resultMap="processTaskStepWorkerMap">
@@ -476,12 +476,12 @@
 		ptsw.`processtask_step_id`,
 		ptsw.`type`,
 		ptsw.`uuid`,
-		CASE `type`
+		<!-- CASE `type`
 		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` =
 		ptsw.`uuid`)
 		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`)
 		WHEN 'role' THEN (SELECT r.`name` FROM `role` r WHERE r.`uuid` = ptsw.`uuid`)
-		ELSE NULL END AS `name`,
+		ELSE NULL END AS `name`, -->
 		ptsw.`user_type`
 		FROM `processtask_step_worker` ptsw
 		WHERE ptsw.`processtask_id` = #{processTaskId}

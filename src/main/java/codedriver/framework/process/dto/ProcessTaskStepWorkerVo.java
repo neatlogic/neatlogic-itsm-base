@@ -4,6 +4,7 @@ import java.util.List;
 
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.dto.WorkAssignmentUnitVo;
 import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 
@@ -22,6 +23,7 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
     private String name;
     private String userType;
 
+    private WorkAssignmentUnitVo worker;
     private transient String newUuid;
     private transient String userUuid;
     private transient List<String> teamUuidList;
@@ -188,5 +190,13 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
 
     public void setRoleUuidList(List<String> roleUuidList) {
         this.roleUuidList = roleUuidList;
+    }
+
+    public WorkAssignmentUnitVo getWorker() {
+        return worker;
+    }
+
+    public void setWorker(WorkAssignmentUnitVo worker) {
+        this.worker = worker;
     }
 }
