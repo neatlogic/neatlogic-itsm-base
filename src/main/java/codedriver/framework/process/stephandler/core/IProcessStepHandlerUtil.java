@@ -142,6 +142,15 @@ public interface IProcessStepHandlerUtil {
     public void saveTagList(ProcessTaskStepVo currentProcessTaskStepVo);
 
     /**
+     * @Description: 保存工单关注人
+     * @Author: laiwt
+     * @Date: 2021/2/19 11:20
+     * @Params: [currentProcessTaskStepVo]
+     * @Returns: void
+    **/
+    public void saveFocusUserList(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    /**
      * @Description: 保存表单属性值
      * @Author: linbq
      * @Date: 2021/1/27 11:42

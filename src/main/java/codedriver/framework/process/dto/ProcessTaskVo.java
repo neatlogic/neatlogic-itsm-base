@@ -146,6 +146,8 @@ public class ProcessTaskVo extends BasePageVo {
 
     @EntityField(name = "关注人列表", type = ApiParamType.JSONARRAY)
     private List<UserVo> focusUserList;
+    @EntityField(name = "关注人uuid列表", type = ApiParamType.JSONARRAY)
+    private List<String> focusUserUuidList;
 
     @EntityField(name = "sla列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskSlaVo> processTaskSlaVoList;
@@ -650,5 +652,13 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setTagList(List<String> tagList) {
         this.tagList = tagList;
+    }
+
+    public List<String> getFocusUserUuidList() {
+        return focusUserUuidList;
+    }
+
+    public void setFocusUserUuidList(List<String> focusUserUuidList) {
+        this.focusUserUuidList = focusUserUuidList;
     }
 }

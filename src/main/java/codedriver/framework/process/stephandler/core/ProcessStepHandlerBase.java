@@ -1648,6 +1648,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             /** 写入“标签”信息 **/
             IProcessStepHandlerUtil.saveTagList(currentProcessTaskStepVo);
+            /** 保存工单关注人 **/
+            IProcessStepHandlerUtil.saveFocusUserList(currentProcessTaskStepVo);
             myStartProcess(currentProcessTaskStepVo);
             // 获取表单数据
             List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());

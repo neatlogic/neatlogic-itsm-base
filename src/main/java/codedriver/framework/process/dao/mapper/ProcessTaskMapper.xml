@@ -1753,6 +1753,10 @@
 		SELECT CONCAT("user#",`user_uuid`) FROM `processtask_focus` WHERE `processtask_id` = #{value}
 	</select>
 
+	<select id="getFocusUserListByTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT `user_uuid` FROM `processtask_focus` WHERE `processtask_id` = #{value}
+	</select>
+
 	<select id="getProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
 		SELECT
 		`processtask_id` AS processTaskId,
@@ -2664,7 +2668,7 @@
 	</insert>
 
 	<insert id="insertProcessTaskFocus">
-		INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTask.id}, #{userUuid})
+		INSERT IGNORE INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTaskId}, #{userUuid})
 	</insert>
 
 	<insert id="replaceProcesssTaskStepAgent" parameterType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
@@ -2988,7 +2992,7 @@
 	</delete>
 
 	<delete id="deleteProcessTaskFocus">
-		DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTask.id}
+		DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTaskId}
 		<if test="userUuid != null">
 			and `user_uuid` = #{userUuid}
 		</if>
