@@ -226,6 +226,8 @@ public interface ProcessTaskMapper {
 
     public List<String> getFocusUsersOfProcessTask(Long processTaskId);
 
+    public List<String> getFocusUserListByTaskId(Long processTaskId);
+
     public List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskId(Long processTaskId);
 
     public List<ProcessTagVo> getProcessTaskTagListByProcessTaskId(@Param("processTaskId") Long processTaskId);
@@ -325,7 +327,7 @@ public interface ProcessTaskMapper {
     public int insertProcessTaskScoreTempleteConfig(ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo);
 
 
-    public int insertProcessTaskFocus(@Param("processTask") ProcessTaskVo processTask,
+    public int insertProcessTaskFocus(@Param("processTaskId") Long processTaskId,
                                       @Param("userUuid") String userUuid);
 
     public int insertProcessTaskTag(@Param("processTaskTagList") List<ProcessTaskTagVo> processTaskTagList);
@@ -404,7 +406,7 @@ public interface ProcessTaskMapper {
     public int deleteProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
 
 
-    public int deleteProcessTaskFocus(@Param("processTask") ProcessTaskVo processTask,
+    public int deleteProcessTaskFocus(@Param("processTaskId") Long processTaskId,
                                       @Param("userUuid") String userUuid);
 
     public int deleteProcessTaskStepAgentByProcessTaskStepId(Long processTaskStepId);

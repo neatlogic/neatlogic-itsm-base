@@ -18,7 +18,8 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	CAUSE("cause", "原因", "cause", "oldCause", 13, true),
 	RULE("rule", "流转规则", "rule", "oldRule", 14, false),
 	SCORE("score", "评分", "score", "oldScore", 15, false),
-	TAGLIST("taglist","标签","tagList","oldTagList",16, false)
+	TAGLIST("taglist","标签","tagList","oldTagList",16, false),
+	FOCUSUSER("focususer","工单关注人","focusUser","oldFocusUser",17, false),
 	;
 	
 	private String value;
