@@ -78,15 +78,6 @@ public interface CatalogMapper {
 
     public List<String> getCatalogUuidListByLftRht(@Param("lft") Integer lft, @Param("rht")Integer rht);
 
-    /**
-     * @Description: 根据左右编码判断是否存在is_active=0的catalog
-     * @Author: laiwt
-     * @Date: 2021/2/23 16:25
-     * @Params: [lft, rht]
-     * @Returns: int
-    **/
-    public int checkNotActiveCatalogIsExistsByLftRht(@Param("lft") Integer lft, @Param("rht")Integer rht);
-	
 	public int replaceCatalog(CatalogVo catalogVo);
 
 	public int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);

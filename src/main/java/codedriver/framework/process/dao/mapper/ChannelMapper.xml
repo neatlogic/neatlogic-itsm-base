@@ -33,6 +33,14 @@
 		<if test="support == 'pc'">
 			AND c.`support` != 'mobile'
 		</if>
+		<if test="isFavorite == 1">
+			AND NOT EXISTS(
+			SELECT `uuid`
+			FROM `catalog`
+			WHERE `lft` &lt;= (SELECT `lft` FROM `catalog` WHERE `uuid` = c.`parent_uuid`) AND `rht` &gt;=
+			(SELECT `rht` FROM `catalog` WHERE `uuid` = c.`parent_uuid`)
+			and `is_active` = 0)
+		</if>
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ChannelVo" id="channelMap">
@@ -99,6 +107,14 @@
 		<if test="support == 'pc'">
 			AND c.`support` != 'mobile'
 		</if>
+		<if test="isFavorite == 1">
+			AND NOT EXISTS(
+			SELECT `uuid`
+			FROM `catalog`
+			WHERE `lft` &lt;= (SELECT `lft` FROM `catalog` WHERE `uuid` = c.`parent_uuid`) AND `rht` &gt;=
+			(SELECT `rht` FROM `catalog` WHERE `uuid` = c.`parent_uuid`)
+			and `is_active` = 0)
+		</if>
 		<choose>
 			<when test="isFavorite == 1">
 				ORDER BY cu.`insert_time` DESC
@@ -110,52 +126,6 @@
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
 		</if>
-	</select>
-
-	<select id="getFavoriteChannelList" parameterType="codedriver.framework.process.dto.ChannelVo" resultMap="channelMap" useCache="false">
-		SELECT
-		c.`uuid`,
-		c.`name`,
-		c.`parent_uuid`,
-		(SELECT GROUP_CONCAT(NAME ORDER BY lft) FROM catalog WHERE lft &lt;= (SELECT lft FROM `catalog` WHERE UUID = c.`parent_uuid`) AND rht >= (SELECT rht FROM
-		`catalog` WHERE UUID = c.`parent_uuid`)) AS parentNames,
-		(SELECT GROUP_CONCAT(`uuid` ORDER BY lft) FROM catalog WHERE lft &lt;= (SELECT lft FROM `catalog` WHERE UUID = c.`parent_uuid`) AND rht >=
-		(SELECT rht FROM `catalog` WHERE UUID = c.`parent_uuid`)) AS parentUuids,
-		c.`is_active`,
-		c.`icon`,
-		c.`color`,
-		c.`desc`,
-		c.`channel_type_uuid`,
-		CASE WHEN cu.`user_uuid` IS NULL THEN 0 ELSE 1 END AS
-		`isFavorite`,
-		c.`sort`
-		FROM
-		`channel` c
-		JOIN `channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.`user_uuid` = #{userUuid}
-		<where>
-		<if test="authorizedUuidList != null and authorizedUuidList.size() > 0">
-			AND c.`uuid` IN
-			<foreach collection="authorizedUuidList" item="authorizedUuid" open="(" separator="," close=")">
-				#{authorizedUuid}
-			</foreach>
-		</if>
-		<if test="parentUuid != null">
-			AND c.`parent_uuid` = #{parentUuid}
-		</if>
-		<if test="keyword != null and keyword != ''">
-			AND c.`name` LIKE CONCAT('%',#{keyword},'%')
-		</if>
-		<if test="isActive != null">
-			AND c.`is_active` = #{isActive}
-		</if>
-		<if test="support == 'mobile'">
-			AND c.`support` != 'pc'
-		</if>
-		<if test="support == 'pc'">
-			AND c.`support` != 'mobile'
-		</if>
-		</where>
-		ORDER BY cu.`insert_time` DESC
 	</select>
 
 	<select id="searchChannelListForSelect" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
