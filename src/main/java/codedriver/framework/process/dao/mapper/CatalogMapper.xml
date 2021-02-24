@@ -245,7 +245,7 @@
 	WHERE `lft` &gt;= #{lft}
 	AND `rht` &lt;= #{rht}
 	</select>
-	
+
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
 		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})

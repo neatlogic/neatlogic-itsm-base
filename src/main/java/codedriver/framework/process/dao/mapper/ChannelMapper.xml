@@ -33,6 +33,14 @@
 		<if test="support == 'pc'">
 			AND c.`support` != 'mobile'
 		</if>
+		<if test="isFavorite == 1">
+			AND NOT EXISTS(
+			SELECT `uuid`
+			FROM `catalog`
+			WHERE `lft` &lt;= (SELECT `lft` FROM `catalog` WHERE `uuid` = c.`parent_uuid`) AND `rht` &gt;=
+			(SELECT `rht` FROM `catalog` WHERE `uuid` = c.`parent_uuid`)
+			and `is_active` = 0)
+		</if>
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ChannelVo" id="channelMap">
@@ -98,6 +106,14 @@
 		</if>
 		<if test="support == 'pc'">
 			AND c.`support` != 'mobile'
+		</if>
+		<if test="isFavorite == 1">
+			AND NOT EXISTS(
+			SELECT `uuid`
+			FROM `catalog`
+			WHERE `lft` &lt;= (SELECT `lft` FROM `catalog` WHERE `uuid` = c.`parent_uuid`) AND `rht` &gt;=
+			(SELECT `rht` FROM `catalog` WHERE `uuid` = c.`parent_uuid`)
+			and `is_active` = 0)
 		</if>
 		<choose>
 			<when test="isFavorite == 1">

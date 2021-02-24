@@ -77,7 +77,7 @@ public interface CatalogMapper {
     public int checkLeftRightCodeIsWrong();
 
     public List<String> getCatalogUuidListByLftRht(@Param("lft") Integer lft, @Param("rht")Integer rht);
-	
+
 	public int replaceCatalog(CatalogVo catalogVo);
 
 	public int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
