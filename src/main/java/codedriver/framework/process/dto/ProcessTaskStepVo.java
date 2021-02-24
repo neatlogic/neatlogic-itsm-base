@@ -302,7 +302,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public Integer getIsRequired() {
 		if(isRequired == null && StringUtils.isNotBlank(configHash)) {
 			if(StringUtils.isNotBlank(config)){
-				isNeedContent = (Integer) JSONPath.read(config, "workerPolicyConfig.isRequired");
+				isRequired = (Integer) JSONPath.read(config, "workerPolicyConfig.isRequired");
 			}else if(StringUtils.isNotBlank(configHash)){
 				isRequired = ProcessStepInternalHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
 			}
