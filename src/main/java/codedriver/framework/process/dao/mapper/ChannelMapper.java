@@ -13,6 +13,8 @@ public interface ChannelMapper {
 
     public List<ChannelVo> searchChannelList(ChannelVo channelVo);
 
+    public List<ChannelVo> getFavoriteChannelList(ChannelVo channelVo);
+
     public List<ValueTextVo> searchChannelListForSelect(ChannelVo channelVo);
 
     public ChannelVo getChannelByUuid(String channelUuid);

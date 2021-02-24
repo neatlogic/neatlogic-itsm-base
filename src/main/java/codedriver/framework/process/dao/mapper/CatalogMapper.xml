@@ -245,6 +245,14 @@
 	WHERE `lft` &gt;= #{lft}
 	AND `rht` &lt;= #{rht}
 	</select>
+
+	<select id="checkNotActiveCatalogIsExistsByLftRht" parameterType="java.lang.Integer" resultType="int">
+		select count(1)
+		from `catalog`
+		where `lft` &lt;= #{lft}
+		and `rht` &gt;= #{rht}
+		and `is_active` = 0
+	</select>
 	
 	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
