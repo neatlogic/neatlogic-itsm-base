@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import codedriver.framework.dto.UserVo;
+import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -300,7 +301,11 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsRequired() {
 		if(isRequired == null && StringUtils.isNotBlank(configHash)) {
-			isRequired = ProcessStepInternalHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
+			if(StringUtils.isNotBlank(config)){
+				isRequired = (Integer) JSONPath.read(config, "workerPolicyConfig.isRequired");
+			}else if(StringUtils.isNotBlank(configHash)){
+				isRequired = ProcessStepInternalHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
+			}
 		}
 		return isRequired;
 	}
@@ -311,7 +316,11 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsNeedContent() {
 		if(isNeedContent == null && StringUtils.isNotBlank(configHash)) {
-			isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
+			if(StringUtils.isNotBlank(config)){
+				isNeedContent = (Integer) JSONPath.read(config, "workerPolicyConfig.isNeedContent");
+			}else if(StringUtils.isNotBlank(configHash)){
+				isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
+			}
 		}
 		return isNeedContent;
 	}
