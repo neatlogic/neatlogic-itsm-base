@@ -467,7 +467,7 @@
 		<id column="processtask_step_id" property="processTaskStepId" />
 		<id column="processtask_id" property="processTaskId" />
 		<result column="type" property="type" />
-		<result column="name" property="name" />
+		<!-- <result column="name" property="name" /> -->
 		<result column="user_type" property="userType" />
 	</resultMap>
 	<select id="getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId" resultMap="processTaskStepWorkerMap">
@@ -476,12 +476,12 @@
 		ptsw.`processtask_step_id`,
 		ptsw.`type`,
 		ptsw.`uuid`,
-		CASE `type`
+		<!-- CASE `type`
 		WHEN 'user' THEN (SELECT u.`user_name` FROM `user` u WHERE u.`uuid` =
 		ptsw.`uuid`)
 		WHEN 'team' THEN (SELECT t.`name` FROM `team` t WHERE t.`uuid` = ptsw.`uuid`)
 		WHEN 'role' THEN (SELECT r.`name` FROM `role` r WHERE r.`uuid` = ptsw.`uuid`)
-		ELSE NULL END AS `name`,
+		ELSE NULL END AS `name`, -->
 		ptsw.`user_type`
 		FROM `processtask_step_worker` ptsw
 		WHERE ptsw.`processtask_id` = #{processTaskId}
@@ -1407,7 +1407,7 @@
 
 	<select id="getProcessTaskScoreInfoById" parameterType="java.lang.Long" resultType="java.lang.String">
 		SELECT
-		pc.`content`
+		psaa.`new_content`
 		FROM `processtask` p
 		left join `processtask_step_audit` psa on p.`id` = psa.`processtask_id`
 		left join `processtask_step_audit_detail` psaa on psa.`id` = psaa.`audit_id`
@@ -1751,6 +1751,10 @@
 
 	<select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
 		SELECT CONCAT("user#",`user_uuid`) FROM `processtask_focus` WHERE `processtask_id` = #{value}
+	</select>
+
+	<select id="getFocusUserListByTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT `user_uuid` FROM `processtask_focus` WHERE `processtask_id` = #{value}
 	</select>
 
 	<select id="getProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
@@ -2664,7 +2668,7 @@
 	</insert>
 
 	<insert id="insertProcessTaskFocus">
-		INSERT INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTask.id}, #{userUuid})
+		INSERT IGNORE INTO `processtask_focus` (`processtask_id`, `user_uuid`) VALUES (#{processTaskId}, #{userUuid})
 	</insert>
 
 	<insert id="replaceProcesssTaskStepAgent" parameterType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
@@ -2988,7 +2992,7 @@
 	</delete>
 
 	<delete id="deleteProcessTaskFocus">
-		DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTask.id}
+		DELETE FROM `processtask_focus` WHERE `processtask_id` = #{processTaskId}
 		<if test="userUuid != null">
 			and `user_uuid` = #{userUuid}
 		</if>

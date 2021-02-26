@@ -404,7 +404,8 @@
 			`uuid`,
 			`name`,
 			`type`,
-			`handler`
+			`handler`,
+		    `config`
 		FROM `process_step`
 		WHERE `process_uuid` = #{value}
 		  AND `type` = 'start'

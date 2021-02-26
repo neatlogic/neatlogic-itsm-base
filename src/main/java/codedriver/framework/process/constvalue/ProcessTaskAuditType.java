@@ -34,6 +34,9 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
     DELETERELATION("deleterelation", "解除关联", "解除关联工单"),
     REDO("redo", "回退", "回退至【${DATA.processTaskStepName}】"),
     TRANSFERKNOWLEDGE("transferknowledge", "转知识", "提交工单转知识"),
+    UPDATEFOCUSUSER("updatefocususer", "修改工单关注人", "修改工单关注人"),
+    FOCUSTASK("focustask", "关注工单", "关注工单"),
+    UNDOFOCUSTASK("undofocustask", "取消关注工单", "取消关注工单")
 	;
 	private String value;
 	private String text;

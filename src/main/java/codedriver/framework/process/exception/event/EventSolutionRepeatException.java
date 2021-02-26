@@ -1,8 +1,8 @@
 package codedriver.framework.process.exception.event;
 
-import codedriver.framework.exception.core.ApiRuntimeException;
+import codedriver.framework.exception.core.ApiFieldValidRuntimeException;
 
-public class EventSolutionRepeatException extends ApiRuntimeException {
+public class EventSolutionRepeatException extends ApiFieldValidRuntimeException {
 
 	private static final long serialVersionUID = 7578574406227399198L;
 
