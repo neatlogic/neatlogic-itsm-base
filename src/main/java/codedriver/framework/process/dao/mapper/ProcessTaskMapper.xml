@@ -293,7 +293,6 @@
 
 	<select id="getPendingProcessTaskListByStepTeamUuidList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		select
-		DISTINCT
 		a.`id`,
 		a.`title`,
 		a.`process_uuid` as processUuid,
@@ -320,6 +319,7 @@
 				</foreach>
 			</if>
 		</where>
+		group by a.`id`
 	</select>
 
 	<select id="getProcessTaskFormByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
