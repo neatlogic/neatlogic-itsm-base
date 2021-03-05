@@ -49,7 +49,7 @@ public abstract class FormHandlerBase implements IFormAttributeHandler {
             columnList.add((String)mapping.getValue());
             columnList.add(mapping.getText());
             paramObj.put("columnList", columnList);
-            JSONObject resultObj = (JSONObject)restComponent.doService(api, paramObj);
+            JSONObject resultObj = (JSONObject)restComponent.doService(api, paramObj,null);
             JSONArray columnDataList = resultObj.getJSONArray("columnDataList");
             for (int i = 0; i < columnDataList.size(); i++) {
                 JSONObject firstObj = columnDataList.getJSONObject(i);

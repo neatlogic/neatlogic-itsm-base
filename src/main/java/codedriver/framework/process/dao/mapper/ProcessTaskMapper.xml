@@ -293,11 +293,10 @@
 
 	<select id="getPendingProcessTaskListByStepTeamUuidList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		select
-		DISTINCT
 		a.`id`,
 		a.`title`,
 		a.`process_uuid` as processUuid,
-		(select `name` from `channel` where `uuid` = a.`channel_uuid`) as channelName,
+		a.`channel_uuid` as channelUuid,
 		(select `name` from `priority` where `uuid` = a.`priority_uuid`) as priorityName,
 		a.`status`,
 		a.`start_time` as startTime,
@@ -308,9 +307,9 @@
 		(select `name` from `worktime` where `uuid` = a.`worktime_uuid`) as worktimeName,
 		a.`serial_number` as serialNumber
 		from `processtask` a
-		left join `processtask_step` b
+		join `processtask_step` b
 		on a.`id` = b.`processtask_id` and b.`status` = 'pending'
-		left join `processtask_step_worker` c
+		join `processtask_step_worker` c
 		on a.`id` = c.`processtask_id`
 		<where>
 			<if test="stepTeamUuidList != null and stepTeamUuidList.size()>0">
@@ -320,6 +319,7 @@
 				</foreach>
 			</if>
 		</where>
+		group by a.`id`
 	</select>
 
 	<select id="getProcessTaskFormByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
