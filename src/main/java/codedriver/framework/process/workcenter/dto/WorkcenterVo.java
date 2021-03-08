@@ -13,9 +13,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private static final long serialVersionUID = 1952066708451908924L;
@@ -80,6 +78,12 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private String keywordColumn;
 
     private String keywordText;
+
+    //组、分组 用于 group_count
+    private String group;
+    private String subGroup;
+    private LinkedHashMap<String,String> groupDataCountMap;
+    private String groupType;
 
     public WorkcenterVo() {
     }
@@ -356,5 +360,37 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     public void setKeywordConditionList(JSONArray keywordConditionList) {
         this.keywordConditionList = keywordConditionList;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getSubGroup() {
+        return subGroup;
+    }
+
+    public void setSubGroup(String subGroup) {
+        this.subGroup = subGroup;
+    }
+
+    public LinkedHashMap<String, String> getGroupDataCountMap() {
+        return groupDataCountMap;
+    }
+
+    public void setGroupDataCountMap(LinkedHashMap<String, String> groupDataCountMap) {
+        this.groupDataCountMap = groupDataCountMap;
+    }
+
+    public String getGroupType() {
+        return groupType;
+    }
+
+    public void setGroupType(String groupType) {
+        this.groupType = groupType;
     }
 }

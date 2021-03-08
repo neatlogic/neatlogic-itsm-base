@@ -34,25 +34,51 @@ public class PrioritySqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", "服务目录UUID"),
-        NAME("name", "服务目录名"),
-        COLOR("color", "颜色"),
-        SORT("sort", "排序"),
+        UUID("uuid", "服务目录UUID","priorityUuid",true),
+        NAME("name", "服务目录名","priorityName"),
+        COLOR("color", "颜色","priorityColor"),
+        SORT("sort", "排序")
         ;
         private final String name;
         private final String text;
+        private String proName;
+        private Boolean isPrimary;
+
 
         private FieldEnum(String _value, String _text) {
             this.name = _value;
             this.text = _text;
+            this.proName = _value;
+            this.isPrimary = false;
         }
 
+        private FieldEnum(String _value, String _text,String _proName) {
+            this.name = _value;
+            this.text = _text;
+            this.proName = _proName;
+            this.isPrimary = false;
+        }
+
+        private FieldEnum(String _value, String _text,String _proName,Boolean _isPrimary) {
+            this.name = _value;
+            this.text = _text;
+            this.proName = _proName;
+            this.isPrimary = _isPrimary;
+        }
         public String getValue() {
             return name;
         }
 
         public String getText() {
             return text;
+        }
+
+        public String getProValue() {
+            return proName;
+        }
+
+        public Boolean getPrimary() {
+            return isPrimary;
         }
 
         public static String getText(String value) {

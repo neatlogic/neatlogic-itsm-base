@@ -48,7 +48,7 @@ public class ProcessTaskSqlTable implements ISqlTable {
         private final String name;
         private final String text;
         private final String proName;
-        private final String handlerName;
+        private String handlerName;
 
         private FieldEnum(String _value, String _text) {
             this.name = _value;
@@ -76,6 +76,9 @@ public class ProcessTaskSqlTable implements ISqlTable {
         }
 
         public String getHandlerName() {
+            if(handlerName == null){
+                handlerName = name;
+            }
             return handlerName;
         }
 

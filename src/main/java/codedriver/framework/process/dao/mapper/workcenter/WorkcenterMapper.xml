@@ -112,7 +112,11 @@
 	<select id="getWorkcenterProcessTaskInfoBySql" parameterType="java.lang.String" resultMap="workcenterProcessTaskMap">
 		${value }
 	</select>
-	
+
+	<select id="getWorkcenterProcessTaskMapBySql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+
 	<resultMap id="workcenterMap" type="codedriver.framework.process.workcenter.dto.WorkcenterVo">
 		<id column="uuid" property="uuid" />
 		<result column="name" property="name" />

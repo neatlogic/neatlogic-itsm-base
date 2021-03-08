@@ -17,6 +17,8 @@ public interface WorkcenterMapper {
 	public List<ProcessTaskVo> getWorkcenterProcessTaskIdBySql(String searchSql);
 
 	public List<ProcessTaskVo> getWorkcenterProcessTaskInfoBySql(String searchSql);
+
+	public List<Map<String,String>> getWorkcenterProcessTaskMapBySql(String searchSql);
 	
 	public List<String> getAuthorizedWorkcenterUuidList(
 			@Param("userUuid")String userUuid, 

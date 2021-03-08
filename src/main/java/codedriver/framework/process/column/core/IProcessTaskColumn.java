@@ -3,11 +3,13 @@ package codedriver.framework.process.column.core;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.TableSelectColumnVo;
+import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
 import com.alibaba.fastjson.JSONObject;
 import com.techsure.multiattrsearch.MultiAttrsObject;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IProcessTaskColumn {
 	
@@ -157,4 +159,22 @@ public interface IProcessTaskColumn {
 	 * @Returns: java.util.Map<codedriver.framework.process.workcenter.table.ISqlTable,java.lang.String>
 	 **/
 	public List<TableSelectColumnVo> getTableSelectColumn();
+
+	/**
+	 * @Description: 将数据集转成dashboard 返回的格式
+	 * @Author: 89770
+	 * @Date: 2021/3/5 17:01
+	 * @Params: [mapList]
+	 * @Returns: com.alibaba.fastjson.JSONArray
+	 **/
+	List<Map<String, String>> getExchangeToDashboardResultData(List<Map<String, String>> mapList, WorkcenterVo workcenterVo);
+
+    /**
+     * @Description: 将数据集提取groupList,用于过滤，并按list 权重排序
+     * @Author: 89770
+     * @Date: 2021/3/5 17:05
+     * @Params: [mapList]
+     * @Returns: java.util.List<java.lang.String>
+     **/
+	void getExchangeToDashboardGroupDataMap(List<Map<String, String>> mapList, WorkcenterVo workcenterVo);
 }

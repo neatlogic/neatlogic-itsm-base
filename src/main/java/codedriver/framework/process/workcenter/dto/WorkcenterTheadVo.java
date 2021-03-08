@@ -35,7 +35,10 @@ public class WorkcenterTheadVo {
 	private String className ;
 	@EntityField(name = "字段是否可导出", type = ApiParamType.INTEGER)
 	private Integer isExport;
-	
+
+	public WorkcenterTheadVo(String name) {
+		this.name = name;
+	}
 	
 	public WorkcenterTheadVo(JSONObject obj) {
 		this.name = obj.getString("name");
