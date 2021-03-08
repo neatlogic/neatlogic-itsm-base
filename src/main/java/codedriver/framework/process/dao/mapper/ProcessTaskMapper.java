@@ -60,9 +60,6 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
             @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
 
-    public List<ProcessTaskStepTimeoutPolicyVo>
-    getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);
-
     public List<ProcessTaskStepWorkerPolicyVo>
     getProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
 
@@ -108,7 +105,7 @@ public interface ProcessTaskMapper {
     public ProcessTaskVo getProcessTaskById(Long id);
 
     public List<ProcessTaskStepFormAttributeVo>
-    getProcessTaskStepFormAttributeByProcessTaskStepId(Long processTaskStepId);
+    getProcessTaskStepFormAttributeByProcessTaskStepId(@Param("processTaskId")Long processTaskId, @Param("processTaskStepId")Long processTaskStepId);
 
     public List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
@@ -286,8 +283,6 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
 
-    public int insertProcessTaskStepTimeoutPolicy(ProcessTaskStepTimeoutPolicyVo processTaskStepTimeoutPolicy);
-
     public int replaceProcessTaskStepConfig(ProcessTaskStepConfigVo processTaskStepConfigVo);
 
 
@@ -393,7 +388,7 @@ public interface ProcessTaskMapper {
 
     public int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
-    public int deleteProcessTaskStepFileByProcessTaskStepId(Long processTaskStepId);
+    public int deleteProcessTaskStepFileByProcessTaskStepId(@Param("processTaskId")Long processTaskId, @Param("processTaskStepId")Long processTaskStepId);
 
     public int deleteProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
 

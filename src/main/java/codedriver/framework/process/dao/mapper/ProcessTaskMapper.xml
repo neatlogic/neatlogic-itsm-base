@@ -426,22 +426,6 @@
 		</if>
 	</select>
 
-	<select id="getProcessTaskStepTimeoutPolicyByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo">
-		SELECT
-		`processtask_id` as processTaskId,
-		`processtask_step_id` as processTaskStepId,
-		`process_step_uuid` as processStepUuid,
-		`policy`,
-		`sort`,
-		`time`,
-		`config`
-		FROM
-		`processtask_step_timeout_policy`
-		WHERE
-		`processtask_step_id` = #{value}
-		ORDER BY `sort`
-	</select>
-
 	<select id="getProcessTaskStepWorkerPolicy" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo" resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo">
 		SELECT
 		`processtask_id` as processTaskId,
@@ -870,7 +854,7 @@
 		WHERE `id`= #{id}
 	</select>
 
-	<select id="getProcessTaskStepFormAttributeByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
+	<select id="getProcessTaskStepFormAttributeByProcessTaskStepId" resultType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
 		SELECT
 		`processtask_id` AS processTaskId,
 		`processtask_step_id` AS processTaskStepId,
@@ -878,7 +862,7 @@
 		`action`,
 		`type`
 		FROM `processtask_step_formattribute`
-		WHERE `processtask_step_id` = #{value}
+		WHERE `processtask_id` = #{processTaskId} AND `processtask_step_id` = #{processTaskStepId}
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.ProcessTaskStepAuditVo" id="processTaskStepAuditMap">
@@ -1014,7 +998,7 @@
 		a.`processtask_id` AS processTaskId,
 		a.`processtask_step_id` AS processTaskStepId
 		FROM `processtask_step_worker` a
-		JOIN `processtask` b ON b.`id` = a.`processtask_id`
+		JOIN `processtask` b ON b.`id` = a.`processtask_id` and b.`status` = 'running'
 		JOIN
 		`processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
 		WHERE a.`processtask_id` = #{processTaskId}
@@ -2150,28 +2134,6 @@
 		(#{formContentHash}, #{formContent});
 	</insert>
 
-	<insert id="insertProcessTaskStepTimeoutPolicy" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimeoutPolicyVo">
-		INSERT INTO `processtask_step_timeout_policy` (
-		`processtask_id`,
-		`processtask_step_id`,
-		`process_step_uuid`,
-		`policy`,
-		`sort`,
-		`time`,
-		`config`
-		)
-		VALUES
-		(
-		#{processTaskId},
-		#{processTaskStepId},
-		#{processStepUuid},
-		#{policy},
-		#{sort},
-		#{time},
-		#{config}
-		)
-	</insert>
-
 	<insert id="insertProcessTaskStepWorkerPolicy" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo">
 		INSERT INTO `processtask_step_worker_policy` (
 		`processtask_id`,
@@ -2940,9 +2902,9 @@
 
 	<delete id="deleteProcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
 		DELETE FROM`processtask_assignworker`
-		WHERE `processtask_step_id` = #{processTaskStepId}
-		AND `from_processtask_step_id` =
-		#{fromProcessTaskStepId}
+		WHERE `processtask_id` = #{processTaskId}
+		  AND `processtask_step_id` = #{processTaskStepId}
+		  AND `from_processtask_step_id` = #{fromProcessTaskStepId}
 	</delete>
 
 	<delete id="deleteProcessTaskAssignWorkerByProcessTaskId" parameterType="java.lang.Long">
@@ -2950,8 +2912,8 @@
 		WHERE `processtask_id` = #{value}
 	</delete>
 
-	<delete id="deleteProcessTaskStepFileByProcessTaskStepId" parameterType="java.lang.Long">
-		DELETE FROM `processtask_file` WHERE `processtask_step_id` = #{value}
+	<delete id="deleteProcessTaskStepFileByProcessTaskStepId" >
+		DELETE FROM `processtask_file` WHERE `processtask_id` = #{processTaskId} and `processtask_step_id` = #{processTaskStepId}
 	</delete>
 
 	<delete id="deleteProcessTaskStepFileByProcessTaskId" parameterType="java.lang.Long">
@@ -3038,8 +3000,6 @@
 		LEFT JOIN
 		`processtask_step_subtask_content` pssc ON pssu.`id` = pssc.`processtask_step_subtask_id`
 		LEFT JOIN `processtask_step_timeaudit` pst ON pst.`processtask_step_id` = ps.id
-		LEFT JOIN
-		`processtask_step_timeout_policy` pstp ON pstp.`processtask_id` = ps.`processtask_id` AND pstp.`processtask_step_id` = ps.id
 		LEFT JOIN `processtask_step_user` psu ON psu.`processtask_id` =
 		ps.`processtask_id` AND psu.`processtask_step_id` = ps.id
 		LEFT JOIN `processtask_step_worker` psw ON psw.`processtask_id` = ps.`processtask_id` AND psw.`processtask_step_id` = ps.id
