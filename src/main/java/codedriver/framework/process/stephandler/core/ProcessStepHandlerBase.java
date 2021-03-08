@@ -1598,7 +1598,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskVo.setPriorityUuid(paramObj.getString("priorityUuid"));
             processTaskMapper.updateProcessTaskTitleOwnerPriorityUuid(processTaskVo);
             processTaskMapper.deleteProcessTaskStepContentByProcessTaskStepId(currentProcessTaskStepVo.getId());
-            processTaskMapper.deleteProcessTaskStepFileByProcessTaskStepId(currentProcessTaskStepVo.getId());
+            processTaskMapper.deleteProcessTaskStepFileByProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
         }
         try {
             // 是否需要校验，兼容提供给第三方的上报接口，表单等不合法，则不生成工单
