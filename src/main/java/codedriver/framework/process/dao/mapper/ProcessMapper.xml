@@ -106,7 +106,7 @@
 		WHERE a.`process_uuid` = #{value}
 	</select>
 
-	<select id="getProcessStepFormAttributeByStepUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
+	<select id="getProcessStepFormAttributeByStepUuid" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
 		SELECT
 		a.`process_uuid` AS processUuid,
 		a.`process_step_uuid` AS processStepUuid,

@@ -4,7 +4,7 @@ import codedriver.framework.notify.core.INotifyTriggerType;
 
 public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
 
-	ACTIVE("active", "步骤激活","流转到某个步骤时，该步骤被自动被激活时触发通知"),
+	ACTIVE("active", "步骤激活","流转到某个步骤，该步骤被自动激活时触发通知"),
 //	ASSIGN("assign", "步骤分配处理人","步骤激活后，系统根据配置为该步骤分配处理人时触发通知"),
 	ASSIGNEXCEPTION("assignexception", "分配异常","步骤激活时分配处理人，处理人不存在或规则无法匹配到有效处理人时触发通知"),
 	START("start", "步骤开始","步骤自动开始或者处理人手动开始处理时触发通知"),
