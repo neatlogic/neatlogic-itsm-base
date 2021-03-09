@@ -1285,6 +1285,7 @@
 		a.`processtask_step_id` AS processTaskStepId,
 		a.`policy_id` AS policyId,
 		a.`policy_name` AS policyName,
+		a.`policy_handler` AS policyHandler,
 		a.`policy_config_hash` AS policyConfigHash,
 		b.`config` AS policyConfig
 		FROM `processtask_step_notify_policy` a
@@ -2512,6 +2513,7 @@
 		`processtask_step_id`,
 		`policy_id`,
 		`policy_name`,
+		`policy_handler`,
 		`policy_config_hash`
 		)
 		VALUES
@@ -2519,6 +2521,7 @@
 		#{processTaskStepId},
 		#{policyId},
 		#{policyName},
+		#{policyHandler},
 		#{policyConfigHash}
 		)
 	</insert>
