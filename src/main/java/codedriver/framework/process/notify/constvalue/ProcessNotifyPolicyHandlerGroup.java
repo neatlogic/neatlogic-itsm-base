@@ -1,11 +1,11 @@
-package codedriver.framework.process.constvalue;
+package codedriver.framework.process.notify.constvalue;
 
 import codedriver.framework.notify.core.INotifyPolicyHandlerGroup;
 
 /**
  * @Title: NotifyPolicyHandlerGroup
  * @Package codedriver.framework.notify.constvalue
- * @Description: TODO
+ * @Description: 工单通知策略分组
  * @Author: linbq
  * @Date: 2021/3/8 16:01
  * Copyright(c) 2021 TechSureCo.,Ltd.AllRightsReserved.
