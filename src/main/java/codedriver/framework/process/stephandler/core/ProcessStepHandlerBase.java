@@ -265,6 +265,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
                     /** 执行动作 **/
                     IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ACTIVE);
+                    System.out.println("--------------------------");
                 } else if (this.getMode().equals(ProcessStepMode.AT)) {
                     myActive(currentProcessTaskStepVo);
                     currentProcessTaskStepVo.setIsActive(1);
