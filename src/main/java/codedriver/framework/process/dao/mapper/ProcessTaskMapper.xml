@@ -291,7 +291,7 @@
 		id = #{value}
 	</select>
 
-	<select id="getPendingProcessTaskListByStepTeamUuidList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<select id="getProcessingTaskListByCondition" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		select
 		a.`id`,
 		a.`title`,
@@ -321,11 +321,8 @@
 		a.`status` in ('draft','running')
 		and
 		b.`status` in ('draft','pending','running' )
-		<if test="stepTeamUuidList != null and stepTeamUuidList.size()>0">
-			and d.`uuid` in
-			<foreach collection="stepTeamUuidList" item="uuid" open="(" separator="," close=")">
-				#{uuid}
-			</foreach>
+		<if test="condition != null and condition != ''">
+			${condition}
 		</if>
 		group by a.`id`
 		order by a.`id` desc

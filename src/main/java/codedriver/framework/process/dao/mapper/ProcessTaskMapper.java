@@ -43,7 +43,7 @@ public interface ProcessTaskMapper {
      * @Params: [stepTeamUuidList]
      * @Returns: java.util.List<codedriver.framework.process.dto.ProcessTaskVo>
      **/
-    public List<ProcessTaskVo> getPendingProcessTaskListByStepTeamUuidList(@Param("stepTeamUuidList") List<String> stepTeamUuidList);
+    public List<ProcessTaskVo> getProcessingTaskListByCondition(@Param("condition") String sql);
 
     public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskId(Long processTaskId);
 
