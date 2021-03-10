@@ -301,25 +301,34 @@
 		a.`status`,
 		a.`start_time` as startTime,
 		a.`end_time` as endTime,
+		a.`owner`,
 		(select `user_name` from `user` where `uuid` = a.`owner`) as ownerName,
+		a.`reporter`,
 		(select `user_name` from `user` where `uuid` = a.`reporter`) as reporterName,
 		a.`worktime_uuid` as worktimeUuid,
 		(select `name` from `worktime` where `uuid` = a.`worktime_uuid`) as worktimeName,
 		a.`serial_number` as serialNumber
 		from `processtask` a
-		join `processtask_step` b
-		on a.`id` = b.`processtask_id` and b.`status` = 'pending'
-		join `processtask_step_worker` c
-		on a.`id` = c.`processtask_id`
-		<where>
-			<if test="stepTeamUuidList != null and stepTeamUuidList.size()>0">
-				and c.`uuid` in
-				<foreach collection="stepTeamUuidList" item="uuid" open="(" separator="," close=")">
-					#{uuid}
-				</foreach>
-			</if>
-		</where>
+		left join `processtask_step` b
+		on a.`id` = b.`processtask_id`
+		left join `processtask_step_user` c
+		on b.`processtask_id` = c.`processtask_id`
+		and b.`id` = c.`processtask_step_id`
+		left join `processtask_step_worker` d
+		on b.`processtask_id` = d.`processtask_id`
+		and b.`id` = d.`processtask_step_id`
+		where
+		a.`status` in ('draft','running')
+		and
+		b.`status` in ('draft','pending','running' )
+		<if test="stepTeamUuidList != null and stepTeamUuidList.size()>0">
+			and d.`uuid` in
+			<foreach collection="stepTeamUuidList" item="uuid" open="(" separator="," close=")">
+				#{uuid}
+			</foreach>
+		</if>
 		group by a.`id`
+		order by a.`id` desc
 	</select>
 
 	<select id="getProcessTaskFormByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
