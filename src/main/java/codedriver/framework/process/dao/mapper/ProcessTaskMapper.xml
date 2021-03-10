@@ -1028,7 +1028,7 @@
 		a.`processtask_step_id` AS processTaskStepId
 		FROM `processtask_step_worker` a
 		JOIN `processtask` b ON b.`id` =
-		a.`processtask_id`
+		a.`processtask_id` and b.`status` = 'running'
 		JOIN `processtask_serial_number` c
 		ON c.`processtask_id` = a.`processtask_id`
 		WHERE a.`processtask_id` != #{processTaskId}
