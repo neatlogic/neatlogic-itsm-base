@@ -291,7 +291,7 @@
 		id = #{value}
 	</select>
 
-	<select id="getProcessingTaskListByCondition" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+	<select id="getProcessingTaskListByCondition" parameterType="java.util.Map" resultType="codedriver.framework.process.dto.ProcessTaskVo">
 		select
 		a.`id`,
 		a.`title`,
@@ -321,8 +321,19 @@
 		a.`status` in ('draft','running')
 		and
 		b.`status` in ('draft','pending','running' )
-		<if test="condition != null and condition != ''">
-			${condition}
+		<if test="conditionMap.containsKey('stepteam')">
+			and ( b.type != 'start'
+			and ( c.`user_uuid` in
+			<foreach collection="conditionMap.stepteam.userUuidList" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+			or
+			d.`uuid` in
+			<foreach collection="conditionMap.stepteam.uuidList" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+			)
+			)
 		</if>
 		group by a.`id`
 		order by a.`id` desc

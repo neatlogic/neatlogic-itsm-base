@@ -40,10 +40,10 @@ public interface ProcessTaskMapper {
      * @Description: 查询待处理的工单
      * @Author: laiwt
      * @Date: 2021/1/11 12:01
-     * @Params: [stepTeamUuidList]
+     * @Params: [map]
      * @Returns: java.util.List<codedriver.framework.process.dto.ProcessTaskVo>
      **/
-    public List<ProcessTaskVo> getProcessingTaskListByCondition(@Param("condition") String sql);
+    public List<ProcessTaskVo> getProcessingTaskListByCondition(@Param("conditionMap") Map<String,Object> map);
 
     public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskId(Long processTaskId);
 
