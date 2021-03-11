@@ -1533,6 +1533,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                                 processTaskStepNotifyPolicyVo.setProcessTaskStepId(stepId);
                                 processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyInvoker.getPolicyId());
                                 processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
+                                processTaskStepNotifyPolicyVo.setPolicyHandler(notifyPolicyVo.getHandler());
                                 processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
                                 processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
                                 processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
@@ -1934,6 +1935,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             /** 执行动作 **/
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskNotifyTriggerType.REOPENPROCESSTASK);
+
+            /** 回退提醒 **/
+            IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), currentProcessTaskStepVo.getParamObj().getString("content"), ProcessTaskStepRemindType.REDO);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setError(ex.getMessage());

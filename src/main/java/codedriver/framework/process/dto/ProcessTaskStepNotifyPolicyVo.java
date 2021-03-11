@@ -8,6 +8,7 @@ public class ProcessTaskStepNotifyPolicyVo {
 	private Long processTaskStepId;
 	private Long policyId;
 	private String policyName;
+	private String policyHandler;
 	private String policyConfig;
 	private String policyConfigHash;
 	public Long getProcessTaskStepId() {
@@ -28,6 +29,15 @@ public class ProcessTaskStepNotifyPolicyVo {
 	public void setPolicyName(String policyName) {
 		this.policyName = policyName;
 	}
+
+	public String getPolicyHandler() {
+		return policyHandler;
+	}
+
+	public void setPolicyHandler(String policyHandler) {
+		this.policyHandler = policyHandler;
+	}
+
 	public String getPolicyConfig() {
 		return policyConfig;
 	}

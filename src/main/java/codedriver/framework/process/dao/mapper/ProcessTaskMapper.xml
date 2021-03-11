@@ -1028,7 +1028,7 @@
 		a.`processtask_step_id` AS processTaskStepId
 		FROM `processtask_step_worker` a
 		JOIN `processtask` b ON b.`id` =
-		a.`processtask_id`
+		a.`processtask_id` and b.`status` = 'running'
 		JOIN `processtask_serial_number` c
 		ON c.`processtask_id` = a.`processtask_id`
 		WHERE a.`processtask_id` != #{processTaskId}
@@ -1285,6 +1285,7 @@
 		a.`processtask_step_id` AS processTaskStepId,
 		a.`policy_id` AS policyId,
 		a.`policy_name` AS policyName,
+		a.`policy_handler` AS policyHandler,
 		a.`policy_config_hash` AS policyConfigHash,
 		b.`config` AS policyConfig
 		FROM `processtask_step_notify_policy` a
@@ -2512,6 +2513,7 @@
 		`processtask_step_id`,
 		`policy_id`,
 		`policy_name`,
+		`policy_handler`,
 		`policy_config_hash`
 		)
 		VALUES
@@ -2519,6 +2521,7 @@
 		#{processTaskStepId},
 		#{policyId},
 		#{policyName},
+		#{policyHandler},
 		#{policyConfigHash}
 		)
 	</insert>
@@ -2975,7 +2978,7 @@
 	</delete>
 
 	<delete id="deleteProcessTaskStepByProcessTaskId" parameterType="java.lang.Long">
-		DELETE ps,psa,psau,psaud,psc,psnp,psco,psd,psf,psr,psrl,pss,pssu,pssc,pst,pstp,psu,psw,pswp
+		DELETE ps,psa,psau,psaud,psc,psnp,psco,psd,psf,psr,psrl,pss,pssu,pssc,pst,psu,psw,pswp
 		FROM
 		`processtask_step` ps
 		LEFT JOIN
