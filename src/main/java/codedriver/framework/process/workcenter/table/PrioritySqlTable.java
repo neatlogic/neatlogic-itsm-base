@@ -1,9 +1,10 @@
 package codedriver.framework.process.workcenter.table;
 
-import codedriver.framework.process.workcenter.table.constvalue.FieldTypeEnum;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,8 +42,8 @@ public class PrioritySqlTable implements ISqlTable {
         ;
         private final String name;
         private final String text;
-        private String proName;
-        private Boolean isPrimary;
+        private final String proName;
+        private final Boolean isPrimary;
 
 
         private FieldEnum(String _value, String _text) {
@@ -65,6 +66,17 @@ public class PrioritySqlTable implements ISqlTable {
             this.proName = _proName;
             this.isPrimary = _isPrimary;
         }
+
+        private List<FieldEnum> getPrimaryFieldList(){
+            List<FieldEnum> primaryFieldEnumList = new ArrayList<>();
+            for (FieldEnum f : FieldEnum.values()) {
+                if(f.getPrimary()){
+                    primaryFieldEnumList.add(f);
+                }
+            }
+            return primaryFieldEnumList;
+        }
+
         public String getValue() {
             return name;
         }
@@ -82,7 +94,7 @@ public class PrioritySqlTable implements ISqlTable {
         }
 
         public static String getText(String value) {
-            for (FieldTypeEnum f : FieldTypeEnum.values()) {
+            for (FieldEnum f : FieldEnum.values()) {
                 if (f.getValue().equals(value)) {
                     return f.getText();
                 }
