@@ -3,6 +3,7 @@ package codedriver.framework.process.workcenter.dto;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.util.CommonUtil;
+import codedriver.framework.dashboard.dto.DashboardConfigVo;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -79,11 +80,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     private String keywordText;
 
-    //组、分组 用于 group_count
-    private String group;
-    private String subGroup;
-    private LinkedHashMap<String,String> groupDataCountMap;
-    private String groupType;
+    //用于dashboard 搜索入参
+    private DashboardConfigVo dashboardConfigVo ;
 
     public WorkcenterVo() {
     }
@@ -362,35 +360,14 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.keywordConditionList = keywordConditionList;
     }
 
-    public String getGroup() {
-        return group;
+    public DashboardConfigVo getDashboardConfigVo() {
+        if(dashboardConfigVo == null){
+            dashboardConfigVo = new DashboardConfigVo();
+        }
+        return dashboardConfigVo;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
-    public String getSubGroup() {
-        return subGroup;
-    }
-
-    public void setSubGroup(String subGroup) {
-        this.subGroup = subGroup;
-    }
-
-    public LinkedHashMap<String, String> getGroupDataCountMap() {
-        return groupDataCountMap;
-    }
-
-    public void setGroupDataCountMap(LinkedHashMap<String, String> groupDataCountMap) {
-        this.groupDataCountMap = groupDataCountMap;
-    }
-
-    public String getGroupType() {
-        return groupType;
-    }
-
-    public void setGroupType(String groupType) {
-        this.groupType = groupType;
+    public void setDashboardConfigVo(DashboardConfigVo dashboardConfigVo) {
+        this.dashboardConfigVo = dashboardConfigVo;
     }
 }

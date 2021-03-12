@@ -115,7 +115,7 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 
     @Override
     public void getExchangeToDashboardGroupDataMap(List<Map<String, String>> mapList, WorkcenterVo workcenterVo) {
-        workcenterVo.setGroupDataCountMap(getMyExchangeToDashboardGroupDataMap(mapList));
+        workcenterVo.getDashboardConfigVo().setGroupDataCountMap(getMyExchangeToDashboardGroupDataMap(mapList));
     }
 
     protected LinkedHashMap<String, String> getMyExchangeToDashboardGroupDataMap(List<Map<String, String>> mapList) {
