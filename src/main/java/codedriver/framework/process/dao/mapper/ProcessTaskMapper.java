@@ -35,14 +35,17 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);
 
+
+    public List<ProcessTaskVo> getTaskListByIdList(List<Long> idList);
+
     /**
-     * @Description: 根据组uuid查询待处理的工单
+     * @Description: 查询待处理的工单id
      * @Author: laiwt
      * @Date: 2021/1/11 12:01
-     * @Params: [stepTeamUuidList]
+     * @Params: [map]
      * @Returns: java.util.List<codedriver.framework.process.dto.ProcessTaskVo>
      **/
-    public List<ProcessTaskVo> getPendingProcessTaskListByStepTeamUuidList(@Param("stepTeamUuidList") List<String> stepTeamUuidList);
+    public List<Long> getProcessingTaskIdListByCondition(@Param("conditionMap") Map<String,Object> map);
 
     public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskId(Long processTaskId);
 

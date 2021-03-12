@@ -291,35 +291,134 @@
 		id = #{value}
 	</select>
 
-	<select id="getPendingProcessTaskListByStepTeamUuidList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskVo">
-		select
-		a.`id`,
-		a.`title`,
-		a.`process_uuid` as processUuid,
-		a.`channel_uuid` as channelUuid,
-		(select `name` from `priority` where `uuid` = a.`priority_uuid`) as priorityName,
-		a.`status`,
-		a.`start_time` as startTime,
-		a.`end_time` as endTime,
-		(select `user_name` from `user` where `uuid` = a.`owner`) as ownerName,
-		(select `user_name` from `user` where `uuid` = a.`reporter`) as reporterName,
-		a.`worktime_uuid` as worktimeUuid,
-		(select `name` from `worktime` where `uuid` = a.`worktime_uuid`) as worktimeName,
-		a.`serial_number` as serialNumber
-		from `processtask` a
-		join `processtask_step` b
-		on a.`id` = b.`processtask_id` and b.`status` = 'pending'
-		join `processtask_step_worker` c
-		on a.`id` = c.`processtask_id`
-		<where>
-			<if test="stepTeamUuidList != null and stepTeamUuidList.size()>0">
-				and c.`uuid` in
-				<foreach collection="stepTeamUuidList" item="uuid" open="(" separator="," close=")">
-					#{uuid}
-				</foreach>
-			</if>
-		</where>
-		group by a.`id`
+	<select id="getProcessingTaskIdListByCondition" parameterType="java.util.Map" resultType="java.lang.Long">
+		SELECT
+		pt.id
+		FROM
+		processtask pt
+		LEFT JOIN processtask_step pts ON pt.id = pts.processtask_id
+		LEFT JOIN processtask_step_user ptsu ON pts.processtask_id = ptsu.processtask_id
+		AND pts.id = ptsu.processtask_step_id
+		LEFT JOIN processtask_step_worker ptsw ON pts.processtask_id = ptsw.processtask_id
+		AND pts.id = ptsw.processtask_step_id
+		where
+		pt.`status` in ('running')
+		and
+		pts.`status` in ('pending','running' )
+		and (
+		ptsu.`user_uuid` in (#{conditionMap.userUuid})
+		<if test="conditionMap.containsKey('teamUuidList')">
+			or
+			ptsw.`uuid` in
+			<foreach collection="conditionMap.teamUuidList" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+			and
+			ptsw.`type` in ('team')
+		</if>
+		<if test="conditionMap.containsKey('roleUuidList')">
+			or
+			ptsw.`uuid` in
+			<foreach collection="conditionMap.roleUuidList" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+			and
+			ptsw.`type` in ('role')
+		</if>
+		or ptsw.`uuid` in (#{conditionMap.userUuid})
+		and ptsw.`type` in ('user')
+		)
+		and ( pts.type != 'start'
+		and ( ptsu.`user_uuid` in
+		<foreach collection="conditionMap.stepteam.userUuidList" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		or
+		ptsw.`uuid` in
+		<foreach collection="conditionMap.stepteam.uuidList" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		)
+		)
+		group by pt.`id`
+	</select>
+
+	<select id="getTaskListByIdList" parameterType="java.util.List" resultMap="workcenterProcessTaskMap">
+		SELECT
+		pt.title AS title,
+		pt.serial_number AS serialNumber,
+		owner.uuid AS ownerUuid,
+		owner.user_name AS ownerName,
+		owner.user_info AS ownerInfo,
+		owner.vip_level AS ownerVipLevel,
+		owner.pinyin AS ownerPinYin,
+		pri.uuid AS priorityUuid,
+		pri.NAME AS priorityName,
+		pri.color AS priorityColor,
+		reporter.uuid AS reporterUuid,
+		reporter.user_name AS reporterName,
+		reporter.user_info AS reporterInfo,
+		reporter.vip_level AS reporterVipLevel,
+		reporter.pinyin AS reporterPinYin,
+		pts.id AS processTaskStepId,
+		pts.NAME AS processTaskStepName,
+		pts.processtask_id AS processTaskId,
+		pts.HANDLER AS processTaskStepHandler,
+		ptsw.uuid AS stepWorkerUuid,
+		ptsw.type AS stepWorkerType,
+		ptsw.user_type AS stepWorkerUserType,
+		ptsu.STATUS AS stepUserUserStatus,
+		ptsu.user_type AS stepUserUserType,
+		ptsuser.user_name AS stepUserUserName,
+		ptsuser.uuid AS stepUserUserUuid,
+		ptsuser.user_info AS stepUserUserInfo,
+		ptsuser.vip_level AS stepUserUserVipLevel,
+		ptsuser.pinyin AS stepUserUserPinyin,
+		pts.STATUS AS processTaskStepStatus,
+		pts.is_active AS processTaskStepIsActive,
+		pt.STATUS AS STATUS,
+		cata.uuid AS catalogUuid,
+		cata.NAME AS catalogName,
+		ct.uuid AS ChannelTypeUuid,
+		ct.NAME AS ChannelTypeName,
+		ct.color AS ChannelTypeColor,
+		c.uuid AS channelUuid,
+		c.NAME AS channelName,
+		pt.start_time AS start_time,
+		wt.NAME AS worktimeName,
+		pt.end_time AS end_time,
+		ptsl.id AS processTaskSlaId,
+		ptsl.NAME AS processTaskSlaName,
+		ptsl.config AS processTaskSlaConfig,
+		ptslt.expire_time AS expireTime,
+		ptslt.realexpire_time AS realExpireTime,
+		ptslt.time_left AS timeLeft,
+		ptslt.realtime_left AS realTimeLeft,
+		pt.is_show AS is_show,
+		pt.id AS id
+		FROM
+		processtask pt
+		LEFT JOIN `user` owner ON pt.owner = owner.uuid
+		LEFT JOIN priority pri ON pt.priority_uuid = pri.uuid
+		LEFT JOIN `user` reporter ON pt.reporter = reporter.uuid
+		LEFT JOIN processtask_step pts ON pt.id = pts.processtask_id
+		LEFT JOIN processtask_step_user ptsu ON pts.processtask_id = ptsu.processtask_id
+		AND pts.id = ptsu.processtask_step_id
+		LEFT JOIN processtask_step_worker ptsw ON pts.processtask_id = ptsw.processtask_id
+		AND pts.id = ptsw.processtask_step_id
+		LEFT JOIN `user` ptsuser ON ptsu.user_uuid = ptsuser.uuid
+		LEFT JOIN channel c ON pt.channel_uuid = c.uuid
+		LEFT JOIN catalog cata ON c.parent_uuid = cata.uuid
+		LEFT JOIN channel_type ct ON c.channel_type_uuid = ct.uuid
+		LEFT JOIN channel_worktime cwt ON c.uuid = cwt.channel_uuid
+		LEFT JOIN worktime wt ON cwt.worktime_uuid = wt.uuid
+		LEFT JOIN processtask_sla ptsl ON pts.processtask_id = ptsl.processtask_id
+		LEFT JOIN processtask_sla_time ptslt ON ptsl.id = ptslt.sla_id
+		where pt.id in
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		order by pt.`id` desc
 	</select>
 
 	<select id="getProcessTaskFormByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
