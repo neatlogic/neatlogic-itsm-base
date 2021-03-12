@@ -1961,6 +1961,115 @@
 	<select id="getProcessTaskStepNameById" parameterType="java.lang.Long" resultType="java.lang.String">
 		SELECT `name` FROM `processtask_step` WHERE `id` = #{value}
 	</select>
+
+	<select id="getProcessTaskCountBySql" parameterType="java.lang.String" resultType="java.lang.Integer">
+		${value}
+	</select>
+
+	<resultMap id="workcenterProcessTaskMap" type="codedriver.framework.process.dto.ProcessTaskVo" >
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="process_uuid" property="processUuid" />
+		<result column="channel_uuid" property="channelUuid" />
+		<result column="config_hash" property="configHash" />
+		<result column="priority_uuid" property="priorityUuid" />
+		<result column="status" property="status" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="ownerUuid" property="owner" />
+		<result column="reporterUuid" property="reporter" />
+		<!--<result column="reporterName" property="reporterName" />-->
+		<result column="expire_time" property="expireTime" />
+		<result column="worktime_uuid" property="worktimeUuid" />
+		<result column="worktimeName" property="worktimeName" />
+		<result column="error" property="error" />
+		<result column="is_show" property="isShow" />
+		<result column="serialNumber" property="serialNumber" />
+		<association property="channelVo" javaType="codedriver.framework.process.dto.ChannelVo">
+			<result property="uuid" column="channelUuid" />
+			<result property="name" column="channelName" />
+			<association property="channelTypeVo" javaType="codedriver.framework.process.dto.ChannelTypeVo">
+				<result property="uuid" column="channelTypeUuid" />
+				<result property="color" column="channelTypeColor" />
+				<result property="name" column="channelTypeName" />
+			</association>
+			<association property="parent" javaType="codedriver.framework.process.dto.CatalogVo">
+				<result property="uuid" column="catalogUuid" />
+				<result property="name" column="catalogName" />
+			</association>
+		</association>
+		<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="ownerUuid" />
+			<result property="userName" column="ownerName" />
+			<result property="userInfo" column="ownerInfo" />
+			<result property="vipLevel" column="ownerVipLevel" />
+			<result property="pinyin" column="ownerPinyin" />
+		</association>
+		<association property="reporterVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="reporterUuid" />
+			<result property="userName" column="reporterName" />
+			<result property="userInfo" column="reporterInfo" />
+			<result property="vipLevel" column="reporterVipLevel" />
+			<result property="pinyin" column="reporterPinyin" />
+		</association>
+		<association property="priority" javaType="codedriver.framework.process.dto.PriorityVo">
+			<result property="uuid" column="priorityUuid" />
+			<result property="name" column="priorityName" />
+			<result property="color" column="priorityColor" />
+		</association>
+		<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
+			<id column="processTaskStepId" property="id" />
+			<result column="processTaskStepName" property="name" />
+			<result column="processTaskStepStatus" property="status" />
+			<result column="processTaskStepType" property="type" />
+			<result column="processTaskStepHandler" property="handler" />
+			<result column="processTaskStepIsActive" property="isActive" />
+			<result column="processTaskStepStartTime" property="startTime" />
+			<result column="processTaskStepConfigHash" property="configHash" />
+			<result column="processTaskStepIsActive" property="isActive" />
+			<result column="processTaskStepEndTime" property="endTime" />
+			<collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+				<result column="stepWorkerType" property="type" />
+				<result column="stepWorkerUserType" property="userType" />
+				<result column="stepWorkerUuid" property="uuid" />
+			</collection>
+			<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+				<result column="userType" property="stepUserUserType" />
+				<result column="stepUserUserStatus" property="status" />
+				<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+					<result column="stepUserUserUuid" property="uuid" />
+					<result column="stepUserUserName" property="userName" />
+					<result column="stepUserUserInfo" property="userInfo" />
+					<result column="stepUserUserVipLevel" property="vipLevel" />
+					<result column="stepUserUserPinyin" property="pinyin" />
+				</association>
+			</collection>
+		</collection>
+		<collection property="focusUserList" ofType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="focusUuid" />
+			<result property="userName" column="focusName" />
+			<result property="userInfo" column="focusInfo" />
+			<result property="vipLevel" column="focusVipLevel" />
+			<result property="pinyin" column="focusPinyin" />
+		</collection>
+		<collection property="processTaskSlaVoList" ofType="codedriver.framework.process.dto.ProcessTaskSlaVo">
+			<result column="ProcessTaskSlaId" property="id" />
+			<result column="ProcessTaskSlaName" property="name" />
+			<result column="ProcessTaskSlaConfig" property="config" />
+			<association property="slaTimeVo" javaType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
+				<result column="expireTime" property="expireTime" />
+				<result column="realExpireTime" property="realExpireTime" />
+				<result column="timeLeft" property="timeLeft" />
+				<result column="realTimeLeft" property="realTimeLeft" />
+			</association>
+		</collection>
+
+	</resultMap>
+
+	<select id="getProcessTaskBySql" parameterType="java.lang.String" resultMap="workcenterProcessTaskMap">
+		${value }
+	</select>
+
 	<update id="updateProcessTaskStepConvergeIsCheck">
 		UPDATE `processtask_converge` SET is_check = #{isCheck} WHERE converge_id = #{convergeId}
 		AND processtask_step_id = #{processTaskStepId}

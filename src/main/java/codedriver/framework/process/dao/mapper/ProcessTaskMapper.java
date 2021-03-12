@@ -1,7 +1,6 @@
 package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.elasticsearch.annotation.ESParam;
 import codedriver.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -238,6 +237,10 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskVo> getProcessTaskDetailListByIdList(List<Long> processTaskIdList);
 
     public String getProcessTaskStepNameById(Long id);
+
+    public Integer getProcessTaskCountBySql(String searchSql);
+
+    public List<ProcessTaskVo> getProcessTaskBySql(String searchSql);
 
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
