@@ -291,52 +291,207 @@
 		id = #{value}
 	</select>
 
-	<select id="getProcessingTaskListByCondition" parameterType="java.util.Map" resultType="codedriver.framework.process.dto.ProcessTaskVo">
-		select
-		a.`id`,
-		a.`title`,
-		a.`process_uuid` as processUuid,
-		a.`channel_uuid` as channelUuid,
-		(select `name` from `priority` where `uuid` = a.`priority_uuid`) as priorityName,
-		a.`status`,
-		a.`start_time` as startTime,
-		a.`end_time` as endTime,
-		a.`owner`,
-		(select `user_name` from `user` where `uuid` = a.`owner`) as ownerName,
-		a.`reporter`,
-		(select `user_name` from `user` where `uuid` = a.`reporter`) as reporterName,
-		a.`worktime_uuid` as worktimeUuid,
-		(select `name` from `worktime` where `uuid` = a.`worktime_uuid`) as worktimeName,
-		a.`serial_number` as serialNumber
-		from `processtask` a
-		left join `processtask_step` b
-		on a.`id` = b.`processtask_id`
-		left join `processtask_step_user` c
-		on b.`processtask_id` = c.`processtask_id`
-		and b.`id` = c.`processtask_step_id`
-		left join `processtask_step_worker` d
-		on b.`processtask_id` = d.`processtask_id`
-		and b.`id` = d.`processtask_step_id`
+	<resultMap id="workcenterProcessTaskMap" type="codedriver.framework.process.dto.ProcessTaskVo" >
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="process_uuid" property="processUuid" />
+		<result column="channel_uuid" property="channelUuid" />
+		<result column="config_hash" property="configHash" />
+		<result column="priority_uuid" property="priorityUuid" />
+		<result column="status" property="status" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="ownerUuid" property="owner" />
+		<result column="reporterUuid" property="reporter" />
+		<result column="expire_time" property="expireTime" />
+		<result column="worktime_uuid" property="worktimeUuid" />
+		<result column="worktimeName" property="worktimeName" />
+		<result column="error" property="error" />
+		<result column="is_show" property="isShow" />
+		<result column="serialNumber" property="serialNumber" />
+		<association property="channelVo" javaType="codedriver.framework.process.dto.ChannelVo">
+			<result property="uuid" column="channelUuid" />
+			<result property="name" column="channelName" />
+			<association property="channelTypeVo" javaType="codedriver.framework.process.dto.ChannelTypeVo">
+				<result property="uuid" column="channelTypeUuid" />
+				<result property="color" column="channelTypeColor" />
+				<result property="name" column="channelTypeName" />
+			</association>
+			<association property="parent" javaType="codedriver.framework.process.dto.CatalogVo">
+				<result property="uuid" column="catalogUuid" />
+				<result property="name" column="catalogName" />
+			</association>
+		</association>
+		<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="ownerUuid" />
+			<result property="userName" column="ownerName" />
+			<result property="userInfo" column="ownerInfo" />
+			<result property="vipLevel" column="ownerVipLevel" />
+			<result property="pinyin" column="ownerPinyin" />
+		</association>
+		<association property="reporterVo" javaType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="reporterUuid" />
+			<result property="userName" column="reporterName" />
+			<result property="userInfo" column="reporterInfo" />
+			<result property="vipLevel" column="reporterVipLevel" />
+			<result property="pinyin" column="reporterPinyin" />
+		</association>
+		<association property="priority" javaType="codedriver.framework.process.dto.PriorityVo">
+			<result property="uuid" column="priorityUuid" />
+			<result property="name" column="priorityName" />
+			<result property="color" column="priorityColor" />
+		</association>
+		<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
+			<id column="processTaskStepId" property="id" />
+			<result column="processTaskStepName" property="name" />
+			<result column="processTaskStepStatus" property="status" />
+			<result column="processTaskStepType" property="type" />
+			<result column="processTaskStepHandler" property="handler" />
+			<result column="processTaskStepIsActive" property="isActive" />
+			<result column="processTaskStepStartTime" property="startTime" />
+			<result column="processTaskStepConfigHash" property="configHash" />
+			<result column="processTaskStepIsActive" property="isActive" />
+			<result column="processTaskStepEndTime" property="endTime" />
+			<collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+				<result column="stepWorkerType" property="type" />
+				<result column="stepWorkerUserType" property="userType" />
+				<result column="stepWorkerUuid" property="uuid" />
+			</collection>
+			<collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+				<result column="userType" property="stepUserUserType" />
+				<result column="stepUserUserStatus" property="status" />
+				<association property="userVo" javaType="codedriver.framework.dto.UserVo">
+					<result column="stepUserUserUuid" property="uuid" />
+					<result column="stepUserUserName" property="userName" />
+					<result column="stepUserUserInfo" property="userInfo" />
+					<result column="stepUserUserVipLevel" property="vipLevel" />
+					<result column="stepUserUserPinyin" property="pinyin" />
+				</association>
+			</collection>
+		</collection>
+		<collection property="focusUserList" ofType="codedriver.framework.dto.UserVo">
+			<result property="uuid" column="focusUuid" />
+			<result property="userName" column="focusName" />
+			<result property="userInfo" column="focusInfo" />
+			<result property="vipLevel" column="focusVipLevel" />
+			<result property="pinyin" column="focusPinyin" />
+		</collection>
+		<collection property="processTaskSlaVoList" ofType="codedriver.framework.process.dto.ProcessTaskSlaVo">
+			<result column="ProcessTaskSlaId" property="id" />
+			<result column="ProcessTaskSlaName" property="name" />
+			<result column="ProcessTaskSlaConfig" property="config" />
+			<association property="slaTimeVo" javaType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
+				<result column="expireTime" property="expireTime" />
+				<result column="realExpireTime" property="realExpireTime" />
+				<result column="timeLeft" property="timeLeft" />
+				<result column="realTimeLeft" property="realTimeLeft" />
+			</association>
+		</collection>
+	</resultMap>
+
+	<select id="getProcessingTaskListByCondition" parameterType="java.util.Map" resultMap="workcenterProcessTaskMap">
+		SELECT
+		pt.title AS title,
+		pt.serial_number AS serialNumber,
+		OWNER.uuid AS ownerUuid,
+		OWNER.user_name AS ownerName,
+		OWNER.user_info AS ownerInfo,
+		OWNER.vip_level AS ownerVipLevel,
+		OWNER.pinyin AS ownerPinYin,
+		pri.uuid AS priorityUuid,
+		pri.NAME AS priorityName,
+		pri.color AS priorityColor,
+		reporter.uuid AS reporterUuid,
+		reporter.user_name AS reporterName,
+		reporter.user_info AS reporterInfo,
+		reporter.vip_level AS reporterVipLevel,
+		reporter.pinyin AS reporterPinYin,
+		pts.id AS processTaskStepId,
+		pts.NAME AS processTaskStepName,
+		pts.processtask_id AS processTaskId,
+		pts.HANDLER AS processTaskStepHandler,
+		ptsw.uuid AS stepWorkerUuid,
+		ptsw.type AS stepWorkerType,
+		ptsw.user_type AS stepWorkerUserType,
+		ptsu.STATUS AS stepUserUserStatus,
+		ptsu.user_type AS stepUserUserType,
+		ptsuser.user_name AS stepUserUserName,
+		ptsuser.uuid AS stepUserUserUuid,
+		ptsuser.user_info AS stepUserUserInfo,
+		ptsuser.vip_level AS stepUserUserVipLevel,
+		ptsuser.pinyin AS stepUserUserPinyin,
+		pts.STATUS AS processTaskStepStatus,
+		pts.is_active AS processTaskStepIsActive,
+		pt.STATUS AS STATUS,
+		cata.uuid AS catalogUuid,
+		cata.NAME AS catalogName,
+		ct.uuid AS ChannelTypeUuid,
+		ct.NAME AS ChannelTypeName,
+		ct.color AS ChannelTypeColor,
+		c.uuid AS channelUuid,
+		c.NAME AS channelName,
+		pt.start_time AS start_time,
+		wt.NAME AS worktimeName,
+		pt.end_time AS end_time,
+		ptsl.id AS processTaskSlaId,
+		ptsl.NAME AS processTaskSlaName,
+		ptsl.config AS processTaskSlaConfig,
+		ptslt.expire_time AS expireTime,
+		ptslt.realexpire_time AS realExpireTime,
+		ptslt.time_left AS timeLeft,
+		ptslt.realtime_left AS realTimeLeft,
+		pt.is_show AS is_show,
+		pt.id AS id
+		FROM
+		processtask pt
+		LEFT JOIN USER OWNER ON pt.OWNER = OWNER.uuid
+		LEFT JOIN priority pri ON pt.priority_uuid = pri.uuid
+		LEFT JOIN USER reporter ON pt.reporter = reporter.uuid
+		LEFT JOIN processtask_step pts ON pt.id = pts.processtask_id
+		LEFT JOIN processtask_step_user ptsu ON pts.processtask_id = ptsu.processtask_id
+		AND pts.id = ptsu.processtask_step_id
+		LEFT JOIN processtask_step_worker ptsw ON pts.processtask_id = ptsw.processtask_id
+		AND pts.id = ptsw.processtask_step_id
+		LEFT JOIN USER ptsuser ON ptsu.user_uuid = ptsuser.uuid
+		LEFT JOIN channel c ON pt.channel_uuid = c.uuid
+		LEFT JOIN catalog cata ON c.parent_uuid = cata.uuid
+		LEFT JOIN channel_type ct ON c.channel_type_uuid = ct.uuid
+		LEFT JOIN channel_worktime cwt ON c.uuid = cwt.channel_uuid
+		LEFT JOIN worktime wt ON cwt.worktime_uuid = wt.uuid
+		LEFT JOIN processtask_sla ptsl ON pts.processtask_id = ptsl.processtask_id
+		LEFT JOIN processtask_sla_time ptslt ON ptsl.id = ptslt.sla_id
 		where
-		a.`status` in ('draft','running')
+		pt.`status` in ('running')
 		and
-		b.`status` in ('draft','pending','running' )
-		<if test="conditionMap.containsKey('stepteam')">
-			and ( b.type != 'start'
-			and ( c.`user_uuid` in
-			<foreach collection="conditionMap.stepteam.userUuidList" item="item" open="(" close=")" separator=",">
-				#{item}
-			</foreach>
+		pts.`status` in ('pending','running' )
+		and (
+		ptsu.`user_uuid` in (#{conditionMap.userUuid})
+		<if test="conditionMap.containsKey('teamUuidList')">
 			or
-			d.`uuid` in
-			<foreach collection="conditionMap.stepteam.uuidList" item="item" open="(" close=")" separator=",">
+			ptsw.`uuid` in
+			<foreach collection="conditionMap.teamUuidList" item="item" open="(" close=")" separator=",">
 				#{item}
 			</foreach>
-			)
-			)
+			and
+			ptsw.`type` in ('team')
 		</if>
-		group by a.`id`
-		order by a.`id` desc
+		or ptsw.`uuid` in (#{conditionMap.userUuid})
+		and ptsw.`type` in ('user')
+		)
+		and ( pts.type != 'start'
+		and ( ptsu.`user_uuid` in
+		<foreach collection="conditionMap.stepteam.userUuidList" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		or
+		ptsw.`uuid` in
+		<foreach collection="conditionMap.stepteam.uuidList" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		)
+		)
+		group by pt.`id`
+		order by pt.`id` desc
 	</select>
 
 	<select id="getProcessTaskFormByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
