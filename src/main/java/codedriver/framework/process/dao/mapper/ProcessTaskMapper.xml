@@ -389,7 +389,61 @@
 		</collection>
 	</resultMap>
 
-	<select id="getProcessingTaskListByCondition" parameterType="java.util.Map" resultMap="workcenterProcessTaskMap">
+	<select id="getProcessingTaskIdListByCondition" parameterType="java.util.Map" resultType="java.lang.Long">
+		SELECT
+		pt.id
+		FROM
+		processtask pt
+		LEFT JOIN USER OWNER ON pt.OWNER = OWNER.uuid
+		LEFT JOIN priority pri ON pt.priority_uuid = pri.uuid
+		LEFT JOIN USER reporter ON pt.reporter = reporter.uuid
+		LEFT JOIN processtask_step pts ON pt.id = pts.processtask_id
+		LEFT JOIN processtask_step_user ptsu ON pts.processtask_id = ptsu.processtask_id
+		AND pts.id = ptsu.processtask_step_id
+		LEFT JOIN processtask_step_worker ptsw ON pts.processtask_id = ptsw.processtask_id
+		AND pts.id = ptsw.processtask_step_id
+		LEFT JOIN USER ptsuser ON ptsu.user_uuid = ptsuser.uuid
+		LEFT JOIN channel c ON pt.channel_uuid = c.uuid
+		LEFT JOIN catalog cata ON c.parent_uuid = cata.uuid
+		LEFT JOIN channel_type ct ON c.channel_type_uuid = ct.uuid
+		LEFT JOIN channel_worktime cwt ON c.uuid = cwt.channel_uuid
+		LEFT JOIN worktime wt ON cwt.worktime_uuid = wt.uuid
+		LEFT JOIN processtask_sla ptsl ON pts.processtask_id = ptsl.processtask_id
+		LEFT JOIN processtask_sla_time ptslt ON ptsl.id = ptslt.sla_id
+		where
+		pt.`status` in ('running')
+		and
+		pts.`status` in ('pending','running' )
+		and (
+		ptsu.`user_uuid` in (#{conditionMap.userUuid})
+		<if test="conditionMap.containsKey('teamUuidList')">
+			or
+			ptsw.`uuid` in
+			<foreach collection="conditionMap.teamUuidList" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+			and
+			ptsw.`type` in ('team')
+		</if>
+		or ptsw.`uuid` in (#{conditionMap.userUuid})
+		and ptsw.`type` in ('user')
+		)
+		and ( pts.type != 'start'
+		and ( ptsu.`user_uuid` in
+		<foreach collection="conditionMap.stepteam.userUuidList" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		or
+		ptsw.`uuid` in
+		<foreach collection="conditionMap.stepteam.uuidList" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		)
+		)
+		group by pt.`id`
+	</select>
+
+	<select id="getTaskListByIdList" parameterType="java.util.List" resultMap="workcenterProcessTaskMap">
 		SELECT
 		pt.title AS title,
 		pt.serial_number AS serialNumber,
@@ -460,36 +514,10 @@
 		LEFT JOIN worktime wt ON cwt.worktime_uuid = wt.uuid
 		LEFT JOIN processtask_sla ptsl ON pts.processtask_id = ptsl.processtask_id
 		LEFT JOIN processtask_sla_time ptslt ON ptsl.id = ptslt.sla_id
-		where
-		pt.`status` in ('running')
-		and
-		pts.`status` in ('pending','running' )
-		and (
-		ptsu.`user_uuid` in (#{conditionMap.userUuid})
-		<if test="conditionMap.containsKey('teamUuidList')">
-			or
-			ptsw.`uuid` in
-			<foreach collection="conditionMap.teamUuidList" item="item" open="(" close=")" separator=",">
-				#{item}
-			</foreach>
-			and
-			ptsw.`type` in ('team')
-		</if>
-		or ptsw.`uuid` in (#{conditionMap.userUuid})
-		and ptsw.`type` in ('user')
-		)
-		and ( pts.type != 'start'
-		and ( ptsu.`user_uuid` in
-		<foreach collection="conditionMap.stepteam.userUuidList" item="item" open="(" close=")" separator=",">
+		where pt.id in
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
 			#{item}
 		</foreach>
-		or
-		ptsw.`uuid` in
-		<foreach collection="conditionMap.stepteam.uuidList" item="item" open="(" close=")" separator=",">
-			#{item}
-		</foreach>
-		)
-		)
 		group by pt.`id`
 		order by pt.`id` desc
 	</select>
