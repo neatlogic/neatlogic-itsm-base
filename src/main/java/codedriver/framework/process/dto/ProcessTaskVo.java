@@ -4,7 +4,6 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.UserVo;
-import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -16,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 public class ProcessTaskVo extends BasePageVo {
-    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
+//    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
     @EntityField(name = "工单id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "父工单id", type = ApiParamType.LONG)
