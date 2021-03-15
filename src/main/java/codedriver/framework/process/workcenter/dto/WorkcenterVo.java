@@ -3,6 +3,7 @@ package codedriver.framework.process.workcenter.dto;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.util.CommonUtil;
+import codedriver.framework.dashboard.dto.DashboardConfigVo;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -13,9 +14,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private static final long serialVersionUID = 1952066708451908924L;
@@ -80,6 +79,9 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private String keywordColumn;
 
     private String keywordText;
+
+    //用于dashboard 搜索入参
+    private DashboardConfigVo dashboardConfigVo ;
 
     public WorkcenterVo() {
     }
@@ -356,5 +358,16 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     public void setKeywordConditionList(JSONArray keywordConditionList) {
         this.keywordConditionList = keywordConditionList;
+    }
+
+    public DashboardConfigVo getDashboardConfigVo() {
+        if(dashboardConfigVo == null){
+            dashboardConfigVo = new DashboardConfigVo();
+        }
+        return dashboardConfigVo;
+    }
+
+    public void setDashboardConfigVo(DashboardConfigVo dashboardConfigVo) {
+        this.dashboardConfigVo = dashboardConfigVo;
     }
 }

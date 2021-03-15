@@ -243,6 +243,8 @@ public interface ProcessTaskMapper {
 
     public Integer getProcessTaskCountBySql(String searchSql);
 
+    public List<Map<String,Object>> getWorkcenterProcessTaskMapBySql(String searchSql);
+
     public List<ProcessTaskVo> getProcessTaskBySql(String searchSql);
 
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);

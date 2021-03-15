@@ -40,7 +40,7 @@ public class ProcessTaskSqlTable implements ISqlTable {
         END_TIME("end_time", "结束时间"),
         OWNER("owner", "上报人"),
         REPORTER("reporter", "上报人"),
-        STATUS("status", "工单状态"),
+        STATUS("status", "工单状态","statusName","status"),
         PRIORITY_UUID("priority_uuid", "工单状态"),
         CHANNEL_UUID("channel_uuid", "工单状态"),
         IS_SHOW("is_show", "工单是否隐藏"),
@@ -48,7 +48,7 @@ public class ProcessTaskSqlTable implements ISqlTable {
         private final String name;
         private final String text;
         private final String proName;
-        private final String handlerName;
+        private String handlerName;
 
         private FieldEnum(String _value, String _text) {
             this.name = _value;
@@ -76,6 +76,9 @@ public class ProcessTaskSqlTable implements ISqlTable {
         }
 
         public String getHandlerName() {
+            if(handlerName == null){
+                handlerName = name;
+            }
             return handlerName;
         }
 
