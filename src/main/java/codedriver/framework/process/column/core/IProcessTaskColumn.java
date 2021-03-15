@@ -7,7 +7,6 @@ import codedriver.framework.process.workcenter.dto.TableSelectColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
 import com.alibaba.fastjson.JSONObject;
-import com.techsure.multiattrsearch.MultiAttrsObject;
 
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,7 @@ public interface IProcessTaskColumn {
      * @return: java.lang.Object
      * @Date: 2020/2/2
      */
-    public Object getValue(MultiAttrsObject el) throws RuntimeException;
+//    public Object getValue(MultiAttrsObject el) throws RuntimeException;
 
     /**
      * @Description: 获取显示值 dashboard
@@ -52,7 +51,7 @@ public interface IProcessTaskColumn {
      * @return: java.lang.Object
      * @Date: 2020/2/2
      */
-    public Object getValueText(MultiAttrsObject el) throws RuntimeException;
+//    public Object getValueText(MultiAttrsObject el) throws RuntimeException;
 
     /**
      * @Description: 获取类型

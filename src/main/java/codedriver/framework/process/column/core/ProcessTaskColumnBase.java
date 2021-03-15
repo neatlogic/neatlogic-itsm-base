@@ -6,8 +6,6 @@ import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
 import com.alibaba.fastjson.JSONObject;
-import com.techsure.multiattrsearch.MultiAttrsObject;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ import java.util.Map;
 
 public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
 
-    @Override
+    /*@Override
     public Object getValue(MultiAttrsObject el) throws RuntimeException {
         JSONObject commonJson = (JSONObject) el.getJSON(this.getType());
         if (commonJson == null) {
@@ -38,7 +36,7 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
             return getMyValueText(commonJson);
         }
         return null;
-    }
+    }*/
 
     public Object getMyValueText(JSONObject json) {
         return null;

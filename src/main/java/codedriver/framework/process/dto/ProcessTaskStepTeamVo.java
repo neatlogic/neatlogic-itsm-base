@@ -1,10 +1,7 @@
 package codedriver.framework.process.dto;
 
-import codedriver.framework.elasticsearch.annotation.ESKey;
-import codedriver.framework.elasticsearch.constvalue.ESKeyType;
-
 public class ProcessTaskStepTeamVo {
-    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
+//    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
     private Long processTaskId;
 	private Long processTaskStepId;
 	private Long teamId;
