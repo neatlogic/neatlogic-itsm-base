@@ -100,13 +100,13 @@
 		h.`process_step_uuid` AS workerPolicyProcessStepUuid
 		FROM
 		`process_step` a
-		LEFT JOIN `process_step_formattribute` b ON a.`uuid` = b.`process_step_uuid`
+		LEFT JOIN `process_step_formattribute` b ON a.`uuid` = b.`process_step_uuid` and a.`process_uuid` = b.`process_uuid`
 		LEFT JOIN `form_attribute` c ON b.`attribute_uuid` = c.`uuid`
 		LEFT JOIN `process_step_worker_policy` h ON a.`uuid` = h.`process_step_uuid`
 		WHERE a.`process_uuid` = #{value}
 	</select>
 
-	<select id="getProcessStepFormAttributeByStepUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
+	<select id="getProcessStepFormAttributeByStepUuid" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
 		SELECT
 		a.`process_uuid` AS processUuid,
 		a.`process_step_uuid` AS processStepUuid,
@@ -115,7 +115,7 @@
 		a.`action` AS action,
 		a.`type`
 		FROM `process_step_formattribute` a
-		WHERE a.`process_step_uuid` = #{value}
+		WHERE a.`process_uuid` = #{processUuid} and a.`process_step_uuid` = #{processStepUuid}
 	</select>
 
 	<resultMap id="processDetailMap" type="codedriver.framework.process.dto.ProcessVo">

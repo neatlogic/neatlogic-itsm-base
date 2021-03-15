@@ -219,7 +219,7 @@ public class ProcessTaskUtil {
                                 JSONObject changeStepObj = changeStepList.getJSONObject(i);
                                 if (changeStepId.equals(changeStepObj.getLong("id"))) {
                                     resultObj.put(ProcessTaskParams.CHANGESTEPNAME.getValue(), changeStepObj.getString("name"));
-                                    resultObj.put(ProcessTaskParams.CHANGESTEPWORKER.getValue(), changeStepObj.getString("workerName"));
+                                    resultObj.put(ProcessTaskParams.CHANGESTEPWORKER.getValue(), changeStepObj.getJSONObject("workerVo").getString("name"));
                                 }
                             }
                         }

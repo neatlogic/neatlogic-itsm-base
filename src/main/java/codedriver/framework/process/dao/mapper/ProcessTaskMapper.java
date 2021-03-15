@@ -1,7 +1,6 @@
 package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.elasticsearch.annotation.ESParam;
 import codedriver.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,14 +35,17 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);
 
+
+    public List<ProcessTaskVo> getTaskListByIdList(List<Long> idList);
+
     /**
-     * @Description: 根据组uuid查询待处理的工单
+     * @Description: 查询待处理的工单id
      * @Author: laiwt
      * @Date: 2021/1/11 12:01
-     * @Params: [stepTeamUuidList]
+     * @Params: [map]
      * @Returns: java.util.List<codedriver.framework.process.dto.ProcessTaskVo>
      **/
-    public List<ProcessTaskVo> getPendingProcessTaskListByStepTeamUuidList(@Param("stepTeamUuidList") List<String> stepTeamUuidList);
+    public List<Long> getProcessingTaskIdListByCondition(@Param("conditionMap") Map<String,Object> map);
 
     public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskId(Long processTaskId);
 
@@ -59,9 +61,6 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
             @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
-
-    public List<ProcessTaskStepTimeoutPolicyVo>
-    getProcessTaskStepTimeoutPolicyByProcessTaskStepId(Long processTaskStepId);
 
     public List<ProcessTaskStepWorkerPolicyVo>
     getProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
@@ -108,7 +107,7 @@ public interface ProcessTaskMapper {
     public ProcessTaskVo getProcessTaskById(Long id);
 
     public List<ProcessTaskStepFormAttributeVo>
-    getProcessTaskStepFormAttributeByProcessTaskStepId(Long processTaskStepId);
+    getProcessTaskStepFormAttributeByProcessTaskStepId(@Param("processTaskId")Long processTaskId, @Param("processTaskStepId")Long processTaskStepId);
 
     public List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
@@ -242,6 +241,10 @@ public interface ProcessTaskMapper {
 
     public String getProcessTaskStepNameById(Long id);
 
+    public Integer getProcessTaskCountBySql(String searchSql);
+
+    public List<ProcessTaskVo> getProcessTaskBySql(String searchSql);
+
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -285,8 +288,6 @@ public interface ProcessTaskMapper {
     public int insertProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
     public int insertProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
-
-    public int insertProcessTaskStepTimeoutPolicy(ProcessTaskStepTimeoutPolicyVo processTaskStepTimeoutPolicy);
 
     public int replaceProcessTaskStepConfig(ProcessTaskStepConfigVo processTaskStepConfigVo);
 
@@ -393,7 +394,7 @@ public interface ProcessTaskMapper {
 
     public int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
-    public int deleteProcessTaskStepFileByProcessTaskStepId(Long processTaskStepId);
+    public int deleteProcessTaskStepFileByProcessTaskStepId(@Param("processTaskId")Long processTaskId, @Param("processTaskStepId")Long processTaskStepId);
 
     public int deleteProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
 
