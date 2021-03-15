@@ -7,6 +7,6 @@ public class ScoreTemplateNameRepeatException extends ApiFieldValidRuntimeExcept
 	private static final long serialVersionUID = 7647275192524314055L;
 
 	public ScoreTemplateNameRepeatException(String name) {
-		super("评分模版 :" + name + "已存在");
+		super("评分模版：'" + name + "'已存在");
 	}
 }
