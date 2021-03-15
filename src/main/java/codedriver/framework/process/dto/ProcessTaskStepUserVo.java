@@ -1,18 +1,14 @@
 package codedriver.framework.process.dto;
 
-import java.util.Date;
-
 import codedriver.framework.dto.UserVo;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-
-import codedriver.framework.elasticsearch.annotation.ESKey;
-import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Date;
 
 public class ProcessTaskStepUserVo {
-    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
+//    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private UserVo userVo;

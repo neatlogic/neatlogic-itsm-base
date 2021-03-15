@@ -2065,6 +2065,10 @@
 		${value}
 	</select>
 
+	<select id="getWorkcenterProcessTaskMapBySql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+
 	<resultMap id="workcenterProcessTaskMap" type="codedriver.framework.process.dto.ProcessTaskVo" >
 		<id column="id" property="id" />
 		<result column="title" property="title" />

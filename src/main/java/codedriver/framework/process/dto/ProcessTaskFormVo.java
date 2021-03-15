@@ -3,11 +3,8 @@ package codedriver.framework.process.dto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
-import codedriver.framework.elasticsearch.annotation.ESKey;
-import codedriver.framework.elasticsearch.constvalue.ESKeyType;
-
 public class ProcessTaskFormVo {
-    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
+//    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private String formUuid;
 	private String formName;

@@ -1,12 +1,10 @@
 package codedriver.framework.process.dto;
 
-import java.util.List;
-
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.WorkAssignmentUnitVo;
-import codedriver.framework.elasticsearch.annotation.ESKey;
-import codedriver.framework.elasticsearch.constvalue.ESKeyType;
+
+import java.util.List;
 
 /**
  * @Author:chenqiwei
@@ -15,7 +13,7 @@ import codedriver.framework.elasticsearch.constvalue.ESKeyType;
  * @Description: 记录当前流程任务谁可以处理
  */
 public class ProcessTaskStepWorkerVo extends BasePageVo {
-    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
+//    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
     private Long processTaskId;
     private Long processTaskStepId;
     private String type;

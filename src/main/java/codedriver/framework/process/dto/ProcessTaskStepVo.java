@@ -15,7 +15,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.elasticsearch.annotation.ESKey;
 import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
@@ -25,7 +24,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	@EntityField(name = "工单步骤id", type = ApiParamType.LONG)
 	private Long id;
-	@ESKey(type = ESKeyType.PKEY, name ="processTaskId")
+//	@ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
 	private Long fromProcessTaskStepId;

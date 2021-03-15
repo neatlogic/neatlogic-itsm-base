@@ -1,6 +1,7 @@
 package codedriver.framework.process.dao.mapper.workcenter;
 
 import codedriver.framework.dto.AuthorityVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterTheadVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;

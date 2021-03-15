@@ -1,9 +1,12 @@
 package codedriver.framework.process.workcenter.table.util;
 
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
+import codedriver.framework.process.workcenter.dto.SelectColumnVo;
+import codedriver.framework.process.workcenter.dto.TableSelectColumnVo;
 import codedriver.framework.process.workcenter.table.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -89,6 +92,42 @@ public class SqlTableUtil {
                     put(ProcessTaskStepSqlTable.FieldEnum.PROCESSTASK_ID.getValue(), ProcessTaskStepWorkerSqlTable.FieldEnum.PROCESSTASK_ID.getValue());
                     put(ProcessTaskStepSqlTable.FieldEnum.ID.getValue(), ProcessTaskStepWorkerSqlTable.FieldEnum.PROCESSTASK_STEP_ID.getValue());
                 }}));
+            }
+        };
+    }
+
+    /**
+     * @Description: 获取stepUser 相关表字段关系
+     * @Author: 89770
+     * @Date: 2021/3/11 18:02
+     * @Params: []
+     * @Returns: java.util.List<codedriver.framework.process.workcenter.dto.TableSelectColumnVo>
+     **/
+    public static List<TableSelectColumnVo> getTableSelectColumn() {
+        return new ArrayList<TableSelectColumnVo>(){
+            {
+                add(new TableSelectColumnVo(new ProcessTaskStepSqlTable(), Arrays.asList(
+                        new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.ID.getValue(),"processTaskStepId"),
+                        new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.NAME.getValue(),"processTaskStepName"),
+                        new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.PROCESSTASK_ID.getValue(),"processTaskId"),
+                        new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.HANDLER.getValue(),"processTaskStepHandler")
+                )));
+                add(new TableSelectColumnVo(new ProcessTaskStepWorkerSqlTable(), Arrays.asList(
+                        new SelectColumnVo(ProcessTaskStepWorkerSqlTable.FieldEnum.UUID.getValue(),"stepWorkerUuid"),
+                        new SelectColumnVo(ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(),"stepWorkerType"),
+                        new SelectColumnVo(ProcessTaskStepWorkerSqlTable.FieldEnum.USER_TYPE.getValue(),"stepWorkerUserType")
+                )));
+                add(new TableSelectColumnVo(new ProcessTaskStepUserSqlTable(), Arrays.asList(
+                        new SelectColumnVo(ProcessTaskStepUserSqlTable.FieldEnum.STATUS.getValue(),"stepUserUserStatus"),
+                        new SelectColumnVo(ProcessTaskStepUserSqlTable.FieldEnum.USER_TYPE.getValue(),"stepUserUserType")
+                )));
+                add(new TableSelectColumnVo(new UserTable(),"ptsuser", Arrays.asList(
+                        new SelectColumnVo(UserTable.FieldEnum.USER_NAME.getValue(),"stepUserUserName"),
+                        new SelectColumnVo(UserTable.FieldEnum.UUID.getValue(),"stepUserUserUuid",true),
+                        new SelectColumnVo(UserTable.FieldEnum.USER_INFO.getValue(),"stepUserUserInfo"),
+                        new SelectColumnVo(UserTable.FieldEnum.VIP_LEVEL.getValue(),"stepUserUserVipLevel"),
+                        new SelectColumnVo(UserTable.FieldEnum.PINYIN.getValue(),"stepUserUserPinyin")
+                )));
             }
         };
     }

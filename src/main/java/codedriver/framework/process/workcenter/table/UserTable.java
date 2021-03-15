@@ -43,10 +43,20 @@ public class UserTable implements ISqlTable {
         ;
         private final String name;
         private final String text;
+        private final String proName;
+        private String handlerName;
 
         private FieldEnum(String _value, String _text) {
             this.name = _value;
             this.text = _text;
+            this.handlerName = _value;
+            this.proName = _value;
+        }
+        private FieldEnum(String _value, String _text,String _proName,String _handlerName) {
+            this.name = _value;
+            this.text = _text;
+            this.proName = _proName;
+            this.handlerName = _handlerName;
         }
 
         public String getValue() {
@@ -55,6 +65,17 @@ public class UserTable implements ISqlTable {
 
         public String getText() {
             return text;
+        }
+
+        public String getProValue() {
+            return proName;
+        }
+
+        public String getHandlerName() {
+            if(handlerName == null){
+                handlerName = name;
+            }
+            return handlerName;
         }
 
         public static String getText(String value) {
