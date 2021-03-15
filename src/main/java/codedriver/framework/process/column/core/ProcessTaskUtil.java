@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import codedriver.framework.dto.UrlInfoVo;
 import codedriver.framework.process.dto.*;
+import codedriver.framework.util.HtmlUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -134,7 +136,9 @@ public class ProcessTaskUtil {
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
         if (comment != null && StringUtils.isNotBlank(comment.getContent())) {
-            resultObj.put(ProcessTaskParams.CONTENT.getValue(), comment.getContent());
+            List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(comment.getContent(), "<img src=\"", "\"");
+            String content = HtmlUtil.urlReplace(comment.getContent(), urlInfoVoList);
+            resultObj.put(ProcessTaskParams.CONTENT.getValue(), content);
         } else {
             resultObj.put(ProcessTaskParams.CONTENT.getValue(), "");
         }
@@ -207,7 +211,10 @@ public class ProcessTaskUtil {
             }
             JSONObject paramObj = currentProcessTaskStep.getParamObj();
             if (MapUtils.isNotEmpty(paramObj)) {
-                resultObj.put(ProcessTaskParams.REASON.getValue(), paramObj.get("content"));
+                String reason = paramObj.getString("content");
+                List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(reason, "<img src=\"", "\"");
+                reason = HtmlUtil.urlReplace(reason, urlInfoVoList);
+                resultObj.put(ProcessTaskParams.REASON.getValue(), reason);
                 Long changeStepId = paramObj.getLong("changeStepId");
                 if (changeStepId != null) {
                     Object handlerStepInfo = currentProcessTaskStep.getHandlerStepInfo();
