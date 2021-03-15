@@ -105,20 +105,20 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
     }
 
     @Override
-    public void getDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, String>> mapList) {
+    public void getDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
         getMyDashboardDataVo(dashboardDataVo, workcenterVo, mapList);
     }
 
-    protected void getMyDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, String>> mapList) {
+    protected void getMyDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
 
     }
 
     @Override
-    public void getExchangeToDashboardGroupDataMap(List<Map<String, String>> mapList, WorkcenterVo workcenterVo) {
+    public void getExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList, WorkcenterVo workcenterVo) {
         workcenterVo.getDashboardConfigVo().setGroupDataCountMap(getMyExchangeToDashboardGroupDataMap(mapList));
     }
 
-    protected LinkedHashMap<String, String> getMyExchangeToDashboardGroupDataMap(List<Map<String, String>> mapList) {
+    protected LinkedHashMap<String, Object> getMyExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList) {
         return null;
     }
 

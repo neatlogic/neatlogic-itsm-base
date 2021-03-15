@@ -169,7 +169,7 @@ public interface IProcessTaskColumn {
      * @Params: [mapList]
      * @Returns: com.alibaba.fastjson.JSONArray
      **/
-    public void getDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, String>> mapList);
+    public void getDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList);
 
     /**
      * @Description: 将数据集提取groupList, 用于过滤，并按list 权重排序
@@ -178,5 +178,5 @@ public interface IProcessTaskColumn {
      * @Params: [mapList]
      * @Returns: java.util.List<java.lang.String>
      **/
-    void getExchangeToDashboardGroupDataMap(List<Map<String, String>> mapList, WorkcenterVo workcenterVo);
+    void getExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList, WorkcenterVo workcenterVo);
 }
