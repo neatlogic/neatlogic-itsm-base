@@ -1838,7 +1838,7 @@
 	</select>
 
 	<select id="getFocusUserListByTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
-		SELECT `user_uuid` FROM `processtask_focus` WHERE `processtask_id` = #{value}
+		SELECT CONCAT('user#',`user_uuid`) FROM `processtask_focus` WHERE `processtask_id` = #{value}
 	</select>
 
 	<select id="getProcessTaskStepAgentByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
