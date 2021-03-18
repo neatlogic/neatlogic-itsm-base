@@ -246,9 +246,9 @@
 	AND `rht` &lt;= #{rht}
 	</select>
 
-	<insert id="replaceCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
-		REPLACE INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht` )
-		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})
+	<insert id="insertCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
+		INSERT INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`)
+		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc})
 	</insert>
 
 	<insert id="insertCatalogAuthority">
@@ -283,6 +283,18 @@
 
 	<update id="batchUpdateCatalogRightCode">
 		UPDATE `catalog` set `rht` = `rht` + #{step} WHERE `rht` &gt;= #{minCode}
+	</update>
+
+	<update id="updateCatalogByUuid" parameterType="codedriver.framework.process.dto.CatalogVo">
+		UPDATE `catalog`
+		SET
+			`name` = #{name},
+			`parent_uuid` = #{parent_uuid},
+			`is_active` = #{is_active},
+			`icon` = #{icon},
+			`color` = #{color},
+			`desc` = #{desc}
+		WHERE `uuid` = #{uuid}
 	</update>
 
 	<delete id="deleteCatalogByUuid" parameterType="java.lang.String">
