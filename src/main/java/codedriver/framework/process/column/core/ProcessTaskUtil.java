@@ -212,8 +212,12 @@ public class ProcessTaskUtil {
             JSONObject paramObj = currentProcessTaskStep.getParamObj();
             if (MapUtils.isNotEmpty(paramObj)) {
                 String reason = paramObj.getString("content");
-                List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(reason, "<img src=\"", "\"");
-                reason = HtmlUtil.urlReplace(reason, urlInfoVoList);
+                if(StringUtils.isNotBlank(reason)){
+                    List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(reason, "<img src=\"", "\"");
+                    if(CollectionUtils.isNotEmpty(urlInfoVoList)){
+                        reason = HtmlUtil.urlReplace(reason, urlInfoVoList);
+                    }
+                }
                 resultObj.put(ProcessTaskParams.REASON.getValue(), reason);
                 Long changeStepId = paramObj.getLong("changeStepId");
                 if (changeStepId != null) {
