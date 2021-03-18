@@ -247,8 +247,8 @@
 	</select>
 
 	<insert id="insertCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
-		INSERT INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`)
-		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc})
+		INSERT INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht`)
+		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})
 	</insert>
 
 	<insert id="insertCatalogAuthority">
