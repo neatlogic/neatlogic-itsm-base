@@ -1,11 +1,9 @@
 package codedriver.framework.process.formattribute.core;
 
-import com.alibaba.fastjson.JSONObject;
-
 import codedriver.framework.common.constvalue.ParamType;
-import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.process.dto.AttributeDataVo;
 import codedriver.framework.process.exception.form.AttributeValidException;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
@@ -199,4 +197,11 @@ public interface IFormAttributeHandler {
     public default int getSort() {
         return 0;
     }
+
+    /**
+     * 用于创建索引，不同的表单需根据自身规则分拆成多个field content
+     * @param data
+     * @return 返回contentList
+     */
+    public List<String> indexFieldContentList(String data);
 }

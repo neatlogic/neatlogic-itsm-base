@@ -1355,6 +1355,12 @@
 		</foreach>
 	</select>
 
+	<select id="getAllProcessTaskIdList" resultType="java.lang.Long">
+		SELECT
+		`id`
+		FROM `processtask`
+	</select>
+
 	<select id="getProcessTaskStepListByIdList" parameterType="java.lang.Long" resultMap="processTaskStepMap">
 		SELECT
 		`id`,

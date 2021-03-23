@@ -7,7 +7,11 @@ import codedriver.framework.restful.core.IApiComponent;
 import codedriver.framework.restful.dto.ApiVo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Collections;
+import java.util.List;
 
 public abstract class FormHandlerBase implements IFormAttributeHandler {
 
@@ -72,6 +76,19 @@ public abstract class FormHandlerBase implements IFormAttributeHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public List<String> indexFieldContentList(String data){
+        List<String> contentList = myIndexFieldContentList(data);
+        if(CollectionUtils.isEmpty(contentList)){
+            contentList = Collections.singletonList(data);
+        }
+        return contentList;
+    }
+
+    protected List<String> myIndexFieldContentList(String data){
         return null;
     }
 }
