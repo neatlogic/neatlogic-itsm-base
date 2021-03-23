@@ -1880,7 +1880,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
             /** 保存打回原因 **/
             IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_REDO);
-            // myRedo(currentProcessTaskStepVo);
+            myRedo(currentProcessTaskStepVo);
 
             /** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
             resetConvergeInfo(currentProcessTaskStepVo);
@@ -1951,7 +1951,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         return 1;
     }
 
-    // protected abstract int myRedo(ProcessTaskStepVo currentProcessTaskStepVo);
+    protected abstract int myRedo(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
 
     public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo) {
         // 锁定当前流程
