@@ -204,4 +204,11 @@ public interface IFormAttributeHandler {
      * @return 返回contentList
      */
     public List<String> indexFieldContentList(String data);
+
+    /**
+     * 如果无需分词将会作为md5保存
+     * @author lvzk
+     * @return 返回是否需要分词
+     */
+    public Boolean isNeedSliceWord();
 }

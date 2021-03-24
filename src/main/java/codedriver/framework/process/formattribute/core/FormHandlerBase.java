@@ -15,23 +15,23 @@ import java.util.List;
 
 public abstract class FormHandlerBase implements IFormAttributeHandler {
 
-    public enum ConversionType{
+    public enum ConversionType {
 
-        TOVALUE("toValue","text转换成value"),
-        TOTEXT("toText","value转换成text");
+        TOVALUE("toValue", "text转换成value"),
+        TOTEXT("toText", "value转换成text");
 
         private String value;
         private String text;
 
-        public String getValue(){
+        public String getValue() {
             return value;
         }
 
-        public String getText(){
+        public String getText() {
             return text;
         }
 
-        private ConversionType(String _value,String _text){
+        private ConversionType(String _value, String _text) {
             value = _value;
             text = _text;
         }
@@ -50,23 +50,23 @@ public abstract class FormHandlerBase implements IFormAttributeHandler {
             JSONObject paramObj = new JSONObject();
             paramObj.put("matrixUuid", matrixUuid);
             JSONArray columnList = new JSONArray();
-            columnList.add((String)mapping.getValue());
+            columnList.add((String) mapping.getValue());
             columnList.add(mapping.getText());
             paramObj.put("columnList", columnList);
-            JSONObject resultObj = (JSONObject)restComponent.doService(api, paramObj,null);
+            JSONObject resultObj = (JSONObject) restComponent.doService(api, paramObj, null);
             JSONArray columnDataList = resultObj.getJSONArray("columnDataList");
             for (int i = 0; i < columnDataList.size(); i++) {
                 JSONObject firstObj = columnDataList.getJSONObject(i);
-                JSONObject valueObj = firstObj.getJSONObject((String)mapping.getValue());
+                JSONObject valueObj = firstObj.getJSONObject((String) mapping.getValue());
                 /** 当text与value字段相同时，不同类型的矩阵字段，拼接value的逻辑不同，下拉、用户、组、角色，按uuid&=&text拼接，其余按value&=&value拼接 **/
-                if(mapping.getValue().equals(mapping.getText())
+                if (mapping.getValue().equals(mapping.getText())
                         && (GroupSearch.USER.getValue().equals(valueObj.getString("type"))
                         || GroupSearch.ROLE.getValue().equals(valueObj.getString("type"))
                         || GroupSearch.TEAM.getValue().equals(valueObj.getString("type"))
                         || FormHandlerType.SELECT.toString().equals(valueObj.getString("type")))
-                        && value.equals(valueObj.getString("text"))){
+                        && value.equals(valueObj.getString("text"))) {
                     return valueObj.getString("value") + IFormAttributeHandler.SELECT_COMPOSE_JOINER + valueObj.getString("text");
-                }else if(mapping.getValue().equals(mapping.getText()) && value.equals(valueObj.getString("text"))){
+                } else if (mapping.getValue().equals(mapping.getText()) && value.equals(valueObj.getString("text"))) {
                     return valueObj.getString("value") + IFormAttributeHandler.SELECT_COMPOSE_JOINER + valueObj.getString("value");
                 }
                 if (valueObj.getString("compose").contains(value)) {
@@ -80,15 +80,20 @@ public abstract class FormHandlerBase implements IFormAttributeHandler {
     }
 
     @Override
-    public List<String> indexFieldContentList(String data){
+    public List<String> indexFieldContentList(String data) {
         List<String> contentList = myIndexFieldContentList(data);
-        if(CollectionUtils.isEmpty(contentList)){
+        if (CollectionUtils.isEmpty(contentList)) {
             contentList = Collections.singletonList(data);
         }
         return contentList;
     }
 
-    protected List<String> myIndexFieldContentList(String data){
+    protected List<String> myIndexFieldContentList(String data) {
         return null;
+    }
+
+    @Override
+    public Boolean isNeedSliceWord() {
+        return true;
     }
 }

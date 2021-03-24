@@ -23,4 +23,9 @@ public abstract class ControlHandlerBase implements IFormAttributeHandler {
     protected List<String> myIndexFieldContentList(String data){
         return null;
     }
+
+    @Override
+    public Boolean isNeedSliceWord() {
+        return true;
+    }
 }
