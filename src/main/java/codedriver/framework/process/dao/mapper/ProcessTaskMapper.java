@@ -2,6 +2,7 @@ package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.process.dto.*;
+import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public interface ProcessTaskMapper {
      * @Params: [map]
      * @Returns: java.util.List<codedriver.framework.process.dto.ProcessTaskVo>
      **/
-    public List<Long> getProcessingTaskIdListByCondition(@Param("conditionMap") Map<String,Object> map);
+    public List<Long> getProcessingTaskIdListByCondition(@Param("conditionMap") Map<String, Object> map);
 
     public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskId(Long processTaskId);
 
@@ -107,7 +108,7 @@ public interface ProcessTaskMapper {
     public ProcessTaskVo getProcessTaskById(Long id);
 
     public List<ProcessTaskStepFormAttributeVo>
-    getProcessTaskStepFormAttributeByProcessTaskStepId(@Param("processTaskId")Long processTaskId, @Param("processTaskStepId")Long processTaskStepId);
+    getProcessTaskStepFormAttributeByProcessTaskStepId(@Param("processTaskId") Long processTaskId, @Param("processTaskStepId") Long processTaskStepId);
 
     public List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
@@ -149,6 +150,8 @@ public interface ProcessTaskMapper {
             @Param("toDate") String toDate);
 
     public List<ProcessTaskVo> getProcessTaskListByIdList(List<Long> processTaskIdList);
+
+    public List<Long> getAllProcessTaskIdList();
 
     public List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 
@@ -243,9 +246,11 @@ public interface ProcessTaskMapper {
 
     public Integer getProcessTaskCountBySql(String searchSql);
 
-    public List<Map<String,Object>> getWorkcenterProcessTaskMapBySql(String searchSql);
+    public List<Map<String, Object>> getWorkcenterProcessTaskMapBySql(String searchSql);
 
     public List<ProcessTaskVo> getProcessTaskBySql(String searchSql);
+
+    public List<ProcessTaskVo> getProcessTaskByIndexKeyword(@Param("keywordList") List<String> keywordList, @Param("limit") int limit, @Param("targetType") String targetType,@Param("columnPro") String columnPro);
 
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -396,7 +401,7 @@ public interface ProcessTaskMapper {
 
     public int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
-    public int deleteProcessTaskStepFileByProcessTaskStepId(@Param("processTaskId")Long processTaskId, @Param("processTaskStepId")Long processTaskStepId);
+    public int deleteProcessTaskStepFileByProcessTaskStepId(@Param("processTaskId") Long processTaskId, @Param("processTaskStepId") Long processTaskStepId);
 
     public int deleteProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
 
