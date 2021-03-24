@@ -27,7 +27,8 @@ public enum ProcessTaskParams {
     SUBTASKDEADLINE("subtaskdeadline", "子任务期望完成时间", ParamType.DATE),
     OPERATOR("operator", "操作人", ParamType.STRING),
     REASON("reason", "原因", ParamType.STRING),
-    FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??><#list DATA.form?keys as key>${key}：${DATA.form[key]}<#if key_has_next><br></#if></#list></#if>");
+//    FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??><#list DATA.form?keys as key>${key}：${DATA.form[key]}<#if key_has_next><br></#if></#list></#if>") //TODO linbq 20210324 暂时屏蔽表单数据在模板中显示
+    ;
     private String value;
     private String text;
     private ParamType paramType;
