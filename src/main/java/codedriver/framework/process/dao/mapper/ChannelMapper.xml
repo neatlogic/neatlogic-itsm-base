@@ -463,7 +463,7 @@
 		WHERE `source` = #{value}
 	</select>
 
-	<select id="getChannelRelationTargetList" parameterType="codedriver.framework.process.dto.ChannelRelationVo" resultType="codedriver.framework.process.dto.ChannelRelationVo">
+	<select id="getChannelRelationTargetList" parameterType="codedriver.framework.process.dto.ChannelRelationVo" resultType="codedriver.framework.process.dto.ChannelRelationVo" useCache="false">
 		SELECT
 		DISTINCT
 		`type`,
