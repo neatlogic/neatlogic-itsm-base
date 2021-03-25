@@ -89,8 +89,8 @@
                 FROM `processtask_step` xx
                 WHERE xx.id = `to_processtask_step_id`) AS toProcessStepHandler,
                `condition`,
-               `uuid`                                   as processStepRelUuid,
-               `is_hit`                                 AS isHit,
+               `uuid`,
+               `is_hit`,
                `name`,
                `type`
         FROM `processtask_step_rel`
