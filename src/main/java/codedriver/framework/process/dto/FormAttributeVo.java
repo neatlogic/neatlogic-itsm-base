@@ -1,14 +1,5 @@
 package codedriver.framework.process.dto;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.dto.ExpressionVo;
@@ -16,6 +7,13 @@ import codedriver.framework.process.constvalue.ProcessConditionModel;
 import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
 import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
 import codedriver.framework.restful.annotation.EntityField;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormAttributeVo implements Serializable {
     private static final long serialVersionUID = 8282018124626035430L;
@@ -41,6 +39,8 @@ public class FormAttributeVo implements Serializable {
     List<ExpressionVo> expressionList;
     @EntityField(name = "默认表达式", type = ApiParamType.JSONOBJECT)
     ExpressionVo defaultExpression;
+    @EntityField(name = "供前端渲染时判断，如果为false则前端页面需使用默认config,true则使用表单管理编辑保存的config", type = ApiParamType.BOOLEAN)
+    private boolean isUseFormConfig;
 
     @EntityField(name = "条件模型")
     private String conditionModel = ProcessConditionModel.CUSTOM.getValue();
@@ -235,5 +235,13 @@ public class FormAttributeVo implements Serializable {
             }
         }
         return null;
+    }
+
+    public boolean getIsUseFormConfig() {
+        return this.isUseFormConfig;
+    }
+
+    public void setIsUseFormConfig(boolean isUseFormConfig) {
+        this.isUseFormConfig = isUseFormConfig;
     }
 }
