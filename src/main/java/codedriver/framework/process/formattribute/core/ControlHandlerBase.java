@@ -28,4 +28,9 @@ public abstract class ControlHandlerBase implements IFormAttributeHandler {
     public Boolean isNeedSliceWord() {
         return true;
     }
+
+    @Override
+    public Boolean isUseFormConfig() {
+        return true;
+    }
 }
