@@ -7,6 +7,7 @@ import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.dto.condition.ConditionVo;
+import codedriver.framework.process.constvalue.ConditionConfigType;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.constvalue.ProcessWorkcenterField;
@@ -164,9 +165,9 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         String startTime;
         String endTime;
         String expression = Expression.BETWEEN.getExpression();
-        if (dateValue.containsKey(ProcessWorkcenterField.STARTTIME.getValue())) {
-            startTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.STARTTIME.getValue())));
-            endTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.ENDTIME.getValue())));
+        if (dateValue.containsKey(ProcessWorkcenterField.STARTTIME.getValuePro())) {
+            startTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.STARTTIME.getValuePro())));
+            endTime = format.format(new Date(dateValue.getLong(ProcessWorkcenterField.ENDTIME.getValuePro())));
         } else {
             startTime = TimeUtil.timeTransfer(dateValue.getInteger("timeRange"), dateValue.getString("timeUnit"));
             endTime = TimeUtil.timeNow();
@@ -258,4 +259,21 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         getProcessingTaskOfMineSqlWhere(sqlSb,userList,teamList,roleList);
         sqlSb.append(" ) ");
     }
+
+    @Override
+    public JSONObject getConfig(Enum<?> type) {
+        if(type instanceof ConditionConfigType) {
+            ConditionConfigType configType = (ConditionConfigType) type;
+            return  getConfig(configType);
+        }else{
+            return  getConfig(ConditionConfigType.DEFAULT);
+        }
+    }
+
+    @Override
+    public JSONObject getConfig() {
+        return  getConfig(ConditionConfigType.DEFAULT);
+    }
+
+    public abstract JSONObject getConfig(ConditionConfigType type);
 }

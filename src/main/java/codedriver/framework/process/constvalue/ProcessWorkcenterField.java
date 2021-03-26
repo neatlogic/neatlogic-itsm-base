@@ -11,8 +11,8 @@ public enum ProcessWorkcenterField {
 	CATALOG("catalog", "服务目录"),
 	CONTENT("content", "上报内容"),
 	CONTENT_INCLUDE_HTML("contentincludehtml", "上报内容"),
-	ENDTIME("endtime", "结束时间"),
-	STARTTIME("starttime", "开始时间"),
+	ENDTIME("endtime", "结束时间","endTime"),
+	STARTTIME("starttime", "开始时间","startTime"),
 	EXPIRED_TIME("expiretime", "剩余时间"),
 	OWNER("owner", "上报人"),
 	REPORTER("reporter", "代报人"),
@@ -29,12 +29,20 @@ public enum ProcessWorkcenterField {
 	ACTION("action", "操作栏"),
 	IS_SHOW("isshow","是否显示，0隐藏，1显示"),
 	FOCUS_USERS("focususers", "关注此工单的用户");
-	private String value;
-	private String name;
+	private final String value;
+	private final String valuePro;
+	private final String name;
 
 
 	private ProcessWorkcenterField(String _value, String _name) {
 		this.value = _value;
+		this.name = _name;
+		this.valuePro = _value;
+	}
+
+	private ProcessWorkcenterField(String _value, String _name,String _vaulePro) {
+		this.value = _value;
+		this.valuePro = _vaulePro;
 		this.name = _name;
 	}
 
@@ -45,7 +53,11 @@ public enum ProcessWorkcenterField {
 	public String getName() {
 		return name;
 	}
-	
+
+	public String getValuePro() {
+		return valuePro;
+	}
+
 	public static String getValue(String _value) {
 		for (ProcessWorkcenterField s : ProcessWorkcenterField.values()) {
 			if (s.getValue().equals(_value)) {
