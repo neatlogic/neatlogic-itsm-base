@@ -38,7 +38,7 @@
 		SELECT
 		COUNT(`uuid`)
 		FROM `worktime` wt
-		WHERE 1 = 1
+		WHERE `is_delete` = 0
 		<if test="keyword != null and keyword != ''">
 			AND wt.`name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
@@ -59,9 +59,10 @@
 		wt.`uuid`,
 		wt.`name`,
 		wt.`is_active`,
-		wt.`config`
+		wt.`config`,
+		(select count(`channel_uuid`) from `channel_worktime` where `worktime_uuid` = wt.`uuid`) as relCount
 		FROM `worktime` wt
-		WHERE 1 = 1
+		WHERE `is_delete` = 0
 		<if test="keyword != null and keyword != ''">
 			AND wt.`name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
@@ -79,7 +80,7 @@
 		wt.`uuid` as `value`,
 		wt.`name` as `text`
 		FROM `worktime` wt
-		WHERE 1 = 1
+		WHERE `is_delete` = 0
 		<if test="keyword != null and keyword != ''">
 			AND wt.`name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
@@ -90,6 +91,20 @@
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
 		</if>
+	</select>
+
+	<select id="checkWorktimeHasBeenRelatedByChannel" parameterType="java.lang.String" resultType="int">
+		select
+		count(`channel_uuid`)
+		from `channel_worktime`
+		where `worktime_uuid` = #{value}
+	</select>
+
+	<select id="checkWorktimeHasBeenRelatedByTask" parameterType="java.lang.String" resultType="int">
+		select
+		count(`id`)
+		from `processtask`
+		where `worktime_uuid` = #{value}
 	</select>
 
 	<resultMap type="codedriver.framework.process.dto.WorktimeRangeVo" id="worktimeRangeMap">
@@ -199,8 +214,8 @@
 	</select>
 
 	<insert id="insertWorktime" parameterType="codedriver.framework.process.dto.WorktimeVo">
-		INSERT INTO `worktime` ( `uuid`, `name`, `is_active`, `lcu`, `lcd`, `config` )
-		VALUES ( #{uuid}, #{name}, #{isActive}, #{lcu}, now(3), #{config})
+		INSERT INTO `worktime` ( `uuid`, `name`, `is_active`, `lcu`, `lcd`, `config`, `is_delete` )
+		VALUES ( #{uuid}, #{name}, #{isActive}, #{lcu}, now(3), #{config}, 0)
 	</insert>
 
 	<insert id="insertBatchWorktimeRange" parameterType="codedriver.framework.process.dto.WorktimeRangeVo">
@@ -222,6 +237,16 @@
 		`config` = #{config},
 		`lcd` = now(3)
 		WHERE `uuid` = #{uuid}
+	</update>
+
+	<update id="updateWorktimeDeleteStatus" parameterType="codedriver.framework.process.dto.WorktimeVo">
+		update
+		`worktime`
+		set
+		`is_delete` = #{isDelete},
+		`lcu` = #{lcu},
+		`lcd` = now(3)
+		where `uuid` = #{uuid}
 	</update>
 
 	<delete id="deleteWorktimeByUuid" parameterType="java.lang.String">
