@@ -80,6 +80,10 @@ public interface ProcessMapper {
 
 	public ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
 
+	public int getFormReferenceCount(String formUuid);
+
+	public List<ProcessVo> getFormReferenceList(ProcessFormVo processFormVo);
+
 	public int insertProcess(ProcessVo processVo);
 
 	public int insertProcessStep(ProcessStepVo processStepVo);

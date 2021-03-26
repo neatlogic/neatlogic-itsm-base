@@ -1,8 +1,8 @@
 package codedriver.framework.process.util;
 
-import codedriver.framework.process.constvalue.FormAttributeAction;
-import codedriver.framework.process.constvalue.FormAttributeAuthRange;
-import codedriver.framework.process.constvalue.FormAttributeAuthType;
+import codedriver.framework.form.constvalue.FormAttributeAction;
+import codedriver.framework.form.constvalue.FormAttributeAuthRange;
+import codedriver.framework.form.constvalue.FormAttributeAuthType;
 import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

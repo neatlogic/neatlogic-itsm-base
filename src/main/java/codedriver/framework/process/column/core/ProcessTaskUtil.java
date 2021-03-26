@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import codedriver.framework.dto.UrlInfoVo;
+import codedriver.framework.form.dto.AttributeDataVo;
+import codedriver.framework.form.dto.FormAttributeVo;
+import codedriver.framework.form.dto.FormVersionVo;
 import codedriver.framework.process.dto.*;
 import codedriver.framework.util.HtmlUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -23,8 +26,8 @@ import codedriver.framework.dto.TeamVo;
 import codedriver.framework.process.constvalue.ProcessField;
 import codedriver.framework.process.constvalue.ProcessTaskParams;
 import codedriver.framework.process.constvalue.ProcessUserType;
-import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
-import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
+import codedriver.framework.form.attribute.core.FormAttributeHandlerFactory;
+import codedriver.framework.form.attribute.core.IFormAttributeHandler;
 
 public class ProcessTaskUtil {
     /**

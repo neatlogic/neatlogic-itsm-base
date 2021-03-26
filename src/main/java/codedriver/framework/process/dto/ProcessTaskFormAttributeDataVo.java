@@ -1,5 +1,7 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.form.dto.AttributeDataVo;
+
 public class ProcessTaskFormAttributeDataVo extends AttributeDataVo
     implements Comparable<ProcessTaskFormAttributeDataVo> {
 //    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")

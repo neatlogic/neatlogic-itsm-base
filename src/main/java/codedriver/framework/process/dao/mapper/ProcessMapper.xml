@@ -411,6 +411,24 @@
 		  AND `type` = 'start'
 	</select>
 
+	<select id="getFormReferenceCount" parameterType="java.lang.String" resultType="int">
+		SELECT
+			count(p.`uuid`)
+		FROM `process` p
+				 JOIN `process_form` pf ON pf.`process_uuid` = p.`uuid` AND pf.`form_uuid` = #{formUuid}
+	</select>
+
+	<select id="getFormReferenceList" parameterType="codedriver.framework.process.dto.ProcessFormVo" resultType="codedriver.framework.process.dto.ProcessVo">
+		SELECT
+		p.`uuid`,
+		p.`name`
+		FROM `process` p
+		JOIN `process_form` pf ON pf.`process_uuid` = p.`uuid` AND pf.`form_uuid` = #{formUuid}
+		<if test="needPage">
+			LIMIT #{startNum}, #{pageSize}
+		</if>
+	</select>
+
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,

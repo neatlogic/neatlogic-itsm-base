@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import codedriver.framework.dto.UserVo;
+import codedriver.framework.form.dto.FormAttributeVo;
 import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,7 +16,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
