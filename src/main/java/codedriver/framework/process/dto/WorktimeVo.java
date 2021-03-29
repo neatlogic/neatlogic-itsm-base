@@ -47,6 +47,12 @@ public class WorktimeVo extends BasePageVo implements Serializable{
 	private Set<String> workingHoursSet;
 	@JSONField(serialize=false)
 	private transient String keyword;
+
+	@EntityField(name = "被服务引用的次数", type = ApiParamType.INTEGER)
+	private Integer relCount;
+
+	@EntityField(name = "是否已经被删除", type = ApiParamType.INTEGER)
+	private Integer isDelete;
 	
 	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
@@ -106,4 +112,19 @@ public class WorktimeVo extends BasePageVo implements Serializable{
 		this.workingHoursSet = workingHoursSet;
 	}
 
+	public Integer getRelCount() {
+		return relCount;
+	}
+
+	public void setRelCount(Integer relCount) {
+		this.relCount = relCount;
+	}
+
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
+	}
 }
