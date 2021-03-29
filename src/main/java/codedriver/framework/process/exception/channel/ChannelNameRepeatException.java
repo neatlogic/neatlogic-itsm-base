@@ -1,8 +1,8 @@
 package codedriver.framework.process.exception.channel;
 
-import codedriver.framework.exception.core.ApiFieldValidRuntimeException;
+import codedriver.framework.exception.core.ApiRuntimeException;
 
-public class ChannelNameRepeatException extends ApiFieldValidRuntimeException {
+public class ChannelNameRepeatException extends ApiRuntimeException {
 
 	private static final long serialVersionUID = -4617724920030245143L;
 
