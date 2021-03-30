@@ -1399,7 +1399,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     public final int saveDraft(ProcessTaskStepVo currentProcessTaskStepVo) {
         JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
         Long processTaskId = currentProcessTaskStepVo.getProcessTaskId();
-//        List<FormAttributeVo> formAttributeList = new ArrayList<FormAttributeVo>();
         ProcessTaskVo processTaskVo = null;
         if (processTaskId == null) {// 首次保存
             processTaskVo = new ProcessTaskVo();
@@ -1447,7 +1446,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskFormVo.setFormName(formVersionVo.getFormName());
                     processTaskMapper.insertProcessTaskForm(processTaskFormVo);
                     processTaskMapper.insertIgnoreProcessTaskFormContent(processTaskFormVo);
-//                    formAttributeList = formVersionVo.getFormAttributeList();
                 }
             }
 
@@ -1593,9 +1591,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             // 第二次保存时的操作
             processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
             new ProcessAuthManager.TaskOperationChecker(processTaskVo.getId(), ProcessTaskOperationType.TASK_START).build().checkAndNoPermissionThrowException();
-//            if (!ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
-//                throw new ProcessTaskRuntimeException("工单非草稿状态，不能进行上报暂存操作");
-//            }
             /** 更新工单信息 **/
             processTaskVo.setTitle(paramObj.getString("title"));
             processTaskVo.setOwner(paramObj.getString("owner"));
@@ -1605,16 +1600,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.deleteProcessTaskStepFileByProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
         }
         try {
-            // 是否需要校验，兼容提供给第三方的上报接口，表单等不合法，则不生成工单
-//            Integer isNeedValid = paramObj.getInteger("isNeedValid");
-//            if (isNeedValid != null && isNeedValid == 1) {
-//                currentProcessTaskStepVo.setFormAttributeDataMap(formAttributeDataMap);
-//                currentProcessTaskStepVo.setFormAttributeVoList(formAttributeList);
-//                // currentProcessTaskStepVo.setFormAttributeActionMap(formAttributeActionMap);
-//                IProcessStepHandlerUtil.formAttributeDataValid(currentProcessTaskStepVo);
-//                IProcessStepHandlerUtil.baseInfoValid(currentProcessTaskStepVo, processTaskVo);
-//            }
-
+            /** 保存表单属性值 **/
+            IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
+            /** 保存描述内容和附件 **/
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_START);
             mySaveDraft(currentProcessTaskStepVo);
             currentProcessTaskStepVo.setIsActive(1);
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.DRAFT.getValue());
