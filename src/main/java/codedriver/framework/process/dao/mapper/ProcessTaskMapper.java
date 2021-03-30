@@ -1,3 +1,8 @@
+/*
+ * Copyright(c) 2021 TechSureCo.,Ltd.AllRightsReserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.common.dto.BasePageVo;
@@ -30,9 +35,6 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskId(Long processTaskId);
 
     public List<ProcessTaskSlaTimeVo> getProcessTaskSlaTimeByProcessTaskStepIdList(List<Long> processTaskStepIdList);
-
-    public ProcessTaskStepAuditDetailVo getProcessTaskStepAuditDetail(@Param("processTaskId") Long processTaskId,
-                                                                      @Param("type") String type);
 
     public ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);
 
@@ -255,6 +257,8 @@ public interface ProcessTaskMapper {
     public List<ProcessTaskVo> getProcessTaskBySql(String searchSql);
 
     public List<ProcessTaskVo> getProcessTaskByIndexKeyword(@Param("keywordList") List<String> keywordList, @Param("limit") int limit, @Param("targetType") String targetType,@Param("columnPro") String columnPro);
+
+    public Long getProcessTaskIdByChannelUuidLimitOne(String channelUuid);
 
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
