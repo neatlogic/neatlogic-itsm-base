@@ -101,6 +101,9 @@ public class ChannelVo extends BasePageVo implements Serializable {
     @EntityField(name = "使用范围", type = ApiParamType.STRING)
     private String support;
 
+    @EntityField(name = "被引用个数", type = ApiParamType.INTEGER)
+    private int childrenCount = 0;
+
     @JSONField(serialize = false)
     private transient boolean isAuthority = false;
     @JSONField(serialize = false)
@@ -436,5 +439,13 @@ public class ChannelVo extends BasePageVo implements Serializable {
 
     public void setPriorityList(List<PriorityVo> priorityList) {
         this.priorityList = priorityList;
+    }
+
+    public int getChildrenCount() {
+        return childrenCount;
+    }
+
+    public void setChildrenCount(int childrenCount) {
+        this.childrenCount = childrenCount;
     }
 }

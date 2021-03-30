@@ -260,6 +260,8 @@ public interface ProcessTaskMapper {
 
     public Long getProcessTaskIdByChannelUuidLimitOne(String channelUuid);
 
+    public List<ChannelVo> getChannelReferencedCountList();
+
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
