@@ -1600,9 +1600,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.deleteProcessTaskStepFileByProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
         }
         try {
-            /** 保存表单属性值 **/
-            IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
-            /** 保存描述内容和附件 **/
             IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_START);
             mySaveDraft(currentProcessTaskStepVo);
             currentProcessTaskStepVo.setIsActive(1);
