@@ -186,12 +186,16 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskRelationVo> getProcessTaskRelationList(ProcessTaskRelationVo processTaskRelationVo);
 
+    public List<Long> getRelatedProcessTaskIdListByProcessTaskId(Long processTaskId);
+
     public List<Long> checkProcessTaskIdListIsExists(List<Long> processTaskIdList);
 
     public int getProcessTaskCountByKeywordAndChannelUuidList(@Param("basePageVo") BasePageVo basePageVo,
+                                                              @Param("relatedProcessTaskIdList") List<Long> relatedProcessTaskIdList,
                                                               @Param("channelUuidList") List<String> channelUuidList);
 
     public List<ProcessTaskVo> getProcessTaskListByKeywordAndChannelUuidList(@Param("basePageVo") BasePageVo basePageVo,
+                                                                             @Param("relatedProcessTaskIdList") List<Long> relatedProcessTaskIdList,
                                                                              @Param("channelUuidList") List<String> channelUuidList);
 
     public ProcessTaskTranferReportVo getProcessTaskTranferReportByToProcessTaskId(Long toProcessTaskId);
