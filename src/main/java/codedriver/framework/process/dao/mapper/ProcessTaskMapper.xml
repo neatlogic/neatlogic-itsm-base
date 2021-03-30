@@ -2238,6 +2238,10 @@
         limit 0,#{limit}
     </select>
 
+    <select id="getProcessTaskIdByChannelUuidLimitOne" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT `id` FROM `processtask` WHERE `channel_uuid` = #{value} LIMIT 1
+    </select>
+
     <update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
