@@ -22,6 +22,10 @@
 		process_uuid = #{value}
 	</select>
 
+	<select id="getSlaUuidListByProcessUuid" parameterType="java.lang.String" resultType="java.lang.String">
+		select `uuid` FROM `process_sla` WHERE `process_uuid` = #{value}
+	</select>
+
 	<select id="getProcessFormByProcessUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessFormVo">
 		SELECT
 		`process_uuid` AS processUuid,
@@ -104,6 +108,10 @@
 		LEFT JOIN `form_attribute` c ON b.`attribute_uuid` = c.`uuid`
 		LEFT JOIN `process_step_worker_policy` h ON a.`uuid` = h.`process_step_uuid`
 		WHERE a.`process_uuid` = #{value}
+	</select>
+
+	<select id="getProcessStepUuidListByProcessUuid" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `uuid` FROM `process_step` WHERE `process_uuid` = #{value}
 	</select>
 
 	<select id="getProcessStepFormAttributeByStepUuid" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
@@ -429,6 +437,15 @@
 		</if>
 	</select>
 
+	<select id="getProcessSlaByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessSlaVo">
+		SELECT
+			`uuid`,
+			`process_uuid` AS processUuid,
+			`name`
+		FROM `process_sla`
+		WHERE `uuid` = #{value}
+	</select>
+
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,
@@ -572,11 +589,6 @@
 		VALUES (#{processUuid}, #{formUuid})
 	</insert>
 
-	<insert id="replaceProcessStepNotifyTemplate" parameterType="codedriver.framework.process.dto.ProcessStepNotifyTemplateVo">
-		REPLACE INTO `process_step_notifytemplate` ( `process_uuid`, `process_step_uuid`, `template_uuid` )
-		VALUES ( #{processUuid}, #{processStepUuid}, #{templateUuid} )
-	</insert>
-
 	<insert id="insertProcessDraft" parameterType="codedriver.framework.process.dto.ProcessDraftVo">
 		INSERT INTO `process_draft` (
 		`uuid`,
@@ -665,10 +677,6 @@
 
 	<delete id="deleteProcessFormByProcessUuid" parameterType="java.lang.String">
 		DELETE FROM `process_form` WHERE `process_uuid` = #{processUuid}
-	</delete>
-
-	<delete id="deleteProcessStepNotifyTemplateByProcessUuid" parameterType="java.lang.String">
-		DELETE FROM `process_step_notifytemplate` WHERE `process_uuid` = #{processUuid}
 	</delete>
 
 	<delete id="deleteProcessDraft" parameterType="codedriver.framework.process.dto.ProcessDraftVo">

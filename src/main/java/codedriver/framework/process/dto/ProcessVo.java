@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
+import codedriver.framework.process.stephandler.core.ProcessStepHandlerTypeFactory;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -233,11 +234,12 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
                 if (StringUtils.isNotBlank(handler)) {
                     processStepVo.setHandler(handler);
-                    // FIXME 后续改成跨模块读取，暂时先把默认值改成process
-                    String type = ProcessStepHandlerType.getType(handler);
-                    if (StringUtils.isBlank(type)) {
-                        type = "process";
-                    }
+//                    // FIXME 后续改成跨模块读取，暂时先把默认值改成process
+//                    String type = ProcessStepHandlerType.getType(handler);
+//                    if (StringUtils.isBlank(type)) {
+//                        type = "process";
+//                    }
+                    String type = ProcessStepHandlerTypeFactory.getType(handler);
                     processStepVo.setType(type);
                     IProcessStepInternalHandler procssStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
                     if (procssStepUtilHandler != null) {
