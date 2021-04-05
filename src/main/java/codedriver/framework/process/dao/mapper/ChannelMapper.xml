@@ -515,6 +515,17 @@
 		ORDER BY cu.`insert_time` DESC
 	</select>
 
+	<select id="getFormUuidListByChannelUuidList" parameterType="java.util.List" resultType="java.lang.String">
+		SELECT
+		DISTINCT a.`form_uuid`
+		FROM `process_form` a
+		JOIN `channel_process` b on b.`process_uuid` = a.`process_uuid`
+		WHERE b.`channel_uuid` IN
+		<foreach collection="list" item="channelUuid" open="(" separator="," close=")">
+			#{channelUuid}
+		</foreach>
+	</select>
+
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
