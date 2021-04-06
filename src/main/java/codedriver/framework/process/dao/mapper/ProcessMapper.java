@@ -90,6 +90,8 @@ public interface ProcessMapper {
 
 	public ProcessSlaVo getProcessSlaByUuid(String caller);
 
+	public Long getNotifyPolicyIdByProcessStepUuid(String processStepUuid);
+
 	public int insertProcess(ProcessVo processVo);
 
 	public int insertProcessStep(ProcessStepVo processStepVo);

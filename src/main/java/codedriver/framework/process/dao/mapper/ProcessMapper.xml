@@ -446,6 +446,10 @@
 		WHERE `uuid` = #{value}
 	</select>
 
+	<select id="getNotifyPolicyIdByProcessStepUuid" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT `notify_policy_id` FROM `process_step_notify_policy` WHERE `process_step_uuid` = #{value}
+	</select>
+
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,

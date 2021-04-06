@@ -1504,45 +1504,60 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (stepVo.getType().equals(ProcessStepType.START.getValue())) {
                     currentProcessTaskStepVo.setId(ptStepVo.getId());
                 }
-            }
 
-            Map<Long, NotifyPolicyVo> notifyPolicyMap = new HashMap<>();
-            NotifyPolicyInvokerVo notifyPolicyInvokerVo = new NotifyPolicyInvokerVo();
-            notifyPolicyInvokerVo.setInvoker(currentProcessTaskStepVo.getProcessUuid());
-            notifyPolicyInvokerVo.setPageSize(100);
-            int rowNum = notifyMapper.getNotifyPolicyInvokerCountByInvoker(currentProcessTaskStepVo.getProcessUuid());
-            int pageCount = PageUtil.getPageCount(rowNum, notifyPolicyInvokerVo.getPageSize());
-            for(int currentPage = 1; currentPage <= pageCount; currentPage++){
-                notifyPolicyInvokerVo.setCurrentPage(currentPage);
-                List<NotifyPolicyInvokerVo> notifyPolicyInvokerList = notifyMapper.getNotifyPolicyInvokerList(notifyPolicyInvokerVo);
-                for (NotifyPolicyInvokerVo notifyPolicyInvoker : notifyPolicyInvokerList) {
-                    JSONObject config = notifyPolicyInvoker.getConfig();
-                    if (MapUtils.isNotEmpty(config)) {
-                        String processStepUuid = config.getString("processStepUuid");
-                        if (StringUtils.isNotBlank(processStepUuid)) {
-                            Long stepId = stepIdMap.get(processStepUuid);
-                            if (stepId != null) {
-                                NotifyPolicyVo notifyPolicyVo = notifyPolicyMap.get(notifyPolicyInvoker.getPolicyId());
-                                if (notifyPolicyVo == null) {
-                                    notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyInvoker.getPolicyId());
-                                    if (notifyPolicyVo == null) {
-                                        continue;
-                                    }
-                                    notifyPolicyMap.put(notifyPolicyVo.getId(), notifyPolicyVo);
-                                }
-                                ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
-                                processTaskStepNotifyPolicyVo.setProcessTaskStepId(stepId);
-                                processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyInvoker.getPolicyId());
-                                processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
-                                processTaskStepNotifyPolicyVo.setPolicyHandler(notifyPolicyVo.getHandler());
-                                processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
-                                processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
-                                processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
-                            }
-                        }
+                Long notifyPolicyId = processMapper.getNotifyPolicyIdByProcessStepUuid(ptStepVo.getProcessStepUuid());
+                if(notifyPolicyId != null){
+                    NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyId);
+                    if(notifyPolicyVo != null){
+                        ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
+                        processTaskStepNotifyPolicyVo.setProcessTaskStepId(ptStepVo.getId());
+                        processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyVo.getId());
+                        processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
+                        processTaskStepNotifyPolicyVo.setPolicyHandler(notifyPolicyVo.getHandler());
+                        processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
+                        processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
+                        processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
                     }
                 }
             }
+
+//            Map<Long, NotifyPolicyVo> notifyPolicyMap = new HashMap<>();
+//            NotifyPolicyInvokerVo notifyPolicyInvokerVo = new NotifyPolicyInvokerVo();
+//            notifyPolicyInvokerVo.setInvoker(currentProcessTaskStepVo.getProcessUuid());
+//            notifyPolicyInvokerVo.setPageSize(100);
+//            int rowNum = notifyMapper.getNotifyPolicyInvokerCountByInvoker(currentProcessTaskStepVo.getProcessUuid());
+//            int pageCount = PageUtil.getPageCount(rowNum, notifyPolicyInvokerVo.getPageSize());
+//            for(int currentPage = 1; currentPage <= pageCount; currentPage++){
+//                notifyPolicyInvokerVo.setCurrentPage(currentPage);
+//                List<NotifyPolicyInvokerVo> notifyPolicyInvokerList = notifyMapper.getNotifyPolicyInvokerList(notifyPolicyInvokerVo);
+//                for (NotifyPolicyInvokerVo notifyPolicyInvoker : notifyPolicyInvokerList) {
+//                    JSONObject config = notifyPolicyInvoker.getConfig();
+//                    if (MapUtils.isNotEmpty(config)) {
+//                        String processStepUuid = config.getString("processStepUuid");
+//                        if (StringUtils.isNotBlank(processStepUuid)) {
+//                            Long stepId = stepIdMap.get(processStepUuid);
+//                            if (stepId != null) {
+//                                NotifyPolicyVo notifyPolicyVo = notifyPolicyMap.get(notifyPolicyInvoker.getPolicyId());
+//                                if (notifyPolicyVo == null) {
+//                                    notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyInvoker.getPolicyId());
+//                                    if (notifyPolicyVo == null) {
+//                                        continue;
+//                                    }
+//                                    notifyPolicyMap.put(notifyPolicyVo.getId(), notifyPolicyVo);
+//                                }
+//                                ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
+//                                processTaskStepNotifyPolicyVo.setProcessTaskStepId(stepId);
+//                                processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyInvoker.getPolicyId());
+//                                processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
+//                                processTaskStepNotifyPolicyVo.setPolicyHandler(notifyPolicyVo.getHandler());
+//                                processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
+//                                processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
+//                                processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 
             /** 写入关系信息 **/
             List<ProcessStepRelVo> processStepRelList = processMapper.getProcessStepRelByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
