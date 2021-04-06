@@ -68,6 +68,8 @@ public class ProcessVo extends BasePageVo implements Serializable {
     private transient String keyword;
     @JSONField(serialize = false)
     private transient Long notifyPolicyId;
+    @JSONField(serialize = false)
+    private transient List<String> integrationUuidList;
 
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
@@ -296,6 +298,18 @@ public class ProcessVo extends BasePageVo implements Serializable {
         }
         /** 组装通知策略id **/
         notifyPolicyId = (Long)JSONPath.read(config, "process.processConfig.notifyPolicyConfig.policyId");
+
+        /** 组装动作列表 **/
+        JSONArray actionList = (JSONArray)JSONPath.read(config, "process.processConfig.actionConfig.actionList");
+        if(CollectionUtils.isNotEmpty(actionList)){
+            for (int i = 0; i < actionList.size(); i++) {
+                JSONObject ationObj = actionList.getJSONObject(i);
+                String integrationUuid = ationObj.getString("integrationUuid");
+                if(StringUtils.isNotBlank(integrationUuid)) {
+                    integrationUuidList.add(integrationUuid);
+                }
+            }
+        }
     }
 
     public void setStepList(List<ProcessStepVo> stepList) {
@@ -364,5 +378,13 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     public void setNotifyPolicyId(Long notifyPolicyId) {
         this.notifyPolicyId = notifyPolicyId;
+    }
+
+    public List<String> getIntegrationUuidList() {
+        return integrationUuidList;
+    }
+
+    public void setIntegrationUuidList(List<String> integrationUuidList) {
+        this.integrationUuidList = integrationUuidList;
     }
 }
