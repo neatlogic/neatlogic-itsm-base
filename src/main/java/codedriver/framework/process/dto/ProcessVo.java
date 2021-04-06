@@ -69,7 +69,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
     @JSONField(serialize = false)
     private transient Long notifyPolicyId;
     @JSONField(serialize = false)
-    private transient List<String> integrationUuidList;
+    private transient List<String> integrationUuidList = new ArrayList<>();
 
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
