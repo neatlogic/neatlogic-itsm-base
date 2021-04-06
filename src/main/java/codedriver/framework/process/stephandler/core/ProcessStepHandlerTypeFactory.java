@@ -15,6 +15,7 @@ import java.util.Set;
 
 /**
  * 流程组件类型工厂
+ *
  * @author: linbq
  * @since: 2021/4/5 15:13
  **/
@@ -26,6 +27,11 @@ public class ProcessStepHandlerTypeFactory {
 
     private static Set<IProcessStepHandlerType> set = new HashSet<>();
 
+    /**
+     * 获取IProcessStepHandlerType接口所有实现枚举类集合
+     *
+     * @return
+     */
     public static Set<IProcessStepHandlerType> getCalleeTypeSet() {
         if (isUninitialized) {
             synchronized (CalleeTypeFactory.class) {
@@ -43,6 +49,13 @@ public class ProcessStepHandlerTypeFactory {
         }
         return set;
     }
+
+    /**
+     * 通过_handler值查询对应的name
+     *
+     * @param _handler
+     * @return
+     */
     public static String getName(String _handler) {
         for (IProcessStepHandlerType s : getCalleeTypeSet()) {
             if (s.getHandler().equals(_handler)) {
@@ -52,6 +65,12 @@ public class ProcessStepHandlerTypeFactory {
         return "";
     }
 
+    /**
+     * 通过_handler值查询对应的type
+     *
+     * @param _handler
+     * @return
+     */
     public static String getType(String _handler) {
         for (IProcessStepHandlerType s : getCalleeTypeSet()) {
             if (s.getHandler().equals(_handler)) {

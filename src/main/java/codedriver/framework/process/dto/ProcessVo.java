@@ -236,11 +236,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
                 if (StringUtils.isNotBlank(handler)) {
                     processStepVo.setHandler(handler);
-//                    // FIXME 后续改成跨模块读取，暂时先把默认值改成process
-//                    String type = ProcessStepHandlerType.getType(handler);
-//                    if (StringUtils.isBlank(type)) {
-//                        type = "process";
-//                    }
                     String type = ProcessStepHandlerTypeFactory.getType(handler);
                     processStepVo.setType(type);
                     IProcessStepInternalHandler procssStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
@@ -299,7 +294,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
         /** 组装通知策略id **/
         notifyPolicyId = (Long)JSONPath.read(config, "process.processConfig.notifyPolicyConfig.policyId");
 
-        /** 组装动作列表 **/
         JSONArray actionList = (JSONArray)JSONPath.read(config, "process.processConfig.actionConfig.actionList");
         if(CollectionUtils.isNotEmpty(actionList)){
             for (int i = 0; i < actionList.size(); i++) {
