@@ -328,6 +328,58 @@
         )
         )
         group by pt.`id`
+        limit 0,50
+    </select>
+
+    <select id="getProcessingTaskCountByCondition" parameterType="java.util.Map" resultType="int">
+        SELECT
+        count(distinct pt.id)
+        FROM
+        processtask pt
+        LEFT JOIN processtask_step pts ON pt.id = pts.processtask_id
+        LEFT JOIN processtask_step_user ptsu ON pts.processtask_id = ptsu.processtask_id
+        AND pts.id = ptsu.processtask_step_id
+        LEFT JOIN processtask_step_worker ptsw ON pts.processtask_id = ptsw.processtask_id
+        AND pts.id = ptsw.processtask_step_id
+        where
+        pt.`status` in ('running')
+        and
+        pts.`status` in ('pending','running' )
+        and (
+        ptsu.`user_uuid` in (#{conditionMap.userUuid})
+        <if test="conditionMap.containsKey('teamUuidList')">
+            or
+            ptsw.`uuid` in
+            <foreach collection="conditionMap.teamUuidList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            and
+            ptsw.`type` in ('team')
+        </if>
+        <if test="conditionMap.containsKey('roleUuidList')">
+            or
+            ptsw.`uuid` in
+            <foreach collection="conditionMap.roleUuidList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            and
+            ptsw.`type` in ('role')
+        </if>
+        or ptsw.`uuid` in (#{conditionMap.userUuid})
+        and ptsw.`type` in ('user')
+        )
+        and ( pts.type != 'start'
+        and ( ptsu.`user_uuid` in
+        <foreach collection="conditionMap.stepteam.userUuidList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        or
+        ptsw.`uuid` in
+        <foreach collection="conditionMap.stepteam.uuidList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        )
+        )
     </select>
 
     <select id="getTaskListByIdList" parameterType="java.util.List" resultMap="workcenterProcessTaskMap">
