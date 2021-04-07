@@ -6,7 +6,6 @@ import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.TableSelectColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
-import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -86,7 +85,7 @@ public interface IProcessTaskColumn {
      */
     public Boolean getIsShow();
 
-    Object getMyValue(JSONObject json);
+    //Object getMyValue(JSONObject json);
 
     public Boolean getDisabled();
 
@@ -105,7 +104,7 @@ public interface IProcessTaskColumn {
      * @param json
      * @return
      */
-    Object getSimpleValue(Object json);
+    //Object getSimpleValue(Object json);
 
     /**
      * @return
@@ -151,6 +150,15 @@ public interface IProcessTaskColumn {
      * @Returns: java.lang.Object
      **/
     public Object getValue(ProcessTaskVo processTaskVo);
+
+    /**
+     * @Description: 重新渲染字段 (主要获取字符串 用于导出)
+     * @Author: 89770
+     * @Date: 2021/1/26 15:29
+     * @Params: [processTaskVo]
+     * @Returns: java.lang.Object
+     **/
+    public String getSimpleValue(ProcessTaskVo processTaskVo);
 
     /**
      * @Description: 获取table 需要 select 出来的 column
