@@ -2,10 +2,10 @@ package codedriver.framework.process.column.core;
 
 
 import codedriver.framework.dashboard.dto.DashboardDataVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
-import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -38,9 +38,9 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
         return null;
     }*/
 
-    public Object getMyValueText(JSONObject json) {
+    /*public Object getMyValueText(JSONObject json) {
         return null;
-    }
+    }*/
 
     @Override
     public Boolean getIsShow() {
@@ -61,8 +61,13 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
         return false;
     }
 
-    @Override
+   /* @Override
     public Object getSimpleValue(Object json) {
+        return null;
+    }*/
+
+    @Override
+    public String getSimpleValue(ProcessTaskVo taskVo) {
         return null;
     }
 
