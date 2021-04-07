@@ -278,9 +278,7 @@
         WHERE id = #{value}
     </select>
 
-    <select id="getProcessingTaskIdListByCondition" parameterType="java.util.Map" resultType="java.lang.Long">
-        SELECT
-        pt.id
+    <sql id="getProcessingTaskByConditionSql">
         FROM
         processtask pt
         LEFT JOIN processtask_step pts ON pt.id = pts.processtask_id
@@ -327,7 +325,20 @@
         </foreach>
         )
         )
+    </sql>
+
+    <select id="getProcessingTaskIdListByCondition" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        pt.id
+        <include refid="getProcessingTaskByConditionSql"/>
         group by pt.`id`
+        limit 0,50
+    </select>
+
+    <select id="getProcessingTaskCountByCondition" parameterType="java.util.Map" resultType="int">
+        SELECT
+        count(distinct pt.id)
+        <include refid="getProcessingTaskByConditionSql"/>
     </select>
 
     <select id="getTaskListByIdList" parameterType="java.util.List" resultMap="workcenterProcessTaskMap">
