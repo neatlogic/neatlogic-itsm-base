@@ -1,5 +1,7 @@
 package codedriver.framework.process.constvalue;
 
+import codedriver.framework.process.stephandler.core.IProcessStepHandlerType;
+
 public enum ProcessStepHandlerType implements IProcessStepHandlerType {
     START("start", "start", "开始"), OMNIPOTENT("omnipotent", "process", "通用节点"), END("end", "end", "结束"),
     CONDITION("condition", "converge", "条件"), DISTRIBUTARY("distributary", "converge", "分流"),
@@ -22,33 +24,6 @@ public enum ProcessStepHandlerType implements IProcessStepHandlerType {
 
     public String getName() {
         return name;
-    }
-
-    public static String getHandler(String _handler) {
-        for (ProcessStepHandlerType s : ProcessStepHandlerType.values()) {
-            if (s.getHandler().equals(_handler)) {
-                return s.getHandler();
-            }
-        }
-        return null;
-    }
-
-    public static String getName(String _handler) {
-        for (ProcessStepHandlerType s : ProcessStepHandlerType.values()) {
-            if (s.getHandler().equals(_handler)) {
-                return s.getName();
-            }
-        }
-        return "";
-    }
-
-    public static String getType(String _handler) {
-        for (ProcessStepHandlerType s : ProcessStepHandlerType.values()) {
-            if (s.getHandler().equals(_handler)) {
-                return s.getType();
-            }
-        }
-        return "";
     }
 
     public String getType() {
