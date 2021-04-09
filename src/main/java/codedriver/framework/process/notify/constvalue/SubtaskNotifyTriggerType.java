@@ -34,7 +34,7 @@ public enum SubtaskNotifyTriggerType implements INotifyTriggerType {
 	}
 	
 	public static String getText(String trigger) {
-		for(SubtaskNotifyTriggerType n : SubtaskNotifyTriggerType.values()) {
+		for(SubtaskNotifyTriggerType n : values()) {
 			if(n.getTrigger().equals(trigger)) {
 				return n.getText();
 			}
