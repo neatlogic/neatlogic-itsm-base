@@ -37,7 +37,7 @@ public enum TaskNotifyTriggerType implements INotifyTriggerType {
 	}
 
 	public static String getText(String trigger) {
-		for(TaskNotifyTriggerType n : TaskNotifyTriggerType.values()) {
+		for(TaskNotifyTriggerType n : values()) {
 			if(n.getTrigger().equals(trigger)) {
 				return n.getText();
 			}
