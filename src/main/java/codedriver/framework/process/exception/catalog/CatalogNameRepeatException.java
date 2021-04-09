@@ -1,8 +1,8 @@
 package codedriver.framework.process.exception.catalog;
 
-import codedriver.framework.exception.core.ApiFieldValidRuntimeException;
+import codedriver.framework.exception.core.ApiRuntimeException;
 
-public class CatalogNameRepeatException extends ApiFieldValidRuntimeException {
+public class CatalogNameRepeatException extends ApiRuntimeException {
 
 	private static final long serialVersionUID = -4617724920030245142L;
 

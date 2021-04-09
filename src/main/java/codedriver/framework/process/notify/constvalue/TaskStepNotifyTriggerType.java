@@ -41,7 +41,7 @@ public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
 	}
 
 	public static String getText(String trigger) {
-		for(TaskStepNotifyTriggerType n : TaskStepNotifyTriggerType.values()) {
+		for(TaskStepNotifyTriggerType n : values()) {
 			if(n.getTrigger().equals(trigger)) {
 				return n.getText();
 			}

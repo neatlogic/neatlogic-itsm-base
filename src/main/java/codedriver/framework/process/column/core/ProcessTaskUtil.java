@@ -7,7 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import codedriver.framework.dto.UrlInfoVo;
+import codedriver.framework.form.dto.AttributeDataVo;
+import codedriver.framework.form.dto.FormAttributeVo;
+import codedriver.framework.form.dto.FormVersionVo;
 import codedriver.framework.process.dto.*;
+import codedriver.framework.util.HtmlUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,8 +26,8 @@ import codedriver.framework.dto.TeamVo;
 import codedriver.framework.process.constvalue.ProcessField;
 import codedriver.framework.process.constvalue.ProcessTaskParams;
 import codedriver.framework.process.constvalue.ProcessUserType;
-import codedriver.framework.process.formattribute.core.FormAttributeHandlerFactory;
-import codedriver.framework.process.formattribute.core.IFormAttributeHandler;
+import codedriver.framework.form.attribute.core.FormAttributeHandlerFactory;
+import codedriver.framework.form.attribute.core.IFormAttributeHandler;
 
 public class ProcessTaskUtil {
     /**
@@ -134,7 +139,9 @@ public class ProcessTaskUtil {
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
         if (comment != null && StringUtils.isNotBlank(comment.getContent())) {
-            resultObj.put(ProcessTaskParams.CONTENT.getValue(), comment.getContent());
+            List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(comment.getContent(), "<img src=\"", "\"");
+            String content = HtmlUtil.urlReplace(comment.getContent(), urlInfoVoList);
+            resultObj.put(ProcessTaskParams.CONTENT.getValue(), content);
         } else {
             resultObj.put(ProcessTaskParams.CONTENT.getValue(), "");
         }
@@ -152,41 +159,42 @@ public class ProcessTaskUtil {
             resultObj.put(ProcessTaskParams.STARTTIME.getValue(), "");
         }
 
+        //TODO linbq 20210324 暂时屏蔽表单数据在模板中显示
         /** 表单信息数据 **/
-        Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
-        if (MapUtils.isNotEmpty(formAttributeDataMap)) {
-            if (StringUtils.isNotBlank(processTaskVo.getFormConfig())) {
-                Map<String, Object> formAttributeMap = new HashMap<>();
-                FormVersionVo formVersionVo = new FormVersionVo();
-                formVersionVo.setFormConfig(processTaskVo.getFormConfig());
-                List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
-                for (FormAttributeVo formAttribute : formAttributeList) {
-                    Object attributeValue = formAttributeDataMap.get(formAttribute.getUuid());
-                    if (attributeValue != null) {
-                        IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
-                        if (handler != null) {
-                            AttributeDataVo attributeDataVo = new AttributeDataVo();
-                            attributeDataVo.setAttributeUuid(formAttribute.getUuid());
-                            if (attributeValue instanceof String) {
-                                attributeDataVo.setData((String) attributeValue);
-                            } else if (attributeValue instanceof JSONArray) {
-                                attributeDataVo.setData(JSON.toJSONString(attributeValue));
-                            } else if (attributeValue instanceof JSONObject) {
-                                attributeDataVo.setData(JSON.toJSONString(attributeValue));
-                            }
-                            Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
-
-                            resultObj.put(formAttribute.getUuid(), value);
-                            formAttributeMap.put(formAttribute.getLabel(), joinToString(value));
-                        } else {
-                            resultObj.put(formAttribute.getUuid(), attributeValue);
-                            formAttributeMap.put(formAttribute.getLabel(), joinToString(attributeValue));
-                        }
-                    }
-                }
-                resultObj.put(ProcessTaskParams.FORM.getValue(), formAttributeMap);
-            }
-        }
+//        Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
+//        if (MapUtils.isNotEmpty(formAttributeDataMap)) {
+//            if (StringUtils.isNotBlank(processTaskVo.getFormConfig())) {
+//                Map<String, Object> formAttributeMap = new HashMap<>();
+//                FormVersionVo formVersionVo = new FormVersionVo();
+//                formVersionVo.setFormConfig(processTaskVo.getFormConfig());
+//                List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
+//                for (FormAttributeVo formAttribute : formAttributeList) {
+//                    Object attributeValue = formAttributeDataMap.get(formAttribute.getUuid());
+//                    if (attributeValue != null) {
+//                        IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
+//                        if (handler != null) {
+//                            AttributeDataVo attributeDataVo = new AttributeDataVo();
+//                            attributeDataVo.setAttributeUuid(formAttribute.getUuid());
+//                            if (attributeValue instanceof String) {
+//                                attributeDataVo.setData((String) attributeValue);
+//                            } else if (attributeValue instanceof JSONArray) {
+//                                attributeDataVo.setData(JSON.toJSONString(attributeValue));
+//                            } else if (attributeValue instanceof JSONObject) {
+//                                attributeDataVo.setData(JSON.toJSONString(attributeValue));
+//                            }
+//                            Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+//
+//                            resultObj.put(formAttribute.getUuid(), value);
+//                            formAttributeMap.put(formAttribute.getLabel(), joinToString(value));
+//                        } else {
+//                            resultObj.put(formAttribute.getUuid(), attributeValue);
+//                            formAttributeMap.put(formAttribute.getLabel(), joinToString(attributeValue));
+//                        }
+//                    }
+//                }
+//                resultObj.put(ProcessTaskParams.FORM.getValue(), formAttributeMap);
+//            }
+//        }
         ProcessTaskStepVo currentProcessTaskStep = processTaskVo.getCurrentProcessTaskStep();
         if (currentProcessTaskStep != null) {
             resultObj.put(ProcessTaskParams.STEPID.getValue(), currentProcessTaskStep.getId());
@@ -207,7 +215,14 @@ public class ProcessTaskUtil {
             }
             JSONObject paramObj = currentProcessTaskStep.getParamObj();
             if (MapUtils.isNotEmpty(paramObj)) {
-                resultObj.put(ProcessTaskParams.REASON.getValue(), paramObj.get("content"));
+                String reason = paramObj.getString("content");
+                if(StringUtils.isNotBlank(reason)){
+                    List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(reason, "<img src=\"", "\"");
+                    if(CollectionUtils.isNotEmpty(urlInfoVoList)){
+                        reason = HtmlUtil.urlReplace(reason, urlInfoVoList);
+                    }
+                }
+                resultObj.put(ProcessTaskParams.REASON.getValue(), reason);
                 Long changeStepId = paramObj.getLong("changeStepId");
                 if (changeStepId != null) {
                     Object handlerStepInfo = currentProcessTaskStep.getHandlerStepInfo();

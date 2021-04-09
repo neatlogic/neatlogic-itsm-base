@@ -7,11 +7,15 @@ package codedriver.framework.process.exception.channel;
 
 import codedriver.framework.exception.core.ApiRuntimeException;
 
-public class ChannelNotFoundException extends ApiRuntimeException {
+/**
+ * @author: linbq
+ * @since: 2021/3/30 14:39
+ **/
+public class ChannelParentUuidCannotBeZeroException extends ApiRuntimeException {
 
-    private static final long serialVersionUID = -5334268232696017057L;
+    private static final long serialVersionUID = 1747171456084633383L;
 
-    public ChannelNotFoundException(String channelUuid) {
-        super("服务：'" + channelUuid + "'不存在");
+    public ChannelParentUuidCannotBeZeroException(){
+        super("服务的parentUuid不能为零");
     }
 }

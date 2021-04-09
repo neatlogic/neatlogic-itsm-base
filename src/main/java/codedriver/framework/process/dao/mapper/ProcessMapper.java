@@ -32,7 +32,11 @@ public interface ProcessMapper {
 
 	public List<ProcessSlaVo> getProcessSlaByProcessUuid(String processUuid);
 
+	public List<String> getSlaUuidListByProcessUuid(String processUuid);
+
 	public List<ProcessStepVo> getProcessStepDetailByProcessUuid(String processUuid);
+
+	public List<String> getProcessStepUuidListByProcessUuid(String processUuid);
 
 	public List<ProcessStepFormAttributeVo> getProcessStepFormAttributeByStepUuid(@Param("processUuid")String processUuid, @Param("processStepUuid")String processStepUuid);
 
@@ -80,6 +84,14 @@ public interface ProcessMapper {
 
 	public ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
 
+	public int getFormReferenceCount(String formUuid);
+
+	public List<ProcessVo> getFormReferenceList(ProcessFormVo processFormVo);
+
+	public ProcessSlaVo getProcessSlaByUuid(String caller);
+
+	public Long getNotifyPolicyIdByProcessStepUuid(String processStepUuid);
+
 	public int insertProcess(ProcessVo processVo);
 
 	public int insertProcessStep(ProcessStepVo processStepVo);
@@ -97,8 +109,6 @@ public interface ProcessMapper {
 	public int insertProcessStepSla(@Param("stepUuid") String stepUuid, @Param("slaUuid") String slaUuid);
 
 	public int insertProcessSla(ProcessSlaVo processSlaVo);
-
-	public int replaceProcessStepNotifyTemplate(ProcessStepNotifyTemplateVo processStepNotifyTemplateVo);
 
 	public int insertProcessDraft(ProcessDraftVo processDraftVo);
 	
@@ -121,8 +131,6 @@ public interface ProcessMapper {
 	public int deleteProcessByUuid(String uuid);
 
 	public int deleteProcessFormByProcessUuid(String processUuid);
-
-	public int deleteProcessStepNotifyTemplateByProcessUuid(String processUuid);
 
 	public int deleteProcessDraft(ProcessDraftVo processDraftVo);
 

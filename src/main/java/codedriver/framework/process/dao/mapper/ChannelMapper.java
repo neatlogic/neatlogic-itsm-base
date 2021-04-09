@@ -59,6 +59,10 @@ public interface ChannelMapper {
 
     public List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
 
+    public List<ChannelVo> getFavoriteChannelList(ChannelVo channelVo);
+
+    List<String> getFormUuidListByChannelUuidList(List<String> channelUuidList);
+
     public int replaceChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
     public int replaceChannel(ChannelVo channelVo);

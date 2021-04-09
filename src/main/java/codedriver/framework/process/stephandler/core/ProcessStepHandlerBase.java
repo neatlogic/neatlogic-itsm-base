@@ -3,13 +3,13 @@ package codedriver.framework.process.stephandler.core;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.TransactionSynchronizationPool;
 import codedriver.framework.common.constvalue.GroupSearch;
-import codedriver.framework.common.util.PageUtil;
 import codedriver.framework.dao.mapper.RoleMapper;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.dto.UserVo;
+import codedriver.framework.form.dao.mapper.FormMapper;
+import codedriver.framework.form.dto.FormVersionVo;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
-import codedriver.framework.notify.dto.NotifyPolicyInvokerVo;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.process.constvalue.*;
 import codedriver.framework.process.dao.mapper.*;
@@ -37,7 +37,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -745,6 +744,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     /** 更新处理人状态 **/
                     ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserUuid());// 兼容automatic作业无用户
                     processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
+                    processTaskMajorUser.setUserType(ProcessUserType.MAJOR.getValue());
                     processTaskMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
                     /** 清空worker表 **/
                     processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
@@ -1396,7 +1396,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     public final int saveDraft(ProcessTaskStepVo currentProcessTaskStepVo) {
         JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
         Long processTaskId = currentProcessTaskStepVo.getProcessTaskId();
-//        List<FormAttributeVo> formAttributeList = new ArrayList<FormAttributeVo>();
         ProcessTaskVo processTaskVo = null;
         if (processTaskId == null) {// 首次保存
             processTaskVo = new ProcessTaskVo();
@@ -1444,7 +1443,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskFormVo.setFormName(formVersionVo.getFormName());
                     processTaskMapper.insertProcessTaskForm(processTaskFormVo);
                     processTaskMapper.insertIgnoreProcessTaskFormContent(processTaskFormVo);
-//                    formAttributeList = formVersionVo.getFormAttributeList();
                 }
             }
 
@@ -1503,42 +1501,19 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (stepVo.getType().equals(ProcessStepType.START.getValue())) {
                     currentProcessTaskStepVo.setId(ptStepVo.getId());
                 }
-            }
 
-            Map<Long, NotifyPolicyVo> notifyPolicyMap = new HashMap<>();
-            NotifyPolicyInvokerVo notifyPolicyInvokerVo = new NotifyPolicyInvokerVo();
-            notifyPolicyInvokerVo.setInvoker(currentProcessTaskStepVo.getProcessUuid());
-            notifyPolicyInvokerVo.setPageSize(100);
-            int rowNum = notifyMapper.getNotifyPolicyInvokerCountByInvoker(currentProcessTaskStepVo.getProcessUuid());
-            int pageCount = PageUtil.getPageCount(rowNum, notifyPolicyInvokerVo.getPageSize());
-            for(int currentPage = 1; currentPage <= pageCount; currentPage++){
-                notifyPolicyInvokerVo.setCurrentPage(currentPage);
-                List<NotifyPolicyInvokerVo> notifyPolicyInvokerList = notifyMapper.getNotifyPolicyInvokerList(notifyPolicyInvokerVo);
-                for (NotifyPolicyInvokerVo notifyPolicyInvoker : notifyPolicyInvokerList) {
-                    JSONObject config = notifyPolicyInvoker.getConfig();
-                    if (MapUtils.isNotEmpty(config)) {
-                        String processStepUuid = config.getString("processStepUuid");
-                        if (StringUtils.isNotBlank(processStepUuid)) {
-                            Long stepId = stepIdMap.get(processStepUuid);
-                            if (stepId != null) {
-                                NotifyPolicyVo notifyPolicyVo = notifyPolicyMap.get(notifyPolicyInvoker.getPolicyId());
-                                if (notifyPolicyVo == null) {
-                                    notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyInvoker.getPolicyId());
-                                    if (notifyPolicyVo == null) {
-                                        continue;
-                                    }
-                                    notifyPolicyMap.put(notifyPolicyVo.getId(), notifyPolicyVo);
-                                }
-                                ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
-                                processTaskStepNotifyPolicyVo.setProcessTaskStepId(stepId);
-                                processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyInvoker.getPolicyId());
-                                processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
-                                processTaskStepNotifyPolicyVo.setPolicyHandler(notifyPolicyVo.getHandler());
-                                processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
-                                processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
-                                processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
-                            }
-                        }
+                Long notifyPolicyId = processMapper.getNotifyPolicyIdByProcessStepUuid(ptStepVo.getProcessStepUuid());
+                if(notifyPolicyId != null){
+                    NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyId);
+                    if(notifyPolicyVo != null){
+                        ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
+                        processTaskStepNotifyPolicyVo.setProcessTaskStepId(ptStepVo.getId());
+                        processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyVo.getId());
+                        processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
+                        processTaskStepNotifyPolicyVo.setPolicyHandler(notifyPolicyVo.getHandler());
+                        processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
+                        processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
+                        processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
                     }
                 }
             }
@@ -1590,9 +1565,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             // 第二次保存时的操作
             processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
             new ProcessAuthManager.TaskOperationChecker(processTaskVo.getId(), ProcessTaskOperationType.TASK_START).build().checkAndNoPermissionThrowException();
-//            if (!ProcessTaskStatus.DRAFT.getValue().equals(processTaskVo.getStatus())) {
-//                throw new ProcessTaskRuntimeException("工单非草稿状态，不能进行上报暂存操作");
-//            }
             /** 更新工单信息 **/
             processTaskVo.setTitle(paramObj.getString("title"));
             processTaskVo.setOwner(paramObj.getString("owner"));
@@ -1602,16 +1574,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.deleteProcessTaskStepFileByProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
         }
         try {
-            // 是否需要校验，兼容提供给第三方的上报接口，表单等不合法，则不生成工单
-//            Integer isNeedValid = paramObj.getInteger("isNeedValid");
-//            if (isNeedValid != null && isNeedValid == 1) {
-//                currentProcessTaskStepVo.setFormAttributeDataMap(formAttributeDataMap);
-//                currentProcessTaskStepVo.setFormAttributeVoList(formAttributeList);
-//                // currentProcessTaskStepVo.setFormAttributeActionMap(formAttributeActionMap);
-//                IProcessStepHandlerUtil.formAttributeDataValid(currentProcessTaskStepVo);
-//                IProcessStepHandlerUtil.baseInfoValid(currentProcessTaskStepVo, processTaskVo);
-//            }
-
             mySaveDraft(currentProcessTaskStepVo);
             currentProcessTaskStepVo.setIsActive(1);
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.DRAFT.getValue());
@@ -1880,7 +1842,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
             /** 保存打回原因 **/
             IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_REDO);
-            // myRedo(currentProcessTaskStepVo);
+            myRedo(currentProcessTaskStepVo);
 
             /** 遍历后续节点所有步骤，写入汇聚步骤数据 **/
             resetConvergeInfo(currentProcessTaskStepVo);
@@ -1951,7 +1913,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         return 1;
     }
 
-    // protected abstract int myRedo(ProcessTaskStepVo currentProcessTaskStepVo);
+    protected abstract int myRedo(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
 
     public int scoreProcessTask(ProcessTaskVo currentProcessTaskVo) {
         // 锁定当前流程

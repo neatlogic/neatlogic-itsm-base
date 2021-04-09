@@ -151,6 +151,9 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "sla列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskSlaVo> processTaskSlaVoList;
 
+    @EntityField(name = "是否有权限修改工单关注人", type = ApiParamType.INTEGER)
+    private Integer canEditFocusUser;
+
     public ProcessTaskVo() {
 
     }
@@ -659,5 +662,13 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setFocusUserUuidList(List<String> focusUserUuidList) {
         this.focusUserUuidList = focusUserUuidList;
+    }
+
+    public Integer getCanEditFocusUser() {
+        return canEditFocusUser;
+    }
+
+    public void setCanEditFocusUser(Integer canEditFocusUser) {
+        this.canEditFocusUser = canEditFocusUser;
     }
 }

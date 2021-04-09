@@ -78,7 +78,9 @@ public interface CatalogMapper {
 
     public List<String> getCatalogUuidListByLftRht(@Param("lft") Integer lft, @Param("rht")Integer rht);
 
-	public int replaceCatalog(CatalogVo catalogVo);
+	public String getParentUuidByUuid(String uuid);
+
+	public int insertCatalog(CatalogVo catalogVo);
 
 	public int insertCatalogAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("catalogUuid")String catalogUuid);
 
@@ -91,9 +93,10 @@ public interface CatalogMapper {
 	public int batchUpdateCatalogLeftCode(@Param("minCode") Integer minCode, @Param("step") int step);
 
 	public int batchUpdateCatalogRightCode(@Param("minCode") Integer minCode, @Param("step") int step);
+
+	public int updateCatalogByUuid(CatalogVo catalogVo);
 	
 	public int deleteCatalogByUuid(String uuid);
 
 	public int deleteCatalogAuthorityByCatalogUuid(String uuid);
-
 }

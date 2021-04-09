@@ -1,21 +1,20 @@
 package codedriver.framework.process.constvalue;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import codedriver.framework.common.constvalue.IUserProfile;
 import codedriver.framework.common.util.ModuleUtil;
 import codedriver.framework.dto.UserProfileVo;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.Arrays;
+import java.util.List;
 
 public enum UserProfile implements IUserProfile{
-	PROCESSTASK_SUCESS("processtasksucess","服务上报成功",Arrays.asList(UserProfileOperate.KEEP_ON_CREATE_TASK,UserProfileOperate.VIEW_PROCESSTASK_DETAIL,UserProfileOperate.BACK_CATALOG_LIST));
-	
-	private String value;
-	private String text;
-	private List<UserProfileOperate> userProfileOperateList;
+	PROCESSTASK_SUCCESS("processtasksuccess","服务上报成功",Arrays.asList(UserProfileOperate.KEEP_ON_CREATE_TASK,UserProfileOperate.VIEW_PROCESSTASK_DETAIL,UserProfileOperate.BACK_CATALOG_LIST));
+
+	private final String value;
+	private final String text;
+	private final List<UserProfileOperate> userProfileOperateList;
 	
 	private UserProfile(String _value,String _text,List<UserProfileOperate> _userProfileOperateList){
 		this.value = _value;

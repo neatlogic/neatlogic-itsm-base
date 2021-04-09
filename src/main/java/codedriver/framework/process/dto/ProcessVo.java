@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
+import codedriver.framework.process.stephandler.core.ProcessStepHandlerTypeFactory;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -67,6 +68,8 @@ public class ProcessVo extends BasePageVo implements Serializable {
     private transient String keyword;
     @JSONField(serialize = false)
     private transient Long notifyPolicyId;
+    @JSONField(serialize = false)
+    private transient List<String> integrationUuidList = new ArrayList<>();
 
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
@@ -233,11 +236,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
                 if (StringUtils.isNotBlank(handler)) {
                     processStepVo.setHandler(handler);
-                    // FIXME 后续改成跨模块读取，暂时先把默认值改成process
-                    String type = ProcessStepHandlerType.getType(handler);
-                    if (StringUtils.isBlank(type)) {
-                        type = "process";
-                    }
+                    String type = ProcessStepHandlerTypeFactory.getType(handler);
                     processStepVo.setType(type);
                     IProcessStepInternalHandler procssStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
                     if (procssStepUtilHandler != null) {
@@ -294,6 +293,17 @@ public class ProcessVo extends BasePageVo implements Serializable {
         }
         /** 组装通知策略id **/
         notifyPolicyId = (Long)JSONPath.read(config, "process.processConfig.notifyPolicyConfig.policyId");
+
+        JSONArray actionList = (JSONArray)JSONPath.read(config, "process.processConfig.actionConfig.actionList");
+        if(CollectionUtils.isNotEmpty(actionList)){
+            for (int i = 0; i < actionList.size(); i++) {
+                JSONObject ationObj = actionList.getJSONObject(i);
+                String integrationUuid = ationObj.getString("integrationUuid");
+                if(StringUtils.isNotBlank(integrationUuid)) {
+                    integrationUuidList.add(integrationUuid);
+                }
+            }
+        }
     }
 
     public void setStepList(List<ProcessStepVo> stepList) {
@@ -362,5 +372,13 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     public void setNotifyPolicyId(Long notifyPolicyId) {
         this.notifyPolicyId = notifyPolicyId;
+    }
+
+    public List<String> getIntegrationUuidList() {
+        return integrationUuidList;
+    }
+
+    public void setIntegrationUuidList(List<String> integrationUuidList) {
+        this.integrationUuidList = integrationUuidList;
     }
 }
