@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum AutoExecJobSource implements IAutoexecJobSource {
-    PROCESSTASK("processtask", "工单");
+    PROCESSTASK("工单", "processtask");
     private final String text;
     private final String value;
 
