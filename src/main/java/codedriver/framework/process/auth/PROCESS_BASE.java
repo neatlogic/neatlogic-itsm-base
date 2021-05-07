@@ -25,7 +25,7 @@ public class PROCESS_BASE extends AuthBase {
 	}
 
 	@Override
-	public Integer sort() {
+	public Integer getSort() {
 		return 1;
 	}
 

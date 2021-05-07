@@ -20,7 +20,7 @@ public class SCORE_TEMPLATE_MODIFY extends AuthBase {
 	}
 
 	@Override
-	public Integer sort() {
+	public Integer getSort() {
 		return 12;
 	}
 }
