@@ -2,6 +2,9 @@ package codedriver.framework.process.auth;
 
 import codedriver.framework.auth.core.AuthBase;
 
+import java.util.Collections;
+import java.util.List;
+
 public class CATALOG_MODIFY extends AuthBase {
 
 	@Override
@@ -22,6 +25,11 @@ public class CATALOG_MODIFY extends AuthBase {
 	@Override
 	public Integer getSort() {
 		return 4;
+	}
+
+	@Override
+	public List<Class<? extends AuthBase>> getIncludeAuths(){
+		return Collections.singletonList(PROCESS_BASE.class);
 	}
 
 }

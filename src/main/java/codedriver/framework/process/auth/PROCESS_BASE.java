@@ -29,4 +29,9 @@ public class PROCESS_BASE extends AuthBase {
 		return 1;
 	}
 
+	@Override
+	public boolean getIsDefault(){
+		return true;
+	}
+
 }

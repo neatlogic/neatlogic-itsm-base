@@ -2,6 +2,9 @@ package codedriver.framework.process.auth;
 
 import codedriver.framework.auth.core.AuthBase;
 
+import java.util.Collections;
+import java.util.List;
+
 public class CHANNELTYPE_MODIFY extends AuthBase {
 
 	@Override
@@ -24,4 +27,8 @@ public class CHANNELTYPE_MODIFY extends AuthBase {
 		return 5;
 	}
 
+	@Override
+	public List<Class<? extends AuthBase>> getIncludeAuths(){
+		return Collections.singletonList(PROCESS_BASE.class);
+	}
 }
