@@ -58,7 +58,6 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
         processStepHandlerMapper = _processStepHandlerMapper;
     }
 
-    protected abstract IOperationAuthHandlerType MyOperationAuthHandlerType();
     @Override
     public Map<String, String> getCustomButtonMapByProcessTaskStepId(Long processTaskStepId) {
         Map<String, String> customButtonMap = new HashMap<>();
