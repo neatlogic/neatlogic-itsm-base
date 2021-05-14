@@ -159,10 +159,9 @@ public class ProcessConfigUtil {
      *
      * @param customButtonList 用户配置的数据
      * @param stepButtons
-     * @param subtaskButtons
      * @return
      */
-    public static JSONArray makeupCustomButtonList(JSONArray customButtonList, ProcessTaskOperationType[] stepButtons, ProcessTaskOperationType[] subtaskButtons) {
+    public static JSONArray makeupCustomButtonList(JSONArray customButtonList, ProcessTaskOperationType[] stepButtons) {
         JSONArray customButtonArray = new JSONArray();
         for (ProcessTaskOperationType stepButton : stepButtons) {
             customButtonArray.add(new JSONObject() {{
@@ -171,6 +170,33 @@ public class ProcessConfigUtil {
                 this.put("value", "");
             }});
         }
+
+        if (CollectionUtils.isNotEmpty(customButtonList)) {
+            Map<String, String> customButtonMap = new HashMap<>();
+            for (int i = 0; i < customButtonList.size(); i++) {
+                JSONObject customButton = customButtonList.getJSONObject(i);
+                customButtonMap.put(customButton.getString("name"), customButton.getString("value"));
+            }
+            for (int i = 0; i < customButtonArray.size(); i++) {
+                JSONObject customButton = customButtonArray.getJSONObject(i);
+                String value = customButtonMap.get(customButton.getString("name"));
+                if (StringUtils.isNotBlank(value)) {
+                    customButton.put("value", value);
+                }
+            }
+        }
+        return customButtonArray;
+    }
+
+    /**
+     * 子任务按钮映射
+     *
+     * @param customButtonList 用户配置的数据
+     * @param subtaskButtons
+     * @return
+     */
+    public static JSONArray makeupSubtaskCustomButtonList(JSONArray customButtonList, ProcessTaskOperationType[] subtaskButtons) {
+        JSONArray customButtonArray = new JSONArray();
         for (ProcessTaskOperationType subtaskButton : subtaskButtons) {
             customButtonArray.add(new JSONObject() {{
                 this.put("name", subtaskButton.getValue());
