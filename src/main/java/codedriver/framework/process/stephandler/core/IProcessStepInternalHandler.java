@@ -67,6 +67,15 @@ public interface IProcessStepInternalHandler {
     public JSONObject makeupConfig(JSONObject configObj);
 
     /**
+     * 构造流程步骤配置数据
+     * @param configObj 配置数据
+     * @return
+     */
+    public default JSONObject makeupProcessStepConfig(JSONObject configObj) {
+        return configObj;
+    }
+
+    /**
      * 
      * @Time:2020年9月15日
      * @Description: 根据工单步骤id获取自定义按钮文案映射

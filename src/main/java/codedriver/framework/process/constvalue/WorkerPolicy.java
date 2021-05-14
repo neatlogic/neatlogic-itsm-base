@@ -3,12 +3,12 @@ package codedriver.framework.process.constvalue;
 public enum WorkerPolicy {
 	ASSIGN("assign", "自定义"), 
 	//MANUAL("manual", "处理人抢单"), 
-	AUTOMATIC("automatic", "分配器分派"),
+	AUTOMATIC("automatic", "分派器"),
 	//FROMER("fromer", "前置步骤指定"), 
-	COPY("copy", "复制前置步骤"), 
+	COPY("copy", "复制前置步骤处理人"),
 	//ATTRIBUTE("attribute", "属性值"), 
 	FORM("form", "表单值"),
-	PRESTEPASSIGN("prestepassign","前置步骤分配");
+	PRESTEPASSIGN("prestepassign","由前置步骤处理人指定");
 	private String policy;
 	private String text;
 
@@ -43,4 +43,12 @@ public enum WorkerPolicy {
 		return "";
 	}
 
+	public static WorkerPolicy getWorkerPolicy(String _policy){
+		for (WorkerPolicy s : WorkerPolicy.values()) {
+			if (s.getValue().equals(_policy)) {
+				return s;
+			}
+		}
+		return null;
+	}
 }
