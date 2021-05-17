@@ -4,10 +4,7 @@ import codedriver.framework.form.constvalue.FormAttributeAction;
 import codedriver.framework.form.constvalue.FormAttributeAuthRange;
 import codedriver.framework.form.constvalue.FormAttributeAuthType;
 import codedriver.framework.notify.core.INotifyPolicyHandler;
-import codedriver.framework.process.constvalue.ProcessStepHandlerType;
-import codedriver.framework.process.constvalue.ProcessTaskOperationType;
-import codedriver.framework.process.constvalue.ProcessTaskStatus;
-import codedriver.framework.process.constvalue.WorkerPolicy;
+import codedriver.framework.process.constvalue.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -161,46 +158,28 @@ public class ProcessConfigUtil {
      * @param stepButtons
      * @return
      */
-    public static JSONArray makeupCustomButtonList(JSONArray customButtonList, ProcessTaskOperationType[] stepButtons) {
-        JSONArray customButtonArray = new JSONArray();
-        for (ProcessTaskOperationType stepButton : stepButtons) {
-            customButtonArray.add(new JSONObject() {{
-                this.put("name", stepButton.getValue());
-                this.put("customText", stepButton.getText());
-                this.put("value", "");
-            }});
-        }
-
-        if (CollectionUtils.isNotEmpty(customButtonList)) {
-            Map<String, String> customButtonMap = new HashMap<>();
-            for (int i = 0; i < customButtonList.size(); i++) {
-                JSONObject customButton = customButtonList.getJSONObject(i);
-                customButtonMap.put(customButton.getString("name"), customButton.getString("value"));
-            }
-            for (int i = 0; i < customButtonArray.size(); i++) {
-                JSONObject customButton = customButtonArray.getJSONObject(i);
-                String value = customButtonMap.get(customButton.getString("name"));
-                if (StringUtils.isNotBlank(value)) {
-                    customButton.put("value", value);
-                }
-            }
-        }
-        return customButtonArray;
+    public static JSONArray makeupCustomButtonList(JSONArray customButtonList, IOperationType[] stepButtons) {
+        return makeupCustomButtonList(customButtonList, stepButtons, null);
     }
 
     /**
-     * 子任务按钮映射
+     * 按钮映射
      *
      * @param customButtonList 用户配置的数据
-     * @param subtaskButtons
+     * @param stepButtons
+     * @param remark
      * @return
      */
-    public static JSONArray makeupSubtaskCustomButtonList(JSONArray customButtonList, ProcessTaskOperationType[] subtaskButtons) {
+    public static JSONArray makeupCustomButtonList(JSONArray customButtonList, IOperationType[] stepButtons, String remark) {
         JSONArray customButtonArray = new JSONArray();
-        for (ProcessTaskOperationType subtaskButton : subtaskButtons) {
+        for (IOperationType stepButton : stepButtons) {
             customButtonArray.add(new JSONObject() {{
-                this.put("name", subtaskButton.getValue());
-                this.put("customText", subtaskButton.getText() + "(子任务)");
+                this.put("name", stepButton.getValue());
+                if(StringUtils.isNotBlank(remark)){
+                    this.put("customText", stepButton.getText() + "(" + remark + ")");
+                }else {
+                    this.put("customText", stepButton.getText());
+                }
                 this.put("value", "");
             }});
         }
