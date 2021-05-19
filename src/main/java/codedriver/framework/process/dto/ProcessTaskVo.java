@@ -155,7 +155,7 @@ public class ProcessTaskVo extends BasePageVo {
     private Integer canEditFocusUser;
 
     @EntityField(name = "工单来源", type = ApiParamType.STRING)
-    private String source;
+    private String source = "process";
 
     public ProcessTaskVo() {
 

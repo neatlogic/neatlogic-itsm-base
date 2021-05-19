@@ -1406,7 +1406,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskVo.setProcessUuid(currentProcessTaskStepVo.getProcessUuid());
             processTaskVo.setReporter(UserContext.get().getUserUuid(true));
             processTaskVo.setStatus(ProcessTaskStatus.DRAFT.getValue());
-            processTaskVo.setSource(paramObj.getString("source"));
+            String source = paramObj.getString("source");
+            if(StringUtils.isNotBlank(source)){
+                processTaskVo.setSource(source);
+            }
 
             ProcessVo processVo = processMapper.getProcessByUuid(currentProcessTaskStepVo.getProcessUuid());
             /** 对流程配置进行散列处理 **/
