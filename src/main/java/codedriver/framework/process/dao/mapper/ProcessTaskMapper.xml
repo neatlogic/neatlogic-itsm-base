@@ -235,6 +235,7 @@
         <result column="error" property="error"/>
         <result column="is_show" property="isShow"/>
         <result column="serial_number" property="serialNumber"/>
+        <result column="source" property="source"/>
         <association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="ownerUuid"/>
             <result property="userName" column="ownerName"/>
@@ -273,7 +274,9 @@
                `expire_time`,
                `worktime_uuid`,
                `error`,
-               `is_show`
+               `is_show`,
+               `serial_number`,
+               `source`
         FROM `processtask`
         WHERE id = #{value}
     </select>
@@ -935,8 +938,8 @@
                `worktime_uuid` AS worktimeUuid,
                `error`,
                `is_show`       as isShow,
-               `serial_number` AS
-                                  serialNumber
+               `serial_number` AS serialNumber,
+               `source`
         FROM `processtask`
         WHERE `id` = #{id}
     </select>
@@ -1307,7 +1310,8 @@
         `expire_time`,
         `worktime_uuid`,
         `is_show`,
-        `serial_number`
+        `serial_number`,
+        `source`
         FROM `processtask`
         <where>
             <if test="processTaskIdList != null and processTaskIdList.size() >0">
@@ -1341,7 +1345,8 @@
         `expire_time`,
         `worktime_uuid`,
         `is_show`,
-        `serial_number`
+        `serial_number`,
+        `source`
         FROM `processtask`
         WHERE `id` IN
         <foreach collection="list" item="id" open="(" separator="," close=")">
@@ -1701,7 +1706,8 @@
         (SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
         `expire_time`,
         `worktime_uuid`,
-        `serial_number`
+        `serial_number`,
+        `source`
         FROM `processtask`
         WHERE `status` != 'draft'
         AND `channel_uuid` IN
@@ -1982,7 +1988,8 @@
         a.`expire_time`,
         a.`worktime_uuid`,
         a.`is_show`,
-        a.`serial_number`
+        a.`serial_number`,
+        a.`source`
         FROM `processtask` a
         JOIN channel b ON b.`uuid` = a.`channel_uuid`
         JOIN channel_type c ON c.`uuid` = b.`channel_type_uuid`
@@ -2571,7 +2578,8 @@
         `reporter`,
         `expire_time`,
         `worktime_uuid`,
-        `serial_number`
+        `serial_number`,
+        `source`
         )
         VALUES
         (
@@ -2587,7 +2595,8 @@
         #{reporter},
         #{expireTime},
         #{worktimeUuid},
-        #{serialNumber}
+        #{serialNumber},
+        #{source}
         )
     </insert>
 
