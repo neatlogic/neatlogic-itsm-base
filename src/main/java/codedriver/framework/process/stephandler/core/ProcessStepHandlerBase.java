@@ -41,9 +41,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
@@ -61,62 +61,62 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static SelectContentByHashMapper selectContentByHashMapper;
     protected static IProcessStepHandlerUtil IProcessStepHandlerUtil;
 
-    @Autowired
+    @Resource
     public void setProcessMapper(ProcessMapper _processMapper) {
         processMapper = _processMapper;
     }
 
-    @Autowired
+    @Resource
     public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
         processTaskMapper = _processTaskMapper;
     }
 
-    @Autowired
+    @Resource
     public void setFormMapper(FormMapper _formMapper) {
         formMapper = _formMapper;
     }
 
-    @Autowired
+    @Resource
     public void setUserMapper(UserMapper _userMapper) {
         userMapper = _userMapper;
     }
 
-    @Autowired
+    @Resource
     public void setChannelMapper(ChannelMapper _channelMapper) {
         channelMapper = _channelMapper;
     }
 
-    @Autowired
+    @Resource
     public void setNotifyMapper(NotifyMapper _notifyMapper) {
         notifyMapper = _notifyMapper;
     }
 
-    @Autowired
+    @Resource
     public void setTeamMapper(TeamMapper _teamMapper) {
         teamMapper = _teamMapper;
     }
 
-    @Autowired
+    @Resource
     public void setRoleMapper(RoleMapper _roleMapper) {
         roleMapper = _roleMapper;
     }
 
-    @Autowired
+    @Resource
     public void setSelectContentByHashMapper(SelectContentByHashMapper _selectContentByHashMapper) {
         selectContentByHashMapper = _selectContentByHashMapper;
     }
 
-    @Autowired
+    @Resource
     public void setProcessTaskScoreMapper(ProcessTaskScoreMapper _processTaskScoreMapper) {
         processTaskScoreMapper = _processTaskScoreMapper;
     }
 
-    @Autowired
+    @Resource
     public void setProcessTaskSerialNumberMapper(ProcessTaskSerialNumberMapper _processTaskSerialNumberMapper) {
         processTaskSerialNumberMapper = _processTaskSerialNumberMapper;
     }
 
-    @Autowired
+    @Resource
     public void setProcessStepHandlerUtilService(IProcessStepHandlerUtil _I_processStepHandlerUtil) {
         IProcessStepHandlerUtil = _I_processStepHandlerUtil;
     }
@@ -1406,6 +1406,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskVo.setProcessUuid(currentProcessTaskStepVo.getProcessUuid());
             processTaskVo.setReporter(UserContext.get().getUserUuid(true));
             processTaskVo.setStatus(ProcessTaskStatus.DRAFT.getValue());
+            processTaskVo.setSource(paramObj.getString("source"));
 
             ProcessVo processVo = processMapper.getProcessByUuid(currentProcessTaskStepVo.getProcessUuid());
             /** 对流程配置进行散列处理 **/
@@ -1503,9 +1504,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
 
                 Long notifyPolicyId = processMapper.getNotifyPolicyIdByProcessStepUuid(ptStepVo.getProcessStepUuid());
-                if(notifyPolicyId != null){
+                if (notifyPolicyId != null) {
                     NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyId);
-                    if(notifyPolicyVo != null){
+                    if (notifyPolicyVo != null) {
                         ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo = new ProcessTaskStepNotifyPolicyVo();
                         processTaskStepNotifyPolicyVo.setProcessTaskStepId(ptStepVo.getId());
                         processTaskStepNotifyPolicyVo.setPolicyId(notifyPolicyVo.getId());
