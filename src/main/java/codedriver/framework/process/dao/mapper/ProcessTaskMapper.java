@@ -158,8 +158,6 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskVo> getProcessTaskListByIdList(List<Long> processTaskIdList);
 
-    public List<Long> getAllProcessTaskIdList();
-
     public List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 
     public ProcessTaskStepNotifyPolicyVo

@@ -293,8 +293,8 @@
 		UPDATE `catalog`
 		SET
 			`name` = #{name},
-			`parent_uuid` = #{parent_uuid},
-			`is_active` = #{is_active},
+			`parent_uuid` = #{parentUuid},
+			`is_active` = #{isActive},
 			`icon` = #{icon},
 			`color` = #{color},
 			`desc` = #{desc}
