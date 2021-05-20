@@ -286,6 +286,7 @@ public class ProcessConfigUtil {
             if (CollectionUtils.isNotEmpty(policyList)) {
                 Map<WorkerPolicy, JSONObject> policyMap = new HashMap<>();
                 JSONArray policyArray = new JSONArray();
+                workerPolicyObj.put("policyList", policyArray);
                 /** 由前置步骤处理人指定 **/
                 {
                     JSONObject policyObj = new JSONObject();

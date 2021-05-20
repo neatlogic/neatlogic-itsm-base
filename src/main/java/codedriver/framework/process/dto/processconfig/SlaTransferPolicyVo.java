@@ -10,11 +10,11 @@ package codedriver.framework.process.dto.processconfig;
  * @since 2021/5/19 18:09
  **/
 public class SlaTransferPolicyVo {
-    private String minute = "";
     private String expression = "";
     private Integer time = 0;
     private String transferTo = "";
     private String uuid = "";
+    private String minute = "";
 
     public String getMinute() {
         return minute;
