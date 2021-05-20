@@ -14,7 +14,7 @@ import java.util.List;
  **/
 public class FormAttributeAuthorityVo {
     private String action = "";
-    private String component = "";
+    private String type = "";
     private List<String> attributeUuidList = new ArrayList<>();
     private List<String> processStepUuidList = new ArrayList<>();
 
@@ -26,12 +26,12 @@ public class FormAttributeAuthorityVo {
         this.action = action;
     }
 
-    public String getComponent() {
-        return component;
+    public String getType() {
+        return type;
     }
 
-    public void setComponent(String component) {
-        this.component = component;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public List<String> getAttributeUuidList() {

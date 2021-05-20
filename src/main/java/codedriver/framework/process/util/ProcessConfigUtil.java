@@ -245,7 +245,7 @@ public class ProcessConfigUtil {
         if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
             notifyPolicyObj.putAll(notifyPolicyConfig);
         }
-        notifyPolicyObj.put("handler", handlerClass.getName());
+//        notifyPolicyObj.put("handler", handlerClass.getName());
         return notifyPolicyObj;
     }
 
@@ -393,7 +393,7 @@ public class ProcessConfigUtil {
                                     if (StringUtils.isNotBlank(handler)) {
                                         configObject.put("handler", handler);
                                     }
-                                    JSONObject handlerConfig = policyObj.getJSONObject("handlerConfig");
+                                    JSONObject handlerConfig = configObj.getJSONObject("handlerConfig");
                                     if (MapUtils.isNotEmpty(handlerConfig)) {
                                         configObject.put("handlerConfig", handlerConfig);
                                     }
@@ -441,8 +441,10 @@ public class ProcessConfigUtil {
         resultObj.put("isRequired", isRequired);
         /** 回复模板 **/
         Long commentTemplateId = configObj.getLong("commentTemplateId");
-        commentTemplateId = commentTemplateId == null ? -1 : commentTemplateId;
-        resultObj.put("commentTemplateId", commentTemplateId);
+//        commentTemplateId = commentTemplateId == null ? -1 : commentTemplateId;
+        if(commentTemplateId != null){
+            resultObj.put("commentTemplateId", commentTemplateId);
+        }
         /** 异常处理人 **/
         String defaultWorker = configObj.getString("defaultWorker");
         resultObj.put("defaultWorker", defaultWorker);
