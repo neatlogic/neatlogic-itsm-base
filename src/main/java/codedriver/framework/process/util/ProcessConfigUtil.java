@@ -240,14 +240,14 @@ public class ProcessConfigUtil {
      * @param handlerClass       通知策略类型
      * @return
      */
-    public static JSONObject makeupNotifyPolicyConfig(JSONObject notifyPolicyConfig, Class<? extends INotifyPolicyHandler> handlerClass) {
-        JSONObject notifyPolicyObj = new JSONObject();
-        if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
-            notifyPolicyObj.putAll(notifyPolicyConfig);
-        }
-//        notifyPolicyObj.put("handler", handlerClass.getName());
-        return notifyPolicyObj;
-    }
+//    public static JSONObject makeupNotifyPolicyConfig(JSONObject notifyPolicyConfig, Class<? extends INotifyPolicyHandler> handlerClass) {
+//        JSONObject notifyPolicyObj = new JSONObject();
+//        if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
+//            notifyPolicyObj.putAll(notifyPolicyConfig);
+//        }
+////        notifyPolicyObj.put("handler", handlerClass.getName());
+//        return notifyPolicyObj;
+//    }
 
     /**
      * 动作设置
@@ -256,15 +256,15 @@ public class ProcessConfigUtil {
      * @param handlerClass 通知策略类型
      * @return
      */
-    public static JSONObject makeupActionConfig(JSONObject actionConfig, Class<? extends INotifyPolicyHandler> handlerClass) {
-        JSONObject actionObj = new JSONObject();
-        if (MapUtils.isNotEmpty(actionConfig)) {
-            actionObj.putAll(actionConfig);
-        }
-        actionObj.put("handler", handlerClass.getName());
-        actionObj.put("integrationHandler", "");
-        return actionObj;
-    }
+//    public static JSONObject makeupActionConfig(JSONObject actionConfig, Class<? extends INotifyPolicyHandler> handlerClass) {
+//        JSONObject actionObj = new JSONObject();
+//        if (MapUtils.isNotEmpty(actionConfig)) {
+//            actionObj.putAll(actionConfig);
+//        }
+//        actionObj.put("handler", handlerClass.getName());
+//        actionObj.put("integrationHandler", "");
+//        return actionObj;
+//    }
 
     /**
      * 分配处理人

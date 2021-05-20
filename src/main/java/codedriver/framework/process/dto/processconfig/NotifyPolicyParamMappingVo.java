@@ -7,13 +7,12 @@ package codedriver.framework.process.dto.processconfig;
 
 /**
  * @author linbq
- * @since 2021/5/20 10:54
+ * @since 2021/5/20 18:11
  **/
-public class IntegrationParamMappingVo {
+public class NotifyPolicyParamMappingVo {
     private String name;
-    private String type;
     private String value;
-    private Integer isRequired;
+
     public String getName() {
         return name;
     }
@@ -22,27 +21,11 @@ public class IntegrationParamMappingVo {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getValue() {
         return value;
     }
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public Integer getIsRequired() {
-        return isRequired;
-    }
-
-    public void setIsRequired(Integer isRequired) {
-        this.isRequired = isRequired;
     }
 }

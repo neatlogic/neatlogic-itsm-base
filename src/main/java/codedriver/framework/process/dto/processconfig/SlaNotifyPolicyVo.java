@@ -19,7 +19,7 @@ public class SlaNotifyPolicyVo {
     private Integer time = 0;
     private String uuid = "";
     private Integer intervalTime = 0;
-    private JSONObject notifyPolicyConfig = new JSONObject();
+    private NotifyPolicyConfigVo notifyPolicyConfig;
 
     public String getExecuteType() {
         return executeType;
@@ -77,11 +77,11 @@ public class SlaNotifyPolicyVo {
         this.intervalTime = intervalTime;
     }
 
-    public JSONObject getNotifyPolicyConfig() {
+    public NotifyPolicyConfigVo getNotifyPolicyConfig() {
         return notifyPolicyConfig;
     }
 
-    public void setNotifyPolicyConfig(JSONObject notifyPolicyConfig) {
+    public void setNotifyPolicyConfig(NotifyPolicyConfigVo notifyPolicyConfig) {
         this.notifyPolicyConfig = notifyPolicyConfig;
     }
 }
