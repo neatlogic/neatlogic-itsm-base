@@ -122,7 +122,7 @@ public class ProcessConfigUtil {
      * @param stepActions   权限集合
      * @return
      */
-    public static JSONArray makeupAuthorityList(JSONArray authorityList, ProcessTaskOperationType[] stepActions) {
+    public static JSONArray regulateAuthorityList(JSONArray authorityList, ProcessTaskOperationType[] stepActions) {
         JSONArray authorityArray = new JSONArray();
         for (ProcessTaskOperationType stepAction : stepActions) {
             authorityArray.add(new JSONObject() {{
@@ -157,8 +157,8 @@ public class ProcessConfigUtil {
      * @param stepButtons
      * @return
      */
-    public static JSONArray makeupCustomButtonList(JSONArray customButtonList, IOperationType[] stepButtons) {
-        return makeupCustomButtonList(customButtonList, stepButtons, null);
+    public static JSONArray regulateCustomButtonList(JSONArray customButtonList, IOperationType[] stepButtons) {
+        return regulateCustomButtonList(customButtonList, stepButtons, null);
     }
 
     /**
@@ -169,7 +169,7 @@ public class ProcessConfigUtil {
      * @param remark
      * @return
      */
-    public static JSONArray makeupCustomButtonList(JSONArray customButtonList, IOperationType[] stepButtons, String remark) {
+    public static JSONArray regulateCustomButtonList(JSONArray customButtonList, IOperationType[] stepButtons, String remark) {
         JSONArray customButtonArray = new JSONArray();
         for (IOperationType stepButton : stepButtons) {
             customButtonArray.add(new JSONObject() {{
@@ -206,7 +206,7 @@ public class ProcessConfigUtil {
      * @param customStatusList 用户配置的数据
      * @return
      */
-    public static JSONArray makeupCustomStatusList(JSONArray customStatusList) {
+    public static JSONArray regulateCustomStatusList(JSONArray customStatusList) {
         JSONArray customStatusArray = new JSONArray();
         for (ProcessTaskStatus status : ProcessTaskStatus.values()) {
             customStatusArray.add(new JSONObject() {{
@@ -238,10 +238,10 @@ public class ProcessConfigUtil {
      * @param workerPolicyConfig 用户配置的数据
      * @return
      */
-    public static JSONObject makeupWorkerPolicyConfig(JSONObject workerPolicyConfig) {
+    public static JSONObject regulateWorkerPolicyConfig(JSONObject workerPolicyConfig) {
         JSONObject workerPolicyObj = new JSONObject();
         if (MapUtils.isNotEmpty(workerPolicyConfig)) {
-            JSONObject simpleSettings = makeupSimpleSettings(workerPolicyConfig);
+            JSONObject simpleSettings = regulateSimpleSettings(workerPolicyConfig);
             workerPolicyObj.putAll(simpleSettings);
             String executeMode = workerPolicyConfig.getString("executeMode");
             if (StringUtils.isBlank(executeMode)) {
@@ -387,7 +387,7 @@ public class ProcessConfigUtil {
      * @param configObj 用户配置的数据
      * @return
      */
-    private static JSONObject makeupSimpleSettings(JSONObject configObj) {
+    private static JSONObject regulateSimpleSettings(JSONObject configObj) {
         // TODO linbq 数据结构有问题，下面这些字段放在workerPolicyConfig里面了，应该放在与workerPolicyConfig同级
         if (configObj == null) {
             configObj = new JSONObject();
@@ -416,7 +416,12 @@ public class ProcessConfigUtil {
         return resultObj;
     }
 
-    public static String makeupProcessConfig(String config){
+    /**
+     * 校正流程图配置数据
+     * @param config 流程图配置数据
+     * @return
+     */
+    public static String regulateProcessConfig(String config){
         if (StringUtils.isNotBlank(config)) {
             JSONObject configObj = JSONObject.parseObject(config);
             if (MapUtils.isNotEmpty(configObj)) {
@@ -429,7 +434,7 @@ public class ProcessConfigUtil {
                     if (processStepInternalHandler == null) {
                         throw new ProcessStepUtilHandlerNotFoundException(ProcessStepHandlerType.END.getHandler());
                     }
-                    JSONObject processObj = processStepInternalHandler.makeupProcessStepConfig(process);
+                    JSONObject processObj = processStepInternalHandler.regulateProcessStepConfig(process);
                     JSONArray stepList = process.getJSONArray("stepList");
                     if (CollectionUtils.isNotEmpty(stepList)) {
                         stepList.removeIf(Objects::isNull);
@@ -442,7 +447,7 @@ public class ProcessConfigUtil {
                                     throw new ProcessStepUtilHandlerNotFoundException(handler);
                                 }
                                 JSONObject stepConfig = step.getJSONObject("stepConfig");
-                                JSONObject stepConfigObj = processStepInternalHandler.makeupProcessStepConfig(stepConfig);
+                                JSONObject stepConfigObj = processStepInternalHandler.regulateProcessStepConfig(stepConfig);
                                 step.put("stepConfig", stepConfigObj);
                             }
                         }

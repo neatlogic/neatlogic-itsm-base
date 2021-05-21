@@ -69,11 +69,11 @@ public interface IProcessStepInternalHandler {
     }
 
     /**
-     * 构造流程步骤配置数据
+     * 校正流程步骤配置数据，对配置数据中没用的字段删除，对缺失的字段用默认值补全。
      * @param configObj 配置数据
      * @return
      */
-    public default JSONObject makeupProcessStepConfig(JSONObject configObj) {
+    public default JSONObject regulateProcessStepConfig(JSONObject configObj) {
         return configObj;
     }
 
