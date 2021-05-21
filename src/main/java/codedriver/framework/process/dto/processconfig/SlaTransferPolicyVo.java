@@ -14,15 +14,7 @@ public class SlaTransferPolicyVo {
     private Integer time = 0;
     private String transferTo = "";
     private String uuid = "";
-    private String minute = "";
-
-    public String getMinute() {
-        return minute;
-    }
-
-    public void setMinute(String minute) {
-        this.minute = minute;
-    }
+    private String unit = "";
 
     public String getExpression() {
         return expression;
@@ -54,5 +46,13 @@ public class SlaTransferPolicyVo {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

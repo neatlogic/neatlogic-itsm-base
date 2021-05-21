@@ -344,7 +344,7 @@ public class ProcessConfigUtil {
                     policyObj.put("type", WorkerPolicy.ASSIGN.getValue());
                     policyObj.put("isChecked", 0);
                     JSONObject config = new JSONObject();
-                    config.put("workerList", new JSONArray());
+//                    config.put("workerList", new JSONArray());
                     policyObj.put("config", config);
                     policyMap.put(WorkerPolicy.ASSIGN, policyObj);
                     policyArray.add(policyObj);

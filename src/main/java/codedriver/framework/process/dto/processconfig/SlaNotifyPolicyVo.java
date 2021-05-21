@@ -15,10 +15,10 @@ public class SlaNotifyPolicyVo {
     private String executeType = "once";
     private String unit = "minute";
     private String expression = "";
-    private String intervalUnit = "day";
+    private String intervalUnit;
     private Integer time = 0;
     private String uuid = "";
-    private Integer intervalTime = 0;
+    private Integer intervalTime;
     private NotifyPolicyConfigVo notifyPolicyConfig;
 
     public String getExecuteType() {

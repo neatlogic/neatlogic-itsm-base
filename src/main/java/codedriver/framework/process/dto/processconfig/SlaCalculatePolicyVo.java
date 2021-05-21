@@ -23,6 +23,7 @@ public class SlaCalculatePolicyVo {
     private List<SlaCalculatePolicyPriorityVo> priorityList = new ArrayList<>();
     private String uuid = "";
     private List<ConditionGroupRelVo> conditionGroupRelList = new ArrayList<>();
+    private String unit;
 
     public Integer getEnablePriority() {
         return enablePriority;
@@ -78,5 +79,13 @@ public class SlaCalculatePolicyVo {
 
     public void setConditionGroupRelList(List<ConditionGroupRelVo> conditionGroupRelList) {
         this.conditionGroupRelList = conditionGroupRelList;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }
