@@ -3,20 +3,25 @@ package codedriver.framework.process.util;
 import codedriver.framework.form.constvalue.FormAttributeAction;
 import codedriver.framework.form.constvalue.FormAttributeAuthRange;
 import codedriver.framework.form.constvalue.FormAttributeAuthType;
+import codedriver.framework.lcs.LCSUtil;
+import codedriver.framework.lcs.PrintSingeColorFormatUtil;
+import codedriver.framework.lcs.SegmentPair;
+import codedriver.framework.lcs.SegmentRange;
 import codedriver.framework.notify.core.INotifyPolicyHandler;
 import codedriver.framework.process.constvalue.*;
+import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
+import codedriver.framework.process.stephandler.core.IProcessStepInternalHandler;
+import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class ProcessConfigUtil {
@@ -449,5 +454,65 @@ public class ProcessConfigUtil {
         String defaultWorker = configObj.getString("defaultWorker");
         resultObj.put("defaultWorker", defaultWorker);
         return resultObj;
+    }
+
+    public static String makeupProcessConfig(String config){
+        if (StringUtils.isNotBlank(config)) {
+            JSONObject configObj = JSONObject.parseObject(config);
+            if (MapUtils.isNotEmpty(configObj)) {
+                JSONObject process = configObj.getJSONObject("process");
+                if (MapUtils.isNotEmpty(process)) {
+                    JSONArray connectionList = process.getJSONArray("connectionList");
+                    process.remove("connectionList");
+//                    String source = JSONObject.toJSONString(process, SerializerFeature.MapSortField);
+                    IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(ProcessStepHandlerType.END.getHandler());
+                    if (processStepInternalHandler == null) {
+                        throw new ProcessStepUtilHandlerNotFoundException(ProcessStepHandlerType.END.getHandler());
+                    }
+                    JSONObject processObj = processStepInternalHandler.makeupProcessStepConfig(process);
+                    JSONArray stepList = process.getJSONArray("stepList");
+                    if (CollectionUtils.isNotEmpty(stepList)) {
+                        stepList.removeIf(Objects::isNull);
+                        for (int i = 0; i < stepList.size(); i++) {
+                            JSONObject step = stepList.getJSONObject(i);
+                            String handler = step.getString("handler");
+                            if(!Objects.equals(handler, ProcessStepHandlerType.END.getHandler())){
+                                processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
+                                if (processStepInternalHandler == null) {
+                                    throw new ProcessStepUtilHandlerNotFoundException(handler);
+                                }
+                                JSONObject stepConfig = step.getJSONObject("stepConfig");
+                                JSONObject stepConfigObj = processStepInternalHandler.makeupProcessStepConfig(stepConfig);
+                                step.put("stepConfig", stepConfigObj);
+                            }
+                        }
+                    }
+                    processObj.put("stepList", stepList);
+//                    String target = JSONObject.toJSONString(processObj, SerializerFeature.MapSortField);
+                    if (CollectionUtils.isNotEmpty(connectionList)) {
+                        connectionList.removeIf(Objects::isNull);
+                    } else {
+                        connectionList = new JSONArray();
+                    }
+                    processObj.put("connectionList", connectionList);
+                    configObj.put("process", processObj);
+//                    System.out.println("-------------------------");
+//                    List<SegmentPair> segmentPairList = LCSUtil.LCSCompare(source, target);
+//                    List<SegmentRange> oldSegmentRangeList = new ArrayList<>();
+//                    List<SegmentRange> newSegmentRangeList = new ArrayList<>();
+//                    for(SegmentPair segmentpair : segmentPairList) {
+//                        oldSegmentRangeList.add(new SegmentRange(segmentpair.getOldBeginIndex(), segmentpair.getOldEndIndex(), segmentpair.isMatch()));
+//                        newSegmentRangeList.add(new SegmentRange(segmentpair.getNewBeginIndex(), segmentpair.getNewEndIndex(), segmentpair.isMatch()));
+//                    }
+//                    LCSUtil.wrapChangePlace(source, oldSegmentRangeList, LCSUtil.SPAN_CLASS_DELETE, LCSUtil.SPAN_END);
+//                    PrintSingeColorFormatUtil.println();
+//                    LCSUtil.wrapChangePlace(target, newSegmentRangeList, LCSUtil.SPAN_CLASS_INSERT, LCSUtil.SPAN_END);
+//                    PrintSingeColorFormatUtil.println();
+//                    System.out.println("=========================");
+                }
+            }
+            return configObj.toJSONString();
+        }
+        return config;
     }
 }
