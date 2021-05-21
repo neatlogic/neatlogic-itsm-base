@@ -64,7 +64,9 @@ public interface IProcessStepInternalHandler {
      * @param configObj
      * @return JSONObject
      */
-    public JSONObject makeupConfig(JSONObject configObj);
+    public default JSONObject makeupConfig(JSONObject configObj) {
+        return configObj;
+    }
 
     /**
      * 构造流程步骤配置数据
