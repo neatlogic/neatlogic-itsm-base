@@ -239,39 +239,6 @@ public class ProcessConfigUtil {
     }
 
     /**
-     * 通知设置
-     *
-     * @param notifyPolicyConfig 用户配置的数据
-     * @param handlerClass       通知策略类型
-     * @return
-     */
-//    public static JSONObject makeupNotifyPolicyConfig(JSONObject notifyPolicyConfig, Class<? extends INotifyPolicyHandler> handlerClass) {
-//        JSONObject notifyPolicyObj = new JSONObject();
-//        if (MapUtils.isNotEmpty(notifyPolicyConfig)) {
-//            notifyPolicyObj.putAll(notifyPolicyConfig);
-//        }
-////        notifyPolicyObj.put("handler", handlerClass.getName());
-//        return notifyPolicyObj;
-//    }
-
-    /**
-     * 动作设置
-     *
-     * @param actionConfig 用户配置的数据
-     * @param handlerClass 通知策略类型
-     * @return
-     */
-//    public static JSONObject makeupActionConfig(JSONObject actionConfig, Class<? extends INotifyPolicyHandler> handlerClass) {
-//        JSONObject actionObj = new JSONObject();
-//        if (MapUtils.isNotEmpty(actionConfig)) {
-//            actionObj.putAll(actionConfig);
-//        }
-//        actionObj.put("handler", handlerClass.getName());
-//        actionObj.put("integrationHandler", "");
-//        return actionObj;
-//    }
-
-    /**
      * 分配处理人
      *
      * @param workerPolicyConfig 用户配置的数据
@@ -446,7 +413,6 @@ public class ProcessConfigUtil {
         resultObj.put("isRequired", isRequired);
         /** 回复模板 **/
         Long commentTemplateId = configObj.getLong("commentTemplateId");
-//        commentTemplateId = commentTemplateId == null ? -1 : commentTemplateId;
         if(commentTemplateId != null){
             resultObj.put("commentTemplateId", commentTemplateId);
         }
