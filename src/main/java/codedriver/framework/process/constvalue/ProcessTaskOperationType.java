@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.UserType;
 
-public enum ProcessTaskOperationType {
+public enum ProcessTaskOperationType implements IOperationType {
 
     TASK_VIEW("pocesstaskview","工单查看"),//有服务上报权限才能查看对应工单信息
     TASK_START("startprocess", "上报"),
@@ -103,10 +103,12 @@ public enum ProcessTaskOperationType {
         this.groupList = _groupList;
     }
 
+    @Override
     public String getValue() {
         return status;
     }
 
+    @Override
     public String getText() {
         return text;
     }

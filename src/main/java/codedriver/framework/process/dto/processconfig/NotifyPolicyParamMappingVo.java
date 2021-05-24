@@ -1,0 +1,40 @@
+/*
+ * Copyright(c) 2021 TechSureCo.,Ltd.AllRightsReserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
+package codedriver.framework.process.dto.processconfig;
+
+/**
+ * @author linbq
+ * @since 2021/5/20 18:11
+ **/
+public class NotifyPolicyParamMappingVo {
+    private String name;
+    private String type;
+    private String value;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+}
