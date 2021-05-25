@@ -6,7 +6,7 @@ public class EventTypeMoveException extends ApiRuntimeException {
 
 	private static final long serialVersionUID = -5791371013765232773L;
 
-	public EventTypeMoveException(String msg) {
+	public EventTypeMoveException(String msg, boolean flag) {
 		super(msg);
 	}
 
