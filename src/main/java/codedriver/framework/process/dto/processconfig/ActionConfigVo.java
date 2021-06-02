@@ -13,7 +13,7 @@ import java.util.List;
  **/
 public class ActionConfigVo {
     private String handler;
-    private String integrationHandler = "codedriver.module.process.integration.handler.ProcessActionIntegrationHandler";
+    private String integrationHandler;
     private List<ActionConfigActionVo> actionList;
 
     public String getHandler() {
