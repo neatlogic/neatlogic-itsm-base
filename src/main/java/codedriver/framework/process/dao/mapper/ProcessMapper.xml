@@ -450,6 +450,18 @@
 		SELECT `notify_policy_id` FROM `process_step_notify_policy` WHERE `process_step_uuid` = #{value}
 	</select>
 
+	<select id="getProcessListByUuidList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.ProcessVo">
+		SELECT
+			`uuid`,
+			`name`,
+			`is_active` as isActive
+		FROM `process`
+		WHERE `uuid` IN
+		<foreach collection="list" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</select>
+
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,

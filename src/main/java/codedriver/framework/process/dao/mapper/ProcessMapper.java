@@ -92,6 +92,8 @@ public interface ProcessMapper {
 
 	public Long getNotifyPolicyIdByProcessStepUuid(String processStepUuid);
 
+	List<ProcessVo> getProcessListByUuidList(List<String> uuidList);
+
 	public int insertProcess(ProcessVo processVo);
 
 	public int insertProcessStep(ProcessStepVo processStepVo);
