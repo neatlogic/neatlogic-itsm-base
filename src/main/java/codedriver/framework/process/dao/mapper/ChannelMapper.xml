@@ -177,28 +177,22 @@
 
 	<select id="getChannelByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelVo" useCache="true">
 		SELECT
-		c.`uuid`,
-		c.`name`,
-		c.`parent_uuid` AS parentUuid,
-		c.`is_active` AS isActive,
-		c.`icon`,
-		c.`color`,
-		c.`desc`,
-		c.`sort`,
-		c.`sla`,
-		c.`allow_desc` AS allowDesc,
-		c.`help`,
-		c.`is_active_help` AS isActiveHelp,
-		c.`channel_type_uuid` AS channelTypeUuid,
-		c.`support`,
-		cp.`process_uuid` AS processUuid,
-		cw.`worktime_uuid` AS worktimeUuid
-		FROM
-		`channel` c
-		JOIN `channel_process` cp ON cp.channel_uuid = c.uuid
-		JOIN `channel_worktime` cw ON cw.channel_uuid = c.uuid
-		WHERE
-		`uuid` = #{uuid}
+		`uuid`,
+		`name`,
+		`parent_uuid` AS parentUuid,
+		`is_active` AS isActive,
+		`icon`,
+		`color`,
+		`desc`,
+		`sort`,
+		`sla`,
+		`allow_desc` AS allowDesc,
+		`help`,
+		`is_active_help` AS isActiveHelp,
+		`channel_type_uuid` AS channelTypeUuid,
+		`support`
+		FROM `channel`
+		WHERE `uuid` = #{value}
 	</select>
 
 	<select id="getChannelByName" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelVo" useCache="false">
@@ -326,8 +320,11 @@
 	</select>
 
 	<select id="getProcessUuidByChannelUuid" parameterType="java.lang.String" resultType="java.lang.String" useCache="false">
-		SELECT `process_uuid` FROM `channel_process` WHERE `channel_uuid` =
-		#{channelUuid}
+		SELECT `process_uuid` FROM `channel_process` WHERE `channel_uuid` = #{value}
+	</select>
+
+	<select id="getWorktimeUuidByChannelUuid" parameterType="java.lang.String" resultType="java.lang.String" useCache="false">
+		SELECT `worktime_uuid` FROM `channel_worktime` WHERE `channel_uuid` = #{value}
 	</select>
 
 	<select id="getChannelAuthorityListByChannelUuid" parameterType="java.lang.String" resultType="codedriver.framework.dto.AuthorityVo" useCache="false">
