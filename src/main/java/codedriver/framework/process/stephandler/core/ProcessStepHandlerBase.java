@@ -1419,7 +1419,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 processTaskMapper.insertIgnoreProcessTaskConfig(new ProcessTaskConfigVo(hash, processVo.getConfig()));
             }
             ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
-            processTaskVo.setWorktimeUuid(channelVo.getWorktimeUuid());
+            String worktimeUuid = channelMapper.getWorktimeUuidByChannelUuid(processTaskVo.getChannelUuid());
+            processTaskVo.setWorktimeUuid(worktimeUuid);
             /** 生成工单号 **/
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelVo.getChannelTypeUuid());
             if (processTaskSerialNumberPolicyVo == null) {

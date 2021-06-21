@@ -117,6 +117,27 @@ public class ChannelVo extends BasePageVo implements Serializable {
     @JSONField(serialize = false)
     private transient List<String> authorizedUuidList;
 
+    public ChannelVo() {
+
+    }
+
+    public ChannelVo(ChannelVo channelVo) {
+        this.uuid = channelVo.uuid;
+        this.name = channelVo.name;
+        this.isActive = channelVo.isActive;
+        this.desc = channelVo.desc;
+        this.icon = channelVo.icon;
+        this.color = channelVo.color;
+        this.parentUuid = channelVo.parentUuid;
+        this.allowDesc = channelVo.allowDesc;
+        this.help = channelVo.help;
+        this.isActiveHelp = channelVo.isActiveHelp;
+        this.sla = channelVo.sla;
+        this.channelTypeUuid = channelVo.channelTypeUuid;
+        this.support = channelVo.support;
+        this.sort = channelVo.sort;
+    }
+
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
             uuid = UUID.randomUUID().toString().replace("-", "");

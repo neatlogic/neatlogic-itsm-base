@@ -37,6 +37,8 @@ public interface ChannelMapper {
 
     public String getProcessUuidByChannelUuid(String channelUuid);
 
+    public String getWorktimeUuidByChannelUuid(String channelUuid);
+
     public List<AuthorityVo> getChannelAuthorityListByChannelUuid(String uuid);
 
     public List<String> getAuthorizedChannelUuidList(@Param("userUuid") String userUuid,
