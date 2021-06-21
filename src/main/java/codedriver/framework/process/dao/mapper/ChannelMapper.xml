@@ -489,12 +489,11 @@
 		c.`color`,
 		c.`desc`,
 		c.`channel_type_uuid`,
-		CASE WHEN cu.`user_uuid` IS NULL THEN 0 ELSE 1 END AS
-		`isFavorite`,
+		1 as `isFavorite`,
 		c.`sort`
 		FROM
 		`channel` c
-		LEFT JOIN
+		JOIN
 		`channel_user` cu ON cu.`channel_uuid` = c.`uuid` AND cu.`user_uuid` = #{userUuid}
 		WHERE
 		NOT EXISTS(
