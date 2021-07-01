@@ -1521,6 +1521,24 @@
         <result column="start_time" property="startTime"/>
         <result column="isShow" property="isShow"/>
         <result column="endTime" property="endTime"/>
+        <association property="channelVo" javaType="codedriver.framework.process.dto.ChannelVo">
+            <result property="uuid" column="channelUuid"/>
+            <result property="name" column="channelName"/>
+            <association property="channelTypeVo" javaType="codedriver.framework.process.dto.ChannelTypeVo">
+                <result property="uuid" column="channelTypeUuid"/>
+                <result property="color" column="channelTypeColor"/>
+                <result property="name" column="channelTypeName"/>
+            </association>
+            <association property="parent" javaType="codedriver.framework.process.dto.CatalogVo">
+                <result property="uuid" column="catalogUuid"/>
+                <result property="name" column="catalogName"/>
+            </association>
+        </association>
+        <association property="priority" javaType="codedriver.framework.process.dto.PriorityVo">
+            <result property="uuid" column="priorityUuid"/>
+            <result property="name" column="priorityName"/>
+            <result property="color" column="priorityColor"/>
+        </association>
         <collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
             <result column="stepId" property="id"/>
             <result column="stepName" property="name"/>
@@ -1532,6 +1550,22 @@
             <result column="stepActiveTime" property="activeTime"/>
             <result column="stepStartTime" property="startTime"/>
             <result column="stepEndTime" property="endTime"/>
+            <collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+                <result column="stepWorkerType" property="type"/>
+                <result column="stepWorkerUserType" property="userType"/>
+                <result column="stepWorkerUuid" property="uuid"/>
+            </collection>
+            <collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+                <result column="userType" property="stepUserUserType"/>
+                <result column="stepUserUserStatus" property="status"/>
+                <association property="userVo" javaType="codedriver.framework.dto.UserVo">
+                    <result column="stepUserUserUuid" property="uuid"/>
+                    <result column="stepUserUserName" property="userName"/>
+                    <result column="stepUserUserInfo" property="userInfo"/>
+                    <result column="stepUserUserVipLevel" property="vipLevel"/>
+                    <result column="stepUserUserPinyin" property="pinyin"/>
+                </association>
+            </collection>
         </collection>
     </resultMap>
 
@@ -1549,21 +1583,48 @@
                p.`worktime_uuid`,
                p.`start_time`,
                p.`end_time`,
-               p.`is_show`      as isShow,
-               ps.`id`          as stepId,
-               ps.`name`        as stepName,
-               ps.`status`      as stepStatus,
+               p.`is_show`       as isShow,
+               pri.`uuid`        as priorityUuid,
+               pri.`name`        as priorityName,
+               pri.`color`       as priorityColor,
+               cata.`uuid`       as catalogUuid,
+               cata.`name`       as catalogName,
+               ct.`uuid`         as channelTypeUuid,
+               ct.`name`         as channelTypeName,
+               ct.`color`        as channelTypeColor,
+               c.`uuid`          as channelUuid,
+               c.`name`          as channelName,
+               ps.`id`           as stepId,
+               ps.`name`         as stepName,
+               ps.`status`       as stepStatus,
                ps.`type`,
                ps.`handler`,
                ps.`is_active`,
-               ps.`config_hash` as stepConfigHash,
-               ps.`active_time` as stepActiveTime,
-               ps.`start_time`  as stepStartTime,
-               ps.`end_time`    as stepEndTime
+               ps.`config_hash`  as stepConfigHash,
+               ps.`active_time`  as stepActiveTime,
+               ps.`start_time`   as stepStartTime,
+               ps.`end_time`     as stepEndTime,
+               ptsw.uuid         as stepWorkerUuid,
+               ptsw.type         as stepWorkerType,
+               ptsw.user_type    as stepWorkerUserType,
+               ptsu.status       as stepUserUserStatus,
+               ptsu.user_type    as stepUserUserType,
+               ptsuser.user_name as stepUserUserName,
+               ptsuser.uuid      as stepUserUserUuid,
+               ptsuser.user_info as stepUserUserInfo,
+               ptsuser.vip_level as stepUserUserVipLevel,
+               ptsuser.pinyin    as stepUserUserPinyin
         from `processtask` p
-                 left join
-             `processtask_step` ps
-             on p.`id` = ps.`processtask_id`
+        left join `processtask_step` ps on p.`id` = ps.`processtask_id`
+        left join `priority` pri on p.`priority_uuid` = pri.`uuid`
+        left join `channel` c on p.`channel_uuid` = c.`uuid`
+        left join `catalog` cata on c.`parent_uuid` = cata.`uuid`
+        left join `channel_type` ct on c.`channel_type_uuid` = ct.`uuid`
+        left join `processtask_step_user` ptsu on ps.`processtask_id` = ptsu.`processtask_id`
+        and ps.`id` = ptsu.`processtask_step_id`
+        left join `processtask_step_worker` ptsw on ps.`processtask_id` = ptsw.`processtask_id`
+        and ps.`id` = ptsw.`processtask_step_id`
+        left join `user` ptsuser on ptsu.`user_uuid` = ptsuser.`uuid`
         where p.`id` = #{value}
     </select>
 
