@@ -250,7 +250,7 @@ public class ProcessConfigUtil {
             workerPolicyObj.put("executeMode", executeMode);
             JSONArray policyList = workerPolicyConfig.getJSONArray("policyList");
             if (CollectionUtils.isNotEmpty(policyList)) {
-                Map<WorkerPolicy, JSONObject> policyMap = new HashMap<>();
+                Map<WorkerPolicy, JSONObject> policyMap = new LinkedHashMap<>();
                 JSONArray policyArray = new JSONArray();
                 workerPolicyObj.put("policyList", policyArray);
                 /** 由前置步骤处理人指定 **/
@@ -264,7 +264,6 @@ public class ProcessConfigUtil {
                     config.put("processStepUuidList", new JSONArray());
                     policyObj.put("config", config);
                     policyMap.put(WorkerPolicy.PRESTEPASSIGN, policyObj);
-                    policyArray.add(policyObj);
                 }
                 /** 复制前置步骤处理人 **/
                 {
@@ -276,7 +275,6 @@ public class ProcessConfigUtil {
                     config.put("processStepUuidList", "");//TODO 这里是单选，应该改成processStepUuid
                     policyObj.put("config", config);
                     policyMap.put(WorkerPolicy.COPY, policyObj);
-                    policyArray.add(policyObj);
                 }
                 /** 表单值 **/
                 {
@@ -288,7 +286,6 @@ public class ProcessConfigUtil {
                     config.put("attributeUuid", "");
                     policyObj.put("config", config);
                     policyMap.put(WorkerPolicy.FORM, policyObj);
-                    policyArray.add(policyObj);
                 }
                 /** 分派器 **/
                 {
@@ -301,7 +298,6 @@ public class ProcessConfigUtil {
                     config.put("handlerConfig", new JSONObject());
                     policyObj.put("config", config);
                     policyMap.put(WorkerPolicy.AUTOMATIC, policyObj);
-                    policyArray.add(policyObj);
                 }
                 /** 自定义 **/
                 {
@@ -313,22 +309,22 @@ public class ProcessConfigUtil {
 //                    config.put("workerList", new JSONArray());
                     policyObj.put("config", config);
                     policyMap.put(WorkerPolicy.ASSIGN, policyObj);
-                    policyArray.add(policyObj);
                 }
                 for (int i = 0; i < policyList.size(); i++) {
                     JSONObject policyObj = policyList.getJSONObject(i);
                     if (MapUtils.isNotEmpty(policyObj)) {
+                        WorkerPolicy type = WorkerPolicy.getWorkerPolicy(policyObj.getString("type"));
+                        if (type == null) {
+                            continue;
+                        }
+                        JSONObject configObj = policyObj.getJSONObject("config");
+                        if (MapUtils.isEmpty(configObj)) {
+                            continue;
+                        }
+                        JSONObject policyObject = policyMap.remove(type);
+                        policyArray.add(policyObject);
                         Integer isChecked = policyObj.getInteger("isChecked");
                         if (Objects.equals(isChecked, 1)) {
-                            WorkerPolicy type = WorkerPolicy.getWorkerPolicy(policyObj.getString("type"));
-                            if (type == null) {
-                                continue;
-                            }
-                            JSONObject configObj = policyObj.getJSONObject("config");
-                            if (MapUtils.isEmpty(configObj)) {
-                                continue;
-                            }
-                            JSONObject policyObject = policyMap.get(type);
                             policyObject.put("isChecked", 1);
                             JSONObject configObject = policyObject.getJSONObject("config");
                             switch (type) {
@@ -341,18 +337,21 @@ public class ProcessConfigUtil {
                                     if (CollectionUtils.isNotEmpty(processStepUuidList)) {
                                         configObject.put("processStepUuidList", processStepUuidList);
                                     }
+//                                    policyArray.add(policyObject);
                                     break;
                                 case COPY:
                                     String processStepUuid = configObj.getString("processStepUuidList");
                                     if (StringUtils.isNotBlank(processStepUuid)) {
                                         configObject.put("processStepUuidList", processStepUuid);
                                     }
+//                                    policyArray.add(policyObject);
                                     break;
                                 case FORM:
                                     String attributeUuid = configObj.getString("attributeUuid");
                                     if (StringUtils.isNotBlank(attributeUuid)) {
                                         configObject.put("attributeUuid", attributeUuid);
                                     }
+//                                    policyArray.add(policyObject);
                                     break;
                                 case AUTOMATIC:
                                     String handler = configObj.getString("handler");
@@ -363,17 +362,24 @@ public class ProcessConfigUtil {
                                     if (MapUtils.isNotEmpty(handlerConfig)) {
                                         configObject.put("handlerConfig", handlerConfig);
                                     }
+//                                    policyArray.add(policyObject);
                                     break;
                                 case ASSIGN:
                                     JSONArray workerList = configObj.getJSONArray("workerList");
                                     if (CollectionUtils.isNotEmpty(workerList)) {
                                         configObject.put("workerList", workerList);
                                     }
+//                                    policyArray.add(policyObject);
                                     break;
                                 default:
                                     break;
                             }
                         }
+                    }
+                }
+                if (MapUtils.isNotEmpty(policyMap)) {
+                    for (Map.Entry<WorkerPolicy, JSONObject> entry : policyMap.entrySet()) {
+                        policyArray.add(entry.getValue());
                     }
                 }
             }
@@ -418,49 +424,52 @@ public class ProcessConfigUtil {
 
     /**
      * 校正流程图配置数据
-     * @param config 流程图配置数据
+     * @param configObj 流程图配置数据
      * @return
      */
-    public static String regulateProcessConfig(String config){
-        if (StringUtils.isNotBlank(config)) {
-            JSONObject configObj = JSONObject.parseObject(config);
-            if (MapUtils.isNotEmpty(configObj)) {
-                JSONObject process = configObj.getJSONObject("process");
-                if (MapUtils.isNotEmpty(process)) {
-                    JSONArray connectionList = process.getJSONArray("connectionList");
-                    process.remove("connectionList");
+    public static String regulateProcessConfig(JSONObject configObj){
+        if (configObj == null) {
+            return null;
+        }
+        if (configObj.isEmpty()) {
+            return "{}";
+        }
+        JSONObject process = configObj.getJSONObject("process");
+        if (MapUtils.isNotEmpty(process)) {
+            JSONArray connectionList = process.getJSONArray("connectionList");
+            process.remove("connectionList");
 //                    String source = JSONObject.toJSONString(process, SerializerFeature.MapSortField);
-                    IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(ProcessStepHandlerType.END.getHandler());
-                    if (processStepInternalHandler == null) {
-                        throw new ProcessStepUtilHandlerNotFoundException(ProcessStepHandlerType.END.getHandler());
-                    }
-                    JSONObject processObj = processStepInternalHandler.regulateProcessStepConfig(process);
-                    JSONArray stepList = process.getJSONArray("stepList");
-                    if (CollectionUtils.isNotEmpty(stepList)) {
-                        stepList.removeIf(Objects::isNull);
-                        for (int i = 0; i < stepList.size(); i++) {
-                            JSONObject step = stepList.getJSONObject(i);
-                            String handler = step.getString("handler");
-                            if(!Objects.equals(handler, ProcessStepHandlerType.END.getHandler())){
-                                processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
-                                if (processStepInternalHandler == null) {
-                                    throw new ProcessStepUtilHandlerNotFoundException(handler);
-                                }
-                                JSONObject stepConfig = step.getJSONObject("stepConfig");
-                                JSONObject stepConfigObj = processStepInternalHandler.regulateProcessStepConfig(stepConfig);
-                                step.put("stepConfig", stepConfigObj);
-                            }
+            IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(ProcessStepHandlerType.END.getHandler());
+            if (processStepInternalHandler == null) {
+                throw new ProcessStepUtilHandlerNotFoundException(ProcessStepHandlerType.END.getHandler());
+            }
+            JSONObject processObj = processStepInternalHandler.regulateProcessStepConfig(process);
+            JSONArray stepList = process.getJSONArray("stepList");
+            if (CollectionUtils.isNotEmpty(stepList)) {
+                stepList.removeIf(Objects::isNull);
+                for (int i = 0; i < stepList.size(); i++) {
+                    JSONObject step = stepList.getJSONObject(i);
+                    String handler = step.getString("handler");
+                    if(!Objects.equals(handler, ProcessStepHandlerType.END.getHandler())){
+                        processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
+                        if (processStepInternalHandler == null) {
+                            throw new ProcessStepUtilHandlerNotFoundException(handler);
                         }
+                        JSONObject stepConfig = step.getJSONObject("stepConfig");
+                        JSONObject stepConfigObj = processStepInternalHandler.regulateProcessStepConfig(stepConfig);
+                        step.put("stepConfig", stepConfigObj);
                     }
-                    processObj.put("stepList", stepList);
+                }
+            }
+            processObj.put("stepList", stepList);
 //                    String target = JSONObject.toJSONString(processObj, SerializerFeature.MapSortField);
-                    if (CollectionUtils.isNotEmpty(connectionList)) {
-                        connectionList.removeIf(Objects::isNull);
-                    } else {
-                        connectionList = new JSONArray();
-                    }
-                    processObj.put("connectionList", connectionList);
-                    configObj.put("process", processObj);
+            if (CollectionUtils.isNotEmpty(connectionList)) {
+                connectionList.removeIf(Objects::isNull);
+            } else {
+                connectionList = new JSONArray();
+            }
+            processObj.put("connectionList", connectionList);
+            configObj.put("process", processObj);
 //                    System.out.println("-------------------------");
 //                    List<SegmentPair> segmentPairList = LCSUtil.LCSCompare(source, target);
 //                    List<SegmentRange> oldSegmentRangeList = new ArrayList<>();
@@ -474,10 +483,7 @@ public class ProcessConfigUtil {
 //                    LCSUtil.wrapChangePlace(target, newSegmentRangeList, LCSUtil.SPAN_CLASS_INSERT, LCSUtil.SPAN_END);
 //                    PrintSingeColorFormatUtil.println();
 //                    System.out.println("=========================");
-                }
-            }
-            return configObj.toJSONString();
         }
-        return config;
+        return configObj.toJSONString();
     }
 }
