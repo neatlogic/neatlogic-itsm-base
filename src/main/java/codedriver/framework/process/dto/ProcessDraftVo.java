@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import java.util.Date;
 import java.util.UUID;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
@@ -23,7 +24,7 @@ public class ProcessDraftVo {
 	private String name;
 
 	@EntityField(name = "流程图配置", type = ApiParamType.JSONOBJECT)
-	private String config;
+	private JSONObject config;
 	
 	@EntityField(name = "保存时间", type = ApiParamType.LONG)
 	private Date fcd;
@@ -31,6 +32,8 @@ public class ProcessDraftVo {
 	private transient String fcu;
 	@JSONField(serialize=false)
 	private transient String md5;
+
+	private transient String configStr;
 
 	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
@@ -59,12 +62,12 @@ public class ProcessDraftVo {
 		this.name = name;
 	}
 
-	public String getConfig() {
+	public JSONObject getConfig() {
 		return config;
 	}
 
-	public void setConfig(String config) {
-		this.config = config;
+	public void setConfig(String configStr) {
+		this.config = JSONObject.parseObject(configStr);
 	}
 
 	public Date getFcd() {
@@ -87,14 +90,21 @@ public class ProcessDraftVo {
 		if(md5 != null) {
 			return md5;
 		}
-		if (StringUtils.isBlank(config)) {
+		if (config != null) {
 			return null;
 		}
-		md5 = "{MD5}" + DigestUtils.md5DigestAsHex(config.getBytes());
+		md5 = "{MD5}" + DigestUtils.md5DigestAsHex(config.toJSONString().getBytes());
 		return md5;
 	}
 
 	public void setMd5(String md5) {
 		this.md5 = md5;
+	}
+
+	public String getConfigStr() {
+		if (config != null) {
+			return config.toJSONString();
+		}
+		return configStr;
 	}
 }

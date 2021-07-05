@@ -498,7 +498,7 @@
 		#{uuid},
 		#{name},
 		#{isActive},
-		#{config},
+		#{configStr},
 		now(3),
 		#{fcu}
 		)
@@ -620,7 +620,7 @@
 		#{uuid},
 		#{processUuid},
 		#{name},
-		#{config},
+		#{configStr},
 		now(3),
 		#{fcu},
 		#{md5}
@@ -645,8 +645,8 @@
 		<if test="isActive != null">
 			`is_active` = #{isActive},
 		</if>
-		<if test="config != null">
-			`config` = #{config},
+		<if test="configStr != null and configStr != ''">
+			`config` = #{configStr},
 		</if>
 		`uuid` = #{uuid}
 		WHERE `uuid` = #{uuid}
