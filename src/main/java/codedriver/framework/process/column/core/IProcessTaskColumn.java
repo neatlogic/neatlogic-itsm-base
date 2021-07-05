@@ -140,7 +140,7 @@ public interface IProcessTaskColumn {
      * @Params: []
      * @Returns: java.lang.String
      **/
-    public String getSortSqlColumn();
+    public String getSortSqlColumn(Boolean isColumn);
 
     /**
      * @Description: 重新渲染字段

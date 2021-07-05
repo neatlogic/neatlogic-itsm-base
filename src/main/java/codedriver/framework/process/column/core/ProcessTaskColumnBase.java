@@ -90,11 +90,11 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
     }
 
     @Override
-    public String getSortSqlColumn() {
-        return getMySortSqlColumn();
+    public String getSortSqlColumn(Boolean isColumn) {
+        return getMySortSqlColumn(isColumn);
     }
 
-    protected String getMySortSqlColumn() {
+    protected String getMySortSqlColumn(Boolean isColumn) {
         return StringUtils.EMPTY;
     }
 

@@ -51,8 +51,11 @@ public class SqlTableUtil {
                 add(new JoinTableColumnVo(new ProcessTaskStepSqlTable(), new ProcessTaskSlaSqlTable(), new HashMap<String, String>() {{
                     put(ProcessTaskStepSqlTable.FieldEnum.PROCESSTASK_ID.getValue(), ProcessTaskSlaSqlTable.FieldEnum.PROCESSTASK_ID.getValue());
                 }}));
-                add(new JoinTableColumnVo(new ProcessTaskSlaSqlTable(), new ProcessTaskSlaTimeSqlTable(), new HashMap<String, String>() {{
-                    put(ProcessTaskSlaSqlTable.FieldEnum.ID.getValue(), ProcessTaskSlaTimeSqlTable.FieldEnum.SLA_ID.getValue());
+                add(new JoinTableColumnVo(new ProcessTaskStepSqlTable(), new ProcessTaskStepSlaSqlTable(), new HashMap<String, String>() {{
+                    put(ProcessTaskStepSqlTable.FieldEnum.ID.getValue(), ProcessTaskStepSlaSqlTable.FieldEnum.PROCESSTASK_STEP_ID.getValue());
+                }}));
+                add(new JoinTableColumnVo(new ProcessTaskStepSlaSqlTable(), new ProcessTaskSlaTimeSqlTable(), new HashMap<String, String>() {{
+                    put(ProcessTaskStepSlaSqlTable.FieldEnum.SLA_ID.getValue(), ProcessTaskSlaTimeSqlTable.FieldEnum.SLA_ID.getValue());
                 }}));
             }
         };
