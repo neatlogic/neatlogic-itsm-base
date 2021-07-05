@@ -50,8 +50,8 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     @EntityField(name = "引用数量", type = ApiParamType.INTEGER)
     private int referenceCount;
-    @JSONField(serialize = false)
-    private transient JSONObject configObj;
+//    @JSONField(serialize = false)
+//    private transient JSONObject configObj;
     // @EntityField(name = "流程表单uuid", type = ApiParamType.STRING)
     private String formUuid;
     private List<ProcessStepVo> stepList;
