@@ -337,21 +337,18 @@ public class ProcessConfigUtil {
                                     if (CollectionUtils.isNotEmpty(processStepUuidList)) {
                                         configObject.put("processStepUuidList", processStepUuidList);
                                     }
-//                                    policyArray.add(policyObject);
                                     break;
                                 case COPY:
                                     String processStepUuid = configObj.getString("processStepUuidList");
                                     if (StringUtils.isNotBlank(processStepUuid)) {
                                         configObject.put("processStepUuidList", processStepUuid);
                                     }
-//                                    policyArray.add(policyObject);
                                     break;
                                 case FORM:
                                     String attributeUuid = configObj.getString("attributeUuid");
                                     if (StringUtils.isNotBlank(attributeUuid)) {
                                         configObject.put("attributeUuid", attributeUuid);
                                     }
-//                                    policyArray.add(policyObject);
                                     break;
                                 case AUTOMATIC:
                                     String handler = configObj.getString("handler");
@@ -362,14 +359,12 @@ public class ProcessConfigUtil {
                                     if (MapUtils.isNotEmpty(handlerConfig)) {
                                         configObject.put("handlerConfig", handlerConfig);
                                     }
-//                                    policyArray.add(policyObject);
                                     break;
                                 case ASSIGN:
                                     JSONArray workerList = configObj.getJSONArray("workerList");
                                     if (CollectionUtils.isNotEmpty(workerList)) {
                                         configObject.put("workerList", workerList);
                                     }
-//                                    policyArray.add(policyObject);
                                     break;
                                 default:
                                     break;
