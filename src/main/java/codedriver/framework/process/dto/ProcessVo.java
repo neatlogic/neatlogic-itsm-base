@@ -50,8 +50,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     @EntityField(name = "引用数量", type = ApiParamType.INTEGER)
     private int referenceCount;
-//    @JSONField(serialize = false)
-//    private transient JSONObject configObj;
     // @EntityField(name = "流程表单uuid", type = ApiParamType.STRING)
     private String formUuid;
     private List<ProcessStepVo> stepList;
@@ -115,17 +113,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
     public void setConfig(String configStr) {
         this.config = JSONObject.parseObject(configStr);
     }
-
-//    public JSONObject getConfigObj() {
-//        if (configObj == null && StringUtils.isNotBlank(config)) {
-//            configObj = JSONObject.parseObject(config);
-//        }
-//        return configObj;
-//    }
-
-//    public void setConfigObj(JSONObject configObj) {
-//        this.configObj = configObj;
-//    }
 
     public List<ProcessStepVo> getStepList() {
         return stepList;
