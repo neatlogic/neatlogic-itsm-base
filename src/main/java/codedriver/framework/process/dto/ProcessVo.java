@@ -286,6 +286,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
         JSONArray actionList = (JSONArray)JSONPath.read(configStr, "process.processConfig.actionConfig.actionList");
         if(CollectionUtils.isNotEmpty(actionList)){
+            integrationUuidList = new ArrayList<>();
             for (int i = 0; i < actionList.size(); i++) {
                 JSONObject ationObj = actionList.getJSONObject(i);
                 String integrationUuid = ationObj.getString("integrationUuid");
