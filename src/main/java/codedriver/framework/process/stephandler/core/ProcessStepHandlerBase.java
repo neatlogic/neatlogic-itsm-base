@@ -1419,10 +1419,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             ProcessVo processVo = processMapper.getProcessByUuid(currentProcessTaskStepVo.getProcessUuid());
             /* 对流程配置进行散列处理 **/
-            if (StringUtils.isNotBlank(processVo.getConfig())) {
-                String hash = DigestUtils.md5DigestAsHex(processVo.getConfig().getBytes());
+            String configStr = processVo.getConfigStr();
+            if (StringUtils.isNotBlank(configStr)) {
+                String hash = DigestUtils.md5DigestAsHex(configStr.getBytes());
                 processTaskVo.setConfigHash(hash);
-                processTaskMapper.insertIgnoreProcessTaskConfig(new ProcessTaskConfigVo(hash, processVo.getConfig()));
+                processTaskMapper.insertIgnoreProcessTaskConfig(new ProcessTaskConfigVo(hash, configStr));
             }
             ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
             String worktimeUuid = channelMapper.getWorktimeUuidByChannelUuid(processTaskVo.getChannelUuid());

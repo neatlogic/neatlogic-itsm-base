@@ -45,13 +45,11 @@ public class ProcessVo extends BasePageVo implements Serializable {
     @EntityField(name = "是否激活", type = ApiParamType.INTEGER)
     private Integer isActive;
 
-    @EntityField(name = "流程图配置", type = ApiParamType.STRING)
-    private String config;
+    @EntityField(name = "流程图配置", type = ApiParamType.JSONOBJECT)
+    private JSONObject config;
 
     @EntityField(name = "引用数量", type = ApiParamType.INTEGER)
     private int referenceCount;
-    @JSONField(serialize = false)
-    private transient JSONObject configObj;
     // @EntityField(name = "流程表单uuid", type = ApiParamType.STRING)
     private String formUuid;
     private List<ProcessStepVo> stepList;
@@ -70,6 +68,8 @@ public class ProcessVo extends BasePageVo implements Serializable {
     private transient Long notifyPolicyId;
     @JSONField(serialize = false)
     private transient List<String> integrationUuidList = new ArrayList<>();
+
+    private transient String configStr;
 
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
@@ -106,23 +106,12 @@ public class ProcessVo extends BasePageVo implements Serializable {
         this.isActive = isActive;
     }
 
-    public String getConfig() {
+    public JSONObject getConfig() {
         return config;
     }
 
-    public void setConfig(String config) {
-        this.config = config;
-    }
-
-    public JSONObject getConfigObj() {
-        if (configObj == null && StringUtils.isNotBlank(config)) {
-            configObj = JSONObject.parseObject(config);
-        }
-        return configObj;
-    }
-
-    public void setConfigObj(JSONObject configObj) {
-        this.configObj = configObj;
+    public void setConfig(String configStr) {
+        this.config = JSONObject.parseObject(configStr);
     }
 
     public List<ProcessStepVo> getStepList() {
@@ -130,7 +119,8 @@ public class ProcessVo extends BasePageVo implements Serializable {
     }
 
     public void makeupConfigObj() {
-        JSONObject processObj = (JSONObject)JSONPath.read(config, "process");
+        configStr = getConfigStr();
+        JSONObject processObj = (JSONObject)JSONPath.read(configStr, "process");
         if (MapUtils.isEmpty(processObj)) {
             return;
         }
@@ -292,9 +282,9 @@ public class ProcessVo extends BasePageVo implements Serializable {
             }
         }
         /** 组装通知策略id **/
-        notifyPolicyId = (Long)JSONPath.read(config, "process.processConfig.notifyPolicyConfig.policyId");
+        notifyPolicyId = (Long)JSONPath.read(configStr, "process.processConfig.notifyPolicyConfig.policyId");
 
-        JSONArray actionList = (JSONArray)JSONPath.read(config, "process.processConfig.actionConfig.actionList");
+        JSONArray actionList = (JSONArray)JSONPath.read(configStr, "process.processConfig.actionConfig.actionList");
         if(CollectionUtils.isNotEmpty(actionList)){
             for (int i = 0; i < actionList.size(); i++) {
                 JSONObject ationObj = actionList.getJSONObject(i);
@@ -380,5 +370,12 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     public void setIntegrationUuidList(List<String> integrationUuidList) {
         this.integrationUuidList = integrationUuidList;
+    }
+
+    public String getConfigStr() {
+        if (config != null) {
+            return config.toJSONString();
+        }
+        return configStr;
     }
 }
