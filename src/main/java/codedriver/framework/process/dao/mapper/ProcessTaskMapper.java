@@ -263,6 +263,8 @@ public interface ProcessTaskMapper {
 
     public Long getProcessTaskIdByChannelUuidLimitOne(String channelUuid);
 
+    Long getProcessTaskIdByPriorityUuidLimitOne(String prioriryUuid);
+
     public List<ChannelVo> getChannelReferencedCountList();
 
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);

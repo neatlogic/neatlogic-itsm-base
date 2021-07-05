@@ -2316,6 +2316,10 @@
         SELECT `id` FROM `processtask` WHERE `channel_uuid` = #{value} LIMIT 1
     </select>
 
+    <select id="getProcessTaskIdByPriorityUuidLimitOne" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT `id` FROM `processtask` WHERE `priority_uuid` = #{value} LIMIT 1
+    </select>
+
     <select id="getChannelReferencedCountList" resultType="codedriver.framework.process.dto.ChannelVo">
         SELECT
             `channel_uuid` AS `uuid`,
