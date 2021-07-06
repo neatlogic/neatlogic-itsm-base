@@ -3,9 +3,6 @@ package codedriver.framework.process.workcenter.table;
 import codedriver.framework.process.workcenter.table.constvalue.FieldTypeEnum;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @Title: ProcessTaskFocusSqlTable
  * @Package: codedriver.module.process.workcenter.core.table
@@ -26,11 +23,6 @@ public class ProcessTaskFocusSqlTable implements ISqlTable {
     @Override
     public String getShortName() {
         return "ptf";
-    }
-
-    @Override
-    public Map<ISqlTable, Map<String, String>> getDependTableColumnMap() {
-        return new HashMap<>();
     }
 
     public enum FieldEnum {

@@ -3,9 +3,7 @@ package codedriver.framework.process.workcenter.table;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Title: ProcessTaskTable
@@ -27,11 +25,6 @@ public class ChannelTypeSqlTable implements ISqlTable {
     @Override
     public String getShortName() {
         return "ct";
-    }
-
-    @Override
-    public Map<ISqlTable, Map<String, String>> getDependTableColumnMap() {
-        return new HashMap<>();
     }
 
     public enum FieldEnum {

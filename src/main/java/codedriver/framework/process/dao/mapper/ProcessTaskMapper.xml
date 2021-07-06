@@ -2272,6 +2272,10 @@
                     <result column="stepUserUserPinyin" property="pinyin"/>
                 </association>
             </collection>
+            <collection property="slaTimeList" ofType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
+                <result column="slaStepId" property="processTaskStepId"/>
+                <result column="slaId" property="slaId"/>
+            </collection>
         </collection>
         <collection property="focusUserList" ofType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="focusUuid"/>

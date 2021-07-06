@@ -1,7 +1,5 @@
 package codedriver.framework.process.workcenter.table;
 
-import java.util.Map;
-
 /**
  * @Title: SqlTable
  * @Package: codedriver.module.process.workcenter.core.table
@@ -31,13 +29,4 @@ public interface ISqlTable {
      **/
     public String getShortName();
 
-    /**
-     * @Description: 与关联表字段关系
-     * 如果包含关联表，则返回关联表和对应关联表的字段
-     * @Author: 89770
-     * @Date: 2021/1/15 17:16
-     * @Params: [List<String>]
-     * @Returns: java.util.Map<java.lang.String,java.lang.String>
-     **/
-    public Map<ISqlTable,Map<String,String>> getDependTableColumnMap();
 }

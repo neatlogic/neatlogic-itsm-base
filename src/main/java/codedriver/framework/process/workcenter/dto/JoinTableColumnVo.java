@@ -1,11 +1,11 @@
 package codedriver.framework.process.workcenter.dto;
 
 import codedriver.framework.process.workcenter.table.ISqlTable;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Title: JoinTableColumnVo
@@ -21,30 +21,30 @@ public class JoinTableColumnVo {
     private String leftTableShortName;
     private ISqlTable rightTable;
     private String rightTableShortName;
-    private Map<String, String> onColumnMap;
+    private List<JoinOnVo> JoinOnVoList;
 
-    public JoinTableColumnVo(ISqlTable _leftTable, ISqlTable _rightTable, Map<String, String> _onColumnMap) {
-        construct( _leftTable,  _leftTable.getShortName(),  _rightTable, _rightTable.getShortName(),  _onColumnMap);
+    public JoinTableColumnVo(ISqlTable _leftTable, ISqlTable _rightTable, List<JoinOnVo> _JoinOnVoList) {
+        construct( _leftTable,  _leftTable.getShortName(),  _rightTable, _rightTable.getShortName(),  _JoinOnVoList);
     }
 
-    public JoinTableColumnVo(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, Map<String, String> _onColumnMap) {
-        construct( _leftTable,  _leftTableShortName,  _rightTable, _rightTable.getShortName(),  _onColumnMap);
+    public JoinTableColumnVo(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, List<JoinOnVo> _JoinOnVoList) {
+        construct( _leftTable,  _leftTableShortName,  _rightTable, _rightTable.getShortName(),  _JoinOnVoList);
     }
 
-    public JoinTableColumnVo(ISqlTable _leftTable, ISqlTable _rightTable, String _rightTableShortName, Map<String, String> _onColumnMap) {
-        construct( _leftTable, _leftTable.getShortName(),  _rightTable,  _rightTableShortName,  _onColumnMap);
+    public JoinTableColumnVo(ISqlTable _leftTable, ISqlTable _rightTable, String _rightTableShortName, List<JoinOnVo> _JoinOnVoList) {
+        construct( _leftTable, _leftTable.getShortName(),  _rightTable,  _rightTableShortName,  _JoinOnVoList);
     }
 
-    public JoinTableColumnVo(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, String _rightTableShortName, Map<String, String> _onColumnMap) {
-        construct( _leftTable,  _leftTableShortName,  _rightTable,  _rightTableShortName,  _onColumnMap);
+    public JoinTableColumnVo(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, String _rightTableShortName, List<JoinOnVo> _JoinOnVoList) {
+        construct( _leftTable,  _leftTableShortName,  _rightTable,  _rightTableShortName,  _JoinOnVoList);
     }
 
-    private void construct(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, String _rightTableShortName, Map<String, String> _onColumnMap){
+    private void construct(ISqlTable _leftTable, String _leftTableShortName, ISqlTable _rightTable, String _rightTableShortName, List<JoinOnVo> _JoinOnVoList){
         this.leftTable = _leftTable;
         this.leftTableShortName = _leftTableShortName;
         this.rightTable = _rightTable;
         this.rightTableShortName = _rightTableShortName;
-        this.onColumnMap = _onColumnMap;
+        this.JoinOnVoList = _JoinOnVoList;
     }
 
     public ISqlTable getLeftTable() {
@@ -63,12 +63,12 @@ public class JoinTableColumnVo {
         this.rightTable = rightTable;
     }
 
-    public Map<String, String> getOnColumnMap() {
-        return onColumnMap;
+    public List<JoinOnVo> getJoinOnVoList() {
+        return JoinOnVoList;
     }
 
-    public void setOnColumnMap(Map<String, String> onColumnMap) {
-        this.onColumnMap = onColumnMap;
+    public void setJoinOnVoList(List<JoinOnVo> joinOnVoList) {
+        JoinOnVoList = joinOnVoList;
     }
 
     public String getLeftTableShortName() {
@@ -90,8 +90,16 @@ public class JoinTableColumnVo {
 
     public String toSqlString() {
         List<String> onList = new ArrayList<>();
-        for (Map.Entry<String, String> depend : onColumnMap.entrySet()) {
-            onList.add(String.format(" %s.%s = %s.%s ", leftTableShortName, depend.getKey(), rightTableShortName, depend.getValue()));
+        String leftTableShortNameTmp = leftTableShortName;
+        for (JoinOnVo depend : JoinOnVoList) {
+            if(StringUtils.isNotBlank(depend.getLeftTableShortName())){
+                leftTableShortNameTmp = depend.getLeftTableShortName();
+            }
+            if(depend.getRightConst()){
+                onList.add(String.format(" %s.%s = '%s' ", leftTableShortNameTmp, depend.getLeftKey(), depend.getRightKey()));
+            }else {
+                onList.add(String.format(" %s.%s = %s.%s ", leftTableShortNameTmp, depend.getLeftKey(), rightTableShortName, depend.getRightKey()));
+            }
         }
         return String.format(" LEFT JOIN %s %s ON %s", rightTable.getName(), rightTableShortName, String.join(" and ", onList));
     }
@@ -99,8 +107,8 @@ public class JoinTableColumnVo {
     public String getHash() {
         StringBuilder sb = new StringBuilder();
         sb.append(leftTable.getName()).append(rightTable.getName());
-        for (Map.Entry<String, String> entry : onColumnMap.entrySet()) {
-            sb.append(entry.getKey()).append(entry.getValue());
+        for (JoinOnVo depend : JoinOnVoList) {
+            sb.append(depend.getLeftKey()).append(depend.getRightKey());
         }
         return DigestUtils.md5DigestAsHex(sb.toString().getBytes());
     }
