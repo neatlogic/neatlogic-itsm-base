@@ -119,8 +119,6 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
-    public ProcessTaskStepAuditVo getProcessTaskStepAuditById(Long auditId);
-
     public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
     public List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdList(List<Long> processTaskIdList);
