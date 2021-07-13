@@ -2015,7 +2015,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskMapper.replaceProcesssTaskStepAgent(
                             new ProcessTaskStepAgentVo(currentProcessTaskStepVo.getProcessTaskId(),
                                     currentProcessTaskStepVo.getId(), userUuid, currentUserUuid));
-                    System.out.println("qqqqqqqqqqqqqq");
                     processTaskMapper.updateProcessTaskStepWorkerUuid(
                             new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(),
                                     currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), userUuid,
@@ -2047,7 +2046,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 processTaskMapper.replaceProcesssTaskStepAgent(new ProcessTaskStepAgentVo(
                         currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
                         processTaskStepAgentVo.getAgentUuid(), currentUserUuid));
-                System.out.println("wwwwwwwwwwwwwww");
                 processTaskMapper.updateProcessTaskStepWorkerUuid(new ProcessTaskStepWorkerVo(
                         currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
                         GroupSearch.USER.getValue(), processTaskStepAgentVo.getAgentUuid(),
