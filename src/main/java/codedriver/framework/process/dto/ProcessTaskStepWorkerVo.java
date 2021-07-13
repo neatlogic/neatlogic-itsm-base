@@ -26,6 +26,7 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
     private transient String userUuid;
     private transient List<String> teamUuidList;
     private transient List<String> roleUuidList;
+    private transient List<String> userUuidList;
 
     public ProcessTaskStepWorkerVo() {
 
@@ -196,5 +197,13 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
 
     public void setWorker(WorkAssignmentUnitVo worker) {
         this.worker = worker;
+    }
+
+    public List<String> getUserUuidList() {
+        return userUuidList;
+    }
+
+    public void setUserUuidList(List<String> userUuidList) {
+        this.userUuidList = userUuidList;
     }
 }

@@ -1065,7 +1065,11 @@
         JOIN `processtask` b ON b.`id` = a.`processtask_id`
         JOIN `processtask_serial_number` c ON c.`processtask_id` =
         a.`processtask_id`
-        WHERE ((`type` = 'user' AND `uuid` = #{userUuid})
+        WHERE ((`type` = 'user' AND `uuid` in
+        <foreach collection="userUuidList" item="userUuid" open="(" separator="," close=")">
+            #{userUuid}
+        </foreach>
+        )
         <if test="teamUuidList != null and teamUuidList.size() > 0">
             OR (`type` = 'team' AND `uuid` in
             <foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
@@ -1100,7 +1104,11 @@
         <if test="keyword != null and keyword != ''">
             AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
         </if>
-        AND ((`type` = 'user' AND `uuid` = #{userUuid})
+        AND ((`type` = 'user' AND `uuid` in
+        <foreach collection="userUuidList" item="userUuid" open="(" separator="," close=")">
+            #{userUuid}
+        </foreach>
+        )
         <if test="teamUuidList != null and teamUuidList.size() > 0">
             OR (`type` = 'team' AND `uuid` in
             <foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
@@ -1130,7 +1138,11 @@
         <if test="keyword != null and keyword != ''">
             AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
         </if>
-        AND ((`type` = 'user' AND `uuid` = #{userUuid})
+        AND ((`type` = 'user' AND `uuid` in
+        <foreach collection="userUuidList" item="userUuid" open="(" separator="," close=")">
+            #{userUuid}
+        </foreach>
+        )
         <if test="teamUuidList != null and teamUuidList.size() > 0">
             OR (`type` = 'team' AND `uuid` in
             <foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
