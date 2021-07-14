@@ -9,6 +9,7 @@ import codedriver.framework.process.workcenter.table.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -112,10 +113,15 @@ public class SqlTableUtil {
     public static List<TableSelectColumnVo> getTableSelectColumn() {
         return new ArrayList<TableSelectColumnVo>() {
             {
+                add(new TableSelectColumnVo(new ProcessTaskSqlTable(), Collections.singletonList(
+                        new SelectColumnVo(ProcessTaskSqlTable.FieldEnum.STATUS.getValue(), ProcessTaskSqlTable.FieldEnum.STATUS.getProValue(), true)
+                )));
                 add(new TableSelectColumnVo(new ProcessTaskStepSqlTable(), Arrays.asList(
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.ID.getValue(), "processTaskStepId"),
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.NAME.getValue(), "processTaskStepName"),
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.PROCESSTASK_ID.getValue(), "processTaskId"),
+                        new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.IS_ACTIVE.getValue(), "processTaskStepIsActive"),
+                        new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.STATUS.getValue(), "processTaskStepStatus"),
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.HANDLER.getValue(), "processTaskStepHandler")
                 )));
                 add(new TableSelectColumnVo(new ProcessTaskStepWorkerSqlTable(), Arrays.asList(
