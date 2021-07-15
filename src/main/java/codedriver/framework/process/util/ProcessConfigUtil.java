@@ -233,6 +233,38 @@ public class ProcessConfigUtil {
     }
 
     /**
+     * 可替换文本列表
+     *
+     * @param replaceableTextList 用户配置的数据
+     * @return
+     */
+    public static JSONArray regulateReplaceableTextList(JSONArray replaceableTextList) {
+        JSONArray replaceableTextArray = new JSONArray();
+        for (ReplaceableText replaceableText : ReplaceableText.values()) {
+            replaceableTextArray.add(new JSONObject() {{
+                this.put("value", replaceableText.getValue());
+                this.put("text", replaceableText.getText());
+                this.put("customText", "");
+            }});
+        }
+        if (CollectionUtils.isNotEmpty(replaceableTextList)) {
+            Map<String, String> replaceableTextMap = new HashMap<>();
+            for (int i = 0; i < replaceableTextList.size(); i++) {
+                JSONObject replaceableText = replaceableTextList.getJSONObject(i);
+                replaceableTextMap.put(replaceableText.getString("value"), replaceableText.getString("customText"));
+            }
+            for (int i = 0; i < replaceableTextArray.size(); i++) {
+                JSONObject replaceableText = replaceableTextArray.getJSONObject(i);
+                String customText = replaceableTextMap.get(replaceableText.getString("value"));
+                if (StringUtils.isNotBlank(customText)) {
+                    replaceableText.put("customText", customText);
+                }
+            }
+        }
+        return replaceableTextArray;
+    }
+
+    /**
      * 分配处理人
      *
      * @param workerPolicyConfig 用户配置的数据
