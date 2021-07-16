@@ -33,10 +33,10 @@ public class ProcessTaskVo extends BasePageVo {
     private String channelPath;
     @EntityField(name = "优先级uuid", type = ApiParamType.STRING)
     private String priorityUuid;
-//    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
-//    private String config;
-//    private String configPath;
-//    private JSONObject configObj;
+    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
+    private String config;
+    private String configPath;
+    private JSONObject configObj;
     @EntityField(name = "状态", type = ApiParamType.STRING)
     private String status;
     @EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
@@ -180,29 +180,29 @@ public class ProcessTaskVo extends BasePageVo {
         this.id = id;
     }
 
-//    public String getConfig() {
-//        return config;
-//    }
-//
-//    public void setConfig(String config) {
-//        this.config = config;
-//    }
-//
-//    public String getConfigPath() {
-//        return configPath;
-//    }
-//
-//    public void setConfigPath(String configPath) {
-//        this.configPath = configPath;
-//    }
-//
-//    public JSONObject getConfigObj() {
-//        return configObj;
-//    }
-//
-//    public void setConfigObj(JSONObject configObj) {
-//        this.configObj = configObj;
-//    }
+    public String getConfig() {
+        return config;
+    }
+
+    public void setConfig(String config) {
+        this.config = config;
+    }
+
+    public String getConfigPath() {
+        return configPath;
+    }
+
+    public void setConfigPath(String configPath) {
+        this.configPath = configPath;
+    }
+
+    public JSONObject getConfigObj() {
+        return configObj;
+    }
+
+    public void setConfigObj(JSONObject configObj) {
+        this.configObj = configObj;
+    }
 
     public String getOwner() {
         return owner;
