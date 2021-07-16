@@ -10,7 +10,7 @@ package codedriver.framework.process.constvalue;
  * @since 2021/7/15 11:15
  **/
 public enum ReplaceableText {
-    SUBTASK("subtask", "子任务");
+    SUBTASK("replaceable_subtask", "子任务");
     private final String value;
     private final String Text;
 
