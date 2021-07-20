@@ -14,7 +14,6 @@ import java.util.List;
  **/
 public class ActionConfigVo {
     private String handler;
-//    private String integrationHandler;
     private List<ActionConfigActionVo> actionList = new ArrayList<>();
 
     public String getHandler() {
@@ -24,14 +23,6 @@ public class ActionConfigVo {
     public void setHandler(String handler) {
         this.handler = handler;
     }
-
-//    public String getIntegrationHandler() {
-//        return integrationHandler;
-//    }
-//
-//    public void setIntegrationHandler(String integrationHandler) {
-//        this.integrationHandler = integrationHandler;
-//    }
 
     public List<ActionConfigActionVo> getActionList() {
         return actionList;

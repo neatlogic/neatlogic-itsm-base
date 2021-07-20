@@ -247,13 +247,11 @@ public class ProcessConfigUtil {
         if (workerPolicyConfig == null) {
             workerPolicyConfig = new JSONObject();
         }
-//        if (MapUtils.isNotEmpty(workerPolicyConfig)) {
         String executeMode = workerPolicyConfig.getString("executeMode");
         if (StringUtils.isBlank(executeMode)) {
             executeMode = "batch";
         }
         workerPolicyObj.put("executeMode", executeMode);
-//            if (CollectionUtils.isNotEmpty(policyList)) {
         Map<WorkerPolicy, JSONObject> policyMap = new LinkedHashMap<>();
         JSONArray policyArray = new JSONArray();
         workerPolicyObj.put("policyList", policyArray);
@@ -385,12 +383,10 @@ public class ProcessConfigUtil {
                 policyArray.add(entry.getValue());
             }
         }
-//            }
 
         /** 异常处理人 **/
         String defaultWorker = workerPolicyConfig.getString("defaultWorker");
         workerPolicyObj.put("defaultWorker", defaultWorker);
-//        }
         return workerPolicyObj;
     }
 
