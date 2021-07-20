@@ -19,29 +19,31 @@ import java.util.*;
 
 @Component
 public class ProcessConfigUtil {
-    /** 获取第一个步骤的UUID
+    /**
+     * 获取第一个步骤的UUID
+     *
      * @param configObj 流程配置
      * @return
      */
-    public static String getFirstStepUuid(JSONObject configObj){
+    public static String getFirstStepUuid(JSONObject configObj) {
         String firstStepUuid = null;
-        if(MapUtils.isNotEmpty(configObj)){
+        if (MapUtils.isNotEmpty(configObj)) {
             JSONObject processConfig = configObj.getJSONObject("process");
             JSONArray stepList = processConfig.getJSONArray("stepList");
-            if(MapUtils.isNotEmpty(processConfig) && CollectionUtils.isNotEmpty(stepList)){
+            if (MapUtils.isNotEmpty(processConfig) && CollectionUtils.isNotEmpty(stepList)) {
                 /** 获取开始节点UUID */
                 String startUuid = "";
-                for(int i = 0;i < stepList.size();i++){
-                    if(ProcessStepHandlerType.START.getHandler().equals(stepList.getJSONObject(i).getString("handler"))){
+                for (int i = 0; i < stepList.size(); i++) {
+                    if (ProcessStepHandlerType.START.getHandler().equals(stepList.getJSONObject(i).getString("handler"))) {
                         startUuid = stepList.getJSONObject(i).getString("uuid");
                         break;
                     }
                 }
                 JSONArray connectionList = processConfig.getJSONArray("connectionList");
                 /** 获取开始节点后的第一个节点UUID */
-                if(CollectionUtils.isNotEmpty(connectionList)){
-                    for(int i = 0;i < connectionList.size();i++){
-                        if(connectionList.getJSONObject(i).getString("fromStepUuid").equals(startUuid)){
+                if (CollectionUtils.isNotEmpty(connectionList)) {
+                    for (int i = 0; i < connectionList.size(); i++) {
+                        if (connectionList.getJSONObject(i).getString("fromStepUuid").equals(startUuid)) {
                             firstStepUuid = connectionList.getJSONObject(i).getString("toStepUuid");
                             break;
                         }
@@ -52,19 +54,20 @@ public class ProcessConfigUtil {
         return firstStepUuid;
     }
 
-    /** 判断第一步是否需要描述框
+    /**
+     * 判断第一步是否需要描述框
      * 1、从stepList获取开始节点
      * 2、从connectionList获取开始节点后的第一个节点
      * 3、从stepList获取开始节点后的第一个节点是否启用描述框
      */
-    public static int getIsNeedContent(JSONObject configObj){
+    public static int getIsNeedContent(JSONObject configObj) {
         Integer isNeedContent = 0;
         String firstStepUuid = getFirstStepUuid(configObj);
         JSONArray stepList = (JSONArray) JSONPath.read(configObj.toJSONString(), "process.stepList");
-        if(StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(stepList)){
-            for(int i = 0;i < stepList.size();i++){
-                if(stepList.getJSONObject(i).getString("uuid").equals(firstStepUuid)){
-                    isNeedContent = (Integer)JSONPath.read(stepList.getJSONObject(i).toJSONString(),"stepConfig.workerPolicyConfig.isNeedContent");
+        if (StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(stepList)) {
+            for (int i = 0; i < stepList.size(); i++) {
+                if (stepList.getJSONObject(i).getString("uuid").equals(firstStepUuid)) {
+                    isNeedContent = (Integer) JSONPath.read(stepList.getJSONObject(i).toJSONString(), "stepConfig.workerPolicyConfig.isNeedContent");
                     break;
                 }
             }
@@ -74,17 +77,18 @@ public class ProcessConfigUtil {
 
     /**
      * 判断是否全部表单属性可编辑&获取可编辑的表单属性UUID与可编辑的行号
-     * @param configObj 流程配置
-     * @param editableAttrs 可编辑的表单属性UUID集合
+     *
+     * @param configObj        流程配置
+     * @param editableAttrs    可编辑的表单属性UUID集合
      * @param editableAttrRows 可编辑的表单属性行号
      * @return
      */
-    public static boolean getEditableFormAttr(JSONObject configObj, Set<String> editableAttrs,Set<Integer> editableAttrRows){
+    public static boolean getEditableFormAttr(JSONObject configObj, Set<String> editableAttrs, Set<Integer> editableAttrRows) {
         boolean allAttrCanEdit = false;
         String firstStepUuid = getFirstStepUuid(configObj);
         JSONArray authorityList = (JSONArray) JSONPath.read(configObj.toJSONString(), "process.formConfig.authorityList");
-        if(StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(authorityList)){
-            for(int i = 0;i < authorityList.size();i++){
+        if (StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(authorityList)) {
+            for (int i = 0; i < authorityList.size(); i++) {
                 JSONObject object = authorityList.getJSONObject(i);
                 String action = object.getString("action");
                 JSONArray attributeUuidList = object.getJSONArray("attributeUuidList");
@@ -95,18 +99,18 @@ public class ProcessConfigUtil {
                  * 如果以行为单位，则记录下可编辑的行号
                  * 如果发现有attributeUuidList为"all"的配置项，则退出循环
                  */
-                if(CollectionUtils.isNotEmpty(processStepUuidList) && processStepUuidList.contains(firstStepUuid)
+                if (CollectionUtils.isNotEmpty(processStepUuidList) && processStepUuidList.contains(firstStepUuid)
                         && StringUtils.isNotBlank(action) && FormAttributeAction.EDIT.getValue().equals(action) && CollectionUtils.isNotEmpty(attributeUuidList)
-                        && StringUtils.isNotBlank(type)){
-                    if(FormAttributeAuthType.COMPONENT.getValue().equals(type)){
-                        if(FormAttributeAuthRange.ALL.getValue().equals(attributeUuidList.get(0).toString())){
+                        && StringUtils.isNotBlank(type)) {
+                    if (FormAttributeAuthType.COMPONENT.getValue().equals(type)) {
+                        if (FormAttributeAuthRange.ALL.getValue().equals(attributeUuidList.get(0).toString())) {
                             allAttrCanEdit = true;
                             editableAttrs.clear();
                             break;
-                        }else{
+                        } else {
                             editableAttrs.addAll(attributeUuidList.toJavaList(String.class));
                         }
-                    }else if(FormAttributeAuthType.ROW.getValue().equals(type)){
+                    } else if (FormAttributeAuthType.ROW.getValue().equals(type)) {
                         editableAttrRows.addAll(attributeUuidList.toJavaList(Integer.class));
                     }
                 }
@@ -174,10 +178,10 @@ public class ProcessConfigUtil {
         for (IOperationType stepButton : stepButtons) {
             customButtonArray.add(new JSONObject() {{
                 this.put("name", stepButton.getValue());
-                if(StringUtils.isNotBlank(remark)){
-                    this.put("customText", stepButton.getText() + "(" + remark + ")");
-                }else {
-                    this.put("customText", stepButton.getText());
+                if (StringUtils.isNotBlank(remark)) {
+                    this.put("text", stepButton.getText() + "(" + remark + ")");
+                } else {
+                    this.put("text", stepButton.getText());
                 }
                 this.put("value", "");
             }});
@@ -240,145 +244,149 @@ public class ProcessConfigUtil {
      */
     public static JSONObject regulateWorkerPolicyConfig(JSONObject workerPolicyConfig) {
         JSONObject workerPolicyObj = new JSONObject();
-        if (MapUtils.isNotEmpty(workerPolicyConfig)) {
-            JSONObject simpleSettings = regulateSimpleSettings(workerPolicyConfig);
-            workerPolicyObj.putAll(simpleSettings);
-            String executeMode = workerPolicyConfig.getString("executeMode");
-            if (StringUtils.isBlank(executeMode)) {
-                executeMode = "batch";
-            }
-            workerPolicyObj.put("executeMode", executeMode);
-            JSONArray policyList = workerPolicyConfig.getJSONArray("policyList");
-            if (CollectionUtils.isNotEmpty(policyList)) {
-                Map<WorkerPolicy, JSONObject> policyMap = new LinkedHashMap<>();
-                JSONArray policyArray = new JSONArray();
-                workerPolicyObj.put("policyList", policyArray);
-                /** 由前置步骤处理人指定 **/
-                {
-                    JSONObject policyObj = new JSONObject();
-                    policyObj.put("name", WorkerPolicy.PRESTEPASSIGN.getText());
-                    policyObj.put("type", WorkerPolicy.PRESTEPASSIGN.getValue());
-                    policyObj.put("isChecked", 0);
-                    JSONObject config = new JSONObject();
-                    config.put("isRequired", 0);
-                    config.put("processStepUuidList", new JSONArray());
-                    policyObj.put("config", config);
-                    policyMap.put(WorkerPolicy.PRESTEPASSIGN, policyObj);
-                }
-                /** 复制前置步骤处理人 **/
-                {
-                    JSONObject policyObj = new JSONObject();
-                    policyObj.put("name", WorkerPolicy.COPY.getText());
-                    policyObj.put("type", WorkerPolicy.COPY.getValue());
-                    policyObj.put("isChecked", 0);
-                    JSONObject config = new JSONObject();
-                    config.put("processStepUuidList", "");//TODO 这里是单选，应该改成processStepUuid
-                    policyObj.put("config", config);
-                    policyMap.put(WorkerPolicy.COPY, policyObj);
-                }
-                /** 表单值 **/
-                {
-                    JSONObject policyObj = new JSONObject();
-                    policyObj.put("name", WorkerPolicy.FORM.getText());
-                    policyObj.put("type", WorkerPolicy.FORM.getValue());
-                    policyObj.put("isChecked", 0);
-                    JSONObject config = new JSONObject();
-                    config.put("attributeUuid", "");
-                    policyObj.put("config", config);
-                    policyMap.put(WorkerPolicy.FORM, policyObj);
-                }
-                /** 分派器 **/
-                {
-                    JSONObject policyObj = new JSONObject();
-                    policyObj.put("name", WorkerPolicy.AUTOMATIC.getText());
-                    policyObj.put("type", WorkerPolicy.AUTOMATIC.getValue());
-                    policyObj.put("isChecked", 0);
-                    JSONObject config = new JSONObject();
-                    config.put("handler", "");
-                    config.put("handlerConfig", new JSONObject());
-                    policyObj.put("config", config);
-                    policyMap.put(WorkerPolicy.AUTOMATIC, policyObj);
-                }
-                /** 自定义 **/
-                {
-                    JSONObject policyObj = new JSONObject();
-                    policyObj.put("name", WorkerPolicy.ASSIGN.getText());
-                    policyObj.put("type", WorkerPolicy.ASSIGN.getValue());
-                    policyObj.put("isChecked", 0);
-                    JSONObject config = new JSONObject();
+        if (workerPolicyConfig == null) {
+            workerPolicyConfig = new JSONObject();
+        }
+        String executeMode = workerPolicyConfig.getString("executeMode");
+        if (StringUtils.isBlank(executeMode)) {
+            executeMode = "batch";
+        }
+        workerPolicyObj.put("executeMode", executeMode);
+        Map<WorkerPolicy, JSONObject> policyMap = new LinkedHashMap<>();
+        JSONArray policyArray = new JSONArray();
+        workerPolicyObj.put("policyList", policyArray);
+        /** 由前置步骤处理人指定 **/
+        {
+            JSONObject policyObj = new JSONObject();
+            policyObj.put("name", WorkerPolicy.PRESTEPASSIGN.getText());
+            policyObj.put("type", WorkerPolicy.PRESTEPASSIGN.getValue());
+            policyObj.put("isChecked", 0);
+            JSONObject config = new JSONObject();
+            config.put("isRequired", 0);
+            config.put("processStepUuidList", new JSONArray());
+            policyObj.put("config", config);
+            policyMap.put(WorkerPolicy.PRESTEPASSIGN, policyObj);
+        }
+        /** 复制前置步骤处理人 **/
+        {
+            JSONObject policyObj = new JSONObject();
+            policyObj.put("name", WorkerPolicy.COPY.getText());
+            policyObj.put("type", WorkerPolicy.COPY.getValue());
+            policyObj.put("isChecked", 0);
+            JSONObject config = new JSONObject();
+            config.put("processStepUuid", "");//TODO 这里是单选，应该改成processStepUuid
+            policyObj.put("config", config);
+            policyMap.put(WorkerPolicy.COPY, policyObj);
+        }
+        /** 表单值 **/
+        {
+            JSONObject policyObj = new JSONObject();
+            policyObj.put("name", WorkerPolicy.FORM.getText());
+            policyObj.put("type", WorkerPolicy.FORM.getValue());
+            policyObj.put("isChecked", 0);
+            JSONObject config = new JSONObject();
+            config.put("attributeUuid", "");
+            policyObj.put("config", config);
+            policyMap.put(WorkerPolicy.FORM, policyObj);
+        }
+        /** 分派器 **/
+        {
+            JSONObject policyObj = new JSONObject();
+            policyObj.put("name", WorkerPolicy.AUTOMATIC.getText());
+            policyObj.put("type", WorkerPolicy.AUTOMATIC.getValue());
+            policyObj.put("isChecked", 0);
+            JSONObject config = new JSONObject();
+            config.put("handler", "");
+            config.put("handlerConfig", new JSONObject());
+            policyObj.put("config", config);
+            policyMap.put(WorkerPolicy.AUTOMATIC, policyObj);
+        }
+        /** 自定义 **/
+        {
+            JSONObject policyObj = new JSONObject();
+            policyObj.put("name", WorkerPolicy.ASSIGN.getText());
+            policyObj.put("type", WorkerPolicy.ASSIGN.getValue());
+            policyObj.put("isChecked", 0);
+            JSONObject config = new JSONObject();
 //                    config.put("workerList", new JSONArray());
-                    policyObj.put("config", config);
-                    policyMap.put(WorkerPolicy.ASSIGN, policyObj);
-                }
-                for (int i = 0; i < policyList.size(); i++) {
-                    JSONObject policyObj = policyList.getJSONObject(i);
-                    if (MapUtils.isNotEmpty(policyObj)) {
-                        WorkerPolicy type = WorkerPolicy.getWorkerPolicy(policyObj.getString("type"));
-                        if (type == null) {
-                            continue;
-                        }
-                        JSONObject configObj = policyObj.getJSONObject("config");
-                        if (MapUtils.isEmpty(configObj)) {
-                            continue;
-                        }
-                        JSONObject policyObject = policyMap.remove(type);
-                        policyArray.add(policyObject);
-                        Integer isChecked = policyObj.getInteger("isChecked");
-                        if (Objects.equals(isChecked, 1)) {
-                            policyObject.put("isChecked", 1);
-                            JSONObject configObject = policyObject.getJSONObject("config");
-                            switch (type) {
-                                case PRESTEPASSIGN:
-                                    Integer isRequired = configObj.getInteger("isRequired");
-                                    if (Objects.equals(isRequired, 1)) {
-                                        configObject.put("isRequired", 1);
-                                    }
-                                    JSONArray processStepUuidList = configObj.getJSONArray("processStepUuidList");
-                                    if (CollectionUtils.isNotEmpty(processStepUuidList)) {
-                                        configObject.put("processStepUuidList", processStepUuidList);
-                                    }
-                                    break;
-                                case COPY:
-                                    String processStepUuid = configObj.getString("processStepUuidList");
-                                    if (StringUtils.isNotBlank(processStepUuid)) {
-                                        configObject.put("processStepUuidList", processStepUuid);
-                                    }
-                                    break;
-                                case FORM:
-                                    String attributeUuid = configObj.getString("attributeUuid");
-                                    if (StringUtils.isNotBlank(attributeUuid)) {
-                                        configObject.put("attributeUuid", attributeUuid);
-                                    }
-                                    break;
-                                case AUTOMATIC:
-                                    String handler = configObj.getString("handler");
-                                    if (StringUtils.isNotBlank(handler)) {
-                                        configObject.put("handler", handler);
-                                    }
-                                    JSONObject handlerConfig = configObj.getJSONObject("handlerConfig");
-                                    if (MapUtils.isNotEmpty(handlerConfig)) {
-                                        configObject.put("handlerConfig", handlerConfig);
-                                    }
-                                    break;
-                                case ASSIGN:
-                                    JSONArray workerList = configObj.getJSONArray("workerList");
-                                    if (CollectionUtils.isNotEmpty(workerList)) {
-                                        configObject.put("workerList", workerList);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
+            policyObj.put("config", config);
+            policyMap.put(WorkerPolicy.ASSIGN, policyObj);
+        }
+        JSONArray policyList = workerPolicyConfig.getJSONArray("policyList");
+        if (CollectionUtils.isNotEmpty(policyList)) {
+            for (int i = 0; i < policyList.size(); i++) {
+                JSONObject policyObj = policyList.getJSONObject(i);
+                if (MapUtils.isNotEmpty(policyObj)) {
+                    WorkerPolicy type = WorkerPolicy.getWorkerPolicy(policyObj.getString("type"));
+                    if (type == null) {
+                        continue;
                     }
-                }
-                if (MapUtils.isNotEmpty(policyMap)) {
-                    for (Map.Entry<WorkerPolicy, JSONObject> entry : policyMap.entrySet()) {
-                        policyArray.add(entry.getValue());
+                    JSONObject configObj = policyObj.getJSONObject("config");
+                    if (MapUtils.isEmpty(configObj)) {
+                        continue;
+                    }
+                    JSONObject policyObject = policyMap.remove(type);
+                    policyArray.add(policyObject);
+                    Integer isChecked = policyObj.getInteger("isChecked");
+                    if (Objects.equals(isChecked, 1)) {
+                        policyObject.put("isChecked", 1);
+                        JSONObject configObject = policyObject.getJSONObject("config");
+                        switch (type) {
+                            case PRESTEPASSIGN:
+                                Integer isRequired = configObj.getInteger("isRequired");
+                                if (Objects.equals(isRequired, 1)) {
+                                    configObject.put("isRequired", 1);
+                                }
+                                JSONArray processStepUuidList = configObj.getJSONArray("processStepUuidList");
+                                if (CollectionUtils.isNotEmpty(processStepUuidList)) {
+                                    configObject.put("processStepUuidList", processStepUuidList);
+                                }
+                                break;
+                            case COPY:
+                                String processStepUuid = configObj.getString("processStepUuid");
+                                if (StringUtils.isNotBlank(processStepUuid)) {
+                                    configObject.put("processStepUuid", processStepUuid);
+                                }
+                                break;
+                            case FORM:
+                                String attributeUuid = configObj.getString("attributeUuid");
+                                if (StringUtils.isNotBlank(attributeUuid)) {
+                                    configObject.put("attributeUuid", attributeUuid);
+                                }
+                                break;
+                            case AUTOMATIC:
+                                String handler = configObj.getString("handler");
+                                if (StringUtils.isNotBlank(handler)) {
+                                    configObject.put("handler", handler);
+                                }
+                                JSONObject handlerConfig = configObj.getJSONObject("handlerConfig");
+                                if (MapUtils.isNotEmpty(handlerConfig)) {
+                                    configObject.put("handlerConfig", handlerConfig);
+                                }
+                                break;
+                            case ASSIGN:
+                                JSONArray workerList = configObj.getJSONArray("workerList");
+                                if (CollectionUtils.isNotEmpty(workerList)) {
+                                    configObject.put("workerList", workerList);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
         }
+
+        if (MapUtils.isNotEmpty(policyMap)) {
+            for (Map.Entry<WorkerPolicy, JSONObject> entry : policyMap.entrySet()) {
+                policyArray.add(entry.getValue());
+            }
+        }
+
+        /** 异常处理人 **/
+        String defaultWorker = workerPolicyConfig.getString("defaultWorker");
+        workerPolicyObj.put("defaultWorker", defaultWorker);
         return workerPolicyObj;
     }
 
@@ -388,7 +396,7 @@ public class ProcessConfigUtil {
      * @param configObj 用户配置的数据
      * @return
      */
-    private static JSONObject regulateSimpleSettings(JSONObject configObj) {
+    public static JSONObject regulateSimpleSettings(JSONObject configObj) {
         // TODO linbq 数据结构有问题，下面这些字段放在workerPolicyConfig里面了，应该放在与workerPolicyConfig同级
         if (configObj == null) {
             configObj = new JSONObject();
@@ -408,21 +416,19 @@ public class ProcessConfigUtil {
         resultObj.put("isRequired", isRequired);
         /** 回复模板 **/
         Long commentTemplateId = configObj.getLong("commentTemplateId");
-        if(commentTemplateId != null){
+        if (commentTemplateId != null) {
             resultObj.put("commentTemplateId", commentTemplateId);
         }
-        /** 异常处理人 **/
-        String defaultWorker = configObj.getString("defaultWorker");
-        resultObj.put("defaultWorker", defaultWorker);
         return resultObj;
     }
 
     /**
      * 校正流程图配置数据
+     *
      * @param configObj 流程图配置数据
      * @return
      */
-    public static String regulateProcessConfig(JSONObject configObj){
+    public static String regulateProcessConfig(JSONObject configObj) {
         if (configObj == null) {
             return null;
         }
@@ -445,7 +451,7 @@ public class ProcessConfigUtil {
                 for (int i = 0; i < stepList.size(); i++) {
                     JSONObject step = stepList.getJSONObject(i);
                     String handler = step.getString("handler");
-                    if(!Objects.equals(handler, ProcessStepHandlerType.END.getHandler())){
+                    if (!Objects.equals(handler, ProcessStepHandlerType.END.getHandler())) {
                         processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
                         if (processStepInternalHandler == null) {
                             throw new ProcessStepUtilHandlerNotFoundException(handler);
