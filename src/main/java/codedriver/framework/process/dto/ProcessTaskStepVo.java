@@ -52,8 +52,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Date endTime;
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
-//	@JSONField(serialize=false)
-//	private transient String config;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
@@ -280,14 +278,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-
-//	public String getConfig() {
-//		return config;
-//	}
-//
-//	public void setConfig(String config) {
-//		this.config = config;
-//	}
 
 	public List<ProcessTaskStepUserVo> getUserList() {
 		return userList;
