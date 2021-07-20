@@ -5,6 +5,7 @@
 
 package codedriver.framework.process.dto.processconfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,8 +14,8 @@ import java.util.List;
  **/
 public class ActionConfigVo {
     private String handler;
-    private String integrationHandler;
-    private List<ActionConfigActionVo> actionList;
+//    private String integrationHandler;
+    private List<ActionConfigActionVo> actionList = new ArrayList<>();
 
     public String getHandler() {
         return handler;
@@ -24,13 +25,13 @@ public class ActionConfigVo {
         this.handler = handler;
     }
 
-    public String getIntegrationHandler() {
-        return integrationHandler;
-    }
-
-    public void setIntegrationHandler(String integrationHandler) {
-        this.integrationHandler = integrationHandler;
-    }
+//    public String getIntegrationHandler() {
+//        return integrationHandler;
+//    }
+//
+//    public void setIntegrationHandler(String integrationHandler) {
+//        this.integrationHandler = integrationHandler;
+//    }
 
     public List<ActionConfigActionVo> getActionList() {
         return actionList;
