@@ -2755,7 +2755,7 @@
                 NOW(3))
     </insert>
 
-    <insert id="replaceProcessTaskStepConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepConfigVo">
+    <insert id="insertIgnoreProcessTaskStepConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepConfigVo">
         insert ignore INTO `processtask_step_config` (`hash`, `config`)
         VALUES (#{hash}, #{config})
     </insert>

@@ -36,7 +36,7 @@ public class ProcessStepVo implements Serializable {
 	@JSONField(serialize=false)
 	private transient Long notifyPolicyId;
 	@JSONField(serialize=false)
-	private transient List<String> integrationUuidList = new ArrayList<>();
+	private transient List<String> integrationUuidList;
 
 	@Override
 	public boolean equals(Object other) {

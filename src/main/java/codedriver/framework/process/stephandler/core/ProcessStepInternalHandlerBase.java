@@ -132,12 +132,12 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     @Override
     public Integer getIsRequiredByConfigHash(String configHash) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
-        return (Integer)JSONPath.read(stepConfig, "workerPolicyConfig.isRequired");
+        return (Integer)JSONPath.read(stepConfig, "isRequired");
     }
 
     @Override
     public Integer getIsNeedContentByConfigHash(String configHash) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
-        return (Integer)JSONPath.read(stepConfig, "workerPolicyConfig.isNeedContent");
+        return (Integer)JSONPath.read(stepConfig, "isNeedContent");
     }
 }

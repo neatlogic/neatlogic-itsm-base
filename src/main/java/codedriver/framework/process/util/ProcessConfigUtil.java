@@ -67,7 +67,7 @@ public class ProcessConfigUtil {
         if (StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(stepList)) {
             for (int i = 0; i < stepList.size(); i++) {
                 if (stepList.getJSONObject(i).getString("uuid").equals(firstStepUuid)) {
-                    isNeedContent = (Integer) JSONPath.read(stepList.getJSONObject(i).toJSONString(), "stepConfig.workerPolicyConfig.isNeedContent");
+                    isNeedContent = (Integer) JSONPath.read(stepList.getJSONObject(i).toJSONString(), "stepConfig.isNeedContent");
                     break;
                 }
             }

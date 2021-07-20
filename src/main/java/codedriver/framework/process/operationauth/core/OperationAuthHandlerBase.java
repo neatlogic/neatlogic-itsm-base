@@ -194,18 +194,19 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
      */
     protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
         ProcessTaskOperationType operationType, String userUuid) {
-        String stepConfig = processTaskStepVo.getConfig();
-        if (StringUtils.isBlank(stepConfig)) {
-            String taskConfig = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
-            JSONArray stepList = (JSONArray)JSONPath.read(taskConfig, "process.stepList");
-            for (int i = 0; i < stepList.size(); i++) {
-                JSONObject stepObj = stepList.getJSONObject(i);
-                if (processTaskStepVo.getProcessStepUuid().equals(stepObj.getString("uuid"))) {
-                    stepConfig = stepObj.getString("stepConfig");
-                    processTaskStepVo.setConfig(stepConfig);
-                }
-            }
-        }
+//        String stepConfig = processTaskStepVo.getConfig();
+//        if (StringUtils.isBlank(stepConfig)) {
+//            String taskConfig = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
+//            JSONArray stepList = (JSONArray)JSONPath.read(taskConfig, "process.stepList");
+//            for (int i = 0; i < stepList.size(); i++) {
+//                JSONObject stepObj = stepList.getJSONObject(i);
+//                if (processTaskStepVo.getProcessStepUuid().equals(stepObj.getString("uuid"))) {
+//                    stepConfig = stepObj.getString("stepConfig");
+//                    processTaskStepVo.setConfig(stepConfig);
+//                }
+//            }
+//        }
+        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
         JSONArray authorityList = (JSONArray)JSONPath.read(stepConfig, "authorityList");
         // 如果步骤自定义权限设置为空，则用组件的全局权限设置
         if (CollectionUtils.isEmpty(authorityList)) {

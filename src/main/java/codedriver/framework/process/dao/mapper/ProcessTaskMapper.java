@@ -309,7 +309,7 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
 
-    public int replaceProcessTaskStepConfig(ProcessTaskStepConfigVo processTaskStepConfigVo);
+    public int insertIgnoreProcessTaskStepConfig(ProcessTaskStepConfigVo processTaskStepConfigVo);
 
 
     public int insertProcessTaskStepFormAttribute(
