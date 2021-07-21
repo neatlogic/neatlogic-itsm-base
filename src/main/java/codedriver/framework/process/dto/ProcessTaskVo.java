@@ -4,7 +4,6 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.UserVo;
-import codedriver.framework.elasticsearch.constvalue.ESKeyType;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;

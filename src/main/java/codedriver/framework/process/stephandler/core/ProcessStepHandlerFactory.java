@@ -41,8 +41,8 @@ public class ProcessStepHandlerFactory extends ApplicationListenerBase {
 		List<ModuleVo> moduleList = tenantContext.getActiveModuleList();
 		List<ProcessStepHandlerVo> returnProcessStepHandlerList = new ArrayList<>();
 		for (ProcessStepHandlerVo processStepHandler : processStepHandlerList) {
-			//开始和结束组件不用返回给前端
-			if(processStepHandler.getType().equals(ProcessStepType.END.getValue()) || processStepHandler.getType().equals(ProcessStepType.START.getValue())) {
+			//开始组件不用返回给前端
+			if(processStepHandler.getType().equals(ProcessStepType.START.getValue())) {
 				continue;
 			}
 			for (ModuleVo moduleVo : moduleList) {

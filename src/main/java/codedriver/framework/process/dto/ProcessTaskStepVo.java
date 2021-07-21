@@ -8,7 +8,9 @@ import java.util.Map;
 
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.form.dto.FormAttributeVo;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONPath;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -85,6 +87,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Integer isNeedContent;
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
+	@EntityField(name = "可替换文本列表", type = ApiParamType.JSONARRAY)
+	private JSONArray replaceableTextList;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
 	private String flowDirection;
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
@@ -303,6 +307,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 			isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
 		}
 		return isNeedContent;
+	}
+
+	public JSONArray getReplaceableTextList() {
+		return replaceableTextList;
+	}
+
+	public void setReplaceableTextList(JSONArray replaceableTextList) {
+		this.replaceableTextList = replaceableTextList;
 	}
 
 	public void setIsNeedContent(Integer isNeedContent) {
