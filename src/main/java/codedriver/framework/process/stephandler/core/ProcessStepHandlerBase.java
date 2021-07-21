@@ -332,10 +332,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         boolean isAssignException = false;
         if (CollectionUtils.isEmpty(workerSet)) {
             /* 获取步骤配置信息 **/
-            ProcessTaskStepVo processTaskStepVo =
-                    processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
-            String stepConfig =
-                    selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+            ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+            String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
             String defaultWorker = (String) JSONPath.read(stepConfig, "workerPolicyConfig.defaultWorker");
             String[] split = defaultWorker.split("#");
             workerSet.add(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(),
@@ -404,7 +402,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
 
         String executeMode = (String) JSONPath.read(stepConfig, "workerPolicyConfig.executeMode");
-        Integer autoStart = (Integer) JSONPath.read(stepConfig, "workerPolicyConfig.autoStart");
+        Integer autoStart = (Integer) JSONPath.read(stepConfig, "autoStart");
 
         /* 如果workerList.size()>0，说明已经存在过处理人，则继续使用旧处理人，否则启用分派 **/
         if (CollectionUtils.isEmpty(workerSet)) {
@@ -455,7 +453,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             }
         }
-        return autoStart != null ? autoStart : 0;
+        return autoStart != null ? 1 : autoStart;
     }
 
     /**
@@ -1481,11 +1479,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 ProcessTaskStepVo ptStepVo = new ProcessTaskStepVo(stepVo);
                 ptStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
                 ptStepVo.setProcessTaskId(processTaskVo.getId());
-                if (StringUtils.isNotBlank(ptStepVo.getConfig())) {
+                String stepConfig = stepVo.getConfig();
+                if (StringUtils.isNotBlank(stepConfig)) {
                     /* 对步骤配置进行散列处理 **/
-                    String hash = DigestUtils.md5DigestAsHex(ptStepVo.getConfig().getBytes());
+                    String hash = DigestUtils.md5DigestAsHex(stepConfig.getBytes());
                     ptStepVo.setConfigHash(hash);
-                    processTaskMapper.replaceProcessTaskStepConfig(new ProcessTaskStepConfigVo(hash, ptStepVo.getConfig()));
+                    processTaskMapper.insertIgnoreProcessTaskStepConfig(new ProcessTaskStepConfigVo(hash, stepConfig));
                 }
 
                 processTaskMapper.insertProcessTaskStep(ptStepVo);

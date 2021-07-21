@@ -2,12 +2,12 @@ package codedriver.framework.process.operationauth.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -23,7 +23,6 @@ import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
-import codedriver.framework.process.dto.ProcessStepHandlerVo;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
 import codedriver.framework.process.dto.ProcessTaskStepUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
@@ -194,31 +193,24 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
      */
     protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
         ProcessTaskOperationType operationType, String userUuid) {
-        String stepConfig = processTaskStepVo.getConfig();
-        if (StringUtils.isBlank(stepConfig)) {
-            String taskConfig = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
-            JSONArray stepList = (JSONArray)JSONPath.read(taskConfig, "process.stepList");
-            for (int i = 0; i < stepList.size(); i++) {
-                JSONObject stepObj = stepList.getJSONObject(i);
-                if (processTaskStepVo.getProcessStepUuid().equals(stepObj.getString("uuid"))) {
-                    stepConfig = stepObj.getString("stepConfig");
-                    processTaskStepVo.setConfig(stepConfig);
-                }
-            }
-        }
-        JSONArray authorityList = (JSONArray)JSONPath.read(stepConfig, "authorityList");
-        // 如果步骤自定义权限设置为空，则用组件的全局权限设置
-        if (CollectionUtils.isEmpty(authorityList)) {
-            IProcessStepInternalHandler processStepUtilHandler =
-                    ProcessStepInternalHandlerFactory.getHandler(processTaskStepVo.getHandler());
+        JSONArray authorityList = null;
+        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+        Integer enableAuthority = (Integer) JSONPath.read(stepConfig, "enableAuthority");
+        if (Objects.equals(enableAuthority, 1)) {
+            authorityList = (JSONArray) JSONPath.read(stepConfig, "authorityList");
+        } else {
+            String handler = processTaskStepVo.getHandler();
+            IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
             if (processStepUtilHandler == null) {
-                throw new ProcessStepUtilHandlerNotFoundException(processTaskStepVo.getHandler());
+                throw new ProcessStepUtilHandlerNotFoundException(handler);
             }
-            ProcessStepHandlerVo processStepHandlerConfig =
-                    processStepHandlerMapper.getProcessStepHandlerByHandler(processTaskStepVo.getHandler());
-            JSONObject globalConfig = processStepUtilHandler
-                    .makeupConfig(processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null);
-            authorityList = (JSONArray) JSONPath.read(JSON.toJSONString(globalConfig), "authorityList");
+            String processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerConfigByHandler(handler);
+            JSONObject globalConfig = null;
+            if (StringUtils.isNotBlank(processStepHandlerConfig)) {
+                globalConfig = JSONObject.parseObject(processStepHandlerConfig);
+            }
+            globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
+            authorityList = globalConfig.getJSONArray("authorityList");
         }
 
         if (CollectionUtils.isNotEmpty(authorityList)) {
