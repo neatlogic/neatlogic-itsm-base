@@ -247,22 +247,22 @@ public class ProcessConfigUtil {
         JSONArray replaceableTextArray = new JSONArray();
         for (ReplaceableText replaceableText : ReplaceableText.values()) {
             replaceableTextArray.add(new JSONObject() {{
-                this.put("value", replaceableText.getValue());
+                this.put("name", replaceableText.getValue());
                 this.put("text", replaceableText.getText());
-                this.put("customText", "");
+                this.put("value", "");
             }});
         }
         if (CollectionUtils.isNotEmpty(replaceableTextList)) {
             Map<String, String> replaceableTextMap = new HashMap<>();
             for (int i = 0; i < replaceableTextList.size(); i++) {
                 JSONObject replaceableText = replaceableTextList.getJSONObject(i);
-                replaceableTextMap.put(replaceableText.getString("value"), replaceableText.getString("customText"));
+                replaceableTextMap.put(replaceableText.getString("name"), replaceableText.getString("value"));
             }
             for (int i = 0; i < replaceableTextArray.size(); i++) {
                 JSONObject replaceableText = replaceableTextArray.getJSONObject(i);
-                String customText = replaceableTextMap.get(replaceableText.getString("value"));
-                if (StringUtils.isNotBlank(customText)) {
-                    replaceableText.put("customText", customText);
+                String value = replaceableTextMap.get(replaceableText.getString("name"));
+                if (StringUtils.isNotBlank(value)) {
+                    replaceableText.put("value", value);
                 }
             }
         }
