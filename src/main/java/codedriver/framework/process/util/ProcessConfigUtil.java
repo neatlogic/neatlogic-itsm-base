@@ -132,7 +132,8 @@ public class ProcessConfigUtil {
             authorityArray.add(new JSONObject() {{
                 this.put("action", stepAction.getValue());
                 this.put("text", stepAction.getText());
-                this.put("acceptList", stepAction.getAcceptList());
+                this.put("defaultValue", stepAction.getDefaultValue());
+                this.put("acceptList", new ArrayList<>());
                 this.put("groupList", stepAction.getGroupList());
             }});
         }
@@ -146,7 +147,7 @@ public class ProcessConfigUtil {
             for (int i = 0; i < authorityArray.size(); i++) {
                 JSONObject authority = authorityArray.getJSONObject(i);
                 JSONArray acceptList = authorityMap.get(authority.getString("action"));
-                if (acceptList != null) {
+                if (CollectionUtils.isNotEmpty(acceptList)) {
                     authority.put("acceptList", acceptList);
                 }
             }

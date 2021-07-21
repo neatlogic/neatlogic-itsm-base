@@ -88,7 +88,7 @@ public enum ProcessTaskOperationType implements IOperationType {
     private String status;
     private String text;
     /** 节点管理中默认授权对象 **/
-    private List<String> acceptList;
+    private List<String> defaultValue;
     /** 节点管理中可授权对象类型 **/
     private List<String> groupList;
     private ProcessTaskOperationType(String _status, String _text) {
@@ -96,10 +96,10 @@ public enum ProcessTaskOperationType implements IOperationType {
         this.text = _text;
     }
 
-    private ProcessTaskOperationType(String _status, String _text, List<String> _acceptList, List<String> _groupList) {
+    private ProcessTaskOperationType(String _status, String _text, List<String> _defaultValue, List<String> _groupList) {
         this.status = _status;
         this.text = _text;
-        this.acceptList = _acceptList;
+        this.defaultValue = _defaultValue;
         this.groupList = _groupList;
     }
 
@@ -113,8 +113,8 @@ public enum ProcessTaskOperationType implements IOperationType {
         return text;
     }
 
-    public List<String> getAcceptList() {
-        return acceptList;
+    public List<String> getDefaultValue() {
+        return defaultValue;
     }
 
     public List<String> getGroupList() {

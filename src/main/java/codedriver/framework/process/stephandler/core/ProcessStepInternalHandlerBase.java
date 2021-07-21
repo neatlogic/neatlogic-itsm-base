@@ -5,15 +5,14 @@ import codedriver.framework.file.dao.mapper.FileMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
+import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.worktime.dao.mapper.WorktimeMapper;
-import codedriver.framework.process.dto.ProcessStepHandlerVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.operationauth.core.IOperationAuthHandlerType;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -84,26 +83,31 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 }
             }
         }
-        ProcessStepHandlerVo processStepHandlerConfig =
-            processStepHandlerMapper.getProcessStepHandlerByHandler(handler);
-        JSONObject globalConfig = processStepHandlerConfig != null ? processStepHandlerConfig.getConfig() : null;
-        IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
-        if (processStepUtilHandler != null) {
+        if (MapUtils.isEmpty(customButtonMap)) {
+            IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
+            if (processStepUtilHandler == null) {
+                throw new ProcessStepUtilHandlerNotFoundException(handler);
+            }
+            String processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerConfigByHandler(handler);
+            JSONObject globalConfig = null;
+            if (StringUtils.isNotBlank(processStepHandlerConfig)) {
+                globalConfig = JSONObject.parseObject(processStepHandlerConfig);
+            }
             globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
-        }
-        /** 节点管理按钮映射 **/
-        customButtonList = (JSONArray)JSONPath.read(JSON.toJSONString(globalConfig), "customButtonList");
-        if (CollectionUtils.isNotEmpty(customButtonList)) {
-            for (int i = 0; i < customButtonList.size(); i++) {
-                JSONObject customButton = customButtonList.getJSONObject(i);
-                String name = customButton.getString("name");
-                if (!customButtonMap.containsKey(name)) {
+            /** 节点管理按钮映射 **/
+            customButtonList = globalConfig.getJSONArray("customButtonList");
+            if (CollectionUtils.isNotEmpty(customButtonList)) {
+                for (int i = 0; i < customButtonList.size(); i++) {
+                    JSONObject customButton = customButtonList.getJSONObject(i);
+                    String name = customButton.getString("name");
+                    if (customButtonMap.containsKey(name)) {
+                        continue;
+                    }
                     String value = customButton.getString("value");
                     if (StringUtils.isNotBlank(value)) {
                         customButtonMap.put(name, value);
                     }
                 }
-
             }
         }
         return customButtonMap;
@@ -113,13 +117,37 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     public String getStatusTextByConfigHashAndHandler(String configHash, String handler, String status) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
         /** 节点设置状态映射 **/
-        JSONArray customButtonList = (JSONArray)JSONPath.read(stepConfig, "customStatusList");
-        if (CollectionUtils.isNotEmpty(customButtonList)) {
-            for (int i = 0; i < customButtonList.size(); i++) {
-                JSONObject customButton = customButtonList.getJSONObject(i);
-                String name = customButton.getString("name");
+        JSONArray customStatusList = (JSONArray)JSONPath.read(stepConfig, "customStatusList");
+        if (CollectionUtils.isNotEmpty(customStatusList)) {
+            for (int i = 0; i < customStatusList.size(); i++) {
+                JSONObject customStatus = customStatusList.getJSONObject(i);
+                String name = customStatus.getString("name");
                 if (name.equals(status)) {
-                    String value = customButton.getString("value");
+                    String value = customStatus.getString("value");
+                    if (StringUtils.isNotBlank(value)) {
+                        return value;
+                    }
+                }
+            }
+        }
+        IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);
+        if (processStepUtilHandler == null) {
+            throw new ProcessStepUtilHandlerNotFoundException(handler);
+        }
+        String processStepHandlerConfig = processStepHandlerMapper.getProcessStepHandlerConfigByHandler(handler);
+        JSONObject globalConfig = null;
+        if (StringUtils.isNotBlank(processStepHandlerConfig)) {
+            globalConfig = JSONObject.parseObject(processStepHandlerConfig);
+        }
+        globalConfig = processStepUtilHandler.makeupConfig(globalConfig);
+        /** 节点管理状态映射 **/
+        customStatusList = globalConfig.getJSONArray("customStatusList");
+        if (CollectionUtils.isNotEmpty(customStatusList)) {
+            for (int i = 0; i < customStatusList.size(); i++) {
+                JSONObject customStatus = customStatusList.getJSONObject(i);
+                String name = customStatus.getString("name");
+                if (name.equals(status)) {
+                    String value = customStatus.getString("value");
                     if (StringUtils.isNotBlank(value)) {
                         return value;
                     }

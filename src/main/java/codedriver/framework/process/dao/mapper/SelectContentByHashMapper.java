@@ -5,8 +5,6 @@ import codedriver.framework.process.dto.ProcessTaskContentVo;
 
 public interface SelectContentByHashMapper {
 
-    public ProcessTaskConfigVo getProcessTaskConfigByHash(String hash);
-
     public String getProcessTaskStepConfigByHash(String hash);
 
     public ProcessTaskContentVo getProcessTaskContentByHash(String hash);
