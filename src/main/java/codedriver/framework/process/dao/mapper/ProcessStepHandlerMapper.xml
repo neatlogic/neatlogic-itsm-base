@@ -8,25 +8,13 @@
 		`config`
 		FROM `process_step_handler`
 	</select>
-	
-	<select id="getProcessStepHandlerByHandler" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessStepHandlerVo">
-		SELECT
-		`handler`,
-		`config`
-		FROM `process_step_handler`
-		WHERE `handler` = #{handler}
+
+	<select id="getProcessStepHandlerConfigByHandler" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `config` FROM `process_step_handler` WHERE `handler` = #{handler}
 	</select>
 
-	<update id="updateProcessStepHandlerConfig" parameterType="codedriver.framework.process.dto.ProcessStepHandlerVo">
-		UPDATE `process_step_handler` SET `config` = #{configStr} WHERE `handler` = #{handler}
-	</update>
-
-	<delete id="deleteProcessStepHandlerConfigByHandler" parameterType="string">
-		DELETE FROM `process_step_handler` WHERE `handler` = #{value}
-	</delete>
-
-	<insert id="insertProcessStepHandlerConfig" parameterType="codedriver.framework.process.dto.ProcessStepHandlerVo">
-		INSERT 	INTO `process_step_handler` (
+	<insert id="replaceProcessStepHandlerConfig" parameterType="codedriver.framework.process.dto.ProcessStepHandlerVo">
+		REPLACE 	INTO `process_step_handler` (
 		`handler`,
 		`config`
 		) VALUES (

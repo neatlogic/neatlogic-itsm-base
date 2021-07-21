@@ -54,8 +54,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Date endTime;
 	@EntityField(name = "超时时间点", type = ApiParamType.LONG)
 	private Date expireTime;
-	@JSONField(serialize=false)
-	private transient String config;
 	private Long expireTimeLong;
 	private String error;
 	private String result;
@@ -150,7 +148,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.setName(processStepVo.getName());
 		this.setHandler(processStepVo.getHandler());
 		this.setType(processStepVo.getType());
-		this.setConfig(processStepVo.getConfig());
 		this.setFormUuid(processStepVo.getFormUuid());
 
 		if (processStepVo.getFormAttributeList() != null && processStepVo.getFormAttributeList().size() > 0) {
@@ -286,14 +283,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.endTime = endTime;
 	}
 
-	public String getConfig() {
-		return config;
-	}
-
-	public void setConfig(String config) {
-		this.config = config;
-	}
-
 	public List<ProcessTaskStepUserVo> getUserList() {
 		return userList;
 	}
@@ -304,11 +293,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsRequired() {
 		if(isRequired == null && StringUtils.isNotBlank(configHash)) {
-			if(StringUtils.isNotBlank(config)){
-				isRequired = (Integer) JSONPath.read(config, "workerPolicyConfig.isRequired");
-			}else if(StringUtils.isNotBlank(configHash)){
-				isRequired = ProcessStepInternalHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
-			}
+			isRequired = ProcessStepInternalHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
 		}
 		return isRequired;
 	}
@@ -319,11 +304,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public Integer getIsNeedContent() {
 		if(isNeedContent == null && StringUtils.isNotBlank(configHash)) {
-			if(StringUtils.isNotBlank(config)){
-				isNeedContent = (Integer) JSONPath.read(config, "workerPolicyConfig.isNeedContent");
-			}else if(StringUtils.isNotBlank(configHash)){
-				isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
-			}
+			isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
 		}
 		return isNeedContent;
 	}

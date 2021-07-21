@@ -8,11 +8,7 @@ public interface ProcessStepHandlerMapper {
 
     public List<ProcessStepHandlerVo> getProcessStepHandlerConfig();
 
-	public ProcessStepHandlerVo getProcessStepHandlerByHandler(String handler);
+	public String getProcessStepHandlerConfigByHandler(String handler);
 
-    public void updateProcessStepHandlerConfig(ProcessStepHandlerVo stepHandlerVo);
-
-    public void deleteProcessStepHandlerConfigByHandler(String handler);
-
-    public void insertProcessStepHandlerConfig(ProcessStepHandlerVo stepHandlerVo);
+    public int replaceProcessStepHandlerConfig(ProcessStepHandlerVo stepHandlerVo);
 }

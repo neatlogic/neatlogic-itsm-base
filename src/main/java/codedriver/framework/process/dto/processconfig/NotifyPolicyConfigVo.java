@@ -5,6 +5,7 @@
 
 package codedriver.framework.process.dto.processconfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  **/
 public class NotifyPolicyConfigVo {
     private Long policyId;
-    private List<NotifyPolicyParamMappingVo> paramMappingList;
+    private List<NotifyPolicyParamMappingVo> paramMappingList = new ArrayList<>();
     private String handler;
     public Long getPolicyId() {
         return policyId;
