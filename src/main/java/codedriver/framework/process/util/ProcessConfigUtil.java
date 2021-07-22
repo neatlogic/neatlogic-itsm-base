@@ -147,7 +147,7 @@ public class ProcessConfigUtil {
             for (int i = 0; i < authorityArray.size(); i++) {
                 JSONObject authority = authorityArray.getJSONObject(i);
                 JSONArray acceptList = authorityMap.get(authority.getString("action"));
-                if (CollectionUtils.isNotEmpty(acceptList)) {
+                if (acceptList != null) {
                     authority.put("acceptList", acceptList);
                 }
             }
