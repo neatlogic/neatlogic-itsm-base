@@ -12,7 +12,7 @@ public enum ProcessNotifyPolicyHandlerGroup implements INotifyPolicyHandlerGroup
     private final String value;
     private final String text;
 
-    private ProcessNotifyPolicyHandlerGroup(String value, String text) {
+    ProcessNotifyPolicyHandlerGroup(String value, String text) {
         this.value = value;
         this.text = text;
     }
