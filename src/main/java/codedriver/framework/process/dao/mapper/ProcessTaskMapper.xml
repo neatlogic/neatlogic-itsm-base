@@ -2695,6 +2695,7 @@
         `owner`,
         `reporter`,
         `expire_time`,
+        `serial_number`,
         `worktime_uuid`
         )
         VALUES
@@ -2710,6 +2711,7 @@
         #{owner},
         #{reporter},
         #{expireTime},
+        #{serialNumber},
         #{worktimeUuid}
         )
     </insert>
