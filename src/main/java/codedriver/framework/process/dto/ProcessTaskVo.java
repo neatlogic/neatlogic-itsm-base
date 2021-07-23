@@ -93,6 +93,10 @@ public class ProcessTaskVo extends BasePageVo {
     @JSONField(serialize = false)
     private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
 
+    @EntityField(name = "上报人部门列表", type = ApiParamType.JSONARRAY)
+    @JSONField(serialize = false)
+    private transient List<TeamVo> ownerDepartmentList = new ArrayList<>();
+
     @EntityField(name = "评分信息", type = ApiParamType.STRING)
     private String scoreInfo;
 
@@ -461,6 +465,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setOwnerCompanyList(List<TeamVo> ownerCompanyList) {
         this.ownerCompanyList = ownerCompanyList;
+    }
+
+    public List<TeamVo> getOwnerDepartmentList() {
+        return ownerDepartmentList;
+    }
+
+    public void setOwnerDepartmentList(List<TeamVo> ownerDepartmentList) {
+        this.ownerDepartmentList = ownerDepartmentList;
     }
 
     public int getIsHasOldFormProp() {
