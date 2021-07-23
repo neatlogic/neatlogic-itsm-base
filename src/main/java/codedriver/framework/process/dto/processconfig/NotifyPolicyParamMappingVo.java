@@ -12,7 +12,7 @@ package codedriver.framework.process.dto.processconfig;
 public class NotifyPolicyParamMappingVo {
     private String name;
     private String type;
-    private String value;
+    private Object value;
 
     public String getName() {
         return name;
@@ -30,11 +30,11 @@ public class NotifyPolicyParamMappingVo {
         this.type = type;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 }
