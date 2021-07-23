@@ -49,6 +49,7 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessField.PRIORITY.getValue(), isValue ? processTaskVo.getPriority().getUuid() : processTaskVo.getPriority().getName());
         resultObj.put(ProcessField.STATUS.getValue(), isValue ? processTaskVo.getStatusVo().getStatus() : processTaskVo.getStatusVo().getText());
         resultObj.put(ProcessField.OWNERCOMPANY.getValue(), isValue ? processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
+        resultObj.put(ProcessField.OWNERDEPARTMENT.getValue(), isValue ? processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessField.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);
 
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();

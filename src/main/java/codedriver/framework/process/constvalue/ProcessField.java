@@ -14,6 +14,7 @@ public enum ProcessField {
 	REPORTER("reporter", "代报人"),
 	PRIORITY("priority", "优先级"),
 	STATUS("status", "工单状态"),
+	OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
 	OWNERCOMPANY("ownercompany", "上报人公司");
 	private String value;
 	private String name;

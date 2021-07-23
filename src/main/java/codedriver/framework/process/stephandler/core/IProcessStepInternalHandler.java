@@ -65,6 +65,9 @@ public interface IProcessStepInternalHandler {
      * @return JSONObject
      */
     public default JSONObject makeupConfig(JSONObject configObj) {
+        if (configObj == null) {
+            configObj = new JSONObject();
+        }
         return configObj;
     }
 

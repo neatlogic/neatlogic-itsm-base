@@ -8,6 +8,7 @@ public enum ConditionProcessTaskOptions {
     OWNER("owner", "上报人"),
     PRIORITY("priority", "优先级"),
     OWNERCOMPANY("ownercompany", "上报人公司"),
+    OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
     OWNERLEVEL("ownerlevel", "上报人级别")
     ;
     private String value;
