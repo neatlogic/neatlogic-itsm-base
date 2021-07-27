@@ -1562,6 +1562,7 @@
             <result column="stepActiveTime" property="activeTime"/>
             <result column="stepStartTime" property="startTime"/>
             <result column="stepEndTime" property="endTime"/>
+            <result column="stepConfigHash" property="configHash"/>
             <collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
                 <result column="stepWorkerType" property="type"/>
                 <result column="stepWorkerUserType" property="userType"/>
@@ -2268,6 +2269,7 @@
             <result column="processTaskStepConfigHash" property="configHash"/>
             <result column="processTaskStepIsActive" property="isActive"/>
             <result column="processTaskStepEndTime" property="endTime"/>
+            <result column="processTaskConfigHash" property="configHash"/>
             <collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
                 <result column="stepWorkerType" property="type"/>
                 <result column="stepWorkerUserType" property="userType"/>

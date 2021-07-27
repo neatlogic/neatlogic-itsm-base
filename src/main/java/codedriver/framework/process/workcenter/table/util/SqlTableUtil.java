@@ -122,6 +122,7 @@ public class SqlTableUtil {
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.PROCESSTASK_ID.getValue(), "processTaskId"),
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.IS_ACTIVE.getValue(), "processTaskStepIsActive"),
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.STATUS.getValue(), "processTaskStepStatus"),
+                        new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.CONFIG_HASH.getValue(), "processTaskConfigHash"),
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.HANDLER.getValue(), "processTaskStepHandler")
                 )));
                 add(new TableSelectColumnVo(new ProcessTaskStepWorkerSqlTable(), Arrays.asList(
