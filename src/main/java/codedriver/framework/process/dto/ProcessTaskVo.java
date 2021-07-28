@@ -33,8 +33,8 @@ public class ProcessTaskVo extends BasePageVo {
     private String channelPath;
     @EntityField(name = "优先级uuid", type = ApiParamType.STRING)
     private String priorityUuid;
-//    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
-//    private String config;
+    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
+    private String config;
 //    private String configPath;
 //    private JSONObject configObj;
     @EntityField(name = "状态", type = ApiParamType.STRING)
@@ -184,13 +184,13 @@ public class ProcessTaskVo extends BasePageVo {
         this.id = id;
     }
 
-//    public String getConfig() {
-//        return config;
-//    }
-//
-//    public void setConfig(String config) {
-//        this.config = config;
-//    }
+    public String getConfig() {
+        return config;
+    }
+
+    public void setConfig(String config) {
+        this.config = config;
+    }
 //
 //    public String getConfigPath() {
 //        return configPath;
