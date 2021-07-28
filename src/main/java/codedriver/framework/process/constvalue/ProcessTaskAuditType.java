@@ -15,7 +15,7 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	EDITSUBTASK("editsubtask", "编辑子任务", "修改${DATA.replaceable_subtask}【${DATA.processTaskStepName}】"),
 	ABORTSUBTASK("abortsubtask", "取消子任务", "取消${DATA.replaceable_subtask}【${DATA.processTaskStepName}】"),
 	REDOSUBTASK("redosubtask", "重做子任务", "重做${DATA.replaceable_subtask}【${DATA.processTaskStepName}】"),
-	COMPLETESUBTASK("completesubtask", "完成子任务", "完成${DATA.subtask}【${DATA.processTaskStepName}】"),
+	COMPLETESUBTASK("completesubtask", "完成子任务", "完成${DATA.replaceable_subtask}【${DATA.processTaskStepName}】"),
 	START("start", "开始", "开始【${DATA.processTaskStepName}】"),
 	RETREAT("retreat", "撤回", "撤回【${DATA.processTaskStepName}】"),
 	ABORTPROCESSTASK("abort", "取消", "取消工单"),
