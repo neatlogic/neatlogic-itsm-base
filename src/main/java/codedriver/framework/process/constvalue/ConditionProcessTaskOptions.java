@@ -1,6 +1,8 @@
 package codedriver.framework.process.constvalue;
 
 public enum ConditionProcessTaskOptions {
+    TASKID("id","工单ID"),
+    STEPID("stepid","步骤ID"),
     TITLE("title", "标题"),
     CHANNELTYPE("channeltype", "服务类型"),
     CONTENT("content", "上报内容"),
