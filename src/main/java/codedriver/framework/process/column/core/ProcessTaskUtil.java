@@ -78,6 +78,8 @@ public class ProcessTaskUtil {
         } else {
             resultObj.put(ProcessField.EXPIREDTIME.getValue(), "");
         }
+        // 当前子任务id
+        resultObj.put(ProcessField.SUBTASKID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getCurrentSubtaskId() : null);
 
         /** 表单信息数据 **/
         Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
@@ -217,9 +219,9 @@ public class ProcessTaskUtil {
             JSONObject paramObj = currentProcessTaskStep.getParamObj();
             if (MapUtils.isNotEmpty(paramObj)) {
                 String reason = paramObj.getString("content");
-                if(StringUtils.isNotBlank(reason)){
+                if (StringUtils.isNotBlank(reason)) {
                     List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(reason, "<img src=\"", "\"");
-                    if(CollectionUtils.isNotEmpty(urlInfoVoList)){
+                    if (CollectionUtils.isNotEmpty(urlInfoVoList)) {
                         reason = HtmlUtil.urlReplace(reason, urlInfoVoList);
                     }
                 }

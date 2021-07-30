@@ -11,7 +11,8 @@ public enum ConditionProcessTaskOptions {
     PRIORITY("priority", "优先级"),
     OWNERCOMPANY("ownercompany", "上报人公司"),
     OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
-    OWNERLEVEL("ownerlevel", "上报人级别")
+    OWNERLEVEL("ownerlevel", "上报人级别"),
+    SUBTASKID("subtaskid", "当前子任务id")
     ;
     private String value;
     private String text;
