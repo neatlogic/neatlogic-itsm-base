@@ -1,8 +1,6 @@
 package codedriver.framework.process.operationauth.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import codedriver.framework.dao.mapper.RoleMapper;
 import org.apache.commons.collections4.CollectionUtils;
@@ -76,7 +74,12 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
      */
     protected boolean checkIsWorker(ProcessTaskVo processTaskVo, String userType, String userUuid) {
         List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
-        List<String> roleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+        List<String> userRoleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+        List<String> teamRoleUuidList = roleMapper.getRoleUuidListByTeamUuidList(teamUuidList);
+        Set<String> roleUuidSet = new HashSet<>();
+        roleUuidSet.addAll(userRoleUuidList);
+        roleUuidSet.addAll(teamRoleUuidList);
+        List<String> roleUuidList = new ArrayList<>(roleUuidSet);
         for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
             for (ProcessTaskStepWorkerVo workerVo : processTaskStepVo.getWorkerList()) {
                 if (userType == null || userType.equals(workerVo.getUserType())) {
@@ -113,7 +116,12 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
      */
     protected boolean checkIsWorker(ProcessTaskStepVo processTaskStepVo, String userType, String userUuid) {
         List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
-        List<String> roleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+        List<String> userRoleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+        List<String> teamRoleUuidList = roleMapper.getRoleUuidListByTeamUuidList(teamUuidList);
+        Set<String> roleUuidSet = new HashSet<>();
+        roleUuidSet.addAll(userRoleUuidList);
+        roleUuidSet.addAll(teamRoleUuidList);
+        List<String> roleUuidList = new ArrayList<>(roleUuidSet);
         for (ProcessTaskStepWorkerVo workerVo : processTaskStepVo.getWorkerList()) {
             if (userType == null || userType.equals(workerVo.getUserType())) {
                 if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
@@ -254,7 +262,12 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                 JSONArray acceptList = authorityObj.getJSONArray("acceptList");
                 if (CollectionUtils.isNotEmpty(acceptList)) {
                     List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
-                    List<String> roleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+                    List<String> userRoleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+                    List<String> teamRoleUuidList = roleMapper.getRoleUuidListByTeamUuidList(teamUuidList);
+                    Set<String> roleUuidSet = new HashSet<>();
+                    roleUuidSet.addAll(userRoleUuidList);
+                    roleUuidSet.addAll(teamRoleUuidList);
+                    List<String> roleUuidList = new ArrayList<>(roleUuidSet);
                     for (int j = 0; j < acceptList.size(); j++) {
                         String accept = acceptList.getString(j);
                         String[] split = accept.split("#");

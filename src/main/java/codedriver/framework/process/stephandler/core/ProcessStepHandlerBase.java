@@ -2001,9 +2001,15 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 flag = processTaskMapper.checkIsProcessTaskStepUser(searchVo);
             } else {
                 List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(currentUserUuid);
+                List<String> userRoleUuidList = UserContext.get().getRoleUuidList();
+                List<String> teamRoleUuidList = roleMapper.getRoleUuidListByTeamUuidList(teamUuidList);
+                Set<String> roleUuidSet = new HashSet<>();
+                roleUuidSet.addAll(userRoleUuidList);
+                roleUuidSet.addAll(teamRoleUuidList);
+                List<String> roleUuidList = new ArrayList<>(roleUuidSet);
                 flag = processTaskMapper.checkIsWorker(currentProcessTaskStepVo.getProcessTaskId(),
                         currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue(), currentUserUuid,
-                        teamUuidList, UserContext.get().getRoleUuidList());
+                        teamUuidList, roleUuidList);
             }
 
             if (flag == 0) {
