@@ -453,7 +453,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             }
         }
-        return autoStart != null ? 1 : autoStart;
+        return autoStart != null ? autoStart : 1;
     }
 
     /**
