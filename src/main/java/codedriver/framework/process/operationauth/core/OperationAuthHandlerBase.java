@@ -1,10 +1,10 @@
 package codedriver.framework.process.operationauth.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import codedriver.framework.dao.mapper.RoleMapper;
+import codedriver.framework.dto.AuthenticationInfoVo;
+import codedriver.framework.service.AuthenticationInfoService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,29 +36,18 @@ import codedriver.framework.process.stephandler.core.ProcessStepHandlerFactory;
 import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 
 public abstract class OperationAuthHandlerBase implements IOperationAuthHandler {
-    protected static UserMapper userMapper;
-    protected static TeamMapper teamMapper;
-    protected static RoleMapper roleMapper;
+    protected static AuthenticationInfoService authenticationInfoService;
     protected static ProcessStepHandlerMapper processStepHandlerMapper;
     protected static SelectContentByHashMapper selectContentByHashMapper;
-    
+
     @Autowired
-    public void setTeamMapper(TeamMapper _teamMapper) {
-        teamMapper = _teamMapper;
-    }
-    @Autowired
-    public void setRoleMapper(RoleMapper _roleMapper) {
-        roleMapper = _roleMapper;
+    public void setAuthenticationInfoService(AuthenticationInfoService _authenticationInfoService) {
+        authenticationInfoService = _authenticationInfoService;
     }
 
     @Autowired
     public void setProcessStepHandlerMapper(ProcessStepHandlerMapper _processStepHandlerMapper) {
         processStepHandlerMapper = _processStepHandlerMapper;
-    }
-
-    @Autowired
-    public void setUserMapper(UserMapper _userMapper) {
-        userMapper = _userMapper;
     }
     
     @Autowired
@@ -75,8 +64,9 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     * @return boolean 
      */
     protected boolean checkIsWorker(ProcessTaskVo processTaskVo, String userType, String userUuid) {
-        List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
-        List<String> roleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+        AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+        List<String> teamUuidList = authenticationInfoVo.getTeamUuidList();
+        List<String> roleUuidList = authenticationInfoVo.getRoleUuidList();
         for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
             for (ProcessTaskStepWorkerVo workerVo : processTaskStepVo.getWorkerList()) {
                 if (userType == null || userType.equals(workerVo.getUserType())) {
@@ -112,8 +102,9 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     * @return boolean
      */
     protected boolean checkIsWorker(ProcessTaskStepVo processTaskStepVo, String userType, String userUuid) {
-        List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
-        List<String> roleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+        AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+        List<String> teamUuidList = authenticationInfoVo.getTeamUuidList();
+        List<String> roleUuidList = authenticationInfoVo.getRoleUuidList();
         for (ProcessTaskStepWorkerVo workerVo : processTaskStepVo.getWorkerList()) {
             if (userType == null || userType.equals(workerVo.getUserType())) {
                 if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
@@ -253,8 +244,9 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
             if (operationType.getValue().equals(action)) {
                 JSONArray acceptList = authorityObj.getJSONArray("acceptList");
                 if (CollectionUtils.isNotEmpty(acceptList)) {
-                    List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(userUuid);
-                    List<String> roleUuidList = roleMapper.getRoleUuidListByUserUuid(userUuid);
+                    AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+                    List<String> teamUuidList = authenticationInfoVo.getTeamUuidList();
+                    List<String> roleUuidList = authenticationInfoVo.getRoleUuidList();
                     for (int j = 0; j < acceptList.size(); j++) {
                         String accept = acceptList.getString(j);
                         String[] split = accept.split("#");
