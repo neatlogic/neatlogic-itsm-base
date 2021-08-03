@@ -11,6 +11,7 @@ import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dao.mapper.RoleMapper;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
+import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.form.dao.mapper.FormMapper;
 import codedriver.framework.form.dto.FormVersionVo;
@@ -38,6 +39,7 @@ import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessT
 import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
 import codedriver.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import codedriver.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
+import codedriver.framework.service.AuthenticationInfoService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -46,6 +48,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -57,6 +60,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static UserMapper userMapper;
     protected static TeamMapper teamMapper;
     protected static RoleMapper roleMapper;
+    protected static AuthenticationInfoService authenticationInfoService;
     protected static ProcessTaskScoreMapper processTaskScoreMapper;
     protected static FormMapper formMapper;
     protected static ProcessMapper processMapper;
@@ -104,6 +108,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     @Resource
     public void setRoleMapper(RoleMapper _roleMapper) {
         roleMapper = _roleMapper;
+    }
+    @Autowired
+    public void setAuthenticationInfoService(AuthenticationInfoService _authenticationInfoService) {
+        authenticationInfoService = _authenticationInfoService;
     }
 
     @Resource
@@ -2000,16 +2008,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 ProcessTaskStepUserVo searchVo = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), currentUserUuid, ProcessUserType.MAJOR.getValue());
                 flag = processTaskMapper.checkIsProcessTaskStepUser(searchVo);
             } else {
-                List<String> teamUuidList = teamMapper.getTeamUuidListByUserUuid(currentUserUuid);
-                List<String> userRoleUuidList = UserContext.get().getRoleUuidList();
-                List<String> teamRoleUuidList = roleMapper.getRoleUuidListByTeamUuidList(teamUuidList);
-                Set<String> roleUuidSet = new HashSet<>();
-                roleUuidSet.addAll(userRoleUuidList);
-                roleUuidSet.addAll(teamRoleUuidList);
-                List<String> roleUuidList = new ArrayList<>(roleUuidSet);
+                AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(currentUserUuid);
                 flag = processTaskMapper.checkIsWorker(currentProcessTaskStepVo.getProcessTaskId(),
                         currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue(), currentUserUuid,
-                        teamUuidList, roleUuidList);
+                        authenticationInfoVo.getTeamUuidList(), authenticationInfoVo.getRoleUuidList());
             }
 
             if (flag == 0) {
