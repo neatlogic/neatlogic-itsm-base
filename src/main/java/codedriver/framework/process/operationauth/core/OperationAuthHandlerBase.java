@@ -36,21 +36,10 @@ import codedriver.framework.process.stephandler.core.ProcessStepHandlerFactory;
 import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 
 public abstract class OperationAuthHandlerBase implements IOperationAuthHandler {
-//    protected static UserMapper userMapper;
-//    protected static TeamMapper teamMapper;
-//    protected static RoleMapper roleMapper;
     protected static AuthenticationInfoService authenticationInfoService;
     protected static ProcessStepHandlerMapper processStepHandlerMapper;
     protected static SelectContentByHashMapper selectContentByHashMapper;
-    
-//    @Autowired
-//    public void setTeamMapper(TeamMapper _teamMapper) {
-//        teamMapper = _teamMapper;
-//    }
-//    @Autowired
-//    public void setRoleMapper(RoleMapper _roleMapper) {
-//        roleMapper = _roleMapper;
-//    }
+
     @Autowired
     public void setAuthenticationInfoService(AuthenticationInfoService _authenticationInfoService) {
         authenticationInfoService = _authenticationInfoService;
@@ -60,11 +49,6 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     public void setProcessStepHandlerMapper(ProcessStepHandlerMapper _processStepHandlerMapper) {
         processStepHandlerMapper = _processStepHandlerMapper;
     }
-
-//    @Autowired
-//    public void setUserMapper(UserMapper _userMapper) {
-//        userMapper = _userMapper;
-//    }
     
     @Autowired
     public void setSelectContentByHashMapper(SelectContentByHashMapper _selectContentByHashMapper) {
