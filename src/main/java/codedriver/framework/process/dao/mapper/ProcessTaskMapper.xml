@@ -432,16 +432,42 @@
         WHERE a.`processtask_id` = #{value}
     </select>
 
+    <select id="getProcessTaskFormListByProcessTaskIdList" parameterType="java.util.List"
+            resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
+        SELECT a.`processtask_id`    as processTaskId,
+               a.`form_uuid`         as formUuid,
+               a.`form_name`         as formName,
+               a.`form_content_hash` as formContentHash
+        FROM `processtask_form` a
+        WHERE a.`processtask_id` IN
+        <foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+            #{processTaskId}
+        </foreach>
+    </select>
+
     <select id="getProcessTaskStepFormAttributeDataByProcessTaskId" parameterType="java.lang.Long"
             resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
         SELECT `processtask_id` AS processTaskId,
                `attribute_uuid` AS attributeUuid,
-               `type`           AS
-                                   type,
+               `type`           AS type,
                `data`,
                `sort`
         FROM `processtask_formattribute_data`
         WHERE `processtask_id` = #{value}
+    </select>
+
+    <select id="getProcessTaskStepFormAttributeDataByProcessTaskIdList" parameterType="java.util.List"
+            resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
+        SELECT `processtask_id` AS processTaskId,
+               `attribute_uuid` AS attributeUuid,
+               `type`           AS type,
+               `data`,
+               `sort`
+        FROM `processtask_formattribute_data`
+        WHERE `processtask_id` IN
+        <foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+            #{processTaskId}
+        </foreach>
     </select>
 
     <select id="getProcessTaskStepContentByProcessTaskStepId" parameterType="java.lang.Long"

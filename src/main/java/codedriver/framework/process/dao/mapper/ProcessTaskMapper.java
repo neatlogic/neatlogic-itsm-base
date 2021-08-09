@@ -61,7 +61,11 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskFormVo getProcessTaskFormByProcessTaskId(Long processTaskId);
 
+    List<ProcessTaskFormVo> getProcessTaskFormListByProcessTaskIdList(List<Long> existsProcessTaskIdList);
+
     public List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskId(Long processTaskId);
+
+    List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskIdList(List<Long> existsFormProcessTaskIdList);
 
     public List<ProcessTaskStepContentVo> getProcessTaskStepContentProcessTaskId(Long processTaskId);
 

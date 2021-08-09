@@ -132,6 +132,8 @@ public interface IProcessStepHandlerUtil {
      **/
     public void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskOperationType action);
 
+    public void chechContentIsRequired(ProcessTaskStepVo currentProcessTaskStepVo);
+
     /**
      * @Description: 保存标签列表
      * @Author: linbq
