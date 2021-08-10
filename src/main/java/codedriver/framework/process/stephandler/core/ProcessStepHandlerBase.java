@@ -762,6 +762,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
                 }
                 /* 保存描述内容 **/
+                IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
                 IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, operationType);
                 myComplete(currentProcessTaskStepVo);
 
@@ -1626,6 +1627,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
 
             /* 保存描述内容和附件 **/
+            IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
             IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_START);
 
             /* 写入“标签”信息 **/
