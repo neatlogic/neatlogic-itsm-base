@@ -33,8 +33,8 @@ public class ProcessTaskVo extends BasePageVo {
     private String channelPath;
     @EntityField(name = "优先级uuid", type = ApiParamType.STRING)
     private String priorityUuid;
-    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
-    private String config;
+//    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
+//    private String config;
 //    private String configPath;
 //    private JSONObject configObj;
     @EntityField(name = "状态", type = ApiParamType.STRING)
@@ -102,8 +102,10 @@ public class ProcessTaskVo extends BasePageVo {
 
     @EntityField(name = "转报工单信息列表", type = ApiParamType.JSONOBJECT)
     private List<ProcessTaskVo> tranferReportProcessTaskList = new ArrayList<>();
-    @EntityField(name = "评分信息", type = ApiParamType.STRING)
+    @EntityField(name = "转报/关联方向", type = ApiParamType.STRING)
     private String tranferReportDirection;
+    @EntityField(name = "转报/关联类型", type = ApiParamType.STRING)
+    private String channelTypeRelationName;
     @JSONField(serialize = false)
     private transient Boolean isAutoGenerateId = true;
     @EntityField(name = "重做步骤列表", type = ApiParamType.JSONARRAY)
@@ -184,13 +186,13 @@ public class ProcessTaskVo extends BasePageVo {
         this.id = id;
     }
 
-    public String getConfig() {
-        return config;
-    }
-
-    public void setConfig(String config) {
-        this.config = config;
-    }
+//    public String getConfig() {
+//        return config;
+//    }
+//
+//    public void setConfig(String config) {
+//        this.config = config;
+//    }
 //
 //    public String getConfigPath() {
 //        return configPath;
@@ -505,6 +507,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setTranferReportDirection(String tranferReportDirection) {
         this.tranferReportDirection = tranferReportDirection;
+    }
+
+    public String getChannelTypeRelationName() {
+        return channelTypeRelationName;
+    }
+
+    public void setChannelTypeRelationName(String channelTypeRelationName) {
+        this.channelTypeRelationName = channelTypeRelationName;
     }
 
     public List<ProcessTaskStepVo> getRedoStepList() {
