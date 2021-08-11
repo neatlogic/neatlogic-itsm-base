@@ -116,6 +116,8 @@ public class ChannelVo extends BasePageVo implements Serializable {
     private transient String userUuid;
     @JSONField(serialize = false)
     private transient List<String> authorizedUuidList;
+    @JSONField(serialize = false)
+    private transient List<String> uuidList;
 
     public ChannelVo() {
 
@@ -349,6 +351,14 @@ public class ChannelVo extends BasePageVo implements Serializable {
 
     public void setAuthorizedUuidList(List<String> authorizedUuidList) {
         this.authorizedUuidList = authorizedUuidList;
+    }
+
+    public List<String> getUuidList() {
+        return uuidList;
+    }
+
+    public void setUuidList(List<String> uuidList) {
+        this.uuidList = uuidList;
     }
 
     public String getParentNames() {
