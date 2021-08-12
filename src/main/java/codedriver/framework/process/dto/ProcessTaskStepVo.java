@@ -73,8 +73,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	
 	@JSONField(serialize=false)
 	private transient JSONObject paramObj;
-	@EntityField(name = "表单属性显示控制", type = ApiParamType.JSONOBJECT)
-	private Map<String, String> formAttributeActionMap;
 	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepUserVo majorUser;
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
@@ -118,11 +116,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<ProcessTaskStepVo> forwardNextStepList = new ArrayList<>();
 	@EntityField(name = "向后步骤列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepVo> backwardNextStepList = new ArrayList<>();
-	@JSONField(serialize=false)
-	private transient Map<String, Object> formAttributeDataMap;
-    
-    @EntityField(name = "步骤表单属性隐藏数据", type = ApiParamType.JSONARRAY)
-    private List<ProcessTaskStepFormAttributeVo> stepFormConfig = new ArrayList<>();
     
     @EntityField(name = "提醒列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepRemindVo> processTaskStepRemindList = new ArrayList<>();
@@ -500,14 +493,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.configHash = configHash;
 	}
 
-	public Map<String, String> getFormAttributeActionMap() {
-		return formAttributeActionMap;
-	}
-
-	public void setFormAttributeActionMap(Map<String, String> formAttributeActionMap) {
-		this.formAttributeActionMap = formAttributeActionMap;
-	}
-
 	public List<ProcessTaskStepUserVo> getMinorUserList() {
 		return minorUserList;
 	}
@@ -635,22 +620,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public void setBackwardNextStepList(List<ProcessTaskStepVo> backwardNextStepList) {
 		this.backwardNextStepList = backwardNextStepList;
 	}
-
-    public Map<String, Object> getFormAttributeDataMap() {
-        return formAttributeDataMap;
-    }
-
-    public void setFormAttributeDataMap(Map<String, Object> formAttributeDataMap) {
-        this.formAttributeDataMap = formAttributeDataMap;
-    }
-
-    public List<ProcessTaskStepFormAttributeVo> getStepFormConfig() {
-        return stepFormConfig;
-    }
-
-    public void setStepFormConfig(List<ProcessTaskStepFormAttributeVo> stepFormConfig) {
-        this.stepFormConfig = stepFormConfig;
-    }
 
     public List<ProcessTaskStepRemindVo> getProcessTaskStepRemindList() {
         return processTaskStepRemindList;

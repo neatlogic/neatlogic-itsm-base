@@ -970,7 +970,7 @@
         WHERE `id` = #{id}
     </select>
 
-    <select id="getProcessTaskStepFormAttributeByProcessTaskStepId"
+    <!--<select id="getProcessTaskStepFormAttributeByProcessTaskStepId"
             resultType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
         SELECT `processtask_id`      AS processTaskId,
                `processtask_step_id` AS processTaskStepId,
@@ -980,7 +980,7 @@
         FROM `processtask_step_formattribute`
         WHERE `processtask_id` = #{processTaskId}
           AND `processtask_step_id` = #{processTaskStepId}
-    </select>
+    </select>-->
 
     <resultMap type="codedriver.framework.process.dto.ProcessTaskStepAuditVo" id="processTaskStepAuditMap">
         <id column="id" property="id"/>
@@ -1236,17 +1236,29 @@
             AND `user_type` = #{userType}
         </if>
         AND (
-        (`type` = 'user' AND `uuid` = #{userUuid})
-        <if test="teamUuidList != null and teamUuidList.size() > 0">
+        (`type` = 'user'
+        <choose>
+            <when test="authenticationInfoVo.userUuidList != null and authenticationInfoVo.userUuidList.size() > 0">
+                AND `uuid` IN
+                <foreach collection="authenticationInfoVo.userUuidList" item="userUuid" open="(" separator="," close=")">
+                    #{userUuid}
+                </foreach>
+            </when>
+            <otherwise>
+                AND `uuid` = #{authenticationInfoVo.userUuid}
+            </otherwise>
+        </choose>
+        )
+        <if test="authenticationInfoVo.teamUuidList != null and authenticationInfoVo.teamUuidList.size() > 0">
             OR (`type` = 'team' AND `uuid` IN
-            <foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
+            <foreach collection="authenticationInfoVo.teamUuidList" item="teamUuid" open="(" separator="," close=")">
                 #{teamUuid}
             </foreach>
             )
         </if>
-        <if test="roleUuidList != null and roleUuidList.size() > 0">
+        <if test="authenticationInfoVo.roleUuidList != null and authenticationInfoVo.roleUuidList.size() > 0">
             OR (`type` = 'role' AND `uuid` IN
-            <foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
+            <foreach collection="authenticationInfoVo.roleUuidList" item="roleUuid" open="(" separator="," close=")">
                 #{roleUuid}
             </foreach>
             )
@@ -1260,7 +1272,17 @@
         COUNT(1)
         FROM `processtask_step_user`
         WHERE `processtask_id` = #{processTaskId}
-        AND `user_uuid` = #{userVo.uuid}
+        <choose>
+            <when test="userUuidList != null and userUuidList.size() > 0">
+                AND `user_uuid` IN
+                <foreach collection="userUuidList" item="useruuid" open="(" separator="," close=")">
+                    #{useruuid}
+                </foreach>
+            </when>
+            <otherwise>
+                AND `user_uuid` = #{userUuid}
+            </otherwise>
+        </choose>
         <if test="processTaskStepId != null">
             AND `processtask_step_id` = #{processTaskStepId}
         </if>

@@ -7,6 +7,7 @@ import codedriver.framework.dto.UserVo;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.lang3.StringUtils;
@@ -70,8 +71,12 @@ public class ProcessTaskVo extends BasePageVo {
 
     @EntityField(name = "优先级信息", type = ApiParamType.JSONOBJECT)
     private PriorityVo priority;
-    @EntityField(name = "工单表单信息", type = ApiParamType.STRING)
-    private String formConfig;
+    @EntityField(name = "工单表单信息", type = ApiParamType.JSONOBJECT)
+    private JSONObject formConfig;
+    @EntityField(name = "工单表单信息授权列表", type = ApiParamType.JSONARRAY)
+    private JSONArray formConfigAuthorityList;
+    @EntityField(name = "表单配置授权隐藏属性uuid列表")
+    private List<String> formAttributeHideList;
     @EntityField(name = "是否存在旧工单表单信息", type = ApiParamType.STRING)
     private int isHasOldFormProp = 0;
     @EntityField(name = "工单表单属性值", type = ApiParamType.JSONOBJECT)
@@ -397,12 +402,28 @@ public class ProcessTaskVo extends BasePageVo {
         this.priority = priority;
     }
 
-    public String getFormConfig() {
+    public JSONObject getFormConfig() {
         return formConfig;
     }
 
-    public void setFormConfig(String formConfig) {
+    public void setFormConfig(JSONObject formConfig) {
         this.formConfig = formConfig;
+    }
+
+    public JSONArray getFormConfigAuthorityList() {
+        return formConfigAuthorityList;
+    }
+
+    public void setFormConfigAuthorityList(JSONArray formConfigAuthorityList) {
+        this.formConfigAuthorityList = formConfigAuthorityList;
+    }
+
+    public List<String> getFormAttributeHideList() {
+        return formAttributeHideList;
+    }
+
+    public void setFormAttributeHideList(List<String> formAttributeHideList) {
+        this.formAttributeHideList = formAttributeHideList;
     }
 
     public Map<String, Object> getFormAttributeDataMap() {

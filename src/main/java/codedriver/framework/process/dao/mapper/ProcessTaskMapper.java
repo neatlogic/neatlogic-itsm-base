@@ -6,6 +6,7 @@
 package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.dto.*;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import org.apache.ibatis.annotations.Param;
@@ -118,8 +119,8 @@ public interface ProcessTaskMapper {
 
     public ProcessTaskVo getProcessTaskById(Long id);
 
-    public List<ProcessTaskStepFormAttributeVo>
-    getProcessTaskStepFormAttributeByProcessTaskStepId(@Param("processTaskId") Long processTaskId, @Param("processTaskStepId") Long processTaskStepId);
+//    public List<ProcessTaskStepFormAttributeVo>
+//    getProcessTaskStepFormAttributeByProcessTaskStepId(@Param("processTaskId") Long processTaskId, @Param("processTaskStepId") Long processTaskStepId);
 
     public List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
@@ -141,8 +142,7 @@ public interface ProcessTaskMapper {
 
     public int checkIsWorker(@Param("processTaskId") Long processTaskId,
                              @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType,
-                             @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList,
-                             @Param("roleUuidList") List<String> roleUuidList);
+                             @Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo);
 
     public int checkIsProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
