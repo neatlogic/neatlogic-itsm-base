@@ -87,10 +87,10 @@ public class ProcessTaskUtil {
             if (isValue) {
                 resultObj.putAll(formAttributeDataMap);
             } else {
-                if (StringUtils.isNotBlank(processTaskVo.getFormConfig())) {
+                if (MapUtils.isNotEmpty(processTaskVo.getFormConfig())) {
                     Map<String, Object> formAttributeMap = new HashMap<>();
                     FormVersionVo formVersionVo = new FormVersionVo();
-                    formVersionVo.setFormConfig(processTaskVo.getFormConfig());
+                    formVersionVo.setFormConfig(processTaskVo.getFormConfig().toJSONString());
                     List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
                     for (FormAttributeVo formAttribute : formAttributeList) {
                         Object attributeValue = formAttributeDataMap.get(formAttribute.getUuid());

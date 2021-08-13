@@ -114,7 +114,7 @@
 		SELECT `uuid` FROM `process_step` WHERE `process_uuid` = #{value}
 	</select>
 
-	<select id="getProcessStepFormAttributeByStepUuid" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
+	<!--<select id="getProcessStepFormAttributeByStepUuid" resultType="codedriver.framework.process.dto.ProcessStepFormAttributeVo">
 		SELECT
 		a.`process_uuid` AS processUuid,
 		a.`process_step_uuid` AS processStepUuid,
@@ -124,7 +124,7 @@
 		a.`type`
 		FROM `process_step_formattribute` a
 		WHERE a.`process_uuid` = #{processUuid} and a.`process_step_uuid` = #{processStepUuid}
-	</select>
+	</select>-->
 
 	<resultMap id="processDetailMap" type="codedriver.framework.process.dto.ProcessVo">
 		<id column="uuid" property="uuid" />

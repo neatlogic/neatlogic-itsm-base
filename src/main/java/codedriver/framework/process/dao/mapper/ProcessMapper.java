@@ -38,7 +38,7 @@ public interface ProcessMapper {
 
 	public List<String> getProcessStepUuidListByProcessUuid(String processUuid);
 
-	public List<ProcessStepFormAttributeVo> getProcessStepFormAttributeByStepUuid(@Param("processUuid")String processUuid, @Param("processStepUuid")String processStepUuid);
+//	public List<ProcessStepFormAttributeVo> getProcessStepFormAttributeByStepUuid(@Param("processUuid")String processUuid, @Param("processStepUuid")String processStepUuid);
 
 	public ProcessVo getProcessByUuid(String processUuid);
 	

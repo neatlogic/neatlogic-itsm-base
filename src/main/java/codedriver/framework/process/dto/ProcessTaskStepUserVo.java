@@ -6,13 +6,15 @@ import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
+import java.util.List;
 
 public class ProcessTaskStepUserVo {
 //    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private Long processTaskStepId;
 	private UserVo userVo;
-//	private String userUuid;
+	private String userUuid;
+	private List<String> userUuidList;
 //	private String userName;
 	private String userType;
 //	private String userInfo;
@@ -41,12 +43,14 @@ public class ProcessTaskStepUserVo {
 		this.setProcessTaskId(_processTaskId);
 		this.setProcessTaskStepId(_processTaskStepId);
 		this.userVo = new UserVo(_userUuid);
+		this.userUuid = _userUuid;
 	}
 
 	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid, String userType) {
         this.setProcessTaskId(_processTaskId);
         this.setProcessTaskStepId(_processTaskStepId);
 		this.userVo = new UserVo(_userUuid);
+		this.userUuid = _userUuid;
         this.setUserType(userType);
     }
 	
@@ -59,7 +63,7 @@ public class ProcessTaskStepUserVo {
         String newUserUuid) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
-		this.userVo = new UserVo(userUuid);
+		this.userVo = new UserVo(userUuid);this.userUuid = userUuid;
         this.userType = userType;
         this.newUserUuid = newUserUuid;
     }
@@ -80,14 +84,23 @@ public class ProcessTaskStepUserVo {
 		this.userVo = userVo;
 	}
 
-	//	public String getUserUuid() {
-//		return userUuid;
-//	}
-//
-//	public void setUserUuid(String userUuid) {
-//		this.userUuid = userUuid;
-//	}
-//
+	public String getUserUuid() {
+		return userUuid;
+	}
+
+	public void setUserUuid(String userUuid) {
+		this.userUuid = userUuid;
+	}
+
+	public List<String> getUserUuidList() {
+		return userUuidList;
+	}
+
+	public void setUserUuidList(List<String> userUuidList) {
+		this.userUuidList = userUuidList;
+	}
+
+	//
 //	public String getUserName() {
 //		return userName;
 //	}
