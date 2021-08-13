@@ -1,34 +1,32 @@
+/*
+ * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.dto;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
-
-import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
-import codedriver.framework.process.stephandler.core.ProcessStepHandlerTypeFactory;
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
-import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import codedriver.framework.process.constvalue.ProcessStepType;
+import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.stephandler.core.IProcessStepInternalHandler;
+import codedriver.framework.process.stephandler.core.ProcessStepHandlerTypeFactory;
 import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
+import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class ProcessVo extends BasePageVo implements Serializable {
     private static final long serialVersionUID = 4684015408674741157L;
@@ -120,7 +118,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     public void makeupConfigObj() {
         configStr = getConfigStr();
-        JSONObject processObj = (JSONObject)JSONPath.read(configStr, "process");
+        JSONObject processObj = (JSONObject) JSONPath.read(configStr, "process");
         if (MapUtils.isEmpty(processObj)) {
             return;
         }
@@ -140,13 +138,13 @@ public class ProcessVo extends BasePageVo implements Serializable {
                         String action = authorityObj.getString("action");
                         String type = authorityObj.getString("type");
                         if (CollectionUtils.isNotEmpty(processStepUuidList)
-                            && CollectionUtils.isNotEmpty(attributeUuidList) && StringUtils.isNotBlank(action)) {
+                                && CollectionUtils.isNotEmpty(attributeUuidList) && StringUtils.isNotBlank(action)) {
                             for (int j = 0; j < processStepUuidList.size(); j++) {
                                 String processStepUuid = processStepUuidList.getString(j);
                                 for (int k = 0; k < attributeUuidList.size(); k++) {
                                     String attributeUuid = attributeUuidList.getString(k);
                                     ProcessStepFormAttributeVo processStepFormAttributeVo =
-                                        new ProcessStepFormAttributeVo();
+                                            new ProcessStepFormAttributeVo();
                                     processStepFormAttributeVo.setProcessUuid(this.getUuid());
                                     processStepFormAttributeVo.setFormUuid(this.getFormUuid());
                                     processStepFormAttributeVo.setProcessStepUuid(processStepUuid);
@@ -154,7 +152,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
                                     processStepFormAttributeVo.setAction(action);
                                     processStepFormAttributeVo.setType(type);
                                     List<ProcessStepFormAttributeVo> processStepFormAttributeList =
-                                        processStepFormAttributeMap.get(processStepUuid);
+                                            processStepFormAttributeMap.get(processStepUuid);
                                     if (processStepFormAttributeList == null) {
                                         processStepFormAttributeList = new ArrayList<>();
                                         processStepFormAttributeMap.put(processStepUuid, processStepFormAttributeList);
@@ -189,7 +187,7 @@ public class ProcessVo extends BasePageVo implements Serializable {
                     if (CollectionUtils.isNotEmpty(notifyPolicyList)) {
                         for (int j = 0; j < notifyPolicyList.size(); j++) {
                             Long policyId =
-                                (Long)JSONPath.read(notifyPolicyList.getString(j), "notifyPolicyConfig.policyId");
+                                    (Long) JSONPath.read(notifyPolicyList.getString(j), "notifyPolicyConfig.policyId");
                             if (policyId != null) {
                                 processSlaVo.getNotifyPolicyIdList().add(policyId);
                             }
@@ -282,15 +280,15 @@ public class ProcessVo extends BasePageVo implements Serializable {
             }
         }
         /** 组装通知策略id **/
-        notifyPolicyId = (Long)JSONPath.read(configStr, "process.processConfig.notifyPolicyConfig.policyId");
+        notifyPolicyId = (Long) JSONPath.read(configStr, "process.processConfig.notifyPolicyConfig.policyId");
 
-        JSONArray actionList = (JSONArray)JSONPath.read(configStr, "process.processConfig.actionConfig.actionList");
-        if(CollectionUtils.isNotEmpty(actionList)){
+        JSONArray actionList = (JSONArray) JSONPath.read(configStr, "process.processConfig.actionConfig.actionList");
+        if (CollectionUtils.isNotEmpty(actionList)) {
             integrationUuidList = new ArrayList<>();
             for (int i = 0; i < actionList.size(); i++) {
                 JSONObject ationObj = actionList.getJSONObject(i);
                 String integrationUuid = ationObj.getString("integrationUuid");
-                if(StringUtils.isNotBlank(integrationUuid)) {
+                if (StringUtils.isNotBlank(integrationUuid)) {
                     integrationUuidList.add(integrationUuid);
                 }
             }
@@ -317,13 +315,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
         this.formUuid = formUuid;
     }
 
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
 
     public int getReferenceCount() {
         return referenceCount;
