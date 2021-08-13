@@ -970,18 +970,6 @@
         WHERE `id` = #{id}
     </select>
 
-    <!--<select id="getProcessTaskStepFormAttributeByProcessTaskStepId"
-            resultType="codedriver.framework.process.dto.ProcessTaskStepFormAttributeVo">
-        SELECT `processtask_id`      AS processTaskId,
-               `processtask_step_id` AS processTaskStepId,
-               `attribute_uuid`      AS attributeUuid,
-               `action`,
-               `type`
-        FROM `processtask_step_formattribute`
-        WHERE `processtask_id` = #{processTaskId}
-          AND `processtask_step_id` = #{processTaskStepId}
-    </select>-->
-
     <resultMap type="codedriver.framework.process.dto.ProcessTaskStepAuditVo" id="processTaskStepAuditMap">
         <id column="id" property="id"/>
         <result column="processtask_id" property="processTaskId"/>
