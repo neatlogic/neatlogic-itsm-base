@@ -714,4 +714,8 @@
 	<delete id="deleteProcessStepCommentTemplate" parameterType="java.lang.String">
 		DELETE FROM `process_step_comment_template` WHERE `process_step_uuid` = #{value}
 	</delete>
+
+	<delete id="deleteProcessStepTagByProcessUuid" parameterType="java.lang.String">
+		DELETE FROM `process_step_tag` WHERE `process_uuid` = #{value}
+	</delete>
 </mapper>

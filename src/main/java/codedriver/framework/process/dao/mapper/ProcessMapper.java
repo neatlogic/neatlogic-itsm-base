@@ -130,4 +130,6 @@ public interface ProcessMapper {
 	public int deleteProcessSlaByProcessUuid(String uuid);
 
 	public int deleteProcessStepCommentTemplate(String stepUuid);
+
+	int deleteProcessStepTagByProcessUuid(String processUuid);
 }
