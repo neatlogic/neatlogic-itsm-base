@@ -1,40 +1,42 @@
+/*
+ * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.datacube;
+
+import codedriver.framework.applicationlistener.core.ModuleInitializedListenerBase;
+import codedriver.framework.bootstrap.CodedriverWebApplicationContext;
+import codedriver.framework.common.RootComponent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.event.ContextRefreshedEvent;
-
-import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
-import codedriver.framework.common.RootComponent;
-
 @RootComponent
-public class DataCubeFactory extends ApplicationListenerBase {
-	private static Map<String, IDataCubeHandler> componentMap = new HashMap<String, IDataCubeHandler>();
+public class DataCubeFactory extends ModuleInitializedListenerBase {
+    private static final Map<String, IDataCubeHandler> componentMap = new HashMap<String, IDataCubeHandler>();
 
-	public static IDataCubeHandler getComponent(String type) {
-		if (!componentMap.containsKey(type) || componentMap.get(type) == null) {
-			throw new RuntimeException("找不到类型为：" + type + "的流程组件");
-		}
-		return componentMap.get(type);
-	}
+    public static IDataCubeHandler getComponent(String type) {
+        if (!componentMap.containsKey(type) || componentMap.get(type) == null) {
+            throw new RuntimeException("找不到类型为：" + type + "的流程组件");
+        }
+        return componentMap.get(type);
+    }
 
-	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
-		ApplicationContext context = event.getApplicationContext();
-		Map<String, IDataCubeHandler> myMap = context.getBeansOfType(IDataCubeHandler.class);
-		for (Map.Entry<String, IDataCubeHandler> entry : myMap.entrySet()) {
-			IDataCubeHandler component = entry.getValue();
-			if (component.getType() != null) {
-				componentMap.put(component.getType(), component);
-			}
-		}
-	}
+    @Override
+    public void onInitialized(CodedriverWebApplicationContext context) {
+        Map<String, IDataCubeHandler> myMap = context.getBeansOfType(IDataCubeHandler.class);
+        for (Map.Entry<String, IDataCubeHandler> entry : myMap.entrySet()) {
+            IDataCubeHandler component = entry.getValue();
+            if (component.getType() != null) {
+                componentMap.put(component.getType(), component);
+            }
+        }
+    }
 
-	@Override
-	protected void myInit() {
-		// TODO Auto-generated method stub
+    @Override
+    protected void myInit() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 }

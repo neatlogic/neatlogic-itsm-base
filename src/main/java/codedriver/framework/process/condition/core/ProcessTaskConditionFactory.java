@@ -1,41 +1,43 @@
+/*
+ * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.condition.core;
+
+import codedriver.framework.applicationlistener.core.ModuleInitializedListenerBase;
+import codedriver.framework.bootstrap.CodedriverWebApplicationContext;
+import codedriver.framework.common.RootComponent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.event.ContextRefreshedEvent;
-
-import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
-import codedriver.framework.common.RootComponent;
-
 @RootComponent
-public class ProcessTaskConditionFactory extends ApplicationListenerBase{
+public class ProcessTaskConditionFactory extends ModuleInitializedListenerBase {
 
-	private static Map<String, IProcessTaskCondition> conditionComponentMap = new HashMap<>();
-	
-	public static IProcessTaskCondition getHandler(String name) {
-		return conditionComponentMap.get(name);
-	}
-	
-	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
-		ApplicationContext context = event.getApplicationContext();
-		Map<String, IProcessTaskCondition> myMap = context.getBeansOfType(IProcessTaskCondition.class);
-		for (Map.Entry<String, IProcessTaskCondition> entry : myMap.entrySet()) {
-			IProcessTaskCondition column= entry.getValue();
-			conditionComponentMap.put(column.getName(), column);
-		}
-	}
-	
-	public static Map<String, IProcessTaskCondition> getConditionComponentMap() {
-		return conditionComponentMap;
-	}
+    private static final Map<String, IProcessTaskCondition> conditionComponentMap = new HashMap<>();
 
-	@Override
-	protected void myInit() {
-		// TODO Auto-generated method stub
-		
-	}
+    public static IProcessTaskCondition getHandler(String name) {
+        return conditionComponentMap.get(name);
+    }
+
+    @Override
+    public void onInitialized(CodedriverWebApplicationContext context) {
+        Map<String, IProcessTaskCondition> myMap = context.getBeansOfType(IProcessTaskCondition.class);
+        for (Map.Entry<String, IProcessTaskCondition> entry : myMap.entrySet()) {
+            IProcessTaskCondition column = entry.getValue();
+            conditionComponentMap.put(column.getName(), column);
+        }
+    }
+
+    public static Map<String, IProcessTaskCondition> getConditionComponentMap() {
+        return conditionComponentMap;
+    }
+
+    @Override
+    protected void myInit() {
+        // TODO Auto-generated method stub
+
+    }
 
 }
