@@ -220,6 +220,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
                     for (ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo : processTaskFormAttributeDataList) {
                         processTaskVo.getFormAttributeDataMap().put(processTaskFormAttributeDataVo.getAttributeUuid(), processTaskFormAttributeDataVo.getDataObj());
                     }
+                    processTaskVo.setProcessTaskFormAttributeDataList(processTaskFormAttributeDataList);
                     // 获取工单流程图信息
                     String taskConfig = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
                     JSONArray formConfigAuthorityList = (JSONArray) JSONPath.read(taskConfig, "process.formConfig.authorityList");
