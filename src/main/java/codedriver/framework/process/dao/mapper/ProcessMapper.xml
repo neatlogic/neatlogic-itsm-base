@@ -450,6 +450,10 @@
 		</foreach>
 	</select>
 
+	<select id="getProcessStepTagIdListByProcessStepUuid" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT `tag_id` FROM `process_step_tag` WHERE `process_step_uuid` = #{value}
+	</select>
+
 	<insert id="insertProcessSla" parameterType="codedriver.framework.process.dto.ProcessSlaVo">
 		INSERT INTO `process_sla` (
 		`uuid`,
@@ -620,6 +624,11 @@
 		VALUES (#{id}, #{name})
 	</insert>
 
+	<insert id="insertProcessStepTag" parameterType="codedriver.framework.process.dto.ProcessStepTagVo">
+		INSERT INTO `process_Step_tag` (`process_uuid`, `process_step_uuid`, `tag_id`)
+		VALUES (#{processUuid}, #{processStepUuid}, #{tagId})
+	</insert>
+
 	<insert id="insertProcessStepCommentTemplate" parameterType="codedriver.framework.process.dto.ProcessStepVo">
 		INSERT INTO `process_step_comment_template` (`process_step_uuid`, `comment_template_id`)
 		VALUES (#{uuid}, #{commentTemplateId})
@@ -704,5 +713,9 @@
 
 	<delete id="deleteProcessStepCommentTemplate" parameterType="java.lang.String">
 		DELETE FROM `process_step_comment_template` WHERE `process_step_uuid` = #{value}
+	</delete>
+
+	<delete id="deleteProcessStepTagByProcessUuid" parameterType="java.lang.String">
+		DELETE FROM `process_step_tag` WHERE `process_uuid` = #{value}
 	</delete>
 </mapper>

@@ -58,7 +58,7 @@ public interface ProcessTaskMapper {
 
     public List<ProcessTaskStepVo> getProcessTaskStepBaseInfoByProcessTaskId(Long processTaskId);
 
-    public List<Long> getProcessTaskStepIdByConvergeId(Long convergeId);
+//    public List<Long> getProcessTaskStepIdByConvergeId(Long convergeId);
 
     public ProcessTaskFormVo getProcessTaskFormByProcessTaskId(Long processTaskId);
 
@@ -358,6 +358,8 @@ public interface ProcessTaskMapper {
 
     public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
+    int insertProcessTaskStepTag(ProcessTaskStepTagVo processTaskStepTagVo);
+
 
     public int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
@@ -374,8 +376,8 @@ public interface ProcessTaskMapper {
     public int updateProcessTaskStepRelIsHit(@Param("fromProcessTaskStepId") Long fromProcessTaskStepId,
                                              @Param("toProcessTaskStepId") Long toProcessTaskStepId, @Param("isHit") Integer isHit);
 
-    public int updateProcessTaskStepConvergeIsCheck(@Param("isCheck") Integer isCheck,
-                                                    @Param("convergeId") Long convergeId, @Param("processTaskStepId") Long processTaskStepId);
+//    public int updateProcessTaskStepConvergeIsCheck(@Param("isCheck") Integer isCheck,
+//                                                    @Param("convergeId") Long convergeId, @Param("processTaskStepId") Long processTaskStepId);
 
 
     public int updateProcessTaskStepUserStatus(ProcessTaskStepUserVo processTaskStepUserVo);
