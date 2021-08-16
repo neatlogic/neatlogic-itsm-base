@@ -452,6 +452,10 @@ public class ProcessConfigUtil {
         if (commentTemplateId != null) {
             resultObj.put("commentTemplateId", commentTemplateId);
         }
+        JSONArray tagList = configObj.getJSONArray("tagList");
+        if (CollectionUtils.isNotEmpty(tagList)) {
+            resultObj.put("tagList", tagList);
+        }
         return resultObj;
     }
 
