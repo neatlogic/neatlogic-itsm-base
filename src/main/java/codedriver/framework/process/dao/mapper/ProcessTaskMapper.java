@@ -269,6 +269,8 @@ public interface ProcessTaskMapper {
 
     public List<ChannelVo> getChannelReferencedCountList();
 
+    List<ProcessTaskStepFileVo> getProcessTaskStepFileListByTaskId(Long taskId);
+
     public int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     public int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,

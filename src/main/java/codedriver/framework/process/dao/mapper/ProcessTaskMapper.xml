@@ -2394,6 +2394,15 @@
         GROUP BY `channel_uuid`
     </select>
 
+    <select id="getProcessTaskStepFileListByTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepFileVo">
+        select
+        `processtask_id` as processTaskId,
+        `processtask_step_id` as processTaskStepId,
+        `content_id` as contentId,
+        `file_id` as fileId
+        from `processtask_file` where `processtask_id` = #{value}
+    </select>
+
     <update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
