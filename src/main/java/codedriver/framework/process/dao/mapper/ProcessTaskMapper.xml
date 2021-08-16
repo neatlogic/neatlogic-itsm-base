@@ -650,11 +650,11 @@
         WHERE a.`converge_id` = #{value}
     </select>
 
-    <select id="getProcessTaskStepIdByConvergeId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    <!--<select id="getProcessTaskStepIdByConvergeId" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT a.`processtask_step_id`
         FROM `processtask_converge` a
         WHERE a.`converge_id` = #{value}
-    </select>
+    </select>-->
 
     <select id="getProcessTaskLockById" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT id
@@ -2382,12 +2382,12 @@
         GROUP BY `channel_uuid`
     </select>
 
-    <update id="updateProcessTaskStepConvergeIsCheck">
+    <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
         WHERE converge_id = #{convergeId}
           AND processtask_step_id = #{processTaskStepId}
-    </update>
+    </update>-->
 
     <update id="updateProcessTaskStepRelIsHit">
         UPDATE
@@ -3009,6 +3009,20 @@
                 #{processTaskStepId},
                 #{operationType},
                 NOW(3))
+    </insert>
+
+    <insert id="insertProcessTaskStepTag" parameterType="codedriver.framework.process.dto.ProcessTaskStepTagVo">
+        INSERT INTO `processtask_step_tag` (
+            `processtask_id`,
+            `processtask_step_id`,
+            `tag_id`
+        )
+        VALUES
+        (
+            #{processTaskId},
+            #{processTaskStepId},
+            #{tagId}
+        )
     </insert>
 
     <update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
