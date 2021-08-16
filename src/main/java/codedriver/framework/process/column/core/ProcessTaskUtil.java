@@ -1,10 +1,7 @@
 package codedriver.framework.process.column.core;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import codedriver.framework.dto.UrlInfoVo;
@@ -164,40 +161,28 @@ public class ProcessTaskUtil {
 
         //TODO linbq 20210324 暂时屏蔽表单数据在模板中显示
         /** 表单信息数据 **/
-//        Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
-//        if (MapUtils.isNotEmpty(formAttributeDataMap)) {
-//            if (StringUtils.isNotBlank(processTaskVo.getFormConfig())) {
-//                Map<String, Object> formAttributeMap = new HashMap<>();
-//                FormVersionVo formVersionVo = new FormVersionVo();
-//                formVersionVo.setFormConfig(processTaskVo.getFormConfig());
-//                List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
-//                for (FormAttributeVo formAttribute : formAttributeList) {
-//                    Object attributeValue = formAttributeDataMap.get(formAttribute.getUuid());
-//                    if (attributeValue != null) {
-//                        IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
-//                        if (handler != null) {
-//                            AttributeDataVo attributeDataVo = new AttributeDataVo();
-//                            attributeDataVo.setAttributeUuid(formAttribute.getUuid());
-//                            if (attributeValue instanceof String) {
-//                                attributeDataVo.setData((String) attributeValue);
-//                            } else if (attributeValue instanceof JSONArray) {
-//                                attributeDataVo.setData(JSON.toJSONString(attributeValue));
-//                            } else if (attributeValue instanceof JSONObject) {
-//                                attributeDataVo.setData(JSON.toJSONString(attributeValue));
-//                            }
-//                            Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
-//
-//                            resultObj.put(formAttribute.getUuid(), value);
-//                            formAttributeMap.put(formAttribute.getLabel(), joinToString(value));
-//                        } else {
-//                            resultObj.put(formAttribute.getUuid(), attributeValue);
-//                            formAttributeMap.put(formAttribute.getLabel(), joinToString(attributeValue));
-//                        }
-//                    }
-//                }
-//                resultObj.put(ProcessTaskParams.FORM.getValue(), formAttributeMap);
-//            }
-//        }
+        List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskVo.getProcessTaskFormAttributeDataList();
+        if (CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
+            Map<String, ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataMap = processTaskFormAttributeDataList.stream().collect(Collectors.toMap(e -> e.getAttributeUuid(), e -> e));
+            if (MapUtils.isNotEmpty(processTaskVo.getFormConfig())) {
+                List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataVoList = new ArrayList<>();
+                FormVersionVo formVersionVo = new FormVersionVo();
+                formVersionVo.setFormConfig(processTaskVo.getFormConfig().toJSONString());
+                List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
+                for (FormAttributeVo formAttribute : formAttributeList) {
+                    ProcessTaskFormAttributeDataVo attributeDataVo = processTaskFormAttributeDataMap.get(formAttribute.getUuid());
+                    if (attributeDataVo != null) {
+                        IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
+                        if (handler != null) {
+                            Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+//                            attributeDataVo.setData();// TODO linbq
+                            processTaskFormAttributeDataVoList.add(attributeDataVo);
+                        }
+                    }
+                }
+                resultObj.put(ProcessTaskParams.FORM.getValue(), processTaskFormAttributeDataVoList);
+            }
+        }
         ProcessTaskStepVo currentProcessTaskStep = processTaskVo.getCurrentProcessTaskStep();
         if (currentProcessTaskStep != null) {
             resultObj.put(ProcessTaskParams.STEPID.getValue(), currentProcessTaskStep.getId());
