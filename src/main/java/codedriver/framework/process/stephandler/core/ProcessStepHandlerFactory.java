@@ -1,28 +1,27 @@
+/*
+ * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.stephandler.core;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.annotation.Order;
-
-import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
+import codedriver.framework.applicationlistener.core.ModuleInitializedListenerBase;
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
+import codedriver.framework.bootstrap.CodedriverWebApplicationContext;
 import codedriver.framework.common.RootComponent;
 import codedriver.framework.dto.ModuleVo;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
+import org.springframework.core.annotation.Order;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RootComponent
 @Order(10)
-public class ProcessStepHandlerFactory extends ApplicationListenerBase {
-	private static Map<String, IProcessStepHandler> componentMap = new HashMap<String, IProcessStepHandler>();
-	private static List<ProcessStepHandlerVo> processStepHandlerList = new ArrayList<>();
+public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
+	private static final Map<String, IProcessStepHandler> componentMap = new HashMap<String, IProcessStepHandler>();
+	private static final List<ProcessStepHandlerVo> processStepHandlerList = new ArrayList<>();
 
 	public static IProcessStepHandler getHandler(String handler) {
 //		if (!componentMap.containsKey(handler) || componentMap.get(handler) == null) {
@@ -32,7 +31,7 @@ public class ProcessStepHandlerFactory extends ApplicationListenerBase {
 	}
 
 	public static IProcessStepHandler getHandler() {
-		/** 随便返回一个handler，主要用来处理作业级操作 **/
+		/* 随便返回一个handler，主要用来处理作业级操作 **/
 		return componentMap.values().iterator().next();
 	}
 
@@ -56,8 +55,7 @@ public class ProcessStepHandlerFactory extends ApplicationListenerBase {
 	}
 
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
-		ApplicationContext context = event.getApplicationContext();
+	public void onInitialized(CodedriverWebApplicationContext context) {
 		Map<String, IProcessStepHandler> myMap = context.getBeansOfType(IProcessStepHandler.class);
 		for (Map.Entry<String, IProcessStepHandler> entry : myMap.entrySet()) {
 			IProcessStepHandler component = entry.getValue();

@@ -1,9 +1,13 @@
+/*
+ * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.notify.core;
 
-import codedriver.framework.applicationlistener.core.ApplicationListenerBase;
+import codedriver.framework.applicationlistener.core.ModuleInitializedListenerBase;
+import codedriver.framework.bootstrap.CodedriverWebApplicationContext;
 import codedriver.framework.common.RootComponent;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,25 +16,25 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RootComponent
-public class NotifyDefaultTemplateFactory extends ApplicationListenerBase {
-	
-//	private static List<NotifyTemplateVo> defaultTemplateList = new ArrayList<>();	
+public class NotifyDefaultTemplateFactory extends ModuleInitializedListenerBase {
+
+    //	private static List<NotifyTemplateVo> defaultTemplateList = new ArrayList<>();
 //
-	private static int number;
+    private static int number;
+
     public static synchronized long nextNum() {
         return number++;
     }
 
 
-    private static Map<String, List<IDefaultTemplate>> templateMap = new HashMap<>();
+    private static final Map<String, List<IDefaultTemplate>> templateMap = new HashMap<>();
 
     public static List<IDefaultTemplate> getTemplate(String handler) {
         return templateMap.get(handler);
     }
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        ApplicationContext context = event.getApplicationContext();
+    public void onInitialized(CodedriverWebApplicationContext context) {
         Map<String, IDefaultTemplate> map = context.getBeansOfType(IDefaultTemplate.class);
         Collection<IDefaultTemplate> values = map.values();
         templateMap.putAll(values.stream().collect(Collectors.groupingBy(IDefaultTemplate::getNotifyHandlerType)));
@@ -112,5 +116,5 @@ public class NotifyDefaultTemplateFactory extends ApplicationListenerBase {
 //		}
 //		return null;
 //	}
-	
+
 }
