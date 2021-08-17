@@ -1,13 +1,12 @@
 package codedriver.framework.process.constvalue;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import codedriver.framework.common.constvalue.IEnum;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import codedriver.framework.common.dto.ValueTextVo;
-
-public enum ProcessTaskStatus {
+public enum ProcessTaskStatus implements IEnum {
 	RUNNING("running", "处理中","#2d84fb"),
 	ABORTED("aborted", "已取消","#F9A825"),
 	SUCCEED("succeed", "已完成","#25b865"),
@@ -23,7 +22,6 @@ public enum ProcessTaskStatus {
 	private String text;
 	private String color;
 
-	private static List<ValueTextVo> processTaskStatusList;
 	private ProcessTaskStatus(String _status, String _text,String _color) {
 		this.status = _status;
 		this.text = _text;
@@ -82,13 +80,18 @@ public enum ProcessTaskStatus {
 		return statusJson;
 	}
 
-	public static List<ValueTextVo> getProcessTaskStatusList(){
-		if(processTaskStatusList == null) {
-			processTaskStatusList = new ArrayList<>();
-			for (ProcessTaskStatus s : ProcessTaskStatus.values()) {
-				processTaskStatusList.add(new ValueTextVo(s.getValue(), s.getText()));
-			}
+	@Override
+	public List getValueTextList() {
+		JSONArray array = new JSONArray();
+		for (ProcessTaskStatus type : values()) {
+			array.add(new JSONObject() {
+				{
+					this.put("value", type.getValue());
+					this.put("text", type.getText());
+					this.put("color", type.getColor());
+				}
+			});
 		}
-		return processTaskStatusList;
+		return array;
 	}
 }
