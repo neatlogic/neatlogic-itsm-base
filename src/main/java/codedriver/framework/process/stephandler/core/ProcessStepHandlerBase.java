@@ -1536,6 +1536,17 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
                     }
                 }
+
+                List<Long> tagIdList = processMapper.getProcessStepTagIdListByProcessStepUuid(stepVo.getUuid());
+                if (CollectionUtils.isNotEmpty(tagIdList)) {
+                    ProcessTaskStepTagVo processTaskStepTagVo = new ProcessTaskStepTagVo();
+                    processTaskStepTagVo.setProcessTaskId(processTaskVo.getId());
+                    processTaskStepTagVo.setProcessTaskStepId(ptStepVo.getId());
+                    for (Long tagId : tagIdList) {
+                        processTaskStepTagVo.setTagId(tagId);
+                        processTaskMapper.insertProcessTaskStepTag(processTaskStepTagVo);
+                    }
+                }
             }
 
             /* 写入关系信息 **/
