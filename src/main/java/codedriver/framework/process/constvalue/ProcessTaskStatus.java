@@ -88,7 +88,6 @@ public enum ProcessTaskStatus implements IEnum {
 				{
 					this.put("value", type.getValue());
 					this.put("text", type.getText());
-					this.put("color", type.getColor());
 				}
 			});
 		}
