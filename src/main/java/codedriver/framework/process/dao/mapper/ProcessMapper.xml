@@ -368,6 +368,7 @@
 		FROM  `process_tag` 
 		<if test="keyword != null and keyword != ''">
 			WHERE `name` LIKE CONCAT('%', #{keyword}, '%')
+			ORDER BY LENGTH(`name`)
 		</if>
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
@@ -625,7 +626,7 @@
 	</insert>
 
 	<insert id="insertProcessStepTag" parameterType="codedriver.framework.process.dto.ProcessStepTagVo">
-		INSERT INTO `process_Step_tag` (`process_uuid`, `process_step_uuid`, `tag_id`)
+		INSERT INTO `process_step_tag` (`process_uuid`, `process_step_uuid`, `tag_id`)
 		VALUES (#{processUuid}, #{processStepUuid}, #{tagId})
 	</insert>
 
