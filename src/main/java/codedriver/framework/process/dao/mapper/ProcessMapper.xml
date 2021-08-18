@@ -368,8 +368,8 @@
 		FROM  `process_tag` 
 		<if test="keyword != null and keyword != ''">
 			WHERE `name` LIKE CONCAT('%', #{keyword}, '%')
+			ORDER BY LENGTH(`name`)
 		</if>
-		ORDER BY LENGTH(`name`)
 		<if test="needPage">
 			limit #{startNum}, #{pageSize}
 		</if>
