@@ -297,7 +297,7 @@ public class ProcessConfigUtil {
             JSONObject config = new JSONObject();
             config.put("isRequired", 0);
             config.put("processStepUuidList", new JSONArray());
-            config.put("limitList", new JSONArray());
+            config.put("rangeList", new JSONArray());
             policyObj.put("config", config);
             policyMap.put(WorkerPolicy.PRESTEPASSIGN, policyObj);
         }
@@ -375,9 +375,9 @@ public class ProcessConfigUtil {
                                 if (CollectionUtils.isNotEmpty(processStepUuidList)) {
                                     configObject.put("processStepUuidList", processStepUuidList);
                                 }
-                                JSONArray limitList = configObj.getJSONArray("limitList");
-                                if (CollectionUtils.isNotEmpty(limitList)) {
-                                    configObject.put("limitList", limitList);
+                                JSONArray rangeList = configObj.getJSONArray("rangeList");
+                                if (CollectionUtils.isNotEmpty(rangeList)) {
+                                    configObject.put("rangeList", rangeList);
                                 }
                                 break;
                             case COPY:
