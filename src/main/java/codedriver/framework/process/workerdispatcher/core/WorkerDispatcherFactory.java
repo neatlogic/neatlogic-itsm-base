@@ -11,12 +11,11 @@ import codedriver.framework.bootstrap.CodedriverWebApplicationContext;
 import codedriver.framework.common.RootComponent;
 import codedriver.framework.dto.ModuleVo;
 import codedriver.framework.process.dto.WorkerDispatcherVo;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RootComponent
 public class WorkerDispatcherFactory extends ModuleInitializedListenerBase {
@@ -58,7 +57,15 @@ public class WorkerDispatcherFactory extends ModuleInitializedListenerBase {
 				workerDispatcherVo.setName(component.getName());
 				workerDispatcherVo.setIsActive(1);
 				workerDispatcherVo.setHelp(component.getHelp());
-				workerDispatcherVo.setConfig(component.getConfig());
+				JSONArray configArray = component.getConfig();
+				workerDispatcherVo.setConfig(configArray);
+				//判断是否有form组件，提高前端性能
+				for(int i=0;i< configArray.size();i++){
+					JSONObject config = configArray.getJSONObject(i);
+					if(Objects.equals(config.getString("type"),WorkerDispatcherForm.FORM_SELECT.getValue())){
+						workerDispatcherVo.setIsHasForm(1);
+					}
+				}
 				workerDispatcherVo.setModuleId(context.getId());
 				workerDispatcherList.add(workerDispatcherVo);
 			}
