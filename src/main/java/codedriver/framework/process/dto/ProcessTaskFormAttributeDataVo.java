@@ -8,6 +8,8 @@ public class ProcessTaskFormAttributeDataVo extends AttributeDataVo
     private Long processTaskId;
     private String type;
     private Integer sort;
+    private String label;
+    private Object transformedResult;
 
     public Long getProcessTaskId() {
         return processTaskId;
@@ -31,6 +33,22 @@ public class ProcessTaskFormAttributeDataVo extends AttributeDataVo
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public Object getTransformedResult() {
+        return transformedResult;
+    }
+
+    public void setTransformedResult(Object transformedResult) {
+        this.transformedResult = transformedResult;
     }
 
     @Override
