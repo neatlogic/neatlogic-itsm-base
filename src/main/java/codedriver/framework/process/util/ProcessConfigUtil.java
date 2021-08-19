@@ -297,6 +297,7 @@ public class ProcessConfigUtil {
             JSONObject config = new JSONObject();
             config.put("isRequired", 0);
             config.put("processStepUuidList", new JSONArray());
+            config.put("limitList", new JSONArray());
             policyObj.put("config", config);
             policyMap.put(WorkerPolicy.PRESTEPASSIGN, policyObj);
         }
@@ -374,6 +375,10 @@ public class ProcessConfigUtil {
                                 if (CollectionUtils.isNotEmpty(processStepUuidList)) {
                                     configObject.put("processStepUuidList", processStepUuidList);
                                 }
+                                JSONArray limitList = configObj.getJSONArray("limitList");
+                                if (CollectionUtils.isNotEmpty(limitList)) {
+                                    configObject.put("limitList", limitList);
+                                }
                                 break;
                             case COPY:
                                 String processStepUuid = configObj.getString("processStepUuid");
@@ -430,7 +435,6 @@ public class ProcessConfigUtil {
      * @return
      */
     public static JSONObject regulateSimpleSettings(JSONObject configObj) {
-        // TODO linbq 数据结构有问题，下面这些字段放在workerPolicyConfig里面了，应该放在与workerPolicyConfig同级
         if (configObj == null) {
             configObj = new JSONObject();
         }
@@ -453,9 +457,10 @@ public class ProcessConfigUtil {
             resultObj.put("commentTemplateId", commentTemplateId);
         }
         JSONArray tagList = configObj.getJSONArray("tagList");
-        if (CollectionUtils.isNotEmpty(tagList)) {
-            resultObj.put("tagList", tagList);
+        if (tagList == null) {
+            tagList = new JSONArray();
         }
+        resultObj.put("tagList", tagList);
         return resultObj;
     }
 
