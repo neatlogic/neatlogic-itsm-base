@@ -12,7 +12,7 @@ import java.util.Objects;
  * @since 2021/8/19 11:30
  **/
 public enum WorkerDispatcherForm {
-    INPUT("input", "文本框组件"),
+    TEXT("text", "文本框组件"),
     USER_SELECT("userselect", "选择用户组件"),
     FORM_SELECT("formselect", "选择表单组件"),
     SELECT("select", "下拉框组件");
