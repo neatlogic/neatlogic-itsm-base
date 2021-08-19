@@ -1,10 +1,8 @@
 package codedriver.framework.process.dto;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.restful.annotation.EntityField;
+import com.alibaba.fastjson.JSONArray;
 
 public class WorkerDispatcherVo {
 	@EntityField(name = "分派器名称",
@@ -25,6 +23,9 @@ public class WorkerDispatcherVo {
 	@EntityField(name = "分派器所属模块",
 			type = ApiParamType.STRING)
 	private String moduleId;
+	@EntityField(name = "是否包含选表单组件",
+			type = ApiParamType.INTEGER)
+	private int isHasForm = 0;
 
 	public String getName() {
 		return name;
@@ -74,4 +75,11 @@ public class WorkerDispatcherVo {
 		this.moduleId = moduleId;
 	}
 
+	public int getIsHasForm() {
+		return isHasForm;
+	}
+
+	public void setIsHasForm(int isHasForm) {
+		this.isHasForm = isHasForm;
+	}
 }
