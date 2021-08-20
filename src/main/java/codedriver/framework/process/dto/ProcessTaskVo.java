@@ -81,6 +81,7 @@ public class ProcessTaskVo extends BasePageVo {
     private int isHasOldFormProp = 0;
     @EntityField(name = "工单表单属性值", type = ApiParamType.JSONOBJECT)
     private Map<String, Object> formAttributeDataMap = new HashMap<>();
+    private List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList;
     @EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
     private String worktimeUuid;
 
@@ -432,6 +433,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setFormAttributeDataMap(Map<String, Object> formAttributeDataMap) {
         this.formAttributeDataMap = formAttributeDataMap;
+    }
+
+    public List<ProcessTaskFormAttributeDataVo> getProcessTaskFormAttributeDataList() {
+        return processTaskFormAttributeDataList;
+    }
+
+    public void setProcessTaskFormAttributeDataList(List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList) {
+        this.processTaskFormAttributeDataList = processTaskFormAttributeDataList;
     }
 
     public String getWorktimeUuid() {

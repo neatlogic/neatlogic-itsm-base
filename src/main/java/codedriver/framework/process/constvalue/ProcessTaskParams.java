@@ -27,8 +27,66 @@ public enum ProcessTaskParams {
     SUBTASKDEADLINE("subtaskdeadline", "子任务期望完成时间", ParamType.DATE),
     OPERATOR("operator", "操作人", ParamType.STRING),
     REASON("reason", "原因", ParamType.STRING),
-//    FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??><#list DATA.form?keys as key>${key}：${DATA.form[key]}<#if key_has_next><br></#if></#list></#if>") //TODO linbq 20210324 暂时屏蔽表单数据在模板中显示
+    FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??>\n" +
+            "<#list DATA.form as attributeItem>\t\t\t\t   \n" +
+            "<#if attributeItem.type=='forminput'>\n" +
+            "${attributeItem.label}：\t${attributeItem.dataObj}\n" +
+            "<#elseif attributeItem.type=='formtextarea'>\n" +
+            "${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "<#elseif attributeItem.type=='formeditor'>\n" +
+            "${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "<#elseif attributeItem.type=='formtime'>\n" +
+            "${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "<#elseif attributeItem.type=='formdate'>\n" +
+            "${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "<#elseif attributeItem.type=='formlink'>\n" +
+            "${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "<#elseif attributeItem.type=='formradio'>\n" +
+            "${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "<#elseif attributeItem.type=='formcheckbox'>\n" +
+            "${attributeItem.label}：\n" +
+            "\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t${dataItem}\n" +
+            "\t<#if dataItem_has_next>、</#if>\n" +
+            "\t</#list>\n" +
+            "<#elseif attributeItem.type=='formcascadelist'>\n" +
+            "${attributeItem.label}：\n" +
+            "\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t${dataItem}\n" +
+            "\t<#if dataItem_has_next>、</#if>\n" +
+            "\t</#list>\n" +
+            "<#elseif attributeItem.type=='formselect'>\n" +
+            "${attributeItem.label}：\n" +
+            "\t<#if attributeItem.isMultiple == 0>\n" +
+            "\t${attributeItem.dataObj}\n" +
+            "\t<#elseif attributeItem.isMultiple == 1>\n" +
+            "\t\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t\t${dataItem}\n" +
+            "\t\t<#if dataItem_has_next>、</#if>\n" +
+            "\t\t</#list>\n" +
+            "\t</#if>\n" +
+            "<#elseif attributeItem.type=='formuserselect'>\n" +
+            "${attributeItem.label}：\n" +
+            "\t<#if attributeItem.isMultiple == 0>\n" +
+            "\t${attributeItem.dataObj}\n" +
+            "\t<#elseif attributeItem.isMultiple == 1>\n" +
+            "\t\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t\t${dataItem}\n" +
+            "\t\t<#if dataItem_has_next>、</#if>\n" +
+            "\t\t</#list>\n" +
+            "\t</#if>\n" +
+            "<#elseif attributeItem.type=='formstaticlist'>\n" +
+            "${attributeItem.label}：暂无\n" +
+            "<#elseif attributeItem.type=='formdynamiclist'>\n" +
+            "${attributeItem.label}：暂无\n" +
+            "<#elseif attributeItem.type=='cientityselect'>\n" +
+            "${attributeItem.label}：暂无\n" +
+            "</#if>\n" +
+            "<#if attributeItem_has_next><br></#if>\n" +
+            "</#list>\n" +
+            "</#if>")
     ;
+
     private String value;
     private String text;
     private ParamType paramType;
