@@ -173,7 +173,7 @@ public class ProcessTaskUtil {
                     if (attributeDataVo != null && attributeDataVo.getData() != null) {
                         IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
                         if (handler != null) {
-                            Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+                            Object value = handler.dataTransformationForEmail(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
                             attributeDataVo.setDataObj(value);
                             attributeDataVo.setLabel(formAttribute.getLabel());
                             processTaskFormAttributeDataVoList.add(attributeDataVo);
