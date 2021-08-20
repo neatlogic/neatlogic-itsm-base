@@ -96,9 +96,9 @@ public interface ProcessTaskService {
      *            工单id
      * @param processStepUuid
      *            流程步骤uuid
-     * @return List<ProcessTaskStepVo>
+     * @return List<AssignableWorkerStepVo>
      */
-    public List<ProcessTaskStepVo> getAssignableWorkerStepList(Long processTaskId, String processStepUuid);
+    public List<AssignableWorkerStepVo> getAssignableWorkerStepList(Long processTaskId, String processStepUuid);
 
     /**
      * 
@@ -109,9 +109,9 @@ public interface ProcessTaskService {
      *            流程uuid
      * @param processStepUuid
      *            流程步骤uuid
-     * @return List<ProcessTaskStepVo>
+     * @return List<AssignableWorkerStepVo>
      */
-    public List<ProcessTaskStepVo> getAssignableWorkerStepList(String processUuid, String processStepUuid);
+    public List<AssignableWorkerStepVo> getAssignableWorkerStepList(String processUuid, String processStepUuid);
 
     /**
      * 

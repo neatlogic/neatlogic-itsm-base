@@ -94,7 +94,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
 	private Integer isView;
 	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepVo> assignableWorkerStepList = new ArrayList<>();
+	private List<AssignableWorkerStepVo> assignableWorkerStepList = new ArrayList<>();
 	@EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
 	@JSONField(serialize=false)
@@ -541,11 +541,11 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.aliasName = aliasName;
 	}
 
-	public List<ProcessTaskStepVo> getAssignableWorkerStepList() {
+	public List<AssignableWorkerStepVo> getAssignableWorkerStepList() {
 		return assignableWorkerStepList;
 	}
 
-	public void setAssignableWorkerStepList(List<ProcessTaskStepVo> assignableWorkerStepList) {
+	public void setAssignableWorkerStepList(List<AssignableWorkerStepVo> assignableWorkerStepList) {
 		this.assignableWorkerStepList = assignableWorkerStepList;
 	}
 
