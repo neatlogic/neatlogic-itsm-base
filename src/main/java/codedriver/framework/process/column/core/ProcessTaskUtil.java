@@ -159,7 +159,6 @@ public class ProcessTaskUtil {
             resultObj.put(ProcessTaskParams.STARTTIME.getValue(), "");
         }
 
-        //TODO linbq 20210324 暂时屏蔽表单数据在模板中显示
         /** 表单信息数据 **/
         List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskVo.getProcessTaskFormAttributeDataList();
         if (CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
@@ -171,11 +170,12 @@ public class ProcessTaskUtil {
                 List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
                 for (FormAttributeVo formAttribute : formAttributeList) {
                     ProcessTaskFormAttributeDataVo attributeDataVo = processTaskFormAttributeDataMap.get(formAttribute.getUuid());
-                    if (attributeDataVo != null) {
+                    if (attributeDataVo != null && attributeDataVo.getData() != null) {
                         IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
                         if (handler != null) {
                             Object value = handler.valueConversionText(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
-//                            attributeDataVo.setData();// TODO linbq
+                            attributeDataVo.setDataObj(value);
+                            attributeDataVo.setLabel(formAttribute.getLabel());
                             processTaskFormAttributeDataVoList.add(attributeDataVo);
                         }
                     }
