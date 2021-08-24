@@ -170,13 +170,15 @@ public class ProcessTaskUtil {
                 List<FormAttributeVo> formAttributeList = formVersionVo.getFormAttributeList();
                 for (FormAttributeVo formAttribute : formAttributeList) {
                     ProcessTaskFormAttributeDataVo attributeDataVo = processTaskFormAttributeDataMap.get(formAttribute.getUuid());
-                    if (attributeDataVo != null && attributeDataVo.getData() != null) {
-                        IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
-                        if (handler != null) {
-                            Object value = handler.dataTransformationForEmail(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
-                            attributeDataVo.setDataObj(value);
-                            attributeDataVo.setLabel(formAttribute.getLabel());
-                            processTaskFormAttributeDataVoList.add(attributeDataVo);
+                    if (attributeDataVo != null) {
+                        attributeDataVo.setLabel(formAttribute.getLabel());
+                        if (attributeDataVo.getData() != null) {
+                            IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
+                            if (handler != null) {
+                                Object value = handler.dataTransformationForEmail(attributeDataVo, JSONObject.parseObject(formAttribute.getConfig()));
+                                attributeDataVo.setDataObj(value);
+                                processTaskFormAttributeDataVoList.add(attributeDataVo);
+                            }
                         }
                     }
                 }
