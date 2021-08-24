@@ -28,62 +28,155 @@ public enum ProcessTaskParams {
     OPERATOR("operator", "操作人", ParamType.STRING),
     REASON("reason", "原因", ParamType.STRING),
     FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??>\n" +
-            "<#list DATA.form as attributeItem>\t\t\t\t   \n" +
-            "<#if attributeItem.type=='forminput'>\n" +
-            "${attributeItem.label}：\t${attributeItem.dataObj}\n" +
-            "<#elseif attributeItem.type=='formtextarea'>\n" +
-            "${attributeItem.label}：${attributeItem.dataObj}\n" +
-            "<#elseif attributeItem.type=='formeditor'>\n" +
-            "${attributeItem.label}：${attributeItem.dataObj}\n" +
-            "<#elseif attributeItem.type=='formtime'>\n" +
-            "${attributeItem.label}：${attributeItem.dataObj}\n" +
-            "<#elseif attributeItem.type=='formdate'>\n" +
-            "${attributeItem.label}：${attributeItem.dataObj}\n" +
-            "<#elseif attributeItem.type=='formlink'>\n" +
-            "${attributeItem.label}：${attributeItem.dataObj}\n" +
-            "<#elseif attributeItem.type=='formradio'>\n" +
-            "${attributeItem.label}：${attributeItem.dataObj}\n" +
-            "<#elseif attributeItem.type=='formcheckbox'>\n" +
-            "${attributeItem.label}：\n" +
-            "\t<#list attributeItem.dataObj as dataItem>\n" +
-            "\t${dataItem}\n" +
-            "\t<#if dataItem_has_next>、</#if>\n" +
-            "\t</#list>\n" +
-            "<#elseif attributeItem.type=='formcascadelist'>\n" +
-            "${attributeItem.label}：\n" +
-            "\t<#list attributeItem.dataObj as dataItem>\n" +
-            "\t${dataItem}\n" +
-            "\t<#if dataItem_has_next>、</#if>\n" +
-            "\t</#list>\n" +
-            "<#elseif attributeItem.type=='formselect'>\n" +
-            "${attributeItem.label}：\n" +
-            "\t<#if attributeItem.isMultiple == 0>\n" +
-            "\t${attributeItem.dataObj}\n" +
-            "\t<#elseif attributeItem.isMultiple == 1>\n" +
+            "\t<#list DATA.form as attributeItem>\t\t\t\t   \n" +
+            "\t\t<#if attributeItem.type=='forminput'>\n" +
+            "\t\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t<#elseif attributeItem.type=='formtextarea'>\n" +
+            "\t\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t<#elseif attributeItem.type=='formeditor'>\n" +
+            "\t\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t<#elseif attributeItem.type=='formtime'>\n" +
+            "\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t<#elseif attributeItem.type=='formdate'>\n" +
+            "\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t<#elseif attributeItem.type=='formlink'>\n" +
+            "\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t<#elseif attributeItem.type=='formradio'>\n" +
+            "\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t<#elseif attributeItem.type=='formcheckbox'>\n" +
+            "\t\t${attributeItem.label}：\n" +
             "\t\t<#list attributeItem.dataObj as dataItem>\n" +
-            "\t\t${dataItem}\n" +
-            "\t\t<#if dataItem_has_next>、</#if>\n" +
+            "\t\t\t${dataItem}\n" +
+            "\t\t\t<#if dataItem_has_next>、</#if>\n" +
             "\t\t</#list>\n" +
-            "\t</#if>\n" +
-            "<#elseif attributeItem.type=='formuserselect'>\n" +
-            "${attributeItem.label}：\n" +
-            "\t<#if attributeItem.isMultiple == 0>\n" +
-            "\t${attributeItem.dataObj}\n" +
-            "\t<#elseif attributeItem.isMultiple == 1>\n" +
-            "\t\t<#list attributeItem.dataObj as dataItem>\n" +
-            "\t\t${dataItem}\n" +
-            "\t\t<#if dataItem_has_next>、</#if>\n" +
-            "\t\t</#list>\n" +
-            "\t</#if>\n" +
-            "<#elseif attributeItem.type=='formstaticlist'>\n" +
-            "${attributeItem.label}：暂无\n" +
-            "<#elseif attributeItem.type=='formdynamiclist'>\n" +
-            "${attributeItem.label}：暂无\n" +
-            "<#elseif attributeItem.type=='cientityselect'>\n" +
-            "${attributeItem.label}：暂无\n" +
-            "</#if>\n" +
-            "<#if attributeItem_has_next><br></#if>\n" +
-            "</#list>\n" +
+            "\t\t<#elseif attributeItem.type=='formcascadelist'>\n" +
+            "\t\t\t${attributeItem.label}：\n" +
+            "\t\t\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t\t\t\t${dataItem}\n" +
+            "\t\t\t\t<#if dataItem_has_next>、</#if>\n" +
+            "\t\t\t</#list>\n" +
+            "\t\t<#elseif attributeItem.type=='formselect'>\n" +
+            "\t\t\t${attributeItem.label}：\n" +
+            "\t\t\t<#if attributeItem.isMultiple == 0>\n" +
+            "\t\t\t\t${attributeItem.dataObj}\n" +
+            "\t\t\t<#elseif attributeItem.isMultiple == 1>\n" +
+            "\t\t\t\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t\t\t\t\t${dataItem}\n" +
+            "\t\t\t\t\t<#if dataItem_has_next>、</#if>\n" +
+            "\t\t\t\t</#list>\n" +
+            "\t\t\t</#if>\n" +
+            "\t\t<#elseif attributeItem.type=='formuserselect'>\n" +
+            "\t\t\t${attributeItem.label}：\n" +
+            "\t\t\t<#if attributeItem.isMultiple == 0>\n" +
+            "\t\t\t\t${attributeItem.dataObj}\n" +
+            "\t\t\t<#elseif attributeItem.isMultiple == 1>\n" +
+            "\t\t\t\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t\t\t\t\t${dataItem}\n" +
+            "\t\t\t\t\t<#if dataItem_has_next>、</#if>\n" +
+            "\t\t\t\t</#list>\n" +
+            "\t\t\t</#if>\n" +
+            "\t\t<#elseif attributeItem.type=='formstaticlist'>\n" +
+            "\t\t${attributeItem.label}：\n" +
+            "\t\t\t<#if attributeItem.dataObj??>\n" +
+            "\t\t\t\t<table border=\"1\" style=\"border-collapse:collapse\">\n" +
+            "\t\t\t\t<#assign theadList = attributeItem.dataObj.theadList/>\n" +
+            "\t\t\t\t<#if theadList??>\n" +
+            "\t\t\t\t\t<tr>\n" +
+            "\t\t\t\t\t\t<#list theadList as thead>\n" +
+            "\t\t\t\t\t\t\t<th>${thead.title}</th>\n" +
+            "\t\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t</tr>\n" +
+            "\t\t\t\t</#if>\n" +
+            "\t\t\t\t<#assign tbodyList = attributeItem.dataObj.tbodyList/>\n" +
+            "\t\t\t\t<#if tbodyList??>\n" +
+            "\t\t\t\t<#list tbodyList as tbody>\n" +
+            "\t\t\t\t\t<tr>\n" +
+            "\t\t\t\t\t<#list theadList as thead>\n" +
+            "\t\t\t\t\t\t<#assign colKey = thead.key/>\n" +
+            "\t\t\t\t\t\t<td>\n" +
+            "\t\t\t\t\t\t\t<#assign cell = tbody[colKey]/>\n" +
+            "\t\t\t\t\t\t\t<#if cell.type =='selects' || cell.type =='checkbox'>\n" +
+            "\t\t\t\t\t\t\t\t<#list cell.text as text>\n" +
+            "\t\t\t\t\t\t\t\t\t${text}\n" +
+            "\t\t\t\t\t\t\t\t\t<#if text_has_next>、</#if>\n" +
+            "\t\t\t\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t\t\t<#elseif cell.type == 'table'>\n" +
+            "\t\t\t\t\t\t\t\t<table border=\"1\" style=\"border-collapse:collapse\">\n" +
+            "\t\t\t\t\t\t\t\t\t<#assign cellTheadList = cell.text.theadList/>\n" +
+            "\t\t\t\t\t\t\t\t\t<#if cellTheadList??>\n" +
+            "\t\t\t\t\t\t\t\t\t\t<tr>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t<#list cellTheadList as cellThead>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t<th>${cellThead.title}</th>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t\t\t\t\t\t</tr>\n" +
+            "\t\t\t\t\t\t\t\t\t</#if>\n" +
+            "\t\t\t\t\t\t\t\t\t<#assign cellTbodyList = cell.text.tbodyList/>\n" +
+            "\t\t\t\t\t\t\t\t\t<#if cellTbodyList??>\n" +
+            "\t\t\t\t\t\t\t\t\t\t<#list cellTbodyList as cellTbody>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t<tr>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t<#list cellTheadList as cellThead>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t<#assign cellColKey = cellThead.key/>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t<td>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#assign cellCell = cellTbody[cellColKey]/>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#if cellCell.type =='selects' || cellCell.type =='checkbox'>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#list cellCell.text as text>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t${text}\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#if text_has_next>、</#if>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#else>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t${cellCell.text}\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t</#if>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t</tr>\n" +
+            "\t\t\t\t\t\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t\t\t\t\t</#if>\n" +
+            "\t\t\t\t\t\t\t\t</table>\n" +
+            "\t\t\t\t\t\t\t<#else>\n" +
+            "\t\t\t\t\t\t\t\t${cell.text}\n" +
+            "\t\t\t\t\t\t\t</#if>\n" +
+            "\t\t\t\t\t\t</td>\n" +
+            "\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t</tr>\n" +
+            "\t\t\t\t</#list>\n" +
+            "\t\t\t\t</#if>\n" +
+            "\t\t\t\t</table>\n" +
+            "\t\t\t</#if>\n" +
+            "\t\t<#elseif attributeItem.type=='formdynamiclist'>\n" +
+            "\t\t${attributeItem.label}：\n" +
+            "\t\t<#if attributeItem.dataObj??>\n" +
+            "\t\t\t<table border=\"1\" style=\"border-collapse:collapse\">\n" +
+            "\t\t\t\t<#assign theadList = attributeItem.dataObj.theadList/>\n" +
+            "\t\t\t\t<#if theadList??>\n" +
+            "\t\t\t\t\t<tr>\n" +
+            "\t\t\t\t\t<#list theadList as thead>\n" +
+            "\t\t\t\t\t\t<th>${thead.title}</th>\n" +
+            "\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t</tr>\n" +
+            "\t\t\t\t</#if>\n" +
+            "\t\t\t\t<#assign tbodyList = attributeItem.dataObj.tbodyList/>\n" +
+            "\t\t\t\t<#if tbodyList??>\n" +
+            "\t\t\t\t\t<#list tbodyList as tbody>\n" +
+            "\t\t\t\t\t\t<tr>\n" +
+            "\t\t\t\t\t\t<#list theadList as thead>\n" +
+            "\t\t\t\t\t\t\t<#assign colKey = thead.key/>\n" +
+            "\t\t\t\t\t\t\t<td>\n" +
+            "\t\t\t\t\t\t\t\t<#assign cell = tbody[colKey]/>\n" +
+            "\t\t\t\t\t\t\t\t${cell.text}\n" +
+            "\t\t\t\t\t\t\t</td>\n" +
+            "\t\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t\t\t</tr>\n" +
+            "\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t</#if>\n" +
+            "\t\t\t</table>\n" +
+            "\t\t</#if>\n" +
+            "\t\t<#elseif attributeItem.type=='cientityselect'>\n" +
+            "\t\t\t${attributeItem.label}：暂不支持显示内容\n" +
+            "\t\t</#if>\n" +
+            "\t\t<#if attributeItem_has_next>\n" +
+            "\t\t\t<br>\n" +
+            "\t\t</#if>\n" +
+            "\t</#list>\n" +
             "</#if>")
     ;
 
