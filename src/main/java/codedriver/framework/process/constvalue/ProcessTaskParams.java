@@ -30,50 +30,58 @@ public enum ProcessTaskParams {
     FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??>\n" +
             "\t<#list DATA.form as attributeItem>\t\t\t\t   \n" +
             "\t\t<#if attributeItem.type=='forminput'>\n" +
-            "\t\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t\t${attributeItem.label}：${attributeItem.dataObj!''}\n" +
             "\t\t<#elseif attributeItem.type=='formtextarea'>\n" +
-            "\t\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t\t${attributeItem.label}：${attributeItem.dataObj!''}\n" +
             "\t\t<#elseif attributeItem.type=='formeditor'>\n" +
-            "\t\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t\t${attributeItem.label}：${attributeItem.dataObj!''}\n" +
             "\t\t<#elseif attributeItem.type=='formtime'>\n" +
-            "\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t${attributeItem.label}：${attributeItem.dataObj!''}\n" +
             "\t\t<#elseif attributeItem.type=='formdate'>\n" +
-            "\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t${attributeItem.label}：${attributeItem.dataObj!''}\n" +
             "\t\t<#elseif attributeItem.type=='formlink'>\n" +
-            "\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t${attributeItem.label}：${attributeItem.dataObj!''}\n" +
             "\t\t<#elseif attributeItem.type=='formradio'>\n" +
-            "\t\t${attributeItem.label}：${attributeItem.dataObj}\n" +
+            "\t\t${attributeItem.label}：${attributeItem.dataObj!''}\n" +
             "\t\t<#elseif attributeItem.type=='formcheckbox'>\n" +
             "\t\t${attributeItem.label}：\n" +
-            "\t\t<#list attributeItem.dataObj as dataItem>\n" +
-            "\t\t\t${dataItem}\n" +
-            "\t\t\t<#if dataItem_has_next>、</#if>\n" +
-            "\t\t</#list>\n" +
-            "\t\t<#elseif attributeItem.type=='formcascadelist'>\n" +
-            "\t\t\t${attributeItem.label}：\n" +
+            "\t\t<#if attributeItem.dataObj?? && attributeItem.dataObj?size gt 0>\n" +
             "\t\t\t<#list attributeItem.dataObj as dataItem>\n" +
             "\t\t\t\t${dataItem}\n" +
             "\t\t\t\t<#if dataItem_has_next>、</#if>\n" +
             "\t\t\t</#list>\n" +
-            "\t\t<#elseif attributeItem.type=='formselect'>\n" +
+            "\t\t</#if>\n" +
+            "\t\t<#elseif attributeItem.type=='formcascadelist'>\n" +
             "\t\t\t${attributeItem.label}：\n" +
-            "\t\t\t<#if attributeItem.isMultiple == 0>\n" +
-            "\t\t\t\t${attributeItem.dataObj}\n" +
-            "\t\t\t<#elseif attributeItem.isMultiple == 1>\n" +
+            "\t\t\t<#if attributeItem.dataObj?? && attributeItem.dataObj?size gt 0>\n" +
             "\t\t\t\t<#list attributeItem.dataObj as dataItem>\n" +
             "\t\t\t\t\t${dataItem}\n" +
             "\t\t\t\t\t<#if dataItem_has_next>、</#if>\n" +
             "\t\t\t\t</#list>\n" +
             "\t\t\t</#if>\n" +
+            "\t\t<#elseif attributeItem.type=='formselect'>\n" +
+            "\t\t\t${attributeItem.label}：\n" +
+            "\t\t\t<#if attributeItem.isMultiple == 0>\n" +
+            "\t\t\t\t${attributeItem.dataObj!''}\n" +
+            "\t\t\t<#elseif attributeItem.isMultiple == 1>\n" +
+            "\t\t\t\t<#if attributeItem.dataObj?? && attributeItem.dataObj?size gt 0>\n" +
+            "\t\t\t\t\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t\t\t\t\t\t${dataItem}\n" +
+            "\t\t\t\t\t\t<#if dataItem_has_next>、</#if>\n" +
+            "\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t</#if>\n" +
+            "\t\t\t</#if>\n" +
             "\t\t<#elseif attributeItem.type=='formuserselect'>\n" +
             "\t\t\t${attributeItem.label}：\n" +
             "\t\t\t<#if attributeItem.isMultiple == 0>\n" +
-            "\t\t\t\t${attributeItem.dataObj}\n" +
+            "\t\t\t\t${attributeItem.dataObj!''}\n" +
             "\t\t\t<#elseif attributeItem.isMultiple == 1>\n" +
-            "\t\t\t\t<#list attributeItem.dataObj as dataItem>\n" +
-            "\t\t\t\t\t${dataItem}\n" +
-            "\t\t\t\t\t<#if dataItem_has_next>、</#if>\n" +
-            "\t\t\t\t</#list>\n" +
+            "\t\t\t\t<#if attributeItem.dataObj?? && attributeItem.dataObj?size gt 0>\n" +
+            "\t\t\t\t\t<#list attributeItem.dataObj as dataItem>\n" +
+            "\t\t\t\t\t\t${dataItem}\n" +
+            "\t\t\t\t\t\t<#if dataItem_has_next>、</#if>\n" +
+            "\t\t\t\t\t</#list>\n" +
+            "\t\t\t\t</#if>\n" +
             "\t\t\t</#if>\n" +
             "\t\t<#elseif attributeItem.type=='formstaticlist'>\n" +
             "\t\t${attributeItem.label}：\n" +
@@ -172,6 +180,9 @@ public enum ProcessTaskParams {
             "\t\t</#if>\n" +
             "\t\t<#elseif attributeItem.type=='cientityselect'>\n" +
             "\t\t\t${attributeItem.label}：暂不支持显示内容\n" +
+            "\t\t</#if>\n" +
+            "\t\t<#if attributeItem_has_next>\n" +
+            "\t\t\t<br>\n" +
             "\t\t</#if>\n" +
             "\t</#list>\n" +
             "</#if>")
