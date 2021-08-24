@@ -173,9 +173,6 @@ public enum ProcessTaskParams {
             "\t\t<#elseif attributeItem.type=='cientityselect'>\n" +
             "\t\t\t${attributeItem.label}：暂不支持显示内容\n" +
             "\t\t</#if>\n" +
-            "\t\t<#if attributeItem_has_next>\n" +
-            "\t\t\t<br>\n" +
-            "\t\t</#if>\n" +
             "\t</#list>\n" +
             "</#if>")
     ;
