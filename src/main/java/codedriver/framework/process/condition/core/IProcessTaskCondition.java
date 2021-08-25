@@ -2,6 +2,7 @@ package codedriver.framework.process.condition.core;
 
 import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.condition.ConditionVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 
@@ -63,5 +64,13 @@ public interface IProcessTaskCondition extends IConditionHandler {
 	 * @Returns: * @return: null
 	 **/
 	public List<JoinTableColumnVo> getJoinTableColumnList(WorkcenterVo workcenterVo);
+
+	/**
+	 * 获取条件分流需要判断的数据
+	 * @return 数据
+	 */
+	default Object getConditionParamData(ProcessTaskVo processTaskVo){
+		return null;
+	}
 
 }

@@ -1,30 +1,30 @@
 package codedriver.framework.process.column.core;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import codedriver.framework.asynchronization.threadlocal.UserContext;
+import codedriver.framework.condition.core.ConditionHandlerFactory;
+import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.UrlInfoVo;
+import codedriver.framework.form.attribute.core.FormAttributeHandlerFactory;
+import codedriver.framework.form.attribute.core.IFormAttributeHandler;
 import codedriver.framework.form.dto.AttributeDataVo;
 import codedriver.framework.form.dto.FormAttributeVo;
 import codedriver.framework.form.dto.FormVersionVo;
+import codedriver.framework.process.condition.core.IProcessTaskCondition;
+import codedriver.framework.process.constvalue.ProcessField;
+import codedriver.framework.process.constvalue.ProcessTaskParams;
+import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dto.*;
 import codedriver.framework.util.HtmlUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
-import codedriver.framework.asynchronization.threadlocal.UserContext;
-import codedriver.framework.dto.TeamVo;
-import codedriver.framework.process.constvalue.ProcessField;
-import codedriver.framework.process.constvalue.ProcessTaskParams;
-import codedriver.framework.process.constvalue.ProcessUserType;
-import codedriver.framework.form.attribute.core.FormAttributeHandlerFactory;
-import codedriver.framework.form.attribute.core.IFormAttributeHandler;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProcessTaskUtil {
     /**
@@ -48,7 +48,7 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessField.OWNERCOMPANY.getValue(), isValue ? processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessField.OWNERDEPARTMENT.getValue(), isValue ? processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessField.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);
-
+        resultObj.put(ProcessField.OWNERROLE.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.OWNERROLE.getValue())).getConditionParamData(processTaskVo));
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
         if (comment != null && StringUtils.isNotBlank(comment.getContent())) {
