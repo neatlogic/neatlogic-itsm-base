@@ -16,6 +16,7 @@ public enum ProcessField {
     STATUS("status", "工单状态"),
     OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
     OWNERCOMPANY("ownercompany", "上报人公司"),
+    OWNERROLE("ownerrole", "上报人角色"),
     SUBTASKID("subtaskid", "当前子任务id");
     private String value;
     private String name;
