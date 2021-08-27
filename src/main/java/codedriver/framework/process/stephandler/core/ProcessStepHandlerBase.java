@@ -392,6 +392,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             }
                             if (CollectionUtils.isNotEmpty(checkedChildrenteamUuidList)) {
                                 List<TeamVo> teamList = teamMapper.getTeamByUuidList(checkedChildrenteamUuidList);
+                                teamList.sort(Comparator.comparing(TeamVo::getLft));
                                 for (TeamVo teamVo : teamList) {
                                     if (!teamUuidList.contains(teamVo.getUuid())) {
                                         teamUuidList.add(teamVo.getUuid());
