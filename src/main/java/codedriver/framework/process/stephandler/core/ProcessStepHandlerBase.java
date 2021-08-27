@@ -364,15 +364,27 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
 
         /* 当只分配到一个用户时，自动设置为处理人，不需要抢单 **/
-        if (workerSet.size() == 1) {
+        if (workerSet.size() == 1 && autoStart == 1) {
             for (ProcessTaskStepWorkerVo workerVo : workerSet) {
-                if (StringUtils.isNotBlank(workerVo.getUuid())
-                        && GroupSearch.USER.getValue().equals(workerVo.getType())) {
-                    processTaskMapper.insertProcessTaskStepUser(new ProcessTaskStepUserVo(
-                            currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
-                            workerVo.getUuid(), ProcessUserType.MAJOR.getValue()));
-                    /* 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
-                    if (autoStart == 1) {
+                String userUuid = null;
+                if (GroupSearch.TEAM.getValue().equals(workerVo.getType())) {
+                    List<String> userUuidList = userMapper.getUserUuidListByTeamUuid(workerVo.getUuid());
+                    if (userUuidList.size() == 1) {
+                        userUuid = userUuidList.get(0);
+                    }
+                } else if (GroupSearch.ROLE.getValue().equals(workerVo.getType())) {
+                    List<String> userUuidList = userMapper.getUserUuidListByRoleUuid(workerVo.getUuid());
+                    if (userUuidList.size() == 1) {
+                        userUuid = userUuidList.get(0);
+                    }
+                } else if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
+                    userUuid = workerVo.getUuid();
+                }
+                if (StringUtils.isNotBlank(userUuid)) {
+                    UserVo userVo = userMapper.getUserBaseInfoByUuidWithoutCache(userUuid);
+                    if (userVo != null) {
+                        processTaskMapper.insertProcessTaskStepUser(new ProcessTaskStepUserVo( currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), userVo.getUuid(), ProcessUserType.MAJOR.getValue()));
+                        /* 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
                         currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
                         currentProcessTaskStepVo.setUpdateStartTime(1);
                     }
