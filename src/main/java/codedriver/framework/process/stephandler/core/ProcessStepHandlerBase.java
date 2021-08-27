@@ -403,10 +403,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             }
                             userUuidSet.addAll(userMapper.getUserUuidListByTeamUuidList(teamUuidList));
                         }
-                    }
-                    if (userUuidSet.size() == 1) {
-                        for (String uuid : userUuidSet) {
-                            userUuid = uuid;
+                        if (userUuidSet.size() == 1) {
+                            for (String uuid : userUuidSet) {
+                                userUuid = uuid;
+                            }
                         }
                     }
                 } else if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
