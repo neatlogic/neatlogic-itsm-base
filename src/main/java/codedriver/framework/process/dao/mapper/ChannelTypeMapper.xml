@@ -230,7 +230,7 @@
         WHERE `channel_type_uuid` IN (#{value}, 'all')
     </select>
 
-    <select id="getAuthorizedChannelTypeRelationIdListBySourceChannelUuid" resultType="java.lang.Long">
+    <select id="getAuthorizedChannelTypeRelationIdListBySourceChannelUuid" resultType="java.lang.Long" useCache="false">
         SELECT
         DISTINCT `channel_type_relation_id`
         FROM `channel_relation_authority`

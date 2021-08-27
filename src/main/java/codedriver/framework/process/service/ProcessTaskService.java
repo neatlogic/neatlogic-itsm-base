@@ -5,6 +5,7 @@
 
 package codedriver.framework.process.service;
 
+import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.*;
@@ -311,4 +312,6 @@ public interface ProcessTaskService {
      * @return
      */
     ProcessTaskStepVo getProcessTaskStepDetailInfoById(Long processTaskStepId);
+
+    List<String> getProcessUserTypeList(Long processTaskId, AuthenticationInfoVo authenticationInfoVo);
 }
