@@ -401,7 +401,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                                     }
                                 }
                             }
-                            userUuidSet.addAll(userMapper.getUserUuidListByTeamUuidList(teamUuidList));
+                            userUuidSet.addAll(userMapper.getUserUuidListByTeamUuidListLimitTwo(teamUuidList));
                         }
                         if (userUuidSet.size() == 1) {
                             for (String uuid : userUuidSet) {
