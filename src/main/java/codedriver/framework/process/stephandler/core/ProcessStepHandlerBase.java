@@ -12,6 +12,8 @@ import codedriver.framework.dao.mapper.RoleMapper;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.dto.AuthenticationInfoVo;
+import codedriver.framework.dto.RoleTeamVo;
+import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.form.dao.mapper.FormMapper;
 import codedriver.framework.form.dto.FormVersionVo;
@@ -373,9 +375,39 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         userUuid = userUuidList.get(0);
                     }
                 } else if (GroupSearch.ROLE.getValue().equals(workerVo.getType())) {
+                    Set<String> userUuidSet = new HashSet<>();
                     List<String> userUuidList = userMapper.getUserUuidListByRoleUuid(workerVo.getUuid());
-                    if (userUuidList.size() == 1) {
-                        userUuid = userUuidList.get(0);
+                    userUuidSet.addAll(userUuidList);
+                    if (userUuidSet.size() < 2) {
+                        List<RoleTeamVo> roleTeamList = roleMapper.getRoleTeamListByRoleUuid(workerVo.getUuid(), null);
+                        if (CollectionUtils.isNotEmpty(roleTeamList)) {
+                            List<String> checkedChildrenteamUuidList = new ArrayList<>();
+                            List<String> teamUuidList = new ArrayList<>();
+                            for (RoleTeamVo roleTeamVo : roleTeamList) {
+                                if (Objects.equals(roleTeamVo.getCheckedChildren(), 1)) {
+                                    checkedChildrenteamUuidList.add(roleTeamVo.getTeamUuid());
+                                } else {
+                                    teamUuidList.add(roleTeamVo.getTeamUuid());
+                                }
+                            }
+                            if (CollectionUtils.isNotEmpty(checkedChildrenteamUuidList)) {
+                                List<TeamVo> teamList = teamMapper.getTeamByUuidList(checkedChildrenteamUuidList);
+                                teamList.sort(Comparator.comparing(TeamVo::getLft));
+                                for (TeamVo teamVo : teamList) {
+                                    if (!teamUuidList.contains(teamVo.getUuid())) {
+                                        teamUuidList.add(teamVo.getUuid());
+                                        List<String> childrenUuidList = teamMapper.getChildrenUuidListByLeftRightCode(teamVo.getLft(), teamVo.getRht());
+                                        teamUuidList.addAll(childrenUuidList);
+                                    }
+                                }
+                            }
+                            userUuidSet.addAll(userMapper.getUserUuidListByTeamUuidListLimitTwo(teamUuidList));
+                        }
+                        if (userUuidSet.size() == 1) {
+                            for (String uuid : userUuidSet) {
+                                userUuid = uuid;
+                            }
+                        }
                     }
                 } else if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
                     userUuid = workerVo.getUuid();
