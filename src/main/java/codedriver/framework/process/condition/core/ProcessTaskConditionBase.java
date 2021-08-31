@@ -5,7 +5,7 @@ import codedriver.framework.common.constvalue.Expression;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dao.mapper.UserMapper;
-import codedriver.framework.dto.UserVo;
+import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.dto.condition.ConditionVo;
 import codedriver.framework.process.constvalue.ConditionConfigType;
 import codedriver.framework.process.constvalue.ProcessFieldType;
@@ -17,6 +17,7 @@ import codedriver.framework.process.workcenter.table.ProcessTaskSqlTable;
 import codedriver.framework.process.workcenter.table.ProcessTaskStepSqlTable;
 import codedriver.framework.process.workcenter.table.ProcessTaskStepUserSqlTable;
 import codedriver.framework.process.workcenter.table.ProcessTaskStepWorkerSqlTable;
+import codedriver.framework.service.AuthenticationInfoService;
 import codedriver.framework.util.TimeUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -25,8 +26,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +40,13 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
     @Autowired
     public void setUserMapper(UserMapper _userMapper) {
         userMapper = _userMapper;
+    }
+
+    protected static AuthenticationInfoService authenticationInfoService;
+
+    @Resource
+    public void setAuthenticationInfoService(AuthenticationInfoService _authenticationInfoService){
+        authenticationInfoService = _authenticationInfoService;
     }
 
     @Override
@@ -235,28 +245,20 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
     public void getProcessingOfMineConditionSqlWhere(StringBuilder sqlSb){
         sqlSb.append(" ( ");
         // status
-        List<String> statusList = Stream.of(ProcessTaskStatus.DRAFT.getValue(), ProcessTaskStatus.RUNNING.getValue())
+        List<String> statusList = Stream.of(ProcessTaskStatus.RUNNING.getValue())
                 .map(String::toString).collect(Collectors.toList());
         sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskSqlTable().getShortName(), ProcessTaskSqlTable.FieldEnum.STATUS.getValue(), String.join("','", statusList)));
         sqlSb.append(" ) and ( ");
         // step.status
         List<String> stepStatusList =
-                Stream.of(ProcessTaskStatus.DRAFT.getValue(), ProcessTaskStatus.PENDING.getValue(), ProcessTaskStatus.RUNNING.getValue())
+                Stream.of(ProcessTaskStatus.PENDING.getValue(), ProcessTaskStatus.RUNNING.getValue())
                         .map(String::toString).collect(Collectors.toList());
         sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepSqlTable().getShortName(), ProcessTaskStepSqlTable.FieldEnum.STATUS.getValue(), String.join("','", stepStatusList)));
         sqlSb.append(" ) and ( ");
         // step.user
-        List<String> userList = new ArrayList<String>();
-        List<String> teamList = new ArrayList<String>();
-        List<String> roleList = new ArrayList<String>();
-        userList.add(UserContext.get().getUserUuid());
         // 如果是待处理状态，则需额外匹配角色和组
-        UserVo userVo = userMapper.getUserByUuid(UserContext.get().getUserUuid());
-        if (userVo != null) {
-            teamList = userVo.getTeamUuidList();
-            roleList = userVo.getRoleUuidList();
-        }
-        getProcessingTaskOfMineSqlWhere(sqlSb,userList,teamList,roleList);
+        AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(UserContext.get().getUserUuid());
+        getProcessingTaskOfMineSqlWhere(sqlSb, Collections.singletonList(UserContext.get().getUserUuid()),authenticationInfoVo.getTeamUuidList(),authenticationInfoVo.getRoleUuidList());
         sqlSb.append(" ) ");
     }
 
