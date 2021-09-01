@@ -254,10 +254,17 @@ public enum ProcessTaskParams {
             "\t\t\t\t\t\t\t\t\t\t\t\t<#assign cell = tbody[colKey]/>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t<#if cell?? && cell?size gt 0>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t<#if cell.actualValueList??>\n" +
-            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#assign actualValueList1 = cell.actualValueList/>\n" +
-            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#if actualValueList1?? && actualValueList1?size gt 0>\n" +
-            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#list actualValueList1 as actualValue>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#assign isMultiple = (cell.config.isMultiple)!0/>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#assign actualValueList = cell.actualValueList/>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#if actualValueList?? && actualValueList?size gt 0>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#list actualValueList as actualValue>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#if isMultiple == 1>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#if actualValue?? && actualValue?size gt 0>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t${actualValue.text!''}\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</#if>\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#else>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t${actualValue}\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</#if>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<#if actualValue_has_next>、</#if>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</#list>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t</#if>\n" +
