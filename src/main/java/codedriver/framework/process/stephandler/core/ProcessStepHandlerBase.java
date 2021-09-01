@@ -989,7 +989,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /* 校验权限 **/
         new ProcessAuthManager.TaskOperationChecker(currentProcessTaskVo.getId(),
-                ProcessTaskOperationType.TASK_ABORT).build().checkAndNoPermissionThrowException();
+                ProcessTaskOperationType.PROCESSTASK_ABORT).build().checkAndNoPermissionThrowException();
 
         List<ProcessTaskStepVo> processTaskStepList =
                 processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
@@ -1032,7 +1032,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
         /* 写入时间审计 **/
-        IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_ABORT);
+        IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_ABORT);
 
         /* 计算SLA **/
         IProcessStepHandlerUtil.calculateSla(currentProcessTaskStepVo);
@@ -1056,7 +1056,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /* 校验权限 **/
         new ProcessAuthManager.TaskOperationChecker(currentProcessTaskVo.getId(),
-                ProcessTaskOperationType.TASK_RECOVER).build().checkAndNoPermissionThrowException();
+                ProcessTaskOperationType.PROCESSTASK_RECOVER).build().checkAndNoPermissionThrowException();
 
         List<ProcessTaskStepVo> processTaskStepList =
                 processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
@@ -1151,7 +1151,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         }
 
         /* 写入时间审计 **/
-        IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_RECOVER);
+        IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_RECOVER);
 
         /* 计算SLA **/
         IProcessStepHandlerUtil.calculateSla(currentProcessTaskStepVo);
@@ -1310,7 +1310,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             /* 保存描述内容 **/
-            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_TRANSFER);
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_TRANSFER);
 
             /* 根据子类需要把最终处理人放进来，引擎将自动写入数据库，也可能为空，例如一些特殊的流程节点 **/
             processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -1348,7 +1348,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.TRANSFER);
 
             /* 处理时间审计 **/
-            IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_TRANSFER);
+            IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_TRANSFER);
             /* 转交提醒 **/
 
             processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(),
@@ -1639,7 +1639,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.getProcessTaskLockById(processTaskId);
             // 第二次保存时的操作
             processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
-            new ProcessAuthManager.TaskOperationChecker(processTaskVo.getId(), ProcessTaskOperationType.TASK_START).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.TaskOperationChecker(processTaskVo.getId(), ProcessTaskOperationType.PROCESSTASK_START).build().checkAndNoPermissionThrowException();
             /* 更新工单信息 **/
             processTaskVo.setTitle(paramObj.getString("title"));
             processTaskVo.setOwner(paramObj.getString("owner"));
@@ -1673,7 +1673,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         try {
             // 锁定当前流程
             processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-            new ProcessAuthManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.TASK_START).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.PROCESSTASK_START).build().checkAndNoPermissionThrowException();
 
             IProcessStepHandlerUtil.assignWorkerValid(currentProcessTaskStepVo);
             IProcessStepHandlerUtil.baseInfoValidFromDb(currentProcessTaskStepVo);
@@ -1683,7 +1683,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             /* 保存描述内容和附件 **/
             IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
-            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_START);
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_START);
 
             /* 写入“标签”信息 **/
             IProcessStepHandlerUtil.saveTagList(currentProcessTaskStepVo);
@@ -1911,13 +1911,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             new ProcessAuthManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(),
-                    ProcessTaskOperationType.TASK_REDO).build().checkAndNoPermissionThrowException();
+                    ProcessTaskOperationType.PROCESSTASK_REDO).build().checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /* 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
             /* 保存打回原因 **/
-            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_REDO);
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_REDO);
             myRedo(currentProcessTaskStepVo);
 
             /* 遍历后续节点所有步骤，写入汇聚步骤数据 **/
@@ -1960,7 +1960,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskScoreMapper
                     .deleteProcessTaskAutoScoreByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             /* 写入时间审计 **/
-            IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.TASK_REDO);
+            IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_REDO);
             if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
                 IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_START);
             }
@@ -1995,7 +1995,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         // 只有上报人才可评分
-        new ProcessAuthManager.TaskOperationChecker(currentProcessTaskVo.getId(), ProcessTaskOperationType.TASK_SCORE)
+        new ProcessAuthManager.TaskOperationChecker(currentProcessTaskVo.getId(), ProcessTaskOperationType.PROCESSTASK_SCORE)
                 .build().checkAndNoPermissionThrowException();
 
         JSONObject paramObj = currentProcessTaskVo.getParamObj();

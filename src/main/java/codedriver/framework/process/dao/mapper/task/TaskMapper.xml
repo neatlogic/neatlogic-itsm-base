@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c)  2021 TechSure Co.,Ltd.  All Rights Reserved.
+  ~ 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.task.TaskMapper">
+    <select id="searchTaskConfigCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        `task_config`
+        <where>
+            <if test="keyword != null">
+                AND p.`name` LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="isActive != null">
+                AND p.`is_active` = #{isActive}
+            </if>
+        </where>
+    </select>
+
+    <select id="searchTaskConfig" resultType="codedriver.framework.process.dto.TaskConfigVo">
+        SELECT
+        `id`,
+        `name`,
+        `type`,
+        `policy`,
+        `is_active` as isActive,
+        `fcd`,
+        `fcu`,
+        `lcd`,
+        `lcu`
+        FROM
+        `task_config`
+        <where>
+            <if test="keyword != null">
+                AND `name` LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="isActive != null">
+                AND `is_active` = #{isActive}
+            </if>
+        </where>
+        ORDER BY `fcd` DESC
+        <if test="needPage">
+            limit #{startNum}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="checkTaskConfigNameIsRepeat" parameterType="codedriver.framework.process.dto.TaskConfigVo"
+            resultType="int">
+        SELECT COUNT(1)
+        FROM `task_config`
+        WHERE `name` = #{name}
+          AND `id` != #{id}
+    </select>
+
+    <select id="getTaskConfigById" resultType="codedriver.framework.process.dto.TaskConfigVo">
+        SELECT
+            `id`,
+            `name`,
+            `type`,
+            `policy`,
+            `is_active` as isActive,
+            `fcd`,
+            `fcu`,
+            `lcd`,
+            `lcu`
+        FROM
+            `task_config`
+        WHERE
+            `id` = #{value}
+    </select>
+
+    <update id="updateTaskConfig">
+        UPDATE
+            `task_config`
+        SET
+            `name` = #{name},
+            `type` = #{type},
+            `policy` = #{policy},
+            `is_active` = #{isActive},
+            `lcd` = now(3),
+            `lcu` = #{lcu}
+        WHERE `id` = #{id} ;
+    </update>
+
+    <insert id="insertTaskConfig">
+        INSERT INTO `task_config` (
+            `id`,
+            `name`,
+            `type`,
+            `policy`,
+            `is_active`,
+            `fcd`,
+            `fcu`
+        )
+        VALUES
+        (
+            #{id},
+            #{name},
+            #{type},
+            #{policy},
+            #{isActive},
+            #{fcd},
+            #{fcu}
+        ) ;
+    </insert>
+
+    <delete id="deleteTaskConfigById">
+        DELETE FROM  `task_config`
+        WHERE `id` = #{value}
+    </delete>
+</mapper>

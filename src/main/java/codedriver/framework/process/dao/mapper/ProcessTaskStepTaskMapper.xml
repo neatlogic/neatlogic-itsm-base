@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c)  2021 TechSure Co.,Ltd.  All Rights Reserved.
+  ~ 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.ProcessTaskStepTaskMapper">
+
+    <select id="getInvokedCountByTaskConfigId" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        from `processtask_step_task`
+        where `task_config_id` = #{value}
+    </select>
+
+    <insert id="insertTask">
+        INSERT INTO `processtask_step_task` (`processtask_id`,
+                                             `processtask_step_id`,
+                                             `id`,
+                                             `owner`,
+                                             `status`,
+                                             `create_time`,
+                                             `content_hash`,
+                                             `task_config_id`)
+        VALUES (#{processtaskId},
+                #{processtaskStepId},
+                #{id},
+                #{owner},
+                #{status},
+                #{createTime},
+                #{contentHash},
+                #{taskConfigId})
+    </insert>
+
+    <insert id="insertIgnoreTaskUser">
+        INSERT IGNORE INTO `processtask_step_task_user` (`processtask_step_task_id`,
+                                                  `user_uuid`,
+                                                  `status`)
+        VALUES (#{processtaskStepTaskId},
+                #{userUuid'},
+                #{status});
+
+    </insert>
+
+    <update id="updateTask">
+        UPDATE
+            `processtask_step_task`
+        SET
+            `owner` = 'owner',
+            `content_hash` = 'content_hash'
+        WHERE `id` = #{id} ;
+    </update>
+
+    <delete id="deleteTaskUserByUserListAndId">
+        DELETE FROM `processtask_step_task_user`
+        WHERE `user_uuid` not in
+        <foreach collection="userList" item="userUuid" open="(" close=")" separator=",">
+            #{userUuid}
+        </foreach>
+        and `processtask_step_task_id` = #{processTaskStepTaskId}
+    </delete>
+</mapper>

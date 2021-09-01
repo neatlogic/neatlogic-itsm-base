@@ -757,7 +757,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
                 ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
                 processTaskMapper.insertIgnoreProcessTaskContent(contentVo);
                 if (oldContentId == null) {
-                    ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo(processTaskId, processTaskStepId, contentVo.getHash(), ProcessTaskOperationType.TASK_START.getValue());
+                    ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo(processTaskId, processTaskStepId, contentVo.getHash(), ProcessTaskOperationType.PROCESSTASK_START.getValue());
                     processTaskMapper.insertProcessTaskStepContent(processTaskStepContentVo);
                     oldContentId = processTaskStepContentVo.getId();
                 } else {
@@ -769,7 +769,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             ProcessTaskContentVo contentVo = new ProcessTaskContentVo(content);
             processTaskMapper.insertIgnoreProcessTaskContent(contentVo);
             if (oldContentId == null) {
-                ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo(processTaskId, processTaskStepId, contentVo.getHash(), ProcessTaskOperationType.TASK_START.getValue());
+                ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo(processTaskId, processTaskStepId, contentVo.getHash(), ProcessTaskOperationType.PROCESSTASK_START.getValue());
                 processTaskMapper.insertProcessTaskStepContent(processTaskStepContentVo);
                 oldContentId = processTaskStepContentVo.getId();
             } else {
@@ -797,7 +797,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
                 jsonObj.put(ProcessTaskAuditDetailType.FILE.getOldDataParamName(), JSON.toJSONString(oldFileIdList));
                 isUpdate = true;
                 if (oldContentId == null) {
-                    ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo(processTaskId, processTaskStepId, null, ProcessTaskOperationType.TASK_START.getValue());
+                    ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo(processTaskId, processTaskStepId, null, ProcessTaskOperationType.PROCESSTASK_START.getValue());
                     processTaskMapper.insertProcessTaskStepContent(processTaskStepContentVo);
                     oldContentId = processTaskStepContentVo.getId();
                 }
@@ -816,7 +816,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         } else if (CollectionUtils.isNotEmpty(fileIdList)) {
             isUpdate = true;
             if (oldContentId == null) {
-                ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo(processTaskId, processTaskStepId, null, ProcessTaskOperationType.TASK_START.getValue());
+                ProcessTaskStepContentVo processTaskStepContentVo = new ProcessTaskStepContentVo(processTaskId, processTaskStepId, null, ProcessTaskOperationType.PROCESSTASK_START.getValue());
                 processTaskMapper.insertProcessTaskStepContent(processTaskStepContentVo);
                 oldContentId = processTaskStepContentVo.getId();
             }
@@ -1035,7 +1035,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
     @Override
     public List<ProcessTaskStepVo> getUrgeableStepList(ProcessTaskVo processTaskVo, String userUuid) {
         List<ProcessTaskStepVo> resultList = new ArrayList<>();
-        if (checkOperationAuthIsConfigured(processTaskVo, ProcessTaskOperationType.TASK_URGE, userUuid)) {
+        if (checkOperationAuthIsConfigured(processTaskVo, ProcessTaskOperationType.PROCESSTASK_URGE, userUuid)) {
             List<ProcessTaskStepVo> processTaskStepList =
                     processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskVo.getId());
             for (ProcessTaskStepVo processTaskStep : processTaskStepList) {
@@ -1214,7 +1214,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         }
         /* 查询当前用户是否有权限修改工单关注人 **/
         int canEditFocusUser = new ProcessAuthManager
-                .TaskOperationChecker(processTaskId, ProcessTaskOperationType.TASK_FOCUSUSER_UPDATE).build()
+                .TaskOperationChecker(processTaskId, ProcessTaskOperationType.PROCESSTASK_FOCUSUSER_UPDATE).build()
                 .check() ? 1 : 0;
         processTaskVo.setCanEditFocusUser(canEditFocusUser);
 
@@ -1238,7 +1238,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         List<ProcessTaskStepContentVo> processTaskStepContentList =
                 processTaskMapper.getProcessTaskStepContentByProcessTaskStepId(startProcessTaskStepVo.getId());
         for (ProcessTaskStepContentVo processTaskStepContent : processTaskStepContentList) {
-            if (ProcessTaskOperationType.TASK_START.getValue().equals(processTaskStepContent.getType())) {
+            if (ProcessTaskOperationType.PROCESSTASK_START.getValue().equals(processTaskStepContent.getType())) {
                 fileIdList = processTaskMapper.getFileIdListByContentId(processTaskStepContent.getId());
                 comment.setContent(selectContentByHashMapper
                         .getProcessTaskContentStringByHash(processTaskStepContent.getContentHash()));
