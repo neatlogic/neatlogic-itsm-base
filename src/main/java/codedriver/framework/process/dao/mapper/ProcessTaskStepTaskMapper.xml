@@ -53,7 +53,6 @@
                pst.`owner`,
                pst.`status`,
                pst.`create_time`         as createTime,
-               pst.`start_time`          as startTime,
                pst.`end_time`            as endTime,
                pst.`task_config_id`      as taskConfigId
         FROM `processtask_step_task` pst
@@ -80,7 +79,6 @@
                pst.`owner`,
                pst.`status`,
                pst.`create_time`         as createTime,
-               pst.`start_time`          as startTime,
                pst.`end_time`            as endTime,
                pst.`task_config_id`      as taskConfigId
         FROM `processtask_step_task` pst
@@ -95,7 +93,6 @@
         pst.`owner`,
         pst.`status`,
         pst.`create_time` as createTime,
-        pst.`start_time` as startTime,
         pst.`end_time` as endTime,
         pst.`task_config_id` as taskConfigId
         FROM `processtask_step_task` pst
