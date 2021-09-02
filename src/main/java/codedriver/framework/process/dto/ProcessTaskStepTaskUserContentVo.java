@@ -6,23 +6,25 @@
 package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.annotation.JSONField;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author lvzk
  * @since 2021/9/1 17:33
  **/
-public class ProcessTaskStepTaskUserVo {
+public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
+    private static final long serialVersionUID = -7440360822572699974L;
     @EntityField(name = "id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "任务id", type = ApiParamType.LONG)
     private Long processtaskStepTaskId;
+    @EntityField(name = "任务用户id", type = ApiParamType.LONG)
+    private Long processtaskStepTaskUserId;
     @EntityField(name = "用户uuid", type = ApiParamType.STRING)
     private String userUuid;
     @EntityField(name = "结束时间", type = ApiParamType.LONG)
@@ -33,12 +35,11 @@ public class ProcessTaskStepTaskUserVo {
     private transient String contentHash;
     @EntityField(name = "内容", type = ApiParamType.STRING)
     private String content;
-    @EntityField(name = "内容VoList", type = ApiParamType.JSONARRAY)
-    private List<ProcessTaskStepTaskUserContentVo> stepTaskUserContentVoList = new ArrayList<>();
-    public ProcessTaskStepTaskUserVo() {
+
+    public ProcessTaskStepTaskUserContentVo() {
     }
 
-    public ProcessTaskStepTaskUserVo(Long processtaskStepTaskId, String userUuid, String status) {
+    public ProcessTaskStepTaskUserContentVo(Long processtaskStepTaskId, String userUuid, String status) {
         this.processtaskStepTaskId = processtaskStepTaskId;
         this.userUuid = userUuid;
         this.status = status;
@@ -103,11 +104,11 @@ public class ProcessTaskStepTaskUserVo {
         this.content = content;
     }
 
-    public List<ProcessTaskStepTaskUserContentVo> getStepTaskUserContentVoList() {
-        return stepTaskUserContentVoList;
+    public Long getProcesstaskStepTaskUserId() {
+        return processtaskStepTaskUserId;
     }
 
-    public void setStepTaskUserContentVoList(List<ProcessTaskStepTaskUserContentVo> stepTaskUserContentVoList) {
-        this.stepTaskUserContentVoList = stepTaskUserContentVoList;
+    public void setProcesstaskStepTaskUserId(Long processtaskStepTaskUserId) {
+        this.processtaskStepTaskUserId = processtaskStepTaskUserId;
     }
 }

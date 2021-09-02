@@ -12,11 +12,11 @@
         FROM
         `task_config`
         <where>
-            <if test="keyword != null">
-                AND p.`name` LIKE CONCAT('%', #{keyword}, '%')
+            <if test="keyword != null and keyword != ''">
+                AND `name` LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="isActive != null">
-                AND p.`is_active` = #{isActive}
+                AND `is_active` = #{isActive}
             </if>
         </where>
     </select>
@@ -25,7 +25,7 @@
         SELECT
         `id`,
         `name`,
-        `type`,
+        `num`,
         `policy`,
         `is_active` as isActive,
         `fcd`,
@@ -60,7 +60,7 @@
         SELECT
             `id`,
             `name`,
-            `type`,
+            `num`,
             `policy`,
             `is_active` as isActive,
             `fcd`,
@@ -78,7 +78,7 @@
             `task_config`
         SET
             `name` = #{name},
-            `type` = #{type},
+            `num` = #{num},
             `policy` = #{policy},
             `is_active` = #{isActive},
             `lcd` = now(3),
@@ -90,7 +90,7 @@
         INSERT INTO `task_config` (
             `id`,
             `name`,
-            `type`,
+            `num`,
             `policy`,
             `is_active`,
             `fcd`,
@@ -100,10 +100,10 @@
         (
             #{id},
             #{name},
-            #{type},
+            #{num},
             #{policy},
             #{isActive},
-            #{fcd},
+            now(3),
             #{fcu}
         ) ;
     </insert>

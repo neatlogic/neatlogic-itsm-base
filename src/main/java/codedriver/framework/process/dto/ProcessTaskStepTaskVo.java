@@ -6,16 +6,20 @@
 package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author lvzk
@@ -30,6 +34,8 @@ public class ProcessTaskStepTaskVo {
     private Long id;
     @EntityField(name = "任务配置id", type = ApiParamType.LONG)
     private Long taskConfigId;
+    @EntityField(name = "任务配置", type = ApiParamType.STRING)
+    private String taskConfigName;
     @EntityField(name = "创建人")
     private UserVo ownerVo;
     @EntityField(name = "状态", type = ApiParamType.STRING)
@@ -38,8 +44,6 @@ public class ProcessTaskStepTaskVo {
     private ProcessTaskStatusVo statusVo;
     @EntityField(name = "创建时间", type = ApiParamType.LONG)
     private Date createTime;
-    @EntityField(name = "开始时间", type = ApiParamType.LONG)
-    private Date startTime;
     @EntityField(name = "结束时间", type = ApiParamType.LONG)
     private Date endTime;
     @EntityField(name = "描述", type = ApiParamType.STRING)
@@ -48,9 +52,11 @@ public class ProcessTaskStepTaskVo {
     private String contentHash;
     @EntityField(name = "步骤主处理人", type = ApiParamType.STRING)
     private String majorUser;
-    @EntityField(name = "处理人", type = ApiParamType.STRING)
+    @EntityField(name = "处理人", type = ApiParamType.JSONARRAY)
     private JSONArray userList;
-    @JSONField(serialize=false)
+    @EntityField(name = "处理人VoList", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskStepTaskUserVo> stepTaskUserVoList = new ArrayList<>();
+    @JSONField(serialize = false)
     private transient JSONObject paramObj;
 
     public Long getProcessTaskId() {
@@ -70,7 +76,7 @@ public class ProcessTaskStepTaskVo {
     }
 
     public Long getId() {
-        if(id == null) {
+        if (id == null) {
             id = SnowflakeUtil.uniqueLong();
         }
         return id;
@@ -115,14 +121,6 @@ public class ProcessTaskStepTaskVo {
         this.createTime = createTime;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
     public Date getEndTime() {
         return endTime;
     }
@@ -156,6 +154,11 @@ public class ProcessTaskStepTaskVo {
     }
 
     public JSONArray getUserList() {
+        if (CollectionUtils.isNotEmpty(userList)) {
+            for (int i = 0; i < userList.size(); i++) {
+                userList.set(i, userList.get(i).toString().replaceAll(GroupSearch.USER.getValuePlugin(), StringUtils.EMPTY));
+            }
+        }
         return userList;
     }
 
@@ -164,7 +167,7 @@ public class ProcessTaskStepTaskVo {
     }
 
     public JSONObject getParamObj() {
-        if(MapUtils.isEmpty(paramObj)){
+        if (MapUtils.isEmpty(paramObj)) {
             return new JSONObject();
         }
         return paramObj;
@@ -180,5 +183,21 @@ public class ProcessTaskStepTaskVo {
 
     public void setTaskConfigId(Long taskConfigId) {
         this.taskConfigId = taskConfigId;
+    }
+
+    public String getTaskConfigName() {
+        return taskConfigName;
+    }
+
+    public void setTaskConfigName(String taskConfigName) {
+        this.taskConfigName = taskConfigName;
+    }
+
+    public List<ProcessTaskStepTaskUserVo> getStepTaskUserVoList() {
+        return stepTaskUserVoList;
+    }
+
+    public void setStepTaskUserVoList(List<ProcessTaskStepTaskUserVo> stepTaskUserVoList) {
+        this.stepTaskUserVoList = stepTaskUserVoList;
     }
 }

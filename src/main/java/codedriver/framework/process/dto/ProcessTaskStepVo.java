@@ -1,26 +1,21 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.dto.UserVo;
+import codedriver.framework.form.dto.FormAttributeVo;
+import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
+import codedriver.framework.restful.annotation.EntityField;
+import codedriver.framework.util.SnowflakeUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import codedriver.framework.dto.UserVo;
-import codedriver.framework.form.dto.FormAttributeVo;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONPath;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
-
-import codedriver.framework.common.constvalue.ApiParamType;
-import codedriver.framework.common.dto.BasePageVo;
-import codedriver.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
-import codedriver.framework.restful.annotation.EntityField;
-import codedriver.framework.util.SnowflakeUtil;
 
 public class ProcessTaskStepVo extends BasePageVo {
 
@@ -91,6 +86,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String flowDirection;
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
+	@EntityField(name = "任务列表", type = ApiParamType.JSONOBJECT)
+	private JSONObject processTaskStepTask = new JSONObject();
 	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
 	private Integer isView;
 	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
@@ -691,5 +688,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setCommentTemplate(ProcessCommentTemplateVo commentTemplate) {
 		this.commentTemplate = commentTemplate;
+	}
+
+	public JSONObject getProcessTaskStepTask() {
+		return processTaskStepTask;
+	}
+
+	public void setProcessTaskStepTask(JSONObject processTaskStepTask) {
+		this.processTaskStepTask = processTaskStepTask;
 	}
 }

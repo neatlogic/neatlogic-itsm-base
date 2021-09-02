@@ -13,6 +13,114 @@
         where `task_config_id` = #{value}
     </select>
 
+    <resultMap id="stepTaskMap" type="codedriver.framework.process.dto.ProcessTaskStepTaskVo">
+        <id column="id" property="id"/>
+        <result column="processTaskId" property="processTaskId"/>
+        <result column="processTaskStepId" property="processTaskStepId"/>
+        <result column="status" property="status"/>
+        <result column="createTime" property="createTime"/>
+        <result column="content" property="content"/>
+        <result column="endTime" property="endTime"/>
+        <association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
+            <result property="uuid" column="lcuUuid"/>
+            <result property="userName" column="lcuName"/>
+            <result property="pinyin" column="lcuPinyin"/>
+            <result property="vipLevel" column="lcuVipLevel"/>
+            <result property="userInfo" column="lcuInfo"/>
+        </association>
+    </resultMap>
+
+    <select id="getStepTaskDetailById" resultMap="stepTaskMap">
+        SELECT pst.`processtask_id`      as processTaskId,
+               pst.`processtask_step_id` as processTaskStepId,
+               pst.`id`,
+               pst.`owner`,
+               pst.`status`,
+               pst.`create_time`         as createTime,
+               pst.`end_time`            as endTime,
+               pst.`task_config_id`      as taskConfigId,
+               pc.content
+        FROM `processtask_step_task` pst
+                 LEFT JOIN `task_config` tc on pst.`task_config_id` = tc.id
+                 LEFT JOIN `processtask_content` pc on pst.`content_hash` = pc.hash
+        WHERE pst.id = #{value}
+    </select>
+
+    <select id="getStepTaskById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo">
+        SELECT pst.`processtask_id`      as processTaskId,
+               pst.`processtask_step_id` as processTaskStepId,
+               pst.`id`,
+               pst.`owner`,
+               pst.`status`,
+               pst.`create_time`         as createTime,
+               pst.`start_time`          as startTime,
+               pst.`end_time`            as endTime,
+               pst.`task_config_id`      as taskConfigId
+        FROM `processtask_step_task` pst
+        WHERE pst.id = #{value}
+    </select>
+    <select id="getStepTaskUserByTaskIdAndUserUuid"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+        SELECT `id`,
+               `processtask_step_task_id` as processTaskStepTaskId,
+               `user_uuid`                as userUuid,
+               `end_time`                 as endTime,
+               `status`,
+               `is_delete`                as isDelete
+        FROM `processtask_step_task_user`
+        where `processtask_step_task_id` = #{processTaskStepTaskId}
+          and `user_uuid` = #{userUuid}
+    </select>
+
+    <select id="getStepTaskByProcessTaskStepId"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo">
+        SELECT pst.`processtask_id`      as processTaskId,
+               pst.`processtask_step_id` as processTaskStepId,
+               pst.`id`,
+               pst.`owner`,
+               pst.`status`,
+               pst.`create_time`         as createTime,
+               pst.`start_time`          as startTime,
+               pst.`end_time`            as endTime,
+               pst.`task_config_id`      as taskConfigId
+        FROM `processtask_step_task` pst
+        WHERE pst.`processtask_step_id` = #{value}
+    </select>
+
+    <select id="getStepTaskUserByStepTaskIdList"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+        SELECT pst.`processtask_id` as processTaskId,
+        pst.`processtask_step_id` as processTaskStepId,
+        pst.`id`,
+        pst.`owner`,
+        pst.`status`,
+        pst.`create_time` as createTime,
+        pst.`start_time` as startTime,
+        pst.`end_time` as endTime,
+        pst.`task_config_id` as taskConfigId
+        FROM `processtask_step_task` pst
+        WHERE pst.`processtask_step_id` in
+        <foreach collection="stepTaskIdList" item="stepTaskId" open="(" separator="," close=")">
+            #{stepTaskId}
+        </foreach>
+    </select>
+
+    <select id="getStepTaskUserContentByStepTaskUserIdList"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">
+        SELECT
+            `id`,
+            `processtask_step_task_id` as processTaskStepTaskId,
+            `processtask_step_task_user_id` as processTaskStepTaskUserId,
+            `user_uuid` as userUuid,
+            `content_hash` as contentHash,
+            `fcd`
+        FROM
+            `processtask_step_task_user_content` in
+        <foreach collection="stepTaskUserIdList" item="stepTaskUserId" open="(" separator="," close=")">
+            #{stepTaskUserId}
+        </foreach>
+    </select>
+
     <insert id="insertTask">
         INSERT INTO `processtask_step_task` (`processtask_id`,
                                              `processtask_step_id`,
@@ -34,29 +142,73 @@
 
     <insert id="insertIgnoreTaskUser">
         INSERT IGNORE INTO `processtask_step_task_user` (`processtask_step_task_id`,
-                                                  `user_uuid`,
-                                                  `status`)
+                                                         `user_uuid`,
+                                                         `status`)
         VALUES (#{processtaskStepTaskId},
                 #{userUuid'},
                 #{status});
 
     </insert>
 
+    <insert id="insertTaskUserContent">
+        INSERT INTO `processtask_step_task_user_content` (`id`,
+                                                          `processtask_step_task_id`,
+                                                          `processtask_step_task_user_id`,
+                                                          `user_uuid`,
+                                                          `content_hash`,
+                                                          `fcd`)
+        VALUES (#{id},
+                #{processtaskStepTaskId},
+                #{processtaskStepTaskUserId},
+                #{userUuid},
+                #{contentHash},
+                now(3))
+    </insert>
+
     <update id="updateTask">
         UPDATE
             `processtask_step_task`
-        SET
-            `owner` = 'owner',
+        SET `owner`        = 'owner',
             `content_hash` = 'content_hash'
-        WHERE `id` = #{id} ;
+        WHERE `id` = #{id};
+    </update>
+
+    <update id="updateTaskUserByTaskIdAndUserUuid">
+        UPDATE
+            `processtask_step_task_user`
+        SET `end_time` = now(3),
+            `status`   = #{status}
+        WHERE `processtask_step_task_id` = #{processtaskStepTaskId}
+          and `user_uuid` = #{user_uuid}
     </update>
 
     <delete id="deleteTaskUserByUserListAndId">
-        DELETE FROM `processtask_step_task_user`
+        UPDATE `processtask_step_task_user`
+        SET
+        `is_delete` = 1
         WHERE `user_uuid` not in
         <foreach collection="userList" item="userUuid" open="(" close=")" separator=",">
             #{userUuid}
         </foreach>
         and `processtask_step_task_id` = #{processTaskStepTaskId}
     </delete>
+
+    <delete id="deleteTaskById">
+        DELETE
+        FROM `processtask_step_task`
+        WHERE `id` = #{value};
+    </delete>
+
+    <delete id="deleteTaskUserByTaskId">
+        DELETE
+        FROM `processtask_step_task_user`
+        WHERE `processtask_step_task_id` = #{value};
+    </delete>
+
+    <delete id="deleteTaskUserContentByTaskId">
+        DELETE
+        FROM `processtask_step_task_user_content`
+        WHERE `processtask_step_task_id` = #{value};
+    </delete>
+
 </mapper>

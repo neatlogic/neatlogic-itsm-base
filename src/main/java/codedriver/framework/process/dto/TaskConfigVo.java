@@ -20,8 +20,8 @@ public class TaskConfigVo extends BaseEditorVo {
     private Long id;
     @EntityField(name = "任务名称", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "单人：single, 多人：many", type = ApiParamType.STRING)
-    private String type;
+    @EntityField(name = "参与人数。-1：不做限制", type = ApiParamType.STRING)
+    private Integer num;
     @EntityField(name = "其中一个人完成即可：any,所有人完成：all", type = ApiParamType.STRING)
     private String policy;
     @EntityField(name = "是否激活", type = ApiParamType.INTEGER)
@@ -46,12 +46,12 @@ public class TaskConfigVo extends BaseEditorVo {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public Integer getNum() {
+        return num;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setNum(Integer num) {
+        this.num = num;
     }
 
     public String getPolicy() {
