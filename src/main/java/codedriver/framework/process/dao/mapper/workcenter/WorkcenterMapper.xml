@@ -251,8 +251,10 @@
 		UPDATE 
 		  `process_workcenter` 
 		SET
+		<if test="name != null and name != ''">
 		  `name` = #{name},
-		   `type` = #{type}
+		</if>
+		`type` = #{type}
 		WHERE `uuid` = #{uuid} ;
 	</update>
 	
