@@ -6,7 +6,7 @@
 package codedriver.framework.process.event.core;
 
 import codedriver.framework.asynchronization.thread.CodeDriverThread;
-import codedriver.framework.asynchronization.threadpool.CommonThreadPool;
+import codedriver.framework.asynchronization.threadpool.CachedThreadPool;
 import codedriver.framework.process.constvalue.ProcessTaskEvent;
 import codedriver.framework.process.dao.mapper.ProcessEventMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
@@ -45,7 +45,7 @@ public class ProcessEventHandler {
     public synchronized static void doEvent(ProcessTaskEvent event, Long flowJobStepId) {
         ProcessEventHandler.EventRunner runner = new ProcessEventHandler.EventRunner(event, flowJobStepId);
         if (!TransactionSynchronizationManager.isSynchronizationActive()) {
-            CommonThreadPool.execute(runner);
+            CachedThreadPool.execute(runner);
             return;
         }
         List<CodeDriverThread> runnableActionList = RUNNABLES.get();
@@ -57,7 +57,7 @@ public class ProcessEventHandler {
                 public void afterCommit() {
                     List<CodeDriverThread> runnableActionList = RUNNABLES.get();
                     for (CodeDriverThread runnable : runnableActionList) {
-                        CommonThreadPool.execute(runnable);
+                        CachedThreadPool.execute(runnable);
                     }
                 }
 
@@ -72,8 +72,8 @@ public class ProcessEventHandler {
     }
 
     static class EventRunner extends CodeDriverThread {
-        private Long processTaskStepId;
-        private ProcessTaskEvent event;
+        private final Long processTaskStepId;
+        private final ProcessTaskEvent event;
 
         public EventRunner(ProcessTaskEvent _event, Long _processTaskStepId) {
             event = _event;
