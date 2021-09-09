@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2021/9/1 16:20
  **/
 public enum TaskConfigPolicy implements IEnum {
-    ANY("any","其中一个人完成即可"),MANY("all","所有人完成");
+    ANY("any","任一完成"),MANY("all","所有完成");
     private final String value;
     private final String name;
 
