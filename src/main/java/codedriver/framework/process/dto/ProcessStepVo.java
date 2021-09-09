@@ -1,15 +1,13 @@
 package codedriver.framework.process.dto;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
 
 public class ProcessStepVo implements Serializable {
 	private static final long serialVersionUID = -1211661404097123528L;
@@ -34,6 +32,7 @@ public class ProcessStepVo implements Serializable {
 	private List<ProcessStepFormAttributeVo> formAttributeList;
 	private Long commentTemplateId;//回复模版ID
 	private List<String> tagList;
+	private ProcessStepTaskConfigVo taskConfigVo;
 	@JSONField(serialize=false)
 	private transient Long notifyPolicyId;
 	@JSONField(serialize=false)
@@ -234,5 +233,13 @@ public class ProcessStepVo implements Serializable {
 
 	public void setTagList(List<String> tagList) {
 		this.tagList = tagList;
+	}
+
+	public ProcessStepTaskConfigVo getTaskConfigVo() {
+		return taskConfigVo;
+	}
+
+	public void setTaskConfigVo(ProcessStepTaskConfigVo taskConfigVo) {
+		this.taskConfigVo = taskConfigVo;
 	}
 }

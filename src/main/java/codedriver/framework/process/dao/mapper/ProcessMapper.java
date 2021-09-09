@@ -1,135 +1,139 @@
 package codedriver.framework.process.dao.mapper;
 
-import java.util.List;
-
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.dto.*;
+import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import org.apache.ibatis.annotations.Param;
 
-import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
+import java.util.List;
 
 public interface ProcessMapper {
-	public int checkProcessIsExists(String processUuid);
+	int checkProcessIsExists(String processUuid);
 
-	public List<String> getProcessStepUuidBySlaUuid(String slaUuid);
+	List<String> getProcessStepUuidBySlaUuid(String slaUuid);
 
-	public ProcessFormVo getProcessFormByProcessUuid(String processUuid);
+	ProcessFormVo getProcessFormByProcessUuid(String processUuid);
 
-	public List<ProcessStepRelVo> getProcessStepRelByProcessUuid(String processUuid);
+	List<ProcessStepRelVo> getProcessStepRelByProcessUuid(String processUuid);
 
-	public List<ProcessSlaVo> getProcessSlaByProcessUuid(String processUuid);
+	List<ProcessSlaVo> getProcessSlaByProcessUuid(String processUuid);
 
-	public List<String> getSlaUuidListByProcessUuid(String processUuid);
+	List<String> getSlaUuidListByProcessUuid(String processUuid);
 
-	public List<ProcessStepVo> getProcessStepDetailByProcessUuid(String processUuid);
+	List<ProcessStepVo> getProcessStepDetailByProcessUuid(String processUuid);
 
-	public List<String> getProcessStepUuidListByProcessUuid(String processUuid);
+	List<String> getProcessStepUuidListByProcessUuid(String processUuid);
 
-	public ProcessVo getProcessByUuid(String processUuid);
+	ProcessVo getProcessByUuid(String processUuid);
 	
-	public ProcessVo getProcessByName(String processName);
+	ProcessVo getProcessByName(String processName);
 
-	public ProcessVo getProcessBaseInfoByUuid(String processUuid);
+	ProcessVo getProcessBaseInfoByUuid(String processUuid);
 
-	public List<ProcessStepVo> searchProcessStep(ProcessStepVo processStepVo);
+	List<ProcessStepVo> searchProcessStep(ProcessStepVo processStepVo);
 
-	public List<ProcessTypeVo> getAllProcessType();
+	List<ProcessTypeVo> getAllProcessType();
 
-	public int checkProcessNameIsRepeat(ProcessVo processVo);
+	int checkProcessNameIsRepeat(ProcessVo processVo);
 
-	public int searchProcessCount(ProcessVo processVo);
+	int searchProcessCount(ProcessVo processVo);
 
-	public List<ProcessVo> searchProcessList(ProcessVo processVo);
+	List<ProcessVo> searchProcessList(ProcessVo processVo);
 
-	public List<ValueTextVo> searchProcessListForSelect(ProcessVo processVo);
+	List<ValueTextVo> searchProcessListForSelect(ProcessVo processVo);
 
-	public int getProcessReferenceCount(String processUuid);
+	int getProcessReferenceCount(String processUuid);
 
-	public List<String> getProcessReferenceUuidList(String processUuid);
+	List<String> getProcessReferenceUuidList(String processUuid);
 
-	public int checkProcessDraftIsExists(ProcessDraftVo processDraftVo);
+	int checkProcessDraftIsExists(ProcessDraftVo processDraftVo);
 
-	public ProcessDraftVo getProcessDraftByUuid(String uuid);
+	ProcessDraftVo getProcessDraftByUuid(String uuid);
 
-	public List<ProcessDraftVo> getProcessDraftList(ProcessDraftVo processDraftVo);
+	List<ProcessDraftVo> getProcessDraftList(ProcessDraftVo processDraftVo);
 
-	public String getEarliestProcessDraft(ProcessDraftVo processDraftVo);
+	String getEarliestProcessDraft(ProcessDraftVo processDraftVo);
 
-	public List<ProcessStepWorkerPolicyVo> getProcessStepWorkerPolicyListByProcessUuid(String processUuid);
+	List<ProcessStepWorkerPolicyVo> getProcessStepWorkerPolicyListByProcessUuid(String processUuid);
 
-	public ProcessStepVo getProcessStepByUuid(String processStepUuid);
+	ProcessStepVo getProcessStepByUuid(String processStepUuid);
 
-    public ProcessScoreTemplateVo getProcessScoreTemplateByProcessUuid(String processUuid);
+    ProcessScoreTemplateVo getProcessScoreTemplateByProcessUuid(String processUuid);
     
-    public List<ValueTextVo> getProcessTagForSelect(ProcessTagVo processTagVo);
+    List<ValueTextVo> getProcessTagForSelect(ProcessTagVo processTagVo);
     
-    public List<ProcessTagVo> getProcessTagByNameList(List<String> tagNameList);
+    List<ProcessTagVo> getProcessTagByNameList(List<String> tagNameList);
     
-    public int getProcessTagCount(ProcessTagVo processTagVo);
+    int getProcessTagCount(ProcessTagVo processTagVo);
 
-	public ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
+	ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
 
-	public int getFormReferenceCount(String formUuid);
+	int getFormReferenceCount(String formUuid);
 
-	public List<ProcessVo> getFormReferenceList(ProcessFormVo processFormVo);
+	List<ProcessVo> getFormReferenceList(ProcessFormVo processFormVo);
 
-	public ProcessSlaVo getProcessSlaByUuid(String caller);
+	ProcessSlaVo getProcessSlaByUuid(String caller);
 
-	public Long getNotifyPolicyIdByProcessStepUuid(String processStepUuid);
+	Long getNotifyPolicyIdByProcessStepUuid(String processStepUuid);
 
 	List<ProcessVo> getProcessListByUuidList(List<String> uuidList);
 
 	List<Long> getProcessStepTagIdListByProcessStepUuid(String processStepUuid);
 
-	public int insertProcess(ProcessVo processVo);
+	int insertProcess(ProcessVo processVo);
 
-	public int insertProcessStep(ProcessStepVo processStepVo);
+	int insertProcessStep(ProcessStepVo processStepVo);
 
-	public int insertProcessStepFormAttribute(ProcessStepFormAttributeVo processStepFormAttributeVo);
+	int insertProcessStepFormAttribute(ProcessStepFormAttributeVo processStepFormAttributeVo);
 
-	public int insertProcessStepRel(ProcessStepRelVo processStepRelVo);
+	int insertProcessStepRel(ProcessStepRelVo processStepRelVo);
 
-	public int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
+	int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
 
-	public int insertProcessStepWorkerPolicy(ProcessStepWorkerPolicyVo processStepWorkerPolicyVo);
+	int insertProcessStepWorkerPolicy(ProcessStepWorkerPolicyVo processStepWorkerPolicyVo);
 
-	public int insertProcessForm(ProcessFormVo processFormVo);
+	int insertProcessForm(ProcessFormVo processFormVo);
 
-	public int insertProcessStepSla(@Param("stepUuid") String stepUuid, @Param("slaUuid") String slaUuid);
+	int insertProcessStepSla(@Param("stepUuid") String stepUuid, @Param("slaUuid") String slaUuid);
 
-	public int insertProcessSla(ProcessSlaVo processSlaVo);
+	int insertProcessSla(ProcessSlaVo processSlaVo);
 
-	public int insertProcessDraft(ProcessDraftVo processDraftVo);
-	
-	public int insertProcessTag(ProcessTagVo processTagVo);
+	int insertProcessDraft(ProcessDraftVo processDraftVo);
 
-	public int insertProcessStepTag(ProcessStepTagVo processStepTagVo);
+	int insertProcessTag(ProcessTagVo processTagVo);
 
-	public int insertProcessStepCommentTemplate(ProcessStepVo vo);
+	int insertProcessStepTag(ProcessStepTagVo processStepTagVo);
 
-	public int updateProcess(ProcessVo processVo);
+	int insertProcessStepCommentTemplate(ProcessStepVo vo);
 
-	public int deleteProcessStepByProcessUuid(String processUuid);
+	int insertProcessStepTask(ProcessStepTaskConfigVo tmpVo);
 
-	public int deleteProcessStepRelByProcessUuid(String processUuid);
+	int updateProcess(ProcessVo processVo);
 
-	public int deleteProcessStepTeamByProcessUuid(String processUuid);
+	int deleteProcessStepByProcessUuid(String processUuid);
 
-	public int deleteProcessStepWorkerPolicyByProcessUuid(String processUuid);
+	int deleteProcessStepRelByProcessUuid(String processUuid);
 
-	public int deleteProcessStepFormAttributeByProcessUuid(String processUuid);
+	int deleteProcessStepTeamByProcessUuid(String processUuid);
 
-	public int deleteProcessByUuid(String uuid);
+	int deleteProcessStepWorkerPolicyByProcessUuid(String processUuid);
 
-	public int deleteProcessFormByProcessUuid(String processUuid);
+	int deleteProcessStepFormAttributeByProcessUuid(String processUuid);
 
-	public int deleteProcessDraft(ProcessDraftVo processDraftVo);
+	int deleteProcessByUuid(String uuid);
 
-	public int deleteProcessDraftByUuid(String uuid);
+	int deleteProcessFormByProcessUuid(String processUuid);
 
-	public int deleteProcessSlaByProcessUuid(String uuid);
+	int deleteProcessDraft(ProcessDraftVo processDraftVo);
 
-	public int deleteProcessStepCommentTemplate(String stepUuid);
+	int deleteProcessDraftByUuid(String uuid);
+
+	int deleteProcessSlaByProcessUuid(String uuid);
+
+	int deleteProcessStepCommentTemplate(String stepUuid);
 
 	int deleteProcessStepTagByProcessUuid(String processUuid);
+
+    int deleteProcessStepTaskByProcessStepUuid(String processStepUuid);
+
 }

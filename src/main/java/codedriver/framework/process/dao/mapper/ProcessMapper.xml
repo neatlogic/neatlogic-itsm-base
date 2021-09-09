@@ -634,6 +634,18 @@
 		INSERT INTO `process_step_comment_template` (`process_step_uuid`, `comment_template_id`)
 		VALUES (#{uuid}, #{commentTemplateId})
 	</insert>
+	<insert id="insertProcessStepTask">
+		insert into `process_step_task_config` (
+			`process_step_uuid`,
+			`task_config_id`
+		)
+		values
+		(
+			#{processStepUuid},
+			#{taskConfigId}
+		) ;
+
+	</insert>
 
 	<update id="updateProcess" parameterType="codedriver.framework.process.dto.ProcessVo">
 		UPDATE `process` SET
@@ -718,5 +730,8 @@
 
 	<delete id="deleteProcessStepTagByProcessUuid" parameterType="java.lang.String">
 		DELETE FROM `process_step_tag` WHERE `process_uuid` = #{value}
+	</delete>
+    <delete id="deleteProcessStepTaskByProcessStepUuid">
+		DELETE FROM `process_step_task_config` WHERE `process_step_uuid` = #{value}
 	</delete>
 </mapper>

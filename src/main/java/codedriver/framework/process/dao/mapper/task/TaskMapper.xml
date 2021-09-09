@@ -57,59 +57,70 @@
     </select>
 
     <select id="getTaskConfigById" resultType="codedriver.framework.process.dto.TaskConfigVo">
+        SELECT `id`,
+               `name`,
+               `num`,
+               `policy`,
+               `is_active` as isActive,
+               `fcd`,
+               `fcu`,
+               `lcd`,
+               `lcu`
+        FROM `task_config`
+        WHERE `id` = #{value}
+    </select>
+    <select id="getTaskConfigByIdList" resultType="codedriver.framework.process.dto.TaskConfigVo">
         SELECT
-            `id`,
-            `name`,
-            `num`,
-            `policy`,
-            `is_active` as isActive,
-            `fcd`,
-            `fcu`,
-            `lcd`,
-            `lcu`
+        `id`,
+        `name`,
+        `num`,
+        `policy`,
+        `is_active` as isActive,
+        `fcd`,
+        `fcu`,
+        `lcd`,
+        `lcu`
         FROM
-            `task_config`
+        `task_config`
         WHERE
-            `id` = #{value}
+        `id` in
+        <foreach collection="list" separator="," item="id" open="(" close=")">
+            #{id}
+        </foreach>
     </select>
 
     <update id="updateTaskConfig">
         UPDATE
             `task_config`
-        SET
-            `name` = #{name},
-            `num` = #{num},
-            `policy` = #{policy},
+        SET `name`      = #{name},
+            `num`       = #{num},
+            `policy`    = #{policy},
             `is_active` = #{isActive},
-            `lcd` = now(3),
-            `lcu` = #{lcu}
-        WHERE `id` = #{id} ;
+            `lcd`       = now(3),
+            `lcu`       = #{lcu}
+        WHERE `id` = #{id};
     </update>
 
     <insert id="insertTaskConfig">
-        INSERT INTO `task_config` (
-            `id`,
-            `name`,
-            `num`,
-            `policy`,
-            `is_active`,
-            `fcd`,
-            `fcu`
-        )
-        VALUES
-        (
-            #{id},
-            #{name},
-            #{num},
-            #{policy},
-            #{isActive},
-            now(3),
-            #{fcu}
-        ) ;
+        INSERT INTO `task_config` (`id`,
+                                   `name`,
+                                   `num`,
+                                   `policy`,
+                                   `is_active`,
+                                   `fcd`,
+                                   `fcu`)
+        VALUES (#{id},
+                #{name},
+                #{num},
+                #{policy},
+                #{isActive},
+                now(3),
+                #{fcu});
     </insert>
 
     <delete id="deleteTaskConfigById">
-        DELETE FROM  `task_config`
+        DELETE
+        FROM `task_config`
         WHERE `id` = #{value}
     </delete>
 </mapper>

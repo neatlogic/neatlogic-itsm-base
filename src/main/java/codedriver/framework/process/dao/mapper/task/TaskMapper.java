@@ -6,6 +6,7 @@
 package codedriver.framework.process.dao.mapper.task;
 
 import codedriver.framework.process.dto.TaskConfigVo;
+import com.alibaba.fastjson.JSONArray;
 
 import java.util.List;
 
@@ -23,9 +24,12 @@ public interface TaskMapper {
 
     TaskConfigVo getTaskConfigById(Long taskId);
 
+    List<TaskConfigVo> getTaskConfigByIdList(JSONArray stepTaskIdList);
+
     int updateTaskConfig(TaskConfigVo taskConfigVo);
 
     int insertTaskConfig(TaskConfigVo taskConfigVo);
 
     int deleteTaskConfigById(Long taskId);
+
 }
