@@ -97,11 +97,11 @@ public class ProcessTaskVo extends BasePageVo {
 
     @EntityField(name = "上报人公司列表", type = ApiParamType.JSONARRAY)
     @JSONField(serialize = false)
-    private transient List<TeamVo> ownerCompanyList = new ArrayList<>();
+    private List<TeamVo> ownerCompanyList = new ArrayList<>();
 
     @EntityField(name = "上报人部门列表", type = ApiParamType.JSONARRAY)
     @JSONField(serialize = false)
-    private transient List<TeamVo> ownerDepartmentList = new ArrayList<>();
+    private List<TeamVo> ownerDepartmentList = new ArrayList<>();
 
     @EntityField(name = "评分信息", type = ApiParamType.STRING)
     private String scoreInfo;
@@ -113,13 +113,13 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "转报/关联类型", type = ApiParamType.STRING)
     private String channelTypeRelationName;
     @JSONField(serialize = false)
-    private transient Boolean isAutoGenerateId = true;
+    private Boolean isAutoGenerateId = true;
     @EntityField(name = "重做步骤列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> redoStepList = new ArrayList<>();
     @EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
     private ScoreTemplateVo scoreTemplateVo;
     @JSONField(serialize = false)
-    private transient JSONObject paramObj;
+    private JSONObject paramObj;
     @EntityField(name = "是否显示，1：显示，0：隐藏", type = ApiParamType.INTEGER)
     private Integer isShow;
     @EntityField(name = "是否已关注，1：是，0：否", type = ApiParamType.INTEGER)
@@ -133,7 +133,7 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "移动端表单交互类型，1：下探页面；0：当前页", type = ApiParamType.INTEGER)
     private Integer mobileFormUIType;
     @JSONField(serialize = false)
-    private transient List<ProcessTaskStepRelVo> stepRelList;
+    private List<ProcessTaskStepRelVo> stepRelList;
 
     @JSONField(serialize = false)
     @EntityField(name = "上报人userName", type = ApiParamType.STRING)

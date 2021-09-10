@@ -59,15 +59,16 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     private ProcessScoreTemplateVo processScoreTemplateVo;
     @JSONField(serialize = false)
-    private transient String fcu;
+    private String fcu;
     @JSONField(serialize = false)
-    private transient String keyword;
+    private String keyword;
     @JSONField(serialize = false)
-    private transient Long notifyPolicyId;
+    private Long notifyPolicyId;
     @JSONField(serialize = false)
-    private transient List<String> integrationUuidList = new ArrayList<>();
+    private List<String> integrationUuidList = new ArrayList<>();
 
-    private transient String configStr;
+    @JSONField(serialize = false)
+    private String configStr;
 
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {

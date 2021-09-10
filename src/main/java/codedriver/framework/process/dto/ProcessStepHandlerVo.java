@@ -36,7 +36,7 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Se
 	@EntityField(name = "前端配置信息", type = ApiParamType.JSONOBJECT)
 	private JSONObject chartConfig;
 	@JSONField(serialize=false)
-	private transient String configStr;
+	private String configStr;
 
 	public ProcessStepHandlerVo() {
 	}

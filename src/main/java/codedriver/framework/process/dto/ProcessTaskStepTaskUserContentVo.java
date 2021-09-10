@@ -32,7 +32,7 @@ public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
     @EntityField(name = "任务状态", type = ApiParamType.STRING)
     private String status;
     @JSONField(serialize=false)
-    private transient String contentHash;
+    private String contentHash;
     @EntityField(name = "内容", type = ApiParamType.STRING)
     private String content;
 

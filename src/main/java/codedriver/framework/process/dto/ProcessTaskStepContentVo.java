@@ -15,7 +15,7 @@ public class ProcessTaskStepContentVo extends BaseEditorVo {
 	private String contentHash;
 	private String type;
 	@JSONField(serialize=false)
-    private transient Boolean isAutoGenerateId = true;
+    private Boolean isAutoGenerateId = true;
 
 	public ProcessTaskStepContentVo() {
 

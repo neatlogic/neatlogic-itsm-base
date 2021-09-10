@@ -3,6 +3,7 @@ package codedriver.framework.process.dto;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.WorkAssignmentUnitVo;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.List;
 
@@ -22,11 +23,16 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
     private String userType;
 
     private WorkAssignmentUnitVo worker;
-    private transient String newUuid;
-    private transient String userUuid;
-    private transient List<String> teamUuidList;
-    private transient List<String> roleUuidList;
-    private transient List<String> userUuidList;
+    @JSONField(serialize = false)
+    private String newUuid;
+    @JSONField(serialize = false)
+    private String userUuid;
+    @JSONField(serialize = false)
+    private List<String> teamUuidList;
+    @JSONField(serialize = false)
+    private List<String> roleUuidList;
+    @JSONField(serialize = false)
+    private List<String> userUuidList;
 
     public ProcessTaskStepWorkerVo() {
 

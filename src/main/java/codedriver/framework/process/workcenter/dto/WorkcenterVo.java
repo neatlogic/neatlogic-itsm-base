@@ -51,7 +51,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private String processingOfMineCount;
     @JSONField(serialize = false)
     @EntityField(name = "设备类型", type = ApiParamType.STRING)
-    private transient String device;
+    private String device;
     @EntityField(name = "排序的字段", type = ApiParamType.JSONARRAY)
     private JSONArray sortList;
     @EntityField(name = "上报时间条件", type = ApiParamType.JSONOBJECT)

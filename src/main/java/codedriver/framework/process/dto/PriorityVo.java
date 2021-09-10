@@ -32,9 +32,9 @@ public class PriorityVo extends BasePageVo implements Serializable {
     @EntityField(name = "排序", type = ApiParamType.INTEGER)
     private Integer sort;
     @JSONField(serialize = false)
-    private transient String channelUuid;
+    private String channelUuid;
     @JSONField(serialize = false)
-    private transient String keyword;
+    private String keyword;
 
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {

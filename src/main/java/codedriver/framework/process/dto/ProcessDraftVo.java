@@ -29,11 +29,12 @@ public class ProcessDraftVo {
 	@EntityField(name = "保存时间", type = ApiParamType.LONG)
 	private Date fcd;
 	@JSONField(serialize=false)
-	private transient String fcu;
+	private String fcu;
 	@JSONField(serialize=false)
-	private transient String md5;
+	private String md5;
 
-	private transient String configStr;
+	@JSONField(serialize = false)
+	private String configStr;
 
 	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {

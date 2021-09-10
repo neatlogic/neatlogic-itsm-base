@@ -26,7 +26,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Long processTaskId;
 	private Long fromProcessTaskStepId;
 	@JSONField(serialize=false)
-	private transient Long startProcessTaskStepId;
+	private Long startProcessTaskStepId;
 	private String processUuid;
 	private String processStepUuid;
 	@EntityField(name = "步骤名称", type = ApiParamType.STRING)
@@ -59,7 +59,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	//@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
 	@JSONField(serialize=false)
-	private transient List<ProcessTaskStepRelVo> relList = new ArrayList<>();
+	private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
 	@EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
 	private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
@@ -67,7 +67,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<FormAttributeVo> formAttributeVoList = new ArrayList<>();
 	
 	@JSONField(serialize=false)
-	private transient JSONObject paramObj;
+	private JSONObject paramObj;
 	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepUserVo majorUser;
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
@@ -95,18 +95,18 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
 	@JSONField(serialize=false)
-	private transient String aliasName;
+	private String aliasName;
 	@JSONField(serialize=false)
-	private transient Boolean isAutoGenerateId = false;
+	private Boolean isAutoGenerateId = false;
 	
 	@EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
 	private JSONObject processTaskStepData;
 	//@EntityField(name = "当前子任务Id", type = ApiParamType.LONG)
 	@JSONField(serialize=false)
-	private transient Long currentSubtaskId;
+	private Long currentSubtaskId;
     //@EntityField(name = "当前子任务", type = ApiParamType.JSONOBJECT)
 	@JSONField(serialize=false)
-    private transient ProcessTaskStepSubtaskVo currentSubtaskVo;
+    private ProcessTaskStepSubtaskVo currentSubtaskVo;
 	@EntityField(name = "处理器特有的步骤信息", type = ApiParamType.JSONOBJECT)
 	private Object handlerStepInfo;
 	@EntityField(name = "向前步骤列表", type = ApiParamType.JSONARRAY)
@@ -124,9 +124,12 @@ public class ProcessTaskStepVo extends BasePageVo {
 //    private String originalUserName;
     @EntityField(name = "回复模版", type = ApiParamType.JSONOBJECT)
     private ProcessCommentTemplateVo commentTemplate;
-    private transient int updateActiveTime;
-    private transient int updateStartTime;
-    private transient int updateEndTime;
+	@JSONField(serialize = false)
+    private int updateActiveTime;
+	@JSONField(serialize = false)
+    private int updateStartTime;
+	@JSONField(serialize = false)
+    private int updateEndTime;
 	public ProcessTaskStepVo() {
 
 	}
