@@ -11,7 +11,7 @@ public class ProcessTaskTranferReportVo {
     private Long fromProcessTaskId;
     private Long toProcessTaskId;
     @JSONField(serialize=false)
-    private transient Boolean isAutoGenerateId = true;
+    private Boolean isAutoGenerateId = true;
     
     public ProcessTaskTranferReportVo() {}
     public ProcessTaskTranferReportVo(Long channelTypeRelationId, Long fromProcessTaskId, Long toProcessTaskId) {

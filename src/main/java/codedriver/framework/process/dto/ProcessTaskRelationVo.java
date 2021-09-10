@@ -21,7 +21,7 @@ public class ProcessTaskRelationVo extends BasePageVo {
     private ProcessTaskStatusVo statusVo;
     private ChannelTypeVo channelTypeVo;
     @JSONField(serialize=false)
-    private transient Boolean isAutoGenerateId = true;
+    private Boolean isAutoGenerateId = true;
     public ProcessTaskRelationVo() {}
     public ProcessTaskRelationVo(Long processTaskId) {
         this.processTaskId = processTaskId;

@@ -34,7 +34,7 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 	@EntityField(name = "是否可删除", type = ApiParamType.INTEGER)
 	private Integer isDeletable;
 	@JSONField(serialize=false)
-	private transient String contentHash;
+	private String contentHash;
 	public ProcessTaskStepReplyVo() {}
 	public ProcessTaskStepReplyVo(ProcessTaskStepContentVo processTaskStepContentVo) {
 	    super.setFcd(processTaskStepContentVo.getFcd());

@@ -41,7 +41,7 @@ public class ChannelTypeVo extends BasePageVo implements Serializable, Cloneable
     private String handlerName;
 
     @JSONField(serialize = false)
-    private transient String keyword;
+    private String keyword;
 
     public ChannelTypeVo() {
     }

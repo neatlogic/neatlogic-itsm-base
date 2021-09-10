@@ -13,9 +13,9 @@ public class ChannelRelationVo {
     private List<String> targetList = new ArrayList<>();
     private List<String> authorityList = new ArrayList<>();
     @JSONField(serialize=false)
-    private transient String type;
+    private String type;
     @JSONField(serialize=false)
-    private transient String uuid;
+    private String uuid;
     
     public Long getChannelTypeRelationId() {
         return channelTypeRelationId;

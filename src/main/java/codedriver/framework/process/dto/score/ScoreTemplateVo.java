@@ -4,6 +4,7 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +24,8 @@ public class ScoreTemplateVo extends BaseEditorVo {
 	private List<ScoreTemplateDimensionVo> dimensionList;
 
 	@EntityField(name = "评分维度名称列表", type = ApiParamType.JSONARRAY)
-	private transient List<String> dimensionNameList;
+	@JSONField(serialize = false)
+	private List<String> dimensionNameList;
 
 	/** 评分维度名称，利用dimensionNameList拼接而成的字符串，分隔符为"、"，用于管理页列表 */
 	private String dimensionNames;

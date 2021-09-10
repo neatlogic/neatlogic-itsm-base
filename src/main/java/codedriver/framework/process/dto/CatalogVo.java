@@ -64,19 +64,19 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Seria
 	@EntityField(name = "类型#uuid", type = ApiParamType.STRING)
 	private String typeAndUuid;
 	@JSONField(serialize=false)
-	private transient boolean isAuthority = false;
+	private boolean isAuthority = false;
 	@JSONField(serialize=false)
-	private transient List<AuthorityVo> authorityVoList;
+	private List<AuthorityVo> authorityVoList;
 	@JSONField(serialize=false)
-	private transient CatalogVo parent;
+	private CatalogVo parent;
 	@JSONField(serialize=false)
-	private transient List<Integer> sortList;
+	private List<Integer> sortList;
 	@JSONField(serialize=false)
-	private transient List<String> nameList;
+	private List<String> nameList;
 	@JSONField(serialize=false)
-	private transient List<CatalogVo> childCatalogList = new ArrayList<>();
+	private List<CatalogVo> childCatalogList = new ArrayList<>();
 	@JSONField(serialize=false)
-	private transient List<ChannelVo> childChannelList = new ArrayList<>();
+	private List<ChannelVo> childChannelList = new ArrayList<>();
 
 	public CatalogVo() {
 	}

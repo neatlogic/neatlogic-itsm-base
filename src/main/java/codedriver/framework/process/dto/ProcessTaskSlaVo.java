@@ -20,7 +20,7 @@ public class ProcessTaskSlaVo {
 	@EntityField(name = "配置", type = ApiParamType.JSONOBJECT)
 	private String config;
 	@JSONField(serialize=false)
-	private transient JSONObject configObj;
+	private JSONObject configObj;
 	private List<Long> processTaskStepIdList;
 	private ProcessTaskSlaTimeVo slaTimeVo;
 

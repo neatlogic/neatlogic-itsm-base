@@ -8,14 +8,14 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 public class ProcessTaskSerialNumberPolicyVo {
     @JSONField(serialize = false)
-    private transient String channelTypeUuid;
+    private String channelTypeUuid;
     private String handler;
     private String name;
     private JSONArray formAttributeList;
     @JSONField(serialize = false)
-    private transient JSONObject config;
+    private JSONObject config;
     @JSONField(serialize = false)
-    private transient Long serialNumberSeed;
+    private Long serialNumberSeed;
 
     private Date startTime;
     private Date endTime;

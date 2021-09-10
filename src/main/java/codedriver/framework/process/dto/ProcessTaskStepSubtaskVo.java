@@ -88,7 +88,7 @@ public class ProcessTaskStepSubtaskVo {
 	@EntityField(name = "处理人", type = ApiParamType.STRING)
 	private String workerList;
 	@JSONField(serialize=false)
-	private transient JSONObject paramObj;
+	private JSONObject paramObj;
 	
 	public Long getProcessTaskId() {
 		return processTaskId;

@@ -6,6 +6,7 @@ import java.util.List;
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.dto.WorkAssignmentUnitVo;
 import codedriver.framework.util.SnowflakeUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.lang3.StringUtils;
 
 import codedriver.framework.common.constvalue.ApiParamType;
@@ -38,7 +39,8 @@ public class ProcessTaskStepAuditVo {
 	private WorkAssignmentUnitVo originalUserVo;
     @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
     private String originalUser;
-	private transient String descriptionHash;
+	@JSONField(serialize = false)
+	private String descriptionHash;
 
 	public ProcessTaskStepAuditVo() { 
 	}

@@ -105,19 +105,19 @@ public class ChannelVo extends BasePageVo implements Serializable {
     private int childrenCount = 0;
 
     @JSONField(serialize = false)
-    private transient boolean isAuthority = false;
+    private boolean isAuthority = false;
     @JSONField(serialize = false)
-    private transient List<AuthorityVo> authorityVoList;
+    private List<AuthorityVo> authorityVoList;
     @JSONField(serialize = false)
-    private transient CatalogVo parent;
+    private CatalogVo parent;
     @JSONField(serialize = false)
-    private transient Integer sort;
+    private Integer sort;
     @JSONField(serialize = false)
-    private transient String userUuid;
+    private String userUuid;
     @JSONField(serialize = false)
-    private transient List<String> authorizedUuidList;
+    private List<String> authorizedUuidList;
     @JSONField(serialize = false)
-    private transient List<String> uuidList;
+    private List<String> uuidList;
 
     public ChannelVo() {
 

@@ -21,11 +21,11 @@ public class ChannelTypeRelationVo extends BasePageVo {
     private List<ChannelTypeVo> targetVoList = new ArrayList<>();
     
     @JSONField(serialize=false)
-    private transient Boolean isAutoGenerateId = true;
+    private Boolean isAutoGenerateId = true;
     @JSONField(serialize=false)
-    private transient List<Long> idList = new ArrayList<>();
+    private List<Long> idList = new ArrayList<>();
     @JSONField(serialize=false)
-    private transient boolean useIdList;
+    private boolean useIdList;
     public synchronized Long getId() {
         if(id == null && isAutoGenerateId) {
             id = SnowflakeUtil.uniqueLong();

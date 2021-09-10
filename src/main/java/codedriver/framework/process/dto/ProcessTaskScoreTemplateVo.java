@@ -24,7 +24,7 @@ public class ProcessTaskScoreTemplateVo extends BaseEditorVo {
     @EntityField(name = "评分配置hash", type = ApiParamType.STRING)
     private String configHash;
     @JSONField(serialize = false)
-    private transient String configStr;
+    private String configStr;
     
 	public ProcessTaskScoreTemplateVo() {}
 
