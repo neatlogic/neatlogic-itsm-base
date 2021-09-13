@@ -23,7 +23,6 @@
 		   LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
 		   LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
 		<where>
-			pw.type = 'factory' OR
 			(pwa.type = 'common' AND pwa.`uuid` = 'alluser')
 			<if test="userUuid != null and userUuid != ''">
 			  	OR	(pwa.type = 'user' AND pwa.`uuid` = #{userUuid})
