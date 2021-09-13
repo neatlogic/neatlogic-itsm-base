@@ -95,7 +95,7 @@
         pst.`end_time` as endTime,
         pst.`task_config_id` as taskConfigId
         FROM `processtask_step_task` pst
-        WHERE pst.`processtask_step_id` in
+        WHERE pst.`id` in
         <foreach collection="stepTaskIdList" item="stepTaskId" open="(" separator="," close=")">
             #{stepTaskId}
         </foreach>
@@ -111,7 +111,7 @@
             `content_hash` as contentHash,
             `fcd`
         FROM
-            `processtask_step_task_user_content` in
+            `processtask_step_task_user_content` where `processtask_step_task_user_id` in
         <foreach collection="stepTaskUserIdList" item="stepTaskUserId" open="(" separator="," close=")">
             #{stepTaskUserId}
         </foreach>
