@@ -168,7 +168,7 @@ public class ProcessTaskStepTaskVo {
 
     public JSONObject getParamObj() {
         if (MapUtils.isEmpty(paramObj)) {
-            return new JSONObject();
+            paramObj = new JSONObject();
         }
         return paramObj;
     }

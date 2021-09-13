@@ -111,6 +111,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     public void setRoleMapper(RoleMapper _roleMapper) {
         roleMapper = _roleMapper;
     }
+
     @Autowired
     public void setAuthenticationInfoService(AuthenticationInfoService _authenticationInfoService) {
         authenticationInfoService = _authenticationInfoService;
@@ -354,7 +355,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
         if (CollectionUtils.isNotEmpty(workerSet)) {
             for (ProcessTaskStepWorkerVo workerVo : workerSet) {
-                processTaskMapper.insertProcessTaskStepWorker(workerVo);
+                processTaskMapper.insertIgnoreProcessTaskStepWorker(workerVo);
             }
         } else {
             throw new ProcessTaskException("没有匹配到处理人");
@@ -415,7 +416,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (StringUtils.isNotBlank(userUuid)) {
                     UserVo userVo = userMapper.getUserBaseInfoByUuidWithoutCache(userUuid);
                     if (userVo != null) {
-                        processTaskMapper.insertProcessTaskStepUser(new ProcessTaskStepUserVo( currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), userVo.getUuid(), ProcessUserType.MAJOR.getValue()));
+                        processTaskMapper.insertProcessTaskStepUser(new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), userVo.getUuid(), ProcessUserType.MAJOR.getValue()));
                         /* 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
                         currentProcessTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
                         currentProcessTaskStepVo.setUpdateStartTime(1);
@@ -1114,7 +1115,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             }
             for (ProcessTaskStepWorkerVo worker : workerSet) {
-                processTaskMapper.insertProcessTaskStepWorker(worker);
+                processTaskMapper.insertIgnoreProcessTaskStepWorker(worker);
             }
             IProcessStepInternalHandler processStepUtilHandler =
                     ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
@@ -1231,7 +1232,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 清空worker表，只留下当前处理人 **/
             processTaskMapper
                     .deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
-            processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(
+            processTaskMapper.insertIgnoreProcessTaskStepWorker(new ProcessTaskStepWorkerVo(
                     currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(),
                     GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue()));
 
@@ -1336,7 +1337,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 清空work表，重新写入新数据 **/
             processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
             for (ProcessTaskStepWorkerVo workerVo : workerList) {
-                processTaskMapper.insertProcessTaskStepWorker(workerVo);
+                processTaskMapper.insertIgnoreProcessTaskStepWorker(workerVo);
             }
 
             updateProcessTaskStepStatus(processTaskStepVo);
@@ -1626,7 +1627,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 加入上报人为处理人 **/
             ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue());
             processTaskMapper.insertProcessTaskStepUser(processTaskStepUserVo);
-            processTaskMapper.insertProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue()));
+            processTaskMapper.insertIgnoreProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), GroupSearch.USER.getValue(), UserContext.get().getUserUuid(true), ProcessUserType.MAJOR.getValue()));
 
             /* 保存转报数据 **/
             Long fromProcessTaskId = paramObj.getLong("fromProcessTaskId");
@@ -2121,5 +2122,33 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
         }
 
+    }
+
+    @Override
+    public List<ProcessTaskStepWorkerVo> getMinorWorkerList(ProcessTaskStepVo taskStepVo) {
+        return myMinorWorkerList(taskStepVo);
+    }
+
+    /**
+     * 获取对应步骤的minor worker
+     *
+     * @param taskStepVo 工单步骤
+     * @return 对应步骤模块的待处理人
+     */
+    protected List<ProcessTaskStepWorkerVo> myMinorWorkerList(ProcessTaskStepVo taskStepVo) {
+        return null;
+    }
+
+    /**
+     * 更新对应步骤模块的协助处理人
+     * @param taskStepVo 工单步骤
+     * @return 1代表成功
+     */
+    public int insertMinorWorkerList(ProcessTaskStepVo taskStepVo){
+        return myInsertMinorWorkerList(taskStepVo);
+    }
+
+    protected int myInsertMinorWorkerList(ProcessTaskStepVo taskStepVo){
+        return 1;
     }
 }

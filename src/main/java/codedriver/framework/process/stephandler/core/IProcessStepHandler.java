@@ -251,4 +251,20 @@ public interface IProcessStepHandler {
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     int scoreProcessTask(ProcessTaskVo currentProcessTaskVo);
+
+    /**
+     * 获取对应步骤的minor worker
+     *
+     * @param taskStepVo 工单步骤
+     * @return 对应步骤模块的协助处理人
+     */
+    List<ProcessTaskStepWorkerVo> getMinorWorkerList(ProcessTaskStepVo taskStepVo);
+
+
+    /**
+     * 更新对应步骤模块的协助处理人
+     * @param taskStepVo 工单步骤
+     * @return 1代表成功
+     */
+    int insertMinorWorkerList(ProcessTaskStepVo taskStepVo);
 }

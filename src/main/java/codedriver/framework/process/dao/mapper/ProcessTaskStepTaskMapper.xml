@@ -68,7 +68,6 @@
                `is_delete`                as isDelete
         FROM `processtask_step_task_user`
         where `processtask_step_task_id` = #{processTaskStepTaskId}
-          and `user_uuid` = #{userUuid}
     </select>
 
     <select id="getStepTaskByProcessTaskStepId"
@@ -117,6 +116,17 @@
             #{stepTaskUserId}
         </foreach>
     </select>
+    <select id="getStepTaskUserListByTaskId"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+        SELECT `id`,
+               `processtask_step_task_id` as processTaskStepTaskId,
+               `user_uuid`                as userUuid,
+               `end_time`                 as endTime,
+               `status`,
+               `is_delete`                as isDelete
+        FROM `processtask_step_task_user`
+        where `processtask_step_task_id` = #{processTaskStepTaskId}
+    </select>
 
     <insert id="insertTask">
         INSERT INTO `processtask_step_task` (`processtask_id`,
@@ -127,22 +137,24 @@
                                              `create_time`,
                                              `content_hash`,
                                              `task_config_id`)
-        VALUES (#{processtaskId},
-                #{processtaskStepId},
+        VALUES (#{processTaskId},
+                #{processTaskStepId},
                 #{id},
-                #{owner},
+                #{ownerVo.uuid},
                 #{status},
-                #{createTime},
+                now(3),
                 #{contentHash},
                 #{taskConfigId})
     </insert>
 
     <insert id="insertIgnoreTaskUser">
-        INSERT IGNORE INTO `processtask_step_task_user` (`processtask_step_task_id`,
+        INSERT IGNORE INTO `processtask_step_task_user` (`id`,
+                                                         `processtask_step_task_id`,
                                                          `user_uuid`,
                                                          `status`)
-        VALUES (#{processtaskStepTaskId},
-                #{userUuid'},
+        VALUES (#{id},
+                #{processtaskStepTaskId},
+                #{userUuid},
                 #{status});
 
     </insert>
@@ -179,11 +191,15 @@
           and `user_uuid` = #{user_uuid}
     </update>
 
-    <delete id="deleteTaskUserByUserListAndId">
+    <delete id="updateDeleteTaskUserByUserListAndId">
         UPDATE `processtask_step_task_user`
         SET
-        `is_delete` = 1
-        WHERE `user_uuid` not in
+        `is_delete` = #{isDelete}
+        WHERE `user_uuid`
+        <if test="isDelete == 1">
+            not
+        </if>
+        in
         <foreach collection="userList" item="userUuid" open="(" close=")" separator=",">
             #{userUuid}
         </foreach>

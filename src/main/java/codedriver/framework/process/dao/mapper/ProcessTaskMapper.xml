@@ -1279,7 +1279,7 @@
         </if>
     </select>
 
-    <select id="getPrcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo"
+    <select id="getProcessTaskAssignWorker" parameterType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo"
             resultType="codedriver.framework.process.dto.ProcessTaskAssignWorkerVo">
         SELECT `processtask_id`           AS processTaskId,
                `processtask_step_id`      AS
@@ -2595,8 +2595,8 @@
                 #{processTaskId})
     </insert>
 
-    <insert id="insertProcessTaskStepWorker" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
-        INSERT INTO `processtask_step_worker` (`processtask_id`,
+    <insert id="insertIgnoreProcessTaskStepWorker" parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+        INSERT ignore INTO `processtask_step_worker` (`processtask_id`,
                                                `processtask_step_id`,
                                                `type`,
                                                `uuid`,
@@ -3417,5 +3417,10 @@
         FROM `processtask_step_in_operation`
         WHERE `processtask_step_id` = #{processTaskStepId}
           and `operation_type` = #{operationType}
+    </delete>
+    <delete id="deleteProcessTaskStepWorkerMinorByProcessTaskStepId">
+        DELETE
+        FROM `processtask_step_worker`
+        where `processtask_step_id` = #{processTaskStepId}
     </delete>
 </mapper>

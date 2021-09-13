@@ -25,9 +25,15 @@ public interface ProcessTaskStepTaskMapper {
 
     ProcessTaskStepTaskVo getStepTaskById(Long processTaskStepTaskId);
 
-    ProcessTaskStepTaskUserVo getStepTaskUserByTaskIdAndUserUuid(Long processtaskStepTaskId, String userUuid);
+    ProcessTaskStepTaskUserVo getStepTaskUserByTaskIdAndUserUuid(@Param("processtaskStepTaskId")Long processtaskStepTaskId,@Param("userUuid") String userUuid);
 
     List<ProcessTaskStepTaskVo> getStepTaskByProcessTaskStepId(Long processTaskStepId);
+
+    List<ProcessTaskStepTaskUserVo> getStepTaskUserByStepTaskIdList(@Param("stepTaskIdList") List<Long> collect);
+
+    List<ProcessTaskStepTaskUserContentVo> getStepTaskUserContentByStepTaskUserIdList(@Param("stepTaskUserIdList") List<Long> collect);
+
+    List<ProcessTaskStepTaskUserVo> getStepTaskUserListByTaskId(Long processtaskStepTaskId);
 
     int insertTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
@@ -39,7 +45,7 @@ public interface ProcessTaskStepTaskMapper {
 
     int updateTaskUserByTaskIdAndUserUuid(@Param("status") String status, @Param("processtaskStepTaskId") Long processtaskStepTaskId, @Param("userUuid") String userUuid);
 
-    int deleteTaskUserByUserListAndId(@Param("userList") JSONArray userList, @Param("processTaskStepTaskId") Long processTaskStepTaskId);
+    int updateDeleteTaskUserByUserListAndId(@Param("userList") JSONArray userList, @Param("processTaskStepTaskId") Long processTaskStepTaskId,@Param("isDelete") Integer isDelete);
 
     int deleteTaskById(Long processTaskStepTaskId);
 
@@ -47,7 +53,4 @@ public interface ProcessTaskStepTaskMapper {
 
     int deleteTaskUserContentByTaskId(Long processTaskStepTaskId);
 
-    List<ProcessTaskStepTaskUserVo> getStepTaskUserByStepTaskIdList(@Param("stepTaskIdList") List<Long> collect);
-
-    List<ProcessTaskStepTaskUserContentVo> getStepTaskUserContentByStepTaskUserIdList(@Param("stepTaskUserIdList") List<Long> collect);
 }

@@ -35,6 +35,10 @@ public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
 		return componentMap.values().iterator().next();
 	}
 
+	public static List<IProcessStepHandler> getHandlerList(){
+		return new ArrayList<>(componentMap.values());
+	}
+
 	public static List<ProcessStepHandlerVo> getActiveProcessStepHandler() {
 		TenantContext tenantContext = TenantContext.get();
 		List<ModuleVo> moduleList = tenantContext.getActiveModuleList();

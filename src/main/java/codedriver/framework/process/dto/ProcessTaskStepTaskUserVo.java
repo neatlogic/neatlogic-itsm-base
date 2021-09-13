@@ -35,6 +35,9 @@ public class ProcessTaskStepTaskUserVo {
     private String content;
     @EntityField(name = "内容VoList", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepTaskUserContentVo> stepTaskUserContentVoList = new ArrayList<>();
+    @EntityField(name = "是否删除", type = ApiParamType.INTEGER)
+    private Integer isDelete;
+
     public ProcessTaskStepTaskUserVo() {
     }
 
@@ -109,5 +112,13 @@ public class ProcessTaskStepTaskUserVo {
 
     public void setStepTaskUserContentVoList(List<ProcessTaskStepTaskUserContentVo> stepTaskUserContentVoList) {
         this.stepTaskUserContentVoList = stepTaskUserContentVoList;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
     }
 }
