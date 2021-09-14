@@ -363,9 +363,9 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
-    int insertProcessTaskRepeatList(List<ProcessTaskRepeatVo> processTaskRepeatList);
+    int replaceProcessTaskRepeatList(List<ProcessTaskRepeatVo> processTaskRepeatList);
 
-    int insertProcessTaskRepeat(ProcessTaskRepeatVo processTaskRepeatVo);
+    int replaceProcessTaskRepeat(ProcessTaskRepeatVo processTaskRepeatVo);
 
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
 

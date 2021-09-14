@@ -3042,15 +3042,15 @@
         )
     </insert>
 
-    <insert id="insertProcessTaskRepeatList" parameterType="codedriver.framework.process.dto.ProcessTaskRepeatVo">
-        INSERT IGNORE `processtask_repeat` (`processtask_id`, `repeat_group_id`) VALUES
+    <insert id="replaceProcessTaskRepeatList" parameterType="codedriver.framework.process.dto.ProcessTaskRepeatVo">
+        REPLACE INTO `processtask_repeat` (`processtask_id`, `repeat_group_id`) VALUES
         <foreach collection="list" item="processTaskRepeat" separator=",">
             (#{processTaskRepeat.processTaskId}, #{processTaskRepeat.repeatGroupId})
         </foreach>
     </insert>
 
-    <insert id="insertProcessTaskRepeat" parameterType="codedriver.framework.process.dto.ProcessTaskRepeatVo">
-        INSERT IGNORE `processtask_repeat` (`processtask_id`, `repeat_group_id`)
+    <insert id="replaceProcessTaskRepeat" parameterType="codedriver.framework.process.dto.ProcessTaskRepeatVo">
+        REPLACE INTO `processtask_repeat` (`processtask_id`, `repeat_group_id`)
         VALUES (#{processTaskId}, #{repeatGroupId})
     </insert>
 
