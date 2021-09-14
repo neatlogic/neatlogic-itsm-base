@@ -24,6 +24,8 @@ public class ProcessTaskStepTaskUserVo {
     private Long id;
     @EntityField(name = "任务id", type = ApiParamType.LONG)
     private Long processTaskStepTaskId;
+    @EntityField(name = "任务id", type = ApiParamType.LONG)
+    private Long processTaskStepTaskUserContentId;
     @EntityField(name = "用户uuid", type = ApiParamType.STRING)
     private String userUuid;
     @EntityField(name = "用户", type = ApiParamType.JSONOBJECT)
@@ -131,5 +133,13 @@ public class ProcessTaskStepTaskUserVo {
 
     public void setUserVo(UserVo userVo) {
         this.userVo = userVo;
+    }
+
+    public Long getProcessTaskStepTaskUserContentId() {
+        return processTaskStepTaskUserContentId;
+    }
+
+    public void setProcessTaskStepTaskUserContentId(Long processTaskStepTaskUserContentId) {
+        this.processTaskStepTaskUserContentId = processTaskStepTaskUserContentId;
     }
 }
