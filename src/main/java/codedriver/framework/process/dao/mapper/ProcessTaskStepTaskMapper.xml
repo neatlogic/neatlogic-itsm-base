@@ -79,8 +79,10 @@
                pst.`status`,
                pst.`create_time`         as createTime,
                pst.`end_time`            as endTime,
-               pst.`task_config_id`      as taskConfigId
+               pst.`task_config_id`      as taskConfigId,
+               tc.`name`                 as taskConfigName
         FROM `processtask_step_task` pst
+                 left join `task_config` tc on pst.`task_config_id` = tc.`id`
         WHERE pst.`processtask_step_id` = #{value}
     </select>
 
@@ -104,14 +106,14 @@
     <select id="getStepTaskUserContentByStepTaskUserIdList"
             resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">
         SELECT
-            `id`,
-            `processtask_step_task_id` as processTaskStepTaskId,
-            `processtask_step_task_user_id` as processTaskStepTaskUserId,
-            `user_uuid` as userUuid,
-            `content_hash` as contentHash,
-            `fcd`
+        `id`,
+        `processtask_step_task_id` as processTaskStepTaskId,
+        `processtask_step_task_user_id` as processTaskStepTaskUserId,
+        `user_uuid` as userUuid,
+        `content_hash` as contentHash,
+        `fcd`
         FROM
-            `processtask_step_task_user_content` where `processtask_step_task_user_id` in
+        `processtask_step_task_user_content` where `processtask_step_task_user_id` in
         <foreach collection="stepTaskUserIdList" item="stepTaskUserId" open="(" separator="," close=")">
             #{stepTaskUserId}
         </foreach>
