@@ -8,7 +8,6 @@ package codedriver.framework.process.dao.mapper;
 import codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepTaskUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepTaskVo;
-import com.alibaba.fastjson.JSONArray;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public interface ProcessTaskStepTaskMapper {
 
     int updateTaskUserByTaskIdAndUserUuid(@Param("status") String status, @Param("processtaskStepTaskId") Long processtaskStepTaskId, @Param("userUuid") String userUuid);
 
-    int updateDeleteTaskUserByUserListAndId(@Param("userList") JSONArray userList, @Param("processTaskStepTaskId") Long processTaskStepTaskId,@Param("isDelete") Integer isDelete);
+    int updateDeleteTaskUserByUserListAndId(@Param("userList") List<String> userList, @Param("processTaskStepTaskId") Long processTaskStepTaskId,@Param("isDelete") Integer isDelete);
 
     int updateTaskUserContent(@Param("processTaskStepTaskUserContentId")Long processTaskStepTaskUserContentId,@Param("contentHash") String contentHash,@Param("userUuid") String userUuid);
 

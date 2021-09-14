@@ -11,13 +11,13 @@ import codedriver.framework.dto.UserVo;
 import codedriver.framework.process.constvalue.task.TaskConfigPolicy;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +26,8 @@ import java.util.List;
  * @author lvzk
  * @since 2021/8/31 11:03
  **/
-public class ProcessTaskStepTaskVo {
+public class ProcessTaskStepTaskVo implements Serializable {
+    private static final long serialVersionUID = -6616612590947765111L;
     @EntityField(name = "工单id", type = ApiParamType.LONG)
     private Long processTaskId;
     @EntityField(name = "步骤id", type = ApiParamType.LONG)
@@ -56,11 +57,14 @@ public class ProcessTaskStepTaskVo {
     @EntityField(name = "步骤主处理人", type = ApiParamType.STRING)
     private String majorUser;
     @EntityField(name = "处理人", type = ApiParamType.JSONARRAY)
-    private JSONArray userList;
+    private List<String> userList;
     @EntityField(name = "处理人VoList", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepTaskUserVo> stepTaskUserVoList = new ArrayList<>();
     @JSONField(serialize = false)
     private JSONObject paramObj;
+
+    public ProcessTaskStepTaskVo() {
+    }
 
     public ProcessTaskStepTaskVo(Long processtaskStepTaskId) {
         this.id = processtaskStepTaskId;
@@ -160,7 +164,7 @@ public class ProcessTaskStepTaskVo {
         this.majorUser = majorUser;
     }
 
-    public JSONArray getUserList() {
+    public List<String> getUserList() {
         if (CollectionUtils.isNotEmpty(userList)) {
             for (int i = 0; i < userList.size(); i++) {
                 userList.set(i, userList.get(i).toString().replaceAll(GroupSearch.USER.getValuePlugin(), StringUtils.EMPTY));
@@ -169,7 +173,7 @@ public class ProcessTaskStepTaskVo {
         return userList;
     }
 
-    public void setUserList(JSONArray userList) {
+    public void setUserList(List<String> userList) {
         this.userList = userList;
     }
 
@@ -209,7 +213,7 @@ public class ProcessTaskStepTaskVo {
     }
 
     public String getTaskConfigPolicy() {
-        if(StringUtils.isNotBlank(taskConfigPolicy)){
+        if (StringUtils.isNotBlank(taskConfigPolicy)) {
             taskConfigPolicy = TaskConfigPolicy.getName(taskConfigPolicy);
         }
         return taskConfigPolicy;
