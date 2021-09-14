@@ -6,6 +6,7 @@
 package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -25,6 +26,8 @@ public class ProcessTaskStepTaskUserVo {
     private Long processTaskStepTaskId;
     @EntityField(name = "用户uuid", type = ApiParamType.STRING)
     private String userUuid;
+    @EntityField(name = "用户", type = ApiParamType.JSONOBJECT)
+    private UserVo userVo;
     @EntityField(name = "结束时间", type = ApiParamType.LONG)
     private Date endTime;
     @EntityField(name = "任务状态", type = ApiParamType.STRING)
@@ -120,5 +123,13 @@ public class ProcessTaskStepTaskUserVo {
 
     public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public UserVo getUserVo() {
+        return userVo;
+    }
+
+    public void setUserVo(UserVo userVo) {
+        this.userVo = userVo;
     }
 }

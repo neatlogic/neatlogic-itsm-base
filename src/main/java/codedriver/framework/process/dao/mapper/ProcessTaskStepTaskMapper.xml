@@ -89,34 +89,76 @@
         WHERE pst.`processtask_step_id` = #{value}
     </select>
 
-    <select id="getStepTaskUserByStepTaskIdList"
-            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
-        SELECT pst.`processtask_id` as processTaskId,
-        pst.`processtask_step_id` as processTaskStepId,
-        pst.`id`,
-        pst.`owner`,
-        pst.`status`,
-        pst.`create_time` as createTime,
-        pst.`end_time` as endTime,
-        pst.`task_config_id` as taskConfigId
-        FROM `processtask_step_task` pst
-        WHERE pst.`id` in
+    <resultMap id="stepTaskUserMap" type="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+        <id column="id" property="id"/>
+        <result column="processTaskStepTaskId" property="processTaskStepTaskId"/>
+        <result column="userUuid" property="userUuid"/>
+        <result column="endTime" property="endTime"/>
+        <result column="status" property="status"/>
+        <result column="isDelete" property="isDelete"/>
+        <association property="userVo" javaType="codedriver.framework.dto.UserVo">
+            <result property="uuid" column="userUuid"/>
+            <result property="userName" column="userName"/>
+            <result property="userInfo" column="userInfo"/>
+            <result property="vipLevel" column="userVipLevel"/>
+            <result property="pinyin" column="userPinyin"/>
+        </association>
+    </resultMap>
+
+    <select id="getStepTaskUserByStepTaskIdList" resultMap="stepTaskUserMap">
+        SELECT pstu.`id`,
+        pstu.`processtask_step_task_id` as processTaskStepTaskId,
+        pstu.`user_uuid` as userUuid,
+        u.pinyin as pinyin,
+        u.user_info as userInfo,
+        u.vip_level as userLevel,
+        u.user_name as userName,
+        pstu.`end_time` as endTime,
+        pstu.`status`,
+        pstu.`is_delete` as isDelete
+        FROM `processtask_step_task_user` pstu
+        left join `user` u on pstu.`user_uuid` = u.uuid
+        where pstu.`processtask_step_task_id` in
         <foreach collection="stepTaskIdList" item="stepTaskId" open="(" separator="," close=")">
             #{stepTaskId}
         </foreach>
     </select>
 
-    <select id="getStepTaskUserContentByStepTaskUserIdList"
-            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">
+    <resultMap id="stepTaskUserContentMap" type="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">
+        <id column="id" property="id"/>
+        <result column="processTaskStepTaskId" property="processTaskStepTaskId"/>
+        <result column="processTaskStepTaskUserId" property="processTaskStepTaskUserId"/>
+        <result column="userUuid" property="userUuid"/>
+        <result column="contentHash" property="contentHash"/>
+        <result column="content" property="content"/>
+        <result column="fcd" property="fcd"/>
+        <association property="userVo" javaType="codedriver.framework.dto.UserVo">
+            <result property="uuid" column="userUuid"/>
+            <result property="userName" column="userName"/>
+            <result property="userInfo" column="userInfo"/>
+            <result property="vipLevel" column="userVipLevel"/>
+            <result property="pinyin" column="userPinyin"/>
+        </association>
+    </resultMap>
+
+    <select id="getStepTaskUserContentByStepTaskUserIdList" resultMap="stepTaskUserContentMap">
         SELECT
-        `id`,
-        `processtask_step_task_id` as processTaskStepTaskId,
-        `processtask_step_task_user_id` as processTaskStepTaskUserId,
-        `user_uuid` as userUuid,
-        `content_hash` as contentHash,
-        `fcd`
+        pstuc.`id`,
+        pstuc.`processtask_step_task_id` as processTaskStepTaskId,
+        pstuc.`processtask_step_task_user_id` as processTaskStepTaskUserId,
+        pstuc.`user_uuid` as userUuid,
+        u.pinyin as pinyin,
+        u.user_info as userInfo,
+        u.vip_level as userLevel,
+        u.user_name as userName,
+        pstuc.`content_hash` as contentHash,
+        pc.content,
+        pstuc.`fcd`
         FROM
-        `processtask_step_task_user_content` where `processtask_step_task_user_id` in
+        `processtask_step_task_user_content` pstuc
+        left join `processtask_content` pc on pstuc.`content_hash` = pc.hash
+        left join `user` u on pstuc.`user_uuid` = u.uuid
+        where pstuc.`processtask_step_task_user_id` in
         <foreach collection="stepTaskUserIdList" item="stepTaskUserId" open="(" separator="," close=")">
             #{stepTaskUserId}
         </foreach>
@@ -130,7 +172,8 @@
                `status`,
                `is_delete`                as isDelete
         FROM `processtask_step_task_user`
-        where `processtask_step_task_id` = #{processTaskStepTaskId}  and `status` = 'pending'
+        where `processtask_step_task_id` = #{processTaskStepTaskId}
+          and `status` = 'pending'
     </select>
 
     <insert id="insertTask">

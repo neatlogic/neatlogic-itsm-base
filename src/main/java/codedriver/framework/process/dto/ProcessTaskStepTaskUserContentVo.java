@@ -7,6 +7,7 @@ package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BaseEditorVo;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -22,11 +23,13 @@ public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
     @EntityField(name = "id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "任务id", type = ApiParamType.LONG)
-    private Long processtaskStepTaskId;
+    private Long processTaskStepTaskId;
     @EntityField(name = "任务用户id", type = ApiParamType.LONG)
-    private Long processtaskStepTaskUserId;
+    private Long processTaskStepTaskUserId;
     @EntityField(name = "用户uuid", type = ApiParamType.STRING)
     private String userUuid;
+    @EntityField(name = "用户", type = ApiParamType.JSONOBJECT)
+    private UserVo userVo;
     @EntityField(name = "结束时间", type = ApiParamType.LONG)
     private Date endTime;
     @EntityField(name = "任务状态", type = ApiParamType.STRING)
@@ -40,14 +43,14 @@ public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
     }
 
     public ProcessTaskStepTaskUserContentVo(Long processtaskStepTaskId, String userUuid, String status) {
-        this.processtaskStepTaskId = processtaskStepTaskId;
+        this.processTaskStepTaskId = processtaskStepTaskId;
         this.userUuid = userUuid;
         this.status = status;
     }
 
     public ProcessTaskStepTaskUserContentVo(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo) {
-        this.processtaskStepTaskId = processTaskStepTaskUserVo.getProcessTaskStepTaskId();
-        this.processtaskStepTaskUserId = processTaskStepTaskUserVo.getId();
+        this.processTaskStepTaskId = processTaskStepTaskUserVo.getProcessTaskStepTaskId();
+        this.processTaskStepTaskUserId = processTaskStepTaskUserVo.getId();
         this.contentHash = processTaskStepTaskUserVo.getContentHash();
         this.userUuid = processTaskStepTaskUserVo.getUserUuid();
     }
@@ -63,12 +66,12 @@ public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
         this.id = id;
     }
 
-    public Long getProcesstaskStepTaskId() {
-        return processtaskStepTaskId;
+    public Long getProcessTaskStepTaskId() {
+        return processTaskStepTaskId;
     }
 
-    public void setProcesstaskStepTaskId(Long processtaskStepTaskId) {
-        this.processtaskStepTaskId = processtaskStepTaskId;
+    public void setProcessTaskStepTaskId(Long processTaskStepTaskId) {
+        this.processTaskStepTaskId = processTaskStepTaskId;
     }
 
     public String getUserUuid() {
@@ -111,11 +114,19 @@ public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
         this.content = content;
     }
 
-    public Long getProcesstaskStepTaskUserId() {
-        return processtaskStepTaskUserId;
+    public Long getProcessTaskStepTaskUserId() {
+        return processTaskStepTaskUserId;
     }
 
-    public void setProcesstaskStepTaskUserId(Long processtaskStepTaskUserId) {
-        this.processtaskStepTaskUserId = processtaskStepTaskUserId;
+    public void setProcessTaskStepTaskUserId(Long processTaskStepTaskUserId) {
+        this.processTaskStepTaskUserId = processTaskStepTaskUserId;
+    }
+
+    public UserVo getUserVo() {
+        return userVo;
+    }
+
+    public void setUserVo(UserVo userVo) {
+        this.userVo = userVo;
     }
 }
