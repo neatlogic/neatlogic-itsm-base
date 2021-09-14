@@ -22,7 +22,7 @@ public class ProcessTaskStepTaskUserVo {
     @EntityField(name = "id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "任务id", type = ApiParamType.LONG)
-    private Long processtaskStepTaskId;
+    private Long processTaskStepTaskId;
     @EntityField(name = "用户uuid", type = ApiParamType.STRING)
     private String userUuid;
     @EntityField(name = "结束时间", type = ApiParamType.LONG)
@@ -42,7 +42,7 @@ public class ProcessTaskStepTaskUserVo {
     }
 
     public ProcessTaskStepTaskUserVo(Long processtaskStepTaskId, String userUuid, String status) {
-        this.processtaskStepTaskId = processtaskStepTaskId;
+        this.processTaskStepTaskId = processtaskStepTaskId;
         this.userUuid = userUuid;
         this.status = status;
     }
@@ -58,12 +58,12 @@ public class ProcessTaskStepTaskUserVo {
         this.id = id;
     }
 
-    public Long getProcesstaskStepTaskId() {
-        return processtaskStepTaskId;
+    public Long getProcessTaskStepTaskId() {
+        return processTaskStepTaskId;
     }
 
-    public void setProcesstaskStepTaskId(Long processtaskStepTaskId) {
-        this.processtaskStepTaskId = processtaskStepTaskId;
+    public void setProcessTaskStepTaskId(Long processTaskStepTaskId) {
+        this.processTaskStepTaskId = processTaskStepTaskId;
     }
 
     public String getUserUuid() {

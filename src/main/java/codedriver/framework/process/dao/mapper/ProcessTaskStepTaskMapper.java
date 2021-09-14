@@ -25,7 +25,7 @@ public interface ProcessTaskStepTaskMapper {
 
     ProcessTaskStepTaskVo getStepTaskById(Long processTaskStepTaskId);
 
-    ProcessTaskStepTaskUserVo getStepTaskUserByTaskIdAndUserUuid(@Param("processtaskStepTaskId")Long processtaskStepTaskId,@Param("userUuid") String userUuid);
+    ProcessTaskStepTaskUserVo getStepTaskUserByTaskIdAndUserUuid(@Param("processTaskStepTaskId")Long processtaskStepTaskId,@Param("userUuid") String userUuid);
 
     List<ProcessTaskStepTaskVo> getStepTaskByProcessTaskStepId(Long processTaskStepId);
 
@@ -33,13 +33,13 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskUserContentVo> getStepTaskUserContentByStepTaskUserIdList(@Param("stepTaskUserIdList") List<Long> collect);
 
-    List<ProcessTaskStepTaskUserVo> getStepTaskUserListByTaskId(Long processtaskStepTaskId);
+    List<ProcessTaskStepTaskUserVo> getPendingStepTaskUserListByTaskId(Long processtaskStepTaskId);
 
     int insertTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
     int insertIgnoreTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
 
-    int insertTaskUserContent(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
+    int insertTaskUserContent(ProcessTaskStepTaskUserContentVo processTaskStepTaskUserContentVo);
 
     int updateTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 

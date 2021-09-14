@@ -45,6 +45,13 @@ public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
         this.status = status;
     }
 
+    public ProcessTaskStepTaskUserContentVo(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo) {
+        this.processtaskStepTaskId = processTaskStepTaskUserVo.getProcessTaskStepTaskId();
+        this.processtaskStepTaskUserId = processTaskStepTaskUserVo.getId();
+        this.contentHash = processTaskStepTaskUserVo.getContentHash();
+        this.userUuid = processTaskStepTaskUserVo.getUserUuid();
+    }
+
     public Long getId() {
         if (id == null) {
             id = SnowflakeUtil.uniqueLong();

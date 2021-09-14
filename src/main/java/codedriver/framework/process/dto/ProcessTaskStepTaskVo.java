@@ -59,6 +59,10 @@ public class ProcessTaskStepTaskVo {
     @JSONField(serialize = false)
     private JSONObject paramObj;
 
+    public ProcessTaskStepTaskVo(Long processtaskStepTaskId) {
+        this.id = processtaskStepTaskId;
+    }
+
     public Long getProcessTaskId() {
         return processTaskId;
     }
