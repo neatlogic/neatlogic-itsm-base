@@ -58,7 +58,7 @@
         FROM `processtask_step_task` pst
         WHERE pst.id = #{value}
     </select>
-    <select id="getStepTaskUserByTaskIdAndUserUuid"
+    <select id="getStepTaskUserByTaskIdAndTaskUserIdAndUserUuid"
             resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
         SELECT `id`,
                `processtask_step_task_id` as processTaskStepTaskId,
@@ -69,6 +69,7 @@
         FROM `processtask_step_task_user`
         where `processtask_step_task_id` = #{processTaskStepTaskId}
           and `user_uuid` = #{userUuid}
+          and `id` = #{processTaskStepTaskUserId}
     </select>
 
     <select id="getStepTaskByProcessTaskStepId"
@@ -177,6 +178,17 @@
           and `status` = 'pending'
     </select>
 
+    <select id="getStepTaskUserContentById"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">
+        SELECT pstuc.`id`,
+               pstuc.`processtask_step_task_id`      as processTaskStepTaskId,
+               pstuc.`processtask_step_task_user_id` as processTaskStepTaskUserId,
+               pstuc.`user_uuid`                     as userUuid,
+               pstuc.`fcd`
+        FROM `processtask_step_task_user_content` pstuc
+        where pstuc.`id` = #{value}
+    </select>
+
     <insert id="insertTask">
         INSERT INTO `processtask_step_task` (`processtask_id`,
                                              `processtask_step_id`,
@@ -237,6 +249,14 @@
         SET `end_time` = now(3),
             `status`   = #{status}
         WHERE `processtask_step_task_id` = #{processtaskStepTaskId}
+          and `user_uuid` = #{userUuid}
+    </update>
+
+    <update id="updateTaskUserContent">
+        update `processtask_step_task_user_content`
+        set `content_hash` = #{contentHash},
+            `lcd`          = now(3)
+        where `id` = #{processTaskStepTaskUserContentId}
           and `user_uuid` = #{userUuid}
     </update>
 

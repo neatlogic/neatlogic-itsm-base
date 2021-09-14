@@ -11,11 +11,11 @@ import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
  * @author lvzk
  * @since 2021/8/31 14:24
  **/
-public class ProcessTaskStepTaskUserNotFoundException extends ProcessTaskRuntimeException {
+public class ProcessTaskStepTaskUserContentNotFoundException extends ProcessTaskRuntimeException {
 
-    private static final long serialVersionUID = 4518210359421738220L;
+    private static final long serialVersionUID = -9049707373772959255L;
 
-    public ProcessTaskStepTaskUserNotFoundException() {
-        super("没有该权限，请联系管理员");
+    public ProcessTaskStepTaskUserContentNotFoundException() {
+        super("用户回复不存在，请重试");
     }
 }
