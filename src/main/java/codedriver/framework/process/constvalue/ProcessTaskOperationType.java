@@ -85,8 +85,7 @@ public enum ProcessTaskOperationType implements IOperationType {
 
     TASK_CREATE("createtask", "创建任务"),
     TASK_EDIT("edittask", "编辑任务"),
-    TASK_ABORT("aborttask", "取消任务"),
-    TASK_REDO("redotask", "重做任务"),
+    TASK_DELETE("deletetask", "删除任务"),
     TASK_COMPLETE("completetask", "完成任务"),
     /**
      * 只有子任务创建人和处理人有回复子任务权限

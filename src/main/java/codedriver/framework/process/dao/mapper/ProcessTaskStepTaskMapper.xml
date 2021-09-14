@@ -214,7 +214,7 @@
                                                          `user_uuid`,
                                                          `status`)
         VALUES (#{id},
-                #{processtaskStepTaskId},
+                #{processTaskStepTaskId},
                 #{userUuid},
                 #{status});
 
@@ -248,7 +248,7 @@
             `processtask_step_task_user`
         SET `end_time` = now(3),
             `status`   = #{status}
-        WHERE `processtask_step_task_id` = #{processtaskStepTaskId}
+        WHERE `processtask_step_task_id` = #{processTaskStepTaskId}
           and `user_uuid` = #{userUuid}
     </update>
 
