@@ -82,6 +82,7 @@
                pst.`end_time`            as endTime,
                pst.`task_config_id`      as taskConfigId,
                pc.`content`,
+               tc.`policy`               as taskConfigPolicy,
                tc.`name`                 as taskConfigName
         FROM `processtask_step_task` pst
                  left join `task_config` tc on pst.`task_config_id` = tc.`id`

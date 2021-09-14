@@ -8,6 +8,7 @@ package codedriver.framework.process.dto;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dto.UserVo;
+import codedriver.framework.process.constvalue.task.TaskConfigPolicy;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.JSONArray;
@@ -36,6 +37,8 @@ public class ProcessTaskStepTaskVo {
     private Long taskConfigId;
     @EntityField(name = "任务配置", type = ApiParamType.STRING)
     private String taskConfigName;
+    @EntityField(name = "任务策略", type = ApiParamType.STRING)
+    private String taskConfigPolicy;
     @EntityField(name = "创建人")
     private UserVo ownerVo;
     @EntityField(name = "状态", type = ApiParamType.STRING)
@@ -203,5 +206,16 @@ public class ProcessTaskStepTaskVo {
 
     public void setStepTaskUserVoList(List<ProcessTaskStepTaskUserVo> stepTaskUserVoList) {
         this.stepTaskUserVoList = stepTaskUserVoList;
+    }
+
+    public String getTaskConfigPolicy() {
+        if(StringUtils.isNotBlank(taskConfigPolicy)){
+            taskConfigPolicy = TaskConfigPolicy.getName(taskConfigPolicy);
+        }
+        return taskConfigPolicy;
+    }
+
+    public void setTaskConfigPolicy(String taskConfigPolicy) {
+        this.taskConfigPolicy = taskConfigPolicy;
     }
 }
