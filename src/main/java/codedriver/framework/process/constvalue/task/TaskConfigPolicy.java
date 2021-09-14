@@ -1,5 +1,5 @@
 /*
- * Copyright (c)  2021 TechSure Co.,Ltd.  All Rights Reserved.
+ * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
  * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  */
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2021/9/1 16:20
  **/
 public enum TaskConfigPolicy implements IEnum {
-    ANY("any","任一完成"),MANY("all","所有完成");
+    ANY("any", "任意一人完成"), MANY("all", "所有人完成");
     private final String value;
     private final String name;
 
@@ -54,11 +54,11 @@ public enum TaskConfigPolicy implements IEnum {
     @Override
     public List getValueTextList() {
         List<Object> list = new ArrayList<>();
-        for(TaskConfigPolicy type : TaskConfigPolicy.values()){
-            list.add(new JSONObject(){
+        for (TaskConfigPolicy type : TaskConfigPolicy.values()) {
+            list.add(new JSONObject() {
                 {
-                    this.put("value",type.getValue());
-                    this.put("text",type.getName());
+                    this.put("value", type.getValue());
+                    this.put("text", type.getName());
                 }
             });
         }
