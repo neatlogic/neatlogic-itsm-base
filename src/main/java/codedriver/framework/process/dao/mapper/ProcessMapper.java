@@ -88,7 +88,7 @@ public interface ProcessMapper {
 
 	int insertProcessStepRel(ProcessStepRelVo processStepRelVo);
 
-	int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
+//	int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
 
 	int insertProcessStepWorkerPolicy(ProcessStepWorkerPolicyVo processStepWorkerPolicyVo);
 

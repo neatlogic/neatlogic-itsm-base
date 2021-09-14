@@ -11,6 +11,7 @@ public enum TaskNotifyTriggerType implements INotifyTriggerType {
 	COMPLETEPROCESSTASK("completeprocesstask", "完成工单","工单流转至结束时触发通知"),
 	SCOREPROCESSTASK("scoreprocesstask", "评分","评分后触发通知"),
 	REOPENPROCESSTASK("reopenprocesstask", "重新打开工单","工单完成后，用户评分前，有权限的用户重新打开工单并回退至某一步骤重新开始处理时触发通知"),
+	MARKREPEATPROCESSTASK("markrepeatprocesstask", "标记重复事件","标记重复事件"),
 	;
 
 	private String trigger;

@@ -258,11 +258,15 @@ public interface ProcessTaskMapper {
 
     Long getProcessTaskIdByChannelUuidLimitOne(String channelUuid);
 
-           Long getProcessTaskIdByPriorityUuidLimitOne(String prioriryUuid);
+    Long getProcessTaskIdByPriorityUuidLimitOne(String prioriryUuid);
 
     List<ChannelVo> getChannelReferencedCountList();
 
-           List<ProcessTaskStepFileVo> getProcessTaskStepFileListByTaskId(Long taskId);
+    List<ProcessTaskStepFileVo> getProcessTaskStepFileListByTaskId(Long taskId);
+
+    Long getRepeatGroupIdByProcessTaskId(Long processTaskId);
+
+    List<Long> getProcessTaskIdListByRepeatGroupId(Long repeatGroupId);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -355,11 +359,13 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
-           int insertProcessTaskStepTag(ProcessTaskStepTagVo processTaskStepTagVo);
-
+    int insertProcessTaskStepTag(ProcessTaskStepTagVo processTaskStepTagVo);
 
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
+    int insertProcessTaskRepeatList(List<ProcessTaskRepeatVo> processTaskRepeatList);
+
+    int insertProcessTaskRepeat(ProcessTaskRepeatVo processTaskRepeatVo);
 
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
 
@@ -468,4 +474,8 @@ public interface ProcessTaskMapper {
             ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
     int deleteProcessTaskStepWorkerMinorByProcessTaskStepId(Long processTaskStepId);
+
+    int deleteProcessTaskRepeatByRepeatGroupId(Long repeatGroupId);
+
+    int deleteProcessTaskRepeatByProcessTaskId(Long processTaskId);
 }

@@ -2391,6 +2391,14 @@
         from `processtask_file` where `processtask_id` = #{value}
     </select>
 
+    <select id="getRepeatGroupIdByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT `repeat_group_id` FROM `processtask_repeat` WHERE `processtask_id` = #{value}
+    </select>
+
+    <select id="getProcessTaskIdListByRepeatGroupId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT `processtask_id` FROM `processtask_repeat` WHERE `repeat_group_id` = #{value}
+    </select>
+
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
@@ -3034,6 +3042,18 @@
         )
     </insert>
 
+    <insert id="insertProcessTaskRepeatList" parameterType="codedriver.framework.process.dto.ProcessTaskRepeatVo">
+        INSERT IGNORE `processtask_repeat` (`processtask_id`, `repeat_group_id`) VALUES
+        <foreach collection="list" item="processTaskRepeat" separator=",">
+            (#{processTaskRepeat.processTaskId}, #{processTaskRepeat.repeatGroupId})
+        </foreach>
+    </insert>
+
+    <insert id="insertProcessTaskRepeat" parameterType="codedriver.framework.process.dto.ProcessTaskRepeatVo">
+        INSERT IGNORE `processtask_repeat` (`processtask_id`, `repeat_group_id`)
+        VALUES (#{processTaskId}, #{repeatGroupId})
+    </insert>
+
     <update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
         UPDATE
             `processtask_sla_transfer`
@@ -3422,5 +3442,13 @@
         DELETE
         FROM `processtask_step_worker`
         where `processtask_step_id` = #{processTaskStepId}
+    </delete>
+
+    <delete id="deleteProcessTaskRepeatByRepeatGroupId" parameterType="java.lang.Long">
+        DELETE FROM `processtask_repeat` WHERE `repeat_group_id` = #{repeatGroupId}
+    </delete>
+
+    <delete id="deleteProcessTaskRepeatByProcessTaskId" parameterType="java.lang.Long">
+        DELETE FROM `processtask_repeat` WHERE `processtask_id` = #{processTaskId}
     </delete>
 </mapper>
