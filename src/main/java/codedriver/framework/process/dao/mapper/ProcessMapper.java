@@ -88,7 +88,7 @@ public interface ProcessMapper {
 
 	int insertProcessStepRel(ProcessStepRelVo processStepRelVo);
 
-	int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
+//	int insertProcessStepTeam(ProcessStepTeamVo processStepTeamVo);
 
 	int insertProcessStepWorkerPolicy(ProcessStepWorkerPolicyVo processStepWorkerPolicyVo);
 
@@ -114,7 +114,7 @@ public interface ProcessMapper {
 
 	int deleteProcessStepRelByProcessUuid(String processUuid);
 
-	int deleteProcessStepTeamByProcessUuid(String processUuid);
+//	int deleteProcessStepTeamByProcessUuid(String processUuid);
 
 	int deleteProcessStepWorkerPolicyByProcessUuid(String processUuid);
 

@@ -579,7 +579,7 @@
 		)
 	</insert>
 
-	<insert id="insertProcessStepTeam" parameterType="codedriver.framework.process.dto.ProcessStepTeamVo">
+	<!--<insert id="insertProcessStepTeam" parameterType="codedriver.framework.process.dto.ProcessStepTeamVo">
 		INSERT INTO `process_step_team` (
 		`process_step_uuid`,
 		`team_id`,
@@ -591,7 +591,7 @@
 		#{teamId},
 		#{teamName}
 		)
-	</insert>
+	</insert>-->
 
 	<insert id="insertProcessForm" parameterType="codedriver.framework.process.dto.ProcessFormVo">
 		INSERT INTO `process_form` (`process_uuid`, `form_uuid`)
@@ -676,12 +676,12 @@
 		WHERE `process_uuid` = #{value}
 	</delete>
 
-	<delete id="deleteProcessStepTeamByProcessUuid" parameterType="java.lang.String">
+	<!--<delete id="deleteProcessStepTeamByProcessUuid" parameterType="java.lang.String">
 		DELETE
 		FROM
 		`process_step_team`
 		WHERE `process_uuid` = #{value}
-	</delete>
+	</delete>-->
 
 	<delete id="deleteProcessStepWorkerPolicyByProcessUuid" parameterType="java.lang.String">
 		DELETE
