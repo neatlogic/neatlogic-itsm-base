@@ -238,8 +238,8 @@
     <update id="updateTask">
         UPDATE
             `processtask_step_task`
-        SET `owner`        = 'owner',
-            `content_hash` = 'content_hash'
+        SET `owner`        = #{owner},
+            `content_hash` = #{content_hash}
         WHERE `id` = #{id};
     </update>
 
