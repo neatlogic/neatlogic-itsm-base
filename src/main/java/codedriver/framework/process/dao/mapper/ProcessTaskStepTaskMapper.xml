@@ -238,7 +238,7 @@
     <update id="updateTask">
         UPDATE
             `processtask_step_task`
-        SET `owner`        = #{owner},
+        SET `owner`        = #{ownerVo.uuid},
             `content_hash` = #{content_hash}
         WHERE `id` = #{id};
     </update>
