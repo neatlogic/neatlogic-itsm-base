@@ -1778,28 +1778,33 @@
         </foreach>
     </select>
 
-    <select id="getProcessTaskCountByKeywordAndChannelUuidList" resultType="int">
+    <select id="getProcessTaskCountByKeywordAndChannelUuidList" parameterType="codedriver.framework.process.dto.ProcessTaskSearchVo" resultType="int">
         SELECT
         COUNT(1)
         FROM `processtask`
-        WHERE `status` != 'draft'
-        AND `channel_uuid` IN
-        <foreach collection="channelUuidList" item="channelUuid" open="(" separator="," close=")">
-            #{channelUuid}
-        </foreach>
-        <if test="basePageVo.keyword != null and basePageVo.keyword != ''">
-            AND (`id` LIKE CONCAT('%', #{basePageVo.keyword}, '%') OR `title` LIKE CONCAT('%', #{basePageVo.keyword},
-            '%'))
-        </if>
-        <if test="relatedProcessTaskIdList != null and relatedProcessTaskIdList.size() > 0">
-            AND `id` NOT IN
-            <foreach collection="relatedProcessTaskIdList" item="processTaskId" open="("  separator="," close=")">
-                #{processTaskId}
-            </foreach>
-        </if>
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (`id` LIKE CONCAT('%', #{keyword}, '%') OR `title` LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="excludeStatus != null and excludeStatus != ''">
+                AND `status` != #{excludeStatus}
+            </if>
+            <if test="includeChannelUuidList != null and includeChannelUuidList.size() > 0">
+                AND `channel_uuid` IN
+                <foreach collection="includeChannelUuidList" item="includeChannelUuid" open="(" separator="," close=")">
+                    #{includeChannelUuid}
+                </foreach>
+            </if>
+            <if test="excludeIdList != null and excludeIdList.size() > 0">
+                AND `id` NOT IN
+                <foreach collection="excludeIdList" item="excludeId" open="("  separator="," close=")">
+                    #{excludeId}
+                </foreach>
+            </if>
+        </where>
     </select>
 
-    <select id="getProcessTaskListByKeywordAndChannelUuidList" resultMap="processTaskMap">
+    <select id="getProcessTaskListByKeywordAndChannelUuidList" parameterType="codedriver.framework.process.dto.ProcessTaskSearchVo" resultMap="processTaskMap">
         SELECT
         `id`,
         `title`,
@@ -1819,24 +1824,29 @@
         `serial_number`,
         `source`
         FROM `processtask`
-        WHERE `status` != 'draft'
-        AND `channel_uuid` IN
-        <foreach collection="channelUuidList" item="channelUuid" open="(" separator="," close=")">
-            #{channelUuid}
-        </foreach>
-        <if test="basePageVo.keyword != null and basePageVo.keyword != ''">
-            AND (`id` LIKE CONCAT('%', #{basePageVo.keyword}, '%') OR `title` LIKE CONCAT('%', #{basePageVo.keyword},
-            '%'))
+        <where>
+        <if test="keyword != null and keyword != ''">
+            AND (`id` LIKE CONCAT('%', #{keyword}, '%') OR `title` LIKE CONCAT('%', #{keyword}, '%'))
         </if>
-        <if test="relatedProcessTaskIdList != null and relatedProcessTaskIdList.size() > 0">
-            AND `id` NOT IN
-            <foreach collection="relatedProcessTaskIdList" item="processTaskId" open="("  separator="," close=")">
-                #{processTaskId}
+        <if test="excludeStatus != null and excludeStatus != ''">
+            AND `status` != #{excludeStatus}
+        </if>
+        <if test="includeChannelUuidList != null and includeChannelUuidList.size() > 0">
+            AND `channel_uuid` IN
+            <foreach collection="includeChannelUuidList" item="includeChannelUuid" open="(" separator="," close=")">
+                #{includeChannelUuid}
             </foreach>
         </if>
+        <if test="excludeIdList != null and excludeIdList.size() > 0">
+            AND `id` NOT IN
+            <foreach collection="excludeIdList" item="excludeId" open="("  separator="," close=")">
+                #{excludeId}
+            </foreach>
+        </if>
+        </where>
         ORDER BY `id` DESC
-        <if test="basePageVo.needPage">
-            LIMIT #{basePageVo.startNum}, #{basePageVo.pageSize}
+        <if test="needPage">
+            LIMIT #{startNum}, #{pageSize}
         </if>
     </select>
 
