@@ -16,7 +16,7 @@ public class ProcessTaskRelationVo extends BasePageVo {
     
     private String channelTypeRelationName;
     private Long processTaskId;
-    private String tilte;
+    private String title;
     private String serialNumber;
     private ProcessTaskStatusVo statusVo;
     private ChannelTypeVo channelTypeVo;
@@ -82,11 +82,11 @@ public class ProcessTaskRelationVo extends BasePageVo {
     public void setProcessTaskId(Long processTaskId) {
         this.processTaskId = processTaskId;
     }
-    public String getTilte() {
-        return tilte;
+    public String getTitle() {
+        return title;
     }
-    public void setTilte(String tilte) {
-        this.tilte = tilte;
+    public void setTitle(String title) {
+        this.title = title;
     }
     public String getSerialNumber() {
         return serialNumber;
