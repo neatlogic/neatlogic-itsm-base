@@ -57,6 +57,7 @@ public enum ProcessTaskOperationType implements IOperationType {
     STEP_TRANSFER("transfercurrentstep", "转交", Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),
     STEP_BACK("back", "回退"),//下一步骤列表中有已激活的步骤时，有回退权限
     STEP_SAVE("save", "暂存"),
+    STEP_ENABLEREAPPROVAL("enablereapproval", "重审"),
     /**
      * 修改上报内容
      * 被授权的对象可在该步骤处于‘待处理’或‘进行中’时修改上报内容，如果同时有多个“待处理”或‘进行中’的步骤，则将每个步骤中配置的授权对象取并集；
