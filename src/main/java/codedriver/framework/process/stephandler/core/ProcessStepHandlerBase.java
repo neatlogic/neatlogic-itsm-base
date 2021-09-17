@@ -1225,7 +1225,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /* 清空worker表，只留下当前处理人 **/
-            processTaskMapper .deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
+            processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
             ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
                     currentProcessTaskStepVo.getProcessTaskId(),
                     currentProcessTaskStepVo.getId(),
@@ -2059,7 +2059,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 // 当用户是B
                 String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(), "processTask");
                 if (StringUtils.isNotBlank(userUuid)) {
-                    ProcessTaskStepAgentVo processTaskStepAgent= new ProcessTaskStepAgentVo(
+                    ProcessTaskStepAgentVo processTaskStepAgent = new ProcessTaskStepAgentVo(
                             currentProcessTaskStepVo.getProcessTaskId(),
                             currentProcessTaskStepVo.getId(),
                             userUuid,
