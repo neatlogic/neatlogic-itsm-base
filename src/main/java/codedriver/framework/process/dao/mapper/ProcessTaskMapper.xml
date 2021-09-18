@@ -2633,8 +2633,8 @@
                 #{sort})
     </insert>
 
-    <insert id="insertProcessTaskConverge" parameterType="codedriver.framework.process.dto.ProcessTaskConvergeVo">
-        INSERT ignore INTO `processtask_converge` (`converge_id`,
+    <insert id="insertIgnoreProcessTaskConverge" parameterType="codedriver.framework.process.dto.ProcessTaskConvergeVo">
+        INSERT IGNORE INTO `processtask_converge` (`converge_id`,
                                             `processtask_step_id`,
                                             `processtask_id`)
         VALUES (#{convergeId},

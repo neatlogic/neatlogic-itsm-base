@@ -982,7 +982,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (CollectionUtils.isNotEmpty(convergeArray)) {
                     List<ProcessTaskConvergeVo> processTaskConvergeList = convergeArray.toJavaList(ProcessTaskConvergeVo.class);
                     for (ProcessTaskConvergeVo processTaskConvergeVo : processTaskConvergeList) {
-                        processTaskMapper.insertProcessTaskConverge(processTaskConvergeVo);
+                        processTaskMapper.insertIgnoreProcessTaskConverge(processTaskConvergeVo);
                     }
                 }
                 JSONObject toStepRelObj = config.getJSONObject("toStepRelVo");
@@ -2094,7 +2094,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             for (Long convergeId : convergeIdList) {
                 ProcessTaskConvergeVo processTaskStepConvergeVo = new ProcessTaskConvergeVo(nextStepVo.getProcessTaskId(), nextStepVo.getId(), convergeId);
                 if (processTaskMapper.checkProcessTaskConvergeIsExists(processTaskStepConvergeVo) == 0) {
-                    processTaskMapper.insertProcessTaskConverge(processTaskStepConvergeVo);
+                    processTaskMapper.insertIgnoreProcessTaskConverge(processTaskStepConvergeVo);
                 }
             }
         }

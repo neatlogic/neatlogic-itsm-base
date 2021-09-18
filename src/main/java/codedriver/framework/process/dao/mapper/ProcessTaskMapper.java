@@ -312,7 +312,7 @@ public interface ProcessTaskMapper {
 
     int insertIgnoreProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
-    int insertProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
+    int insertIgnoreProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
 
     int insertIgnoreProcessTaskStepConfig(ProcessTaskStepConfigVo processTaskStepConfigVo);
 
