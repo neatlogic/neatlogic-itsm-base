@@ -86,6 +86,8 @@ public interface ProcessTaskMapper {
 
     int checkProcessTaskConvergeIsExists(ProcessTaskConvergeVo processTaskStepConvergeVo);
 
+    List<ProcessTaskConvergeVo> getProcessTaskConvergeListByStepId(Long processTaskStepId);
+
     List<ProcessTaskStepVo> getFromProcessTaskStepByToId(Long toProcessTaskStepId);
 
     List<ProcessTaskStepVo> getToProcessTaskStepByFromIdAndType(
@@ -264,6 +266,10 @@ public interface ProcessTaskMapper {
 
     List<Long> getProcessTaskIdListByRepeatGroupId(Long repeatGroupId);
 
+    Integer getProcessTaskStepReapprovalRestoreBackupMaxSortByBackupStepId(Long processTaskStepId);
+
+    List<ProcessTaskStepReapprovalRestoreBackupVo> getProcessTaskStepReapprovalRestoreBackupListByBackupStepId(Long processTaskStepId);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -306,7 +312,7 @@ public interface ProcessTaskMapper {
 
     int insertIgnoreProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
-    int insertProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
+    int insertIgnoreProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
 
     int insertIgnoreProcessTaskStepConfig(ProcessTaskStepConfigVo processTaskStepConfigVo);
 
@@ -357,11 +363,13 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepTag(ProcessTaskStepTagVo processTaskStepTagVo);
 
-    int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
-
     int replaceProcessTaskRepeatList(List<ProcessTaskRepeatVo> processTaskRepeatList);
 
     int replaceProcessTaskRepeat(ProcessTaskRepeatVo processTaskRepeatVo);
+
+    int insertProcessTaskStepReapprovalRestoreBackup(ProcessTaskStepReapprovalRestoreBackupVo processTaskStepReapprovalRestoreBackupVo);
+
+    int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
 
@@ -372,8 +380,8 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
 
-    int updateProcessTaskStepRelIsHit(@Param("fromProcessTaskStepId") Long fromProcessTaskStepId,
-                                             @Param("toProcessTaskStepId") Long toProcessTaskStepId, @Param("isHit") Integer isHit);
+//    int updateProcessTaskStepRelIsHit(@Param("fromProcessTaskStepId") Long fromProcessTaskStepId, @Param("toProcessTaskStepId") Long toProcessTaskStepId, @Param("isHit") Integer isHit);
+    int updateProcessTaskStepRelIsHit(ProcessTaskStepRelVo processTaskStepRelVo);
 
 //    int updateProcessTaskStepConvergeIsCheck(@Param("isCheck") Integer isCheck,
 //                                                    @Param("convergeId") Long convergeId, @Param("processTaskStepId") Long processTaskStepId);
@@ -474,4 +482,6 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskRepeatByRepeatGroupId(Long repeatGroupId);
 
     int deleteProcessTaskRepeatByProcessTaskId(Long processTaskId);
+
+    int deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(Long processTaskStepId);
 }

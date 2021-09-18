@@ -4,7 +4,9 @@ public class ProcessTaskConvergeVo {
 	private Long convergeId;
 	private Long processTaskId;
 	private Long processTaskStepId;
+	public ProcessTaskConvergeVo() {
 
+	}
 	public ProcessTaskConvergeVo(Long _procssTaskId, Long _processTaskStepId, Long _convergeId) {
 		processTaskId = _procssTaskId;
 		processTaskStepId = _processTaskStepId;
@@ -34,5 +36,4 @@ public class ProcessTaskConvergeVo {
 	public void setProcessTaskStepId(Long processTaskStepId) {
 		this.processTaskStepId = processTaskStepId;
 	}
-
 }

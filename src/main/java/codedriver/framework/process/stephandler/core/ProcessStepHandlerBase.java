@@ -43,15 +43,18 @@ import codedriver.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import codedriver.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import codedriver.framework.service.AuthenticationInfoService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
+import org.xlsx4j.sml.Col;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -224,30 +227,32 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 resetConvergeInfo(currentProcessTaskStepVo);
 
                 /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
+                currentProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
+                resetPostStepRelIsHit(currentProcessTaskStepVo);
                 /* 获取当前步骤状态 **/
-                List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
-                for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
-                    if (Objects.equals(nextTaskStepRelVo.getIsHit(), 1)) {
-                        ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
-                        if (nextProcessTaskStepVo != null && !Objects.equals(nextProcessTaskStepVo.getIsActive(), 0)) {
-                            IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
-                            // 标记挂起操作来源步骤
-                            nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                            // 标记挂起操作的发起步骤，避免出现死循环
-                            nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
-                            if (handler != null) {
-                                doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
-                                    @Override
-                                    public void myExecute() {
-                                        handler.hang(nextProcessTaskStepVo);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                    // 恢复路径命中状态为0，代表路径未通过
-                    processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
-                }
+//                List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+//                for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
+//                    if (Objects.equals(nextTaskStepRelVo.getIsHit(), 1)) {
+//                        ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
+//                        if (nextProcessTaskStepVo != null && !Objects.equals(nextProcessTaskStepVo.getIsActive(), 0)) {
+//                            IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
+//                            // 标记挂起操作来源步骤
+//                            nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+//                            // 标记挂起操作的发起步骤，避免出现死循环
+//                            nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
+//                            if (handler != null) {
+//                                doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
+//                                    @Override
+//                                    public void myExecute() {
+//                                        handler.hang(nextProcessTaskStepVo);
+//                                    }
+//                                });
+//                            }
+//                        }
+//                    }
+//                    // 恢复路径命中状态为0，代表路径未通过
+//                    processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
+//                }
 
                 if (this.getMode().equals(ProcessStepMode.MT)) {
                     /* 分配处理人 **/
@@ -512,6 +517,45 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         return autoStart != null ? autoStart : 1;
     }
 
+    private void reapprovalRestoreBackup(ProcessTaskStepVo currentProcessTaskStepVo) {
+        boolean flag = false;
+        Long startProcessTaskStepId = currentProcessTaskStepVo.getStartProcessTaskStepId();
+        if (startProcessTaskStepId == null) {
+            startProcessTaskStepId = currentProcessTaskStepVo.getId();
+        }
+        ProcessTaskStepVo startProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(startProcessTaskStepId);
+        if (Objects.equals(startProcessTaskStepVo.getEnableReapproval(), 1)){
+            List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByToId(startProcessTaskStepId);
+            for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
+                if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
+                    flag = true;
+                }
+            }
+        }
+        if (flag) {
+            JSONObject config = new JSONObject();
+            ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+            config.put("isActive", processTaskStepVo.getIsActive());
+            config.put("status", processTaskStepVo.getStatus());
+            List<ProcessTaskConvergeVo> processTaskConvergeList = processTaskMapper.getProcessTaskConvergeListByStepId(currentProcessTaskStepVo.getId());
+            config.put("convergeList", processTaskConvergeList);
+            ProcessTaskStepRelVo toStepRelVo = new ProcessTaskStepRelVo();
+            toStepRelVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getFromProcessTaskStepId());
+            toStepRelVo.setToProcessTaskStepId(currentProcessTaskStepVo.getId());
+            toStepRelVo.setIsHit(1);
+            config.put("toStepRelVo", toStepRelVo);
+
+            ProcessTaskStepReapprovalRestoreBackupVo processTaskStepReapprovalRestoreBackupVo = new ProcessTaskStepReapprovalRestoreBackupVo();
+            processTaskStepReapprovalRestoreBackupVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+            processTaskStepReapprovalRestoreBackupVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+            processTaskStepReapprovalRestoreBackupVo.setBackupStepId(startProcessTaskStepId);
+            processTaskStepReapprovalRestoreBackupVo.setConfig(config);
+            Integer maxSort = processTaskMapper.getProcessTaskStepReapprovalRestoreBackupMaxSortByBackupStepId(startProcessTaskStepId);
+            maxSort = maxSort == null ? 0 : maxSort;
+            processTaskStepReapprovalRestoreBackupVo.setSort(maxSort + 1);
+            processTaskMapper.insertProcessTaskStepReapprovalRestoreBackup(processTaskStepReapprovalRestoreBackupVo);
+        }
+    }
     /**
      * hang操作原则上不允许出现任何异常，所有异常都必须解决以便流程可以顺利挂起，否则流程可能会卡死在某个节点不能前进或后退
      */
@@ -521,37 +565,40 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             // 锁定当前流程
             processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
 
+            reapprovalRestoreBackup(currentProcessTaskStepVo);
+
             myHang(currentProcessTaskStepVo);
             // 删除当前节点的汇聚记录
             processTaskMapper.deleteProcessTaskConvergeByStepId(currentProcessTaskStepVo.getId());
 
             // 获取流转过的路径
-            List<ProcessTaskStepRelVo> toProcessTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
-
-            for (ProcessTaskStepRelVo processTaskStepRelVo : toProcessTaskStepRelList) {
-                // 沿着流转过的路径向后找激活过的节点并挂起
-                if (Objects.equals(processTaskStepRelVo.getIsHit(), 1)) {
-                    ProcessTaskStepVo toProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepRelVo.getToProcessTaskStepId());
-                    if (toProcessTaskStepVo != null && !Objects.equals(toProcessTaskStepVo.getIsActive(), 0)) {
-                        // 如果下一个步骤不等于发起步骤，则继续挂起
-                        if (!toProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
-                            IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(toProcessTaskStepVo.getHandler());
-                            toProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
-                            toProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                            if (handler != null) {
-                                doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(toProcessTaskStepVo) {
-                                    @Override
-                                    public void myExecute() {
-                                        handler.hang(toProcessTaskStepVo);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-                /* 重置路径状态 **/
-                processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), processTaskStepRelVo.getToProcessTaskStepId(), 0);
-            }
+            resetPostStepRelIsHit(currentProcessTaskStepVo);
+//            List<ProcessTaskStepRelVo> toProcessTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+//
+//            for (ProcessTaskStepRelVo processTaskStepRelVo : toProcessTaskStepRelList) {
+//                // 沿着流转过的路径向后找激活过的节点并挂起
+//                if (Objects.equals(processTaskStepRelVo.getIsHit(), 1)) {
+//                    ProcessTaskStepVo toProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepRelVo.getToProcessTaskStepId());
+//                    if (toProcessTaskStepVo != null && !Objects.equals(toProcessTaskStepVo.getIsActive(), 0)) {
+//                        // 如果下一个步骤不等于发起步骤，则继续挂起
+//                        if (!toProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
+//                            IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(toProcessTaskStepVo.getHandler());
+//                            toProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
+//                            toProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+//                            if (handler != null) {
+//                                doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(toProcessTaskStepVo) {
+//                                    @Override
+//                                    public void myExecute() {
+//                                        handler.hang(toProcessTaskStepVo);
+//                                    }
+//                                });
+//                            }
+//                        }
+//                    }
+//                }
+//                /* 重置路径状态 **/
+//                processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), processTaskStepRelVo.getToProcessTaskStepId(), 0);
+//            }
 
             currentProcessTaskStepVo.setIsActive(0);
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.HANG.getValue());
@@ -825,12 +872,24 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (startProcessTaskStepId == null) {
                     startProcessTaskStepId = currentProcessTaskStepVo.getId();
                 }
+                // 完成步骤时将所有后退路线重置为0
+                List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByToId(currentProcessTaskStepVo.getId());
+                for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
+                    if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
+                        processTaskStepRelVo.setIsHit(0);
+                        processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
+                    }
+                }
                 for (ProcessTaskStepVo nextStep : nextStepList) {
                     IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
-                    nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                    nextStep.setStartProcessTaskStepId(startProcessTaskStepId);
-
                     if (nextStepHandler != null) {
+                        ProcessTaskStepRelVo processTaskStepRelVo = new ProcessTaskStepRelVo();
+                        processTaskStepRelVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+                        processTaskStepRelVo.setToProcessTaskStepId(nextStep.getId());
+                        processTaskStepRelVo.setIsHit(1);
+                        processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
+                        nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+                        nextStep.setStartProcessTaskStepId(startProcessTaskStepId);
                         doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(nextStep) {
                             @Override
                             public void myExecute() {
@@ -849,7 +908,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
                 if (this.getMode().equals(ProcessStepMode.MT)) {
                     if (ProcessTaskOperationType.STEP_BACK.getValue().equals(action)) {
-                        processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
+//                        processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
                         IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, paramObj.getLong("nextStepId"), paramObj.getString("content"), ProcessTaskStepRemindType.BACK);
                     }
                 }
@@ -895,6 +954,162 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected abstract int myCompleteAudit(ProcessTaskStepVo currentProcessTaskStepVo);
 
     @Override
+    public final int reapproval(ProcessTaskStepVo currentProcessTaskStepVo){
+        /* 锁定当前流程 **/
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+        new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_REAPPROVAL).build().checkAndNoPermissionThrowException();
+        Long needActiveStepId = null;
+        List<ProcessTaskStepRelVo> processTaskStepRelList = processTaskMapper.getProcessTaskStepRelByToId(currentProcessTaskStepVo.getId());
+        for (ProcessTaskStepRelVo processTaskStepRelVo : processTaskStepRelList) {
+            if (Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue()) && Objects.equals(processTaskStepRelVo.getIsHit(), 1)) {
+                needActiveStepId = processTaskStepRelVo.getFromProcessTaskStepId();
+            }
+        }
+        if (needActiveStepId != null) {
+            List<ProcessTaskStepReapprovalRestoreBackupVo> processTaskStepReapprovalRestoreBackupList = processTaskMapper.getProcessTaskStepReapprovalRestoreBackupListByBackupStepId(currentProcessTaskStepVo.getId());
+            for (ProcessTaskStepReapprovalRestoreBackupVo processTaskStepReapprovalRestoreBackupVo : processTaskStepReapprovalRestoreBackupList) {
+                JSONObject config = processTaskStepReapprovalRestoreBackupVo.getConfig();
+                Integer isActive = config.getInteger("isActive");
+                String status = config.getString("status");
+                ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
+                processTaskStepVo.setProcessTaskId(processTaskStepReapprovalRestoreBackupVo.getProcessTaskId());
+                processTaskStepVo.setId(processTaskStepReapprovalRestoreBackupVo.getProcessTaskStepId());
+                processTaskStepVo.setIsActive(isActive);
+                processTaskStepVo.setStatus(status);
+                updateProcessTaskStepStatus(processTaskStepVo);
+
+                JSONArray convergeArray = config.getJSONArray("convergeList");
+                if (CollectionUtils.isNotEmpty(convergeArray)) {
+                    List<ProcessTaskConvergeVo> processTaskConvergeList = convergeArray.toJavaList(ProcessTaskConvergeVo.class);
+                    for (ProcessTaskConvergeVo processTaskConvergeVo : processTaskConvergeList) {
+                        processTaskMapper.insertIgnoreProcessTaskConverge(processTaskConvergeVo);
+                    }
+                }
+                JSONObject toStepRelObj = config.getJSONObject("toStepRelVo");
+                if (MapUtils.isNotEmpty(toStepRelObj)) {
+                    ProcessTaskStepRelVo toStepRelVo = toStepRelObj.toJavaObject(ProcessTaskStepRelVo.class);
+                    processTaskMapper.updateProcessTaskStepRelIsHit(toStepRelVo);
+                }
+            }
+
+            processTaskMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(currentProcessTaskStepVo.getId());
+            try {
+                JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+                if (this.getMode().equals(ProcessStepMode.MT)) {
+//                    if (operationType == ProcessTaskOperationType.STEP_COMPLETE) {
+                        String priorityUuid = paramObj.getString("priorityUuid");
+                        if (StringUtils.isNotBlank(priorityUuid)) {
+                            processTaskMapper.updateProcessTaskPriorityUuidById(currentProcessTaskStepVo.getProcessTaskId(), priorityUuid);
+                        }
+                        IProcessStepHandlerUtil.assignWorkerValid(currentProcessTaskStepVo);
+                        /* 保存表单属性值 **/
+                        IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
+//                    }
+
+                    /* 更新处理人状态 **/
+                    ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(
+                            currentProcessTaskStepVo.getProcessTaskId(),
+                            currentProcessTaskStepVo.getId(),
+                            UserContext.get().getUserUuid()
+                    );
+                    // 兼容automatic作业无用户
+                    processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
+                    processTaskMajorUser.setUserType(ProcessUserType.MAJOR.getValue());
+                    processTaskMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
+                    /* 清空worker表 **/
+                    processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
+                }
+                /* 保存描述内容 **/
+                IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
+                IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_REAPPROVAL);
+                myReapproval(currentProcessTaskStepVo);
+
+                /* 更新步骤状态 **/
+                currentProcessTaskStepVo.setStatus(ProcessTaskStatus.SUCCEED.getValue());
+                currentProcessTaskStepVo.setIsActive(2);
+                currentProcessTaskStepVo.setUpdateEndTime(1);
+                currentProcessTaskStepVo.setError(null);
+                updateProcessTaskStepStatus(currentProcessTaskStepVo);
+
+                /* 流转到下一步 **/
+                ProcessTaskStepVo nextStep = processTaskMapper.getProcessTaskStepBaseInfoById(needActiveStepId);
+                IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
+                if (nextStepHandler == null) {
+                    throw new ProcessStepUtilHandlerNotFoundException(nextStep.getHandler());
+                }
+//                Long startProcessTaskStepId = currentProcessTaskStepVo.getStartProcessTaskStepId();
+//                if (startProcessTaskStepId == null) {
+//                    startProcessTaskStepId = currentProcessTaskStepVo.getId();
+//                }
+                // 完成步骤时将所有后退路线重置为0
+                List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByToId(currentProcessTaskStepVo.getId());
+                for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
+                    if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
+                        processTaskStepRelVo.setIsHit(0);
+                        processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
+                    }
+                }
+                doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(nextStep) {
+                    @Override
+                    public void myExecute() {
+                        nextStepHandler.active(nextStep);
+                    }
+                });
+
+                /* 触发通知 **/
+                IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.SUCCEED);
+                /* 执行动作 **/
+                IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.SUCCEED);
+
+                /* 回退提醒 **/
+                processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
+//                if (this.getMode().equals(ProcessStepMode.MT)) {
+//                    if (ProcessTaskOperationType.STEP_BACK.getValue().equals(action)) {
+//                        processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
+//                        IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, paramObj.getLong("nextStepId"), paramObj.getString("content"), ProcessTaskStepRemindType.BACK);
+//                    }
+//                }
+            } catch (ProcessTaskException ex) {
+                logger.error(ex.getMessage(), ex);
+                currentProcessTaskStepVo.setError(ex.getMessage(true));
+                currentProcessTaskStepVo.setIsActive(0);
+                currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
+                updateProcessTaskStepStatus(currentProcessTaskStepVo);
+                /* 异常提醒 **/
+                IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(true), ProcessTaskStepRemindType.ERROR);
+                /* 触发通知 **/
+                IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.FAILED);
+                /* 执行动作 **/
+                IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.FAILED);
+            } finally {
+                if (ProcessTaskStatus.FAILED.getValue().equals(currentProcessTaskStepVo.getStatus())) {
+                    /* 发生异常不能完成当前步骤，执行当前步骤的回退操作 **/
+                    IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
+                    doNext(ProcessTaskOperationType.STEP_BACK, new ProcessStepThread(currentProcessTaskStepVo) {
+                        @Override
+                        public void myExecute() {
+                            handler.back(currentProcessTaskStepVo);
+                        }
+                    });
+                }
+
+                myReapprovalAudit(currentProcessTaskStepVo);
+                if (this.getMode().equals(ProcessStepMode.MT)) {
+                    /* 写入时间审计 **/
+                    IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_REAPPROVAL);
+                    /* 计算SLA **/
+                    IProcessStepHandlerUtil.calculateSla(new ProcessTaskVo(currentProcessTaskStepVo.getProcessTaskId()));
+                }
+            }
+        }
+        return 1;
+    }
+
+    protected abstract int myReapproval(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
+
+    protected abstract int myReapprovalAudit(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    @Override
     public final int retreat(ProcessTaskStepVo currentProcessTaskStepVo) {
         try {
             // 锁定当前流程
@@ -917,30 +1132,31 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             resetConvergeInfo(currentProcessTaskStepVo);
 
             /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
+            resetPostStepRelIsHit(currentProcessTaskStepVo);
             /* 获取当前步骤状态 **/
-            List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
-            for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
-                if (nextTaskStepRelVo != null && nextTaskStepRelVo.getIsHit().equals(1)) {
-                    ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
-                    if (nextProcessTaskStepVo != null) {
-                        IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
-                        // 标记挂起操作来源步骤
-                        nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                        // 标记挂起操作的发起步骤，避免出现死循环
-                        nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
-                        if (handler != null) {
-                            doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
-                                @Override
-                                public void myExecute() {
-                                    handler.hang(nextProcessTaskStepVo);
-                                }
-                            });
-                        }
-                    }
-                }
-                // 恢复路径命中状态为0，代表路径未通过
-                processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
-            }
+//            List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+//            for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
+//                if (nextTaskStepRelVo != null && nextTaskStepRelVo.getIsHit().equals(1)) {
+//                    ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
+//                    if (nextProcessTaskStepVo != null) {
+//                        IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
+//                        // 标记挂起操作来源步骤
+//                        nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+//                        // 标记挂起操作的发起步骤，避免出现死循环
+//                        nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
+//                        if (handler != null) {
+//                            doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
+//                                @Override
+//                                public void myExecute() {
+//                                    handler.hang(nextProcessTaskStepVo);
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//                // 恢复路径命中状态为0，代表路径未通过
+//                processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
+//            }
 
             /* 分配处理人 **/
             assign(currentProcessTaskStepVo);
@@ -1707,15 +1923,19 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             Set<ProcessTaskStepVo> nextStepList = getNext(currentProcessTaskStepVo);
             for (ProcessTaskStepVo nextStep : nextStepList) {
                 IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
-                nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                 if (nextStepHandler != null) {
+                    ProcessTaskStepRelVo processTaskStepRelVo = new ProcessTaskStepRelVo();
+                    processTaskStepRelVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+                    processTaskStepRelVo.setToProcessTaskStepId(nextStep.getId());
+                    processTaskStepRelVo.setIsHit(1);
+                    processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
+                    nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+                    nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                     doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(nextStep) {
                         @Override
                         public void myExecute() {
                             nextStepHandler.active(nextStep);
                         }
-
                     });
                 }
             }
@@ -1769,10 +1989,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     @Override
     public final Set<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo) {
         List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
-        // 重置所有关系状态为-1
-        for (ProcessTaskStepRelVo rel : relList) {
-            processTaskMapper.updateProcessTaskStepRelIsHit(rel.getFromProcessTaskStepId(), rel.getToProcessTaskStepId(), -1);
-        }
+//        // 重置所有关系状态为-1
+//        for (ProcessTaskStepRelVo rel : relList) {
+//            rel.setIsHit(-1);
+//            processTaskMapper.updateProcessTaskStepRelIsHit(rel);
+//        }
         currentProcessTaskStepVo.setRelList(relList);
         Long nextStepId = currentProcessTaskStepVo.getParamObj().getLong("nextStepId");
         List<ProcessTaskStepVo> nextStepList = processTaskMapper.getToProcessTaskStepByFromIdAndType(currentProcessTaskStepVo.getId(), null);
@@ -1795,10 +2016,50 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         if (nextStepSet == null) {
             nextStepSet = new HashSet<>();
         }
-        for (ProcessTaskStepVo stepVo : nextStepSet) {
-            processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), stepVo.getId(), 1);
-        }
+//        for (ProcessTaskStepVo stepVo : nextStepSet) {
+//            ProcessTaskStepRelVo processTaskStepRelVo = new ProcessTaskStepRelVo();
+//            processTaskStepRelVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+//            processTaskStepRelVo.setToProcessTaskStepId(stepVo.getId());
+//            processTaskStepRelVo.setIsHit(1);
+//            processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
+////            processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), stepVo.getId(), 1);
+//        }
         return nextStepSet;
+    }
+
+    private void resetPostStepRelIsHit(ProcessTaskStepVo currentProcessTaskStepVo) {
+        List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+        for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
+            // 沿着流转过的路径向后找激活过的节点并挂起
+            if (Objects.equals(nextTaskStepRelVo.getIsHit(), 1)) {
+                ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
+                if (!Objects.equals(nextProcessTaskStepVo.getIsActive(), 0)) {
+                    Long startProcessTaskStepId = currentProcessTaskStepVo.getStartProcessTaskStepId();
+                    if (startProcessTaskStepId == null) {
+                        startProcessTaskStepId = currentProcessTaskStepVo.getId();
+                    }
+                    // 如果下一个步骤不等于发起步骤，则继续挂起
+                    if (!nextProcessTaskStepVo.getId().equals(startProcessTaskStepId)) {
+                        IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
+                        if (handler != null) {
+                            // 标记挂起操作的发起步骤，避免出现死循环
+                            nextProcessTaskStepVo.setStartProcessTaskStepId(startProcessTaskStepId);
+                            // 标记挂起操作来源步骤
+                            nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+                            doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
+                                @Override
+                                public void myExecute() {
+                                    handler.hang(nextProcessTaskStepVo);
+                                }
+                            });
+                        }
+                        /** 重置路径状态 恢复路径命中状态为0，代表路径未通过 **/
+                        nextTaskStepRelVo.setIsHit(0);
+                        processTaskMapper.updateProcessTaskStepRelIsHit(nextTaskStepRelVo);
+                    }
+                }
+            }
+        }
     }
 
     private void resetConvergeInfo(ProcessTaskStepVo nextStepVo) {
@@ -1833,7 +2094,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             for (Long convergeId : convergeIdList) {
                 ProcessTaskConvergeVo processTaskStepConvergeVo = new ProcessTaskConvergeVo(nextStepVo.getProcessTaskId(), nextStepVo.getId(), convergeId);
                 if (processTaskMapper.checkProcessTaskConvergeIsExists(processTaskStepConvergeVo) == 0) {
-                    processTaskMapper.insertProcessTaskConverge(processTaskStepConvergeVo);
+                    processTaskMapper.insertIgnoreProcessTaskConverge(processTaskStepConvergeVo);
                 }
             }
         }
@@ -1910,30 +2171,31 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             resetConvergeInfo(currentProcessTaskStepVo);
 
             /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
+            resetPostStepRelIsHit(currentProcessTaskStepVo);
             /* 获取当前步骤状态 **/
-            List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
-            for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
-                if (nextTaskStepRelVo != null && nextTaskStepRelVo.getIsHit().equals(1)) {
-                    ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
-                    if (nextProcessTaskStepVo != null) {
-                        IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
-                        // 标记挂起操作来源步骤
-                        nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                        // 标记挂起操作的发起步骤，避免出现死循环
-                        nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
-                        if (handler != null) {
-                            doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
-                                @Override
-                                public void myExecute() {
-                                    handler.hang(nextProcessTaskStepVo);
-                                }
-                            });
-                        }
-                    }
-                }
-                // 恢复路径命中状态为0，代表路径未通过
-                processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
-            }
+//            List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+//            for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
+//                if (nextTaskStepRelVo != null && nextTaskStepRelVo.getIsHit().equals(1)) {
+//                    ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
+//                    if (nextProcessTaskStepVo != null) {
+//                        IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
+//                        // 标记挂起操作来源步骤
+//                        nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
+//                        // 标记挂起操作的发起步骤，避免出现死循环
+//                        nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
+//                        if (handler != null) {
+//                            doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
+//                                @Override
+//                                public void myExecute() {
+//                                    handler.hang(nextProcessTaskStepVo);
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//                // 恢复路径命中状态为0，代表路径未通过
+//                processTaskMapper.updateProcessTaskStepRelIsHit(currentProcessTaskStepVo.getId(), nextTaskStepRelVo.getToProcessTaskStepId(), 0);
+//            }
 
             /* 分配处理人 **/
             assign(currentProcessTaskStepVo);

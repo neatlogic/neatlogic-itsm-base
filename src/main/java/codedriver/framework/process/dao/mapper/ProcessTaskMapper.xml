@@ -700,6 +700,16 @@
           AND processtask_step_id = #{processTaskStepId}
     </select>
 
+    <select id="getProcessTaskConvergeListByStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskConvergeVo">
+        SELECT
+            `converge_id` AS convergeId,
+            `processtask_step_id` AS processTaskStepId,
+            `processtask_id` AS processTaskId,
+            `is_check` AS isCkeck
+        FROM `processtask_converge`
+        WHERE processtask_step_id = #{processTaskStepId}
+    </select>
+
     <select id="getStartProcessTaskStepByProcessTaskId" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
         SELECT `id`,
                `processtask_id`    AS processTaskId,
@@ -2409,6 +2419,25 @@
         SELECT `processtask_id` FROM `processtask_repeat` WHERE `repeat_group_id` = #{value}
     </select>
 
+    <select id="getProcessTaskStepReapprovalRestoreBackupMaxSortByBackupStepId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT
+            MAX(`sort`)
+        FROM `processtask_step_reapproval_restore_backup`
+        WHERE `backup_step_id` = #{value}
+    </select>
+
+    <select id="getProcessTaskStepReapprovalRestoreBackupListByBackupStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepReapprovalRestoreBackupVo">
+        SELECT
+            `processtask_id` AS processTaskId,
+            `processtask_step_id` AS processTaskStepId,
+            `backup_step_id` AS backupStepId,
+            `config` AS configStr,
+            `sort`
+        FROM `processtask_step_reapproval_restore_backup`
+        WHERE `backup_step_id` = #{value}
+        ORDER BY `sort` DESC
+    </select>
+
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
@@ -2416,7 +2445,7 @@
           AND processtask_step_id = #{processTaskStepId}
     </update>-->
 
-    <update id="updateProcessTaskStepRelIsHit">
+    <update id="updateProcessTaskStepRelIsHit" parameterType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
         UPDATE
         `processtask_step_rel`
         SET
@@ -2604,8 +2633,8 @@
                 #{sort})
     </insert>
 
-    <insert id="insertProcessTaskConverge" parameterType="codedriver.framework.process.dto.ProcessTaskConvergeVo">
-        INSERT INTO `processtask_converge` (`converge_id`,
+    <insert id="insertIgnoreProcessTaskConverge" parameterType="codedriver.framework.process.dto.ProcessTaskConvergeVo">
+        INSERT IGNORE INTO `processtask_converge` (`converge_id`,
                                             `processtask_step_id`,
                                             `processtask_id`)
         VALUES (#{convergeId},
@@ -3064,6 +3093,24 @@
         VALUES (#{processTaskId}, #{repeatGroupId})
     </insert>
 
+    <insert id="insertProcessTaskStepReapprovalRestoreBackup" parameterType="codedriver.framework.process.dto.ProcessTaskStepReapprovalRestoreBackupVo">
+        INSERT INTO `processtask_step_reapproval_restore_backup` (
+            `processtask_id`,
+            `processtask_step_id`,
+            `backup_step_id`,
+            `config`,
+            `sort`
+        )
+        VALUES
+        (
+            #{processTaskId},
+            #{processTaskStepId},
+            #{backupStepId},
+            #{configStr},
+            #{sort}
+        )
+    </insert>
+
     <update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
         UPDATE
             `processtask_sla_transfer`
@@ -3460,5 +3507,9 @@
 
     <delete id="deleteProcessTaskRepeatByProcessTaskId" parameterType="java.lang.Long">
         DELETE FROM `processtask_repeat` WHERE `processtask_id` = #{processTaskId}
+    </delete>
+
+    <delete id="deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId" parameterType="java.lang.Long">
+        DELETE FROM `processtask_step_reapproval_restore_backup` WHERE `backup_step_id` = #{value}
     </delete>
 </mapper>
