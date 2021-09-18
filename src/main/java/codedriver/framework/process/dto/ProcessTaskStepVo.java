@@ -80,6 +80,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private Integer isNeedContent;
 	@EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
 	private Integer isRequired;
+	@EntityField(name = "启用重审", type = ApiParamType.INTEGER)
+	private Integer enableReapproval;
 	@EntityField(name = "可替换文本列表", type = ApiParamType.JSONARRAY)
 	private JSONArray replaceableTextList;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
@@ -300,6 +302,17 @@ public class ProcessTaskStepVo extends BasePageVo {
 			isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
 		}
 		return isNeedContent;
+	}
+
+	public Integer getEnableReapproval() {
+		if(enableReapproval == null && StringUtils.isNotBlank(configHash)) {
+			enableReapproval = ProcessStepInternalHandlerFactory.getHandler().getEnableReapprovalByConfigHash(configHash);
+		}
+		return enableReapproval;
+	}
+
+	public void setEnableReapproval(Integer enableReapproval) {
+		this.enableReapproval = enableReapproval;
 	}
 
 	public JSONArray getReplaceableTextList() {

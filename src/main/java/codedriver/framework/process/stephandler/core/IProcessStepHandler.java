@@ -146,6 +146,15 @@ public interface IProcessStepHandler {
     int complete(ProcessTaskStepVo currentProcessTaskStepVo);
 
     /**
+     * 重审流程步骤
+     *
+     * @param currentProcessTaskStepVo 步骤信息
+     * @return 1代表成功
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    int reapproval(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    /**
      * 上一步发起的撤回动作
      *
      * @param currentProcessTaskStepVo 步骤信息

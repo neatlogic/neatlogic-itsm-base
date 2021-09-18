@@ -168,4 +168,10 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
         return (Integer)JSONPath.read(stepConfig, "isNeedContent");
     }
+
+    @Override
+    public Integer getEnableReapprovalByConfigHash(String configHash) {
+        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
+        return (Integer)JSONPath.read(stepConfig, "enableReapproval");
+    }
 }

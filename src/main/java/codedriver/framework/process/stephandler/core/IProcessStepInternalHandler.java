@@ -124,4 +124,11 @@ public interface IProcessStepInternalHandler {
      * @return Integer
      */
     public Integer getIsNeedContentByConfigHash(String configHash);
+
+    /**
+     * 获取步骤配置信息中enableReapproval(启用重审)字段值
+     * @param configHash
+     * @return
+     */
+    public Integer getEnableReapprovalByConfigHash(String configHash);
 }
