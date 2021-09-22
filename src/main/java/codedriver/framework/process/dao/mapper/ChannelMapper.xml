@@ -379,6 +379,7 @@
 		c.`desc`,
 		c.`sort`,
 		c.`channel_type_uuid` AS channelTypeUuid,
+		c.`support`,
 		CASE WHEN cu.`user_uuid` IS NULL THEN 0 ELSE 1 END AS
 		`isFavorite`
 		FROM
