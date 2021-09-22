@@ -37,7 +37,10 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
     TRANSFERKNOWLEDGE("transferknowledge", "转知识", "提交工单转知识"),
     UPDATEFOCUSUSER("updatefocususer", "修改工单关注人", "修改工单关注人"),
     FOCUSTASK("focustask", "关注工单", "关注工单"),
-    UNDOFOCUSTASK("undofocustask", "取消关注工单", "取消关注工单")
+    UNDOFOCUSTASK("undofocustask", "取消关注工单", "取消关注工单"),
+	BINDREPEAT("bindrepeat", "绑定重复工单", "绑定重复工单"),
+	UNBINDREPEAT("unbindrepeat", "解绑重复工单", "解绑重复工单")
+
 	;
 	private String value;
 	private String text;
