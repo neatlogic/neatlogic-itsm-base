@@ -40,6 +40,8 @@ public class ProcessTaskStepTaskVo implements Serializable {
     private String taskConfigName;
     @EntityField(name = "任务策略", type = ApiParamType.STRING)
     private String taskConfigPolicy;
+    @EntityField(name = "任务策略名", type = ApiParamType.STRING)
+    private String taskConfigPolicyName;
     @EntityField(name = "创建人")
     private UserVo ownerVo;
     @EntityField(name = "状态", type = ApiParamType.STRING)
@@ -213,13 +215,21 @@ public class ProcessTaskStepTaskVo implements Serializable {
     }
 
     public String getTaskConfigPolicy() {
-        if (StringUtils.isNotBlank(taskConfigPolicy)) {
-            taskConfigPolicy = TaskConfigPolicy.getName(taskConfigPolicy);
-        }
         return taskConfigPolicy;
     }
 
     public void setTaskConfigPolicy(String taskConfigPolicy) {
         this.taskConfigPolicy = taskConfigPolicy;
+    }
+
+    public String getTaskConfigPolicyName() {
+        if (StringUtils.isNotBlank(taskConfigPolicy)) {
+            taskConfigPolicyName = TaskConfigPolicy.getName(taskConfigPolicy);
+        }
+        return taskConfigPolicyName;
+    }
+
+    public void setTaskConfigPolicyName(String taskConfigPolicyName) {
+        this.taskConfigPolicyName = taskConfigPolicyName;
     }
 }

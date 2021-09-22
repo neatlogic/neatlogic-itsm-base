@@ -26,9 +26,13 @@ public interface ProcessTaskStepTaskMapper {
 
     ProcessTaskStepTaskUserVo getStepTaskUserByTaskIdAndTaskUserIdAndUserUuid(@Param("processTaskStepTaskId")Long processtaskStepTaskId,@Param("processTaskStepTaskUserId")Long processTaskStepTaskUserId,@Param("userUuid") String userUuid);
 
+    ProcessTaskStepTaskUserVo getStepTaskUserById(Long id);
+
     List<ProcessTaskStepTaskVo> getStepTaskByProcessTaskStepId(Long processTaskStepId);
 
     List<ProcessTaskStepTaskUserVo> getStepTaskUserByStepTaskIdList(@Param("stepTaskIdList") List<Long> collect);
+
+    List<ProcessTaskStepTaskVo> getStepTaskWithUserByProcessTaskStepId(Long processTaskStepId);
 
     List<ProcessTaskStepTaskUserContentVo> getStepTaskUserContentByStepTaskUserIdList(@Param("stepTaskUserIdList") List<Long> collect);
 

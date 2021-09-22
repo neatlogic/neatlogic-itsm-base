@@ -88,8 +88,12 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private String flowDirection;
 	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
-	@EntityField(name = "任务列表", type = ApiParamType.JSONOBJECT)
+	@EntityField(name = "任务json", type = ApiParamType.JSONOBJECT)
 	private JSONObject processTaskStepTask = new JSONObject();
+	@EntityField(name = "任务列表vo", type = ApiParamType.JSONARRAY)
+	private List<ProcessTaskStepTaskVo> processTaskStepTaskVoList;
+	@EntityField(name = "任务列表", type = ApiParamType.JSONOBJECT)
+	private ProcessTaskStepTaskVo processTaskStepTaskVo;
 	@EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
 	private Integer isView;
 	@EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
@@ -712,5 +716,21 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setProcessTaskStepTask(JSONObject processTaskStepTask) {
 		this.processTaskStepTask = processTaskStepTask;
+	}
+
+	public List<ProcessTaskStepTaskVo> getProcessTaskStepTaskVoList() {
+		return processTaskStepTaskVoList;
+	}
+
+	public void setProcessTaskStepTaskVoList(List<ProcessTaskStepTaskVo> processTaskStepTaskVoList) {
+		this.processTaskStepTaskVoList = processTaskStepTaskVoList;
+	}
+
+	public ProcessTaskStepTaskVo getProcessTaskStepTaskVo() {
+		return processTaskStepTaskVo;
+	}
+
+	public void setProcessTaskStepTaskVo(ProcessTaskStepTaskVo processTaskStepTaskVo) {
+		this.processTaskStepTaskVo = processTaskStepTaskVo;
 	}
 }
