@@ -291,7 +291,7 @@
         UPDATE
         `processtask_step_task`
         SET `owner` = #{ownerVo.uuid},
-        `content_hash` = #{content_hash}
+        `content_hash` = #{contentHash}
         WHERE `id` = #{id};
     </update>
 
