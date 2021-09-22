@@ -564,7 +564,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         try {
             // 锁定当前流程
             processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-
+            ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+            // 如果当前节点已经挂起，则不再重复操作
+            if (Objects.equals(processTaskStepVo.getStatus(), ProcessTaskStatus.HANG.getValue()) &&Objects.equals(processTaskStepVo.getIsActive(), 0)) {
+                return 1;
+            }
             reapprovalRestoreBackup(currentProcessTaskStepVo);
 
             myHang(currentProcessTaskStepVo);
