@@ -34,8 +34,8 @@ import codedriver.framework.process.exception.processtask.ProcessTaskStepUnActiv
 import codedriver.framework.process.exception.processtask.ProcessTaskStepUserIsExistsException;
 import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyHandlerNotFoundException;
 import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyNotFoundException;
-import codedriver.framework.process.notify.constvalue.TaskNotifyTriggerType;
-import codedriver.framework.process.notify.constvalue.TaskStepNotifyTriggerType;
+import codedriver.framework.process.notify.constvalue.ProcessTaskNotifyTriggerType;
+import codedriver.framework.process.notify.constvalue.ProcessTaskStepNotifyTriggerType;
 import codedriver.framework.process.operationauth.core.ProcessAuthManager;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
@@ -54,7 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.xlsx4j.sml.Col;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -266,18 +265,18 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_ACTIVE);
                     if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStatus.RUNNING.getValue())) {
                         IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_START);
-                        IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.START);
-                        IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.START);
+                        IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.START);
+                        IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.START);
                     }
 
                     /* 计算SLA并触发超时警告 **/
                     IProcessStepHandlerUtil.calculateSla(currentProcessTaskStepVo);
 
                     /* 触发通知 **/
-                    IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ACTIVE);
+                    IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ACTIVE);
 
                     /* 执行动作 **/
-                    IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ACTIVE);
+                    IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ACTIVE);
                 } else if (this.getMode().equals(ProcessStepMode.AT)) {
                     myActive(currentProcessTaskStepVo);
                     currentProcessTaskStepVo.setIsActive(1);
@@ -440,8 +439,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         /* 触发通知 **/
 //        processStepHandlerUtilService.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
         if (isAssignException) {
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGNEXCEPTION);
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGNEXCEPTION);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ASSIGNEXCEPTION);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ASSIGNEXCEPTION);
         }
         /* 执行动作 **/
 //        processStepHandlerUtilService.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
@@ -763,10 +762,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.calculateSla(currentProcessTaskStepVo);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.START);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.START);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.START);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.START);
 
             processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
         } catch (ProcessTaskException ex) {
@@ -799,7 +798,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     public final int complete(ProcessTaskStepVo currentProcessTaskStepVo) {
         /* 锁定当前流程 **/
         processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-        TaskStepNotifyTriggerType notifyTriggerType = TaskStepNotifyTriggerType.SUCCEED;
+        ProcessTaskStepNotifyTriggerType notifyTriggerType = ProcessTaskStepNotifyTriggerType.SUCCEED;
         ProcessTaskOperationType operationType = ProcessTaskOperationType.STEP_COMPLETE;
         boolean canComplete = false;
         JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
@@ -807,7 +806,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         if (this.getMode().equals(ProcessStepMode.MT)) {
             if (ProcessTaskOperationType.STEP_BACK.getValue().equals(action)) {
                 operationType = ProcessTaskOperationType.STEP_BACK;
-                notifyTriggerType = TaskStepNotifyTriggerType.BACK;
+                notifyTriggerType = ProcessTaskStepNotifyTriggerType.BACK;
             }
             canComplete = new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(), operationType).build().checkAndNoPermissionThrowException();
             stepMajorUserRegulate(currentProcessTaskStepVo);
@@ -825,8 +824,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     currentProcessTaskStepVo.setUpdateEndTime(1);
                     currentProcessTaskStepVo.setError(null);
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
-                    IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
-                    IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskNotifyTriggerType.COMPLETEPROCESSTASK);
+                    IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.COMPLETEPROCESSTASK);
+                    IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.COMPLETEPROCESSTASK);
                     myCompleteAudit(currentProcessTaskStepVo);
                     return 1;
                 }
@@ -925,9 +924,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 /* 异常提醒 **/
                 IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(true), ProcessTaskStepRemindType.ERROR);
                 /* 触发通知 **/
-                IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.FAILED);
+                IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
                 /* 执行动作 **/
-                IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.FAILED);
+                IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
             } finally {
                 if (ProcessTaskStatus.FAILED.getValue().equals(currentProcessTaskStepVo.getStatus())) {
                     /* 发生异常不能完成当前步骤，执行当前步骤的回退操作 **/
@@ -1061,9 +1060,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 });
 
                 /* 触发通知 **/
-                IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.SUCCEED);
+                IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.SUCCEED);
                 /* 执行动作 **/
-                IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.SUCCEED);
+                IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.SUCCEED);
 
                 /* 回退提醒 **/
                 processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId()));
@@ -1082,9 +1081,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 /* 异常提醒 **/
                 IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(true), ProcessTaskStepRemindType.ERROR);
                 /* 触发通知 **/
-                IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.FAILED);
+                IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
                 /* 执行动作 **/
-                IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.FAILED);
+                IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
             } finally {
                 if (ProcessTaskStatus.FAILED.getValue().equals(currentProcessTaskStepVo.getStatus())) {
                     /* 发生异常不能完成当前步骤，执行当前步骤的回退操作 **/
@@ -1177,10 +1176,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.calculateSla(currentProcessTaskStepVo);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.RETREAT);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.RETREAT);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.RETREAT);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.RETREAT);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setError(ex.getMessage(true));
@@ -1227,9 +1226,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.ABORTPROCESSTASK);
         /* 触发通知 **/
-        IProcessStepHandlerUtil.notify(processTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
+        IProcessStepHandlerUtil.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.ABORTPROCESSTASK);
         /* 执行动作 **/
-        IProcessStepHandlerUtil.action(processTaskStepVo, TaskNotifyTriggerType.ABORTPROCESSTASK);
+        IProcessStepHandlerUtil.action(processTaskStepVo, ProcessTaskNotifyTriggerType.ABORTPROCESSTASK);
         return 1;
     }
 
@@ -1290,9 +1289,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.RECOVERPROCESSTASK);
         /* 触发通知 **/
-        IProcessStepHandlerUtil.notify(processTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
+        IProcessStepHandlerUtil.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.RECOVERPROCESSTASK);
         /* 执行动作 **/
-        IProcessStepHandlerUtil.action(processTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
+        IProcessStepHandlerUtil.action(processTaskStepVo, ProcessTaskNotifyTriggerType.RECOVERPROCESSTASK);
         return 1;
     }
 
@@ -1358,10 +1357,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.RECOVERPROCESSTASK);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskNotifyTriggerType.RECOVERPROCESSTASK);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.RECOVERPROCESSTASK);
         }
 
         /* 写入时间审计 **/
@@ -1409,10 +1408,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.calculateSla(currentProcessTaskStepVo);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.PAUSE);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.PAUSE);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.PAUSE);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.PAUSE);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setError(ex.getMessage(true));
@@ -1562,10 +1561,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             updateProcessTaskStepStatus(processTaskStepVo);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.TRANSFER);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.TRANSFER);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.TRANSFER);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.TRANSFER);
 
             /* 处理时间审计 **/
             IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_TRANSFER);
@@ -1645,10 +1644,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_BACK);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.BACK);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.BACK);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.BACK);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.BACK);
         } catch (ProcessTaskException e) {
             logger.error(e.getMessage(), e);
             currentProcessTaskStepVo.setError(e.getMessage(true));
@@ -1952,10 +1951,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.calculateSla(currentProcessTaskStepVo);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.STARTPROCESS);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.STARTPROCESS);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskNotifyTriggerType.STARTPROCESS);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.STARTPROCESS);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setIsActive(1);
@@ -1963,10 +1962,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setError(ex.getMessage(true));
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.FAILED);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.FAILED);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
         } finally {
             /* 处理历史记录 **/
             ProcessTaskTranferReportVo processTaskTranferReportVo = processTaskMapper.getProcessTaskTranferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
@@ -2216,10 +2215,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.calculateSla(currentProcessTaskStepVo);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, TaskNotifyTriggerType.REOPENPROCESSTASK);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.REOPENPROCESSTASK);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, TaskNotifyTriggerType.REOPENPROCESSTASK);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.REOPENPROCESSTASK);
 
             /* 回退提醒 **/
             IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), currentProcessTaskStepVo.getParamObj().getString("content"), ProcessTaskStepRemindType.REDO);
@@ -2287,8 +2286,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         /* 生成活动 */
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
         /* 触发通知 **/
-        IProcessStepHandlerUtil.notify(processTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
-        IProcessStepHandlerUtil.action(processTaskStepVo, TaskNotifyTriggerType.SCOREPROCESSTASK);
+        IProcessStepHandlerUtil.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.SCOREPROCESSTASK);
+        IProcessStepHandlerUtil.action(processTaskStepVo, ProcessTaskNotifyTriggerType.SCOREPROCESSTASK);
         return 1;
     }
 

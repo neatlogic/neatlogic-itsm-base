@@ -4,7 +4,7 @@ import codedriver.framework.process.constvalue.ProcessTaskParams;
 import org.springframework.util.ClassUtils;
 
 import codedriver.framework.notify.core.NotifyHandlerType;
-import codedriver.framework.process.notify.constvalue.TaskStepNotifyTriggerType;
+import codedriver.framework.process.notify.constvalue.ProcessTaskStepNotifyTriggerType;
 
 public interface IDefaultTemplate {
 
@@ -18,6 +18,8 @@ public interface IDefaultTemplate {
     String REASON = "【" + ProcessTaskParams.REASON.getFreemarkerTemplate() + "】";
     String SUBTASK_CONTENT = "【" + ProcessTaskParams.SUBTASKCONTENT.getFreemarkerTemplate() + "】";
     String SUBTASK_WORKER = "【" + ProcessTaskParams.SUBTASKWORKER.getFreemarkerTemplate() + "】";
+    String TASK_CONTENT = "【" + ProcessTaskParams.TASKCONTENT.getFreemarkerTemplate() + "】";
+    String TASK_WORKER = "【" + ProcessTaskParams.TASKWORKER.getFreemarkerTemplate() + "】";
     String CHANGE_STEP_NAME = "【" + ProcessTaskParams.CHANGESTEPNAME.getFreemarkerTemplate() + "】";
     String CHANGE_STEP_WORKER = "【" + ProcessTaskParams.CHANGESTEPWORKER.getFreemarkerTemplate() + "】";
 
@@ -31,7 +33,7 @@ public interface IDefaultTemplate {
     }
 
     public default String getName() {
-        return NotifyHandlerType.getText(getNotifyHandlerType()) + "_" + TaskStepNotifyTriggerType.getText(getTrigger());
+        return NotifyHandlerType.getText(getNotifyHandlerType()) + "_" + ProcessTaskStepNotifyTriggerType.getText(getTrigger());
     }
 
     public default String getType() {

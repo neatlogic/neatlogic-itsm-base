@@ -3,16 +3,11 @@ package codedriver.framework.process.notify.constvalue;
 import codedriver.framework.notify.core.INotifyTriggerType;
 
 public enum TaskNotifyTriggerType implements INotifyTriggerType {
-
-    STARTPROCESS("startprocess", "上报","用户上报提交工单时触发通知"),
-	URGE("urge", "催办","工单完成前，用户对工单进行催办时触发通知"),
-	ABORTPROCESSTASK("abortprocesstask", "取消工单","工单完成前，有权限用户取消工单时触发通知"),
-	RECOVERPROCESSTASK("recoverprocesstask", "恢复工单","工单完成前，有权限用户恢复工单时触发通知"),
-	COMPLETEPROCESSTASK("completeprocesstask", "完成工单","工单流转至结束时触发通知"),
-	SCOREPROCESSTASK("scoreprocesstask", "评分","评分后触发通知"),
-	REOPENPROCESSTASK("reopenprocesstask", "重新打开工单","工单完成后，用户评分前，有权限的用户重新打开工单并回退至某一步骤重新开始处理时触发通知"),
-	MARKREPEATPROCESSTASK("markrepeatprocesstask", "标记重复事件","标记重复事件"),
-	;
+	CREATETASK("createtask", "任务创建","步骤处理人为当前步骤创建任务时触发通知"),
+	EDITTASK("edittask", "任务编辑","步骤处理人编辑任务内容时触发通知"),
+	DELETETASK("deletetask", "任务删除","步骤处理人删除任务时触发通知"),
+	COMPLETETASK("completetask", "任务完成","任务处理人完成任务时触发通知"),
+	COMPLETEALLTASK("completealltask", "所有任务完成","所有任务满足流转条件时触发通知");
 
 	private String trigger;
 	private String text;
@@ -36,7 +31,7 @@ public enum TaskNotifyTriggerType implements INotifyTriggerType {
 	public String getDescription() {
 		return description;
 	}
-
+	
 	public static String getText(String trigger) {
 		for(TaskNotifyTriggerType n : values()) {
 			if(n.getTrigger().equals(trigger)) {

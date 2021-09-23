@@ -2,7 +2,7 @@ package codedriver.framework.process.notify.constvalue;
 
 import codedriver.framework.notify.core.INotifyTriggerType;
 
-public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
+public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
 
 	ACTIVE("active", "步骤激活","流转到某个步骤，该步骤被自动激活时触发通知"),
 //	ASSIGN("assign", "步骤分配处理人","步骤激活后，系统根据配置为该步骤分配处理人时触发通知"),
@@ -21,7 +21,7 @@ public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
 	private String text;
 	private String description;
 
-	private TaskStepNotifyTriggerType(String _trigger, String _text, String _description) {
+	private ProcessTaskStepNotifyTriggerType(String _trigger, String _text, String _description) {
 		this.trigger = _trigger;
 		this.text = _text;
 		this.description = _description;
@@ -41,7 +41,7 @@ public enum TaskStepNotifyTriggerType implements INotifyTriggerType {
 	}
 
 	public static String getText(String trigger) {
-		for(TaskStepNotifyTriggerType n : values()) {
+		for(ProcessTaskStepNotifyTriggerType n : values()) {
 			if(n.getTrigger().equals(trigger)) {
 				return n.getText();
 			}
