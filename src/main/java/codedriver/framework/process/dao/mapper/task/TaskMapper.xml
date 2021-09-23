@@ -88,6 +88,15 @@
             #{id}
         </foreach>
     </select>
+    <select id="getTaskConfigReferenceCountMap" resultType="java.util.HashMap">
+        SELECT task_config_id as taskConfigId, COUNT(1) as `count`
+        FROM `process_step_task_config`
+        where task_config_id in
+        <foreach collection="list" item="configId" separator="," open="(" close=")">
+            #{configId}
+        </foreach>
+        GROUP BY task_config_id
+    </select>
 
     <update id="updateTaskConfig">
         UPDATE

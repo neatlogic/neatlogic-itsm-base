@@ -48,7 +48,7 @@ public interface ProcessTaskStepTaskMapper {
 
     int updateTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
-    int updateTaskUserByTaskIdAndUserUuid(@Param("status") String status, @Param("processtaskStepTaskId") Long processtaskStepTaskId, @Param("userUuid") String userUuid);
+    int updateTaskUserByTaskIdAndUserUuid(@Param("status") String status, @Param("processTaskStepTaskId") Long processtaskStepTaskId, @Param("userUuid") String userUuid);
 
     int updateDeleteTaskUserByUserListAndId(@Param("userList") List<String> userList, @Param("processTaskStepTaskId") Long processTaskStepTaskId,@Param("isDelete") Integer isDelete);
 

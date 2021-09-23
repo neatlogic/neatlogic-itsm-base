@@ -9,6 +9,7 @@ import codedriver.framework.process.dto.TaskConfigVo;
 import com.alibaba.fastjson.JSONArray;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lvzk
@@ -25,6 +26,8 @@ public interface TaskMapper {
     TaskConfigVo getTaskConfigById(Long taskId);
 
     List<TaskConfigVo> getTaskConfigByIdList(JSONArray stepTaskIdList);
+
+    List<Map<String,Long>> getTaskConfigReferenceCountMap(List<Long> idList);
 
     int updateTaskConfig(TaskConfigVo taskConfigVo);
 

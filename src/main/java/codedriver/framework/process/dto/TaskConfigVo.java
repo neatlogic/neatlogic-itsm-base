@@ -26,6 +26,8 @@ public class TaskConfigVo extends BaseEditorVo {
     private String policy;
     @EntityField(name = "是否激活", type = ApiParamType.INTEGER)
     private int isActive;
+    @EntityField(name = "依赖数", type = ApiParamType.INTEGER)
+    private int referenceCount;
 
     public Long getId() {
         if(id == null) {
@@ -68,5 +70,13 @@ public class TaskConfigVo extends BaseEditorVo {
 
     public void setIsActive(int isActive) {
         this.isActive = isActive;
+    }
+
+    public int getReferenceCount() {
+        return referenceCount;
+    }
+
+    public void setReferenceCount(int referenceCount) {
+        this.referenceCount = referenceCount;
     }
 }
