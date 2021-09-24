@@ -249,8 +249,23 @@
 	<select id="getParentUuidByUuid" parameterType="java.lang.String" resultType="java.lang.String" useCache="false">
 		SELECT `parent_uuid` FROM `catalog` WHERE `uuid` = #{value}
 	</select>
+    <select id="getCatalogByName" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.CatalogVo">
+		SELECT
+			`uuid`,
+			`name`,
+			`parent_uuid` AS `parentUuid`,
+			`is_active` AS `isActive`,
+			`icon`,
+			`color`,
+			`desc`,
+			`lft`,
+			`rht`
+		FROM
+			`catalog`
+		where `name` = #{value}
+	</select>
 
-	<insert id="insertCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
+    <insert id="insertCatalog" parameterType="codedriver.framework.process.dto.CatalogVo">
 		INSERT INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht`)
 		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})
 	</insert>
