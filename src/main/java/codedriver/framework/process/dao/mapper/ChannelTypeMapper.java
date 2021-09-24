@@ -21,48 +21,48 @@ import java.util.Set;
  **/
 public interface ChannelTypeMapper {
 
-    public int searchChannelTypeCount(ChannelTypeVo channelTypeVo);
+    int searchChannelTypeCount(ChannelTypeVo channelTypeVo);
 
-    public List<ChannelTypeVo> searchChannelTypeList(ChannelTypeVo channelTypeVo);
+    List<ChannelTypeVo> searchChannelTypeList(ChannelTypeVo channelTypeVo);
 
-    public List<ValueTextVo> searchChannelTypeListForSelect(ChannelTypeVo channelTypeVo);
+    List<ValueTextVo> searchChannelTypeListForSelect(ChannelTypeVo channelTypeVo);
 
-    public ChannelTypeVo getChannelTypeByUuid(String uuid);
+    ChannelTypeVo getChannelTypeByUuid(String uuid);
 
-    public int checkChannelTypeIsExists(String uuid);
+    int checkChannelTypeIsExists(String uuid);
 
-    public int checkChannelTypeNameIsRepeat(ChannelTypeVo channelTypeVo);
+    int checkChannelTypeNameIsRepeat(ChannelTypeVo channelTypeVo);
 
-    public Integer getChannelTypeMaxSort();
+    Integer getChannelTypeMaxSort();
 
-    public int checkChannelTypeRelationIsExists(Long id);
+    int checkChannelTypeRelationIsExists(Long id);
 
-    public int checkChannelTypeRelationNameIsRepeat(ChannelTypeRelationVo channelTypeRelationVo);
+    int checkChannelTypeRelationNameIsRepeat(ChannelTypeRelationVo channelTypeRelationVo);
 
-    public ChannelTypeRelationVo getChannelTypeRelationById(Long channelTypeRelationId);
+    ChannelTypeRelationVo getChannelTypeRelationById(Long channelTypeRelationId);
 
-    public ChannelTypeRelationVo getChannelTypeRelationLockById(Long channelTypeRelationId);
+    ChannelTypeRelationVo getChannelTypeRelationLockById(Long channelTypeRelationId);
 
-    public List<ChannelTypeRelationVo> getChannelTypeRelationList(ChannelTypeRelationVo channelTypeRelationVo);
+    List<ChannelTypeRelationVo> getChannelTypeRelationList(ChannelTypeRelationVo channelTypeRelationVo);
 
-    public int getChannelTypeRelationCount(ChannelTypeRelationVo channelTypeRelationVo);
+    int getChannelTypeRelationCount(ChannelTypeRelationVo channelTypeRelationVo);
 
-    public List<ValueTextVo> getChannelTypeRelationListForSelect(ChannelTypeRelationVo channelTypeRelationVo);
+    List<ValueTextVo> getChannelTypeRelationListForSelect(ChannelTypeRelationVo channelTypeRelationVo);
 
-    public int getChannelTypeRelationCountForSelect(ChannelTypeRelationVo channelTypeRelationVo);
+    int getChannelTypeRelationCountForSelect(ChannelTypeRelationVo channelTypeRelationVo);
 
-    public List<String> getChannelTypeRelationSourceListByChannelTypeRelationId(Long channelTypeRelationId);
+    List<String> getChannelTypeRelationSourceListByChannelTypeRelationId(Long channelTypeRelationId);
 
-    public List<String> getChannelTypeRelationTargetListByChannelTypeRelationId(Long channelTypeRelationId);
+    List<String> getChannelTypeRelationTargetListByChannelTypeRelationId(Long channelTypeRelationId);
 
-    public List<ChannelTypeRelationChannelVo>
+    List<ChannelTypeRelationChannelVo>
     getChannelTypeRelationSourceListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
 
-    public List<ChannelTypeRelationChannelVo> getChannelTypeRelationTargetListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
+    List<ChannelTypeRelationChannelVo> getChannelTypeRelationTargetListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
 
-    public List<Long> getChannelTypeRelationIdListBySourceChannelTypeUuid(String sourceChannelTypeUuid);
+    List<Long> getChannelTypeRelationIdListBySourceChannelTypeUuid(String sourceChannelTypeUuid);
 
-    public List<Long> getAuthorizedChannelTypeRelationIdListBySourceChannelUuid(
+    List<Long> getAuthorizedChannelTypeRelationIdListBySourceChannelUuid(
             @Param("source") String source,
             @Param("userUuid") String userUuid,
             @Param("teamUuidList") List<String> teamUuidList,
@@ -70,53 +70,55 @@ public interface ChannelTypeMapper {
             @Param("processUserTypeList") List<String> processUserTypeList
     );
 
-    public List<String> getChannelUuidListByParentUuidListAndChannelTypeUuidList(
+    List<String> getChannelUuidListByParentUuidListAndChannelTypeUuidList(
             @Param("parentUuidList") List<String> parentUuidList,
             @Param("channelTypeUuidList") List<String> channelTypeUuidList
     );
 
-    public int getActiveChannelCountByParentUuidAndChannelTypeUuidList(
+    int getActiveChannelCountByParentUuidAndChannelTypeUuidList(
             @Param("parentUuid") String parentUuid,
             @Param("channelTypeUuidList") List<String> channelTypeUuidList
     );
 
-//    public List<ChannelTypeRelationVo> getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
+//    List<ChannelTypeRelationVo> getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
 
-    public Long checkChannelTypeRelationIsUsedByChannelTypeRelationId(Long channelTypeRelationId);
+    Long checkChannelTypeRelationIsUsedByChannelTypeRelationId(Long channelTypeRelationId);
 
-    public Set<String> getChannelTypeRelationReferenceUuidListByChannelTypeRelationId(Long channelTypeRelationId);
+    Set<String> getChannelTypeRelationReferenceUuidListByChannelTypeRelationId(Long channelTypeRelationId);
 
-    public int checkChannelTypeRelationHasReference(Long channelTypeRelationId);
+    int checkChannelTypeRelationHasReference(Long channelTypeRelationId);
 
-    public int checkChannelTypeHasReference(String channelTypeUuid);
+    int checkChannelTypeHasReference(String channelTypeUuid);
 
-    public int insertChannelType(ChannelTypeVo channelTypeVo);
+    ChannelTypeVo getChannelTypeByName(String name);
 
-    public int insertChannelTypeRelation(ChannelTypeRelationVo channelTypeRelationVo);
+    int insertChannelType(ChannelTypeVo channelTypeVo);
 
-    public int insertChannelTypeRelationSource(
+    int insertChannelTypeRelation(ChannelTypeRelationVo channelTypeRelationVo);
+
+    int insertChannelTypeRelationSource(
             @Param("channelTypeRelationId") Long channelTypeRelationId,
             @Param("channelTypeUuid") String channelTypeUuid
     );
 
-    public int insertChannelTypeRelationTarget(
+    int insertChannelTypeRelationTarget(
             @Param("channelTypeRelationId") Long channelTypeRelationId,
             @Param("channelTypeUuid") String channelTypeUuid
     );
 
-    public int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
+    int updateChannelTypeByUuid(ChannelTypeVo channelTypeVo);
 
-    public int updateChannelTypeRelationById(ChannelTypeRelationVo channelTypeRelationVo);
+    int updateChannelTypeRelationById(ChannelTypeRelationVo channelTypeRelationVo);
 
-    public int updateChannelTypeRelationIsActiveById(Long channelTypeRelationId);
+    int updateChannelTypeRelationIsActiveById(Long channelTypeRelationId);
 
-    public int updateChannelTypeRelationToDeleteById(Long channelTypeRelationId);
+    int updateChannelTypeRelationToDeleteById(Long channelTypeRelationId);
 
-    public int deleteChannelTypeByUuid(String uuid);
+    int deleteChannelTypeByUuid(String uuid);
 
-    public int deleteChannelTypeRelationById(Long channelTypeRelationId);
+    int deleteChannelTypeRelationById(Long channelTypeRelationId);
 
-    public int deleteChannelTypeRelationSourceByChannelTypeRelationId(Long id);
+    int deleteChannelTypeRelationSourceByChannelTypeRelationId(Long id);
 
-    public int deleteChannelTypeRelationTargetByChannelTypeRelationId(Long id);
+    int deleteChannelTypeRelationTargetByChannelTypeRelationId(Long id);
 }
