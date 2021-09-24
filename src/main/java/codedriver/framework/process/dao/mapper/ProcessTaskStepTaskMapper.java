@@ -24,7 +24,7 @@ public interface ProcessTaskStepTaskMapper {
 
     ProcessTaskStepTaskVo getStepTaskById(Long processTaskStepTaskId);
 
-    ProcessTaskStepTaskUserVo getStepTaskUserByTaskIdAndTaskUserIdAndUserUuid(@Param("processTaskStepTaskId")Long processtaskStepTaskId,@Param("processTaskStepTaskUserId")Long processTaskStepTaskUserId,@Param("userUuid") String userUuid);
+    ProcessTaskStepTaskUserVo getStepTaskUserByTaskIdAndTaskUserIdAndUserUuid(@Param("processTaskStepTaskId") Long processtaskStepTaskId, @Param("processTaskStepTaskUserId") Long processTaskStepTaskUserId, @Param("userUuid") String userUuid);
 
     ProcessTaskStepTaskUserVo getStepTaskUserById(Long id);
 
@@ -36,7 +36,7 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskUserContentVo> getStepTaskUserContentByStepTaskUserIdList(@Param("stepTaskUserIdList") List<Long> collect);
 
-    ProcessTaskStepTaskUserContentVo getStepTaskUserContentById(Long processTaskStepTaskUserContentId);
+    ProcessTaskStepTaskUserContentVo getStepTaskUserContentByIdAndUserUuid(@Param("userContentId") Long processTaskStepTaskUserContentId, @Param("userUuid") String userUuid);
 
     List<ProcessTaskStepTaskUserVo> getPendingStepTaskUserListByTaskId(Long processtaskStepTaskId);
 
@@ -50,9 +50,9 @@ public interface ProcessTaskStepTaskMapper {
 
     int updateTaskUserByTaskIdAndUserUuid(@Param("status") String status, @Param("processTaskStepTaskId") Long processtaskStepTaskId, @Param("userUuid") String userUuid);
 
-    int updateDeleteTaskUserByUserListAndId(@Param("userList") List<String> userList, @Param("processTaskStepTaskId") Long processTaskStepTaskId,@Param("isDelete") Integer isDelete);
+    int updateDeleteTaskUserByUserListAndId(@Param("userList") List<String> userList, @Param("processTaskStepTaskId") Long processTaskStepTaskId, @Param("isDelete") Integer isDelete);
 
-    int updateTaskUserContent(@Param("processTaskStepTaskUserContentId")Long processTaskStepTaskUserContentId,@Param("contentHash") String contentHash,@Param("userUuid") String userUuid);
+    int updateTaskUserContent(@Param("processTaskStepTaskUserContentId") Long processTaskStepTaskUserContentId, @Param("contentHash") String contentHash, @Param("userUuid") String userUuid);
 
     int deleteTaskById(Long processTaskStepTaskId);
 
