@@ -333,6 +333,19 @@
         select count(1) from (SELECT `uuid` FROM `channel` WHERE `channel_type_uuid` = #{value}
             limit 1) a
     </select>
+    <select id="getChannelTypeByName" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ChannelTypeVo">
+        SELECT
+            `uuid`,
+            `name`,
+            `is_active` AS isActive,
+            `icon`,
+            `color`,
+            `description`,
+            `sort`,
+            `prefix`
+        FROM `channel_type`
+        WHERE `name` = #{value}
+    </select>
 
     <insert id="insertChannelType" parameterType="codedriver.framework.process.dto.ChannelTypeVo">
         INSERT INTO `channel_type` (
