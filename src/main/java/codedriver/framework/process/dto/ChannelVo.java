@@ -6,6 +6,7 @@ import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.common.util.CommonUtil;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.restful.annotation.EntityField;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Objects;
 import org.apache.commons.collections4.CollectionUtils;
@@ -118,6 +119,11 @@ public class ChannelVo extends BasePageVo implements Serializable {
     private List<String> authorizedUuidList;
     @JSONField(serialize = false)
     private List<String> uuidList;
+
+    @EntityField(name = "配置信息", type = ApiParamType.JSONOBJECT)
+    private JSONObject config;
+    @JSONField(serialize = false)
+    private String configStr;
 
     public ChannelVo() {
 
@@ -478,5 +484,27 @@ public class ChannelVo extends BasePageVo implements Serializable {
 
     public void setChildrenCount(int childrenCount) {
         this.childrenCount = childrenCount;
+    }
+
+    public JSONObject getConfig() {
+        if (config == null && StringUtils.isNotBlank(configStr)) {
+            config = JSONObject.parseObject(configStr);
+        }
+        return config;
+    }
+
+    public void setConfig(JSONObject config) {
+        this.config = config;
+    }
+
+    public String getConfigStr() {
+        if (StringUtils.isBlank(configStr) && config != null) {
+            configStr = config.toJSONString();
+        }
+        return configStr;
+    }
+
+    public void setConfigStr(String configStr) {
+        this.configStr = configStr;
     }
 }
