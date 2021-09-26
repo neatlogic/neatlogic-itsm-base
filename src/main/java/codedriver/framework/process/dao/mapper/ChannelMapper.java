@@ -13,6 +13,8 @@ public interface ChannelMapper {
 
     public List<ChannelVo> searchChannelList(ChannelVo channelVo);
 
+    List<ChannelVo> getAllChannelList();
+
     public List<ValueTextVo> searchChannelListForSelect(ChannelVo channelVo);
 
     public ChannelVo getChannelByUuid(String channelUuid);
@@ -91,6 +93,8 @@ public interface ChannelMapper {
 
     public int updateSortDecrement(@Param("parentUuid") String parentUuid, @Param("fromSort") Integer fromSort,
         @Param("toSort") Integer toSort);
+
+    int updateChannelConfig(ChannelVo channelVo);
 
     public int deleteChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
