@@ -128,6 +128,26 @@
 		</if>
 	</select>
 
+	<select id="getAllChannelList" resultType="codedriver.framework.process.dto.ChannelVo" useCache="false">
+		SELECT
+			`uuid`,
+			`name`,
+			`parent_uuid` AS parentUuid,
+			`is_active` AS isActive,
+			`icon`,
+			`color`,
+			`desc`,
+			`sort`,
+			`sla`,
+			`allow_desc` AS allowDesc,
+			`help`,
+			`is_active_help` AS isActiveHelp,
+			`channel_type_uuid` AS channelTypeUuid,
+			`support`,
+			`config` AS configStr
+		FROM `channel`
+	</select>
+
 	<select id="searchChannelListForSelect" parameterType="codedriver.framework.process.dto.ChannelVo" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
 		SELECT
 		c.`uuid` as `value`,
@@ -647,6 +667,11 @@
 		<if test="toSort != null">
 			AND `sort` &lt;= #{toSort}
 		</if>
+	</update>
+
+	<update id="updateChannelConfig" parameterType="codedriver.framework.process.dto.ChannelVo">
+		UPDATE `channel` SET `config` = #{configStr}
+		WHERE `uuid` = #{uuid}
 	</update>
 
 	<delete id="deleteChannelUser">
