@@ -90,11 +90,11 @@ public class ChannelVo extends BasePageVo implements Serializable {
     @EntityField(name = "服务类型", type = ApiParamType.JSONOBJECT)
     private ChannelTypeVo channelTypeVo;
 
-    @EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
-    private int allowTranferReport;
-
-    @EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
-    private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
+//    @EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
+//    private int allowTranferReport;
+//
+//    @EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
+//    private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
 
     @EntityField(name = "类型#uuid", type = ApiParamType.STRING)
     private String typeAndUuid;
@@ -144,6 +144,7 @@ public class ChannelVo extends BasePageVo implements Serializable {
         this.channelTypeUuid = channelVo.channelTypeUuid;
         this.support = channelVo.support;
         this.sort = channelVo.sort;
+        this.config = channelVo.getConfig();
     }
 
     public synchronized String getUuid() {
@@ -420,21 +421,21 @@ public class ChannelVo extends BasePageVo implements Serializable {
         return true;
     }
 
-    public int getAllowTranferReport() {
-        return allowTranferReport;
-    }
-
-    public void setAllowTranferReport(int allowTranferReport) {
-        this.allowTranferReport = allowTranferReport;
-    }
-
-    public List<ChannelRelationVo> getChannelRelationList() {
-        return channelRelationList;
-    }
-
-    public void setChannelRelationList(List<ChannelRelationVo> channelRelationList) {
-        this.channelRelationList = channelRelationList;
-    }
+//    public int getAllowTranferReport() {
+//        return allowTranferReport;
+//    }
+//
+//    public void setAllowTranferReport(int allowTranferReport) {
+//        this.allowTranferReport = allowTranferReport;
+//    }
+//
+//    public List<ChannelRelationVo> getChannelRelationList() {
+//        return channelRelationList;
+//    }
+//
+//    public void setChannelRelationList(List<ChannelRelationVo> channelRelationList) {
+//        this.channelRelationList = channelRelationList;
+//    }
 
     public String getTypeAndUuid() {
         if (StringUtils.isBlank(typeAndUuid) && StringUtils.isNotBlank(getUuid())) {
