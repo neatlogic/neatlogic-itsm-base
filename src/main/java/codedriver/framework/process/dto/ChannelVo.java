@@ -144,6 +144,7 @@ public class ChannelVo extends BasePageVo implements Serializable {
         this.channelTypeUuid = channelVo.channelTypeUuid;
         this.support = channelVo.support;
         this.sort = channelVo.sort;
+        this.config = channelVo.getConfig();
     }
 
     public synchronized String getUuid() {
