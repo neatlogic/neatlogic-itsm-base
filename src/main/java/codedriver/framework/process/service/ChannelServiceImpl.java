@@ -22,13 +22,17 @@ import codedriver.framework.process.exception.priority.PriorityNotFoundException
 import codedriver.framework.process.exception.process.ProcessNotFoundException;
 import codedriver.framework.worktime.dao.mapper.WorktimeMapper;
 import codedriver.framework.worktime.exception.WorktimeNotFoundException;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ChannelServiceImpl implements ChannelService {
@@ -110,28 +114,34 @@ public class ChannelServiceImpl implements ChannelService {
         /** 转报设置逻辑，允许转报后，转报设置必填 **/
         channelMapper.deleteChannelRelationBySource(channelVo.getUuid());
         channelMapper.deleteChannelRelationAuthorityBySource(channelVo.getUuid());
-        if (channelVo.getAllowTranferReport() == 1) {
-            if (CollectionUtils.isEmpty(channelVo.getChannelRelationList())) {
-                throw new ChannelRelationSettingException();
-            }
-            for (ChannelRelationVo channelRelationVo : channelVo.getChannelRelationList()) {
-                channelRelationVo.setSource(channelVo.getUuid());
-                for (String typeAndtarget : channelRelationVo.getTargetList()) {
-                    if (typeAndtarget.contains("#")) {
-                        String[] split = typeAndtarget.split("#");
-                        channelRelationVo.setType(split[0]);
-                        channelRelationVo.setTarget(split[1]);
-                        channelMapper.insertChannelRelation(channelRelationVo);
-                    }
+        JSONObject config = channelVo.getConfig();
+        if (MapUtils.isNotEmpty(config)) {
+            Integer allowTranferReport = config.getInteger("allowTranferReport");
+            if (Objects.equals(allowTranferReport, 1)) {
+                JSONArray channelRelationArray = config.getJSONArray("channelRelationList");
+                if (CollectionUtils.isEmpty(channelRelationArray)) {
+                    throw new ChannelRelationSettingException();
                 }
-                for (String authority : channelRelationVo.getAuthorityList()) {
-                    if (authority.contains("#")) {
-                        String[] split = authority.split("#");
-                        channelRelationVo.setType(split[0]);
-                        channelRelationVo.setUuid(split[1]);
-                        channelMapper.insertChannelRelationAuthority(channelRelationVo);
+                List<ChannelRelationVo> channelRelationList = channelRelationArray.toJavaList(ChannelRelationVo.class);
+                for (ChannelRelationVo channelRelationVo : channelRelationList) {
+                    channelRelationVo.setSource(channelVo.getUuid());
+                    for (String typeAndtarget : channelRelationVo.getTargetList()) {
+                        if (typeAndtarget.contains("#")) {
+                            String[] split = typeAndtarget.split("#");
+                            channelRelationVo.setType(split[0]);
+                            channelRelationVo.setTarget(split[1]);
+                            channelMapper.insertChannelRelation(channelRelationVo);
+                        }
                     }
+                    for (String authority : channelRelationVo.getAuthorityList()) {
+                        if (authority.contains("#")) {
+                            String[] split = authority.split("#");
+                            channelRelationVo.setType(split[0]);
+                            channelRelationVo.setUuid(split[1]);
+                            channelMapper.insertChannelRelationAuthority(channelRelationVo);
+                        }
 
+                    }
                 }
             }
         }
