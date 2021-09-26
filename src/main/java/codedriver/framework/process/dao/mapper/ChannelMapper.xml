@@ -190,7 +190,8 @@
 		`help`,
 		`is_active_help` AS isActiveHelp,
 		`channel_type_uuid` AS channelTypeUuid,
-		`support`
+		`support`,
+		`config` AS configStr
 		FROM `channel`
 		WHERE `uuid` = #{value}
 	</select>
@@ -209,7 +210,9 @@
 		c.`allow_desc` AS allowDesc,
 		c.`help`,
 		c.`is_active_help` AS isActiveHelp,
-		c.`channel_type_uuid` AS channelTypeUuid
+		c.`channel_type_uuid` AS channelTypeUuid,
+		c.`support`,
+		c.`config` AS configStr
 		FROM
 		`channel` c
 		WHERE c.`name` = #{value}
@@ -256,7 +259,8 @@
 		`allow_desc` AS allowDesc,
 		`is_active_help` AS isActiveHelp,
 		`channel_type_uuid` AS channelTypeUuid,
-		`support`
+		`support`,
+		`config` AS configStr
 		FROM `channel`
 		WHERE `uuid` IN
 		<foreach collection="list" item="uuid" open="(" separator="," close=")">
@@ -538,7 +542,8 @@
 		`help`,
 		`is_active_help`,
 		`channel_type_uuid`,
-		`support`
+		`support`,
+		`config`
 		)
 		VALUES
 		(
@@ -555,7 +560,8 @@
 		#{help},
 		#{isActiveHelp},
 		#{channelTypeUuid},
-		#{support}
+		#{support},
+		#{configStr}
 		)
 	</insert>
 
