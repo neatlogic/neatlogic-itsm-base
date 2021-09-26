@@ -178,6 +178,8 @@
         <result column="contentHash" property="contentHash"/>
         <result column="content" property="content"/>
         <result column="fcd" property="fcd"/>
+        <result column="lcu" property="lcu"/>
+        <result column="fcu" property="fcu"/>
         <association property="userVo" javaType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="userUuid"/>
             <result property="userName" column="userName"/>
