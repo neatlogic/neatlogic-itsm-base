@@ -169,7 +169,7 @@ public class ProcessTaskStepTaskVo implements Serializable {
     public List<String> getUserList() {
         if (CollectionUtils.isNotEmpty(userList)) {
             for (int i = 0; i < userList.size(); i++) {
-                userList.set(i, userList.get(i).toString().replaceAll(GroupSearch.USER.getValuePlugin(), StringUtils.EMPTY));
+                userList.set(i, userList.get(i).replaceAll(GroupSearch.USER.getValuePlugin(), StringUtils.EMPTY));
             }
         }
         return userList;

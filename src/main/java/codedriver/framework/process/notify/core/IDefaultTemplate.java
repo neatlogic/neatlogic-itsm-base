@@ -18,14 +18,15 @@ public interface IDefaultTemplate {
     String REASON = "【" + ProcessTaskParams.REASON.getFreemarkerTemplate() + "】";
     String SUBTASK_CONTENT = "【" + ProcessTaskParams.SUBTASKCONTENT.getFreemarkerTemplate() + "】";
     String SUBTASK_WORKER = "【" + ProcessTaskParams.SUBTASKWORKER.getFreemarkerTemplate() + "】";
-    String TASK_CONTENT = "【" + ProcessTaskParams.TASKCONTENT.getFreemarkerTemplate() + "】";
+    String TASK_CONTENT =  ProcessTaskParams.TASKCONTENT.getFreemarkerTemplate();
     String TASK_WORKER = "【" + ProcessTaskParams.TASKWORKER.getFreemarkerTemplate() + "】";
+    String TASK_CONFIG_NAME = ProcessTaskParams.TASKCONFIGNAME.getFreemarkerTemplate();
     String CHANGE_STEP_NAME = "【" + ProcessTaskParams.CHANGESTEPNAME.getFreemarkerTemplate() + "】";
     String CHANGE_STEP_WORKER = "【" + ProcessTaskParams.CHANGESTEPWORKER.getFreemarkerTemplate() + "】";
 
     String PROCESSTASK_DETAILS_URL = "${homeUrl}/process.html#/task-detail?processTaskId=${DATA.id}";
     String PROCESSTASK_SERIALNUMBER_TITLE = "【" + ProcessTaskParams.SERIALNUMBER.getFreemarkerTemplate() + "-" + ProcessTaskParams.TITLE.getFreemarkerTemplate() + "】";
-    String PROCESSTASK_DETAILS_LINK = "查看详情：<a target=\"_blank\" href=" + PROCESSTASK_DETAILS_URL + "><b>【工单链接】</b></a>";
+    String PROCESSTASK_DETAILS_LINK = "查看详情：<a target=\"_blank\" href=" + PROCESSTASK_DETAILS_URL + ">【工单链接】</a>";
 
     public default Long getId() {
         //return DEFAULT_TEMPLATE_UUID_PREFIX + NotifyDefaultTemplateFactory.nextNum();

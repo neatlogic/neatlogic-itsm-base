@@ -4,6 +4,7 @@ import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.UrlInfoVo;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.form.attribute.core.FormAttributeHandlerFactory;
 import codedriver.framework.form.attribute.core.IFormAttributeHandler;
 import codedriver.framework.form.dto.AttributeDataVo;
@@ -236,7 +237,14 @@ public class ProcessTaskUtil {
                 if(stepTaskVo != null ){
                     resultObj.put(ProcessTaskParams.TASKCONFIGNAME.getValue(),stepTaskVo.getTaskConfigName());
                     resultObj.put(ProcessTaskParams.TASKCONTENT.getValue(),stepTaskVo.getContent());
-                    resultObj.put(ProcessTaskParams.TASKWORKER.getValue(),stepTaskVo.getMajorUser());
+                    if(CollectionUtils.isNotEmpty(stepTaskVo.getStepTaskUserVoList())){
+                        List<UserVo> userVoList = stepTaskVo.getStepTaskUserVoList().stream().map(ProcessTaskStepTaskUserVo::getUserVo).collect(Collectors.toList());
+                        if(CollectionUtils.isNotEmpty(userVoList)){
+                            List<String> users = userVoList.stream().map(u->u.getName()+"("+u.getUserId()+")").collect(Collectors.toList());
+                            resultObj.put(ProcessTaskParams.TASKWORKER.getValue(),String.join(",",users));
+                        }
+                    }
+
                 }
             }
         }

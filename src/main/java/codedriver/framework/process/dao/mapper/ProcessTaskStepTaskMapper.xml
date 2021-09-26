@@ -143,6 +143,7 @@
         <association property="userVo" javaType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="userUuid"/>
             <result property="userName" column="userName"/>
+            <result property="userId" column="userId"/>
             <result property="userInfo" column="userInfo"/>
             <result property="vipLevel" column="userVipLevel"/>
             <result property="pinyin" column="userPinyin"/>
@@ -157,6 +158,7 @@
         u.user_info as userInfo,
         u.vip_level as userLevel,
         u.user_name as userName,
+        u.user_id as userId,
         pstu.`end_time` as endTime,
         pstu.`status`,
         pstu.`is_delete` as isDelete
