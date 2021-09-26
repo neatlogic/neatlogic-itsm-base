@@ -199,7 +199,10 @@
         u.user_name as userName,
         pstuc.`content_hash` as contentHash,
         pc.content,
-        pstuc.`fcd`
+        pstuc.`user_uuid` as lcu,
+        pstuc.`user_uuid` as fcu,
+        pstuc.`fcd`,
+        pstuc.`lcd`
         FROM
         `processtask_step_task_user_content` pstuc
         left join `processtask_content` pc on pstuc.`content_hash` = pc.hash
