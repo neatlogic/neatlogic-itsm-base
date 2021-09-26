@@ -49,7 +49,7 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessField.OWNERDEPARTMENT.getValue(), isValue ? processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessField.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);
         resultObj.put(ProcessField.OWNERROLE.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.OWNERROLE.getValue())).getConditionParamData(processTaskVo));
-        resultObj.put(ProcessField.TASKSTEP.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.TASKSTEP.getValue())).getConditionParamData(processTaskVo));
+        resultObj.put(ProcessField.STEPTASK.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.STEPTASK.getValue())).getConditionParamData(processTaskVo));
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
         if (comment != null && StringUtils.isNotBlank(comment.getContent())) {
@@ -230,6 +230,13 @@ public class ProcessTaskUtil {
                             }
                         }
                     }
+                }
+                //任务
+                ProcessTaskStepTaskVo stepTaskVo = currentProcessTaskStep.getProcessTaskStepTaskVo();
+                if(stepTaskVo != null ){
+                    resultObj.put(ProcessTaskParams.TASKCONFIGNAME.getValue(),stepTaskVo.getTaskConfigName());
+                    resultObj.put(ProcessTaskParams.TASKCONTENT.getValue(),stepTaskVo.getContent());
+                    resultObj.put(ProcessTaskParams.TASKWORKER.getValue(),stepTaskVo.getMajorUser());
                 }
             }
         }

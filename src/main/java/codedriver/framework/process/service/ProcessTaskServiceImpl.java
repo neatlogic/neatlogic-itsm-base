@@ -1306,6 +1306,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         }
         processTaskStepVo.setHandlerStepInfo(handler.getHandlerStepInitInfo(processTaskStepVo));
         processTaskStepVo.setCurrentSubtaskVo(currentProcessTaskStep.getCurrentSubtaskVo());
+        processTaskStepVo.setProcessTaskStepTaskVo(currentProcessTaskStep.getProcessTaskStepTaskVo());
         return processTaskStepVo;
     }
 
