@@ -159,7 +159,7 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepVo> getProcessTaskStepListByIdList(List<Long> processTaskStepIdList);
 
-    ProcessTaskStepNotifyPolicyVo getProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
+//    ProcessTaskStepNotifyPolicyVo getProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 
     Map<String, String> getProcessTaskOldFormAndPropByTaskId(Long processTaskId);
 

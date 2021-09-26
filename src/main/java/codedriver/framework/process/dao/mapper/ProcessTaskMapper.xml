@@ -1436,7 +1436,7 @@
         </foreach>
     </select>
 
-    <select id="getProcessTaskStepNotifyPolicy"
+    <!--<select id="getProcessTaskStepNotifyPolicy"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo"
             resultType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">
         SELECT a.`processtask_step_id` AS processTaskStepId,
@@ -1450,7 +1450,7 @@
              `processtask_step_notify_policy_config` b ON b.`hash` = a.`policy_config_hash`
         WHERE a.`processtask_step_id` = #{processTaskStepId}
           AND a.`policy_id` = #{policyId}
-    </select>
+    </select>-->
 
     <select id="getProcessTaskOldFormAndPropByTaskId" parameterType="java.lang.Long" resultType="java.util.HashMap">
         select form, prop
