@@ -28,6 +28,7 @@ public enum ProcessTaskParams {
     TASKCONFIGNAME("taskConfigName", "任务名", ParamType.STRING),
     TASKWORKER("taskWorker", "任务处理人", ParamType.STRING),
     TASKCONTENT("taskContent", "任务内容", ParamType.STRING),
+    TASKUSERCONTENT("taskUserContent", "任务用户内容", ParamType.STRING),
     OPERATOR("operator", "操作人", ParamType.STRING),
     REASON("reason", "原因", ParamType.STRING),
     FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??>\n" +

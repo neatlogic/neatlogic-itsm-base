@@ -20,6 +20,7 @@
         <result column="status" property="status"/>
         <result column="taskConfigName" property="taskConfigName"/>
         <result column="taskConfigPolicy" property="taskConfigPolicy"/>
+        <result column="taskConfigId" property="taskConfigId"/>
         <result column="createTime" property="createTime"/>
         <result column="content" property="content"/>
         <result column="endTime" property="endTime"/>
@@ -54,6 +55,7 @@
                pst.`create_time`         as createTime,
                pst.`end_time`            as endTime,
                pst.`task_config_id`      as taskConfigId,
+               tc.name                   as taskConfigName,
                pc.content
         FROM `processtask_step_task` pst
                  LEFT JOIN `task_config` tc on pst.`task_config_id` = tc.id
@@ -168,6 +170,27 @@
         <foreach collection="stepTaskIdList" item="stepTaskId" open="(" separator="," close=")">
             #{stepTaskId}
         </foreach>
+    </select>
+
+    <select id="getStepTaskUserByStepTaskIdListAndUserUuid" resultMap="stepTaskUserMap">
+        SELECT pstu.`id`,
+        pstu.`processtask_step_task_id` as processTaskStepTaskId,
+        pstu.`user_uuid` as userUuid,
+        u.pinyin as pinyin,
+        u.user_info as userInfo,
+        u.vip_level as userLevel,
+        u.user_name as userName,
+        u.user_id as userId,
+        pstu.`end_time` as endTime,
+        pstu.`status`,
+        pstu.`is_delete` as isDelete
+        FROM `processtask_step_task_user` pstu
+        left join `user` u on pstu.`user_uuid` = u.uuid
+        where pstu.`processtask_step_task_id` in
+        <foreach collection="stepTaskIdList" item="stepTaskId" open="(" separator="," close=")">
+            #{stepTaskId}
+        </foreach>
+        and  pstu.`user_uuid` = #{userUuid}
     </select>
 
     <resultMap id="stepTaskUserContentMap" type="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">

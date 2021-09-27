@@ -54,7 +54,7 @@ public class TaskConfigManager {
 
     @FunctionalInterface
     public interface Action<T> {
-        boolean execute(T t) throws Exception;
+        boolean execute(T t);
     }
 
 }

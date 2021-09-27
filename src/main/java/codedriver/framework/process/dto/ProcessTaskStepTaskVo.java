@@ -64,6 +64,8 @@ public class ProcessTaskStepTaskVo implements Serializable {
     private List<ProcessTaskStepTaskUserVo> stepTaskUserVoList = new ArrayList<>();
     @JSONField(serialize = false)
     private JSONObject paramObj;
+    //用户回复参数，目前用于邮件回复内容
+    private String taskStepTaskUserContent;
 
     public ProcessTaskStepTaskVo() {
     }
@@ -231,5 +233,13 @@ public class ProcessTaskStepTaskVo implements Serializable {
 
     public void setTaskConfigPolicyName(String taskConfigPolicyName) {
         this.taskConfigPolicyName = taskConfigPolicyName;
+    }
+
+    public String getTaskStepTaskUserContent() {
+        return taskStepTaskUserContent;
+    }
+
+    public void setTaskStepTaskUserContent(String taskStepTaskUserContent) {
+        this.taskStepTaskUserContent = taskStepTaskUserContent;
     }
 }

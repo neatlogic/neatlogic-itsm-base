@@ -1374,6 +1374,17 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             receiverMap.computeIfAbsent(ProcessUserType.MINOR.getValue(), k -> new ArrayList<>())
                     .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserVo().getUuid()));
         }
+        /* 任务处理人 */
+        ProcessTaskStepTaskVo stepTaskVo = currentProcessTaskStepVo.getProcessTaskStepTaskVo();
+        if(stepTaskVo != null){
+            List<ProcessTaskStepTaskUserVo> taskUserVoList = stepTaskVo.getStepTaskUserVoList();
+            if(CollectionUtils.isNotEmpty(taskUserVoList)){
+                for(ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList){
+                    receiverMap.computeIfAbsent(stepTaskVo.getTaskConfigId().toString(), k -> new ArrayList<>())
+                            .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), taskUserVo.getUserUuid()));
+                }
+            }
+        }
         /** 待处理人 **/
         List<ProcessTaskStepWorkerVo> workerList =
                 processTaskMapper.getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(

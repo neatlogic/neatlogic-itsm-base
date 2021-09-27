@@ -237,6 +237,7 @@ public class ProcessTaskUtil {
                 if(stepTaskVo != null ){
                     resultObj.put(ProcessTaskParams.TASKCONFIGNAME.getValue(),stepTaskVo.getTaskConfigName());
                     resultObj.put(ProcessTaskParams.TASKCONTENT.getValue(),stepTaskVo.getContent());
+                    resultObj.put(ProcessTaskParams.TASKUSERCONTENT.getValue(),stepTaskVo.getTaskStepTaskUserContent());
                     if(CollectionUtils.isNotEmpty(stepTaskVo.getStepTaskUserVoList())){
                         List<UserVo> userVoList = stepTaskVo.getStepTaskUserVoList().stream().map(ProcessTaskStepTaskUserVo::getUserVo).collect(Collectors.toList());
                         if(CollectionUtils.isNotEmpty(userVoList)){
