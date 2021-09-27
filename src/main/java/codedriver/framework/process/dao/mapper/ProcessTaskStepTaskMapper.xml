@@ -75,6 +75,13 @@
         FROM `processtask_step_task` pst
         WHERE pst.id = #{value}
     </select>
+
+    <select id="getStepTaskLockById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo">
+        SELECT  pst.`id`
+        FROM `processtask_step_task` pst
+        WHERE pst.id = #{value} for update
+    </select>
+
     <select id="getStepTaskUserByTaskIdAndTaskUserIdAndUserUuid"
             resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
         SELECT `id`,
