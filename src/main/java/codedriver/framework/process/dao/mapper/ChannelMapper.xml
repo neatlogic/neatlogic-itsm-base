@@ -547,6 +547,14 @@
 		</foreach>
 	</select>
 
+	<select id="getChannelRelationIsUsePreOwnerBySourceAndChannelTypeRelationId" parameterType="codedriver.framework.process.dto.ChannelRelationVo" resultType="java.lang.Integer">
+		SELECT
+			`is_use_pre_owner`
+		FROM `channel_relation_isusepreowner`
+		WHERE `source` = #{source}
+		  AND `channel_type_relation_id` = #{channelTypeRelationId}
+	</select>
+
 	<insert id="replaceChannel" parameterType="codedriver.framework.process.dto.ChannelVo">
 		REPLACE INTO `channel` (
 		`uuid`,
@@ -647,6 +655,20 @@
 		)
 	</insert>
 
+	<insert id="insertChannelRelationIsUsePreOwner" parameterType="codedriver.framework.process.dto.ChannelRelationVo">
+		INSERT INTO `channel_relation_isusepreowner` (
+		`source`,
+		`channel_type_relation_id`,
+		`is_use_pre_owner`
+		)
+		VALUES
+		(
+		#{source},
+		#{channelTypeRelationId},
+		#{isUsePreOwner}
+		)
+	</insert>
+
 	<update id="updateChannelForMove" parameterType="codedriver.framework.process.dto.ChannelVo">
 		UPDATE `channel` SET `parent_uuid` = #{parentUuid}, `sort` = #{sort} WHERE `uuid` = #{uuid}
 	</update>
@@ -708,5 +730,8 @@
 
 	<delete id="deleteChannelRelationAuthorityBySource" parameterType="java.lang.String">
 		DELETE FROM `channel_relation_authority` WHERE `source` = #{value}
+	</delete>
+	<delete id="deleteChannelRelationIsUsePreOwnerBySource" parameterType="java.lang.String">
+		DELETE FROM `channel_relation_isusepreowner` WHERE `source` = #{value}
 	</delete>
 </mapper>
