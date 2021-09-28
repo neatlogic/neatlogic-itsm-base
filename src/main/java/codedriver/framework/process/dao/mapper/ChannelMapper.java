@@ -67,6 +67,8 @@ public interface ChannelMapper {
 
     List<String> getFormUuidListByChannelUuidList(List<String> channelUuidList);
 
+    Integer getChannelRelationIsUsePreOwnerBySourceAndChannelTypeRelationId(ChannelRelationVo channelRelationVo);
+
     public int replaceChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
     public int replaceChannel(ChannelVo channelVo);
@@ -85,6 +87,8 @@ public interface ChannelMapper {
     public int insertChannelRelation(ChannelRelationVo channelRelationVo);
 
     public int insertChannelRelationAuthority(ChannelRelationVo channelRelationVo);
+
+    int insertChannelRelationIsUsePreOwner(ChannelRelationVo channelRelationVo);
 
     public int updateChannelForMove(ChannelVo channelVo);
 
@@ -113,4 +117,6 @@ public interface ChannelMapper {
     public int deleteChannelRelationBySource(String channelUuid);
 
     public int deleteChannelRelationAuthorityBySource(String channelUuid);
+
+    int deleteChannelRelationIsUsePreOwnerBySource(String channelUuid);
 }
