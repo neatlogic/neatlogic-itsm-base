@@ -276,4 +276,10 @@ public interface IProcessStepHandler {
      * @return 1代表成功
      */
     int insertMinorWorkerList(ProcessTaskStepVo taskStepVo);
+
+    /**
+     * 获取对应步骤协助处理名
+     * @return 协助处理名
+     */
+    String getMinorName();
 }

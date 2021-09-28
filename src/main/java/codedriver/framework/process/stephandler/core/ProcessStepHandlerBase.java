@@ -2436,4 +2436,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected int myInsertMinorWorkerList(ProcessTaskStepVo taskStepVo) {
         return 1;
     }
+
+    @Override
+    public String getMinorName(){
+        return myMinorName();
+    }
+
+    protected  String myMinorName(){
+        return null;
+    }
 }

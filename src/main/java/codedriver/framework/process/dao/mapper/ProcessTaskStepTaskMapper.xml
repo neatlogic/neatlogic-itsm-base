@@ -36,6 +36,7 @@
             <result column="stepUserEndTime" property="endTime"/>
             <result column="stepUserStatus" property="status"/>
             <result column="isDelete" property="isDelete"/>
+            <result column="userUuid" property="userUuid"/>
             <association property="userVo" javaType="codedriver.framework.dto.UserVo">
                 <result column="userUuid" property="uuid"/>
                 <result column="userName" property="userName"/>
