@@ -6,8 +6,9 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.ProcessTaskStepTaskMapper">
-
-    <select id="getInvokedCountByTaskConfigId" resultType="java.lang.Integer">
+    <cache type="codedriver.framework.dao.cache.CodeDriverCache" flushInterval="30000" size="100"/>
+    <cache-ref namespace="codedriver.framework.dao.mapper.UserMapper"/>
+    <select id="getInvokedCountByTaskConfigId" resultType="java.lang.Integer" useCache="false">
         SELECT COUNT(1)
         from `processtask_step_task`
         where `task_config_id` = #{value}
@@ -47,7 +48,7 @@
         </collection>
     </resultMap>
 
-    <select id="getStepTaskDetailById" resultMap="stepTaskMap">
+    <select id="getStepTaskDetailById" resultMap="stepTaskMap"  useCache="false">
         SELECT pst.`processtask_id`      as processTaskId,
                pst.`processtask_step_id` as processTaskStepId,
                pst.`id`,
@@ -64,7 +65,7 @@
         WHERE pst.id = #{value}
     </select>
 
-    <select id="getStepTaskById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo">
+    <select id="getStepTaskById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo"  useCache="false">
         SELECT pst.`processtask_id`      as processTaskId,
                pst.`processtask_step_id` as processTaskStepId,
                pst.`id`,
@@ -77,14 +78,14 @@
         WHERE pst.id = #{value}
     </select>
 
-    <select id="getStepTaskLockById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo">
+    <select id="getStepTaskLockById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo"  useCache="false">
         SELECT  pst.`id`
         FROM `processtask_step_task` pst
         WHERE pst.id = #{value} for update
     </select>
 
     <select id="getStepTaskUserByTaskIdAndTaskUserIdAndUserUuid"
-            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo"  useCache="false">
         SELECT `id`,
                `processtask_step_task_id` as processTaskStepTaskId,
                `user_uuid`                as userUuid,
@@ -97,7 +98,7 @@
           and `id` = #{processTaskStepTaskUserId}
     </select>
 
-    <select id="getStepTaskWithUserByProcessTaskStepId" resultMap="stepTaskMap">
+    <select id="getStepTaskWithUserByProcessTaskStepId" resultMap="stepTaskMap"  useCache="true">
         SELECT pst.`processtask_id`      AS processTaskId,
                pst.`processtask_step_id` AS processTaskStepId,
                pst.`id`,
@@ -125,7 +126,7 @@
     </select>
 
     <select id="getStepTaskByProcessTaskStepId"
-            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo">
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo"  useCache="false">
         SELECT pst.`processtask_id`      as processTaskId,
                pst.`processtask_step_id` as processTaskStepId,
                pst.`id`,
@@ -160,7 +161,7 @@
         </association>
     </resultMap>
 
-    <select id="getStepTaskUserByStepTaskIdList" resultMap="stepTaskUserMap">
+    <select id="getStepTaskUserByStepTaskIdList" resultMap="stepTaskUserMap"  useCache="false">
         SELECT pstu.`id`,
         pstu.`processtask_step_task_id` as processTaskStepTaskId,
         pstu.`user_uuid` as userUuid,
@@ -180,7 +181,7 @@
         </foreach>
     </select>
 
-    <select id="getStepTaskUserByStepTaskIdListAndUserUuid" resultMap="stepTaskUserMap">
+    <select id="getStepTaskUserByStepTaskIdListAndUserUuid" resultMap="stepTaskUserMap"  useCache="false">
         SELECT pstu.`id`,
         pstu.`processtask_step_task_id` as processTaskStepTaskId,
         pstu.`user_uuid` as userUuid,
@@ -220,7 +221,7 @@
         </association>
     </resultMap>
 
-    <select id="getStepTaskUserContentByStepTaskUserIdList" resultMap="stepTaskUserContentMap">
+    <select id="getStepTaskUserContentByStepTaskUserIdList" resultMap="stepTaskUserContentMap"  useCache="false">
         SELECT
         pstuc.`id`,
         pstuc.`processtask_step_task_id` as processTaskStepTaskId,
@@ -246,7 +247,7 @@
         </foreach>
     </select>
     <select id="getPendingStepTaskUserListByTaskId"
-            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo"  useCache="false">
         SELECT `id`,
                `processtask_step_task_id` as processTaskStepTaskId,
                `user_uuid`                as userUuid,
@@ -259,7 +260,7 @@
     </select>
 
     <select id="getStepTaskUserContentByIdAndUserUuid"
-            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo"  useCache="false">
         SELECT pstuc.`id`,
                pstuc.`processtask_step_task_id`      as processTaskStepTaskId,
                pstuc.`processtask_step_task_user_id` as processTaskStepTaskUserId,
@@ -269,7 +270,7 @@
         where pstuc.`id` = #{userContentId}
           and pstuc.`user_uuid` = #{userUuid}
     </select>
-    <select id="getStepTaskUserById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+    <select id="getStepTaskUserById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo"  useCache="false">
         SELECT `id`,
                `processtask_step_task_id` as processTaskStepTaskId,
                `user_uuid`                as userUuid,

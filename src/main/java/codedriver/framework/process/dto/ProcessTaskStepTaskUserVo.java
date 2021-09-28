@@ -11,6 +11,7 @@ import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author lvzk
  * @since 2021/9/1 17:33
  **/
-public class ProcessTaskStepTaskUserVo {
+public class ProcessTaskStepTaskUserVo implements Serializable {
     @EntityField(name = "id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "任务id", type = ApiParamType.LONG)
