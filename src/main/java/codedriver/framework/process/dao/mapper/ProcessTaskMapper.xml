@@ -3498,7 +3498,7 @@
     <delete id="deleteProcessTaskStepWorkerMinorByProcessTaskStepId">
         DELETE
         FROM `processtask_step_worker`
-        where `processtask_step_id` = #{processTaskStepId}
+        where `processtask_step_id` = #{processTaskStepId} and `user_type` = 'minor'
     </delete>
 
     <delete id="deleteProcessTaskRepeatByRepeatGroupId" parameterType="java.lang.Long">
