@@ -114,6 +114,7 @@ public class ChannelServiceImpl implements ChannelService {
         /** 转报设置逻辑，允许转报后，转报设置必填 **/
         channelMapper.deleteChannelRelationBySource(channelVo.getUuid());
         channelMapper.deleteChannelRelationAuthorityBySource(channelVo.getUuid());
+        channelMapper.deleteChannelRelationIsUsePreOwnerBySource(channelVo.getUuid());
         JSONObject config = channelVo.getConfig();
         if (MapUtils.isNotEmpty(config)) {
             Integer allowTranferReport = config.getInteger("allowTranferReport");
@@ -125,6 +126,7 @@ public class ChannelServiceImpl implements ChannelService {
                 List<ChannelRelationVo> channelRelationList = channelRelationArray.toJavaList(ChannelRelationVo.class);
                 for (ChannelRelationVo channelRelationVo : channelRelationList) {
                     channelRelationVo.setSource(channelVo.getUuid());
+                    channelMapper.insertChannelRelationIsUsePreOwner(channelRelationVo);
                     for (String typeAndtarget : channelRelationVo.getTargetList()) {
                         if (typeAndtarget.contains("#")) {
                             String[] split = typeAndtarget.split("#");

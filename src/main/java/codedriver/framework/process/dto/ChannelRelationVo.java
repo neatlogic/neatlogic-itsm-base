@@ -12,6 +12,7 @@ public class ChannelRelationVo {
     private String target;
     private List<String> targetList = new ArrayList<>();
     private List<String> authorityList = new ArrayList<>();
+    private Integer isUsePreOwner;
     @JSONField(serialize=false)
     private String type;
     @JSONField(serialize=false)
@@ -49,7 +50,15 @@ public class ChannelRelationVo {
     public void setAuthorityList(List<String> authorityList) {
         this.authorityList = authorityList;
     }
-    
+
+    public Integer getIsUsePreOwner() {
+        return isUsePreOwner;
+    }
+
+    public void setIsUsePreOwner(Integer isUsePreOwner) {
+        this.isUsePreOwner = isUsePreOwner;
+    }
+
     public String getType() {
         return type;
     }
