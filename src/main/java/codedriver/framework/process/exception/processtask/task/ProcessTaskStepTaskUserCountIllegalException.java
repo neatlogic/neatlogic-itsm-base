@@ -16,6 +16,6 @@ public class ProcessTaskStepTaskUserCountIllegalException extends ProcessTaskRun
     private static final long serialVersionUID = 7140754332656371637L;
 
     public ProcessTaskStepTaskUserCountIllegalException(Integer num) {
-        super("人数不能大于 '" + num );
+        super("人数不能大于 '" + num + "'");
     }
 }
