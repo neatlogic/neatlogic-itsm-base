@@ -5,8 +5,11 @@
 
 package codedriver.framework.process.dao.mapper.task;
 
+import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.dto.TaskConfigVo;
 import com.alibaba.fastjson.JSONArray;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,10 @@ public interface TaskMapper {
     List<TaskConfigVo> getTaskConfigByIdList(JSONArray stepTaskIdList);
 
     List<Map<String,Long>> getTaskConfigReferenceCountMap(List<Long> idList);
+
+    List<ValueTextVo> getTaskConfigReferenceProcessList(@Param("taskConfigId") Long taskConfigId,@Param("basePageVo") BasePageVo basePageVo);
+
+    int getTaskConfigReferenceProcessCount(Long taskConfigId);
 
     int updateTaskConfig(TaskConfigVo taskConfigVo);
 

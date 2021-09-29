@@ -16,6 +16,6 @@ public class TaskConfigIsInvokedException extends ProcessTaskRuntimeException {
     private static final long serialVersionUID = 2402786145792701691L;
 
     public TaskConfigIsInvokedException(String processStepName) {
-        super("任务: '" + processStepName + "' 被引用，无法删除");
+        super("子任务: '" + processStepName + "' 被引用，无法删除");
     }
 }

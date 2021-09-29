@@ -3,11 +3,11 @@ package codedriver.framework.process.notify.constvalue;
 import codedriver.framework.notify.core.INotifyTriggerType;
 
 public enum TaskNotifyTriggerType implements INotifyTriggerType {
-	CREATETASK("createtask", "任务创建","步骤处理人为当前步骤创建任务时触发通知"),
-	EDITTASK("edittask", "任务编辑","步骤处理人编辑任务内容时触发通知"),
-	DELETETASK("deletetask", "任务删除","步骤处理人删除任务时触发通知"),
-	COMPLETETASK("completetask", "任务完成","任务处理人完成任务时触发通知"),
-	COMPLETEALLTASK("completealltask", "所有任务完成","所有任务满足流转条件时触发通知");
+	CREATETASK("createtask", "子任务创建","步骤处理人为当前步骤创建子任务时触发通知"),
+	EDITTASK("edittask", "子任务编辑","步骤处理人编辑子任务内容时触发通知"),
+	DELETETASK("deletetask", "子任务删除","步骤处理人删除子任务时触发通知"),
+	COMPLETETASK("completetask", "子任务完成","任务处理人完成子任务时触发通知"),
+	COMPLETEALLTASK("completealltask", "子任务满足步骤流转","所有子任务满足流转条件时触发通知");
 
 	private String trigger;
 	private String text;

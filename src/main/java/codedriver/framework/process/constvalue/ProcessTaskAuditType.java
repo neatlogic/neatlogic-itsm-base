@@ -15,11 +15,11 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 //	COMPLETESUBTASK("completesubtask", "完成子任务", "完成${DATA.replaceable_subtask}【${DATA.processTaskStepName}】"),
 
 	//任务
-	CREATETASK("createtask", "创建任务", "创建${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	EDITTASK("edittask", "编辑任务", "编辑${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	ABORTTASK("deletetask", "删除任务", "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	COMPLETETASK("completetask", "回复任务", "完成${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	DELETETASK("deletetask", "回复任务", "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
+	CREATETASK("createtask", "创建子任务", "创建${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
+	EDITTASK("edittask", "编辑子任务", "编辑${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
+	ABORTTASK("deletetask", "删除子任务", "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
+	COMPLETETASK("completetask", "回复子任务", "完成${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
+	DELETETASK("deletetask", "回复子任务", "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
 
 
 	START("start", "开始", "开始【${DATA.processTaskStepName}】"),

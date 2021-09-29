@@ -12,6 +12,6 @@ public class TaskConfigNotFoundException extends ApiRuntimeException {
 	private static final long serialVersionUID = 5137756922568843278L;
 
 	public TaskConfigNotFoundException(String name) {
-		super("任务：'" + name + "'不存在");
+		super("子任务：'" + name + "'不存在");
 	}
 }
