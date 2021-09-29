@@ -2,6 +2,7 @@ package codedriver.framework.process.dto;
 
 import codedriver.framework.common.dto.BaseEditorVo;
 
+@Deprecated
 public class ProcessTaskStepSubtaskContentVo extends BaseEditorVo {
 	private Long id;
 	private Long processTaskStepSubtaskId;
