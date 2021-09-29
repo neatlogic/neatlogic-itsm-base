@@ -5,7 +5,6 @@
 
 package codedriver.framework.process.dao.mapper;
 
-import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
@@ -309,8 +308,9 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepAuditDetail(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo);
 
-
     int insertIgnoreProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+
+    int insertIgnoreProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
     int insertIgnoreProcessTaskConverge(ProcessTaskConvergeVo processTaskConvergeVo);
 

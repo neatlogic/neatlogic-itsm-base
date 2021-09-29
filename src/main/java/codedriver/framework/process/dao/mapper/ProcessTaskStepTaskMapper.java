@@ -42,7 +42,9 @@ public interface ProcessTaskStepTaskMapper {
 
     ProcessTaskStepTaskUserContentVo getStepTaskUserContentByIdAndUserUuid(@Param("userContentId") Long processTaskStepTaskUserContentId, @Param("userUuid") String userUuid);
 
-    List<ProcessTaskStepTaskUserVo> getPendingStepTaskUserListByTaskId(Long processtaskStepTaskId);
+    List<ProcessTaskStepTaskUserVo> getStepTaskUserListByTaskIdAndStatus(@Param("processtaskStepTaskId") Long processtaskStepTaskId,@Param("status") String status);
+
+    List<ProcessTaskStepTaskUserVo> getStepTaskUserListByTaskId(Long processtaskStepTaskId);
 
     int insertTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 

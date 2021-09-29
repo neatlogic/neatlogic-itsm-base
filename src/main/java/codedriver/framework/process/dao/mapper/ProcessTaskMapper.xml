@@ -2851,6 +2851,27 @@
                 NOW(3))
     </insert>
 
+    <insert id="insertIgnoreProcessTaskStepUser" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+        INSERT IGNORE INTO `processtask_step_user` (`processtask_id`,
+                                             `processtask_step_id`,
+                                             `user_uuid`,
+                                             `user_type`,
+                                             `user_name`,
+                                             `status`,
+                                             `active_time`,
+                                             `end_time`,
+                                             `start_time`)
+        VALUES (#{processTaskId},
+                #{processTaskStepId},
+                #{userVo.uuid},
+                #{userType},
+                #{userVo.userName},
+                #{status},
+                #{activeTime},
+                #{endTime},
+                #{startTime})
+    </insert>
+
     <insert id="insertIgnoreProcessTaskStepConfig" parameterType="codedriver.framework.process.dto.ProcessTaskStepConfigVo">
         insert ignore INTO `processtask_step_config` (`hash`, `config`)
         VALUES (#{hash}, #{config})

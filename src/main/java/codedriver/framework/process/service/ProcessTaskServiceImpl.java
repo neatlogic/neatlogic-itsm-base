@@ -440,27 +440,27 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
     @Override
     public List<String> getProcessUserTypeList(Long processTaskId, AuthenticationInfoVo authenticationInfoVo) {
         List<String> processUserTypeList = new ArrayList<>();
-        if(processTaskId != null){
+        if (processTaskId != null) {
             String userUuid = authenticationInfoVo.getUserUuid();
             ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
-            if(userUuid.equals(processTaskVo.getOwner())){
+            if (userUuid.equals(processTaskVo.getOwner())) {
                 processUserTypeList.add(ProcessUserType.OWNER.getValue());
             }
-            if(userUuid.equals(processTaskVo.getReporter())){
+            if (userUuid.equals(processTaskVo.getReporter())) {
                 processUserTypeList.add(ProcessUserType.REPORTER.getValue());
             }
             List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskMapper.getProcessTaskStepUserList(new ProcessTaskStepUserVo(processTaskId, null, userUuid));
-            for(ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepUserList){
-                if(processTaskStepUserVo.getUserType().equals(ProcessUserType.MAJOR.getValue())){
+            for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepUserList) {
+                if (processTaskStepUserVo.getUserType().equals(ProcessUserType.MAJOR.getValue())) {
                     processUserTypeList.add(ProcessUserType.MAJOR.getValue());
-                }else {
+                } else {
                     processUserTypeList.add(ProcessUserType.MINOR.getValue());
                 }
             }
-            if (processUserTypeList.contains(ProcessUserType.MAJOR.getValue())){
+            if (processUserTypeList.contains(ProcessUserType.MAJOR.getValue())) {
                 processUserTypeList.add(ProcessUserType.WORKER.getValue());
-            }else {
-                if(processTaskMapper.checkIsWorker(processTaskVo.getId(), null, ProcessUserType.MAJOR.getValue(), authenticationInfoVo) > 0){
+            } else {
+                if (processTaskMapper.checkIsWorker(processTaskVo.getId(), null, ProcessUserType.MAJOR.getValue(), authenticationInfoVo) > 0) {
                     processUserTypeList.add(ProcessUserType.WORKER.getValue());
                 }
             }
@@ -1375,10 +1375,10 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         }
         /* 任务处理人 */
         ProcessTaskStepTaskVo stepTaskVo = currentProcessTaskStepVo.getProcessTaskStepTaskVo();
-        if(stepTaskVo != null){
+        if (stepTaskVo != null) {
             List<ProcessTaskStepTaskUserVo> taskUserVoList = stepTaskVo.getStepTaskUserVoList();
-            if(CollectionUtils.isNotEmpty(taskUserVoList)){
-                for(ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList){
+            if (CollectionUtils.isNotEmpty(taskUserVoList)) {
+                for (ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList) {
                     receiverMap.computeIfAbsent(stepTaskVo.getTaskConfigId().toString(), k -> new ArrayList<>())
                             .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), taskUserVo.getUserUuid()));
                 }
@@ -1620,14 +1620,14 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
 
         }
         //重新插入pending任务用户到 工单步骤worker
-        List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getPendingStepTaskUserListByTaskId(processTaskStepTaskVo.getId());
+        List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getStepTaskUserListByTaskId(processTaskStepTaskVo.getId());
         for (ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList) {
-            if (taskUserVo.getIsDelete() != 1) {
+            if (taskUserVo.getIsDelete() != 1 && Objects.equals(ProcessTaskStatus.PENDING.getValue(),taskUserVo.getStatus())) {
                 workerVoList.add(new ProcessTaskStepWorkerVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), GroupSearch.USER.getValue(), taskUserVo.getUserUuid(), ProcessUserType.MINOR.getValue()));
             }
         }
 
-        for(ProcessTaskStepWorkerVo workerVo : workerVoList){
+        for (ProcessTaskStepWorkerVo workerVo : workerVoList) {
             processTaskMapper.insertIgnoreProcessTaskStepWorker(workerVo);
         }
     }
@@ -1640,7 +1640,36 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
      */
     @Override
     public void refreshStepMinorUser(ProcessTaskStepVo processTaskStepVo, ProcessTaskStepTaskVo processTaskStepTaskVo) {
-        //删除该step的所有minor工单步骤user
+        List<ProcessTaskStepUserVo> stepUserVoList = new ArrayList<>();
+
+        //如果存在子任务已完成的用户则该用户 status为succeed,则该用户为succeed
+        Map<String,ProcessTaskStepTaskUserVo> stepTaskUserStatusMap = new HashMap<>();
+        List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getStepTaskUserListByTaskId(processTaskStepTaskVo.getId());
+        for (ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList) {
+            if(!stepTaskUserStatusMap.containsKey(taskUserVo.getUserUuid())||Objects.equals(ProcessTaskStatus.SUCCEED.getValue(),stepTaskUserStatusMap.get(taskUserVo.getUserUuid()).getStatus())) {
+                stepTaskUserStatusMap.put(taskUserVo.getUserUuid(), taskUserVo);
+            }
+        }
+
+        //跟新taskStepUser 到库
+        for(Map.Entry<String,ProcessTaskStepTaskUserVo> entry:stepTaskUserStatusMap.entrySet()){
+            ProcessTaskStepTaskUserVo taskUserVo = entry.getValue();
+            if (taskUserVo.getIsDelete() != 1) {
+                String status = ProcessTaskStepUserStatus.DOING.getValue();
+                if(Objects.equals(taskUserVo.getStatus(),ProcessTaskStatus.SUCCEED.getValue())){
+                    status = ProcessTaskStepUserStatus.DONE.getValue();
+                }
+                stepUserVoList.add(new ProcessTaskStepUserVo(status,processTaskStepTaskVo.getCreateTime(),taskUserVo.getEndTime(), processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), taskUserVo.getUserUuid(), ProcessUserType.MINOR.getValue()));
+            }
+        }
+        //TODO 其它模块的taskStepUser
+
+
+        //delete该step的所有minor工单步骤user
         processTaskMapper.deleteProcessTaskStepUserMinorByProcessTaskStepId(processTaskStepVo.getId());
+        //insert该step的所有minor工单步骤user
+        for (ProcessTaskStepUserVo stepUserVo : stepUserVoList) {
+            processTaskMapper.insertIgnoreProcessTaskStepUser(stepUserVo);
+        }
     }
 }

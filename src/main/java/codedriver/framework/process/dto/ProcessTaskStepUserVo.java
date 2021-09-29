@@ -24,6 +24,7 @@ public class ProcessTaskStepUserVo {
 	private String statusName;
 	private Date startTime;
 	private Date endTime;
+	private Date activeTime;
 	private String action;
 	private Long timeCost;
 	private String timeCostStr;
@@ -53,6 +54,18 @@ public class ProcessTaskStepUserVo {
 		this.userUuid = _userUuid;
         this.setUserType(userType);
     }
+
+	public ProcessTaskStepUserVo(String _status,Date _startTime,Date _endTime, Long _processTaskId, Long _processTaskStepId, String _userUuid, String userType) {
+		this.status = _status;
+		this.startTime = _startTime;
+		this.activeTime = _startTime;
+		this.endTime = _endTime;
+		this.setProcessTaskId(_processTaskId);
+		this.setProcessTaskStepId(_processTaskStepId);
+		this.userVo = new UserVo(_userUuid);
+		this.userUuid = _userUuid;
+		this.setUserType(userType);
+	}
 	
 //	public ProcessTaskStepUserVo(ProcessStepUserVo processStepUserVo) {
 //		this.setUserUuid(processStepUserVo.getUserUuid());
@@ -215,4 +228,13 @@ public class ProcessTaskStepUserVo {
 //	public void setUserVipLevel(Integer userVipLevel) {
 //		this.userVipLevel = userVipLevel;
 //	}
+
+
+	public Date getActiveTime() {
+		return activeTime;
+	}
+
+	public void setActiveTime(Date activeTime) {
+		this.activeTime = activeTime;
+	}
 }
