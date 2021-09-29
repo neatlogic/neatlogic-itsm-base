@@ -5,6 +5,7 @@ import java.util.List;
 import codedriver.framework.process.dto.ProcessTaskStepSubtaskContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepSubtaskVo;
 
+@Deprecated
 public interface ProcessTaskStepSubtaskMapper {
 
     public ProcessTaskStepSubtaskVo getProcessTaskStepSubtaskById(Long processTaskStepSubtaskId);

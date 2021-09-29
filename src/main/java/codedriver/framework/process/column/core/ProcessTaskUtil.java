@@ -78,7 +78,7 @@ public class ProcessTaskUtil {
             resultObj.put(ProcessField.EXPIREDTIME.getValue(), "");
         }
         // 当前子任务id
-        resultObj.put(ProcessField.SUBTASKID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getCurrentSubtaskId() : null);
+//        resultObj.put(ProcessField.SUBTASKID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getCurrentSubtaskId() : null);
 
         /** 表单信息数据 **/
         Map<String, Object> formAttributeDataMap = processTaskVo.getFormAttributeDataMap();
@@ -199,12 +199,12 @@ public class ProcessTaskUtil {
                 List<String> userNameList = currentProcessTaskStep.getUserList().stream().filter(e -> e.getUserType().equals(ProcessUserType.MAJOR.getValue())).map(e -> e.getUserVo().getUserName()).collect(Collectors.toList());
                 resultObj.put(ProcessTaskParams.STEPWORKER.getValue(), String.join("、", userNameList));
             }
-            ProcessTaskStepSubtaskVo subtaskVo = currentProcessTaskStep.getCurrentSubtaskVo();
-            if (subtaskVo != null) {
-                resultObj.put(ProcessTaskParams.SUBTASKWORKER.getValue(), subtaskVo.getUserName());
-                resultObj.put(ProcessTaskParams.SUBTASKCONTENT.getValue(), subtaskVo.getContent());
-                resultObj.put(ProcessTaskParams.SUBTASKDEADLINE.getValue(), sdf.format(subtaskVo.getTargetTime()));
-            }
+//            ProcessTaskStepSubtaskVo subtaskVo = currentProcessTaskStep.getCurrentSubtaskVo();
+//            if (subtaskVo != null) {
+//                resultObj.put(ProcessTaskParams.SUBTASKWORKER.getValue(), subtaskVo.getUserName());
+//                resultObj.put(ProcessTaskParams.SUBTASKCONTENT.getValue(), subtaskVo.getContent());
+//                resultObj.put(ProcessTaskParams.SUBTASKDEADLINE.getValue(), sdf.format(subtaskVo.getTargetTime()));
+//            }
             JSONObject paramObj = currentProcessTaskStep.getParamObj();
             if (MapUtils.isNotEmpty(paramObj)) {
                 String reason = paramObj.getString("content");

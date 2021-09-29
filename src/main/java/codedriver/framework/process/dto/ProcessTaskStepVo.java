@@ -86,8 +86,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private JSONArray replaceableTextList;
 	@EntityField(name = "流转方向", type = ApiParamType.STRING)
 	private String flowDirection;
-	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
-	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
+//	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
+//	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
 	@EntityField(name = "任务json", type = ApiParamType.JSONOBJECT)
 	private JSONObject processTaskStepTask = new JSONObject();
 	@EntityField(name = "任务列表vo", type = ApiParamType.JSONARRAY)
@@ -108,11 +108,11 @@ public class ProcessTaskStepVo extends BasePageVo {
 	@EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
 	private JSONObject processTaskStepData;
 	//@EntityField(name = "当前子任务Id", type = ApiParamType.LONG)
-	@JSONField(serialize=false)
-	private Long currentSubtaskId;
+//	@JSONField(serialize=false)
+//	private Long currentSubtaskId;
     //@EntityField(name = "当前子任务", type = ApiParamType.JSONOBJECT)
-	@JSONField(serialize=false)
-    private ProcessTaskStepSubtaskVo currentSubtaskVo;
+//	@JSONField(serialize=false)
+//    private ProcessTaskStepSubtaskVo currentSubtaskVo;
 	@EntityField(name = "处理器特有的步骤信息", type = ApiParamType.JSONOBJECT)
 	private Object handlerStepInfo;
 	@EntityField(name = "向前步骤列表", type = ApiParamType.JSONARRAY)
@@ -126,8 +126,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     private String originalUser;
 	@EntityField(name = "原始处理人")
 	private UserVo originalUserVo;
-//    @EntityField(name = "原始处理人名", type = ApiParamType.STRING)
-//    private String originalUserName;
     @EntityField(name = "回复模版", type = ApiParamType.JSONOBJECT)
     private ProcessCommentTemplateVo commentTemplate;
 	@JSONField(serialize = false)
@@ -534,13 +532,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.commentList = commentList;
 	}
 
-	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList() {
-		return processTaskStepSubtaskList;
-	}
-
-	public void setProcessTaskStepSubtaskList(List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList) {
-		this.processTaskStepSubtaskList = processTaskStepSubtaskList;
-	}
+//	public List<ProcessTaskStepSubtaskVo> getProcessTaskStepSubtaskList() {
+//		return processTaskStepSubtaskList;
+//	}
+//
+//	public void setProcessTaskStepSubtaskList(List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList) {
+//		this.processTaskStepSubtaskList = processTaskStepSubtaskList;
+//	}
 
 	public Integer getIsView() {
 		return isView;
@@ -598,21 +596,21 @@ public class ProcessTaskStepVo extends BasePageVo {
 		this.processTaskStepData = processTaskStepData;
 	}
 
-	public Long getCurrentSubtaskId() {
-		return currentSubtaskId;
-	}
+//	public Long getCurrentSubtaskId() {
+//		return currentSubtaskId;
+//	}
+//
+//	public void setCurrentSubtaskId(Long currentSubtaskId) {
+//		this.currentSubtaskId = currentSubtaskId;
+//	}
 
-	public void setCurrentSubtaskId(Long currentSubtaskId) {
-		this.currentSubtaskId = currentSubtaskId;
-	}
-
-	public ProcessTaskStepSubtaskVo getCurrentSubtaskVo() {
-        return currentSubtaskVo;
-    }
-
-    public void setCurrentSubtaskVo(ProcessTaskStepSubtaskVo currentSubtaskVo) {
-        this.currentSubtaskVo = currentSubtaskVo;
-    }
+//	public ProcessTaskStepSubtaskVo getCurrentSubtaskVo() {
+//        return currentSubtaskVo;
+//    }
+//
+//    public void setCurrentSubtaskVo(ProcessTaskStepSubtaskVo currentSubtaskVo) {
+//        this.currentSubtaskVo = currentSubtaskVo;
+//    }
 
     public Object getHandlerStepInfo() {
 		return handlerStepInfo;
@@ -669,14 +667,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	public void setOriginalUserVo(UserVo originalUserVo) {
 		this.originalUserVo = originalUserVo;
 	}
-
-	//    public String getOriginalUserName() {
-//        return originalUserName;
-//    }
-//
-//    public void setOriginalUserName(String originalUserName) {
-//        this.originalUserName = originalUserName;
-//    }
 
     public int getUpdateActiveTime() {
         return updateActiveTime;
