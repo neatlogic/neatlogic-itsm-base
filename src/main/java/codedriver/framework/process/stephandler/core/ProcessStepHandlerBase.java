@@ -2420,21 +2420,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
      * @return 对应步骤模块的待处理人
      */
     protected List<ProcessTaskStepWorkerVo> myMinorWorkerList(ProcessTaskStepVo taskStepVo) {
-        return null;
-    }
-
-    /**
-     * 更新对应步骤模块的协助处理人
-     *
-     * @param taskStepVo 工单步骤
-     * @return 1代表成功
-     */
-    public int insertMinorWorkerList(ProcessTaskStepVo taskStepVo) {
-        return myInsertMinorWorkerList(taskStepVo);
-    }
-
-    protected int myInsertMinorWorkerList(ProcessTaskStepVo taskStepVo) {
-        return 1;
+        return new ArrayList<>();
     }
 
     @Override

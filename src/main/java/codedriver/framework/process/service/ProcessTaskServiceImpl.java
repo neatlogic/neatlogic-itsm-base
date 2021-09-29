@@ -20,7 +20,6 @@ import codedriver.framework.file.dao.mapper.FileMapper;
 import codedriver.framework.form.dao.mapper.FormMapper;
 import codedriver.framework.form.dto.FormVersionVo;
 import codedriver.framework.form.exception.FormActiveVersionNotFoundExcepiton;
-import codedriver.framework.integration.dao.mapper.IntegrationMapper;
 import codedriver.framework.notify.dto.NotifyReceiverVo;
 import codedriver.framework.process.auth.PROCESSTASK_MODIFY;
 import codedriver.framework.process.column.core.IProcessTaskColumn;
@@ -85,7 +84,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
     private FileMapper fileMapper;
 
     @Resource
-    private IntegrationMapper integrationMapper;
+    private ProcessTaskStepTaskMapper processTaskStepTaskMapper;
 
     @Resource
     private WorktimeMapper worktimeMapper;
@@ -1602,5 +1601,46 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             }
         }
         return replaceableTextList;
+    }
+
+    /**
+     * 刷新minor worker
+     *
+     * @param processTaskStepVo     步骤入参
+     * @param processTaskStepTaskVo 步骤任务入参
+     */
+    @Override
+    public void refreshStepMinorWorker(ProcessTaskStepVo processTaskStepVo, ProcessTaskStepTaskVo processTaskStepTaskVo) {
+        //删除该step的所有minor工单步骤worker
+        processTaskMapper.deleteProcessTaskStepWorkerMinorByProcessTaskStepId(processTaskStepVo.getId());
+        List<ProcessTaskStepWorkerVo> workerVoList = new ArrayList<>();
+        //重新更新每个模块的minor worker
+        for (IProcessStepHandler handler : ProcessStepHandlerFactory.getHandlerList()) {
+            workerVoList.addAll(handler.getMinorWorkerList(processTaskStepVo));
+
+        }
+        //重新插入pending任务用户到 工单步骤worker
+        List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getPendingStepTaskUserListByTaskId(processTaskStepTaskVo.getId());
+        for (ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList) {
+            if (taskUserVo.getIsDelete() != 1) {
+                workerVoList.add(new ProcessTaskStepWorkerVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), GroupSearch.USER.getValue(), taskUserVo.getUserUuid(), ProcessUserType.MINOR.getValue()));
+            }
+        }
+
+        for(ProcessTaskStepWorkerVo workerVo : workerVoList){
+            processTaskMapper.insertIgnoreProcessTaskStepWorker(workerVo);
+        }
+    }
+
+    /**
+     * 刷新minor user
+     *
+     * @param processTaskStepVo     步骤入参
+     * @param processTaskStepTaskVo 步骤任务入参
+     */
+    @Override
+    public void refreshStepMinorUser(ProcessTaskStepVo processTaskStepVo, ProcessTaskStepTaskVo processTaskStepTaskVo) {
+        //删除该step的所有minor工单步骤user
+        processTaskMapper.deleteProcessTaskStepUserMinorByProcessTaskStepId(processTaskStepVo.getId());
     }
 }

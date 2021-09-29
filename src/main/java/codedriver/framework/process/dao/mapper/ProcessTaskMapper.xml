@@ -3501,6 +3501,12 @@
         where `processtask_step_id` = #{processTaskStepId} and `user_type` = 'minor'
     </delete>
 
+    <delete id="deleteProcessTaskStepUserMinorByProcessTaskStepId">
+        DELETE
+        FROM `processtask_step_user`
+        where `processtask_step_id` = #{processTaskStepId} and `user_type` = 'minor'
+    </delete>
+
     <delete id="deleteProcessTaskRepeatByRepeatGroupId" parameterType="java.lang.Long">
         DELETE FROM `processtask_repeat` WHERE `repeat_group_id` = #{repeatGroupId}
     </delete>

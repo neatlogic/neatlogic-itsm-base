@@ -269,14 +269,6 @@ public interface IProcessStepHandler {
      */
     List<ProcessTaskStepWorkerVo> getMinorWorkerList(ProcessTaskStepVo taskStepVo);
 
-
-    /**
-     * 更新对应步骤模块的协助处理人
-     * @param taskStepVo 工单步骤
-     * @return 1代表成功
-     */
-    int insertMinorWorkerList(ProcessTaskStepVo taskStepVo);
-
     /**
      * 获取对应步骤协助处理名
      * @return 协助处理名

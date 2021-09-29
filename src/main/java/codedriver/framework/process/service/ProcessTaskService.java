@@ -314,4 +314,20 @@ public interface ProcessTaskService {
     ProcessTaskStepVo getProcessTaskStepDetailInfoById(Long processTaskStepId);
 
     List<String> getProcessUserTypeList(Long processTaskId, AuthenticationInfoVo authenticationInfoVo);
+
+    /**
+     * 刷新 协助处理 worker
+     *
+     * @param processTaskStepVo     步骤入参
+     * @param processTaskStepTaskVo 步骤任务入参
+     */
+    void refreshStepMinorWorker(ProcessTaskStepVo processTaskStepVo, ProcessTaskStepTaskVo processTaskStepTaskVo);
+
+    /**
+     * 刷新 协助处理 user
+     *
+     * @param processTaskStepVo     步骤入参
+     * @param processTaskStepTaskVo 步骤任务入参
+     */
+    void refreshStepMinorUser(ProcessTaskStepVo processTaskStepVo, ProcessTaskStepTaskVo processTaskStepTaskVo);
 }
