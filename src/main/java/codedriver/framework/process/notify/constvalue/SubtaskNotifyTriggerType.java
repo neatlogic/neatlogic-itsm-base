@@ -1,5 +1,6 @@
 package codedriver.framework.process.notify.constvalue;
 
+@Deprecated
 public enum SubtaskNotifyTriggerType { //implements INotifyTriggerType
 //	CREATESUBTASK("createsubtask", "子任务创建","步骤处理人为当前步骤创建子任务时触发通知"),
 //	EDITSUBTASK("editsubtask", "子任务编辑","步骤处理人编辑子任务内容时触发通知"),
