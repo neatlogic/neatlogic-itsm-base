@@ -1,14 +1,14 @@
 package codedriver.framework.process.notify.constvalue;
 
-import codedriver.framework.notify.core.INotifyTriggerType;
-
-public enum SubtaskNotifyTriggerType implements INotifyTriggerType {
-	CREATESUBTASK("createsubtask", "子任务创建","步骤处理人为当前步骤创建子任务时触发通知"),
-	EDITSUBTASK("editsubtask", "子任务编辑","步骤处理人编辑子任务内容时触发通知"),
-	ABORTSUBTASK("abortsubtask", "子任务取消","步骤处理人取消子任务时触发通知"),
-	REDOSUBTASK("redosubtask", "子任务打回重做","步骤处理人将子任务打回给子任务处理人重做时触发通知"),
-	COMPLETESUBTASK("completesubtask", "子任务完成","子任务处理人完成子任务时触发通知"),
-	COMPLETEALLSUBTASK("completeallsubtask", "所有子任务完成","所有子任务处理人完成全部子任务时触发通知");
+@Deprecated
+public enum SubtaskNotifyTriggerType { //implements INotifyTriggerType
+//	CREATESUBTASK("createsubtask", "子任务创建","步骤处理人为当前步骤创建子任务时触发通知"),
+//	EDITSUBTASK("editsubtask", "子任务编辑","步骤处理人编辑子任务内容时触发通知"),
+//	ABORTSUBTASK("abortsubtask", "子任务取消","步骤处理人取消子任务时触发通知"),
+//	REDOSUBTASK("redosubtask", "子任务打回重做","步骤处理人将子任务打回给子任务处理人重做时触发通知"),
+//	COMPLETESUBTASK("completesubtask", "子任务完成","子任务处理人完成子任务时触发通知"),
+//	COMPLETEALLSUBTASK("completeallsubtask", "所有子任务完成","所有子任务处理人完成全部子任务时触发通知")
+	;
 
 	private String trigger;
 	private String text;
@@ -20,15 +20,15 @@ public enum SubtaskNotifyTriggerType implements INotifyTriggerType {
 		this.description = _description;
 	}
 
-	@Override
+//	@Override
 	public String getTrigger() {
 		return trigger;
 	}
-	@Override
+//	@Override
 	public String getText() {
 		return text;
 	}
-	@Override
+//	@Override
 	public String getDescription() {
 		return description;
 	}

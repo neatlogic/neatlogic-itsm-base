@@ -16,8 +16,8 @@ public interface IDefaultTemplate {
     String PROCESSTASK_STEP_NAME = "【" + ProcessTaskParams.STEPNAME.getFreemarkerTemplate() + "】";
     String PROCESSTASK_STEP_WORKER = "【" + ProcessTaskParams.STEPWORKER.getFreemarkerTemplate() + "】";
     String REASON = "【" + ProcessTaskParams.REASON.getFreemarkerTemplate() + "】";
-    String SUBTASK_CONTENT = "【" + ProcessTaskParams.SUBTASKCONTENT.getFreemarkerTemplate() + "】";
-    String SUBTASK_WORKER = "【" + ProcessTaskParams.SUBTASKWORKER.getFreemarkerTemplate() + "】";
+//    String SUBTASK_CONTENT = "【" + ProcessTaskParams.SUBTASKCONTENT.getFreemarkerTemplate() + "】";
+//    String SUBTASK_WORKER = "【" + ProcessTaskParams.SUBTASKWORKER.getFreemarkerTemplate() + "】";
     String TASK_CONTENT =  ProcessTaskParams.TASKCONTENT.getFreemarkerTemplate();
     String TASK_USER_CONTENT =  ProcessTaskParams.TASKUSERCONTENT.getFreemarkerTemplate();
     String TASK_WORKER = "【" + ProcessTaskParams.TASKWORKER.getFreemarkerTemplate() + "】";

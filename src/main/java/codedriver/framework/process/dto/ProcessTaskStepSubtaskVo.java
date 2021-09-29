@@ -17,6 +17,7 @@ import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.restful.annotation.EntityField;
 
+@Deprecated
 public class ProcessTaskStepSubtaskVo {
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;

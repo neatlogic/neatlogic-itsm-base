@@ -77,12 +77,12 @@ public enum ProcessTaskOperationType implements IOperationType {
     STEP_RETREAT("retreatcurrentstep", "撤回", Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),    
     STEP_HANG("hang", "挂起"),
     STEP_HANDLE("handle", "自动处理"),
-    SUBTASK_CREATE("createsubtask", "创建子任务"),
-
-    SUBTASK_EDIT("editsubtask", "编辑"),
-    SUBTASK_ABORT("abortsubtask", "取消"),
-    SUBTASK_REDO("redosubtask", "重做"),
-    SUBTASK_COMPLETE("completesubtask", "完成"),
+//    SUBTASK_CREATE("createsubtask", "创建子任务"),
+//
+//    SUBTASK_EDIT("editsubtask", "编辑"),
+//    SUBTASK_ABORT("abortsubtask", "取消"),
+//    SUBTASK_REDO("redosubtask", "重做"),
+//    SUBTASK_COMPLETE("completesubtask", "完成"),
 
     TASK_CREATE("createtask", "创建任务"),
     TASK_EDIT("edittask", "编辑任务"),

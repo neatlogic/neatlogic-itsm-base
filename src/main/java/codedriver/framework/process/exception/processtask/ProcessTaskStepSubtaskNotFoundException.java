@@ -2,6 +2,7 @@ package codedriver.framework.process.exception.processtask;
 
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 
+@Deprecated
 public class ProcessTaskStepSubtaskNotFoundException extends ProcessTaskRuntimeException {
 
 	private static final long serialVersionUID = 506247933305553211L;
