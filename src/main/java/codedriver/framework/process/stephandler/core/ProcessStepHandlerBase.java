@@ -1960,7 +1960,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.STARTPROCESS);
 
             //创建全文检索索引
-            IFullTextIndexHandler indexHandler = FullTextIndexHandlerFactory.getComponent(ProcessFullTextIndexType.PROCESSTASK);
+            IFullTextIndexHandler indexHandler = FullTextIndexHandlerFactory.getHandler(ProcessFullTextIndexType.PROCESSTASK);
             if (indexHandler != null) {
                 indexHandler.createIndex(currentProcessTaskStepVo.getProcessTaskId());
             }
