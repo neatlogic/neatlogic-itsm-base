@@ -40,24 +40,9 @@ public class ChannelTypeVo extends BasePageVo implements Serializable, Cloneable
     @EntityField(name = "工单号策略名", type = ApiParamType.STRING)
     private String handlerName;
 
-    @JSONField(serialize = false)
-    private String keyword;
-
     public ChannelTypeVo() {
     }
 
-    //	public ChannelTypeVo(ChannelTypeVo channelTypeVo) {
-//	    if(channelTypeVo != null) {
-//	        this.uuid = channelTypeVo.getUuid();
-//	        this.name = channelTypeVo.getName();
-//	        this.isActive = channelTypeVo.getIsActive();
-//	        this.icon = channelTypeVo.getIcon();
-//	        this.color = channelTypeVo.getColor();
-//	        this.description = channelTypeVo.getDescription();
-//	        this.sort = channelTypeVo.getSort();
-//	        this.prefix = channelTypeVo.getPrefix();
-//	    }
-//    }
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
             uuid = UUID.randomUUID().toString().replace("-", "");

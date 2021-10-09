@@ -87,20 +87,9 @@
 		<result column="action" property="action" />
 		<result column="fcd" property="fcd" />
 		<result column="lcd" property="lcd" />
-		<association property="fcuVo" javaType="codedriver.framework.dto.UserVo">
-			<result property="uuid" column="fcuUuid" />
-			<result property="userName" column="fcuName" />
-			<result property="userInfo" column="fcuInfo" />
-			<result property="vipLevel" column="fcuVipLevel" />
-			<result property="pinyin" column="fcuPinyin" />
-		</association>
-		<association property="lcuVo" javaType="codedriver.framework.dto.UserVo">
-			<result property="uuid" column="lcuUuid" />
-			<result property="userName" column="lcuName" />
-			<result property="userInfo" column="lcuInfo" />
-			<result property="vipLevel" column="lcuVipLevel" />
-			<result property="pinyin" column="lcuPinyin" />
-		</association>
+		<result column="fcu" property="fcu" />
+		<result column="lcu" property="lcu" />
+
 	</resultMap>
 	
 	<select id="getProcessTaskStepSubtaskContentBySubtaskId" parameterType="java.lang.Long" resultMap="processTaskStepSubtaskContentMap">
@@ -111,20 +100,11 @@
 	  b.`content`,
 	  a.`action`,
 	  a.`fcd`,
-	  a.`fcu` as fcuUuid,
-	  (SELECT `user_info` from `user` WHERE `uuid` = a.`fcu`) as fcuInfo,
-	  (SELECT `vip_level` from `user` WHERE `uuid` = a.`fcu`) as fcuVipLevel,
-	  (SELECT `pinyin` from `user` WHERE `uuid` = a.`fcu`) as fcuPinyin,
-	  c.`user_name` AS fcuName,
+	  a.`fcu`,
 	  a.`lcd`,
-	  a.`lcu` as lcuUuid,
-	  (SELECT `user_info` from `user` WHERE `uuid` = a.`lcu`) as lcuInfo,
-	  (SELECT `user_name` from `user` WHERE `uuid` = a.`lcu`) as lcuName,
-	  (SELECT `vip_level` from `user` WHERE `uuid` = a.`lcu`) as lcuVipLevel,
-	  (SELECT `pinyin` from `user` WHERE `uuid` = a.`lcu`) as lcuPinyin
+	  a.`lcu`
 	FROM `processtask_step_subtask_content` a
 	JOIN `processtask_content` b on b.`hash` = a.`content_hash`
-	LEFT JOIN `user` c ON c.`uuid` = a.`fcu`
 	WHERE a.`processtask_step_subtask_id` = #{processTaskStepSubtaskId}
 	</select>
 	

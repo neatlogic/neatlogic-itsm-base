@@ -61,8 +61,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
     @JSONField(serialize = false)
     private String fcu;
     @JSONField(serialize = false)
-    private String keyword;
-    @JSONField(serialize = false)
     private Long notifyPolicyId;
     @JSONField(serialize = false)
     private List<String> integrationUuidList = new ArrayList<>();
