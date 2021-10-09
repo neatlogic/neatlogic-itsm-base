@@ -10,7 +10,6 @@ import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
 import codedriver.framework.restful.annotation.EntityField;
-import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -40,24 +39,9 @@ public class ChannelTypeVo extends BasePageVo implements Serializable, Cloneable
     @EntityField(name = "工单号策略名", type = ApiParamType.STRING)
     private String handlerName;
 
-    @JSONField(serialize = false)
-    private String keyword;
-
     public ChannelTypeVo() {
     }
 
-    //	public ChannelTypeVo(ChannelTypeVo channelTypeVo) {
-//	    if(channelTypeVo != null) {
-//	        this.uuid = channelTypeVo.getUuid();
-//	        this.name = channelTypeVo.getName();
-//	        this.isActive = channelTypeVo.getIsActive();
-//	        this.icon = channelTypeVo.getIcon();
-//	        this.color = channelTypeVo.getColor();
-//	        this.description = channelTypeVo.getDescription();
-//	        this.sort = channelTypeVo.getSort();
-//	        this.prefix = channelTypeVo.getPrefix();
-//	    }
-//    }
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
             uuid = UUID.randomUUID().toString().replace("-", "");

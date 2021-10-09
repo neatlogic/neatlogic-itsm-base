@@ -369,28 +369,22 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             processTaskStepReplyVo.setFileIdList(fileIdList);
             processTaskStepReplyVo.setFileList(fileMapper.getFileListByIdList(fileIdList));
         }
-        if (StringUtils.isNotBlank(processTaskStepReplyVo.getLcu())) {
-            UserVo user = userMapper.getUserBaseInfoByUuid(processTaskStepReplyVo.getLcu());
-            if (user != null) {
-                //使用新对象，防止缓存
-                UserVo vo = new UserVo();
-                BeanUtils.copyProperties(user, vo);
-                processTaskStepReplyVo.setLcuVo(vo);
-//                processTaskStepReplyVo.setLcuName(user.getUserName());
-//                processTaskStepReplyVo.setLcuInfo(user.getUserInfo());
-//                processTaskStepReplyVo.setLcuVipLevel(user.getVipLevel());
-            }
-        }
-        UserVo user = userMapper.getUserBaseInfoByUuid(processTaskStepReplyVo.getFcu());
-        if (user != null) {
-            //使用新对象，防止缓存
-            UserVo vo = new UserVo();
-            BeanUtils.copyProperties(user, vo);
-            processTaskStepReplyVo.setFcuVo(vo);
-//            processTaskStepReplyVo.setFcuName(user.getUserName());
-//            processTaskStepReplyVo.setFcuInfo(user.getUserInfo());
-//            processTaskStepReplyVo.setFcuVipLevel(user.getVipLevel());
-        }
+//        if (StringUtils.isNotBlank(processTaskStepReplyVo.getLcu())) {
+//            UserVo user = userMapper.getUserBaseInfoByUuid(processTaskStepReplyVo.getLcu());
+//            if (user != null) {
+//                //使用新对象，防止缓存
+//                UserVo vo = new UserVo();
+//                BeanUtils.copyProperties(user, vo);
+//                processTaskStepReplyVo.setLcuVo(vo);
+//            }
+//        }
+//        UserVo user = userMapper.getUserBaseInfoByUuid(processTaskStepReplyVo.getFcu());
+//        if (user != null) {
+//            //使用新对象，防止缓存
+//            UserVo vo = new UserVo();
+//            BeanUtils.copyProperties(user, vo);
+//            processTaskStepReplyVo.setFcuVo(vo);
+//        }
     }
 
     @Override
@@ -1064,12 +1058,12 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
                     processTaskStepRemindVo.setContent(pattern_html.matcher(content).replaceAll(""));
                 }
             }
-            UserVo userVo = userMapper.getUserBaseInfoByUuid(processTaskStepRemindVo.getFcu());
-            if (userVo != null) {
-                UserVo vo = new UserVo();
-                BeanUtils.copyProperties(userVo, vo);
-                processTaskStepRemindVo.setFcuVo(vo);
-            }
+//            UserVo userVo = userMapper.getUserBaseInfoByUuid(processTaskStepRemindVo.getFcu());
+//            if (userVo != null) {
+//                UserVo vo = new UserVo();
+//                BeanUtils.copyProperties(userVo, vo);
+//                processTaskStepRemindVo.setFcuVo(vo);
+//            }
         }
         return processTaskStepRemindList;
     }
