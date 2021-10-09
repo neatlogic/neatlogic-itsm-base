@@ -33,8 +33,6 @@ public class PriorityVo extends BasePageVo implements Serializable {
     private Integer sort;
     @JSONField(serialize = false)
     private String channelUuid;
-    @JSONField(serialize = false)
-    private String keyword;
 
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {

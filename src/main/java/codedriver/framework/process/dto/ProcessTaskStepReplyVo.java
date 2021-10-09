@@ -41,8 +41,6 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
         super.setLcd(processTaskStepContentVo.getLcd());
 	    super.setFcu(processTaskStepContentVo.getFcu());
 	    super.setLcu(processTaskStepContentVo.getLcu());
-	    super.setFcuName(processTaskStepContentVo.getFcuName());
-	    super.setLcuName(processTaskStepContentVo.getLcuName());
 	    this.id = processTaskStepContentVo.getId();
 	    this.processTaskId = processTaskStepContentVo.getProcessTaskId();
 	    this.processTaskStepId = processTaskStepContentVo.getProcessTaskStepId();
