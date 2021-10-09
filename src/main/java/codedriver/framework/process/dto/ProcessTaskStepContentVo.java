@@ -60,21 +60,21 @@ public class ProcessTaskStepContentVo extends BaseEditorVo {
 		this.contentHash = contentHash;
 	}
 
-	@Override
-	public String getFcu() {
-		if (StringUtils.isBlank(super.getFcu())) {
-		    super.setFcu(UserContext.get().getUserUuid());
-		}
-		return super.getFcu();
-	}
-	
-	@Override
-	public String getLcu() {
-		if (StringUtils.isBlank(super.getLcu())) {
-			super.setLcu(UserContext.get().getUserUuid());
-		}
-		return super.getLcu();
-	}
+//	@Override
+//	public String getFcu() {
+//		if (StringUtils.isBlank(super.getFcu())) {
+//		    super.setFcu(UserContext.get().getUserUuid());
+//		}
+//		return super.getFcu();
+//	}
+//
+//	@Override
+//	public String getLcu() {
+//		if (StringUtils.isBlank(super.getLcu())) {
+//			super.setLcu(UserContext.get().getUserUuid());
+//		}
+//		return super.getLcu();
+//	}
 
 	public Long getProcessTaskId() {
 		return processTaskId;
