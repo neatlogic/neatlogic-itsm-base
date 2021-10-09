@@ -17,6 +17,8 @@ import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.form.dao.mapper.FormMapper;
 import codedriver.framework.form.dto.FormVersionVo;
+import codedriver.framework.fulltextindex.core.FullTextIndexHandlerFactory;
+import codedriver.framework.fulltextindex.core.IFullTextIndexHandler;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.process.constvalue.*;
@@ -34,6 +36,7 @@ import codedriver.framework.process.exception.processtask.ProcessTaskStepUnActiv
 import codedriver.framework.process.exception.processtask.ProcessTaskStepUserIsExistsException;
 import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyHandlerNotFoundException;
 import codedriver.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyNotFoundException;
+import codedriver.framework.process.fulltextindex.ProcessFullTextIndexType;
 import codedriver.framework.process.notify.constvalue.ProcessTaskNotifyTriggerType;
 import codedriver.framework.process.notify.constvalue.ProcessTaskStepNotifyTriggerType;
 import codedriver.framework.process.operationauth.core.ProcessAuthManager;
@@ -1955,6 +1958,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             /* 执行动作 **/
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.STARTPROCESS);
+
+            //创建全文检索索引
+            IFullTextIndexHandler indexHandler = FullTextIndexHandlerFactory.getComponent(ProcessFullTextIndexType.PROCESSTASK);
+            if (indexHandler != null) {
+                indexHandler.createIndex(currentProcessTaskStepVo.getProcessTaskId());
+            }
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setIsActive(1);

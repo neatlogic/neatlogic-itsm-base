@@ -7,8 +7,8 @@ import codedriver.framework.fulltextindex.core.IFullTextIndexType;
  * @since 2021/03/23
  */
 public enum ProcessFullTextIndexType implements IFullTextIndexType {
-    PROCESSTASK("processtask", "工单"),
-    PROCESSTASK_FORM("processtask_form", "工单_表单");
+    PROCESSTASK("processtask", "工单");
+//    PROCESSTASK_FORM("processtask_form", "工单_表单");
 
     private final String type;
     private final String typeName;
