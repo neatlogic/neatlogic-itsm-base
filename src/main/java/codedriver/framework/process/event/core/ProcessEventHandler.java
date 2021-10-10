@@ -76,23 +76,16 @@ public class ProcessEventHandler {
         private final ProcessTaskEvent event;
 
         public EventRunner(ProcessTaskEvent _event, Long _processTaskStepId) {
+            super("PROCESSTASK-EVENTHANDLER-" + _processTaskStepId);
             event = _event;
             processTaskStepId = _processTaskStepId;
         }
 
         @Override
         public void execute() {
-            String oldName = Thread.currentThread().getName();
-            Thread.currentThread().setName("PROCESSTASK-EVENTHANDLER-" + processTaskStepId);
-            try {
-                ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
-
-                if (processTaskStepVo == null) {
-                    throw new ProcessTaskRuntimeException("找不到步骤信息，processTaskStepId：" + processTaskStepId);
-                }
-
-            } finally {
-                Thread.currentThread().setName(oldName);
+            ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
+            if (processTaskStepVo == null) {
+                throw new ProcessTaskRuntimeException("找不到步骤信息，processTaskStepId：" + processTaskStepId);
             }
         }
 
