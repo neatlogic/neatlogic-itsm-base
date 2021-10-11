@@ -89,21 +89,24 @@ public class ChannelServiceImpl implements ChannelService {
             throw new WorktimeNotFoundException(channelVo.getWorktimeUuid());
         }
         channelMapper.replaceChannelWorktime(uuid, channelVo.getWorktimeUuid());
-        String defaultPriorityUuid = channelVo.getDefaultPriorityUuid();
-        List<String> priorityUuidList = channelVo.getPriorityUuidList();
-        for (String priorityUuid : priorityUuidList) {
-            if (priorityMapper.checkPriorityIsExists(priorityUuid) == 0) {
-                throw new PriorityNotFoundException(priorityUuid);
+        //优先级
+        if(channelVo.getIsNeedPriority() == 1) {
+            String defaultPriorityUuid = channelVo.getDefaultPriorityUuid();
+            List<String> priorityUuidList = channelVo.getPriorityUuidList();
+            for (String priorityUuid : priorityUuidList) {
+                if (priorityMapper.checkPriorityIsExists(priorityUuid) == 0) {
+                    throw new PriorityNotFoundException(priorityUuid);
+                }
+                ChannelPriorityVo channelPriority = new ChannelPriorityVo();
+                channelPriority.setChannelUuid(uuid);
+                channelPriority.setPriorityUuid(priorityUuid);
+                if (defaultPriorityUuid.equals(priorityUuid)) {
+                    channelPriority.setIsDefault(1);
+                } else {
+                    channelPriority.setIsDefault(0);
+                }
+                channelMapper.insertChannelPriority(channelPriority);
             }
-            ChannelPriorityVo channelPriority = new ChannelPriorityVo();
-            channelPriority.setChannelUuid(uuid);
-            channelPriority.setPriorityUuid(priorityUuid);
-            if (defaultPriorityUuid.equals(priorityUuid)) {
-                channelPriority.setIsDefault(1);
-            } else {
-                channelPriority.setIsDefault(0);
-            }
-            channelMapper.insertChannelPriority(channelPriority);
         }
         List<AuthorityVo> authorityList = channelVo.getAuthorityVoList();
         if (CollectionUtils.isNotEmpty(authorityList)) {

@@ -12,12 +12,11 @@ import com.google.common.base.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ChannelVo extends BasePageVo implements Serializable {
+public class ChannelVo extends BasePageVo {
 
     private static final long serialVersionUID = 7055291271172611259L;
 
@@ -65,6 +64,9 @@ public class ChannelVo extends BasePageVo implements Serializable {
 
     @EntityField(name = "优先级列表", type = ApiParamType.JSONARRAY)
     private List<PriorityVo> priorityList;
+
+    @EntityField(name = "是否显示优先级", type = ApiParamType.INTEGER)
+    private Integer isNeedPriority = 1;
 
     @EntityField(name = "默认优先级", type = ApiParamType.STRING)
     private String defaultPriorityUuid;
@@ -507,5 +509,17 @@ public class ChannelVo extends BasePageVo implements Serializable {
 
     public void setConfigStr(String configStr) {
         this.configStr = configStr;
+    }
+
+    public Integer getIsNeedPriority() {
+        //如果不存在优先级List则默认不显示优先级
+        if(CollectionUtils.isEmpty(priorityUuidList)){
+            isNeedPriority = 0;
+        }
+        return isNeedPriority;
+    }
+
+    public void setIsNeedPriority(Integer isNeedPriority) {
+        this.isNeedPriority = isNeedPriority;
     }
 }

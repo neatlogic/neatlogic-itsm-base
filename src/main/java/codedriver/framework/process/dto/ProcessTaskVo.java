@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 public class ProcessTaskVo extends BasePageVo {
-//    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
+    //    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
     @EntityField(name = "工单id", type = ApiParamType.LONG)
     private Long id;
     @EntityField(name = "父工单id", type = ApiParamType.LONG)
@@ -34,7 +34,7 @@ public class ProcessTaskVo extends BasePageVo {
     private String channelPath;
     @EntityField(name = "优先级uuid", type = ApiParamType.STRING)
     private String priorityUuid;
-//    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
+    //    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
 //    private String config;
 //    private String configPath;
 //    private JSONObject configObj;
@@ -46,7 +46,7 @@ public class ProcessTaskVo extends BasePageVo {
     private String owner;
     @EntityField(name = "上报人")
     private UserVo ownerVo;
-//    @EntityField(name = "上报人", type = ApiParamType.STRING)
+    //    @EntityField(name = "上报人", type = ApiParamType.STRING)
 //    private String ownerName;
 //    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
 //    private Integer ownerVipLevel;
@@ -54,7 +54,7 @@ public class ProcessTaskVo extends BasePageVo {
     private String reporter;
     @EntityField(name = "代报人")
     private UserVo reporterVo;
-//    @EntityField(name = "代报人", type = ApiParamType.STRING)
+    //    @EntityField(name = "代报人", type = ApiParamType.STRING)
 //    private String reporterName;
     @EntityField(name = "开始时间", type = ApiParamType.LONG)
     private Date startTime;
@@ -68,7 +68,8 @@ public class ProcessTaskVo extends BasePageVo {
     private String configHash;
 
     private List<ProcessTaskStepVo> stepList = new ArrayList<>();
-
+    @EntityField(name = "是否显示优先级", type = ApiParamType.INTEGER)
+    private Integer isNeedPriority = 1;
     @EntityField(name = "优先级信息", type = ApiParamType.JSONOBJECT)
     private PriorityVo priority;
     @EntityField(name = "工单表单信息", type = ApiParamType.JSONOBJECT)
@@ -732,5 +733,13 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public Integer getIsNeedPriority() {
+        return isNeedPriority;
+    }
+
+    public void setIsNeedPriority(Integer isNeedPriority) {
+        this.isNeedPriority = isNeedPriority;
     }
 }
