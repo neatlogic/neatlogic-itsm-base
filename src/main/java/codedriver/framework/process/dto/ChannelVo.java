@@ -513,7 +513,7 @@ public class ChannelVo extends BasePageVo {
 
     public Integer getIsNeedPriority() {
         //如果不存在优先级List则默认不显示优先级
-        if(CollectionUtils.isEmpty(priorityList)){
+        if(CollectionUtils.isEmpty(priorityUuidList)){
             isNeedPriority = 0;
         }
         return isNeedPriority;
