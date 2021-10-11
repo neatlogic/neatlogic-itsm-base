@@ -52,7 +52,7 @@ public class ChannelRelationVo {
     }
 
     public Integer getIsUsePreOwner() {
-        return isUsePreOwner;
+        return isUsePreOwner == null ? 0 : isUsePreOwner;
     }
 
     public void setIsUsePreOwner(Integer isUsePreOwner) {

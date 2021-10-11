@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright(c) 2021 TechSureCo.,Ltd.AllRightsReserved.
+  ~ 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="codedriver.framework.process.dao.mapper.ProcessTaskAgentMapper">
+
+    <select id="getProcessTaskAgentIdListByFromUserUuid" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT `id` FROM `processtask_agent` WHERE `from_user_uuid` = #{value}
+    </select>
+
+    <select id="getProcessTaskAgentListByFromUserUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.agent.ProcessTaskAgentVo">
+        SELECT
+            `id`,
+            `from_user_uuid` AS fromUserUuid,
+            `to_user_uuid` AS toUserUuid,
+            `begin_time` AS beginTime,
+            `end_time` AS endTime
+        FROM `processtask_agent`
+        WHERE `from_user_uuid` = #{value}
+    </select>
+
+    <select id="getProcessTaskAgentTargetListByProcessTaskAgentId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo">
+        SELECT
+            `processtask_agent_id` AS processTaskAgentId,
+            `target`,
+            `type`
+        FROM `processtask_agent_target`
+        WHERE `processtask_agent_id` = #{value}
+    </select>
+
+    <insert id="insertProcessTaskAgent" parameterType="codedriver.framework.process.dto.agent.ProcessTaskAgentVo">
+        INSERT INTO `processtask_agent` (
+            `id`,
+            `from_user_uuid`,
+            `to_user_uuid`,
+            `begin_time`,
+            `end_time`
+        )
+        VALUES
+        (
+            #{id},
+            #{fromUserUuid},
+            #{toUserUuid},
+            #{beginTime},
+            #{endTime}
+        )
+    </insert>
+
+    <insert id="insertProcessTaskAgentTarget" parameterType="codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo">
+        INSERT INTO `processtask_agent_target` (
+            `processtask_agent_id`,
+            `target`,
+            `type`
+        )
+        VALUES
+        (
+            #{processTaskAgentId},
+            #{target},
+            #{type}
+        )
+    </insert>
+
+    <delete id="deleteProcessTaskAgentByFromUserUuid" parameterType="java.lang.String">
+        DELETE FROM `processtask_agent` WHERE `from_user_uuid` = #{value}
+    </delete>
+
+    <delete id="deleteProcessTaskAgentTargetByProcessTaskAgentIdList" parameterType="java.lang.Long">
+        DELETE FROM `processtask_agent_target`
+        WHERE `processtask_agent_id` IN
+        <foreach collection="list" item="processTaskAgentId" open="(" separator="," close=")">
+            #{processTaskAgentId}
+        </foreach>
+    </delete>
+</mapper>
