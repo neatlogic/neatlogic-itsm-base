@@ -28,6 +28,8 @@ public interface ProcessTaskAgentMapper {
 
     int insertProcessTaskAgentTarget(ProcessTaskAgentTargetVo processTaskAgentTargetVo);
 
+    int updateProcessTaskAgentIsActiveByFromUserUuid(String fromUserUuid);
+
     int deleteProcessTaskAgentByFromUserUuid(String fromUserUuid);
 
     int deleteProcessTaskAgentTargetByProcessTaskAgentIdList(List<Long> processTaskAgentIdList);
