@@ -84,6 +84,10 @@
         )
     </insert>
 
+    <update id="updateProcessTaskAgentIsActiveByFromUserUuid" parameterType="java.lang.String">
+        UPDATE `processtask_agent` SET `is_active` = 1-`is_active` WHERE `from_user_uuid` = #{value}
+    </update>
+
     <delete id="deleteProcessTaskAgentByFromUserUuid" parameterType="java.lang.String">
         DELETE FROM `processtask_agent` WHERE `from_user_uuid` = #{value}
     </delete>
