@@ -42,6 +42,7 @@ import codedriver.framework.process.notify.constvalue.ProcessTaskStepNotifyTrigg
 import codedriver.framework.process.operationauth.core.ProcessAuthManager;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.IProcessTaskSerialNumberPolicyHandler;
 import codedriver.framework.process.processtaskserialnumberpolicy.core.ProcessTaskSerialNumberPolicyHandlerFactory;
+import codedriver.framework.process.service.ProcessTaskAgentService;
 import codedriver.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import codedriver.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import codedriver.framework.service.AuthenticationInfoService;
@@ -76,6 +77,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static ProcessTaskSerialNumberMapper processTaskSerialNumberMapper;
     protected static SelectContentByHashMapper selectContentByHashMapper;
     protected static IProcessStepHandlerUtil IProcessStepHandlerUtil;
+    protected static ProcessTaskAgentService processTaskAgentService;
 
     @Resource
     public void setProcessMapper(ProcessMapper _processMapper) {
@@ -138,8 +140,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     }
 
     @Resource
-    public void setProcessStepHandlerUtilService(IProcessStepHandlerUtil _I_processStepHandlerUtil) {
-        IProcessStepHandlerUtil = _I_processStepHandlerUtil;
+    public void setIProcessStepHandlerUtil(IProcessStepHandlerUtil _processStepHandlerUtil) {
+        IProcessStepHandlerUtil = _processStepHandlerUtil;
+    }
+
+    @Resource
+    public void setProcessTaskAgentService(ProcessTaskAgentService _processTaskAgentService) {
+        processTaskAgentService = _processTaskAgentService;
     }
 
     private int updateProcessTaskStatus(Long processTaskId) {
@@ -2340,7 +2347,30 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             if (flag == 0) {
                 // 当用户是B
-                String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(), "processTask");
+                String userUuid = null;
+                ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
+                List<String> fromUserUuidList = processTaskAgentService.getFromUserUuidListByToUserUuidAndChannelUuid(UserContext.get().getUserUuid(), processTaskVo.getChannelUuid());
+                for (String fromUserUuid : fromUserUuidList) {
+                    if (Objects.equals(processTaskStepVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
+                        ProcessTaskStepUserVo searchVo = new ProcessTaskStepUserVo(
+                                currentProcessTaskStepVo.getProcessTaskId(),
+                                currentProcessTaskStepVo.getId(),
+                                fromUserUuid,
+                                ProcessUserType.MAJOR.getValue()
+                        );
+                        if (processTaskMapper.checkIsProcessTaskStepUser(searchVo) > 0) {
+                            userUuid = fromUserUuid;
+                            break;
+                        }
+                    } else {
+                        AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(fromUserUuid);
+                        if (processTaskMapper.checkIsWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue(), authenticationInfoVo) > 0) {
+                            userUuid = fromUserUuid;
+                            break;
+                        }
+                    }
+                }
+//                String userUuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(), "processTask");
                 if (StringUtils.isNotBlank(userUuid)) {
                     ProcessTaskStepAgentVo processTaskStepAgent = new ProcessTaskStepAgentVo(
                             currentProcessTaskStepVo.getProcessTaskId(),
