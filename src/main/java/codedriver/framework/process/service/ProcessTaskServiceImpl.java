@@ -50,7 +50,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -1089,19 +1088,31 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
     public ProcessTaskVo getProcessTaskDetailById(Long processTaskId) {
         // 获取工单基本信息(title、channel_uuid、config_hash、priority_uuid、status、start_time、end_time、expire_time、owner、ownerName、reporter、reporterName)
         ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskBaseInfoById(processTaskId);
+        if (processTaskVo == null){
+            throw new ProcessTaskNotFoundException(processTaskId.toString());
+        }
+
         // 判断当前用户是否关注该工单
-        if (processTaskVo != null
-                && processTaskMapper.checkProcessTaskFocusExists(processTaskId, UserContext.get().getUserUuid()) > 0) {
+        if (processTaskMapper.checkProcessTaskFocusExists(processTaskId, UserContext.get().getUserUuid()) > 0) {
             processTaskVo.setIsFocus(1);
         }
 
         // 优先级
-        PriorityVo priorityVo = priorityMapper.getPriorityByUuid(processTaskVo.getPriorityUuid());
-        if (priorityVo == null) {
-            priorityVo = new PriorityVo();
-            priorityVo.setUuid(processTaskVo.getPriorityUuid());
+        String taskConfigStr = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTaskVo.getConfigHash());
+        if (StringUtils.isNotBlank(taskConfigStr)) {
+            JSONObject taskConfig = JSONObject.parseObject(taskConfigStr);
+            if (MapUtils.isNotEmpty(taskConfig) && (!taskConfig.containsKey("isNeedPriority") || Objects.equals(taskConfig.getInteger("isNeedPriority"), 1))) {
+                PriorityVo priorityVo = priorityMapper.getPriorityByUuid(processTaskVo.getPriorityUuid());
+                if (priorityVo == null) {
+                    priorityVo = new PriorityVo();
+                    priorityVo.setUuid(processTaskVo.getPriorityUuid());
+                }
+                processTaskVo.setPriority(priorityVo);
+                processTaskVo.setIsNeedPriority(1);
+            }else{
+                processTaskVo.setIsNeedPriority(0);
+            }
         }
-        processTaskVo.setPriority(priorityVo);
         // 上报服务路径
         ChannelVo channelVo = channelMapper.getChannelByUuid(processTaskVo.getChannelUuid());
         if (channelVo != null) {
@@ -1616,7 +1627,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         //重新插入pending任务用户到 工单步骤worker
         List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getStepTaskUserListByTaskId(processTaskStepTaskVo.getId());
         for (ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList) {
-            if (taskUserVo.getIsDelete() != 1 && Objects.equals(ProcessTaskStatus.PENDING.getValue(),taskUserVo.getStatus())) {
+            if (taskUserVo.getIsDelete() != 1 && Objects.equals(ProcessTaskStatus.PENDING.getValue(), taskUserVo.getStatus())) {
                 workerVoList.add(new ProcessTaskStepWorkerVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), GroupSearch.USER.getValue(), taskUserVo.getUserUuid(), ProcessUserType.MINOR.getValue()));
             }
         }
@@ -1637,23 +1648,23 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         List<ProcessTaskStepUserVo> stepUserVoList = new ArrayList<>();
 
         //如果存在子任务已完成的用户则该用户 status为succeed,则该用户为succeed
-        Map<String,ProcessTaskStepTaskUserVo> stepTaskUserStatusMap = new HashMap<>();
+        Map<String, ProcessTaskStepTaskUserVo> stepTaskUserStatusMap = new HashMap<>();
         List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getStepTaskUserListByTaskId(processTaskStepTaskVo.getId());
         for (ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList) {
-            if(!stepTaskUserStatusMap.containsKey(taskUserVo.getUserUuid())||Objects.equals(ProcessTaskStatus.SUCCEED.getValue(),stepTaskUserStatusMap.get(taskUserVo.getUserUuid()).getStatus())) {
+            if (!stepTaskUserStatusMap.containsKey(taskUserVo.getUserUuid()) || Objects.equals(ProcessTaskStatus.SUCCEED.getValue(), stepTaskUserStatusMap.get(taskUserVo.getUserUuid()).getStatus())) {
                 stepTaskUserStatusMap.put(taskUserVo.getUserUuid(), taskUserVo);
             }
         }
 
         //跟新taskStepUser 到库
-        for(Map.Entry<String,ProcessTaskStepTaskUserVo> entry:stepTaskUserStatusMap.entrySet()){
+        for (Map.Entry<String, ProcessTaskStepTaskUserVo> entry : stepTaskUserStatusMap.entrySet()) {
             ProcessTaskStepTaskUserVo taskUserVo = entry.getValue();
             if (taskUserVo.getIsDelete() != 1) {
                 String status = ProcessTaskStepUserStatus.DOING.getValue();
-                if(Objects.equals(taskUserVo.getStatus(),ProcessTaskStatus.SUCCEED.getValue())){
+                if (Objects.equals(taskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
                     status = ProcessTaskStepUserStatus.DONE.getValue();
                 }
-                stepUserVoList.add(new ProcessTaskStepUserVo(status,processTaskStepTaskVo.getCreateTime(),taskUserVo.getEndTime(), processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), taskUserVo.getUserUuid(), ProcessUserType.MINOR.getValue()));
+                stepUserVoList.add(new ProcessTaskStepUserVo(status, processTaskStepTaskVo.getCreateTime(), taskUserVo.getEndTime(), processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), taskUserVo.getUserUuid(), ProcessUserType.MINOR.getValue()));
             }
         }
         //TODO 其它模块的taskStepUser

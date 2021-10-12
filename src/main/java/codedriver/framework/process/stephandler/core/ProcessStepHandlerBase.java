@@ -526,7 +526,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             startProcessTaskStepId = currentProcessTaskStepVo.getId();
         }
         ProcessTaskStepVo startProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(startProcessTaskStepId);
-        if (Objects.equals(startProcessTaskStepVo.getEnableReapproval(), 1)){
+        if (Objects.equals(startProcessTaskStepVo.getEnableReapproval(), 1)) {
             List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByToId(startProcessTaskStepId);
             for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
                 if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
@@ -558,6 +558,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.insertProcessTaskStepReapprovalRestoreBackup(processTaskStepReapprovalRestoreBackupVo);
         }
     }
+
     /**
      * hang操作原则上不允许出现任何异常，所有异常都必须解决以便流程可以顺利挂起，否则流程可能会卡死在某个节点不能前进或后退
      */
@@ -568,7 +569,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
             ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
             // 如果当前节点已经挂起，则不再重复操作
-            if (Objects.equals(processTaskStepVo.getStatus(), ProcessTaskStatus.HANG.getValue()) &&Objects.equals(processTaskStepVo.getIsActive(), 0)) {
+            if (Objects.equals(processTaskStepVo.getStatus(), ProcessTaskStatus.HANG.getValue()) && Objects.equals(processTaskStepVo.getIsActive(), 0)) {
                 return 1;
             }
             reapprovalRestoreBackup(currentProcessTaskStepVo);
@@ -960,7 +961,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected abstract int myCompleteAudit(ProcessTaskStepVo currentProcessTaskStepVo);
 
     @Override
-    public final int reapproval(ProcessTaskStepVo currentProcessTaskStepVo){
+    public final int reapproval(ProcessTaskStepVo currentProcessTaskStepVo) {
         /* 锁定当前流程 **/
         processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
         new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_REAPPROVAL).build().checkAndNoPermissionThrowException();
@@ -1003,13 +1004,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
                 if (this.getMode().equals(ProcessStepMode.MT)) {
 //                    if (operationType == ProcessTaskOperationType.STEP_COMPLETE) {
-                        String priorityUuid = paramObj.getString("priorityUuid");
-                        if (StringUtils.isNotBlank(priorityUuid)) {
-                            processTaskMapper.updateProcessTaskPriorityUuidById(currentProcessTaskStepVo.getProcessTaskId(), priorityUuid);
-                        }
-                        IProcessStepHandlerUtil.assignWorkerValid(currentProcessTaskStepVo);
-                        /* 保存表单属性值 **/
-                        IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
+                    String priorityUuid = paramObj.getString("priorityUuid");
+                    if (StringUtils.isNotBlank(priorityUuid)) {
+                        processTaskMapper.updateProcessTaskPriorityUuidById(currentProcessTaskStepVo.getProcessTaskId(), priorityUuid);
+                    }
+                    IProcessStepHandlerUtil.assignWorkerValid(currentProcessTaskStepVo);
+                    /* 保存表单属性值 **/
+                    IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
 //                    }
 
                     /* 更新处理人状态 **/
@@ -1688,8 +1689,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             ProcessVo processVo = processMapper.getProcessByUuid(currentProcessTaskStepVo.getProcessUuid());
             /* 对流程配置进行散列处理 **/
-            String configStr = processVo.getConfigStr();
-            if (StringUtils.isNotBlank(configStr)) {
+
+            if (MapUtils.isNotEmpty(processVo.getConfig())) {
+                //如果不存在优先级List则默认不显示优先级
+                List<ChannelPriorityVo> channelPriorityList = channelMapper.getChannelPriorityListByChannelUuid(processTaskVo.getChannelUuid());
+                if (CollectionUtils.isEmpty(channelPriorityList)) {
+                    processVo.getConfig().put("isNeedPriority", 0);
+                } else {
+                    processVo.getConfig().put("isNeedPriority", 1);
+                }
+                String configStr = processVo.getConfigStr();
                 String hash = DigestUtils.md5DigestAsHex(configStr.getBytes());
                 processTaskVo.setConfigHash(hash);
                 processTaskMapper.insertIgnoreProcessTaskConfig(new ProcessTaskConfigVo(hash, configStr));
@@ -2433,11 +2442,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     }
 
     @Override
-    public String getMinorName(){
+    public String getMinorName() {
         return myMinorName();
     }
 
-    protected  String myMinorName(){
+    protected String myMinorName() {
         return null;
     }
 }
