@@ -15,6 +15,7 @@ import java.util.List;
 public class ProcessTaskAgentInfoVo {
     private Date beginTime;
     private Date endTime;
+    private Integer isActive;
     private List<ProcessTaskAgentCompobVo> compobList;
 
     public Date getBeginTime() {
@@ -31,6 +32,14 @@ public class ProcessTaskAgentInfoVo {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Integer isActive) {
+        this.isActive = isActive;
     }
 
     public List<ProcessTaskAgentCompobVo> getCompobList() {

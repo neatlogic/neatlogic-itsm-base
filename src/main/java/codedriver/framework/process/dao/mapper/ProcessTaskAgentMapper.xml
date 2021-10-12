@@ -17,9 +17,25 @@
             `from_user_uuid` AS fromUserUuid,
             `to_user_uuid` AS toUserUuid,
             `begin_time` AS beginTime,
-            `end_time` AS endTime
+            `end_time` AS endTime,
+            `is_active` as isActive
         FROM `processtask_agent`
         WHERE `from_user_uuid` = #{value}
+    </select>
+
+    <select id="getProcessTaskAgentListByToUserUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.agent.ProcessTaskAgentVo">
+        SELECT
+            `id`,
+            `from_user_uuid` AS fromUserUuid,
+            `to_user_uuid` AS toUserUuid,
+            `begin_time` AS beginTime,
+            `end_time` AS endTime,
+            `is_active` AS isActive
+        FROM `processtask_agent`
+        WHERE `to_user_uuid` = #{value}
+        AND `is_active` = 1
+        AND `begin_time` &gt;= NOW()
+        AND `end_time` &lt;= NOW()
     </select>
 
     <select id="getProcessTaskAgentTargetListByProcessTaskAgentId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo">
@@ -37,7 +53,8 @@
             `from_user_uuid`,
             `to_user_uuid`,
             `begin_time`,
-            `end_time`
+            `end_time`,
+            `is_active`
         )
         VALUES
         (
@@ -45,7 +62,8 @@
             #{fromUserUuid},
             #{toUserUuid},
             #{beginTime},
-            #{endTime}
+            #{endTime},
+            #{isActive}
         )
     </insert>
 

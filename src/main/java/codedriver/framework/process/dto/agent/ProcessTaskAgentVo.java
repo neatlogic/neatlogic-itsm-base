@@ -20,6 +20,7 @@ public class ProcessTaskAgentVo {
     private String toUserUuid;
     private Date beginTime;
     private Date endTime;
+    private Integer isActive;
 
     public Long getId() {
         if (id == null) {
@@ -62,5 +63,13 @@ public class ProcessTaskAgentVo {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Integer isActive) {
+        this.isActive = isActive;
     }
 }
