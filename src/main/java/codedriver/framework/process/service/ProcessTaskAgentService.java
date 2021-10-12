@@ -5,9 +5,13 @@
 
 package codedriver.framework.process.service;
 
+import java.util.List;
+
 /**
  * @author linbq
  * @since 2021/10/11 15:50
  **/
 public interface ProcessTaskAgentService {
+
+    List<String> getFromUserUuidListByToUserUuidAndChannelUuid(String toUserUuid, String channelUuid);
 }
