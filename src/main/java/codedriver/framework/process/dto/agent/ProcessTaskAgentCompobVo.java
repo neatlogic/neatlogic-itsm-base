@@ -13,7 +13,7 @@ import java.util.List;
  **/
 public class ProcessTaskAgentCompobVo {
     private String toUserUuid;
-    private List<String> targetList;
+    private List<ProcessTaskAgentTargetVo> targetList;
 
     public String getToUserUuid() {
         return toUserUuid;
@@ -23,11 +23,11 @@ public class ProcessTaskAgentCompobVo {
         this.toUserUuid = toUserUuid;
     }
 
-    public List<String> getTargetList() {
+    public List<ProcessTaskAgentTargetVo> getTargetList() {
         return targetList;
     }
 
-    public void setTargetList(List<String> targetList) {
+    public void setTargetList(List<ProcessTaskAgentTargetVo> targetList) {
         this.targetList = targetList;
     }
 }
