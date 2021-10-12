@@ -48,7 +48,8 @@ public interface CatalogMapper {
 	* @return List<CatalogVo>
 	 */
 	List<CatalogVo> getAncestorsAndSelfByLftRht(@Param("lft") Integer lft, @Param("rht") Integer rht);
-	
+
+	List<String> getUpwardUuidListByLftRht(@Param("lft") Integer lft, @Param("rht") Integer rht);
 	/**
 	 * 根据父uuid获取授权的子服务目录列表
 	 * @param uuid
