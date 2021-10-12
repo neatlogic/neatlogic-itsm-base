@@ -42,7 +42,8 @@
         SELECT
             `processtask_agent_id` AS processTaskAgentId,
             `target`,
-            `type`
+            `type`,
+            `path_list` AS pathListStr
         FROM `processtask_agent_target`
         WHERE `processtask_agent_id` = #{value}
     </select>
@@ -71,13 +72,15 @@
         INSERT INTO `processtask_agent_target` (
             `processtask_agent_id`,
             `target`,
-            `type`
+            `type`,
+            `path_list`
         )
         VALUES
         (
             #{processTaskAgentId},
             #{target},
-            #{type}
+            #{type},
+            #{pathListStr}
         )
     </insert>
 
