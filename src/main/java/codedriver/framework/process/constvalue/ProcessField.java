@@ -18,6 +18,7 @@ public enum ProcessField {
     OWNERCOMPANY("ownercompany", "上报人公司"),
     OWNERROLE("ownerrole", "上报人角色"),
     STEPTASK("steptask", "子任务"),
+    ACTIONTRIGGERUSER("actiontriggeruser", "动作触发人"),
     SUBTASKID("subtaskid", "当前子任务id");
     private String value;
     private String name;
