@@ -111,7 +111,8 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
     private ChannelTypeMapper channelTypeMapper;
     @Resource
     private CatalogMapper catalogMapper;
-
+    @Resource
+    private ProcessTaskAgentService processTaskAgentService;
 //    @Override
 //    public void setProcessTaskFormAttributeAction(ProcessTaskVo processTaskVo,
 //                                                  Map<String, String> formAttributeActionMap, int mode) {
@@ -268,10 +269,12 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
                 List<String> userUuidList = new ArrayList<>();
                 String userUuid = UserContext.get().getUserUuid(true);
                 userUuidList.add(userUuid);
-                String agentUuid = userMapper.getUserUuidByAgentUuidAndFunc(userUuid, "processtask");
-                if (StringUtils.isNotBlank(agentUuid)) {
-                    userUuidList.add(agentUuid);
-                }
+                List<String> fromUserUuidList = processTaskAgentService.getFromUserUuidListByToUserUuidAndChannelUuid(userUuid, processTaskVo.getChannelUuid());
+                userUuidList.addAll(fromUserUuidList);
+//                String agentUuid = userMapper.getUserUuidByAgentUuidAndFunc(userUuid, "processtask");
+//                if (StringUtils.isNotBlank(agentUuid)) {
+//                    userUuidList.add(agentUuid);
+//                }
                 AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuidList);
                 List<String> currentUserProcessUserTypeList = new ArrayList<>();
                 currentUserProcessUserTypeList.add(UserType.ALL.getValue());

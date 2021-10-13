@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import codedriver.framework.process.service.ProcessTaskAgentService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.SystemUser;
-import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
@@ -36,12 +36,12 @@ import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissio
 @Component
 public class ProcessAuthManager {
 
-    private static UserMapper userMapper;
     private static ProcessTaskMapper processTaskMapper;
+    private static ProcessTaskAgentService processTaskAgentService;
 
     @Autowired
-    private ProcessAuthManager(UserMapper _userMapper, ProcessTaskMapper _processTaskMapper) {
-        userMapper = _userMapper;
+    private ProcessAuthManager(ProcessTaskAgentService _processTaskAgentService, ProcessTaskMapper _processTaskMapper) {
+        processTaskAgentService = _processTaskAgentService;
         processTaskMapper = _processTaskMapper;
     }
 
@@ -161,16 +161,6 @@ public class ProcessAuthManager {
             return resultMap;
         }
 
-        List<String> userUuidList = new ArrayList<>();
-        userUuidList.add(UserContext.get().getUserUuid(true));
-        /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-        if (!SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid(true))) {
-            String uuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
-            if (StringUtils.isNotBlank(uuid)) {
-                userUuidList.add(uuid);
-            }
-        }
-
         if (processTaskStepIdSetMap == null) {
             processTaskStepIdSetMap = new HashMap<>();
         }
@@ -224,12 +214,21 @@ public class ProcessAuthManager {
                     .add(processTaskStepRelVo);
             }
 
+            List<String> userUuidList = new ArrayList<>();
+            userUuidList.add(UserContext.get().getUserUuid(true));
             List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
             for (ProcessTaskVo processTaskVo : processTaskList) {
-                processTaskVo
-                    .setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
-                processTaskVo.setStepRelList(
-                    processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
+                processTaskVo.setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
+                processTaskVo.setStepRelList(processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
+                /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
+                if (!SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid(true))) {
+//                    String uuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
+//                    if (StringUtils.isNotBlank(uuid)) {
+//                        userUuidList.add(uuid);
+//                    }
+                    List<String> fromUserUuidList = processTaskAgentService.getFromUserUuidListByToUserUuidAndChannelUuid(UserContext.get().getUserUuid(true), processTaskVo.getChannelUuid());
+                    userUuidList.addAll(fromUserUuidList);
+                }
                 resultMap.putAll(getOperateMap(processTaskVo, userUuidList, operationTypeSet));
             }
         }

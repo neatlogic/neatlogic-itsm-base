@@ -26,7 +26,7 @@ public interface ProcessTaskAgentMapper {
 
     int insertProcessTaskAgent(ProcessTaskAgentVo processTaskAgentVo);
 
-    int insertProcessTaskAgentTarget(ProcessTaskAgentTargetVo processTaskAgentTargetVo);
+    int insertIgnoreProcessTaskAgentTarget(ProcessTaskAgentTargetVo processTaskAgentTargetVo);
 
     int updateProcessTaskAgentIsActiveByFromUserUuid(String fromUserUuid);
 
