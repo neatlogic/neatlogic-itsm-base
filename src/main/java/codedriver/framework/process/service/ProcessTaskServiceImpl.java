@@ -1183,7 +1183,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
 
         /** 转报数据 **/
 //        Long fromProcessTaskId = processTaskMapper.getFromProcessTaskIdByToProcessTaskId(processTaskId);
-        ProcessTaskTranferReportVo processTaskTranferReportVo = processTaskMapper.getProcessTaskTranferReportByToProcessTaskId(processTaskId);
+        ProcessTaskTranferReportVo processTaskTranferReportVo = processTaskMapper.getProcessTaskTransferReportByToProcessTaskId(processTaskId);
         if (processTaskTranferReportVo != null) {
             ProcessTaskVo fromProcessTaskVo = getFromProcessTaskById(processTaskTranferReportVo.getFromProcessTaskId());
             ChannelTypeRelationVo channelTypeRelationVo = channelTypeMapper.getChannelTypeRelationById(processTaskTranferReportVo.getChannelTypeRelationId());

@@ -1750,7 +1750,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo = new ProcessTaskScoreTemplateConfigVo(processTaskScoreTemplateVo.getConfigStr());
                     if (StringUtils.isNotBlank(processTaskScoreTemplateConfigVo.getHash())
                             && selectContentByHashMapper.checkProcessTaskScoreTempleteConfigIsExists(processTaskScoreTemplateConfigVo.getHash()) == 0) {
-                        processTaskMapper.insertProcessTaskScoreTempleteConfig(processTaskScoreTemplateConfigVo);
+                        processTaskMapper.insertProcessTaskScoreTemplateConfig(processTaskScoreTemplateConfigVo);
                     }
                     processTaskScoreTemplateVo.setConfigHash(processTaskScoreTemplateConfigVo.getHash());
                 }
@@ -1864,7 +1864,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             Long fromProcessTaskId = paramObj.getLong("fromProcessTaskId");
             Long channelTypeRelationId = paramObj.getLong("channelTypeRelationId");
             if (fromProcessTaskId != null && channelTypeRelationId != null) {
-                processTaskMapper.insertProcessTaskTranferReport(new ProcessTaskTranferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
+                processTaskMapper.insertProcessTaskTransferReport(new ProcessTaskTranferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
             }
         } else {
             /* 锁定当前流程 **/
@@ -1993,7 +1993,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
         } finally {
             /* 处理历史记录 **/
-            ProcessTaskTranferReportVo processTaskTranferReportVo = processTaskMapper.getProcessTaskTranferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+            ProcessTaskTranferReportVo processTaskTranferReportVo = processTaskMapper.getProcessTaskTransferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             if (processTaskTranferReportVo != null) {
                 currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
                 currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASK.getParamName(), processTaskTranferReportVo.getFromProcessTaskId());
@@ -2378,7 +2378,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             userUuid,
                             currentUserUuid
                     );
-                    processTaskMapper.replaceProcesssTaskStepAgent(processTaskStepAgent);
+                    processTaskMapper.replaceProcessTaskStepAgent(processTaskStepAgent);
                     ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
                             currentProcessTaskStepVo.getProcessTaskId(),
                             currentProcessTaskStepVo.getId(),
@@ -2432,7 +2432,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         processTaskStepAgentVo.getAgentUuid(),
                         currentUserUuid
                 );
-                processTaskMapper.replaceProcesssTaskStepAgent(processTaskStepAgent);
+                processTaskMapper.replaceProcessTaskStepAgent(processTaskStepAgent);
                 ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
                         currentProcessTaskStepVo.getProcessTaskId(),
                         currentProcessTaskStepVo.getId(),

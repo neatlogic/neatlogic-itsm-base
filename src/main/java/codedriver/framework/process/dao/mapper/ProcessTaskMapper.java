@@ -66,8 +66,6 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskIdList(List<Long> existsFormProcessTaskIdList);
 
-    List<ProcessTaskStepContentVo> getProcessTaskStepContentProcessTaskId(Long processTaskId);
-
     List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
 
     List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
@@ -131,9 +129,6 @@ public interface ProcessTaskMapper {
     List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
             ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
-    List<Map<String, Object>> getProcessTaskActiveStepListByStepIdList(@Param("keyword") String keyword,
-                                                                              @Param("processTaskStepIdList") List<Long> processTaskStepIdList);
-
     ProcessTaskFormAttributeDataVo getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(
             ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo);
 
@@ -168,8 +163,6 @@ public interface ProcessTaskMapper {
 
     ProcessTaskStepContentVo getProcessTaskStepContentById(Long id);
 
-    int checkProcessTaskhasForm(Long processTaskId);
-
     List<ProcessTaskStepUserVo> getProcessTaskStepUserList(ProcessTaskStepUserVo processTaskStepUserVo);
 
     List<ProcessTaskStepUserVo> getProcessTaskStepUserListByProcessTaskIdList(List<Long> processTaskIdList);
@@ -196,7 +189,7 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskVo> getProcessTaskListByKeywordAndChannelUuidList(ProcessTaskSearchVo processTaskSearchVo);
 
-    ProcessTaskTranferReportVo getProcessTaskTranferReportByToProcessTaskId(Long toProcessTaskId);
+    ProcessTaskTranferReportVo getProcessTaskTransferReportByToProcessTaskId(Long toProcessTaskId);
 
     ProcessTaskRelationVo getProcessTaskRelationById(Long id);
 
@@ -231,8 +224,6 @@ public interface ProcessTaskMapper {
 
     List<String> getFocusUserListByTaskId(Long processTaskId);
 
-    List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskId(Long processTaskId);
-
     List<ProcessTagVo> getProcessTaskTagListByProcessTaskId(@Param("processTaskId") Long processTaskId);
 
     int getProcessTaskStepInOperationCountByProcessTaskId(Long processTaskId);
@@ -241,8 +232,6 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskVo> getProcessTaskListByChannelTypeUuidAndStartTime(ProcessTaskVo processTaskVo);
 
-    List<ProcessTaskVo> getProcessTaskDetailListByIdList(List<Long> processTaskIdList);
-
     String getProcessTaskStepNameById(Long id);
 
     Integer getProcessTaskCountBySql(String searchSql);
@@ -250,8 +239,6 @@ public interface ProcessTaskMapper {
     List<Map<String, Object>> getWorkcenterProcessTaskMapBySql(String searchSql);
 
     List<ProcessTaskVo> getProcessTaskBySql(String searchSql);
-
-    List<ProcessTaskVo> getProcessTaskByIndexKeyword(@Param("keywordList") List<String> keywordList, @Param("limit") int limit, @Param("targetType") String targetType,@Param("columnPro") String columnPro);
 
     Long getProcessTaskIdByChannelUuidLimitOne(String channelUuid);
 
@@ -268,6 +255,8 @@ public interface ProcessTaskMapper {
     Integer getProcessTaskStepReapprovalRestoreBackupMaxSortByBackupStepId(Long processTaskStepId);
 
     List<ProcessTaskStepReapprovalRestoreBackupVo> getProcessTaskStepReapprovalRestoreBackupListByBackupStepId(Long processTaskStepId);
+
+    List<ProcessTaskVo> getProcessTaskByIndexKeyword(@Param("keywordList") List<String> keywordList, @Param("limit") int limit, @Param("targetType") String targetType,@Param("columnPro") String columnPro);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -339,7 +328,7 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 
-    int insertProcessTaskTranferReport(ProcessTaskTranferReportVo processTaskTranferReportVo);
+    int insertProcessTaskTransferReport(ProcessTaskTranferReportVo processTaskTranferReportVo);
 
     int replaceProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
 
@@ -349,7 +338,7 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskScoreTemplate(ProcessTaskScoreTemplateVo processTaskScoreTemplateVo);
 
-    int insertProcessTaskScoreTempleteConfig(ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo);
+    int insertProcessTaskScoreTemplateConfig(ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo);
 
 
     int insertProcessTaskFocus(@Param("processTaskId") Long processTaskId,
@@ -357,7 +346,7 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskTag(@Param("processTaskTagList") List<ProcessTaskTagVo> processTaskTagList);
 
-    int replaceProcesssTaskStepAgent(ProcessTaskStepAgentVo processTaskStepAgentVo);
+    int replaceProcessTaskStepAgent(ProcessTaskStepAgentVo processTaskStepAgentVo);
 
     int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
@@ -420,8 +409,6 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskSlaTransferById(Long slaTransferId);
 
-    int deleteProcessTaskStepAuditById(Long auditId);
-
     int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
     int deleteProcessTaskStepFileByProcessTaskStepId(@Param("processTaskId") Long processTaskId, @Param("processTaskStepId") Long processTaskStepId);
@@ -450,17 +437,7 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskSlaNotifyBySlaId(Long slaId);
 
-    int deleteProcessTaskStepAuditByProcessTaskId(Long processTaskId);
-
-    int deleteProcessTaskStepContentByProcessTaskId(Long processTaskId);
-
     int deleteProcessTaskStepFileByProcessTaskId(Long processTaskId);
-
-    int deleteProcessTaskStepRemindByProcessTaskId(Long processTaskId);
-
-    int deleteProcessTaskStepUserByProcessTaskId(Long processTaskId);
-
-    int deleteProcessTaskStepWorkerByProcessTaskId(Long processTaskId);
 
     int deleteProcessTaskFormByProcessTaskId(Long processTaskId);
 
@@ -480,8 +457,6 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskStepWorkerMinorByProcessTaskStepId(Long processTaskStepId);
 
     int deleteProcessTaskStepUserMinorByProcessTaskStepId(Long processTaskStepId);
-
-    int deleteProcessTaskRepeatByRepeatGroupId(Long repeatGroupId);
 
     int deleteProcessTaskRepeatByProcessTaskId(Long processTaskId);
 
