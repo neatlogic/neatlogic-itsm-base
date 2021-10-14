@@ -1065,110 +1065,36 @@
         </foreach>
     </select>
 
-    <select id="getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList"
-            parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo" resultType="int">
+    <select id="getProcessTaskStepIdSetByChannelUuidListAndAuthenticationInfo" resultType="java.lang.Long">
         SELECT
-        COUNT(DISTINCT a.`processtask_step_id`)
-        FROM `processtask_step_worker` a
-        JOIN `processtask` b ON b.`id` = a.`processtask_id`
-        JOIN `processtask_serial_number` c ON c.`processtask_id` =
-        a.`processtask_id`
-        WHERE ((`type` = 'user' AND `uuid` in
-        <foreach collection="userUuidList" item="userUuid" open="(" separator="," close=")">
-            #{userUuid}
-        </foreach>
-        )
-        <if test="teamUuidList != null and teamUuidList.size() > 0">
-            OR (`type` = 'team' AND `uuid` in
-            <foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
-                #{teamUuid}
-            </foreach>
-            )
-        </if>
-        <if test="roleUuidList != null and roleUuidList.size() > 0">
-            OR (`type` = 'role' AND `uuid` in
-            <foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
-                #{roleUuid}
-            </foreach>
-            )
-        </if>
-        )
-        <if test="keyword != null and keyword != ''">
-            AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
-        </if>
-    </select>
-
-    <select id="getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList"
-            parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo"
-            resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
-        (SELECT
-        a.`processtask_id` AS processTaskId,
-        a.`processtask_step_id` AS processTaskStepId
+            a.`processtask_step_id`
         FROM `processtask_step_worker` a
         JOIN `processtask` b ON b.`id` = a.`processtask_id` and b.`status` = 'running'
-        JOIN
-        `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
-        WHERE a.`processtask_id` = #{processTaskId}
-        <if test="keyword != null and keyword != ''">
-            AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
-        </if>
-        AND ((`type` = 'user' AND `uuid` in
-        <foreach collection="userUuidList" item="userUuid" open="(" separator="," close=")">
-            #{userUuid}
-        </foreach>
-        )
-        <if test="teamUuidList != null and teamUuidList.size() > 0">
-            OR (`type` = 'team' AND `uuid` in
-            <foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
+        JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
+        WHERE ((`type` = 'user' AND a.`uuid` = #{authenticationInfoVo.userUuid})
+        <if test="authenticationInfoVo.teamUuidList != null and authenticationInfoVo.teamUuidList.size() > 0">
+            OR (`type` = 'team' AND a.`uuid` in
+            <foreach collection="authenticationInfoVo.teamUuidList" item="teamUuid" open="(" separator="," close=")">
                 #{teamUuid}
             </foreach>
             )
         </if>
-        <if test="roleUuidList != null and roleUuidList.size() > 0">
-            OR (`type` = 'role' AND `uuid` in
-            <foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
+        <if test="authenticationInfoVo.roleUuidList != null and authenticationInfoVo.roleUuidList.size() > 0">
+            OR (`type` = 'role' AND a.`uuid` in
+            <foreach collection="authenticationInfoVo.roleUuidList" item="roleUuid" open="(" separator="," close=")">
                 #{roleUuid}
             </foreach>
             )
         </if>
         )
-        ORDER BY a.`processtask_step_id` DESC)
-        UNION
-        (SELECT
-        a.`processtask_id` AS processTaskId,
-        a.`processtask_step_id` AS processTaskStepId
-        FROM `processtask_step_worker` a
-        JOIN `processtask` b ON b.`id` =
-        a.`processtask_id` and b.`status` = 'running'
-        JOIN `processtask_serial_number` c
-        ON c.`processtask_id` = a.`processtask_id`
-        WHERE a.`processtask_id` != #{processTaskId}
         <if test="keyword != null and keyword != ''">
             AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
         </if>
-        AND ((`type` = 'user' AND `uuid` in
-        <foreach collection="userUuidList" item="userUuid" open="(" separator="," close=")">
-            #{userUuid}
-        </foreach>
-        )
-        <if test="teamUuidList != null and teamUuidList.size() > 0">
-            OR (`type` = 'team' AND `uuid` in
-            <foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
-                #{teamUuid}
+        <if test="channelUuidList != null and channelUuidList.size() > 0">
+            AND b.`channel_uuid` IN
+            <foreach collection="channelUuidList" item="channelUuid" open="(" separator="," close=")">
+                #{channelUuid}
             </foreach>
-            )
-        </if>
-        <if test="roleUuidList != null and roleUuidList.size() > 0">
-            OR (`type` = 'role' AND `uuid` in
-            <foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
-                #{roleUuid}
-            </foreach>
-            )
-        </if>
-        )
-        ORDER BY a.`processtask_step_id` DESC)
-        <if test="needPage">
-            LIMIT #{startNum}, #{pageSize}
         </if>
     </select>
 
@@ -1313,41 +1239,6 @@
         <if test="action != null">
             and `action` = #{action}
         </if>
-    </select>
-
-    <select id="getProcessTaskListByIdListAndStartTime" resultMap="processTaskMap">
-        SELECT
-        `id`,
-        `title`,
-        `process_uuid`,
-        `channel_uuid`,
-        `config_hash`,
-        `priority_uuid`,
-        `status`,
-        `start_time`,
-        `end_time`,
-        `owner` as ownerUuid,
-        `reporter` as reporterUuid,
-        `expire_time`,
-        `worktime_uuid`,
-        `is_show`,
-        `serial_number`,
-        `source`
-        FROM `processtask`
-        <where>
-            <if test="processTaskIdList != null and processTaskIdList.size() >0">
-                `id` IN
-                <foreach collection="processTaskIdList" item="id" open="(" separator="," close=")">
-                    #{id}
-                </foreach>
-            </if>
-            <if test="fromDate != null and fromDate != ''">
-                AND `start_time` >= #{fromDate}
-            </if>
-            <if test="toDate != null and toDate != ''">
-                AND `start_time` &lt;= #{toDate}
-            </if>
-        </where>
     </select>
 
     <select id="getProcessTaskListByIdList" parameterType="java.lang.Long" resultMap="processTaskMap">

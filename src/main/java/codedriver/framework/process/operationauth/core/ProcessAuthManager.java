@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import codedriver.framework.process.service.ProcessTaskAgentService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -68,6 +67,14 @@ public class ProcessAuthManager {
         }
 
         public Builder addProcessTaskStepId(Long... processTaskStepIds) {
+            for (Long processTaskStepId : processTaskStepIds) {
+                if (processTaskStepId != null) {
+                    processTaskStepIdSet.add(processTaskStepId);
+                }
+            }
+            return this;
+        }
+        public Builder addProcessTaskStepId(List<Long> processTaskStepIds) {
             for (Long processTaskStepId : processTaskStepIds) {
                 if (processTaskStepId != null) {
                     processTaskStepIdSet.add(processTaskStepId);

@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface ProcessTaskMapper {
     ProcessTaskSlaVo getProcessTaskSlaById(Long slaId);
@@ -123,11 +124,11 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdList(List<Long> processTaskIdList);
 
-    int getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
-            ProcessTaskStepWorkerVo processTaskStepWorkerVo);
-
-    List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList(
-            ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+    Set<Long> getProcessTaskStepIdSetByChannelUuidListAndAuthenticationInfo(
+            @Param("keyword") String keyword,
+            @Param("channelUuidList") List<String> channelUuidList,
+            @Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo
+    );
 
     ProcessTaskFormAttributeDataVo getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(
             ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo);
@@ -144,10 +145,6 @@ public interface ProcessTaskMapper {
             @Param("processTaskId") Long processTaskId, @Param("processStepUuid") String processStepUuid);
 
     List<ProcessTaskStepAuditVo> getProcessTaskAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
-
-    List<ProcessTaskVo> getProcessTaskListByIdListAndStartTime(
-            @Param("processTaskIdList") List<Long> processTaskIdList, @Param("fromDate") String fromDate,
-            @Param("toDate") String toDate);
 
     List<ProcessTaskVo> getProcessTaskListByIdList(List<Long> processTaskIdList);
 
