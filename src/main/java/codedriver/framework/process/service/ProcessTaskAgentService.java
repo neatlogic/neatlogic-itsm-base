@@ -14,4 +14,6 @@ import java.util.List;
 public interface ProcessTaskAgentService {
 
     List<String> getFromUserUuidListByToUserUuidAndChannelUuid(String toUserUuid, String channelUuid);
+
+    List<String> getChannelUuidListByProcessTaskAgentId(Long processTaskAgentId);
 }

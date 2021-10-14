@@ -288,6 +288,16 @@
 		</foreach>
 	</select>
 
+	<select id="getChannelUuidListByParentUuidList" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+		`uuid`
+		FROM `channel`
+		WHERE `parent_uuid` IN
+		<foreach collection="list" item="parentUuid" open="(" separator="," close=")">
+			#{parentUuid}
+		</foreach>
+	</select>
+
 	<select id="getMaxSortByParentUuid" parameterType="java.lang.String" resultType="int" useCache="false">
 		SELECT IFNULL(MAX(`sort`), 0) FROM `channel` WHERE `parent_uuid` = #{parentUuid}
 	</select>

@@ -191,6 +191,13 @@
 	WHERE `lft` &lt;= #{lft} AND `rht` &gt;= #{rht}
 	</select>
 
+	<select id="getDownwardUuidListByLftRht" resultType="java.lang.String" useCache="false">
+	SELECT
+		`uuid`
+	FROM `catalog`
+	WHERE `lft` &gt;= #{lft} AND `rht` &lt;= #{rht}
+	</select>
+
 	<select id="getAuthorizedCatalogList" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
 	    SELECT
 		DISTINCT b.`uuid`,b.`name`,b.`icon`,b.`desc`,b.`parent_uuid` AS parentUuid

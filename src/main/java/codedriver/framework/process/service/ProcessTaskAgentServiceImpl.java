@@ -5,7 +5,6 @@
 
 package codedriver.framework.process.service;
 
-import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.dao.mapper.CatalogMapper;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
@@ -20,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author linbq
@@ -74,5 +75,34 @@ public class ProcessTaskAgentServiceImpl implements ProcessTaskAgentService {
             }
         }
         return fromUserUuidList;
+    }
+
+    @Override
+    public List<String> getChannelUuidListByProcessTaskAgentId(Long processTaskAgentId) {
+        List<String> resultList = new ArrayList<>();
+        Set<String> catalogUuidList = new HashSet<>();
+        List<ProcessTaskAgentTargetVo> processTaskAgentTargetList = processTaskAgentMapper.getProcessTaskAgentTargetListByProcessTaskAgentId(processTaskAgentId);
+        for (ProcessTaskAgentTargetVo processTaskAgentTargetVo : processTaskAgentTargetList) {
+            String type = processTaskAgentTargetVo.getType();
+            if ("channel".equals(type)) {
+                if (channelMapper.checkChannelIsExists(processTaskAgentTargetVo.getTarget()) == 0) {
+                    resultList.add(processTaskAgentTargetVo.getTarget());
+                }
+            } else if ("catalog".equals(type)) {
+                CatalogVo catalogVo = catalogMapper.getCatalogByUuid(processTaskAgentTargetVo.getTarget());
+                if (catalogVo != null) {
+                    List<String> downwardUuidList = catalogMapper.getDownwardUuidListByLftRht(catalogVo.getLft(), catalogVo.getRht());
+                    catalogUuidList.addAll(downwardUuidList);
+                }
+            }
+        }
+        if (CollectionUtils.isNotEmpty(catalogUuidList)) {
+            List<String> channelUuidList = channelMapper.getChannelUuidListByParentUuidList(new ArrayList<>(catalogUuidList));
+            if (CollectionUtils.isNotEmpty(channelUuidList)) {
+                channelUuidList.removeAll(resultList);
+                resultList.addAll(channelUuidList);
+            }
+        }
+        return resultList;
     }
 }

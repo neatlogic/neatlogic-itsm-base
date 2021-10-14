@@ -1081,14 +1081,46 @@
         </foreach>
     </select>
 
-    <select id="getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList"
+    <select id="getProcessTaskStepIdSetByChannelUuidListAndAuthenticationInfo" resultType="java.lang.Long">
+        SELECT
+            a.`processtask_step_id`
+        FROM `processtask_step_worker` a
+        JOIN `processtask` b ON b.`id` = a.`processtask_id` and b.`status` = 'running'
+        JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
+        WHERE ((`type` = 'user' AND a.`uuid` = #{authenticationInfoVo.userUuid})
+        <if test="authenticationInfoVo.teamUuidList != null and authenticationInfoVo.teamUuidList.size() > 0">
+            OR (`type` = 'team' AND a.`uuid` in
+            <foreach collection="authenticationInfoVo.teamUuidList" item="teamUuid" open="(" separator="," close=")">
+                #{teamUuid}
+            </foreach>
+            )
+        </if>
+        <if test="authenticationInfoVo.roleUuidList != null and authenticationInfoVo.roleUuidList.size() > 0">
+            OR (`type` = 'role' AND a.`uuid` in
+            <foreach collection="authenticationInfoVo.roleUuidList" item="roleUuid" open="(" separator="," close=")">
+                #{roleUuid}
+            </foreach>
+            )
+        </if>
+        )
+        <if test="keyword != null and keyword != ''">
+            AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="channelUuidList != null and channelUuidList.size() > 0">
+            AND b.`channel_uuid` IN
+            <foreach collection="channelUuidList" item="channelUuid" open="(" separator="," close=")">
+                #{channelUuid}
+            </foreach>
+        </if>
+    </select>
+
+    <!--<select id="getProcessTaskStepWorkerCountByProcessTaskIdUserUuidTeamUuidListRoleUuidList"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo" resultType="int">
         SELECT
-        COUNT(DISTINCT a.`processtask_step_id`)
+            COUNT(DISTINCT a.`processtask_step_id`)
         FROM `processtask_step_worker` a
-        JOIN `processtask` b ON b.`id` = a.`processtask_id`
-        JOIN `processtask_serial_number` c ON c.`processtask_id` =
-        a.`processtask_id`
+        JOIN `processtask` b ON b.`id` = a.`processtask_id` and b.`status` = 'running'
+        JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
         WHERE ((`type` = 'user' AND `uuid` in
         <foreach collection="userUuidList" item="userUuid" open="(" separator="," close=")">
             #{userUuid}
@@ -1112,18 +1144,17 @@
         <if test="keyword != null and keyword != ''">
             AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
         </if>
-    </select>
+    </select>-->
 
-    <select id="getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList"
+    <!--<select id="getProcessTaskStepWorkerListByProcessTaskIdUserUuidTeamUuidListRoleUuidList"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo"
             resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
         (SELECT
-        a.`processtask_id` AS processTaskId,
-        a.`processtask_step_id` AS processTaskStepId
+            a.`processtask_id` AS processTaskId,
+            a.`processtask_step_id` AS processTaskStepId
         FROM `processtask_step_worker` a
         JOIN `processtask` b ON b.`id` = a.`processtask_id` and b.`status` = 'running'
-        JOIN
-        `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
+        JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
         WHERE a.`processtask_id` = #{processTaskId}
         <if test="keyword != null and keyword != ''">
             AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
@@ -1151,13 +1182,11 @@
         ORDER BY a.`processtask_step_id` DESC)
         UNION
         (SELECT
-        a.`processtask_id` AS processTaskId,
-        a.`processtask_step_id` AS processTaskStepId
+            a.`processtask_id` AS processTaskId,
+            a.`processtask_step_id` AS processTaskStepId
         FROM `processtask_step_worker` a
-        JOIN `processtask` b ON b.`id` =
-        a.`processtask_id` and b.`status` = 'running'
-        JOIN `processtask_serial_number` c
-        ON c.`processtask_id` = a.`processtask_id`
+        JOIN `processtask` b ON b.`id` = a.`processtask_id` and b.`status` = 'running'
+        JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
         WHERE a.`processtask_id` != #{processTaskId}
         <if test="keyword != null and keyword != ''">
             AND (b.`title` LIKE CONCAT('%', #{keyword}, '%') OR c.`serial_number` LIKE CONCAT('%', #{keyword}, '%'))
@@ -1186,7 +1215,7 @@
         <if test="needPage">
             LIMIT #{startNum}, #{pageSize}
         </if>
-    </select>
+    </select>-->
 
     <select id="getProcessTaskActiveStepListByStepIdList" resultType="java.util.HashMap">
         SELECT
@@ -1352,7 +1381,7 @@
         </if>
     </select>
 
-    <select id="getProcessTaskListByIdListAndStartTime" resultMap="processTaskMap">
+    <!--<select id="getProcessTaskListByIdListAndStartTime" resultMap="processTaskMap">
         SELECT
         `id`,
         `title`,
@@ -1385,7 +1414,7 @@
                 AND `start_time` &lt;= #{toDate}
             </if>
         </where>
-    </select>
+    </select>-->
 
     <select id="getProcessTaskListByIdList" parameterType="java.lang.Long" resultMap="processTaskMap">
         SELECT
