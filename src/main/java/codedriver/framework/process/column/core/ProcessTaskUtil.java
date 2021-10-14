@@ -44,7 +44,9 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessField.OWNER.getValue(), isValue ? processTaskVo.getOwner() : processTaskVo.getOwnerVo().getUserName());
         resultObj.put(ProcessField.OWNERLEVEL.getValue(), processTaskVo.getOwnerVo().getVipLevel());
         resultObj.put(ProcessField.REPORTER.getValue(), isValue ? processTaskVo.getReporter() : processTaskVo.getReporterVo().getUserName());
-        resultObj.put(ProcessField.PRIORITY.getValue(), isValue ? processTaskVo.getPriority().getUuid() : processTaskVo.getPriority().getName());
+        if(processTaskVo.getPriority() != null) {
+            resultObj.put(ProcessField.PRIORITY.getValue(), isValue ? processTaskVo.getPriority().getUuid() : processTaskVo.getPriority().getName());
+        }
         resultObj.put(ProcessField.STATUS.getValue(), isValue ? processTaskVo.getStatusVo().getStatus() : processTaskVo.getStatusVo().getText());
         resultObj.put(ProcessField.OWNERCOMPANY.getValue(), isValue ? processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessField.OWNERDEPARTMENT.getValue(), isValue ? processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getName).collect(Collectors.toList()));
@@ -134,7 +136,9 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessTaskParams.CHANNELPATH.getValue(), processTaskVo.getChannelPath());
         resultObj.put(ProcessTaskParams.OWNERNAME.getValue(), processTaskVo.getOwnerVo().getUserName());
         resultObj.put(ProcessTaskParams.REPORTERNAME.getValue(), processTaskVo.getReporterVo().getUserName());
-        resultObj.put(ProcessTaskParams.PRIORITYNAME.getValue(), processTaskVo.getPriority().getName());
+        if(processTaskVo.getPriority() != null) {
+            resultObj.put(ProcessTaskParams.PRIORITYNAME.getValue(), processTaskVo.getPriority().getName());
+        }
         resultObj.put(ProcessTaskParams.STATUSTEXT.getValue(), processTaskVo.getStatusVo().getText());
         resultObj.put(ProcessTaskParams.OWNERCOMPANYLIST.getValue(), processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessTaskParams.OPERATOR.getValue(), UserContext.get().getUserName());
