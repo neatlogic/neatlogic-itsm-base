@@ -6,12 +6,12 @@ import codedriver.framework.autoexec.source.IAutoexecJobSource;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum AutoExecJobSource implements IAutoexecJobSource {
-    PROCESSTASK("工单", "processtask");
+public enum AutoExecJobProcessSource implements IAutoexecJobSource {
+    ITSM("IT服务", "itsm");
     private final String text;
     private final String value;
 
-    private AutoExecJobSource(String _text, String _value) {
+    private AutoExecJobProcessSource(String _text, String _value) {
         this.text = _text;
         this.value = _value;
     }
@@ -25,7 +25,7 @@ public enum AutoExecJobSource implements IAutoexecJobSource {
     }
 
     public static String getText(String _status) {
-        for (AutoExecJobSource s : AutoExecJobSource.values()) {
+        for (AutoExecJobProcessSource s : AutoExecJobProcessSource.values()) {
             if (s.getValue().equals(_status)) {
                 return s.getText();
             }
@@ -39,7 +39,7 @@ public enum AutoExecJobSource implements IAutoexecJobSource {
     @Override
     public List<AutoexecJobSourceVo> getSource() {
         List<AutoexecJobSourceVo> list = new ArrayList<>();
-        for (AutoExecJobSource s : AutoExecJobSource.values()) {
+        for (AutoExecJobProcessSource s : AutoExecJobProcessSource.values()) {
             AutoexecJobSourceVo source = new AutoexecJobSourceVo();
             source.setSource(s.value);
             source.setSourceName(s.text);
