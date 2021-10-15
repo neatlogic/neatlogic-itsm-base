@@ -85,7 +85,7 @@ public class ProcessTaskAgentServiceImpl implements ProcessTaskAgentService {
         for (ProcessTaskAgentTargetVo processTaskAgentTargetVo : processTaskAgentTargetList) {
             String type = processTaskAgentTargetVo.getType();
             if ("channel".equals(type)) {
-                if (channelMapper.checkChannelIsExists(processTaskAgentTargetVo.getTarget()) == 0) {
+                if (channelMapper.checkChannelIsExists(processTaskAgentTargetVo.getTarget()) > 0) {
                     resultList.add(processTaskAgentTargetVo.getTarget());
                 }
             } else if ("catalog".equals(type)) {
