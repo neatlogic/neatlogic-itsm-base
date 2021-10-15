@@ -15,7 +15,7 @@ public enum ConditionProcessTaskOptions {
     OWNERLEVEL("ownerlevel", "上报人级别"),
     STEPTASK("steptask", "子任务"),
     ACTIONTRIGGERUSER("actiontriggeruser", "动作触发人"),
-//    SUBTASKID("subtaskid", "当前子任务id")
+    STEPTASKID("steptaskid", "子任务ID")
     ;
     private String value;
     private String text;

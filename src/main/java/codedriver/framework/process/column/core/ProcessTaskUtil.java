@@ -53,6 +53,7 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessField.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);
         resultObj.put(ProcessField.OWNERROLE.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.OWNERROLE.getValue())).getConditionParamData(processTaskVo));
         resultObj.put(ProcessField.STEPTASK.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.STEPTASK.getValue())).getConditionParamData(processTaskVo));
+        resultObj.put(ProcessField.STEPTASKID.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.STEPTASKID.getValue())).getConditionParamData(processTaskVo));
         resultObj.put(ProcessField.ACTIONTRIGGERUSER.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.ACTIONTRIGGERUSER.getValue())).getConditionParamData(processTaskVo));
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
