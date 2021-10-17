@@ -486,6 +486,25 @@
         ORDER BY id DESC
     </select>
 
+    <select id="getProcessTaskStepContentByProcessTaskStepIdList" parameterType="java.lang.Long"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
+        SELECT `id`,
+               `processtask_id`      AS processTaskId,
+               `processtask_step_id` AS processTaskStepId,
+               `content_hash`        AS contentHash,
+               `type`,
+               `fcd`,
+               `fcu`,
+               `lcd`,
+               `lcu`
+        FROM `processtask_step_content`
+        WHERE `processtask_step_id` IN
+        <foreach collection="list" item="processTaskStepId" open="(" separator="," close=")">
+            #{processTaskStepId}
+        </foreach>
+        ORDER BY id DESC
+    </select>
+
     <resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
         <!--<id column="user_uuid" property="userUuid" />-->
         <!--<id column="processtask_step_id" property="processTaskStepId" />-->
@@ -2210,6 +2229,11 @@
         ORDER BY MAX(ff.counter) DESC
         limit 0,#{limit}
     </select>
+
+    <select id="getProcessTaskStepIdListByProcessTaskIdAndTagId" parameterType="codedriver.framework.process.dto.ProcessTaskStepTagVo" resultType="java.lang.Long">
+        SELECT `processtask_step_id` FROM `processtask_step_tag` WHERE `processtask_id` = #{processTaskId} AND `tag_id` = #{tagId}
+    </select>
+
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}

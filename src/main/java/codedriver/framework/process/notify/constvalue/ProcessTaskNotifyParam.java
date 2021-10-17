@@ -1,8 +1,18 @@
-package codedriver.framework.process.constvalue;
+/*
+ * Copyright(c) 2021 TechSureCo.,Ltd.AllRightsReserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
+package codedriver.framework.process.notify.constvalue;
 
 import codedriver.framework.common.constvalue.ParamType;
+import codedriver.framework.notify.core.INotifyParam;
 
-public enum ProcessTaskParams {
+/**
+ * @author linbq
+ * @since 2021/10/15 17:12
+ **/
+public enum ProcessTaskNotifyParam implements INotifyParam {
     ID("id", "工单ID", ParamType.NUMBER),
     SERIALNUMBER("serialNumber", "工单号", ParamType.STRING),
     TITLE("title", "标题", ParamType.STRING),
@@ -12,24 +22,11 @@ public enum ProcessTaskParams {
     CONTENT("content", "上报内容", ParamType.STRING),
     STARTTIME("startTime", "开始时间", ParamType.DATE),
     ENDTIME("endTime", "结束时间", ParamType.DATE),
-    //    EXPIREDTIME("expiretime", "剩余时间",ParamType.STRING),
     OWNERNAME("ownerName", "上报人", ParamType.STRING),
     REPORTERNAME("reporterName", "代报人", ParamType.STRING),
     OWNERCOMPANYLIST("ownerCompanyList", "上报人公司列表", ParamType.ARRAY),
     OWNERDEPARTMENTLIST("ownerDepartmentList", "上报人公司列表", ParamType.ARRAY),
     STATUSTEXT("statusText", "工单状态", ParamType.STRING),
-    STEPID("stepId", "步骤id", ParamType.NUMBER),
-    STEPNAME("stepName", "步骤名", ParamType.STRING),
-    CHANGESTEPNAME("changeStepName", "变更步骤步骤名", ParamType.STRING),
-    STEPWORKER("stepWorker", "步骤处理人", ParamType.STRING),
-    CHANGESTEPWORKER("changeStepWorker", "变更步骤处理人", ParamType.STRING),
-//    SUBTASKWORKER("subtaskWorker", "子任务处理人", ParamType.STRING),
-//    SUBTASKCONTENT("subtaskContent", "子任务内容", ParamType.STRING),
-//    SUBTASKDEADLINE("subtaskDeadline", "子任务期望完成时间", ParamType.DATE),
-    TASKCONFIGNAME("taskConfigName", "任务名", ParamType.STRING),
-    TASKWORKER("taskWorker", "任务处理人", ParamType.STRING),
-    TASKCONTENT("taskContent", "任务内容", ParamType.STRING),
-    TASKUSERCONTENT("taskUserContent", "任务用户内容", ParamType.STRING),
     OPERATOR("operator", "操作人", ParamType.STRING),
     REASON("reason", "原因", ParamType.STRING),
     APPROVALCOMMENTLIST("approvalCommentList", "审批意见", ParamType.ARRAY),
@@ -292,40 +289,41 @@ public enum ProcessTaskParams {
             "\t\t</#if>\n" +
             "\t</#list>\n" +
             "</#if>");
-
-    private String value;
-    private String text;
-    private ParamType paramType;
+    private final String value;
+    private final String text;
+    private final ParamType paramType;
     private String freemarkerTemplate;
 
-    private ProcessTaskParams(String value, String text, ParamType paramType) {
+    ProcessTaskNotifyParam(String value, String text, ParamType paramType) {
         this(value, text, paramType, null);
     }
 
-    private ProcessTaskParams(String value, String text, ParamType paramType, String freemarkerTemplate) {
+    ProcessTaskNotifyParam(String value, String text, ParamType paramType, String freemarkerTemplate) {
         this.value = value;
         this.text = text;
         this.paramType = paramType;
         this.freemarkerTemplate = freemarkerTemplate;
     }
-
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public String getText() {
         return text;
     }
 
+    @Override
     public ParamType getParamType() {
         return paramType;
     }
 
+    @Override
     public String getFreemarkerTemplate() {
         if (freemarkerTemplate == null && paramType != null) {
             freemarkerTemplate = paramType.getFreemarkerTemplate(value);
         }
         return freemarkerTemplate;
     }
-
 }
