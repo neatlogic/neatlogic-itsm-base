@@ -144,7 +144,6 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessTaskParams.OWNERCOMPANYLIST.getValue(), processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessTaskParams.OWNERDEPARTMENTLIST.getValue(), processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessTaskParams.OPERATOR.getValue(), UserContext.get().getUserName());
-        resultObj.put(ProcessTaskParams.APPROVALCOMMENTLIST.getValue(), processTaskVo.getApprovalCommentList());
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
         if (comment != null && StringUtils.isNotBlank(comment.getContent())) {

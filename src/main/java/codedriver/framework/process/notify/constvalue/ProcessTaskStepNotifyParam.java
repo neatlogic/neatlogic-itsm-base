@@ -17,6 +17,7 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
     STEPID("stepId", "步骤id", ParamType.NUMBER),
     STEPNAME("stepName", "步骤名", ParamType.STRING),
     STEPWORKER("stepWorker", "步骤处理人", ParamType.STRING),
+    REASON("reason", "原因", ParamType.STRING),
     ;
 
     private final String value;

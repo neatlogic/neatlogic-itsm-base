@@ -169,9 +169,6 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "工单来源", type = ApiParamType.STRING)
     private String source = "process";
 
-    @EntityField(name = "审批意见列表", type = ApiParamType.JSONARRAY)
-    private List<ProcessTaskStepReplyVo> approvalCommentList;
-
     public ProcessTaskVo() {
 
     }
@@ -746,11 +743,4 @@ public class ProcessTaskVo extends BasePageVo {
         this.isNeedPriority = isNeedPriority;
     }
 
-    public List<ProcessTaskStepReplyVo> getApprovalCommentList() {
-        return approvalCommentList;
-    }
-
-    public void setApprovalCommentList(List<ProcessTaskStepReplyVo> approvalCommentList) {
-        this.approvalCommentList = approvalCommentList;
-    }
 }

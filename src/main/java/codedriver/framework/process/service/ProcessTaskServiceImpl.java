@@ -1234,27 +1234,6 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             ownerVo.setTeamList(teamList);
             processTaskVo.setOwnerVo(ownerVo);
         }
-
-        // 临时
-        Long tagId = processTagMapper.getProcessTagIdByName("审批");
-        if (tagId != null) {
-            ProcessTaskStepTagVo processTaskStepTagVo = new ProcessTaskStepTagVo();
-            processTaskStepTagVo.setProcessTaskId(processTaskId);
-            processTaskStepTagVo.setTagId(tagId);
-            List<Long> processTaskStepIdList = processTaskMapper.getProcessTaskStepIdListByProcessTaskIdAndTagId(processTaskStepTagVo);
-            if (CollectionUtils.isNotEmpty(processTaskStepIdList)) {
-                List<ProcessTaskStepContentVo> processTaskStepContentList = processTaskMapper.getProcessTaskStepContentByProcessTaskStepIdList(processTaskStepIdList);
-                if (CollectionUtils.isNotEmpty(processTaskStepContentList)) {
-                    List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
-                    for (ProcessTaskStepContentVo contentVo : processTaskStepContentList) {
-                        ProcessTaskStepReplyVo comment = new ProcessTaskStepReplyVo(contentVo);
-                        comment.setContent(selectContentByHashMapper.getProcessTaskContentStringByHash(contentVo.getContentHash()));
-                        commentList.add(comment);
-                    }
-                    processTaskVo.setApprovalCommentList(commentList);
-                }
-            }
-        }
         return processTaskVo;
     }
 
