@@ -502,7 +502,7 @@
         <foreach collection="list" item="processTaskStepId" open="(" separator="," close=")">
             #{processTaskStepId}
         </foreach>
-        ORDER BY id DESC
+        ORDER BY `lcd` DESC
     </select>
 
     <resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
