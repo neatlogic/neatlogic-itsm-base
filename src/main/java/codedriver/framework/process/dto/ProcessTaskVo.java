@@ -742,5 +742,4 @@ public class ProcessTaskVo extends BasePageVo {
     public void setIsNeedPriority(Integer isNeedPriority) {
         this.isNeedPriority = isNeedPriority;
     }
-
 }

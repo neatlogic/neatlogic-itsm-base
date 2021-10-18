@@ -1234,6 +1234,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             ownerVo.setTeamList(teamList);
             processTaskVo.setOwnerVo(ownerVo);
         }
+
         return processTaskVo;
     }
 
