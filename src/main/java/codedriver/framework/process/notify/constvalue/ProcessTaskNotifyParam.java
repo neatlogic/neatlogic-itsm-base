@@ -27,7 +27,6 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
     OWNERCOMPANYLIST("ownerCompanyList", "上报人公司列表", ParamType.ARRAY),
     OWNERDEPARTMENTLIST("ownerDepartmentList", "上报人公司列表", ParamType.ARRAY),
     STATUSTEXT("statusText", "工单状态", ParamType.STRING),
-    OPERATOR("operator", "操作人", ParamType.STRING),
     APPROVALCOMMENTLIST("approvalCommentList", "审批意见", ParamType.ARRAY),
     FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??>\n" +
             "\t<#list DATA.form as attributeItem>\t\t\t\t   \n" +
