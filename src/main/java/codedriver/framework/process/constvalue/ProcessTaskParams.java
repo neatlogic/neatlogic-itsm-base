@@ -16,7 +16,6 @@ public enum ProcessTaskParams {
     OWNERNAME("ownerName", "上报人", ParamType.STRING),
     REPORTERNAME("reporterName", "代报人", ParamType.STRING),
     OWNERCOMPANYLIST("ownerCompanyList", "上报人公司列表", ParamType.ARRAY),
-    OWNERDEPARTMENTLIST("ownerDepartmentList", "上报人公司列表", ParamType.ARRAY),
     STATUSTEXT("statusText", "工单状态", ParamType.STRING),
     STEPID("stepId", "步骤id", ParamType.NUMBER),
     STEPNAME("stepName", "步骤名", ParamType.STRING),
