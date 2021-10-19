@@ -59,12 +59,6 @@ public interface ProcessMapper {
 	ProcessStepVo getProcessStepByUuid(String processStepUuid);
 
     ProcessScoreTemplateVo getProcessScoreTemplateByProcessUuid(String processUuid);
-    
-    List<ValueTextVo> getProcessTagForSelect(ProcessTagVo processTagVo);
-    
-    List<ProcessTagVo> getProcessTagByNameList(List<String> tagNameList);
-    
-    int getProcessTagCount(ProcessTagVo processTagVo);
 
 	ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
 
@@ -99,8 +93,6 @@ public interface ProcessMapper {
 	int insertProcessSla(ProcessSlaVo processSlaVo);
 
 	int insertProcessDraft(ProcessDraftVo processDraftVo);
-
-	int insertProcessTag(ProcessTagVo processTagVo);
 
 	int insertProcessStepTag(ProcessStepTagVo processStepTagVo);
 

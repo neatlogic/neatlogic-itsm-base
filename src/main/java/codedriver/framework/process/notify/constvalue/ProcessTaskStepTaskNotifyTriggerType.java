@@ -2,7 +2,7 @@ package codedriver.framework.process.notify.constvalue;
 
 import codedriver.framework.notify.core.INotifyTriggerType;
 
-public enum TaskNotifyTriggerType implements INotifyTriggerType {
+public enum ProcessTaskStepTaskNotifyTriggerType implements INotifyTriggerType {
 	CREATETASK("createtask", "子任务创建","步骤处理人为当前步骤创建子任务时触发通知"),
 	EDITTASK("edittask", "子任务编辑","步骤处理人编辑子任务内容时触发通知"),
 	DELETETASK("deletetask", "子任务删除","步骤处理人删除子任务时触发通知"),
@@ -13,7 +13,7 @@ public enum TaskNotifyTriggerType implements INotifyTriggerType {
 	private String text;
 	private String description;
 
-	private TaskNotifyTriggerType(String _trigger, String _text, String _description) {
+	private ProcessTaskStepTaskNotifyTriggerType(String _trigger, String _text, String _description) {
 		this.trigger = _trigger;
 		this.text = _text;
 		this.description = _description;
@@ -33,7 +33,7 @@ public enum TaskNotifyTriggerType implements INotifyTriggerType {
 	}
 	
 	public static String getText(String trigger) {
-		for(TaskNotifyTriggerType n : values()) {
+		for(ProcessTaskStepTaskNotifyTriggerType n : values()) {
 			if(n.getTrigger().equals(trigger)) {
 				return n.getText();
 			}
