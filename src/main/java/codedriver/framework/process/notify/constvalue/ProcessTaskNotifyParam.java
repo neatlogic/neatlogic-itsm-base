@@ -17,6 +17,7 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
     SERIALNUMBER("serialNumber", "工单号", ParamType.STRING),
     TITLE("title", "标题", ParamType.STRING),
     PRIORITYNAME("priorityName", "优先级", ParamType.STRING),
+    CHANNELNAME("channelName", "服务名称", ParamType.STRING),
     CHANNELPATH("channelPath", "服务路径", ParamType.STRING),
     CHANNELTYPENAME("channelTypeName", "服务类型", ParamType.STRING),
     CONTENT("content", "上报内容", ParamType.STRING),
