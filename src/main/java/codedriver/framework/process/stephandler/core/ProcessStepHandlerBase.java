@@ -1913,15 +1913,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 保存表单属性值 **/
             IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
 
-            /* 保存描述内容和附件 **/
-            IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
-            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_START);
-
             /* 写入“标签”信息 **/
             IProcessStepHandlerUtil.saveTagList(currentProcessTaskStepVo);
             /* 保存工单关注人 **/
             IProcessStepHandlerUtil.saveFocusUserList(currentProcessTaskStepVo);
+
+            IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
             myStartProcess(currentProcessTaskStepVo);
+
+            /* 保存描述内容和附件 **/
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_START);
             // 获取表单数据
             List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             if (CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
