@@ -21,6 +21,7 @@ public class ProcessTaskAgentVo {
     private Date beginTime;
     private Date endTime;
     private Integer isActive;
+    private List<ProcessTaskAgentTargetVo> processTaskAgentTargetVos;
 
     public Long getId() {
         if (id == null) {
@@ -71,5 +72,13 @@ public class ProcessTaskAgentVo {
 
     public void setIsActive(Integer isActive) {
         this.isActive = isActive;
+    }
+
+    public List<ProcessTaskAgentTargetVo> getProcessTaskAgentTargetVos() {
+        return processTaskAgentTargetVos;
+    }
+
+    public void setProcessTaskAgentTargetVos(List<ProcessTaskAgentTargetVo> processTaskAgentTargetVos) {
+        this.processTaskAgentTargetVos = processTaskAgentTargetVos;
     }
 }

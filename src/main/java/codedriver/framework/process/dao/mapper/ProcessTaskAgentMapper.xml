@@ -23,6 +23,37 @@
         WHERE `from_user_uuid` = #{value}
     </select>
 
+    <resultMap id="agentMap" type="codedriver.framework.process.dto.agent.ProcessTaskAgentVo">
+        <id property="id" column="id"/>
+        <result property="fromUserUuid" column="fromUserUuid"/>
+        <result property="toUserUuid" column="toUserUuid"/>
+        <result property="beginTime" column="beginTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="isActive" column="isActive"/>
+        <collection property="processTaskAgentTargetVos" ofType="codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo">
+            <result property="target" column="target"/>
+            <result property="type" column="type"/>
+            <result property="pathListStr" column="pathListStr"/>
+        </collection>
+    </resultMap>
+
+    <select id="getProcessTaskAgentDetailListByToUserUuid" parameterType="java.lang.String" resultMap="agentMap">
+        SELECT
+            psa.`id`,
+            psa.`from_user_uuid` AS fromUserUuid,
+            psa.`to_user_uuid` AS toUserUuid,
+            psa.`begin_time` AS beginTime,
+            psa.`end_time` AS endTime,
+            psa.`is_active` AS isActive,
+            psat.`target`,
+            psat.`type`,
+            psat.`path_list` AS pathListStr,
+            psat.`processtask_agent_id` AS processtaskAgentId
+        FROM `processtask_agent` psa
+                 JOIN `processtask_agent_target` psat ON psa.`id` = psat.`processtask_agent_id`
+        WHERE psa.`to_user_uuid` = #{value}
+    </select>
+
     <select id="getProcessTaskAgentListByToUserUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.agent.ProcessTaskAgentVo">
         SELECT
             `id`,

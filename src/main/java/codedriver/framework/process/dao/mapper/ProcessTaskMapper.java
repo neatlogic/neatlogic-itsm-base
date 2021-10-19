@@ -132,6 +132,8 @@ public interface ProcessTaskMapper {
             @Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo
     );
 
+    Set<Long> getProcessTaskIdSetByChannelUuidListAndAuthenticationInfo(@Param("channelUuidList") List<String> channelUuidList,@Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo);
+
     ProcessTaskFormAttributeDataVo getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(
             ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo);
 

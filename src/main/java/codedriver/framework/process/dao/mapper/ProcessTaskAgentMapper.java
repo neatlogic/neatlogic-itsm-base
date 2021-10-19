@@ -24,6 +24,8 @@ public interface ProcessTaskAgentMapper {
 
     List<ProcessTaskAgentTargetVo> getProcessTaskAgentTargetListByProcessTaskAgentId(Long processTaskAgentId);
 
+    List<ProcessTaskAgentVo> getProcessTaskAgentDetailListByToUserUuid(String toUserUuid);
+
     int insertProcessTaskAgent(ProcessTaskAgentVo processTaskAgentVo);
 
     int insertIgnoreProcessTaskAgentTarget(ProcessTaskAgentTargetVo processTaskAgentTargetVo);

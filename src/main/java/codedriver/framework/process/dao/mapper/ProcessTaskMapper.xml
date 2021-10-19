@@ -1117,6 +1117,35 @@
         </if>
     </select>
 
+    <select id="getProcessTaskIdSetByChannelUuidListAndAuthenticationInfo" resultType="java.lang.Long">
+        SELECT
+        b.`id`
+        FROM `processtask_step_worker` a
+        JOIN `processtask` b ON b.`id` = a.`processtask_id` and b.`status` = 'running'
+        WHERE ((`type` = 'user' AND a.`uuid` = #{authenticationInfoVo.userUuid})
+        <if test="authenticationInfoVo.teamUuidList != null and authenticationInfoVo.teamUuidList.size() > 0">
+            OR (`type` = 'team' AND a.`uuid` in
+            <foreach collection="authenticationInfoVo.teamUuidList" item="teamUuid" open="(" separator="," close=")">
+                #{teamUuid}
+            </foreach>
+            )
+        </if>
+        <if test="authenticationInfoVo.roleUuidList != null and authenticationInfoVo.roleUuidList.size() > 0">
+            OR (`type` = 'role' AND a.`uuid` in
+            <foreach collection="authenticationInfoVo.roleUuidList" item="roleUuid" open="(" separator="," close=")">
+                #{roleUuid}
+            </foreach>
+            )
+        </if>
+        )
+        <if test="channelUuidList != null and channelUuidList.size() > 0">
+            AND b.`channel_uuid` IN
+            <foreach collection="channelUuidList" item="channelUuid" open="(" separator="," close=")">
+                #{channelUuid}
+            </foreach>
+        </if>
+    </select>
+
     <select id="getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid"
             parameterType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo"
             resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">

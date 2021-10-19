@@ -7,7 +7,15 @@ import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.dto.condition.ConditionVo;
-import codedriver.framework.process.constvalue.*;
+import codedriver.framework.process.constvalue.ConditionConfigType;
+import codedriver.framework.process.constvalue.ProcessFieldType;
+import codedriver.framework.process.constvalue.ProcessTaskStatus;
+import codedriver.framework.process.constvalue.ProcessWorkcenterField;
+import codedriver.framework.process.dao.mapper.ProcessTaskAgentMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo;
+import codedriver.framework.process.dto.agent.ProcessTaskAgentVo;
+import codedriver.framework.process.service.ProcessTaskAgentService;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ProcessTaskSqlTable;
@@ -21,22 +29,30 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class ProcessTaskConditionBase implements IProcessTaskCondition {
     protected static UserMapper userMapper;
-    @Autowired
+    @Resource
     public void setUserMapper(UserMapper _userMapper) {
         userMapper = _userMapper;
+    }
+
+    protected static ProcessTaskAgentMapper processTaskAgentMapper;
+    @Resource
+    public void setProcessTaskAgentMapper(ProcessTaskAgentMapper _processTaskAgentMapper) {
+        processTaskAgentMapper = _processTaskAgentMapper;
+    }
+
+    protected static ProcessTaskMapper processTaskMapper;
+    @Resource
+    public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
+        processTaskMapper = _processTaskMapper;
     }
 
     protected static AuthenticationInfoService authenticationInfoService;
@@ -44,6 +60,13 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
     @Resource
     public void setAuthenticationInfoService(AuthenticationInfoService _authenticationInfoService){
         authenticationInfoService = _authenticationInfoService;
+    }
+
+    protected ProcessTaskAgentService processTaskAgentService;
+
+    @Resource
+    public void setProcessTaskAgentService(ProcessTaskAgentService _processTaskAgentService){
+        processTaskAgentService = _processTaskAgentService;
     }
 
     @Override
@@ -240,6 +263,11 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
      * @Returns: void
      **/
     public void getProcessingOfMineConditionSqlWhere(StringBuilder sqlSb){
+        List<Long> agentTaskIdList = getAgentProcessTaskId();
+        if(CollectionUtils.isNotEmpty(agentTaskIdList)){
+            sqlSb.append(" ( ");
+        }
+
         sqlSb.append(" ( ");
         // status
         List<String> statusList = Stream.of(ProcessTaskStatus.RUNNING.getValue())
@@ -257,6 +285,35 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(UserContext.get().getUserUuid());
         getProcessingTaskOfMineSqlWhere(sqlSb, Collections.singletonList(UserContext.get().getUserUuid()),authenticationInfoVo.getTeamUuidList(),authenticationInfoVo.getRoleUuidList());
         sqlSb.append(" ) ");
+
+        //agent
+        if(CollectionUtils.isNotEmpty(agentTaskIdList)){
+            sqlSb.append(" or  ");
+            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskSqlTable().getShortName(), ProcessTaskSqlTable.FieldEnum.ID.getValue(), agentTaskIdList.stream().map(Object::toString).collect(Collectors.joining())));
+            sqlSb.append(" )");
+        }
+    }
+
+    /**
+     * 获取当前登录人被授权所有可以执行的工单
+     * @return 工单idList
+     */
+    private List<Long> getAgentProcessTaskId(){
+        Set<Long> allProcessTaskIdSet = new HashSet<>();
+        //1 找出所有当前用户授权记录
+        List<ProcessTaskAgentVo> taskAgentVos = processTaskAgentMapper.getProcessTaskAgentDetailListByToUserUuid(UserContext.get().getUserUuid(true));
+        //2 循环记录 找出给个授权记录对应的taskIdList 并append
+        for(ProcessTaskAgentVo taskAgentVo : taskAgentVos){
+            List<ProcessTaskAgentTargetVo> taskAgentTargetVos = taskAgentVo.getProcessTaskAgentTargetVos();
+            if(CollectionUtils.isNotEmpty(taskAgentTargetVos)){
+                //根据channelUuid找到formUser 所有能处理的工单idList
+                List<String> channelUuidList = processTaskAgentService.getChannelUuidListByProcessTaskAgentId(taskAgentVo.getId());
+                AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(taskAgentVo.getFromUserUuid());
+                Set<Long> processTaskIdSet = processTaskMapper.getProcessTaskIdSetByChannelUuidListAndAuthenticationInfo(channelUuidList, authenticationInfoVo);
+                allProcessTaskIdSet.addAll(processTaskIdSet);
+            }
+        }
+        return new ArrayList<>(allProcessTaskIdSet);
     }
 
     @Override
