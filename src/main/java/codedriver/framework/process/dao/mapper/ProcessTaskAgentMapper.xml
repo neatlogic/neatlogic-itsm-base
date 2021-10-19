@@ -52,6 +52,9 @@
         FROM `processtask_agent` psa
                  JOIN `processtask_agent_target` psat ON psa.`id` = psat.`processtask_agent_id`
         WHERE psa.`to_user_uuid` = #{value}
+          AND psa.`is_active` = 1
+          AND psa.`begin_time` &lt;= NOW()
+          AND psa.`end_time` &gt;= NOW()
     </select>
 
     <select id="getProcessTaskAgentListByToUserUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.agent.ProcessTaskAgentVo">
