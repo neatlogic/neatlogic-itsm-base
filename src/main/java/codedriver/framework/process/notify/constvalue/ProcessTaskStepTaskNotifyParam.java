@@ -12,7 +12,7 @@ import codedriver.framework.notify.core.INotifyParam;
  * @author linbq
  * @since 2021/10/16 13:30
  **/
-public enum TaskNotifyParam implements INotifyParam {
+public enum ProcessTaskStepTaskNotifyParam implements INotifyParam {
 
     TASKCONFIGNAME("taskConfigName", "任务名", ParamType.STRING),
     TASKWORKER("taskWorker", "任务处理人", ParamType.STRING),
@@ -24,7 +24,7 @@ public enum TaskNotifyParam implements INotifyParam {
     private final String text;
     private final ParamType paramType;
 
-    TaskNotifyParam(String value, String text, ParamType paramType) {
+    ProcessTaskStepTaskNotifyParam(String value, String text, ParamType paramType) {
         this.value = value;
         this.text = text;
         this.paramType = paramType;

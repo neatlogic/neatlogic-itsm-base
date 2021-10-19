@@ -98,9 +98,6 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
     private ProcessMapper processMapper;
 
     @Resource
-    private ProcessTagMapper processTagMapper;
-
-    @Resource
     private FormMapper formMapper;
 
     @Resource
