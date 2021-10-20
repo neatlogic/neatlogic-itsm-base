@@ -347,6 +347,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             );
             workerSet.add(processTaskStepWorkerVo);
             currentProcessTaskStepVo.setUpdateActiveTime(0);
+            currentProcessTaskStepVo.setUpdateEndTime(-1);
         }
         currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
         int autoStart = myAssign(currentProcessTaskStepVo, workerSet);
@@ -445,6 +446,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     }
                 }
             }
+        } else {
+            currentProcessTaskStepVo.setUpdateStartTime(-1);
         }
         /* 触发通知 **/
 //        processStepHandlerUtilService.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
@@ -792,12 +795,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     }
 
     private int updateProcessTaskStepStatus(ProcessTaskStepVo currentProcessTaskStepVo) {
-        if (currentProcessTaskStepVo.getActiveTime() != null) {
-            currentProcessTaskStepVo.setUpdateActiveTime(0);
-        }
-        if (currentProcessTaskStepVo.getStartTime() != null) {
-            currentProcessTaskStepVo.setUpdateStartTime(0);
-        }
+        // linbq 2021-10-20 步骤重新激活时，激活时间不变、开始时间、结束时间都会更新
+//        if (currentProcessTaskStepVo.getActiveTime() != null) {
+//            currentProcessTaskStepVo.setUpdateActiveTime(0);
+//        }
+//        if (currentProcessTaskStepVo.getStartTime() != null) {
+//            currentProcessTaskStepVo.setUpdateStartTime(0);
+//        }
         processTaskMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
         updateProcessTaskStatus(currentProcessTaskStepVo.getProcessTaskId());
         return 1;
