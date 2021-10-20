@@ -2647,12 +2647,16 @@
                                                 `content_hash`,
                                                 `type`,
                                                 `fcd`,
-                                                `fcu`)
+                                                `fcu`,
+                                                `lcd`,
+                                                `lcu`)
         VALUES (#{id},
                 #{processTaskId},
                 #{processTaskStepId},
                 #{contentHash},
                 #{type},
+                NOW(3),
+                #{fcu},
                 NOW(3),
                 #{fcu})
     </insert>
