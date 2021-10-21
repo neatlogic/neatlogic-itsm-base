@@ -238,7 +238,7 @@
 		#{type},
 		#{fcu},
 		now(3),
-		#{lcu},
+		#{fcu},
 		now(3)
 		)
 	</insert>

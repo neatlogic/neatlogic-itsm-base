@@ -3240,7 +3240,7 @@
     </delete>
 
     <delete id="deleteProcessTaskStepByProcessTaskId" parameterType="java.lang.Long">
-        DELETE ps,psa,psau,psaud,psc,psnp,psco,psd,psf,psr,psrl,pss,pssu,pssc,pst,psu,psw,pswp
+        DELETE ps,psa,psau,psaud,psc,psnp,psd,psf,psr,psrl,pss,pssu,pssc,pst,psu,psw,pswp
         FROM `processtask_step` ps
                  LEFT JOIN
              `processtask_step_agent` psa
@@ -3251,8 +3251,6 @@
                  LEFT JOIN `processtask_step_content` psc ON psc.`processtask_id` =
                                                              ps.`processtask_id` AND psc.`processtask_step_id` = ps.id
                  LEFT JOIN `processtask_step_notify_policy` psnp ON psnp.`processtask_step_id` = ps.id
-                 LEFT JOIN `processtask_step_comment` psco ON
-                psco.`processtask_id` = ps.`processtask_id` AND psco.`processtask_step_id` = ps.id
                  LEFT JOIN `processtask_step_data` psd
                            ON psd.`processtask_id` = ps.`processtask_id` AND psd.`processtask_step_id` =
                                                                              ps.id
