@@ -139,12 +139,16 @@
                                    `policy`,
                                    `is_active`,
                                    `fcd`,
-                                   `fcu`)
+                                   `fcu`,
+                                   `lcd`,
+                                   `lcu`)
         VALUES (#{id},
                 #{name},
                 #{num},
                 #{policy},
                 #{isActive},
+                now(3),
+                #{fcu},
                 now(3),
                 #{fcu});
     </insert>
