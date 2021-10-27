@@ -289,7 +289,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         //agent
         if(CollectionUtils.isNotEmpty(agentTaskIdList)){
             sqlSb.append(" or  ");
-            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskSqlTable().getShortName(), ProcessTaskSqlTable.FieldEnum.ID.getValue(), agentTaskIdList.stream().map(Object::toString).collect(Collectors.joining())));
+            sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskSqlTable().getShortName(), ProcessTaskSqlTable.FieldEnum.ID.getValue(), agentTaskIdList.stream().map(Object::toString).collect(Collectors.joining("','"))));
             sqlSb.append(" )");
         }
     }
