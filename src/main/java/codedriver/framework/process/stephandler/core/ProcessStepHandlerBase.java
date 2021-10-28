@@ -2028,8 +2028,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 //            processTaskMapper.updateProcessTaskStepRelIsHit(rel);
 //        }
         currentProcessTaskStepVo.setRelList(relList);
-        Long nextStepId = currentProcessTaskStepVo.getParamObj().getLong("nextStepId");
-        List<ProcessTaskStepVo> nextStepList = processTaskMapper.getToProcessTaskStepByFromIdAndType(currentProcessTaskStepVo.getId(), null);
+        String type = ProcessFlowDirection.FORWARD.getValue();
+        JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
+        String action = paramObj.getString("action");
+        if (ProcessTaskOperationType.STEP_BACK.getValue().equals(action)) {
+            type = ProcessFlowDirection.BACKWARD.getValue();
+        }
+        List<ProcessTaskStepVo> nextStepList = processTaskMapper.getToProcessTaskStepByFromIdAndType(currentProcessTaskStepVo.getId(), type);
+        Long nextStepId = paramObj.getLong("nextStepId");
         Set<ProcessTaskStepVo> nextStepSet = null;
         try {
             nextStepSet = myGetNext(currentProcessTaskStepVo, nextStepList, nextStepId);
