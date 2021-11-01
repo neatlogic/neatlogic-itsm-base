@@ -9,8 +9,7 @@ import codedriver.framework.applicationlistener.core.ModuleInitializedListenerBa
 import codedriver.framework.bootstrap.CodedriverWebApplicationContext;
 import codedriver.framework.common.RootComponent;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author linbq
@@ -19,18 +18,26 @@ import java.util.Map;
 @RootComponent
 public class AutoCompleteRuleHandlerFactory extends ModuleInitializedListenerBase {
 
-    private static Map<String, IAutoCompleteRuleHandler> map = new HashMap<>();
+    private static List<IAutoCompleteRuleHandler> list = new ArrayList<>();
 
-    public static IAutoCompleteRuleHandler getHandler(String handler) {
-        return map.get(handler);
+    public static int getHandlerSize(){
+        return list.size();
+    }
+
+    public static IAutoCompleteRuleHandler getHandler(int index) {
+        if (index < list.size()) {
+            return list.get(index);
+        }
+        return null;
     }
     @Override
     protected void onInitialized(CodedriverWebApplicationContext context) {
         Map<String, IAutoCompleteRuleHandler> myMap = context.getBeansOfType(IAutoCompleteRuleHandler.class);
         for (Map.Entry<String, IAutoCompleteRuleHandler> entry : myMap.entrySet()) {
             IAutoCompleteRuleHandler autoCompleteRuleHandler = entry.getValue();
-            map.put(autoCompleteRuleHandler.getHandler(), autoCompleteRuleHandler);
+            list.add(autoCompleteRuleHandler);
         }
+        list.sort(Comparator.comparingInt(IAutoCompleteRuleHandler::getPriority));
     }
 
     @Override

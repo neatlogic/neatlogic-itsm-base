@@ -6,7 +6,6 @@
 package codedriver.framework.process.autocompleterule.core;
 
 import codedriver.framework.process.dto.ProcessTaskStepVo;
-import org.springframework.util.ClassUtils;
 
 /**
  * @author linbq
@@ -16,5 +15,13 @@ public interface IAutoCompleteRuleHandler {
 
     String getHandler();
 
-    void execute(ProcessTaskStepVo currentProcessTaskStepVo);
+    String getName();
+
+    /**
+     *  优先级不能相同
+     * @return
+     */
+    int getPriority();
+
+    boolean execute(ProcessTaskStepVo currentProcessTaskStepVo);
 }
