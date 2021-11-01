@@ -1243,7 +1243,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
         // 获取步骤基本信息
-        currentProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+//        currentProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
         if (currentProcessTaskStepVo.getIsActive().equals(-1)) {
             /* 组件完成动作 **/
             myRecover(currentProcessTaskStepVo);
