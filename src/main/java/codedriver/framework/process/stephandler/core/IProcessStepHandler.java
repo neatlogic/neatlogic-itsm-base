@@ -214,7 +214,7 @@ public interface IProcessStepHandler {
      * @param currentProcessTaskStepVo 步骤信息
      * @return 1代表成功
      */
-    Set<ProcessTaskStepVo> getNext(ProcessTaskStepVo currentProcessTaskStepVo);
+    Set<Long> getNext(ProcessTaskStepVo currentProcessTaskStepVo);
 
     /**
      * 保存工单草稿，将会创建一个工单，工单状态为草稿状态

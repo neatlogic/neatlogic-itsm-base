@@ -88,9 +88,14 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskConvergeVo> getProcessTaskConvergeListByStepId(Long processTaskStepId);
 
-    List<ProcessTaskStepVo> getFromProcessTaskStepByToId(Long toProcessTaskStepId);
+//    List<ProcessTaskStepVo> getFromProcessTaskStepByToId(Long toProcessTaskStepId);
+
+    List<Long> getFromProcessTaskStepIdListByToId(Long toProcessTaskStepId);
 
     List<ProcessTaskStepVo> getToProcessTaskStepByFromIdAndType(
+            @Param("fromProcessTaskStepId") Long fromProcessTaskStepId, @Param("type") String type);
+
+    List<Long> getToProcessTaskStepIdListByFromIdAndType(
             @Param("fromProcessTaskStepId") Long fromProcessTaskStepId, @Param("type") String type);
 
     List<ProcessTaskStepVo> getProcessTaskStepByConvergeId(Long convergeId);
@@ -260,6 +265,8 @@ public interface ProcessTaskMapper {
     List<ProcessTaskVo> getProcessTaskByIndexKeyword(@Param("keywordList") List<String> keywordList, @Param("limit") int limit, @Param("targetType") String targetType,@Param("columnPro") String columnPro);
 
     List<Long> getProcessTaskStepIdListByProcessTaskIdAndTagId(ProcessTaskStepTagVo processTaskStepTagVo);
+
+    int checkProcessTaskStepTagIsExists(ProcessTaskStepTagVo processTaskStepTagVo);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
