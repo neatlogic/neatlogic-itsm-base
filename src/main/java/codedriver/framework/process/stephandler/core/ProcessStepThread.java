@@ -6,6 +6,7 @@
 package codedriver.framework.process.stephandler.core;
 
 import codedriver.framework.asynchronization.thread.CodeDriverThread;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ public abstract class ProcessStepThread extends CodeDriverThread {
     Logger logger = LoggerFactory.getLogger(ProcessStepThread.class);
     private final ProcessTaskStepVo processTaskStepVo;
     private Supplier<Integer> supplier;
-
+    private UserVo currentUserVo;
     public ProcessTaskStepVo getProcessTaskStepVo() {
         return processTaskStepVo;
     }
@@ -30,6 +31,10 @@ public abstract class ProcessStepThread extends CodeDriverThread {
         this.processTaskStepVo = _processTaskStepVo;
     }
 
+    public ProcessStepThread(ProcessTaskStepVo _processTaskStepVo, UserVo _currentUserVo) {
+        this(_processTaskStepVo);
+        this.currentUserVo = _currentUserVo;
+    }
     @Override
     public final void execute() {
         try {

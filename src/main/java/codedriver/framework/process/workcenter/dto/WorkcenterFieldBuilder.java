@@ -146,7 +146,7 @@ public class WorkcenterFieldBuilder {
 				 }
 			 }else {
 				 for(ProcessTaskStepUserVo userVo : step.getUserList()) {
-					 String user = String.format("%s%s", GroupSearch.USER.getValuePlugin(),userVo.getUserVo().getUuid());
+					 String user = String.format("%s%s", GroupSearch.USER.getValuePlugin(),userVo.getUserUuid());
 					 JSONObject userTypeJson = userTypeMap.get(userVo.getUserType());
 					 userTypeJson.getJSONArray("userlist").add(user);
 					 JSONObject userStatusJson = new JSONObject();

@@ -999,22 +999,25 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
                                                                              Long processTaskStepId, String userUuid) {
         List<ProcessTaskStepVo> resultList = new ArrayList<>();
         /** 所有前置步骤 **/
-        List<ProcessTaskStepVo> fromStepList = processTaskMapper.getFromProcessTaskStepByToId(processTaskStepId);
-        /** 找到所有已完成步骤 **/
-        for (ProcessTaskStepVo fromStep : fromStepList) {
-            IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(fromStep.getHandler());
-            if (handler != null) {
-                if (ProcessStepMode.MT == handler.getMode()) {// 手动处理节点
-                    if (checkOperationAuthIsConfigured(fromStep, processTaskVo.getOwner(), processTaskVo.getReporter(),
-                            ProcessTaskOperationType.STEP_RETREAT, userUuid)) {
-                        resultList.add(fromStep);
+        List<Long> fromStepIdList = processTaskMapper.getFromProcessTaskStepIdListByToId(processTaskStepId);
+        if (CollectionUtils.isNotEmpty(fromStepIdList)) {
+            List<ProcessTaskStepVo> fromStepList = processTaskMapper.getProcessTaskStepListByIdList(fromStepIdList);
+            /** 找到所有已完成步骤 **/
+            for (ProcessTaskStepVo fromStep : fromStepList) {
+                IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(fromStep.getHandler());
+                if (handler != null) {
+                    if (ProcessStepMode.MT == handler.getMode()) {// 手动处理节点
+                        if (checkOperationAuthIsConfigured(fromStep, processTaskVo.getOwner(), processTaskVo.getReporter(),
+                                ProcessTaskOperationType.STEP_RETREAT, userUuid)) {
+                            resultList.add(fromStep);
+                        }
+                    } else {// 自动处理节点，继续找前置节点
+                        resultList
+                                .addAll(getRetractableStepListByProcessTaskStepId(processTaskVo, fromStep.getId(), userUuid));
                     }
-                } else {// 自动处理节点，继续找前置节点
-                    resultList
-                            .addAll(getRetractableStepListByProcessTaskStepId(processTaskVo, fromStep.getId(), userUuid));
+                } else {
+                    throw new ProcessStepHandlerNotFoundException(fromStep.getHandler());
                 }
-            } else {
-                throw new ProcessStepHandlerNotFoundException(fromStep.getHandler());
             }
         }
         return resultList;
@@ -1279,7 +1282,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         if (processTaskStepVo == null) {
             return null;
         }
-        processTaskStepVo.setParamObj(currentProcessTaskStep.getParamObj());
+        processTaskStepVo.getParamObj().putAll(currentProcessTaskStep.getParamObj());
         List<ProcessTaskStepWorkerVo> workerList =
                 processTaskMapper.getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(
                         processTaskStepVo.getProcessTaskId(), currentProcessTaskStep.getId());
@@ -1372,14 +1375,14 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         List<ProcessTaskStepUserVo> majorUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUser);
         for (ProcessTaskStepUserVo processTaskStepUserVo : majorUserList) {
             receiverMap.computeIfAbsent(ProcessUserType.MAJOR.getValue(), k -> new ArrayList<>())
-                    .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserVo().getUuid()));
+                    .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
         }
         /** 子任务处理人 **/
         processTaskStepUser.setUserType(ProcessUserType.MINOR.getValue());
         List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserList(processTaskStepUser);
         for (ProcessTaskStepUserVo processTaskStepUserVo : minorUserList) {
             receiverMap.computeIfAbsent(ProcessUserType.MINOR.getValue(), k -> new ArrayList<>())
-                    .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserVo().getUuid()));
+                    .add(new NotifyReceiverVo(GroupSearch.USER.getValue(), processTaskStepUserVo.getUserUuid()));
         }
         /* 任务处理人 */
         ProcessTaskStepTaskVo stepTaskVo = currentProcessTaskStepVo.getProcessTaskStepTaskVo();
@@ -1667,7 +1670,10 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
                 if (Objects.equals(taskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
                     status = ProcessTaskStepUserStatus.DONE.getValue();
                 }
-                stepUserVoList.add(new ProcessTaskStepUserVo(status, processTaskStepTaskVo.getCreateTime(), taskUserVo.getEndTime(), processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), taskUserVo.getUserUuid(), ProcessUserType.MINOR.getValue()));
+                UserVo userVo = userMapper.getUserBaseInfoByUuid(taskUserVo.getUserUuid());
+                if (userVo != null) {
+                    stepUserVoList.add(new ProcessTaskStepUserVo(status, processTaskStepTaskVo.getCreateTime(), taskUserVo.getEndTime(), processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), userVo.getUuid(), userVo.getUserName(), ProcessUserType.MINOR.getValue()));
+                }
             }
         }
         //TODO 其它模块的taskStepUser
