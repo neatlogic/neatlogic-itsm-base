@@ -141,7 +141,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
             for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepVo.getUserList()) {
                 if (userType == null || userType.equals(processTaskStepUserVo.getUserType())) {
-                    if (userUuid.equals(processTaskStepUserVo.getUserVo().getUuid())) {
+                    if (userUuid.equals(processTaskStepUserVo.getUserUuid())) {
                         return true;
                     }
                 }
@@ -167,7 +167,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         String userUuid) {
         for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepVo.getUserList()) {
             if (userType == null || userType.equals(processTaskStepUserVo.getUserType())) {
-                if (userUuid.equals(processTaskStepUserVo.getUserVo().getUuid())) {
+                if (userUuid.equals(processTaskStepUserVo.getUserUuid())) {
                     return true;
                 }
             }

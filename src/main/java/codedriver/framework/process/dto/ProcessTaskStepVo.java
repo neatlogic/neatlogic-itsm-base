@@ -24,6 +24,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 //	@ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
+	@JSONField(serialize=false)
 	private Long fromProcessTaskStepId;
 	@JSONField(serialize=false)
 	private Long startProcessTaskStepId;
@@ -67,7 +68,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	private List<FormAttributeVo> formAttributeVoList = new ArrayList<>();
 	
 	@JSONField(serialize=false)
-	private JSONObject paramObj;
+	private final JSONObject paramObj = new JSONObject();
 	@EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepUserVo majorUser;
 	@EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
@@ -431,14 +432,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public JSONObject getParamObj() {
-		if(paramObj == null) {
-			paramObj = new JSONObject();
-		}
 		return paramObj;
-	}
-
-	public void setParamObj(JSONObject paramObj) {
-		this.paramObj = paramObj;
 	}
 
 	public Boolean getIsAllDone() {

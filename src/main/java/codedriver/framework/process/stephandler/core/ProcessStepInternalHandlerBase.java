@@ -1,6 +1,7 @@
 package codedriver.framework.process.stephandler.core;
 
 import codedriver.framework.dao.mapper.TeamMapper;
+import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.file.dao.mapper.FileMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
@@ -22,6 +23,7 @@ import java.util.Map;
 public abstract class ProcessStepInternalHandlerBase implements IProcessStepInternalHandler {
     protected static ProcessTaskMapper processTaskMapper;
     protected static SelectContentByHashMapper selectContentByHashMapper;
+    protected static UserMapper userMapper;
     protected static TeamMapper teamMapper;
     protected static WorktimeMapper worktimeMapper;
     protected static FileMapper fileMapper;
@@ -40,6 +42,11 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     @Autowired
     public void setFileMapper(FileMapper _fileMapper) {
         fileMapper = _fileMapper;
+    }
+
+    @Autowired
+    public void setUserMapper(UserMapper _userMapper) {
+        userMapper = _userMapper;
     }
 
     @Autowired

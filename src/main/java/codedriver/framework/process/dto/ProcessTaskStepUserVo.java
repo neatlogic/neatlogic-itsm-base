@@ -14,20 +14,17 @@ public class ProcessTaskStepUserVo {
 	private Long processTaskStepId;
 	private UserVo userVo;
 	private String userUuid;
+	private String userName;
 	private List<String> userUuidList;
-//	private String userName;
 	private String userType;
-//	private String userInfo;
-//	private String userAvatar;
-//	private Integer userVipLevel;
 	private String status = ProcessTaskStepUserStatus.DOING.getValue();
 	private String statusName;
 	private Date startTime;
 	private Date endTime;
 	private Date activeTime;
 	private String action;
-	private Long timeCost;
-	private String timeCostStr;
+//	private Long timeCost;
+//	private String timeCostStr;
 
 	private String newUserUuid;
 	
@@ -35,48 +32,36 @@ public class ProcessTaskStepUserVo {
 
 	}
 
-    /*public ProcessTaskStepUserVo(Long _processTaskStepId, String _userUuid) {
-    	this.setProcessTaskStepId(_processTaskStepId);
-    	this.setUserUuid(_userUuid);
-    }*/
-
 	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid) {
 		this.setProcessTaskId(_processTaskId);
 		this.setProcessTaskStepId(_processTaskStepId);
-		this.userVo = new UserVo(_userUuid);
 		this.userUuid = _userUuid;
 	}
 
 	public ProcessTaskStepUserVo(Long _processTaskId, Long _processTaskStepId, String _userUuid, String userType) {
         this.setProcessTaskId(_processTaskId);
         this.setProcessTaskStepId(_processTaskStepId);
-		this.userVo = new UserVo(_userUuid);
 		this.userUuid = _userUuid;
         this.setUserType(userType);
     }
 
-	public ProcessTaskStepUserVo(String _status,Date _startTime,Date _endTime, Long _processTaskId, Long _processTaskStepId, String _userUuid, String userType) {
+	public ProcessTaskStepUserVo(String _status,Date _startTime,Date _endTime, Long _processTaskId, Long _processTaskStepId, String _userUuid, String _userName, String userType) {
 		this.status = _status;
 		this.startTime = _startTime;
 		this.activeTime = _startTime;
 		this.endTime = _endTime;
 		this.setProcessTaskId(_processTaskId);
 		this.setProcessTaskStepId(_processTaskStepId);
-		this.userVo = new UserVo(_userUuid);
 		this.userUuid = _userUuid;
+		this.userName = _userName;
 		this.setUserType(userType);
 	}
-	
-//	public ProcessTaskStepUserVo(ProcessStepUserVo processStepUserVo) {
-//		this.setUserUuid(processStepUserVo.getUserUuid());
-//		this.setUserName(processStepUserVo.getUserName());
-//	}
 
 	public ProcessTaskStepUserVo(Long processTaskId, Long processTaskStepId, String userUuid, String userType,
         String newUserUuid) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
-		this.userVo = new UserVo(userUuid);this.userUuid = userUuid;
+		this.userUuid = userUuid;
         this.userType = userType;
         this.newUserUuid = newUserUuid;
     }
@@ -89,10 +74,25 @@ public class ProcessTaskStepUserVo {
 		this.processTaskStepId = processTaskStepId;
 	}
 
+	/**
+	 * 这个方法是为了返回userVo属性给前端用的，后端代码不要主动调用这个方法
+	 * @return
+	 */
+	@Deprecated
 	public UserVo getUserVo() {
+		if (userVo == null && StringUtils.isNotBlank(userUuid)) {
+			userVo = new UserVo(userUuid);
+			userVo.setUserName(userName);
+		}
 		return userVo;
 	}
 
+	/**
+	 * 这个方法是mybatis用的，有些旧sql语句存在，但后端代码不要主动调用这个方法
+	 * @param userVo
+	 * @return
+	 */
+	@Deprecated
 	public void setUserVo(UserVo userVo) {
 		this.userVo = userVo;
 	}
@@ -105,6 +105,14 @@ public class ProcessTaskStepUserVo {
 		this.userUuid = userUuid;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public List<String> getUserUuidList() {
 		return userUuidList;
 	}
@@ -113,15 +121,6 @@ public class ProcessTaskStepUserVo {
 		this.userUuidList = userUuidList;
 	}
 
-	//
-//	public String getUserName() {
-//		return userName;
-//	}
-//
-//	public void setUserName(String userName) {
-//		this.userName = userName;
-//	}
-//
 	public String getUserType() {
 		return userType;
 	}
@@ -165,21 +164,21 @@ public class ProcessTaskStepUserVo {
 		this.endTime = endTime;
 	}
 
-	public Long getTimeCost() {
-		return timeCost;
-	}
-
-	public void setTimeCost(Long timeCost) {
-		this.timeCost = timeCost;
-	}
-
-	public String getTimeCostStr() {
-		return timeCostStr;
-	}
-
-	public void setTimeCostStr(String timeCostStr) {
-		this.timeCostStr = timeCostStr;
-	}
+//	public Long getTimeCost() {
+//		return timeCost;
+//	}
+//
+//	public void setTimeCost(Long timeCost) {
+//		this.timeCost = timeCost;
+//	}
+//
+//	public String getTimeCostStr() {
+//		return timeCostStr;
+//	}
+//
+//	public void setTimeCostStr(String timeCostStr) {
+//		this.timeCostStr = timeCostStr;
+//	}
 
 	public Long getProcessTaskId() {
 		return processTaskId;
@@ -197,22 +196,6 @@ public class ProcessTaskStepUserVo {
 		this.action = action;
 	}
 
-//	public String getUserInfo() {
-//		return userInfo;
-//	}
-//
-//	public void setUserInfo(String userInfo) {
-//		this.userInfo = userInfo;
-//	}
-
-//	public String getUserAvatar() {
-//		if (StringUtils.isBlank(userAvatar) && StringUtils.isNotBlank(userInfo)) {
-//			JSONObject jsonObject = JSONObject.parseObject(userInfo);
-//			userAvatar = jsonObject.getString("avatar");
-//		}
-//		return userAvatar;
-//	}
-
     public String getNewUserUuid() {
         return newUserUuid;
     }
@@ -220,15 +203,6 @@ public class ProcessTaskStepUserVo {
     public void setNewUserUuid(String newUserUuid) {
         this.newUserUuid = newUserUuid;
     }
-
-//	public Integer getUserVipLevel() {
-//		return userVipLevel;
-//	}
-//
-//	public void setUserVipLevel(Integer userVipLevel) {
-//		this.userVipLevel = userVipLevel;
-//	}
-
 
 	public Date getActiveTime() {
 		return activeTime;
