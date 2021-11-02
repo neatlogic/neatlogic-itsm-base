@@ -24,8 +24,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 //	@ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	@EntityField(name = "工单id", type = ApiParamType.LONG)
 	private Long processTaskId;
+	/**
+	 * 前置步骤id
+	 */
 	@JSONField(serialize=false)
 	private Long fromProcessTaskStepId;
+	/**
+	 * 发起操作步骤id
+	 */
 	@JSONField(serialize=false)
 	private Long startProcessTaskStepId;
 	private String processUuid;
@@ -487,6 +493,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public Long getStartProcessTaskStepId() {
+		if (startProcessTaskStepId == null) {
+			return id;
+		}
 		return startProcessTaskStepId;
 	}
 
