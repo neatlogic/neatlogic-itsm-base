@@ -236,7 +236,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 resetConvergeInfo(currentProcessTaskStepVo);
 
                 /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
-                currentProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                 resetPostStepRelIsHit(currentProcessTaskStepVo);
 
                 if (this.getMode().equals(ProcessStepMode.MT)) {
@@ -836,10 +835,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (CollectionUtils.isEmpty(nextStepIdSet)) {
                     throw new ProcessTaskException("找不到可流转路径");
                 }
-                Long startProcessTaskStepId = currentProcessTaskStepVo.getStartProcessTaskStepId();
-                if (startProcessTaskStepId == null) {
-                    startProcessTaskStepId = currentProcessTaskStepVo.getId();
-                }
                 // 完成步骤时将所有后退路线重置为0
                 List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByToId(currentProcessTaskStepVo.getId());
                 for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
@@ -858,7 +853,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         processTaskStepRelVo.setIsHit(1);
                         processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
                         nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                        nextStep.setStartProcessTaskStepId(startProcessTaskStepId);
+                        nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
                         doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(nextStep) {
                             @Override
                             public void myExecute() {
@@ -1888,7 +1883,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskStepRelVo.setIsHit(1);
                     processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
                     nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                    nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
+                    nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
                     doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(nextStep) {
                         @Override
                         public void myExecute() {
@@ -1993,16 +1988,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             if (Objects.equals(nextTaskStepRelVo.getIsHit(), 1)) {
                 ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
                 if (!Objects.equals(nextProcessTaskStepVo.getIsActive(), 0)) {
-                    Long startProcessTaskStepId = currentProcessTaskStepVo.getStartProcessTaskStepId();
-                    if (startProcessTaskStepId == null) {
-                        startProcessTaskStepId = currentProcessTaskStepVo.getId();
-                    }
                     // 如果下一个步骤不等于发起步骤，则继续挂起
-                    if (!nextProcessTaskStepVo.getId().equals(startProcessTaskStepId)) {
+                    if (!nextProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
                         IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
                         if (handler != null) {
                             // 标记挂起操作的发起步骤，避免出现死循环
-                            nextProcessTaskStepVo.setStartProcessTaskStepId(startProcessTaskStepId);
+                            nextProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
                             // 标记挂起操作来源步骤
                             nextProcessTaskStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
                             doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(nextProcessTaskStepVo) {
