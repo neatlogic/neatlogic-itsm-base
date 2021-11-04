@@ -2285,7 +2285,7 @@
         SELECT COUNT(1) FROM `processtask_step_tag` WHERE `processtask_step_id` = #{processTaskStepId} AND `tag_id` = #{tagId}
     </select>
 
-    <select id="getSameTagIdByProcessTaskStepIdList" parameterType="java.lang.Long" resultType="java.lang.Long">
+    <select id="getSameTagIdListByProcessTaskStepIdList" parameterType="java.lang.Long" resultType="java.lang.Long">
         <bind name="size" value="list.size()"/>
         SELECT `tag_id` FROM `processtask_step_tag`
         WHERE `processtask_step_id` IN

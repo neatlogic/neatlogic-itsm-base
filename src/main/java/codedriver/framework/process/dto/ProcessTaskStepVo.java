@@ -141,6 +141,9 @@ public class ProcessTaskStepVo extends BasePageVo {
     private int updateStartTime;
 	@JSONField(serialize = false)
     private int updateEndTime;
+	/**
+	 * 并行激活节点
+	 */
 	@JSONField(serialize = false)
 	private List<Long> parallelActivateStepIdList;
 
