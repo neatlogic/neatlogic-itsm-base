@@ -236,7 +236,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 resetConvergeInfo(currentProcessTaskStepVo);
 
                 /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
-                currentProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                 resetPostStepRelIsHit(currentProcessTaskStepVo);
 
                 if (this.getMode().equals(ProcessStepMode.MT)) {
@@ -1950,9 +1949,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     @Override
     public final Set<Long> getNext(ProcessTaskStepVo currentProcessTaskStepVo) {
-        List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
-
-        currentProcessTaskStepVo.setRelList(relList);
+//        List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+//
+//        currentProcessTaskStepVo.setRelList(relList);
         String type = ProcessFlowDirection.FORWARD.getValue();
         JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
         String action = paramObj.getString("action");
@@ -1985,14 +1984,15 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     }
 
     private void resetPostStepRelIsHit(ProcessTaskStepVo currentProcessTaskStepVo) {
-        List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
-        for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
-            // 沿着流转过的路径向后找激活过的节点并挂起
-            if (Objects.equals(nextTaskStepRelVo.getIsHit(), 1)) {
-                ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
-                if (!Objects.equals(nextProcessTaskStepVo.getIsActive(), 0)) {
-                    // 如果下一个步骤不等于发起步骤，则继续挂起
-                    if (!nextProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
+        if (!currentProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
+            List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
+            for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
+                // 沿着流转过的路径向后找激活过的节点并挂起
+                if (Objects.equals(nextTaskStepRelVo.getIsHit(), 1) && Objects.equals(nextTaskStepRelVo.getType(), ProcessFlowDirection.FORWARD.getValue())) {
+                    ProcessTaskStepVo nextProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(nextTaskStepRelVo.getToProcessTaskStepId());
+                    if (!Objects.equals(nextProcessTaskStepVo.getIsActive(), 0)) {
+                        // 如果下一个步骤不等于发起步骤，则继续挂起
+//                    if (!nextProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
                         IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(nextProcessTaskStepVo.getHandler());
                         if (handler != null) {
                             // 标记挂起操作的发起步骤，避免出现死循环
@@ -2009,6 +2009,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         /** 重置路径状态 恢复路径命中状态为0，代表路径未通过 **/
                         nextTaskStepRelVo.setIsHit(0);
                         processTaskMapper.updateProcessTaskStepRelIsHit(nextTaskStepRelVo);
+//                    }
                     }
                 }
             }
