@@ -2285,6 +2285,16 @@
         SELECT COUNT(1) FROM `processtask_step_tag` WHERE `processtask_step_id` = #{processTaskStepId} AND `tag_id` = #{tagId}
     </select>
 
+    <select id="getSameTagIdListByProcessTaskStepIdList" parameterType="java.lang.Long" resultType="java.lang.Long">
+        <bind name="size" value="list.size()"/>
+        SELECT `tag_id` FROM `processtask_step_tag`
+        WHERE `processtask_step_id` IN
+        <foreach collection="list" item="processTaskStepId" open="(" separator="," close=")">
+            #{processTaskStepId}
+        </foreach>
+        GROUP BY `tag_id` HAVING COUNT(`tag_id`) = #{size}
+    </select>
+
     <select id="getProcessTaskListByOwnerAndStatus" resultMap="processTaskMap">
         SELECT
             `id`,

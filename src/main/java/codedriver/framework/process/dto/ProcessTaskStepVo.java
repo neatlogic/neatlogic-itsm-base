@@ -141,6 +141,12 @@ public class ProcessTaskStepVo extends BasePageVo {
     private int updateStartTime;
 	@JSONField(serialize = false)
     private int updateEndTime;
+	/**
+	 * 并行激活节点
+	 */
+	@JSONField(serialize = false)
+	private List<Long> parallelActivateStepIdList;
+
 	public ProcessTaskStepVo() {
 
 	}
@@ -725,5 +731,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setProcessTaskStepTaskVo(ProcessTaskStepTaskVo processTaskStepTaskVo) {
 		this.processTaskStepTaskVo = processTaskStepTaskVo;
+	}
+
+	public List<Long> getParallelActivateStepIdList() {
+		return parallelActivateStepIdList;
+	}
+
+	public void setParallelActivateStepIdList(List<Long> parallelActivateStepIdList) {
+		this.parallelActivateStepIdList = parallelActivateStepIdList;
 	}
 }

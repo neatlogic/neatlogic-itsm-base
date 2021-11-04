@@ -270,6 +270,8 @@ public interface ProcessTaskMapper {
 
     int checkProcessTaskStepTagIsExists(ProcessTaskStepTagVo processTaskStepTagVo);
 
+    List<Long> getSameTagIdListByProcessTaskStepIdList(List<Long> processTaskStepIdList);
+
     List<ProcessTaskVo> getProcessTaskListByOwnerAndStatus(@Param("owner") String owner, @Param("status") String status);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
