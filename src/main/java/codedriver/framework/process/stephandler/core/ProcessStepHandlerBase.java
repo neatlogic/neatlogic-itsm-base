@@ -236,6 +236,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 resetConvergeInfo(currentProcessTaskStepVo);
 
                 /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
+                currentProcessTaskStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getId());
                 resetPostStepRelIsHit(currentProcessTaskStepVo);
 
                 if (this.getMode().equals(ProcessStepMode.MT)) {
@@ -843,7 +844,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
                     }
                 }
-                List<ProcessTaskStepVo> nextStepList = processTaskMapper.getProcessTaskStepListByIdList(new ArrayList<>(nextStepIdSet));
+                List<Long> nextStepIdList = new ArrayList<>(nextStepIdSet);
+                List<ProcessTaskStepVo> nextStepList = processTaskMapper.getProcessTaskStepListByIdList(nextStepIdList);
                 for (ProcessTaskStepVo nextStep : nextStepList) {
                     IProcessStepHandler nextStepHandler = ProcessStepHandlerFactory.getHandler(nextStep.getHandler());
                     if (nextStepHandler != null) {
@@ -854,6 +856,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
                         nextStep.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
                         nextStep.setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
+                        nextStep.setParallelActivateStepIdList(nextStepIdList);
                         doNext(ProcessTaskOperationType.STEP_ACTIVE, new ProcessStepThread(nextStep) {
                             @Override
                             public void myExecute() {
