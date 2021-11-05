@@ -734,6 +734,12 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public List<Long> getParallelActivateStepIdList() {
+		if (parallelActivateStepIdList == null) {
+			parallelActivateStepIdList = new ArrayList<>();
+			if (id != null) {
+				parallelActivateStepIdList.add(id);
+			}
+		}
 		return parallelActivateStepIdList;
 	}
 
