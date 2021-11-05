@@ -145,7 +145,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	 * 并行激活节点
 	 */
 	@JSONField(serialize = false)
-	private List<Long> parallelActivateStepIdList;
+	private List<Long> parallelActivateStepIdList = new ArrayList<>();
 
 	public ProcessTaskStepVo() {
 
