@@ -145,7 +145,7 @@ public class ProcessTaskStepVo extends BasePageVo {
 	 * 并行激活节点
 	 */
 	@JSONField(serialize = false)
-	private List<Long> parallelActivateStepIdList;
+	private List<Long> parallelActivateStepIdList = new ArrayList<>();
 
 	public ProcessTaskStepVo() {
 
@@ -734,12 +734,6 @@ public class ProcessTaskStepVo extends BasePageVo {
 	}
 
 	public List<Long> getParallelActivateStepIdList() {
-		if (parallelActivateStepIdList == null) {
-			parallelActivateStepIdList = new ArrayList<>();
-			if (id != null) {
-				parallelActivateStepIdList.add(id);
-			}
-		}
 		return parallelActivateStepIdList;
 	}
 
