@@ -640,7 +640,7 @@
 
     <select id="getFromProcessTaskStepIdListByToId" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT `from_processtask_step_id` FROM `processtask_step_rel`
-        WHERE b.`to_processtask_step_id` = #{value} AND `is_hit` = 1
+        WHERE `to_processtask_step_id` = #{value} AND `is_hit` = 1
     </select>
 
     <select id="getProcessTaskStepByConvergeId" parameterType="java.lang.Long"
