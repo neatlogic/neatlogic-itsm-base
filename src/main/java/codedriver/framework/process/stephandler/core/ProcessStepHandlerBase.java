@@ -1984,7 +1984,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     }
 
     private void resetPostStepRelIsHit(ProcessTaskStepVo currentProcessTaskStepVo) {
-        if (!currentProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
+//        if (!currentProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
             List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
             for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
                 // 沿着流转过的路径向后找激活过的节点并挂起
@@ -2013,7 +2013,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     }
                 }
             }
-        }
+//        }
     }
 
     private void resetConvergeInfo(ProcessTaskStepVo nextStepVo) {
