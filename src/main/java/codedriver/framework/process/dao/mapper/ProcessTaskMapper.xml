@@ -227,8 +227,8 @@
         <result column="status" property="status"/>
         <result column="start_time" property="startTime"/>
         <result column="end_time" property="endTime"/>
-        <result column="ownerUuid" property="owner"/>
-        <result column="reporterUuid" property="reporter"/>
+        <result column="owner" property="owner"/>
+        <result column="reporter" property="reporter"/>
         <!--<result column="reporterName" property="reporterName" />-->
         <result column="expire_time" property="expireTime"/>
         <result column="worktime_uuid" property="worktimeUuid"/>
@@ -237,14 +237,14 @@
         <result column="serial_number" property="serialNumber"/>
         <result column="source" property="source"/>
         <association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
-            <result property="uuid" column="ownerUuid"/>
+            <result property="uuid" column="owner"/>
             <result property="userName" column="ownerName"/>
             <result property="userInfo" column="ownerInfo"/>
             <result property="vipLevel" column="ownerVipLevel"/>
             <result property="pinyin" column="ownerPinyin"/>
         </association>
         <association property="reporterVo" javaType="codedriver.framework.dto.UserVo">
-            <result property="uuid" column="reporterUuid"/>
+            <result property="uuid" column="reporter"/>
             <result property="userName" column="reporterName"/>
             <result property="userInfo" column="reporterInfo"/>
             <result property="vipLevel" column="reporterVipLevel"/>
@@ -263,13 +263,13 @@
                `status`,
                `start_time`,
                `end_time`,
-               `owner`                                                    as ownerUuid,
+               `owner`,
                (SELECT user_name FROM `user` x WHERE x.uuid = `owner`)    AS
                                                                              ownerName,
                (SELECT vip_level
                 FROM `user` x
                 WHERE x.uuid = `owner`)                                   AS ownerVipLevel,
-               `reporter`                                                 as reporterUuid,
+               `reporter`,
                (SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
                `expire_time`,
                `worktime_uuid`,
@@ -602,6 +602,21 @@
         </foreach>
     </select>
 
+    <select id="getProcessTaskStepWorkerListByProcessTaskStepIdListAndUserType" resultMap="processTaskStepWorkerMap">
+        SELECT
+        `processtask_id`,
+        `processtask_step_id`,
+        `type`,
+        `uuid`,
+        `user_type`
+        FROM `processtask_step_worker`
+        WHERE `user_type` = #{userType}
+        AND `processtask_step_id` IN
+        <foreach collection="processTaskStepIdList" item="processTaskStepId" open="(" separator="," close=")">
+            #{processTaskStepId}
+        </foreach>
+    </select>
+
     <!--<select id="getFromProcessTaskStepByToId" parameterType="java.lang.Long"
             resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
         SELECT a.`id`,
@@ -625,7 +640,7 @@
 
     <select id="getFromProcessTaskStepIdListByToId" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT `from_processtask_step_id` FROM `processtask_step_rel`
-        WHERE b.`to_processtask_step_id` = #{value} AND `is_hit` = 1
+        WHERE `to_processtask_step_id` = #{value} AND `is_hit` = 1
     </select>
 
     <select id="getProcessTaskStepByConvergeId" parameterType="java.lang.Long"
@@ -1055,8 +1070,8 @@
                `error`,
                `expire_time`,
                `config_hash`
-        FROM `processtask_step` pts
-        WHERE pts.`processtask_id` = #{processTaskId}
+        FROM `processtask_step`
+        WHERE `processtask_id` = #{processTaskId}
     </select>
 
     <select id="getProcessTaskStepListByProcessTaskIdList" parameterType="java.lang.Long"
@@ -1299,8 +1314,8 @@
         `status`,
         `start_time`,
         `end_time`,
-        `owner` as ownerUuid,
-        `reporter` as reporterUuid,
+        `owner`,
+        `reporter`,
         `expire_time`,
         `worktime_uuid`,
         `is_show`,
@@ -1722,9 +1737,9 @@
         `status`,
         `start_time`,
         `end_time`,
-        `owner` as ownerUuid,
+        `owner`,
         (SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
-        `reporter` as reporterUuid,
+        `reporter`,
         (SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
         `expire_time`,
         `worktime_uuid`,
@@ -1994,8 +2009,8 @@
         a.`status`,
         a.`start_time`,
         a.`end_time`,
-        a.`owner` as ownerUuid,
-        a.`reporter` as reporterUuid,
+        a.`owner`,
+        a.`reporter`,
         a.`expire_time`,
         a.`worktime_uuid`,
         a.`is_show`,
@@ -2252,7 +2267,8 @@
             resultType="codedriver.framework.process.dto.ProcessTaskVo">
         SELECT pt.`${targetType}` as ${columnPro}
         FROM processtask pt
-        JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_type` = 'processtask' AND ff.`target_field` = #{targetType}
+        JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_field` = #{targetType}
+        JOIN `fulltextindex_target_process` ft ON ff.`target_id` = ft.`target_id` AND ft.`target_type` = 'processtask'
         JOIN `fulltextindex_word` fw ON fw.id = ff.`word_id` AND fw.word IN
         <foreach collection="keywordList" item="keyword" separator="," open="(" close=")">
             #{keyword}
@@ -2268,6 +2284,40 @@
 
     <select id="checkProcessTaskStepTagIsExists" parameterType="codedriver.framework.process.dto.ProcessTaskStepTagVo" resultType="int">
         SELECT COUNT(1) FROM `processtask_step_tag` WHERE `processtask_step_id` = #{processTaskStepId} AND `tag_id` = #{tagId}
+    </select>
+
+    <select id="getSameTagIdListByProcessTaskStepIdList" parameterType="java.lang.Long" resultType="java.lang.Long">
+        <bind name="size" value="list.size()"/>
+        SELECT `tag_id` FROM `processtask_step_tag`
+        WHERE `processtask_step_id` IN
+        <foreach collection="list" item="processTaskStepId" open="(" separator="," close=")">
+            #{processTaskStepId}
+        </foreach>
+        GROUP BY `tag_id` HAVING COUNT(`tag_id`) = #{size}
+    </select>
+
+    <select id="getProcessTaskListByOwnerAndStatus" resultMap="processTaskMap">
+        SELECT
+            `id`,
+            `title`,
+            `process_uuid`,
+            `channel_uuid`,
+            `config_hash`,
+            `priority_uuid`,
+            `status`,
+            `start_time`,
+            `end_time`,
+            `owner`,
+            `reporter`,
+            `expire_time`,
+            `worktime_uuid`,
+            `error`,
+            `is_show`,
+            `serial_number`,
+            `source`
+        FROM `processtask`
+        WHERE `owner` = #{owner}
+        AND `status` = #{status}
     </select>
 
     <!--<update id="updateProcessTaskStepConvergeIsCheck">

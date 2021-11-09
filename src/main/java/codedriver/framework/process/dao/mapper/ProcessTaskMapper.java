@@ -82,6 +82,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdList(List<Long> processTaskIdList);
 
+    List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskStepIdListAndUserType(@Param("processTaskStepIdList")List<Long> processTaskStepIdList, @Param("userType") String userType);
+
     Long getProcessTaskLockById(Long processTaskId);
 
     int checkProcessTaskConvergeIsExists(ProcessTaskConvergeVo processTaskStepConvergeVo);
@@ -267,6 +269,10 @@ public interface ProcessTaskMapper {
     List<Long> getProcessTaskStepIdListByProcessTaskIdAndTagId(ProcessTaskStepTagVo processTaskStepTagVo);
 
     int checkProcessTaskStepTagIsExists(ProcessTaskStepTagVo processTaskStepTagVo);
+
+    List<Long> getSameTagIdListByProcessTaskStepIdList(List<Long> processTaskStepIdList);
+
+    List<ProcessTaskVo> getProcessTaskListByOwnerAndStatus(@Param("owner") String owner, @Param("status") String status);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 

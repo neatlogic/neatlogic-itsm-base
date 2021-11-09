@@ -7,6 +7,7 @@ package codedriver.framework.process.service;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.auth.core.AuthActionChecker;
+import codedriver.framework.auth.core.AuthFactory;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.TeamLevel;
 import codedriver.framework.common.constvalue.UserType;
@@ -476,7 +477,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             throw new ProcessTaskNotFoundException(processTaskId.toString());
         }
         if (processTaskVo.getIsShow() != 1 && !AuthActionChecker.check(PROCESSTASK_MODIFY.class.getSimpleName())) {
-            throw new PermissionDeniedException();
+            throw new PermissionDeniedException(AuthFactory.getAuthInstance(PROCESSTASK_MODIFY.class.getSimpleName()).getAuthDisplayName());
         }
         if (processTaskStepId != null) {
             ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
