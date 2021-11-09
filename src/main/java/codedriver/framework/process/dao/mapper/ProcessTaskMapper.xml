@@ -2267,7 +2267,8 @@
             resultType="codedriver.framework.process.dto.ProcessTaskVo">
         SELECT pt.`${targetType}` as ${columnPro}
         FROM processtask pt
-        JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_type` = 'processtask' AND ff.`target_field` = #{targetType}
+        JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_field` = #{targetType}
+        JOIN `fulltextindex_target_process` ft ON ff.`target_id` = ft.`target_id` AND ft.`target_type` = 'processtask'
         JOIN `fulltextindex_word` fw ON fw.id = ff.`word_id` AND fw.word IN
         <foreach collection="keywordList" item="keyword" separator="," open="(" close=")">
             #{keyword}
