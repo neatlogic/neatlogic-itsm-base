@@ -64,6 +64,8 @@ public class ProcessVo extends BaseEditorVo {
     @JSONField(serialize = false)
     private String configStr;
 
+    private Integer isICreated;
+
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
             uuid = UUID.randomUUID().toString().replace("-", "");
@@ -356,5 +358,13 @@ public class ProcessVo extends BaseEditorVo {
             return config.toJSONString();
         }
         return configStr;
+    }
+
+    public Integer getIsICreated() {
+        return isICreated;
+    }
+
+    public void setIsICreated(Integer isICreated) {
+        this.isICreated = isICreated;
     }
 }

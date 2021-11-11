@@ -201,7 +201,7 @@
 		<if test="isActive != null">
 			AND `is_Active` = #{isActive}
 		</if>
-		<if test="fcu != null and fcu != ''">
+		<if test="isICreated != null and isICreated == 1">
 			AND `fcu` = #{fcu}
 		</if>
 	</select>
@@ -223,7 +223,7 @@
 		<if test="isActive != null">
 			AND `is_Active` = #{isActive}
 		</if>
-		<if test="fcu != null">
+		<if test="isICreated != null and isICreated == 1">
 			AND `fcu` = #{fcu}
 		</if>
 		ORDER BY `fcd` DESC
@@ -244,7 +244,7 @@
 		<if test="isActive != null">
 			AND `is_Active` = #{isActive}
 		</if>
-		<if test="fcu != null">
+		<if test="isICreated != null and isICreated == 1">
 			AND `fcu` = #{fcu}
 		</if>
 		ORDER BY `fcd` DESC
@@ -682,7 +682,7 @@
 	<delete id="deleteProcessDraft" parameterType="codedriver.framework.process.dto.ProcessDraftVo">
 		DELETE FROM `process_draft` 
 		WHERE `process_uuid` = #{processUuid} 
-		<if test="fcu != null and fcu != ''">
+		<if test="isICreated != null and isICreated == 1">
 		AND `fcu` = #{fcu}
 		</if>
 	</delete>
