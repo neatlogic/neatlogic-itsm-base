@@ -8,6 +8,10 @@ public class ProcessTaskFormAttributeDataVo extends AttributeDataVo
     private Long processTaskId;
     private String type;
     private Integer sort;
+    /**
+     * 这个字段已废弃，只有旧邮件模板用到，父类AttributeDataVo中attribureLabel与该字段作用相同
+     * @param label
+     */
     private String label;
 
     public Long getProcessTaskId() {
@@ -34,12 +38,22 @@ public class ProcessTaskFormAttributeDataVo extends AttributeDataVo
         this.sort = sort;
     }
 
+    /**
+     * 这个方法已废弃，只有旧邮件模板用到，父类AttributeDataVo中getAttribureLabel()与该方法作用相同
+     * @return
+     */
+    @Deprecated
     public String getLabel() {
-        return label;
+        return super.getAttributeLabel();
     }
 
+    /**
+     * 这个方法已废弃，只有旧邮件模板用到，父类AttributeDataVo中setAttribureLabel()与该方法作用相同
+     * @param label
+     */
+    @Deprecated
     public void setLabel(String label) {
-        this.label = label;
+        super.setAttributeLabel(label);
     }
 
     @Override

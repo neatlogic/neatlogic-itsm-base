@@ -449,6 +449,7 @@
             resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
         SELECT `processtask_id` AS processTaskId,
                `attribute_uuid` AS attributeUuid,
+               `attribute_label` AS attributeLabel,
                `type`           AS type,
                `data`,
                `sort`
@@ -460,6 +461,7 @@
             resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
         SELECT `processtask_id` AS processTaskId,
                `attribute_uuid` AS attributeUuid,
+               `attribute_label` AS attributeLabel,
                `type`           AS type,
                `data`,
                `sort`
@@ -1167,6 +1169,7 @@
                                    processTaskId,
                `type`,
                `attribute_uuid` AS attributeUuid,
+               `attribute_label` AS attributeLabel,
                `data`
         FROM `processtask_formattribute_data`
         WHERE `processtask_id` = #{processTaskId}
@@ -2505,11 +2508,13 @@
             parameterType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
         REPLACE INTO `processtask_formattribute_data` (`processtask_id`,
                                                        `attribute_uuid`,
+                                                       `attribute_label`,
                                                        `data`,
                                                        `type`,
                                                        `sort`)
         VALUES (#{processTaskId},
                 #{attributeUuid},
+                #{attributeLabel},
                 #{data},
                 #{type},
                 #{sort})
