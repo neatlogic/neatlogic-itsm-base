@@ -13,9 +13,6 @@ public class ProcessTaskStepRemindVo extends BaseEditorVo {
     private String content;
     private String contentHash;
     private String detail;
-//    private String fcu;
-//    private String fcuName;
-//    private Date fcd;
     public ProcessTaskStepRemindVo() {}
     public ProcessTaskStepRemindVo(Long processTaskStepId) {
         this.processTaskStepId = processTaskStepId;
@@ -72,22 +69,4 @@ public class ProcessTaskStepRemindVo extends BaseEditorVo {
     public void setDetail(String detail) {
         this.detail = detail;
     }
-//    public String getFcu() {
-//        return fcu;
-//    }
-//    public void setFcu(String fcu) {
-//        this.fcu = fcu;
-//    }
-//    public String getFcuName() {
-//        return fcuName;
-//    }
-//    public void setFcuName(String fcuName) {
-//        this.fcuName = fcuName;
-//    }
-//    public Date getFcd() {
-//        return fcd;
-//    }
-//    public void setFcd(Date fcd) {
-//        this.fcd = fcd;
-//    }
 }
