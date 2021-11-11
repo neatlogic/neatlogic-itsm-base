@@ -62,9 +62,9 @@ public interface ProcessMapper {
 
 	ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
 
-	int getFormReferenceCount(String formUuid);
+//	int getFormReferenceCount(String formUuid);
 
-	List<ProcessVo> getFormReferenceList(ProcessFormVo processFormVo);
+//	List<ProcessVo> getFormReferenceList(ProcessFormVo processFormVo);
 
 	ProcessSlaVo getProcessSlaByUuid(String caller);
 

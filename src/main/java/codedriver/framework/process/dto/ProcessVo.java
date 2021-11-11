@@ -6,7 +6,7 @@
 package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
-import codedriver.framework.common.dto.BasePageVo;
+import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import codedriver.framework.process.constvalue.ProcessStepType;
@@ -25,11 +25,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.*;
 
-public class ProcessVo extends BasePageVo implements Serializable {
-    private static final long serialVersionUID = 4684015408674741157L;
+public class ProcessVo extends BaseEditorVo {
 
     @EntityField(name = "流程uuid", type = ApiParamType.STRING)
     private String uuid;
@@ -58,8 +56,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
     private List<ProcessSlaVo> slaList;
 
     private ProcessScoreTemplateVo processScoreTemplateVo;
-    @JSONField(serialize = false)
-    private String fcu;
     @JSONField(serialize = false)
     private Long notifyPolicyId;
     @JSONField(serialize = false)
@@ -321,14 +317,6 @@ public class ProcessVo extends BasePageVo implements Serializable {
 
     public void setReferenceCount(int referenceCount) {
         this.referenceCount = referenceCount;
-    }
-
-    public String getFcu() {
-        return fcu;
-    }
-
-    public void setFcu(String fcu) {
-        this.fcu = fcu;
     }
 
     public List<ProcessSlaVo> getSlaList() {

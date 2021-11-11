@@ -210,7 +210,11 @@
 		SELECT
 		`uuid`,
 		`name`,
-		`is_active` AS isActive
+		`is_active` AS isActive,
+		`fcu`,
+		`fcd`,
+		`lcu`,
+		`lcd`
 		FROM `process`
 		WHERE 1=1
 		<if test="keyword != null and keyword != ''">
@@ -374,14 +378,14 @@
 		  AND `type` = 'start'
 	</select>
 
-	<select id="getFormReferenceCount" parameterType="java.lang.String" resultType="int">
+	<!--<select id="getFormReferenceCount" parameterType="java.lang.String" resultType="int">
 		SELECT
 			count(p.`uuid`)
 		FROM `process` p
 				 JOIN `process_form` pf ON pf.`process_uuid` = p.`uuid` AND pf.`form_uuid` = #{formUuid}
-	</select>
+	</select>-->
 
-	<select id="getFormReferenceList" parameterType="codedriver.framework.process.dto.ProcessFormVo" resultType="codedriver.framework.process.dto.ProcessVo">
+	<!--<select id="getFormReferenceList" parameterType="codedriver.framework.process.dto.ProcessFormVo" resultType="codedriver.framework.process.dto.ProcessVo">
 		SELECT
 		p.`uuid`,
 		p.`name`
@@ -390,7 +394,7 @@
 		<if test="needPage">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
-	</select>
+	</select>-->
 
 	<select id="getProcessSlaByUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessSlaVo">
 		SELECT
@@ -409,7 +413,11 @@
 		SELECT
 			`uuid`,
 			`name`,
-			`is_active` as isActive
+			`is_active` as isActive,
+			`fcu`,
+			`fcd`,
+			`lcu`,
+			`lcd`
 		FROM `process`
 		WHERE `uuid` IN
 		<foreach collection="list" item="uuid" open="(" separator="," close=")">
@@ -450,7 +458,9 @@
 		`is_active`,
 		`config`,
 		`fcd`,
-		`fcu`
+		`fcu`,
+		`lcd`,
+		`lcu`
 		)
 		VALUES
 		(
@@ -458,6 +468,8 @@
 		#{name},
 		#{isActive},
 		#{configStr},
+		now(3),
+		#{fcu},
 		now(3),
 		#{fcu}
 		)
@@ -619,7 +631,8 @@
 		<if test="configStr != null and configStr != ''">
 			`config` = #{configStr},
 		</if>
-		`uuid` = #{uuid}
+		`lcu` = #{lcu},
+		`lcd` = NOW(3)
 		WHERE `uuid` = #{uuid}
 	</update>
 
