@@ -5,6 +5,7 @@
 
 package codedriver.framework.process.sla.core;
 
+import codedriver.framework.process.dto.ProcessTaskSlaTimeCostVo;
 import org.springframework.util.ClassUtils;
 
 /**
@@ -23,7 +24,7 @@ public interface ISlaCalculateHandler {
      * @param slaId 时效id
      * @param currentTimeMillis 当前时间毫秒数
      * @param worktimeUuid 工作时间uuid
-     * @return 返回一个long数组，有两个元素，第一个是直接耗时，第二个是工作时间耗时
+     * @return
      */
-    long[] calculateTimeCost(Long slaId, long currentTimeMillis, String worktimeUuid);
+    ProcessTaskSlaTimeCostVo calculateTimeCost(Long slaId, long currentTimeMillis, String worktimeUuid);
 }

@@ -6,6 +6,7 @@
 package codedriver.framework.process.sla.core;
 
 import codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper;
+import codedriver.framework.process.dto.ProcessTaskSlaTimeCostVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
 import codedriver.framework.worktime.dao.mapper.WorktimeMapper;
 import org.apache.commons.collections4.CollectionUtils;
@@ -36,13 +37,13 @@ public abstract class SlaCalculateHandlerBase implements ISlaCalculateHandler {
 
 
     @Override
-    public long[] calculateTimeCost(Long slaId, long currentTimeMillis, String worktimeUuid) {
+    public ProcessTaskSlaTimeCostVo calculateTimeCost(Long slaId, long currentTimeMillis, String worktimeUuid) {
         List<ProcessTaskStepTimeAuditVo> timeAuditList =  processTaskStepTimeAuditMapper.getProcessTaskStepTimeAuditBySlaId(slaId);
         if (CollectionUtils.isEmpty(timeAuditList)) {
-            return new long[]{0, 0};
+            return new ProcessTaskSlaTimeCostVo();
         }
         return myCalculateTimeCost(timeAuditList, currentTimeMillis, worktimeUuid);
     }
 
-    protected abstract long[] myCalculateTimeCost(List<ProcessTaskStepTimeAuditVo> timeAuditList, long currentTimeMillis, String worktimeUuid);
+    protected abstract ProcessTaskSlaTimeCostVo myCalculateTimeCost(List<ProcessTaskStepTimeAuditVo> timeAuditList, long currentTimeMillis, String worktimeUuid);
 }
