@@ -32,9 +32,9 @@ public class ProcessStepHandlerTypeFactory {
      *
      * @return
      */
-    public static Set<IProcessStepHandlerType> getCalleeTypeSet() {
+    public static Set<IProcessStepHandlerType> getProcessStepHandlerTypeSet() {
         if (isUninitialized) {
-            synchronized (CalleeTypeFactory.class) {
+            synchronized (ProcessStepHandlerTypeFactory.class) {
                 if (isUninitialized) {
                     Reflections reflections = new Reflections("codedriver");
                     Set<Class<? extends IProcessStepHandlerType>> classSet = reflections.getSubTypesOf(IProcessStepHandlerType.class);
@@ -57,7 +57,7 @@ public class ProcessStepHandlerTypeFactory {
      * @return
      */
     public static String getName(String _handler) {
-        for (IProcessStepHandlerType s : getCalleeTypeSet()) {
+        for (IProcessStepHandlerType s : getProcessStepHandlerTypeSet()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getName();
             }
@@ -72,7 +72,7 @@ public class ProcessStepHandlerTypeFactory {
      * @return
      */
     public static String getType(String _handler) {
-        for (IProcessStepHandlerType s : getCalleeTypeSet()) {
+        for (IProcessStepHandlerType s : getProcessStepHandlerTypeSet()) {
             if (s.getHandler().equals(_handler)) {
                 return s.getType();
             }
