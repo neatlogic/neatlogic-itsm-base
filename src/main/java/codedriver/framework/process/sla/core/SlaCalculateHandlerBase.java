@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author linbq
@@ -46,4 +47,35 @@ public abstract class SlaCalculateHandlerBase implements ISlaCalculateHandler {
     }
 
     protected abstract ProcessTaskSlaTimeCostVo myCalculateTimeCost(List<ProcessTaskStepTimeAuditVo> timeAuditList, long currentTimeMillis, String worktimeUuid);
+
+
+
+    /**
+     * 计算出时效关联的步骤已经消耗的时长（直接计算）
+     *
+     * @param timePeriodList
+     * @return
+     */
+    protected static long getRealTimeCost(List<Map<String, Long>> timePeriodList) {
+        long sum = 0;
+        for (Map<String, Long> timeMap : timePeriodList) {
+            sum += timeMap.get("e") - timeMap.get("s");
+        }
+        return sum;
+    }
+
+    /**
+     * 计算出时效关联的步骤已经消耗的时长（根据工作日历计算）
+     *
+     * @param timePeriodList
+     * @param worktimeUuid
+     * @return
+     */
+    protected static long getTimeCost(List<Map<String, Long>> timePeriodList, String worktimeUuid) {
+        long sum = 0;
+        for (Map<String, Long> timeMap : timePeriodList) {
+            sum += worktimeMapper.calculateCostTime(worktimeUuid, timeMap.get("s"), timeMap.get("e"));
+        }
+        return sum;
+    }
 }
