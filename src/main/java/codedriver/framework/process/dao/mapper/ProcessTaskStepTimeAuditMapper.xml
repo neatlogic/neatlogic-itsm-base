@@ -3,6 +3,7 @@
 <mapper namespace="codedriver.framework.process.dao.mapper.ProcessTaskStepTimeAuditMapper">
 	<select id="getProcessTaskStepTimeAuditBySlaId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo">
 		SELECT
+		`id`,
 		UNIX_TIMESTAMP(a.`active_time`) * 1000 as activeTimeLong,
 		UNIX_TIMESTAMP(a.`start_time`) * 1000 as startTimeLong,
 		UNIX_TIMESTAMP(a.`complete_time`) * 1000 as completeTimeLong,

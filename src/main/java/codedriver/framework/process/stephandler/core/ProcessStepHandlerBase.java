@@ -1337,7 +1337,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             stepMajorUserRegulate(currentProcessTaskStepVo);
             myPause(currentProcessTaskStepVo);
 
-            /* 更新工单步骤状态为 “进行中” **/
+            /* 更新工单步骤状态为 “已挂起” **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.HANG.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
             // processStepUtilHandler.updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(),
