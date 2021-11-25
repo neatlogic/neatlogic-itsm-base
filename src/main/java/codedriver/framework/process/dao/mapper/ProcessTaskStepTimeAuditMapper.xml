@@ -14,6 +14,7 @@
 		JOIN `processtask_step_sla` b
 		ON a.`processtask_step_id` = b.`processtask_step_id`
 		WHERE b.`sla_id` = #{value}
+		ORDER BY a.`id`
 	</select>
 
 	<select id="getLastProcessTaskStepTimeAuditByStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo">
