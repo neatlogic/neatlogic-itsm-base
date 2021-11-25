@@ -10,7 +10,6 @@ import codedriver.framework.process.dto.ProcessTaskSlaTimeCostVo;
 import codedriver.framework.process.dto.ProcessTaskStepTimeAuditVo;
 import codedriver.framework.worktime.dao.mapper.WorktimeMapper;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,7 +34,6 @@ public abstract class SlaCalculateHandlerBase implements ISlaCalculateHandler {
     public void setWorktimeMapper(WorktimeMapper _worktimeMapper) {
         worktimeMapper = _worktimeMapper;
     }
-
 
     @Override
     public ProcessTaskSlaTimeCostVo calculateTimeCost(Long slaId, long currentTimeMillis, String worktimeUuid) {
