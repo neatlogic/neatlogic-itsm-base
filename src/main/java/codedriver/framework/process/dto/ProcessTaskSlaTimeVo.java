@@ -25,9 +25,11 @@ public class ProcessTaskSlaTimeVo {
 	private Long timeLeft;
 	@EntityField(name = "剩余时间（不考虑工作日历），单位：毫秒", type = ApiParamType.LONG)
 	private Long realTimeLeft;
+	@EntityField(name = "状态", type = ApiParamType.STRING)
+	private String status;
 	private Long expireTimeLong;
 	private Long realExpireTimeLong;
-	
+
 	public Long getProcessTaskId() {
 		return processTaskId;
 	}
@@ -100,6 +102,14 @@ public class ProcessTaskSlaTimeVo {
 		this.realTimeLeft = realTimeLeft;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public Long getExpireTimeLong() {
 		return expireTimeLong;
 	}
@@ -118,7 +128,7 @@ public class ProcessTaskSlaTimeVo {
 
     @Override
     public String toString() {
-        return "[slaId=" + slaId + ", expireTime=" + expireTime
+        return "[slaId=" + slaId + ", status=" + status + ", expireTime=" + expireTime
             + ", realExpireTime=" + realExpireTime + ", timeSum=" + timeSum + ", timeLeft=" + timeLeft
             + ", realTimeLeft=" + realTimeLeft  + "]";
     }

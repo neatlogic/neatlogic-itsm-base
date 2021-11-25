@@ -128,6 +128,7 @@
             <result column="timeLeft" property="timeLeft"/>
             <result column="realTimeLeft" property="realTimeLeft"/>
             <result column="timeSum" property="timeSum"/>
+            <result column="status" property="status"/>
             <result column="processTaskStepId" property="processTaskStepId"/>
         </association>
     </resultMap>
@@ -141,7 +142,8 @@
                c.`realexpire_time` AS realExpireTime,
                c.`time_left`       as timeLeft,
                c.`realtime_left`   as realTimeLeft,
-               c.`time_sum`        as timeSum
+               c.`time_sum`        as timeSum,
+               c.`status`        as status
         FROM `processtask_sla` a
                  JOIN `processtask_step_sla` b ON a.`id` = b.`sla_id`
                  LEFT JOIN `processtask_sla_time` c ON a.`id` = c.`sla_id`
@@ -161,7 +163,8 @@
                c.`time_left`                              as timeLeft,
                c.`realtime_left`                          as
                                                              realTimeLeft,
-               c.`time_sum`                               as timeSum
+               c.`time_sum`                               as timeSum,
+               c.`status`                               as status
         FROM `processtask_sla` a
                  JOIN `processtask_step_sla` b ON a.`id` = b.`sla_id`
                  LEFT JOIN `processtask_sla_time` c ON a.`id` = c.`sla_id`
@@ -180,6 +183,7 @@
         <result column="timeLeft" property="timeLeft"/>
         <result column="realTimeLeft" property="realTimeLeft"/>
         <result column="timeSum" property="timeSum"/>
+        <result column="status" property="status"/>
     </resultMap>
     <select id="getProcessTaskSlaTimeByProcessTaskStepIdList" parameterType="java.util.List"
             resultMap="processTaskSlaTimeMap">
@@ -193,7 +197,8 @@
         c.`time_left` as
         timeLeft,
         c.`realtime_left` as realTimeLeft,
-        c.`time_sum` as timeSum
+        c.`time_sum` as timeSum,
+        c.`status` as status
         FROM `processtask_sla` a
         JOIN `processtask_step_sla` b ON a.`id` = b.`sla_id`
         JOIN `processtask_sla_time` c ON a.`id` = c.`sla_id`
@@ -212,7 +217,8 @@
                `time_left`       as
                                     timeLeft,
                `realtime_left`   as realTimeLeft,
-               `time_sum`        as timeSum
+               `time_sum`        as timeSum,
+               `status`        as status
         FROM `processtask_sla_time`
         WHERE sla_id = #{value}
     </select>
@@ -2793,13 +2799,15 @@
                                             `expire_time`,
                                             `realexpire_time`,
                                             `time_left`,
-                                            `realtime_left`)
+                                            `realtime_left`,
+                                            `status`)
         VALUES (#{slaId},
                 #{timeSum},
                 #{expireTime},
                 #{realExpireTime},
                 #{timeLeft},
-                #{realTimeLeft})
+                #{realTimeLeft},
+                #{status})
     </insert>
 
     <insert id="insertProcessTaskStepFile" parameterType="codedriver.framework.process.dto.ProcessTaskStepFileVo">
@@ -3044,7 +3052,15 @@
             `realexpire_time` = #{realExpireTime},
             `time_left`       = #{timeLeft},
             `realtime_left`   = #{realTimeLeft},
-            `time_sum`        = #{timeSum}
+            `time_sum`        = #{timeSum},
+            `status`        = #{status}
+        WHERE `sla_id` = #{slaId}
+    </update>
+
+    <update id="updateProcessTaskSlaTimeStatus" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
+        UPDATE
+            `processtask_sla_time`
+        SET `status` = #{status}
         WHERE `sla_id` = #{slaId}
     </update>
 
