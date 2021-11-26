@@ -58,6 +58,9 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
 @Service
 public class ProcessTaskServiceImpl implements ProcessTaskService {
 
@@ -1632,7 +1635,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
 
         }
         //重新插入pending任务用户到 工单步骤worker
-        List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getStepTaskUserListByTaskId(processTaskStepTaskVo.getId());
+        List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getStepTaskUserListByProcessTaskStepId(processTaskStepVo.getId());
         for (ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList) {
             if (taskUserVo.getIsDelete() != 1 && Objects.equals(ProcessTaskStatus.PENDING.getValue(), taskUserVo.getStatus())) {
                 workerVoList.add(new ProcessTaskStepWorkerVo(processTaskStepVo.getProcessTaskId(), processTaskStepVo.getId(), GroupSearch.USER.getValue(), taskUserVo.getUserUuid(), ProcessUserType.MINOR.getValue()));
@@ -1653,19 +1656,10 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
     @Override
     public void refreshStepMinorUser(ProcessTaskStepVo processTaskStepVo, ProcessTaskStepTaskVo processTaskStepTaskVo) {
         List<ProcessTaskStepUserVo> stepUserVoList = new ArrayList<>();
-
-        //如果存在子任务已完成的用户则该用户 status为succeed,则该用户为succeed
-        Map<String, ProcessTaskStepTaskUserVo> stepTaskUserStatusMap = new HashMap<>();
-        List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getStepTaskUserListByTaskId(processTaskStepTaskVo.getId());
+        //如果存在子任务已完成的用户,且该用户为succeed， 则更新到 processtask_step_user ，且status 为 done，type 为minor
+        List<ProcessTaskStepTaskUserVo> taskUserVoList = processTaskStepTaskMapper.getStepTaskUserListByProcessTaskStepId(processTaskStepVo.getId());
+        taskUserVoList = taskUserVoList.stream().filter(user->Objects.equals(ProcessTaskStatus.SUCCEED.getValue(),user.getStatus())).collect(collectingAndThen(toCollection(() -> new TreeSet<>( Comparator.comparing(ProcessTaskStepTaskUserVo::getUserUuid))), ArrayList::new));
         for (ProcessTaskStepTaskUserVo taskUserVo : taskUserVoList) {
-            if (!stepTaskUserStatusMap.containsKey(taskUserVo.getUserUuid()) || Objects.equals(ProcessTaskStatus.SUCCEED.getValue(), stepTaskUserStatusMap.get(taskUserVo.getUserUuid()).getStatus())) {
-                stepTaskUserStatusMap.put(taskUserVo.getUserUuid(), taskUserVo);
-            }
-        }
-
-        //跟新taskStepUser 到库
-        for (Map.Entry<String, ProcessTaskStepTaskUserVo> entry : stepTaskUserStatusMap.entrySet()) {
-            ProcessTaskStepTaskUserVo taskUserVo = entry.getValue();
             if (taskUserVo.getIsDelete() != 1) {
                 String status = ProcessTaskStepUserStatus.DOING.getValue();
                 if (Objects.equals(taskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
@@ -1678,8 +1672,6 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             }
         }
         //TODO 其它模块的taskStepUser
-
-
         //delete该step的所有minor工单步骤user
         processTaskMapper.deleteProcessTaskStepUserMinorByProcessTaskStepId(processTaskStepVo.getId());
         //insert该step的所有minor工单步骤user

@@ -263,7 +263,7 @@
           and `status` = #{status}
     </select>
 
-    <select id="getStepTaskUserListByTaskId"
+    <select id="getStepTaskUserListByStepTaskId"
             resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo" useCache="false">
         SELECT `id`,
                `processtask_step_task_id` as processTaskStepTaskId,
@@ -273,6 +273,19 @@
                `is_delete`                as isDelete
         FROM `processtask_step_task_user`
         where `processtask_step_task_id` = #{value}
+    </select>
+
+    <select id="getStepTaskUserListByProcessTaskStepId"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo" useCache="false">
+        SELECT pstu.`id`,
+               pstu.`processtask_step_task_id` as processTaskStepTaskId,
+               pstu.`user_uuid`                as userUuid,
+               pstu.`end_time`                 as endTime,
+               pstu.`status`,
+               pstu.`is_delete`                as isDelete
+        FROM `processtask_step_task_user` pstu
+                 left join processtask_step_task pst on pst.id = pstu.processtask_step_task_id
+        where pst.processtask_step_id = #{value}
     </select>
 
     <select id="getStepTaskUserContentByIdAndUserUuid"

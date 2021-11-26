@@ -20,7 +20,6 @@ import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ProcessTaskSqlTable;
 import codedriver.framework.process.workcenter.table.ProcessTaskStepSqlTable;
-import codedriver.framework.process.workcenter.table.ProcessTaskStepUserSqlTable;
 import codedriver.framework.process.workcenter.table.ProcessTaskStepWorkerSqlTable;
 import codedriver.framework.service.AuthenticationInfoService;
 import codedriver.framework.util.TimeUtil;
@@ -231,10 +230,12 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
      * @Returns: void
      **/
     protected void getProcessingTaskOfMineSqlWhere(StringBuilder sqlSb, List<String> userList, List<String> teamList, List<String> roleList) {
-        sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(),new ProcessTaskStepUserSqlTable().getShortName(),ProcessTaskStepUserSqlTable.FieldEnum.USER_UUID.getValue(),String.join("','",userList)));
+        /*sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(),new ProcessTaskStepUserSqlTable().getShortName(),ProcessTaskStepUserSqlTable.FieldEnum.USER_UUID.getValue(),String.join("','",userList)));
+        sqlSb.append(" and ");
+        sqlSb.append(Expression.getExpressionSql(Expression.EQUAL.getExpression(),new ProcessTaskStepUserSqlTable().getShortName(),ProcessTaskStepUserSqlTable.FieldEnum.STATUS.getValue(), ProcessTaskStepUserStatus.DOING.getValue()));*/
         //worker-team
         if(CollectionUtils.isNotEmpty(teamList)) {
-            sqlSb.append(" or ");
+            //sqlSb.append(" or ");
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.UUID.getValue(), String.join("','", teamList)));
             sqlSb.append(" and ");
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(), GroupSearch.TEAM.getValue()));
