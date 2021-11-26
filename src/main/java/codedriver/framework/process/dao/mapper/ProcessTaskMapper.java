@@ -383,6 +383,8 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
 
+    int updateProcessTaskSlaTimeStatus(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
+
     int updateProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
 
 //    int updateProcessTaskStepRelIsHit(@Param("fromProcessTaskStepId") Long fromProcessTaskStepId, @Param("toProcessTaskStepId") Long toProcessTaskStepId, @Param("isHit") Integer isHit);

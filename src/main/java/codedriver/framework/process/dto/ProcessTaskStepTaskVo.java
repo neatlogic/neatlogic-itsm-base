@@ -42,6 +42,8 @@ public class ProcessTaskStepTaskVo implements Serializable {
     private String taskConfigPolicy;
     @EntityField(name = "任务策略名", type = ApiParamType.STRING)
     private String taskConfigPolicyName;
+    @EntityField(name = "创建人uuid", type = ApiParamType.STRING)
+    private String owner;
     @EntityField(name = "创建人")
     private UserVo ownerVo;
     @EntityField(name = "状态", type = ApiParamType.STRING)
@@ -241,5 +243,13 @@ public class ProcessTaskStepTaskVo implements Serializable {
 
     public void setTaskStepTaskUserContent(String taskStepTaskUserContent) {
         this.taskStepTaskUserContent = taskStepTaskUserContent;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }
