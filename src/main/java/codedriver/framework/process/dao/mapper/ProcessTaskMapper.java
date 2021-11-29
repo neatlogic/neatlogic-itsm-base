@@ -14,30 +14,10 @@ import java.util.Map;
 import java.util.Set;
 
 public interface ProcessTaskMapper {
-    ProcessTaskSlaVo getProcessTaskSlaById(Long slaId);
 
     List<ProcessTaskVo> getProcessTaskByStatusList(@Param("statusList") List<String> statusList, @Param("count") Integer count);
 
-    List<ProcessTaskSlaNotifyVo> getAllProcessTaskSlaNotify();
-
-    List<ProcessTaskSlaTransferVo> getAllProcessTaskSlaTransfer();
-
-    List<ProcessTaskStepVo> getProcessTaskStepBaseInfoBySlaId(Long slaId);
-
-    ProcessTaskSlaTimeVo getProcessTaskSlaTimeBySlaId(Long slaId);
-
-    ProcessTaskSlaNotifyVo getProcessTaskSlaNotifyById(Long id);
-
-    ProcessTaskSlaTransferVo getProcessTaskSlaTransferById(Long id);
-
-    List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskStepId(Long processTaskStepId);
-
-    List<ProcessTaskSlaVo> getProcessTaskSlaByProcessTaskId(Long processTaskId);
-
-    List<ProcessTaskSlaTimeVo> getProcessTaskSlaTimeByProcessTaskStepIdList(List<Long> processTaskStepIdList);
-
     ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);
-
 
     List<ProcessTaskVo> getTaskListByIdList(List<Long> idList);
 
@@ -117,7 +97,7 @@ public interface ProcessTaskMapper {
     ProcessTaskStepVo getEndProcessTaskStepByProcessTaskId(Long processTaskId);
 
     List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndType(@Param("processTaskId") Long processTaskId,
-                                                                            @Param("type") String type);
+                                                                     @Param("type") String type);
 
     List<ProcessTaskStepVo> getProcessTaskActiveStepByProcessTaskIdAndProcessStepType(
             @Param("processTaskId") Long processTaskId, @Param("processStepTypeList") List<String> processStepTypeList,
@@ -145,8 +125,8 @@ public interface ProcessTaskMapper {
             ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo);
 
     int checkIsWorker(@Param("processTaskId") Long processTaskId,
-                             @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType,
-                             @Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo);
+                      @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType,
+                      @Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo);
 
     int checkIsProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
@@ -209,24 +189,10 @@ public interface ProcessTaskMapper {
 
     ProcessTaskScoreTemplateVo getProcessTaskScoreTemplateByProcessTaskId(Long processTaskId);
 
-    List<Long> getSlaIdListByProcessTaskStepId(Long processTaskStepId);
-
-    List<Long> getSlaIdListByProcessTaskId(Long processTaskId);
-
-    String getProcessTaskSlaConfigById(Long id);
-
-    List<Long> getProcessTaskStepIdListBySlaId(Long slaId);
-
-    List<ProcessTaskSlaNotifyVo> getProcessTaskSlaNotifyBySlaId(Long slaId);
-
-    List<ProcessTaskSlaTransferVo> getProcessTaskSlaTransferBySlaId(Long slaId);
-
-    Long getProcessTaskSlaLockById(Long slaId);
-
     ProcessTaskStepAgentVo getProcessTaskStepAgentByProcessTaskStepId(Long processTaskStepId);
 
     int checkProcessTaskFocusExists(@Param("processTaskId") Long processTaskId,
-                                           @Param("userUuid") String userUuid);
+                                    @Param("userUuid") String userUuid);
 
     List<String> getFocusUsersOfProcessTask(Long processTaskId);
 
@@ -277,16 +243,13 @@ public interface ProcessTaskMapper {
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
-                                             @Param("prop") String prop);
+                                      @Param("prop") String prop);
 
     int insertProcessTaskForm(ProcessTaskFormVo processTaskFormVo);
 
-
     int insertIgnoreProcessTaskFormContent(ProcessTaskFormVo processTaskFormVo);
 
-
     int insertProcessTask(ProcessTaskVo processTaskVo);
-
 
     int replaceProcessTask(ProcessTaskVo processTaskVo);
 
@@ -295,11 +258,6 @@ public interface ProcessTaskMapper {
     int insertProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
 
     int replaceProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
-
-    int insertProcessTaskSlaNotify(ProcessTaskSlaNotifyVo processTaskSlaNotifyVo);
-
-    int insertProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
-
 
     int insertProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
@@ -321,17 +279,8 @@ public interface ProcessTaskMapper {
 
     int insertIgnoreProcessTaskStepConfig(ProcessTaskStepConfigVo processTaskStepConfigVo);
 
-
     int insertProcessTaskStepFormAttribute(
             ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
-
-    int insertProcessTaskSla(ProcessTaskSlaVo processTaskSlaVo);
-
-
-    int insertProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
-
-    int insertProcessTaskStepSla(@Param("processTaskStepId") Long processTaskStepId, @Param("slaId") Long slaId);
-
 
     int replaceProcessTaskFormAttributeData(
             ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo);
@@ -356,9 +305,8 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskScoreTemplateConfig(ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo);
 
-
     int insertProcessTaskFocus(@Param("processTaskId") Long processTaskId,
-                                      @Param("userUuid") String userUuid);
+                               @Param("userUuid") String userUuid);
 
     int insertProcessTaskTag(@Param("processTaskTagList") List<ProcessTaskTagVo> processTaskTagList);
 
@@ -378,24 +326,15 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
 
-    int updateProcessTaskSlaNotify(ProcessTaskSlaNotifyVo processTaskNotifyVo);
-
-    int updateProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
-
-    int updateProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
-
-//    int updateProcessTaskStepRelIsHit(@Param("fromProcessTaskStepId") Long fromProcessTaskStepId, @Param("toProcessTaskStepId") Long toProcessTaskStepId, @Param("isHit") Integer isHit);
+    //    int updateProcessTaskStepRelIsHit(@Param("fromProcessTaskStepId") Long fromProcessTaskStepId, @Param("toProcessTaskStepId") Long toProcessTaskStepId, @Param("isHit") Integer isHit);
     int updateProcessTaskStepRelIsHit(ProcessTaskStepRelVo processTaskStepRelVo);
 
 //    int updateProcessTaskStepConvergeIsCheck(@Param("isCheck") Integer isCheck,
 //                                                    @Param("convergeId") Long convergeId, @Param("processTaskStepId") Long processTaskStepId);
 
-
     int updateProcessTaskStepUserStatus(ProcessTaskStepUserVo processTaskStepUserVo);
 
-
     int updateProcessTaskIsShow(ProcessTaskVo processTaskVo);
-
 
     int updateProcessTaskTitleOwnerPriorityUuid(ProcessTaskVo processTaskVo);
 
@@ -406,11 +345,10 @@ public interface ProcessTaskMapper {
     int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
 
     int updateProcessTaskPriorityUuidById(@Param("id") Long processTaskId,
-                                                 @Param("priorityUuid") String priorityUuid);
-
+                                          @Param("priorityUuid") String priorityUuid);
 
     int updateProcessTaskSerialNumberById(@Param("id") Long processTaskId,
-                                                 @Param("serialNumber") String serialNumber);
+                                          @Param("serialNumber") String serialNumber);
 
     int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
@@ -419,10 +357,6 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
     int deleteProcessTaskConvergeByStepId(Long processTaskStepId);
-
-    int deleteProcessTaskSlaNotifyById(Long slaNotifyId);
-
-    int deleteProcessTaskSlaTransferById(Long slaTransferId);
 
     int deleteProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
@@ -438,9 +372,8 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskStepRemind(ProcessTaskStepRemindVo processTaskStepRemindVo);
 
-
     int deleteProcessTaskFocus(@Param("processTaskId") Long processTaskId,
-                                      @Param("userUuid") String userUuid);
+                               @Param("userUuid") String userUuid);
 
     int deleteProcessTaskStepAgentByProcessTaskStepId(Long processTaskStepId);
 
@@ -448,15 +381,9 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskConvergeByProcessTaskId(Long processTaskId);
 
-    int deleteProcessTaskSlaTransferBySlaId(Long slaId);
-
-    int deleteProcessTaskSlaNotifyBySlaId(Long slaId);
-
     int deleteProcessTaskStepFileByProcessTaskId(Long processTaskId);
 
     int deleteProcessTaskFormByProcessTaskId(Long processTaskId);
-
-    int deleteProcessTaskSlaTimeBySlaId(Long slaId);
 
     int deleteProcessTaskStepByProcessTaskId(Long processTaskId);
 

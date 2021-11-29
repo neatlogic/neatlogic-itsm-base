@@ -65,6 +65,7 @@ import java.util.stream.Collectors;
 public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     static Logger logger = LoggerFactory.getLogger(ProcessStepHandlerBase.class);
     protected static ProcessTaskMapper processTaskMapper;
+    protected static ProcessTaskSlaMapper processTaskSlaMapper;
     protected static UserMapper userMapper;
     protected static TeamMapper teamMapper;
     protected static RoleMapper roleMapper;
@@ -87,6 +88,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     @Resource
     public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
         processTaskMapper = _processTaskMapper;
+    }
+
+    @Resource
+    public void setProcessTaskSlaMapper(ProcessTaskSlaMapper _processTaskSlaMapper) {
+        processTaskSlaMapper = _processTaskSlaMapper;
     }
 
     @Resource
@@ -1778,11 +1784,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (CollectionUtils.isNotEmpty(slaStepUuidList)) {
                     ProcessTaskSlaVo processTaskSlaVo = new ProcessTaskSlaVo(slaVo);
                     processTaskSlaVo.setProcessTaskId(processTaskVo.getId());
-                    processTaskMapper.insertProcessTaskSla(processTaskSlaVo);
+                    processTaskSlaMapper.insertProcessTaskSla(processTaskSlaVo);
                     for (String suuid : slaStepUuidList) {
                         Long stepId = stepIdMap.get(suuid);
                         if (stepId != null) {
-                            processTaskMapper.insertProcessTaskStepSla(stepId, processTaskSlaVo.getId());
+                            processTaskSlaMapper.insertProcessTaskStepSla(stepId, processTaskSlaVo.getId());
                         }
                     }
                 }
