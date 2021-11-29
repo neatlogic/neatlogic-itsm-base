@@ -380,10 +380,7 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskSlaNotify(ProcessTaskSlaNotifyVo processTaskNotifyVo);
 
-
     int updateProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
-
-    int updateProcessTaskSlaTimeStatus(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
 
     int updateProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
 

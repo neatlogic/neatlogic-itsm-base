@@ -180,6 +180,8 @@
         <result column="name" property="name"/>
         <result column="expireTime" property="expireTime"/>
         <result column="realExpireTime" property="realExpireTime"/>
+        <result column="expireTimeLong" property="expireTimeLong"/>
+        <result column="realExpireTimeLong" property="realExpireTimeLong"/>
         <result column="timeLeft" property="timeLeft"/>
         <result column="realTimeLeft" property="realTimeLeft"/>
         <result column="timeSum" property="timeSum"/>
@@ -194,8 +196,9 @@
         c.`sla_id`,
         c.`expire_time` as expireTime,
         c.`realexpire_time` AS realExpireTime,
-        c.`time_left` as
-        timeLeft,
+        UNIX_TIMESTAMP(c.`expire_time`) * 1000     as expireTimeLong,
+        UNIX_TIMESTAMP(c.`realexpire_time`) * 1000 AS realExpireTimeLong,
+        c.`time_left` as timeLeft,
         c.`realtime_left` as realTimeLeft,
         c.`time_sum` as timeSum,
         c.`status` as status
@@ -214,8 +217,9 @@
         SELECT `sla_id`          as slaId,
                `expire_time`     AS expireTime,
                `realexpire_time` AS realExpireTime,
-               `time_left`       as
-                                    timeLeft,
+               UNIX_TIMESTAMP(`expire_time`) * 1000     AS expireTimeLong,
+               UNIX_TIMESTAMP(`realexpire_time`) * 1000 AS realExpireTimeLong,
+               `time_left`       as timeLeft,
                `realtime_left`   as realTimeLeft,
                `time_sum`        as timeSum,
                `status`        as status
@@ -3054,13 +3058,6 @@
             `realtime_left`   = #{realTimeLeft},
             `time_sum`        = #{timeSum},
             `status`        = #{status}
-        WHERE `sla_id` = #{slaId}
-    </update>
-
-    <update id="updateProcessTaskSlaTimeStatus" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
-        UPDATE
-            `processtask_sla_time`
-        SET `status` = #{status}
         WHERE `sla_id` = #{slaId}
     </update>
 
