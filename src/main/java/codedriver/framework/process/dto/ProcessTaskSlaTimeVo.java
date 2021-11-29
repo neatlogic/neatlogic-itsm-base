@@ -128,9 +128,16 @@ public class ProcessTaskSlaTimeVo {
 
     @Override
     public String toString() {
-        return "[slaId=" + slaId + ", status=" + status + ", expireTime=" + expireTime
-            + ", realExpireTime=" + realExpireTime + ", timeSum=" + timeSum + ", timeLeft=" + timeLeft
-            + ", realTimeLeft=" + realTimeLeft  + "]";
+        return "{slaId=" + slaId
+				+ ", status=" + status
+				+ ", expireTime=" + expireTime
+            	+ ", realExpireTime=" + realExpireTime
+				+ ", expireTimeLong=" + expireTimeLong
+				+ ", realExpireTimeLong=" + realExpireTimeLong
+				+ ", timeSum=" + timeSum
+				+ ", timeLeft=" + timeLeft
+            	+ ", realTimeLeft=" + realTimeLeft
+				+ "}";
     }
 
 }

@@ -623,57 +623,12 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
     }
 
     @Override
-    public List<ProcessTaskSlaTimeVo> getSlaTimeListByProcessTaskStepIdAndWorktimeUuid(Long processTaskStepId,
-                                                                                       String worktimeUuid) {
+    public List<ProcessTaskSlaTimeVo> getSlaTimeListByProcessTaskStepId(Long processTaskStepId) {
         List<Long> slaIdList = processTaskSlaMapper.getSlaIdListByProcessTaskStepId(processTaskStepId);
         if (CollectionUtils.isNotEmpty(slaIdList)) {
-            List<ProcessTaskSlaTimeVo> slaTimeList = processTaskSlaMapper.getProcessTaskSlaTimeListBySlaIdList(slaIdList);
-            for (ProcessTaskSlaTimeVo processTaskSlaTimeVo : slaTimeList) {
-                long nowTime = System.currentTimeMillis();
-                if (processTaskSlaTimeVo.getExpireTime() != null) {
-                    long timeLeft = 0L;
-                    long expireTime = processTaskSlaTimeVo.getExpireTime().getTime();
-                    if (nowTime < expireTime) {
-                        timeLeft = worktimeMapper.calculateCostTime(worktimeUuid, nowTime, expireTime);
-                    } else if (nowTime > expireTime) {
-                        timeLeft = -worktimeMapper.calculateCostTime(worktimeUuid, expireTime, nowTime);
-                    }
-                    processTaskSlaTimeVo.setTimeLeft(timeLeft);
-                }
-                if (processTaskSlaTimeVo.getRealExpireTime() != null) {
-                    long realTimeLeft = processTaskSlaTimeVo.getRealExpireTime().getTime() - nowTime;
-                    processTaskSlaTimeVo.setRealTimeLeft(realTimeLeft);
-                }
-            }
-            return slaTimeList;
+            return processTaskSlaMapper.getProcessTaskSlaTimeListBySlaIdList(slaIdList);
         }
         return new ArrayList<>();
-//        List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
-//        List<ProcessTaskSlaVo> processTaskSlaList = processTaskSlaMapper.getProcessTaskSlaByProcessTaskStepId(processTaskStepId);
-//        for (ProcessTaskSlaVo processTaskSlaVo : processTaskSlaList) {
-//            ProcessTaskSlaTimeVo processTaskSlaTimeVo = processTaskSlaVo.getSlaTimeVo();
-//            if (processTaskSlaTimeVo != null) {
-//                long nowTime = System.currentTimeMillis();
-//                processTaskSlaTimeVo.setName(processTaskSlaVo.getName());
-//                processTaskSlaTimeVo.setSlaId(processTaskSlaVo.getId());
-//                if (processTaskSlaTimeVo.getExpireTime() != null) {
-//                    long timeLeft = 0L;
-//                    long expireTime = processTaskSlaTimeVo.getExpireTime().getTime();
-//                    if (nowTime < expireTime) {
-//                        timeLeft = worktimeMapper.calculateCostTime(worktimeUuid, nowTime, expireTime);
-//                    } else if (nowTime > expireTime) {
-//                        timeLeft = -worktimeMapper.calculateCostTime(worktimeUuid, expireTime, nowTime);
-//                    }
-//                    processTaskSlaTimeVo.setTimeLeft(timeLeft);
-//                }
-//                if (processTaskSlaTimeVo.getRealExpireTime() != null) {
-//                    long realTimeLeft = processTaskSlaTimeVo.getRealExpireTime().getTime() - nowTime;
-//                    processTaskSlaTimeVo.setRealTimeLeft(realTimeLeft);
-//                }
-//                slaTimeList.add(processTaskSlaTimeVo);
-//            }
-//        }
-//        return slaTimeList;
     }
 
     @Override

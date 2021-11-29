@@ -123,8 +123,7 @@ public interface ProcessTaskService {
      *            步骤id
      * @return List<ProcessTaskSlaTimeVo>
      */
-    public List<ProcessTaskSlaTimeVo> getSlaTimeListByProcessTaskStepIdAndWorktimeUuid(Long processTaskStepId,
-        String worktimeUuid);
+    public List<ProcessTaskSlaTimeVo> getSlaTimeListByProcessTaskStepId(Long processTaskStepId);
 
     /**
      * 
