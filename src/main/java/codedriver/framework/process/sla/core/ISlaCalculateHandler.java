@@ -24,6 +24,12 @@ public interface ISlaCalculateHandler {
     String getDescription();
 
     /**
+     * 控制关联步骤下拉框单选或多选
+     * @return
+     */
+    boolean getMultiple();
+
+    /**
      * 根据时效关联的步骤状态返回时效的状态
      * @param processTaskStepList 时效关联的步骤列表
      * @return
