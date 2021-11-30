@@ -64,6 +64,7 @@ public class SlaCalculateHandlerFactory extends ModuleInitializedListenerBase im
             JSONObject obj = new JSONObject();
             obj.put("value", handler.getHandler());
             obj.put("text", handler.getName());
+            obj.put("multiple", handler.getMultiple());
             obj.put("description", handler.getDescription());
             list.add(obj);
         }
