@@ -682,7 +682,7 @@
 	<delete id="deleteProcessDraft" parameterType="codedriver.framework.process.dto.ProcessDraftVo">
 		DELETE FROM `process_draft` 
 		WHERE `process_uuid` = #{processUuid} 
-		<if test="isICreated != null and isICreated == 1">
+		<if test="fcu != null and fcu != ''">
 		AND `fcu` = #{fcu}
 		</if>
 	</delete>
