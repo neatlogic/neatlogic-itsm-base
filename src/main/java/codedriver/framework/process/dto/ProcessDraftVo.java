@@ -36,8 +36,6 @@ public class ProcessDraftVo {
 	@JSONField(serialize = false)
 	private String configStr;
 
-	private Integer isICreated;
-
 	public synchronized String getUuid() {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = UUID.randomUUID().toString().replace("-", "");
@@ -109,13 +107,5 @@ public class ProcessDraftVo {
 			return config.toJSONString();
 		}
 		return configStr;
-	}
-
-	public Integer getIsICreated() {
-		return isICreated;
-	}
-
-	public void setIsICreated(Integer isICreated) {
-		this.isICreated = isICreated;
 	}
 }
