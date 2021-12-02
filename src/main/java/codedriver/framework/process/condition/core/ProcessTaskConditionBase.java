@@ -234,22 +234,28 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         sqlSb.append(" and ");
         sqlSb.append(Expression.getExpressionSql(Expression.EQUAL.getExpression(),new ProcessTaskStepUserSqlTable().getShortName(),ProcessTaskStepUserSqlTable.FieldEnum.STATUS.getValue(), ProcessTaskStepUserStatus.DOING.getValue()));*/
         //worker-team
+        boolean isFirst = true;
         if(CollectionUtils.isNotEmpty(teamList)) {
-            //sqlSb.append(" or ");
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.UUID.getValue(), String.join("','", teamList)));
             sqlSb.append(" and ");
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(), GroupSearch.TEAM.getValue()));
+            isFirst = false;
         }
         //worker-role
         if(CollectionUtils.isNotEmpty(roleList)) {
-            sqlSb.append(" or ");
+            if(!isFirst) {
+                sqlSb.append(" or ");
+            }
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.UUID.getValue(), String.join("','", roleList)));
             sqlSb.append(" and ");
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(), GroupSearch.ROLE.getValue()));
+            isFirst = false;
         }
         //worker-user
         if(CollectionUtils.isNotEmpty(userList)) {
-            sqlSb.append(" or ");
+            if(!isFirst) {
+                sqlSb.append(" or ");
+            }
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.UUID.getValue(), String.join("','", userList)));
             sqlSb.append(" and ");
             sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepWorkerSqlTable().getShortName(), ProcessTaskStepWorkerSqlTable.FieldEnum.TYPE.getValue(), GroupSearch.USER.getValue()));
