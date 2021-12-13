@@ -483,7 +483,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
             throw new ProcessTaskNotFoundException(processTaskId.toString());
         }
         if (processTaskVo.getIsShow() != 1 && !AuthActionChecker.check(PROCESSTASK_MODIFY.class.getSimpleName())) {
-            throw new PermissionDeniedException(AuthFactory.getAuthInstance(PROCESSTASK_MODIFY.class.getSimpleName()).getAuthDisplayName());
+            throw new PermissionDeniedException(PROCESSTASK_MODIFY.class);
         }
         if (processTaskStepId != null) {
             ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepId);
