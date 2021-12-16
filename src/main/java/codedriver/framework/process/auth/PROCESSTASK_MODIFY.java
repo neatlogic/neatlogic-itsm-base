@@ -14,7 +14,7 @@ public class PROCESSTASK_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthIntroduction() {
-		return "对工单隐藏/显示和删除";
+		return "对工单隐藏/显示和删除，批量上报";
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package codedriver.framework.process.dao.mapper.workcenter;
 
 import codedriver.framework.dto.AuthorityVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterTheadVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
@@ -12,46 +11,48 @@ import java.util.Map;
 
 public interface WorkcenterMapper {
 
-	public List<String> getAuthorizedWorkcenterUuidList(
-			@Param("userUuid")String userUuid, 
-			@Param("teamUuidList")List<String> teamUuidList,
-			@Param("roleUuidList")List<String> roleUuidList
-			);
+	List<String> getAuthorizedWorkcenterUuidList(
+		@Param("userUuid")String userUuid,
+		@Param("teamUuidList")List<String> teamUuidList,
+		@Param("roleUuidList")List<String> roleUuidList,
+		@Param("deviceType") String deviceType,
+		@Param("isHasModifiedAuth") int isHasModifiedAuth
+		);
 	
-	public List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);
+	List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);
 	
-	public Integer checkWorkcenterNameIsRepeat(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
+	Integer checkWorkcenterNameIsRepeat(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
 	
-	public List<WorkcenterVo> getWorkcenterByNameAndUuid(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
+	List<WorkcenterVo> getWorkcenterByNameAndUuid(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
 	
-	public Map<String,String> getWorkcenterConditionConfig();
+	Map<String,String> getWorkcenterConditionConfig();
 	
-	public List<WorkcenterTheadVo> getWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
+	List<WorkcenterTheadVo> getWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
 	
-	public WorkcenterUserProfileVo getWorkcenterUserProfileByUserUuid(String userUuid);
+	WorkcenterUserProfileVo getWorkcenterUserProfileByUserUuid(String userUuid);
 	
-	public Integer deleteWorkcenterUserProfileByUserUuid(String userUuid);
+	Integer deleteWorkcenterUserProfileByUserUuid(String userUuid);
 	
-	public Integer deleteWorkcenterByUuid(@Param("workcenterUuid")String workcenterUuid);
+	Integer deleteWorkcenterByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
-	public Integer deleteWorkcenterAuthorityByUuid(@Param("workcenterUuid")String workcenterUuid);
+	Integer deleteWorkcenterAuthorityByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
-	public Integer deleteWorkcenterOwnerByUuid(@Param("workcenterUuid")String workcenterUuid);
+	Integer deleteWorkcenterOwnerByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
-	public Integer deleteWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
+	Integer deleteWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
 	
-	public Integer insertWorkcenter(WorkcenterVo workcenterVo);
+	Integer insertWorkcenter(WorkcenterVo workcenterVo);
 	
-	public Integer insertWorkcenterAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("workcenterUuid") String workcenterUuid); 
+	Integer insertWorkcenterAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("workcenterUuid") String workcenterUuid);
 	
-	public Integer insertWorkcenterOwner(@Param("userUuid")String owner,@Param("uuid")String workcenterUuid); 
+	Integer insertWorkcenterOwner(@Param("userUuid")String owner,@Param("uuid")String workcenterUuid);
 	
-	public Integer insertWorkcenterThead(WorkcenterTheadVo workcenterTheadVo); 
+	Integer insertWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
 	
-	public Integer insertWorkcenterUserProfile(WorkcenterUserProfileVo workcenterUserProfileVo);
+	Integer insertWorkcenterUserProfile(WorkcenterUserProfileVo workcenterUserProfileVo);
 	
-	public Integer updateWorkcenter(WorkcenterVo workcenterVo);
+	Integer updateWorkcenter(WorkcenterVo workcenterVo);
 	
-	public Integer updateWorkcenterCondition(WorkcenterVo workcenterVo);
+	Integer updateWorkcenterCondition(WorkcenterVo workcenterVo);
 	
 }
