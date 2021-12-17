@@ -2094,6 +2094,26 @@
         AND `status` = #{status}
     </select>
 
+    <select id="getProcessTaskStepAutomaticRequestById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.automatic.ProcessTaskStepAutomaticRequestVo">
+        SELECT
+        `id`,
+        `processtask_id` AS processTaskId,
+        `processtask_step_id` AS processTaskStepId,
+        `type`,
+        `trigger_time` AS triggerTime
+        FROM `processtask_step_automatic_request`
+        WHERE `id` = #{value}
+    </select>
+
+    <select id="getAllProcessTaskStepAutomaticRequestList" resultType="codedriver.framework.process.dto.automatic.ProcessTaskStepAutomaticRequestVo">
+        SELECT
+        `id`,
+        `processtask_id` AS processTaskId,
+        `processtask_step_id` AS processTaskStepId,
+        `type`,
+        `trigger_time` AS triggerTime
+        FROM `processtask_step_automatic_request`
+    </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
@@ -2719,6 +2739,23 @@
         )
     </insert>
 
+    <insert id="insertProcessTaskStepAutomaticRequest" parameterType="codedriver.framework.process.dto.automatic.ProcessTaskStepAutomaticRequestVo">
+        <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+        INSERT INTO `processtask_step_automatic_request` (
+            `processtask_id`,
+            `processtask_step_id`,
+            `type`
+        )
+        VALUES
+        (
+            #{processTaskId},
+            #{processTaskStepId},
+            #{type}
+        )
+    </insert>
+
     <update id="updateProcessTaskStepUserStatus" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
         UPDATE
         `processtask_step_user`
@@ -2809,6 +2846,10 @@
         UPDATE `processtask`
         SET `serial_number` = #{serialNumber}
         WHERE `id` = #{id}
+    </update>
+
+    <update id="updateProcessTaskStepAutomaticRequestTriggerTimeById" parameterType="codedriver.framework.process.dto.automatic.ProcessTaskStepAutomaticRequestVo">
+        UPDATE `processtask_step_automatic_request` SET `trigger_time` = #{triggerTime} WHERE `id` = #{id}
     </update>
 
     <delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
@@ -3023,5 +3064,9 @@
 
     <delete id="deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId" parameterType="java.lang.Long">
         DELETE FROM `processtask_step_reapproval_restore_backup` WHERE `backup_step_id` = #{value}
+    </delete>
+
+    <delete id="deleteProcessTaskStepAutomaticRequestById">
+        DELETE FROM `processtask_step_automatic_request` WHERE `id` = #{value}
     </delete>
 </mapper>

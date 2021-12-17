@@ -1,10 +1,7 @@
 package codedriver.framework.process.dto;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.annotation.JSONField;
 
-import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.util.SnowflakeUtil;
 
@@ -59,22 +56,6 @@ public class ProcessTaskStepContentVo extends BaseEditorVo {
 	public void setContentHash(String contentHash) {
 		this.contentHash = contentHash;
 	}
-
-//	@Override
-//	public String getFcu() {
-//		if (StringUtils.isBlank(super.getFcu())) {
-//		    super.setFcu(UserContext.get().getUserUuid());
-//		}
-//		return super.getFcu();
-//	}
-//
-//	@Override
-//	public String getLcu() {
-//		if (StringUtils.isBlank(super.getLcu())) {
-//			super.setLcu(UserContext.get().getUserUuid());
-//		}
-//		return super.getLcu();
-//	}
 
 	public Long getProcessTaskId() {
 		return processTaskId;
