@@ -967,7 +967,14 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
                                                                              Long processTaskStepId, String userUuid) {
         List<ProcessTaskStepVo> resultList = new ArrayList<>();
         /** 所有前置步骤 **/
-        List<Long> fromStepIdList = processTaskMapper.getFromProcessTaskStepIdListByToId(processTaskStepId);
+//        List<Long> fromStepIdList = processTaskMapper.getFromProcessTaskStepIdListByToId(processTaskStepId);
+        List<Long> fromStepIdList = new ArrayList<>();
+        List<ProcessTaskStepRelVo> fromProcessTaskStepRelList = processTaskMapper.getProcessTaskStepRelByToId(processTaskStepId);
+        for (ProcessTaskStepRelVo relVo : fromProcessTaskStepRelList) {
+            if (Objects.equals(relVo.getIsHit(), 1) && Objects.equals(relVo.getType(), ProcessFlowDirection.FORWARD.getValue())) {
+                fromStepIdList.add(relVo.getFromProcessTaskStepId());
+            }
+        }
         if (CollectionUtils.isNotEmpty(fromStepIdList)) {
             List<ProcessTaskStepVo> fromStepList = processTaskMapper.getProcessTaskStepListByIdList(fromStepIdList);
             /** 找到所有已完成步骤 **/
