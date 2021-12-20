@@ -2010,6 +2010,15 @@
         from `processtask_file` where `processtask_id` = #{value}
     </select>
 
+    <select id="getProcessTaskStepFileListByTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepFileVo">
+        select
+            `processtask_id` as processTaskId,
+            `processtask_step_id` as processTaskStepId,
+            `content_id` as contentId,
+            `file_id` as fileId
+        from `processtask_file` where `processtask_step_id` = #{value}
+    </select>
+
     <select id="getRepeatGroupIdByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT `repeat_group_id` FROM `processtask_repeat` WHERE `processtask_id` = #{value}
     </select>
