@@ -7,6 +7,7 @@
 		<result column="name" property="name" />
 		<result column="owner" property="owner" />
 		<result column="type" property="type" />
+		<result column="suport" property="suport" />
 		<result column="sort" property="sort" />
 		<result column="condition_config" property="conditionConfig" />
 		<collection property="authorityList" ofType="codedriver.framework.dto.AuthorityVo">
@@ -60,6 +61,7 @@
 		  pw.`uuid`,
 		  pw.`name`,
 		  pw.`type`,
+		  pw.`suport`,
 		  pw.`sort`,
 		  pw.`condition_config`,
 		  pwa.`type` as authType,
@@ -100,6 +102,7 @@
 		  pw.`uuid`,
 		  pw.`name`,
 		  pw.`type`,
+		  pw.`suport`,
 		  pw.`sort`,
 		  pw.`condition_config`,
 		  pwo.`user_uuid` as `owner`
@@ -192,7 +195,8 @@
 		  `name`,
 		  `type`,
 		  `sort`,
-		  `condition_config`
+		  `condition_config`,
+			`suport`
 		)
 		VALUES
 		  (
@@ -200,7 +204,8 @@
 		    #{name},
 		    #{type},
 		    #{sort},
-		    #{conditionConfig}
+		    #{conditionConfig},
+		    #{suport}
 		  ) ;
 	</insert>
 
