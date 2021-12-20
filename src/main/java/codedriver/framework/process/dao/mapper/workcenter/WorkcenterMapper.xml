@@ -7,7 +7,7 @@
 		<result column="name" property="name" />
 		<result column="owner" property="owner" />
 		<result column="type" property="type" />
-		<result column="suport" property="suport" />
+		<result column="support" property="support" />
 		<result column="sort" property="sort" />
 		<result column="condition_config" property="conditionConfig" />
 		<collection property="authorityList" ofType="codedriver.framework.dto.AuthorityVo">
@@ -25,7 +25,7 @@
 		   LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
 		   LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
 		<where>
-		     pw.suport in ('all',#{deviceType})
+		     pw.support in ('all',#{deviceType})
 		     and
 		     (
                 (pwa.type = 'common' AND pwa.`uuid` = 'alluser')
@@ -61,7 +61,7 @@
 		  pw.`uuid`,
 		  pw.`name`,
 		  pw.`type`,
-		  pw.`suport`,
+		  pw.`support`,
 		  pw.`sort`,
 		  pw.`condition_config`,
 		  pwa.`type` as authType,
@@ -102,7 +102,7 @@
 		  pw.`uuid`,
 		  pw.`name`,
 		  pw.`type`,
-		  pw.`suport`,
+		  pw.`support`,
 		  pw.`sort`,
 		  pw.`condition_config`,
 		  pwo.`user_uuid` as `owner`
@@ -147,6 +147,21 @@
 	<select id="getWorkcenterUserProfileByUserUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo">
 		select * from `process_workcenter_user_profile`
 		where `user_uuid` = #{userUuid}
+	</select>
+
+	<select id="getWorkcenterVoListByUuidList"
+			parameterType="java.util.List" resultMap="workcenterMap">
+		select
+		`uuid` ,
+		`name`,
+		`sort`,
+		`type`,
+		`support`
+		from `process_workcenter`
+		where `uuid` in
+		<foreach collection="uuidList" item="uuid" separator="," open="(" close=")">
+			#{uuid}
+		</foreach>
 	</select>
 
 	<delete id="deleteWorkcenterByUuid" parameterType="java.lang.String">
@@ -196,7 +211,7 @@
 		  `type`,
 		  `sort`,
 		  `condition_config`,
-			`suport`
+			`support`
 		)
 		VALUES
 		  (
@@ -205,7 +220,7 @@
 		    #{type},
 		    #{sort},
 		    #{conditionConfig},
-		    #{suport}
+		    #{support}
 		  ) ;
 	</insert>
 

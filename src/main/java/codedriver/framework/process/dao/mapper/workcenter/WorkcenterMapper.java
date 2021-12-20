@@ -28,6 +28,8 @@ public interface WorkcenterMapper {
 	Map<String,String> getWorkcenterConditionConfig();
 	
 	List<WorkcenterTheadVo> getWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
+
+	List<WorkcenterVo> getWorkcenterVoListByUuidList(@Param("uuidList") List<String> uuidList);
 	
 	WorkcenterUserProfileVo getWorkcenterUserProfileByUserUuid(String userUuid);
 	

@@ -35,7 +35,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     @EntityField(name = "过滤条件", type = ApiParamType.STRING)
     private String conditionConfig;
     @EntityField(name = "all:所有设备,mobile:手机端,pc:电脑端", type = ApiParamType.ENUM)
-    private String suport;
+    private String support;
     @JSONField(serialize = false)
     @EntityField(name = "显示的字段", type = ApiParamType.JSONARRAY)
     private JSONArray headerList;
@@ -186,12 +186,12 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.conditionConfig = conditionConfig;
     }
 
-    public String getSuport() {
-        return suport;
+    public String getSupport() {
+        return support;
     }
 
-    public void setSuport(String suport) {
-        this.suport = suport;
+    public void setSupport(String support) {
+        this.support = support;
     }
 
     public JSONArray getHeaderList() {
