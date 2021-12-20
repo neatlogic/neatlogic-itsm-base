@@ -222,6 +222,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepFileVo> getProcessTaskStepFileListByTaskId(Long taskId);
 
+    List<ProcessTaskStepFileVo> getProcessTaskStepFileListByTaskStepId(Long taskId);
+
     Long getRepeatGroupIdByProcessTaskId(Long processTaskId);
 
     List<Long> getProcessTaskIdListByRepeatGroupId(Long repeatGroupId);
