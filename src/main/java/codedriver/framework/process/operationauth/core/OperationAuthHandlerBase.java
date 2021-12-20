@@ -342,7 +342,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         List<Long> fromStepIdList = new ArrayList<>();
         for (ProcessTaskStepRelVo processTaskStepRelVo : processTaskVo.getStepRelList()) {
             if (processTaskStepRelVo.getToProcessTaskStepId().equals(processTaskStepId)) {
-                if (processTaskStepRelVo.getIsHit() == 1) {
+                if (processTaskStepRelVo.getIsHit() == 1 && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.FORWARD.getValue())) {
                     fromStepIdList.add(processTaskStepRelVo.getFromProcessTaskStepId());
                 }
             }
