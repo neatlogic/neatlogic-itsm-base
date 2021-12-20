@@ -21,29 +21,30 @@ public class AutomaticConfigVo {
 	private String callbackResultTemplate;
 	private JSONObject callbackSuccessConfig;
 	private JSONObject callbackFailConfig;
-	private Boolean isRequest;
-	private JSONObject resultJson;
+//	private Boolean isRequest;
+	// TODO 可能没有作用
+//	private JSONObject resultJson;
 	
 	public AutomaticConfigVo() {}
 	
 	public AutomaticConfigVo(JSONObject config) {
-		JSONObject baseConfig = config.getJSONObject("requestConfig");
-		this.baseIntegrationUuid = baseConfig.getString("integrationUuid");
 		this.timeWindowConfig = config.getJSONObject("timeWindowConfig");
-		this.baseParamList = baseConfig.getJSONArray("paramList");
-		this.baseSuccessConfig = baseConfig.getJSONObject("successConfig");
-		this.baseFailPolicy = baseConfig.getString("failPolicy");
-		this.baseResultTemplate = baseConfig.getString("resultTemplate");
+		JSONObject requestConfig = config.getJSONObject("requestConfig");
+		this.baseIntegrationUuid = requestConfig.getString("integrationUuid");
+		this.baseParamList = requestConfig.getJSONArray("paramList");
+		this.baseSuccessConfig = requestConfig.getJSONObject("successConfig");
+		this.baseFailPolicy = requestConfig.getString("failPolicy");
+		this.baseResultTemplate = requestConfig.getString("resultTemplate");
 		JSONObject callbackConfig = config.getJSONObject("callbackConfig");
 		this.callbackType = callbackConfig.getString("type");
 		if(CallbackType.INTERVAL.getValue().equals(this.callbackType)) {
-			callbackConfig =callbackConfig.getJSONObject("config");
-			this.callbackIntegrationUuid = callbackConfig.getString("integrationUuid");
-			this.callbackParamList = callbackConfig.getJSONArray("paramList");
-			this.callbackInterval = callbackConfig.getInteger("interval");
-			this.callbackResultTemplate = callbackConfig.getString("resultTemplate");
-			this.callbackSuccessConfig = callbackConfig.getJSONObject("successConfig");
-			this.callbackFailConfig = callbackConfig.getJSONObject("failConfig");
+			JSONObject callbackConfigConfig =callbackConfig.getJSONObject("config");
+			this.callbackIntegrationUuid = callbackConfigConfig.getString("integrationUuid");
+			this.callbackParamList = callbackConfigConfig.getJSONArray("paramList");
+			this.callbackInterval = callbackConfigConfig.getInteger("interval");
+			this.callbackResultTemplate = callbackConfigConfig.getString("resultTemplate");
+			this.callbackSuccessConfig = callbackConfigConfig.getJSONObject("successConfig");
+			this.callbackFailConfig = callbackConfigConfig.getJSONObject("failConfig");
 		}
 	}
 
@@ -160,13 +161,13 @@ public class AutomaticConfigVo {
 		this.callbackFailConfig = callbackFailConfig;
 	}
 
-	public Boolean getIsRequest() {
-		return isRequest;
-	}
-
-	public void setIsRequest(Boolean isRequest) {
-		this.isRequest = isRequest;
-	}
+//	public Boolean getIsRequest() {
+//		return isRequest;
+//	}
+//
+//	public void setIsRequest(Boolean isRequest) {
+//		this.isRequest = isRequest;
+//	}
 
 	public Boolean getIsHasCallback() {
 		if(callbackType.equals(CallbackType.NONE.getValue())) {
@@ -175,12 +176,12 @@ public class AutomaticConfigVo {
 		return true;
 	}
 
-	public JSONObject getResultJson() {
-		return resultJson;
-	}
-
-	public void setResultJson(JSONObject resultJson) {
-		this.resultJson = resultJson;
-	}
+//	public JSONObject getResultJson() {
+//		return resultJson;
+//	}
+//
+//	public void setResultJson(JSONObject resultJson) {
+//		this.resultJson = resultJson;
+//	}
 	
 }

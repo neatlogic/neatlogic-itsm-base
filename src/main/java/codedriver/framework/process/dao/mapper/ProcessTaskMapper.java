@@ -7,6 +7,7 @@ package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.dto.*;
+import codedriver.framework.process.dto.automatic.ProcessTaskStepAutomaticRequestVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -242,6 +243,10 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskVo> getProcessTaskListByOwnerAndStatus(@Param("owner") String owner, @Param("status") String status);
 
+    ProcessTaskStepAutomaticRequestVo getProcessTaskStepAutomaticRequestById(Long id);
+
+    List<ProcessTaskStepAutomaticRequestVo> getAllProcessTaskStepAutomaticRequestList();
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -324,6 +329,8 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepReapprovalRestoreBackup(ProcessTaskStepReapprovalRestoreBackupVo processTaskStepReapprovalRestoreBackupVo);
 
+    int insertProcessTaskStepAutomaticRequest(ProcessTaskStepAutomaticRequestVo processTaskStepAutomaticRequestVo);
+
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
@@ -351,6 +358,8 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskSerialNumberById(@Param("id") Long processTaskId,
                                           @Param("serialNumber") String serialNumber);
+
+    int updateProcessTaskStepAutomaticRequestTriggerTimeById(ProcessTaskStepAutomaticRequestVo processTaskStepAutomaticRequestVo);
 
     int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
@@ -405,4 +414,6 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskRepeatByProcessTaskId(Long processTaskId);
 
     int deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(Long processTaskStepId);
+
+    int deleteProcessTaskStepAutomaticRequestById(Long id);
 }
