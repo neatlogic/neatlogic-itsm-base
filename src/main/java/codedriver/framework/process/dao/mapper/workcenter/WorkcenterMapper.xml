@@ -164,6 +164,13 @@
 		</foreach>
 	</select>
 
+	<select id="getAuthoritiesListByUuid" resultType="codedriver.framework.dto.AuthorityVo">
+		select `uuid`,
+			   `type`
+		from `process_workcenter_authority`
+		where `workcenter_uuid` = #{value}
+	</select>
+
 	<delete id="deleteWorkcenterByUuid" parameterType="java.lang.String">
 		DELETE
 		FROM

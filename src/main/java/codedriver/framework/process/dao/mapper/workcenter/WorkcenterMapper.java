@@ -30,6 +30,8 @@ public interface WorkcenterMapper {
 	List<WorkcenterTheadVo> getWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
 
 	List<WorkcenterVo> getWorkcenterVoListByUuidList(@Param("uuidList") List<String> uuidList);
+
+	List<AuthorityVo> getAuthoritiesListByUuid(String uuid);
 	
 	WorkcenterUserProfileVo getWorkcenterUserProfileByUserUuid(String userUuid);
 	
@@ -56,5 +58,5 @@ public interface WorkcenterMapper {
 	Integer updateWorkcenter(WorkcenterVo workcenterVo);
 	
 	Integer updateWorkcenterCondition(WorkcenterVo workcenterVo);
-	
+
 }
