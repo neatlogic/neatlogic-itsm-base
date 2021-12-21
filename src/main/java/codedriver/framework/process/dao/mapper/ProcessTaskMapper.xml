@@ -2083,7 +2083,7 @@
 
     <select id="getProcessTaskIdAndTitleByIndexKeyword"
             resultType="codedriver.framework.process.dto.ProcessTaskVo">
-        SELECT pt.serial_number, pt.title
+        SELECT pt.serial_number, pt.title , pt.status
         FROM processtask pt
         JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_field` in
         ('title','serial_number','content')
@@ -2093,7 +2093,7 @@
         <foreach collection="keywordList" item="keyword" separator="," open="(" close=")">
             #{keyword}
         </foreach>
-        GROUP BY pt.`serial_number`, pt.title
+        GROUP BY pt.`serial_number`, pt.title , pt.status
         ORDER BY MAX(ff.counter) DESC
         limit 0,#{limit}
     </select>
