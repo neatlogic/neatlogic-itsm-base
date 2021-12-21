@@ -1,6 +1,6 @@
 package codedriver.framework.process.dao.mapper.workcenter;
 
-import codedriver.framework.dto.AuthorityVo;
+import codedriver.framework.process.workcenter.dto.WorkcenterAuthorityVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterTheadVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
@@ -31,7 +31,7 @@ public interface WorkcenterMapper {
 
 	List<WorkcenterVo> getWorkcenterVoListByUuidList(@Param("uuidList") List<String> uuidList);
 
-	List<AuthorityVo> getAuthoritiesListByUuid(String uuid);
+	List<WorkcenterAuthorityVo> getWorkcenterAuthorityVoListByUuidList(@Param("uuidList") List<String> uuidList);
 	
 	WorkcenterUserProfileVo getWorkcenterUserProfileByUserUuid(String userUuid);
 	
@@ -47,7 +47,7 @@ public interface WorkcenterMapper {
 	
 	Integer insertWorkcenter(WorkcenterVo workcenterVo);
 	
-	Integer insertWorkcenterAuthority(@Param("authorityVo")AuthorityVo authorityVo,@Param("workcenterUuid") String workcenterUuid);
+	Integer insertWorkcenterAuthority(WorkcenterAuthorityVo authorityVo);
 	
 	Integer insertWorkcenterOwner(@Param("userUuid")String owner,@Param("uuid")String workcenterUuid);
 	

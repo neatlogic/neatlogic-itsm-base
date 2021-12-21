@@ -164,11 +164,16 @@
 		</foreach>
 	</select>
 
-	<select id="getAuthoritiesListByUuid" resultType="codedriver.framework.dto.AuthorityVo">
-		select `uuid`,
-			   `type`
+	<select id="getWorkcenterAuthorityVoListByUuidList" resultType="codedriver.framework.process.workcenter.dto.WorkcenterAuthorityVo">
+		select
+		workcenter_uuid as workcenterUuid,
+		`uuid`,
+		`type`
 		from `process_workcenter_authority`
-		where `workcenter_uuid` = #{value}
+		where `workcenter_uuid` in
+		<foreach collection="uuidList" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
 	</select>
 
 	<delete id="deleteWorkcenterByUuid" parameterType="java.lang.String">
@@ -231,18 +236,13 @@
 		  ) ;
 	</insert>
 
-	<insert id="insertWorkcenterAuthority">
-		INSERT INTO `process_workcenter_authority` (
-		  `workcenter_uuid`,
-		  `type`,
-		  `uuid`
-		)
-		VALUES
-		  (
-		    #{workcenterUuid},
-		    #{authorityVo.type},
-		    #{authorityVo.uuid}
-		  ) ;
+	<insert id="insertWorkcenterAuthority"
+			parameterType="codedriver.framework.process.workcenter.dto.WorkcenterAuthorityVo">
+		INSERT INTO `process_workcenter_authority` (`workcenter_uuid`, `type`,
+													`uuid`)
+		VALUES (#{workcenterUuid},
+				#{type},
+				#{uuid})
 	</insert>
 
 	<insert id="insertWorkcenterThead" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterTheadVo">
