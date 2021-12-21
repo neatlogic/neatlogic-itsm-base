@@ -45,7 +45,7 @@ public interface WorkcenterMapper {
 	
 	Integer deleteWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
 	
-	Integer insertWorkcenter(WorkcenterVo workcenterVo);
+	Integer replaceWorkcenter(WorkcenterVo workcenterVo);
 	
 	Integer insertWorkcenterAuthority(WorkcenterAuthorityVo authorityVo);
 	

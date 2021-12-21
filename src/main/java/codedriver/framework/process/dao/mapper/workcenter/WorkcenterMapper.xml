@@ -216,7 +216,7 @@
 		WHERE `user_uuid` = #{userUuid} ;
 	</delete>
 
-	<insert id="insertWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
+	<insert id="replaceWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
 		REPLACE INTO `process_workcenter` (
 		  `uuid`,
 		  `name`,
