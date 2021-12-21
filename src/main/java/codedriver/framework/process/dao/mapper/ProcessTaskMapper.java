@@ -233,7 +233,9 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepReapprovalRestoreBackupVo> getProcessTaskStepReapprovalRestoreBackupListByBackupStepId(Long processTaskStepId);
 
-    List<ProcessTaskVo> getProcessTaskByIndexKeyword(@Param("keywordList") List<String> keywordList, @Param("limit") int limit, @Param("targetType") String targetType,@Param("columnPro") String columnPro);
+    List<ProcessTaskVo> getProcessTaskColumnByIndexKeyword(@Param("keywordList") List<String> keywordList, @Param("limit") int limit, @Param("targetType") String targetType, @Param("columnPro") String columnPro);
+
+    List<ProcessTaskVo> getProcessTaskIdAndTitleByIndexKeyword(@Param("keywordList") List<String> keywordList, @Param("limit") int limit);
 
     List<Long> getProcessTaskStepIdListByProcessTaskIdAndTagId(ProcessTaskStepTagVo processTaskStepTagVo);
 
