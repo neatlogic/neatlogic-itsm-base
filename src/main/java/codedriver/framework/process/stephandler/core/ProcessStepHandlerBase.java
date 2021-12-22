@@ -380,7 +380,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     List<String> userUuidList = userMapper.getUserUuidListByRoleUuid(workerVo.getUuid());
                     userUuidSet.addAll(userUuidList);
                     if (userUuidSet.size() < 2) {
-                        List<RoleTeamVo> roleTeamList = roleMapper.getRoleTeamListByRoleUuid(workerVo.getUuid(), null);
+                        List<RoleTeamVo> roleTeamList = roleMapper.getRoleTeamListByRoleUuid(workerVo.getUuid());
                         if (CollectionUtils.isNotEmpty(roleTeamList)) {
                             List<String> checkedChildrenteamUuidList = new ArrayList<>();
                             List<String> teamUuidList = new ArrayList<>();
