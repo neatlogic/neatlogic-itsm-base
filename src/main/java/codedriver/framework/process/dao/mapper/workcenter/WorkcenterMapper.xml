@@ -7,6 +7,7 @@
 		<result column="name" property="name" />
 		<result column="owner" property="owner" />
 		<result column="type" property="type" />
+		<result column="support" property="support" />
 		<result column="sort" property="sort" />
 		<result column="condition_config" property="conditionConfig" />
 		<collection property="authorityList" ofType="codedriver.framework.dto.AuthorityVo">
@@ -24,7 +25,7 @@
 		   LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
 		   LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
 		<where>
-		     pw.suport in ('all',#{deviceType})
+		     pw.support in ('all',#{deviceType})
 		     and
 		     (
                 (pwa.type = 'common' AND pwa.`uuid` = 'alluser')
@@ -60,6 +61,7 @@
 		  pw.`uuid`,
 		  pw.`name`,
 		  pw.`type`,
+		  pw.`support`,
 		  pw.`sort`,
 		  pw.`condition_config`,
 		  pwa.`type` as authType,
@@ -100,6 +102,7 @@
 		  pw.`uuid`,
 		  pw.`name`,
 		  pw.`type`,
+		  pw.`support`,
 		  pw.`sort`,
 		  pw.`condition_config`,
 		  pwo.`user_uuid` as `owner`
@@ -146,6 +149,33 @@
 		where `user_uuid` = #{userUuid}
 	</select>
 
+	<select id="getWorkcenterVoListByUuidList"
+			parameterType="java.util.List" resultMap="workcenterMap">
+		select
+		`uuid` ,
+		`name`,
+		`sort`,
+		`type`,
+		`support`
+		from `process_workcenter`
+		where `uuid` in
+		<foreach collection="uuidList" item="uuid" separator="," open="(" close=")">
+			#{uuid}
+		</foreach>
+	</select>
+
+	<select id="getWorkcenterAuthorityVoListByUuidList" resultType="codedriver.framework.process.workcenter.dto.WorkcenterAuthorityVo">
+		select
+		workcenter_uuid as workcenterUuid,
+		`uuid`,
+		`type`
+		from `process_workcenter_authority`
+		where `workcenter_uuid` in
+		<foreach collection="uuidList" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</select>
+
 	<delete id="deleteWorkcenterByUuid" parameterType="java.lang.String">
 		DELETE
 		FROM
@@ -186,13 +216,14 @@
 		WHERE `user_uuid` = #{userUuid} ;
 	</delete>
 
-	<insert id="insertWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
+	<insert id="replaceWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
 		REPLACE INTO `process_workcenter` (
 		  `uuid`,
 		  `name`,
 		  `type`,
 		  `sort`,
-		  `condition_config`
+		  `condition_config`,
+			`support`
 		)
 		VALUES
 		  (
@@ -200,22 +231,18 @@
 		    #{name},
 		    #{type},
 		    #{sort},
-		    #{conditionConfig}
+		    #{conditionConfig},
+		    #{support}
 		  ) ;
 	</insert>
 
-	<insert id="insertWorkcenterAuthority">
-		INSERT INTO `process_workcenter_authority` (
-		  `workcenter_uuid`,
-		  `type`,
-		  `uuid`
-		)
-		VALUES
-		  (
-		    #{workcenterUuid},
-		    #{authorityVo.type},
-		    #{authorityVo.uuid}
-		  ) ;
+	<insert id="insertWorkcenterAuthority"
+			parameterType="codedriver.framework.process.workcenter.dto.WorkcenterAuthorityVo">
+		INSERT INTO `process_workcenter_authority` (`workcenter_uuid`, `type`,
+													`uuid`)
+		VALUES (#{workcenterUuid},
+				#{type},
+				#{uuid})
 	</insert>
 
 	<insert id="insertWorkcenterThead" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterTheadVo">

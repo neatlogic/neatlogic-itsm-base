@@ -10,7 +10,7 @@ package codedriver.framework.process.constvalue;
  * @since 2021/9/6 11:55
  **/
 public enum ProcessWorkcenterInitType {
-    ALL_PROCESSTASK("allProcessTask", "默认出厂"), DRAFT_PROCESSTASK("draftProcessTask", "系统分类");
+    ALL_PROCESSTASK("allProcessTask", "所有工单"), DRAFT_PROCESSTASK("draftProcessTask", "我的草稿");
     private final String value;
     private final String name;
 
