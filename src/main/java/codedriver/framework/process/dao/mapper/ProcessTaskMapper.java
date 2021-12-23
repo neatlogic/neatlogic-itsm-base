@@ -249,6 +249,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepAutomaticRequestVo> getAllProcessTaskStepAutomaticRequestList();
 
+    ProcessTaskStepVo getProcessTaskStepByFileId(Long fileId);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
