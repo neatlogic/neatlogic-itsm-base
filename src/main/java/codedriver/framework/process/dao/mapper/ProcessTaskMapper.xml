@@ -2167,6 +2167,11 @@
                `trigger_time`        AS triggerTime
         FROM `processtask_step_automatic_request`
     </select>
+    <select id="getProcessTaskStepByFileId" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+        select `processtask_id` as processTaskId, `processtask_step_id` as id
+        from processtask_file
+        where `file_id` = #{value}
+    </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
