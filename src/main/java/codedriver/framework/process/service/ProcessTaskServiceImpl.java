@@ -26,7 +26,6 @@ import codedriver.framework.process.auth.PROCESSTASK_MODIFY;
 import codedriver.framework.process.column.core.IProcessTaskColumn;
 import codedriver.framework.process.column.core.ProcessTaskColumnFactory;
 import codedriver.framework.process.constvalue.*;
-import codedriver.framework.process.crossover.IProcessTaskStepCrossoverService;
 import codedriver.framework.process.dao.mapper.*;
 import codedriver.framework.process.dto.*;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
@@ -64,7 +63,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
 
 @Service
-public class ProcessTaskServiceImpl implements ProcessTaskService, IProcessTaskStepCrossoverService {
+public class ProcessTaskServiceImpl implements ProcessTaskService {
 
     private final static Logger logger = LoggerFactory.getLogger(ProcessTaskServiceImpl.class);
 
