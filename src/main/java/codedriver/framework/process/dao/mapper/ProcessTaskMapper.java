@@ -243,7 +243,9 @@ public interface ProcessTaskMapper {
 
     List<Long> getSameTagIdListByProcessTaskStepIdList(List<Long> processTaskStepIdList);
 
-    List<ProcessTaskVo> getProcessTaskListByOwnerAndStatus(@Param("owner") String owner, @Param("status") String status);
+    int getProcessTaskCountByOwner(ProcessTaskVo vo);
+
+    List<ProcessTaskVo> getProcessTaskListByOwner(ProcessTaskVo vo);
 
     ProcessTaskStepAutomaticRequestVo getProcessTaskStepAutomaticRequestById(Long id);
 
