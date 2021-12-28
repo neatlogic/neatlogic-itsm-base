@@ -2124,7 +2124,16 @@
         GROUP BY `tag_id` HAVING COUNT(`tag_id`) = #{size}
     </select>
 
-    <select id="getProcessTaskListByOwnerAndStatus" resultMap="processTaskMap">
+    <select id="getProcessTaskCountByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultType="int">
+        SELECT count(1)
+        FROM `processtask`
+        WHERE `owner` = #{owner}
+        <if test="status != null and status !=''">
+            AND `status` = #{status}
+        </if>
+    </select>
+
+    <select id="getProcessTaskListByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultMap="processTaskMap">
         SELECT `id`,
                `title`,
                `process_uuid`,
@@ -2144,7 +2153,10 @@
                `source`
         FROM `processtask`
         WHERE `owner` = #{owner}
-          AND `status` = #{status}
+        <if test="status != null and status !=''">
+            AND `status` = #{status}
+        </if>
+        LIMIT #{startNum}, #{pageSize}
     </select>
 
     <select id="getProcessTaskStepAutomaticRequestById" parameterType="java.lang.Long"
