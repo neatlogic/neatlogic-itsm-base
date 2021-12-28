@@ -274,4 +274,37 @@ public interface IProcessStepHandler {
      * @return 协助处理名
      */
     String getMinorName();
+
+    /**
+     * 正向输入路径数量
+     * -1代表不限制
+     * @return
+     */
+    default int getForwardInputQuantity() {
+        return -1;
+    }
+    /**
+     * 正向输出路径数量
+     * -1代表不限制
+     * @return
+     */
+    default int getForwardOutnputQuantity() {
+        return -1;
+    }
+    /**
+     * 回退输入路径数量
+     * -1代表不限制
+     * @return
+     */
+    default int getBackwardInputQuantity() {
+        return -1;
+    }
+    /**
+     * 回退输出路径数量
+     * -1代表不限制
+     * @return
+     */
+    default int getBackwardOutputQuantity() {
+        return -1;
+    }
 }
