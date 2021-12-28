@@ -7,8 +7,19 @@ package codedriver.framework.process.crossover;
 
 import codedriver.framework.crossover.ICrossoverService;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
 
 public interface IProcessTaskCrossoverService extends ICrossoverService {
+
+    ProcessTaskVo checkProcessTaskParamsIsLegal(Long processTaskId, Long processTaskStepId) throws Exception;
+
+    ProcessTaskVo checkProcessTaskParamsIsLegal(Long processTaskId) throws Exception;
+
+    void setProcessTaskFormInfo(ProcessTaskVo processTaskVo);
+
+    ProcessTaskStepVo getStartProcessTaskStepByProcessTaskId(Long processTaskId);
+
+    ProcessTaskVo getProcessTaskDetailById(Long processTaskId);
 
     /**
      * @param processTaskStepId 步骤id
