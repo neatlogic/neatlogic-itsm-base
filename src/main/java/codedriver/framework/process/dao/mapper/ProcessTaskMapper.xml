@@ -2186,23 +2186,23 @@
         where `file_id` = #{value}
     </select>
 
-    <select id="getProcessTaskStepTimerCompleteById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerCompleteVo">
+    <select id="getProcessTaskStepTimerById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
         SELECT
             `id`,
             `processtask_id` AS processTaskId,
             `processtask_step_id` AS processTaskStepId,
             `trigger_time` AS triggerTime
-        FROM `processtask_step_timer_complete`
+        FROM `processtask_step_timer`
         WHERE `id` = #{value}
     </select>
 
-    <select id="getAllProcessTaskStepTimerCompleteList" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerCompleteVo">
+    <select id="getAllProcessTaskStepTimerList" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
         SELECT
             `id`,
             `processtask_id` AS processTaskId,
             `processtask_step_id` AS processTaskStepId,
             `trigger_time` AS triggerTime
-        FROM `processtask_step_timer_complete`
+        FROM `processtask_step_timer`
     </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
@@ -2840,11 +2840,11 @@
         )
     </insert>
 
-    <insert id="insertProcessTaskStepTimerComplete" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerCompleteVo">
+    <insert id="insertProcessTaskStepTimer" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
         <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
             select LAST_INSERT_ID() as id
         </selectKey>
-        INSERT INTO `processtask_step_timer_complete` (
+        INSERT INTO `processtask_step_timer` (
             `processtask_id`,
             `processtask_step_id`,
             `trigger_time`
@@ -2956,8 +2956,8 @@
         WHERE `id` = #{id}
     </update>
 
-    <update id="updateProcessTaskStepTimerCompleteTriggerTimeById" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerCompleteVo">
-        UPDATE  `processtask_step_timer_complete` SET `trigger_time` = #{triggerTime} where `id` = #{id}
+    <update id="updateProcessTaskStepTimerTriggerTimeById" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
+        UPDATE  `processtask_step_timer` SET `trigger_time` = #{triggerTime} where `id` = #{id}
     </update>
 
     <delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
@@ -3186,9 +3186,9 @@
         WHERE `id` = #{value}
     </delete>
 
-    <delete id="deleteProcessTaskStepTimerCompleteById">
+    <delete id="deleteProcessTaskStepTimerById">
         DELETE
-        FROM `processtask_step_timer_complete`
+        FROM `processtask_step_timer`
         WHERE `id` = #{value}
     </delete>
 </mapper>

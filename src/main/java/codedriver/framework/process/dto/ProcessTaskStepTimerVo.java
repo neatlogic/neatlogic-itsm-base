@@ -11,7 +11,7 @@ import java.util.Date;
  * @author linbq
  * @since 2021/12/28 9:43
  **/
-public class ProcessTaskStepTimerCompleteVo {
+public class ProcessTaskStepTimerVo {
     private Long id;
     private Long processTaskId;
     private Long processTaskStepId;

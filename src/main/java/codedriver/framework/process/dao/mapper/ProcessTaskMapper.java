@@ -253,9 +253,9 @@ public interface ProcessTaskMapper {
 
     ProcessTaskStepVo getProcessTaskStepByFileId(Long fileId);
 
-    ProcessTaskStepTimerCompleteVo getProcessTaskStepTimerCompleteById(Long id);
+    ProcessTaskStepTimerVo getProcessTaskStepTimerById(Long id);
 
-    List<ProcessTaskStepTimerCompleteVo> getAllProcessTaskStepTimerCompleteList();
+    List<ProcessTaskStepTimerVo> getAllProcessTaskStepTimerList();
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -341,7 +341,7 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepAutomaticRequest(ProcessTaskStepAutomaticRequestVo processTaskStepAutomaticRequestVo);
 
-    int insertProcessTaskStepTimerComplete(ProcessTaskStepTimerCompleteVo processTaskStepTimerCompleteVo);
+    int insertProcessTaskStepTimer(ProcessTaskStepTimerVo processTaskStepTimerVo);
 
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
@@ -373,7 +373,7 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskStepAutomaticRequestTriggerTimeById(ProcessTaskStepAutomaticRequestVo processTaskStepAutomaticRequestVo);
 
-    int updateProcessTaskStepTimerCompleteTriggerTimeById(ProcessTaskStepTimerCompleteVo processTaskStepTimerCompleteVo);
+    int updateProcessTaskStepTimerTriggerTimeById(ProcessTaskStepTimerVo processTaskStepTimerVo);
 
     int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
@@ -431,5 +431,5 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskStepAutomaticRequestById(Long id);
 
-    int deleteProcessTaskStepTimerCompleteById(Long id);
+    int deleteProcessTaskStepTimerById(Long id);
 }
