@@ -253,6 +253,10 @@ public interface ProcessTaskMapper {
 
     ProcessTaskStepVo getProcessTaskStepByFileId(Long fileId);
 
+    ProcessTaskStepTimerCompleteVo getProcessTaskStepTimerCompleteById(Long id);
+
+    List<ProcessTaskStepTimerCompleteVo> getAllProcessTaskStepTimerCompleteList();
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -337,6 +341,8 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepAutomaticRequest(ProcessTaskStepAutomaticRequestVo processTaskStepAutomaticRequestVo);
 
+    int insertProcessTaskStepTimerComplete(ProcessTaskStepTimerCompleteVo processTaskStepTimerCompleteVo);
+
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
@@ -366,6 +372,8 @@ public interface ProcessTaskMapper {
                                           @Param("serialNumber") String serialNumber);
 
     int updateProcessTaskStepAutomaticRequestTriggerTimeById(ProcessTaskStepAutomaticRequestVo processTaskStepAutomaticRequestVo);
+
+    int updateProcessTaskStepTimerCompleteTriggerTimeById(ProcessTaskStepTimerCompleteVo processTaskStepTimerCompleteVo);
 
     int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
@@ -422,4 +430,6 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(Long processTaskStepId);
 
     int deleteProcessTaskStepAutomaticRequestById(Long id);
+
+    int deleteProcessTaskStepTimerCompleteById(Long id);
 }

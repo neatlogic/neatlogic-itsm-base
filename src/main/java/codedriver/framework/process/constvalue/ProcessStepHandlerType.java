@@ -5,7 +5,7 @@ import codedriver.framework.process.stephandler.core.IProcessStepHandlerType;
 public enum ProcessStepHandlerType implements IProcessStepHandlerType {
     START("start", "start", "开始"), OMNIPOTENT("omnipotent", "process", "通用节点"), END("end", "end", "结束"),
     CONDITION("condition", "converge", "条件"), DISTRIBUTARY("distributary", "converge", "分流"),
-    OCTOPUS("octopus", "process", "自动化"), AUTOMATIC("automatic", "process", "自动处理")
+    OCTOPUS("octopus", "process", "自动化"), AUTOMATIC("automatic", "process", "自动处理"), TIMER("timer", "timer", "定时节点")
     ;
 
     private String handler;
