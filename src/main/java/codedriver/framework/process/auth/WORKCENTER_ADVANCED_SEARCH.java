@@ -5,16 +5,16 @@ import codedriver.framework.auth.core.AuthBase;
 import java.util.Collections;
 import java.util.List;
 
-public class WORKCENTER_MODIFY extends AuthBase {
+public class WORKCENTER_ADVANCED_SEARCH extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "工单中心管理权限";
+		return "工单中心-高级搜索权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "对工单中心系统类型添加、修改、授权和删除，对出厂类型授权";
+		return "工单中心开放高级搜索";
 	}
 
 	@Override
