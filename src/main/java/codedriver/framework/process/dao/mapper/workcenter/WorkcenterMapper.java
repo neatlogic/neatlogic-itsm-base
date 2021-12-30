@@ -16,7 +16,8 @@ public interface WorkcenterMapper {
 		@Param("teamUuidList")List<String> teamUuidList,
 		@Param("roleUuidList")List<String> roleUuidList,
 		@Param("deviceType") String deviceType,
-		@Param("isHasModifiedAuth") int isHasModifiedAuth
+		@Param("isHasModifiedAuth") int isHasModifiedAuth,
+		@Param("isHasNewTypeAuth") int isHasNewTypeAuth
 		);
 	
 	List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);

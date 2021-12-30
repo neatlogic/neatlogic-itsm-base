@@ -50,6 +50,9 @@
                 or	pwo.`user_uuid` = #{userUuid}
                 </if>
             )
+			<if test="isHasNewTypeAuth == 0">
+				and pw.`type` != 'custom'
+			</if>
             <if test="isHasModifiedAuth == 1">
 				or pw.`type` in ('system','factory')
 			</if>
