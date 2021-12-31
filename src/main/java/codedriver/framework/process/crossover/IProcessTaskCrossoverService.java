@@ -6,8 +6,11 @@
 package codedriver.framework.process.crossover;
 
 import codedriver.framework.crossover.ICrossoverService;
+import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
+
+import java.util.List;
 
 public interface IProcessTaskCrossoverService extends ICrossoverService {
 
@@ -29,5 +32,13 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @Description: 获取当前步骤信息
      */
     ProcessTaskStepVo getCurrentProcessTaskStepById(Long processTaskStepId);
+
+    /**
+     * 获取用户拥有此工单的哪些工单干系人身份
+     * @param processTaskId
+     * @param authenticationInfoVo
+     * @return
+     */
+    List<String> getProcessUserTypeList(Long processTaskId, AuthenticationInfoVo authenticationInfoVo);
 
 }
