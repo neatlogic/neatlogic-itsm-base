@@ -24,6 +24,7 @@ public interface ProcessTaskMapper {
 
     /**
      * 查询待处理的工单id
+     *
      * @param map 工单查询条件
      * @return 工单ID列表
      */
@@ -31,6 +32,7 @@ public interface ProcessTaskMapper {
 
     /**
      * 查询待处理的工单数量
+     *
      * @param map 工单查询条件
      * @return 工单数量
      */
@@ -55,6 +57,9 @@ public interface ProcessTaskMapper {
     List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
             @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
 
+    List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepIdList(
+            @Param("processTaskStepIdList") List<Long> processTaskStepIdList, @Param("userType") String userType);
+
     List<ProcessTaskStepWorkerPolicyVo>
     getProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
 
@@ -63,7 +68,7 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskIdList(List<Long> processTaskIdList);
 
-    List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskStepIdListAndUserType(@Param("processTaskStepIdList")List<Long> processTaskStepIdList, @Param("userType") String userType);
+    List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskStepIdListAndUserType(@Param("processTaskStepIdList") List<Long> processTaskStepIdList, @Param("userType") String userType);
 
     Long getProcessTaskLockById(Long processTaskId);
 
@@ -120,7 +125,7 @@ public interface ProcessTaskMapper {
             @Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo
     );
 
-    Set<Long> getProcessTaskIdSetByChannelUuidListAndAuthenticationInfo(@Param("channelUuidList") List<String> channelUuidList,@Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo);
+    Set<Long> getProcessTaskIdSetByChannelUuidListAndAuthenticationInfo(@Param("channelUuidList") List<String> channelUuidList, @Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo);
 
     ProcessTaskFormAttributeDataVo getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(
             ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo);
@@ -256,6 +261,8 @@ public interface ProcessTaskMapper {
     ProcessTaskStepTimerVo getProcessTaskStepTimerById(Long id);
 
     List<ProcessTaskStepTimerVo> getAllProcessTaskStepTimerList();
+
+    List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdAndProcessStepUuidList(@Param("processTaskId") Long processTaskId,@Param("processStepUuidList") List<String> processStepUuidList);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -432,4 +439,5 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskStepAutomaticRequestById(Long id);
 
     int deleteProcessTaskStepTimerById(Long id);
+
 }

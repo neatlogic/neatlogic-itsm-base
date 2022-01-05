@@ -386,6 +386,28 @@
         </if>
     </select>
 
+    <select id="getProcessTaskStepUserByStepIdList" resultMap="processTaskStepUserMap">
+        SELECT
+        `processtask_id`,
+        `processtask_step_id`,
+        `user_uuid`,
+        `user_name`,
+        `user_type`,
+        `status`,
+        `action`,
+        `start_time`,
+        `end_time`,
+        `active_time`
+        FROM `processtask_step_user`
+        WHERE processtask_step_id in
+        <foreach collection="processTaskStepIdList" separator="," open="(" close=")" item="processTaskStepId">
+          #{processTaskStepId}
+        </foreach>
+        <if test="userType != null and userType != ''">
+            and user_type = #{userType}
+        </if>
+    </select>
+
     <select id="getProcessTaskStepWorkerPolicy"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo"
             resultType="codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo">
@@ -2203,6 +2225,31 @@
             `processtask_step_id` AS processTaskStepId,
             `trigger_time` AS triggerTime
         FROM `processtask_step_timer`
+    </select>
+    <select id="getProcessTaskStepListByProcessTaskIdAndProcessStepUuidList"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+        SELECT
+        a.`id`,
+        a.`processtask_id` AS processTaskId,
+        a.`name`,
+        a.`process_step_uuid` AS processStepUuid,
+        a.`status`,
+        a.`result`,
+        a.`type`,
+        a.`handler`,
+        a.`is_active` AS isActive,
+        a.`active_time` AS activeTime,
+        a.`start_time` AS startTime,
+        a.`end_time` AS endTime,
+        a.`error`
+        FROM
+        `processtask_step` a
+        WHERE a.processtask_id = #{processTaskId}
+        and a.`process_step_uuid` in
+        <foreach collection="processStepUuidList" item="processStepUuid" close=")" open="(" separator=",">
+            #{processStepUuid}
+        </foreach>
+
     </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
