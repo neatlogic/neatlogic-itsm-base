@@ -100,7 +100,7 @@
 		</where>
 	</select>
 
-	<select id="getWorkcenterByNameAndUuid"  parameterType="java.lang.String" resultMap="workcenterMap">
+	<select id="getWorkcenterByUuid" parameterType="java.lang.String" resultMap="workcenterMap">
 		SELECT
 		  pw.`uuid`,
 		  pw.`name`,
@@ -112,14 +112,7 @@
 		FROM
 		 	`process_workcenter` pw
 		 	LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
-		<where>
-			<if test="name != null and name != ''">
-				pw.`name` = #{name}
-			</if>
-			<if test="uuid != null and uuid != ''">
-				and `uuid` = #{uuid}
-			</if>
-		</where>
+		where pw.`uuid` = #{uuid}
 	</select>
 
 	<select id="getWorkcenterConditionConfig" resultType="java.util.HashMap">

@@ -21,10 +21,10 @@ public interface WorkcenterMapper {
 		);
 	
 	List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);
-	
+
 	Integer checkWorkcenterNameIsRepeat(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
 	
-	List<WorkcenterVo> getWorkcenterByNameAndUuid(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
+	WorkcenterVo getWorkcenterByUuid(@Param("uuid")String workcenterUuid);
 	
 	Map<String,String> getWorkcenterConditionConfig();
 	
