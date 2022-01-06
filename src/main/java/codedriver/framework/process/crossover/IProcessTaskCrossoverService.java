@@ -44,8 +44,8 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
     /**
      * 根据fileId 和 processTaskStepVo 获取对应用户是否有该工单附件的下载权限
      * @param fileId
-     * @param processTaskStepVo
+     * @param processTaskId
      * @return true：有权限   false：没有权限
      */
-    boolean getProcessFileHasDownloadAuthWithFileIdAndProcessTaskStepVo(Long fileId, ProcessTaskStepVo processTaskStepVo);
+    boolean getProcessFileHasDownloadAuthWithFileIdAndProcessTaskId(Long fileId, Long processTaskId);
 }
