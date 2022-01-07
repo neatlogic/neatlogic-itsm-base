@@ -41,4 +41,11 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      */
     List<String> getProcessUserTypeList(Long processTaskId, AuthenticationInfoVo authenticationInfoVo);
 
+    /**
+     * 根据fileId 和 processTaskStepVo 获取对应用户是否有该工单附件的下载权限
+     * @param fileId
+     * @param processTaskId
+     * @return true：有权限   false：没有权限
+     */
+    boolean getProcessFileHasDownloadAuthWithFileIdAndProcessTaskId(Long fileId, Long processTaskId);
 }
