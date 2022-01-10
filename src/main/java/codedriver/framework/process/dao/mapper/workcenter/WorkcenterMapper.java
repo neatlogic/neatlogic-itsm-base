@@ -1,9 +1,6 @@
 package codedriver.framework.process.dao.mapper.workcenter;
 
-import codedriver.framework.process.workcenter.dto.WorkcenterAuthorityVo;
-import codedriver.framework.process.workcenter.dto.WorkcenterTheadVo;
-import codedriver.framework.process.workcenter.dto.WorkcenterUserProfileVo;
-import codedriver.framework.process.workcenter.dto.WorkcenterVo;
+import codedriver.framework.process.workcenter.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -22,8 +19,14 @@ public interface WorkcenterMapper {
 	
 	List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);
 
+	List<WorkcenterCatalogVo> getWorkcenterCatalogListByName(String name);
+
 	Integer checkWorkcenterNameIsRepeat(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
-	
+
+	Integer checkWorkcenterCatalogNameIsRepeats(WorkcenterCatalogVo vo);
+
+	Integer checkWorkcenterCatalogIsExists(Long id);
+
 	WorkcenterVo getWorkcenterByUuid(@Param("uuid")String workcenterUuid);
 	
 	Map<String,String> getWorkcenterConditionConfig();
@@ -45,7 +48,9 @@ public interface WorkcenterMapper {
 	Integer deleteWorkcenterOwnerByUuid(@Param("workcenterUuid")String workcenterUuid);
 	
 	Integer deleteWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
-	
+
+	Integer deleteWorkcenterCatalogById(Long id);
+
 	Integer replaceWorkcenter(WorkcenterVo workcenterVo);
 	
 	Integer insertWorkcenterAuthority(WorkcenterAuthorityVo authorityVo);
@@ -60,4 +65,7 @@ public interface WorkcenterMapper {
 	
 	Integer updateWorkcenterCondition(WorkcenterVo workcenterVo);
 
+	Integer updateWorkcenterCatalog(WorkcenterCatalogVo catalogVo);
+
+	Integer insertWorkcenterCatalog(WorkcenterCatalogVo catalogVo);
 }

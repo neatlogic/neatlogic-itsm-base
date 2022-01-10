@@ -60,6 +60,10 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private JSONObject startTimeCondition;
     @EntityField(name = "关键字搜索条件", type = ApiParamType.JSONOBJECT)
     private JSONArray keywordConditionList;
+    @EntityField(name = "菜单类型id", type = ApiParamType.LONG)
+    private Long catalogId;
+    @EntityField(name = "菜单类型名称", type = ApiParamType.STRING)
+    private String catalogName;
 
 
 
@@ -379,5 +383,21 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     public void setDashboardConfigVo(DashboardConfigVo dashboardConfigVo) {
         this.dashboardConfigVo = dashboardConfigVo;
+    }
+
+    public Long getCatalogId() {
+        return catalogId;
+    }
+
+    public void setCatalogId(Long catalogId) {
+        this.catalogId = catalogId;
+    }
+
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public void setCatalogName(String catalogName) {
+        this.catalogName = catalogName;
     }
 }
