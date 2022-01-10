@@ -177,12 +177,13 @@
 		</foreach>
 	</select>
 
-    <select id="checkWorkcenterCatalogNameIsRepeats" resultType="java.lang.Integer" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
+	<select id="checkWorkcenterCatalogNameIsRepeats" resultType="java.lang.Integer"
+			parameterType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
 		SELECT count(1)
 		FROM `process_workcenter_catalog`
 		where `id`!=#{id}
 		  and `name`=#{name};
-    </select>
+	</select>
 
 	<select id="getWorkcenterCatalogListByName" parameterType="java.lang.String"
 			resultType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
