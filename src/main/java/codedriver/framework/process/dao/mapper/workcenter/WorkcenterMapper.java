@@ -27,6 +27,8 @@ public interface WorkcenterMapper {
 
 	Integer checkWorkcenterCatalogIsExists(Long id);
 
+	Integer checkWorkcenterCatalogIsUsed(Long id);
+
 	WorkcenterVo getWorkcenterByUuid(@Param("uuid")String workcenterUuid);
 	
 	Map<String,String> getWorkcenterConditionConfig();
@@ -68,4 +70,6 @@ public interface WorkcenterMapper {
 	Integer updateWorkcenterCatalog(WorkcenterCatalogVo catalogVo);
 
 	Integer insertWorkcenterCatalog(WorkcenterCatalogVo catalogVo);
+
+
 }

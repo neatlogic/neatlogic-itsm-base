@@ -201,6 +201,12 @@
 		WHERE id = #{id}
 	</select>
 
+	<select id="checkWorkcenterCatalogIsUsed" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM process_workcenter
+		WHERE catalog_id = #{id}
+	</select>
+
 	<delete id="deleteWorkcenterByUuid" parameterType="java.lang.String">
 		DELETE
 		FROM
