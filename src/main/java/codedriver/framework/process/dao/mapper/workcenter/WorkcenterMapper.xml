@@ -251,7 +251,7 @@
 	<delete id="deleteWorkcenterCatalogById" parameterType="java.lang.Long">
 		DELETE
 		FROM `process_workcenter_catalog`
-		WHERE `id` = #{id};
+		WHERE `id` = #{id}
 	</delete>
 
 	<insert id="replaceWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
@@ -331,7 +331,7 @@
 		`type` = #{type},
 		`support` = #{support},
 		`catalog_id` = #{catalogId}
-		WHERE `uuid` = #{uuid} ;
+		WHERE `uuid` = #{uuid}
 	</update>
 
 	<update id="updateWorkcenterCondition" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
@@ -339,7 +339,7 @@
 		  `process_workcenter`
 		SET
 		  `condition_config` = #{conditionConfig}
-		WHERE `uuid` = #{uuid} ;
+		WHERE `uuid` = #{uuid}
 	</update>
 
 	<insert id="insertWorkcenterCatalog"
