@@ -177,12 +177,12 @@
 		</foreach>
 	</select>
 
-	<select id="checkWorkcenterCatalogNameIsRepeats" resultType="java.lang.Integer"
+	<select id="checkWorkcenterCatalogNameIsRepeats" resultType="int"
 			parameterType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
 		SELECT count(1)
 		FROM `process_workcenter_catalog`
 		where `id`!=#{id}
-		  and `name`=#{name};
+		  and `name`=#{name}
 	</select>
 
 	<select id="getWorkcenterCatalogListByName" parameterType="java.lang.String"
@@ -196,13 +196,13 @@
 		</where>
 	</select>
 
-	<select id="checkWorkcenterCatalogIsExists" resultType="java.lang.Integer">
+	<select id="checkWorkcenterCatalogIsExists" resultType="int">
 		SELECT COUNT(1)
 		FROM process_workcenter_catalog
 		WHERE id = #{id}
 	</select>
 
-	<select id="checkWorkcenterCatalogIsUsed" resultType="java.lang.Integer">
+	<select id="checkWorkcenterCatalogIsUsed" resultType="int">
 		SELECT COUNT(1)
 		FROM process_workcenter
 		WHERE catalog_id = #{id}
@@ -273,7 +273,7 @@
 		    #{conditionConfig},
 		    #{support},
 		    #{catalogId}
-		  ) ;
+		  )
 	</insert>
 
 	<insert id="insertWorkcenterAuthority"
@@ -342,18 +342,11 @@
 		WHERE `uuid` = #{uuid} ;
 	</update>
 
-	<update id="updateWorkcenterCatalog"
-			parameterType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
-		UPDATE
-			`process_workcenter_catalog`
-		SET `name` = #{name}
-		WHERE `id` = #{id};
-	</update>
-
 	<insert id="insertWorkcenterCatalog"
 			parameterType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
 		INSERT INTO `process_workcenter_catalog` (`id`, `name`)
-		VALUES (#{id}, #{name});
+		VALUES (#{id}, #{name}) ON DUPLICATE KEY
+		UPDATE `name` = #{name}
 	</insert>
 
 </mapper>

@@ -8,6 +8,6 @@ import codedriver.framework.exception.core.ApiRuntimeException;
  */
 public class WorkcenterCatalogIsUsedException extends ApiRuntimeException {
     public WorkcenterCatalogIsUsedException(Long id) {
-        super("菜单id为：" + id + "的菜单类型已被引用，无法删除");
+        super("菜单id为“" + id + "”的菜单类型已被引用，无法删除");
     }
 }

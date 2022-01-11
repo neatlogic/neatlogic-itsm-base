@@ -8,6 +8,6 @@ import codedriver.framework.exception.core.ApiRuntimeException;
  */
 public class WorkcenterCatalogIdNotFoundException extends ApiRuntimeException {
     public WorkcenterCatalogIdNotFoundException(Long id) {
-        super("工单中心菜单类型id：" + id + "不存在");
+        super("工单中心菜单类型id“" + id + "”不存在");
     }
 }

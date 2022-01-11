@@ -23,11 +23,11 @@ public interface WorkcenterMapper {
 
 	Integer checkWorkcenterNameIsRepeat(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
 
-	Integer checkWorkcenterCatalogNameIsRepeats(WorkcenterCatalogVo vo);
+	int checkWorkcenterCatalogNameIsRepeats(WorkcenterCatalogVo vo);
 
-	Integer checkWorkcenterCatalogIsExists(Long id);
+	int checkWorkcenterCatalogIsExists(Long id);
 
-	Integer checkWorkcenterCatalogIsUsed(Long id);
+	int checkWorkcenterCatalogIsUsed(Long id);
 
 	WorkcenterVo getWorkcenterByUuid(@Param("uuid")String workcenterUuid);
 	
@@ -51,7 +51,7 @@ public interface WorkcenterMapper {
 	
 	Integer deleteWorkcenterThead(WorkcenterTheadVo workcenterTheadVo);
 
-	Integer deleteWorkcenterCatalogById(Long id);
+	void deleteWorkcenterCatalogById(Long id);
 
 	Integer replaceWorkcenter(WorkcenterVo workcenterVo);
 	
@@ -66,8 +66,6 @@ public interface WorkcenterMapper {
 	Integer updateWorkcenter(WorkcenterVo workcenterVo);
 	
 	Integer updateWorkcenterCondition(WorkcenterVo workcenterVo);
-
-	Integer updateWorkcenterCatalog(WorkcenterCatalogVo catalogVo);
 
 	Integer insertWorkcenterCatalog(WorkcenterCatalogVo catalogVo);
 
