@@ -7,6 +7,8 @@
 		<result column="name" property="name" />
 		<result column="owner" property="owner" />
 		<result column="type" property="type" />
+		<result column="catalogName" property="catalogName" />
+		<result column="catalogId" property="catalogId" />
 		<result column="support" property="support" />
 		<result column="sort" property="sort" />
 		<result column="condition_config" property="conditionConfig" />
@@ -59,25 +61,28 @@
 		</where>
 	</select>
 
-	<select id="getAuthorizedWorkcenterListByUuidList"  parameterType="java.util.List" resultMap="workcenterMap">
+	<select id="getAuthorizedWorkcenterListByUuidList" parameterType="java.util.List" resultMap="workcenterMap">
 		SELECT
-		  pw.`uuid`,
-		  pw.`name`,
-		  pw.`type`,
-		  pw.`support`,
-		  pw.`sort`,
-		  pw.`condition_config`,
-		  pwa.`type` as authType,
-		  pwa.`uuid` as authUuid,
-		  pwo.`user_uuid` as `owner`
+		pw.`uuid`,
+		pw.`name`,
+		pw.`type`,
+		pw.`support`,
+		pw.`sort`,
+		pw.`condition_config`,
+		pwa.`type` as authType,
+		pwa.`uuid` as authUuid,
+		pwo.`user_uuid` as `owner`,
+		pwc.`name` as catalogName,
+		pw.`catalog_id` as catalogId
 		FROM
-		  `process_workcenter` pw
-		   LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
-		   LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
+		`process_workcenter` pw
+		LEFT JOIN `process_workcenter_authority` pwa ON pw.`uuid` = pwa.`workcenter_uuid`
+		LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
+		LEFT JOIN `process_workcenter_catalog` pwc ON pw.`catalog_id` = pwc.`id`
 		<where>
 			<if test="uuidList != null and uuidList.size() > 0">
-				 pw.`uuid` IN
-				<foreach collection="uuidList" item="uuid" open="(" separator=","  close=")">
+				pw.`uuid` IN
+				<foreach collection="uuidList" item="uuid" open="(" separator="," close=")">
 					#{uuid}
 				</foreach>
 			</if>
@@ -172,6 +177,37 @@
 		</foreach>
 	</select>
 
+	<select id="checkWorkcenterCatalogNameIsRepeats" resultType="int"
+			parameterType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
+		SELECT count(1)
+		FROM `process_workcenter_catalog`
+		where `id`!=#{id}
+		  and `name`=#{name}
+	</select>
+
+	<select id="getWorkcenterCatalogListByName" parameterType="java.lang.String"
+			resultType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
+		SELECT `id`,`name`
+		FROM `process_workcenter_catalog`
+		<where>
+			<if test="name != null and name != ''">
+				and `name` like CONCAT('%', #{name}, '%')
+			</if>
+		</where>
+	</select>
+
+	<select id="checkWorkcenterCatalogIsExists" resultType="int">
+		SELECT COUNT(1)
+		FROM process_workcenter_catalog
+		WHERE id = #{id}
+	</select>
+
+	<select id="checkWorkcenterCatalogIsUsed" resultType="int">
+		SELECT COUNT(1)
+		FROM process_workcenter
+		WHERE catalog_id = #{id}
+	</select>
+
 	<delete id="deleteWorkcenterByUuid" parameterType="java.lang.String">
 		DELETE
 		FROM
@@ -212,6 +248,12 @@
 		WHERE `user_uuid` = #{userUuid} ;
 	</delete>
 
+	<delete id="deleteWorkcenterCatalogById" parameterType="java.lang.Long">
+		DELETE
+		FROM `process_workcenter_catalog`
+		WHERE `id` = #{id}
+	</delete>
+
 	<insert id="replaceWorkcenter" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
 		REPLACE INTO `process_workcenter` (
 		  `uuid`,
@@ -219,7 +261,8 @@
 		  `type`,
 		  `sort`,
 		  `condition_config`,
-			`support`
+			`support`,
+			`catalog_id`
 		)
 		VALUES
 		  (
@@ -228,8 +271,9 @@
 		    #{type},
 		    #{sort},
 		    #{conditionConfig},
-		    #{support}
-		  ) ;
+		    #{support},
+		    #{catalogId}
+		  )
 	</insert>
 
 	<insert id="insertWorkcenterAuthority"
@@ -285,8 +329,9 @@
 		  `name` = #{name},
 		</if>
 		`type` = #{type},
-		`support` = #{support}
-		WHERE `uuid` = #{uuid} ;
+		`support` = #{support},
+		`catalog_id` = #{catalogId}
+		WHERE `uuid` = #{uuid}
 	</update>
 
 	<update id="updateWorkcenterCondition" parameterType="codedriver.framework.process.workcenter.dto.WorkcenterVo">
@@ -294,7 +339,14 @@
 		  `process_workcenter`
 		SET
 		  `condition_config` = #{conditionConfig}
-		WHERE `uuid` = #{uuid} ;
+		WHERE `uuid` = #{uuid}
 	</update>
+
+	<insert id="insertWorkcenterCatalog"
+			parameterType="codedriver.framework.process.workcenter.dto.WorkcenterCatalogVo">
+		INSERT INTO `process_workcenter_catalog` (`id`, `name`)
+		VALUES (#{id}, #{name}) ON DUPLICATE KEY
+		UPDATE `name` = #{name}
+	</insert>
 
 </mapper>
