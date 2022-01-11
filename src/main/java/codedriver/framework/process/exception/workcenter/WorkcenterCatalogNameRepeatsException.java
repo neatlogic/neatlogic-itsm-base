@@ -8,6 +8,6 @@ import codedriver.framework.exception.core.ApiRuntimeException;
  */
 public class WorkcenterCatalogNameRepeatsException extends ApiRuntimeException {
     public WorkcenterCatalogNameRepeatsException(String name) {
-        super("工单中心菜单类型名称" + name + "重复");
+        super("工单中心菜单类型名称“" + name + "”重复");
     }
 }
