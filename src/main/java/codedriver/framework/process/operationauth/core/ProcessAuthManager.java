@@ -228,6 +228,7 @@ public class ProcessAuthManager {
             userUuidList.add(UserContext.get().getUserUuid(true));
             List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
 //            logger.error("A:" + (System.currentTimeMillis() - startTime));
+            Map<String, List<String>> channelUuidFromUserUuidList = new HashMap<>();
             for (ProcessTaskVo processTaskVo : processTaskList) {
 //                startTime = System.currentTimeMillis();
                 processTaskVo.setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
@@ -238,7 +239,12 @@ public class ProcessAuthManager {
 //                    if (StringUtils.isNotBlank(uuid)) {
 //                        userUuidList.add(uuid);
 //                    }
-                    List<String> fromUserUuidList = processTaskAgentService.getFromUserUuidListByToUserUuidAndChannelUuid(UserContext.get().getUserUuid(true), processTaskVo.getChannelUuid());
+                    String channelUuid = processTaskVo.getChannelUuid();
+                    List<String> fromUserUuidList = channelUuidFromUserUuidList.get(channelUuid);
+                    if (fromUserUuidList == null) {
+                        fromUserUuidList = processTaskAgentService.getFromUserUuidListByToUserUuidAndChannelUuid(UserContext.get().getUserUuid(true), channelUuid);
+                        channelUuidFromUserUuidList.put(channelUuid, fromUserUuidList);
+                    }
                     userUuidList.addAll(fromUserUuidList);
                 }
                 resultMap.putAll(getOperateMap(processTaskVo, userUuidList, operationTypeSet));
