@@ -146,6 +146,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 	 */
 	@JSONField(serialize = false)
 	private List<Long> parallelActivateStepIdList = new ArrayList<>();
+	@EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
+	private List<ProcessTagVo> processTagList;
 
 	public ProcessTaskStepVo() {
 
@@ -739,5 +741,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 
 	public void setParallelActivateStepIdList(List<Long> parallelActivateStepIdList) {
 		this.parallelActivateStepIdList = parallelActivateStepIdList;
+	}
+
+	public List<ProcessTagVo> getProcessTagList() {
+		return processTagList;
+	}
+
+	public void setProcessTagList(List<ProcessTagVo> processTagList) {
+		this.processTagList = processTagList;
 	}
 }
