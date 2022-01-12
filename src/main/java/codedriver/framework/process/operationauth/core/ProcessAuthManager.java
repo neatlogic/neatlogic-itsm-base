@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import codedriver.framework.process.service.ProcessTaskAgentService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +36,7 @@ import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissio
  */
 @Component
 public class ProcessAuthManager {
-
+    private final static Logger logger = LoggerFactory.getLogger(ProcessAuthManager.class);
     private static ProcessTaskMapper processTaskMapper;
     private static ProcessTaskAgentService processTaskAgentService;
 
@@ -163,6 +165,7 @@ public class ProcessAuthManager {
     * @return Map<Long,Set<ProcessTaskOperationType>>
      */
     public Map<Long, Set<ProcessTaskOperationType>> getOperateMap() {
+//        long startTime = System.currentTimeMillis();
         Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
         if (CollectionUtils.isEmpty(processTaskIdSet) && CollectionUtils.isEmpty(processTaskStepIdSet)) {
             return resultMap;
@@ -224,7 +227,9 @@ public class ProcessAuthManager {
             List<String> userUuidList = new ArrayList<>();
             userUuidList.add(UserContext.get().getUserUuid(true));
             List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
+//            logger.error("A:" + (System.currentTimeMillis() - startTime));
             for (ProcessTaskVo processTaskVo : processTaskList) {
+//                startTime = System.currentTimeMillis();
                 processTaskVo.setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 processTaskVo.setStepRelList(processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
@@ -237,6 +242,7 @@ public class ProcessAuthManager {
                     userUuidList.addAll(fromUserUuidList);
                 }
                 resultMap.putAll(getOperateMap(processTaskVo, userUuidList, operationTypeSet));
+//                logger.error("B:" + (System.currentTimeMillis() - startTime));
             }
         }
         return resultMap;
