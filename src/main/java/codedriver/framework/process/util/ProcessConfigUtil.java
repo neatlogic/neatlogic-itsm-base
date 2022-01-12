@@ -1,3 +1,8 @@
+/*
+ * Copyright(c) 2022 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.util;
 
 import codedriver.framework.form.constvalue.FormAttributeAction;
@@ -94,10 +99,10 @@ public class ProcessConfigUtil {
                 JSONArray attributeUuidList = object.getJSONArray("attributeUuidList");
                 JSONArray processStepUuidList = object.getJSONArray("processStepUuidList");
                 String type = object.getString("type");
-                /** authorityList中存在可编辑与隐藏的表单属性配置
-                 * 取可编辑的配置，如果以组件为单位，则直接记录属性UUID
-                 * 如果以行为单位，则记录下可编辑的行号
-                 * 如果发现有attributeUuidList为"all"的配置项，则退出循环
+                /* authorityList中存在可编辑与隐藏的表单属性配置
+                  取可编辑的配置，如果以组件为单位，则直接记录属性UUID
+                  如果以行为单位，则记录下可编辑的行号
+                  如果发现有attributeUuidList为"all"的配置项，则退出循环
                  */
                 if (CollectionUtils.isNotEmpty(processStepUuidList) && processStepUuidList.contains(firstStepUuid)
                         && StringUtils.isNotBlank(action) && FormAttributeAction.EDIT.getValue().equals(action) && CollectionUtils.isNotEmpty(attributeUuidList)
@@ -336,7 +341,7 @@ public class ProcessConfigUtil {
             policyObj.put("config", config);
             policyMap.put(WorkerPolicy.AUTOMATIC, policyObj);
         }
-        /** 自定义 **/
+        /* 自定义 **/
         {
             JSONObject policyObj = new JSONObject();
             policyObj.put("name", WorkerPolicy.ASSIGN.getText());
@@ -427,7 +432,7 @@ public class ProcessConfigUtil {
             }
         }
 
-        /** 异常处理人 **/
+        /* 异常处理人 **/
         String defaultWorker = workerPolicyConfig.getString("defaultWorker");
         workerPolicyObj.put("defaultWorker", defaultWorker);
         return workerPolicyObj;

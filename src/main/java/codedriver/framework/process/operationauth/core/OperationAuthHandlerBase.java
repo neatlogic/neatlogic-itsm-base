@@ -2,7 +2,7 @@ package codedriver.framework.process.operationauth.core;
 
 import java.util.*;
 
-import codedriver.framework.dao.mapper.RoleMapper;
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.service.AuthenticationInfoService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -15,8 +15,6 @@ import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.UserType;
-import codedriver.framework.dao.mapper.TeamMapper;
-import codedriver.framework.dao.mapper.UserMapper;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepMode;
 import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
@@ -64,7 +62,12 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     * @return boolean 
      */
     protected boolean checkIsWorker(ProcessTaskVo processTaskVo, String userType, String userUuid) {
-        AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+        AuthenticationInfoVo authenticationInfoVo = null;
+        if (Objects.equals(UserContext.get().getUserUuid(), userUuid)) {
+            authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
+        } else {
+            authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+        }
         List<String> teamUuidList = authenticationInfoVo.getTeamUuidList();
         List<String> roleUuidList = authenticationInfoVo.getRoleUuidList();
         for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
@@ -102,7 +105,12 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     * @return boolean
      */
     protected boolean checkIsWorker(ProcessTaskStepVo processTaskStepVo, String userType, String userUuid) {
-        AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+        AuthenticationInfoVo authenticationInfoVo = null;
+        if (Objects.equals(UserContext.get().getUserUuid(), userUuid)) {
+            authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
+        } else {
+            authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+        }
         List<String> teamUuidList = authenticationInfoVo.getTeamUuidList();
         List<String> roleUuidList = authenticationInfoVo.getRoleUuidList();
         for (ProcessTaskStepWorkerVo workerVo : processTaskStepVo.getWorkerList()) {
@@ -244,7 +252,12 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
             if (operationType.getValue().equals(action)) {
                 JSONArray acceptList = authorityObj.getJSONArray("acceptList");
                 if (CollectionUtils.isNotEmpty(acceptList)) {
-                    AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+                    AuthenticationInfoVo authenticationInfoVo = null;
+                    if (Objects.equals(UserContext.get().getUserUuid(), userUuid)) {
+                        authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
+                    } else {
+                        authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
+                    }
                     List<String> teamUuidList = authenticationInfoVo.getTeamUuidList();
                     List<String> roleUuidList = authenticationInfoVo.getRoleUuidList();
                     for (int j = 0; j < acceptList.size(); j++) {

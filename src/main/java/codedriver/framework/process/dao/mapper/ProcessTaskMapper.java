@@ -248,6 +248,8 @@ public interface ProcessTaskMapper {
 
     List<Long> getSameTagIdListByProcessTaskStepIdList(List<Long> processTaskStepIdList);
 
+    List<Long> getTagIdListByProcessTaskStepId(Long processTaskStepId);
+
     int getProcessTaskCountByOwner(ProcessTaskVo vo);
 
     List<ProcessTaskVo> getProcessTaskListByOwner(ProcessTaskVo vo);
@@ -313,7 +315,7 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskAssignWorker(ProcessTaskAssignWorkerVo processTaskAssignWorkerVo);
 
-    int insertIgnoreProcessTaskStepNotifyPolicyConfig(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
+//    int insertIgnoreProcessTaskStepNotifyPolicyConfig(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 
     int insertProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 

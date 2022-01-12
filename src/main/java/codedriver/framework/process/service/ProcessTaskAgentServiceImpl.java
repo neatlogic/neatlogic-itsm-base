@@ -5,6 +5,7 @@
 
 package codedriver.framework.process.service;
 
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.dao.mapper.CatalogMapper;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
@@ -14,6 +15,7 @@ import codedriver.framework.process.dto.ChannelVo;
 import codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo;
 import codedriver.framework.process.dto.agent.ProcessTaskAgentVo;
 import codedriver.framework.service.AuthenticationInfoService;
+import com.alibaba.nacos.common.utils.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +48,12 @@ public class ProcessTaskAgentServiceImpl implements ProcessTaskAgentService {
         List<ProcessTaskAgentVo> processTaskAgentList = processTaskAgentMapper.getProcessTaskAgentListByToUserUuid(toUserUuid);
         for (ProcessTaskAgentVo processTaskAgentVo : processTaskAgentList) {
             String fromUserUuid = processTaskAgentVo.getFromUserUuid();
-            AuthenticationInfoVo fromUserUuidAuthenticationInfoVo = authenticationInfoService.getAuthenticationInfo(fromUserUuid);
+            AuthenticationInfoVo fromUserUuidAuthenticationInfoVo = null;
+            if (Objects.equals(UserContext.get().getUserUuid(), toUserUuid)) {
+                fromUserUuidAuthenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
+            } else {
+                fromUserUuidAuthenticationInfoVo = authenticationInfoService.getAuthenticationInfo(fromUserUuid);
+            }
             List<String> authorizedChannelUuidList = channelMapper.getAuthorizedChannelUuidList(fromUserUuid, fromUserUuidAuthenticationInfoVo.getTeamUuidList(), fromUserUuidAuthenticationInfoVo.getRoleUuidList(), channelUuid);
             if (CollectionUtils.isNotEmpty(authorizedChannelUuidList)) {
                 boolean flag = false;
