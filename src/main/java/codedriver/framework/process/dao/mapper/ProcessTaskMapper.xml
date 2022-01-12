@@ -2146,6 +2146,10 @@
         GROUP BY `tag_id` HAVING COUNT(`tag_id`) = #{size}
     </select>
 
+    <select id="getTagIdListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT `tag_id` FROM `processtask_step_tag` WHERE `processtask_step_id` = #{value}
+    </select>
+
     <select id="getProcessTaskCountByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultType="int">
         SELECT count(1)
         FROM `processtask`
@@ -2688,11 +2692,11 @@
                 NOW(3))
     </insert>
 
-    <insert id="insertIgnoreProcessTaskStepNotifyPolicyConfig"
+    <!--<insert id="insertIgnoreProcessTaskStepNotifyPolicyConfig"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">
         INSERT IGNORE INTO `processtask_step_notify_policy_config` (`hash`, `config`)
         VALUES (#{policyConfigHash}, #{policyConfig})
-    </insert>
+    </insert>-->
 
     <insert id="insertProcessTaskStepNotifyPolicy"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepNotifyPolicyVo">

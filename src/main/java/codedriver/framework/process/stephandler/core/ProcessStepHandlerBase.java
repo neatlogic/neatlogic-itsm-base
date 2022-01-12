@@ -1747,7 +1747,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         processTaskStepNotifyPolicyVo.setPolicyName(notifyPolicyVo.getName());
                         processTaskStepNotifyPolicyVo.setPolicyHandler(notifyPolicyVo.getHandler());
                         processTaskStepNotifyPolicyVo.setPolicyConfig(notifyPolicyVo.getConfigStr());
-                        processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
+//                        processTaskMapper.insertIgnoreProcessTaskStepNotifyPolicyConfig(processTaskStepNotifyPolicyVo);
                         processTaskMapper.insertProcessTaskStepNotifyPolicy(processTaskStepNotifyPolicyVo);
                     }
                 }

@@ -20,6 +20,8 @@ public interface ProcessTagMapper {
 
     List<ProcessTagVo> getProcessTagByNameList(List<String> tagNameList);
 
+    List<ProcessTagVo> getProcessTagByIdList(List<Long> tagIdList);
+
     Long getProcessTagIdByName(String Name);
 
     int getProcessTagCount(ProcessTagVo processTagVo);
