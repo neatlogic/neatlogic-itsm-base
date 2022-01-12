@@ -1,27 +1,29 @@
 package codedriver.framework.process.dao.mapper.score;
 
-import java.util.List;
-
 import codedriver.framework.process.dto.score.ProcessTaskAutoScoreVo;
 import codedriver.framework.process.dto.score.ProcessTaskScoreVo;
 
+import java.util.List;
+
 public interface ProcessTaskScoreMapper {
 
-    public List<ProcessTaskScoreVo> searchProcessTaskScoreByProcesstaskId(Long processtaskId);
-    
-    public List<Long> getAllProcessTaskAutoScoreProcessTaskIdList();
-    
-    public String getProcessTaskAutoScoreConfigByProcessTaskId(Long processTaskId);
+    List<ProcessTaskScoreVo> getProcessTaskScoreByProcesstaskId(Long processtaskId);
 
-    public void insertProcessTaskScore(ProcessTaskScoreVo vo);
+    List<ProcessTaskScoreVo> getProcessTaskScoreWithContentHashByProcessTaskId(Long processtaskId);
 
-    public void insertProcessTaskScoreContent(ProcessTaskScoreVo vo);
+    List<Long> getAllProcessTaskAutoScoreProcessTaskIdList();
     
-    public int insertProcessTaskAutoScore(ProcessTaskAutoScoreVo processTaskAutoScoreVo);
-    
-    public int updateProcessTaskAutoScoreByProcessTaskId(ProcessTaskAutoScoreVo processTaskAutoScoreVo);
-    
-    public int deleteProcessTaskByProcessTaskId(Long processTaskId);
+    String getProcessTaskAutoScoreConfigByProcessTaskId(Long processTaskId);
 
-    public int deleteProcessTaskAutoScoreByProcessTaskId(Long processTaskId);
+    void insertProcessTaskScore(ProcessTaskScoreVo vo);
+
+    void insertProcessTaskScoreContent(ProcessTaskScoreVo vo);
+    
+    int insertProcessTaskAutoScore(ProcessTaskAutoScoreVo processTaskAutoScoreVo);
+    
+    int updateProcessTaskAutoScoreByProcessTaskId(ProcessTaskAutoScoreVo processTaskAutoScoreVo);
+    
+    int deleteProcessTaskByProcessTaskId(Long processTaskId);
+
+    int deleteProcessTaskAutoScoreByProcessTaskId(Long processTaskId);
 }
