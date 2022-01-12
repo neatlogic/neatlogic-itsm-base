@@ -1,17 +1,22 @@
-package codedriver.framework.process.dao.mapper;
+/*
+ * Copyright(c) 2022 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
 
-import java.util.List;
+package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.process.dto.ProcessTaskStepDataVo;
 
-public interface ProcessTaskStepDataMapper {
-	public ProcessTaskStepDataVo getProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
-	
-	public List<ProcessTaskStepDataVo> searchProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
+import java.util.List;
 
-	public int replaceProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
-	
-	public int deleteProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
-	
-	public int deleteProcessTaskStepDataById(Long id);
+public interface ProcessTaskStepDataMapper {
+	ProcessTaskStepDataVo getProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
+
+	List<ProcessTaskStepDataVo> searchProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
+
+	int replaceProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
+
+	int deleteProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
+
+	int deleteProcessTaskStepDataById(Long id);
 }
