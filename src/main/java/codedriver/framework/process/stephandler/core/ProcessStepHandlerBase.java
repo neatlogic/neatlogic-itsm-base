@@ -694,17 +694,18 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     @Override
     public final int start(ProcessTaskStepVo currentProcessTaskStepVo) {
+        // 锁定当前流程
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+        /* 检查处理人是否合法 **/
+        new ProcessAuthManager
+                .StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_START)
+                .build()
+                .checkAndNoPermissionThrowException();
         try {
-            // 锁定当前流程
-            processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-
             IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
             if (processStepUtilHandler == null) {
                 throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
             }
-            /* 检查处理人是否合法 **/
-            new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_START).build().checkAndNoPermissionThrowException();
-
             stepMajorUserRegulate(currentProcessTaskStepVo);
             ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
 
@@ -780,7 +781,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 operationType = ProcessTaskOperationType.STEP_BACK;
                 notifyTriggerType = ProcessTaskStepNotifyTriggerType.BACK;
             }
-            canComplete = new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(), operationType).build().checkAndNoPermissionThrowException();
+            canComplete = new ProcessAuthManager
+                    .StepOperationChecker(currentProcessTaskStepVo.getId(), operationType)
+                    .build()
+                    .checkAndNoPermissionThrowException();
             stepMajorUserRegulate(currentProcessTaskStepVo);
         } else if (this.getMode().equals(ProcessStepMode.AT)) {
             canComplete = true;
@@ -931,7 +935,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     public final int reapproval(ProcessTaskStepVo currentProcessTaskStepVo) {
         /* 锁定当前流程 **/
         processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-        new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_REAPPROVAL).build().checkAndNoPermissionThrowException();
+        new ProcessAuthManager
+                .StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_REAPPROVAL)
+                .build()
+                .checkAndNoPermissionThrowException();
         Long needActiveStepId = null;
         List<ProcessTaskStepRelVo> processTaskStepRelList = processTaskMapper.getProcessTaskStepRelByToId(currentProcessTaskStepVo.getId());
         for (ProcessTaskStepRelVo processTaskStepRelVo : processTaskStepRelList) {
@@ -1085,16 +1092,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     @Override
     public final int retreat(ProcessTaskStepVo currentProcessTaskStepVo) {
+        // 锁定当前流程
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+        new ProcessAuthManager
+                .StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_RETREAT)
+                .build()
+                .checkAndNoPermissionThrowException();
         try {
-            // 锁定当前流程
-            processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-            IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
-            if (processStepUtilHandler == null) {
-                throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
-            }
-
-            new ProcessAuthManager.StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_RETREAT).build().checkAndNoPermissionThrowException();
-
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /* 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -1216,7 +1220,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         // 锁定当前流程
         processTaskMapper.getProcessTaskLockById(currentProcessTaskVo.getId());
         /* 校验权限 **/
-        new ProcessAuthManager.TaskOperationChecker(currentProcessTaskVo.getId(), ProcessTaskOperationType.PROCESSTASK_RECOVER).build().checkAndNoPermissionThrowException();
+        new ProcessAuthManager
+                .TaskOperationChecker(currentProcessTaskVo.getId(), ProcessTaskOperationType.PROCESSTASK_RECOVER)
+                .build()
+                .checkAndNoPermissionThrowException();
 
         List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(currentProcessTaskVo.getId());
         for (ProcessTaskStepVo stepVo : processTaskStepList) {
@@ -1326,20 +1333,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     @Override
     public int pause(ProcessTaskStepVo currentProcessTaskStepVo) {
+        // 锁定当前流程
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+        /* 检查处理人是否合法 **/
+        new ProcessAuthManager
+                .StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_PAUSE)
+                .build()
+                .checkAndNoPermissionThrowException();
         try {
-            // 锁定当前流程
-            processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-
-            IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
-            if (processStepUtilHandler == null) {
-                throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
-            }
-            /* 检查处理人是否合法 **/
-            new ProcessAuthManager
-                    .StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_PAUSE)
-                    .build()
-                    .checkAndNoPermissionThrowException();
-
             stepMajorUserRegulate(currentProcessTaskStepVo);
             myPause(currentProcessTaskStepVo);
 
@@ -1376,20 +1377,15 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     @Override
     public final int accept(ProcessTaskStepVo currentProcessTaskStepVo) {
+        // 锁定当前流程
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+
+        /* 校验权限 **/
+        new ProcessAuthManager
+                .StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_ACCEPT)
+                .build()
+                .checkAndNoPermissionThrowException();
         try {
-            // 锁定当前流程
-            processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-            /* 校验权限 **/
-            IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
-            if (processStepUtilHandler == null) {
-                throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
-            }
-
-            new ProcessAuthManager
-                    .StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_ACCEPT)
-                    .build()
-                    .checkAndNoPermissionThrowException();
-
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /* 清空worker表，只留下当前处理人 **/
             processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
@@ -1438,11 +1434,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
 
         /* 校验权限 **/
-        IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
-        if (processStepUtilHandler == null) {
-            throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
-        }
-
         new ProcessAuthManager
                 .StepOperationChecker(currentProcessTaskStepVo.getId(), ProcessTaskOperationType.STEP_TRANSFER)
                 .build()
@@ -1810,7 +1801,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.getProcessTaskLockById(processTaskId);
             // 第二次保存时的操作
             processTaskVo = processTaskMapper.getProcessTaskById(processTaskId);
-            new ProcessAuthManager.TaskOperationChecker(processTaskVo.getId(), ProcessTaskOperationType.PROCESSTASK_START).build().checkAndNoPermissionThrowException();
+            new ProcessAuthManager
+                    .TaskOperationChecker(processTaskVo.getId(), ProcessTaskOperationType.PROCESSTASK_START)
+                    .build()
+                    .checkAndNoPermissionThrowException();
             /* 更新工单信息 **/
             processTaskVo.setTitle(paramObj.getString("title"));
             processTaskVo.setOwner(paramObj.getString("owner"));
@@ -1841,10 +1835,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     @Override
     public final int startProcess(ProcessTaskStepVo currentProcessTaskStepVo) {
+        // 锁定当前流程
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+        new ProcessAuthManager
+                .TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.PROCESSTASK_START)
+                .build()
+                .checkAndNoPermissionThrowException();
         try {
-            // 锁定当前流程
-            processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-            new ProcessAuthManager.TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.PROCESSTASK_START).build().checkAndNoPermissionThrowException();
 
             IProcessStepHandlerUtil.assignWorkerValid(currentProcessTaskStepVo);
             IProcessStepHandlerUtil.baseInfoValidFromDb(currentProcessTaskStepVo);
@@ -2128,19 +2125,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     }
 
     public int redo(ProcessTaskStepVo currentProcessTaskStepVo) {
+        // 锁定当前流程
+        processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
+        new ProcessAuthManager
+                .TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.PROCESSTASK_REDO)
+                .build()
+                .checkAndNoPermissionThrowException();
         try {
-            // 锁定当前流程
-            processTaskMapper.getProcessTaskLockById(currentProcessTaskStepVo.getProcessTaskId());
-            IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
-            if (processStepUtilHandler == null) {
-                throw new ProcessStepUtilHandlerNotFoundException(this.getHandler());
-            }
-
-            new ProcessAuthManager
-                    .TaskOperationChecker(currentProcessTaskStepVo.getProcessTaskId(), ProcessTaskOperationType.PROCESSTASK_REDO)
-                    .build()
-                    .checkAndNoPermissionThrowException();
-
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /* 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
