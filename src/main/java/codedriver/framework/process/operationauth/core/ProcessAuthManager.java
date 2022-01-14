@@ -246,9 +246,9 @@ public class ProcessAuthManager {
                     String channelUuid = processTaskVo.getChannelUuid();
                     List<String> fromUserUuidList = channelUuidFromUserUuidList.get(channelUuid);
                     if (fromUserUuidList == null) {
-                        long startTime2 = System.currentTimeMillis();
+//                        long startTime2 = System.currentTimeMillis();
                         fromUserUuidList = processTaskAgentService.getFromUserUuidListByToUserUuidAndChannelUuid(UserContext.get().getUserUuid(true), channelUuid);
-                        logger.error("c(" + channelUuid + "):" + (System.currentTimeMillis() - startTime2));
+//                        logger.error("c(" + channelUuid + "):" + (System.currentTimeMillis() - startTime2));
                         channelUuidFromUserUuidList.put(channelUuid, fromUserUuidList);
                     }
                     userUuidList.addAll(fromUserUuidList);
