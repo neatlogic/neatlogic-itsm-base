@@ -163,7 +163,7 @@ public class ProcessAuthManager {
     * @return Map<Long,Set<ProcessTaskOperationType>>
      */
     public Map<Long, Set<ProcessTaskOperationType>> getOperateMap() {
-        long startTime = System.currentTimeMillis();
+//        long startTime = System.currentTimeMillis();
         Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
         if (CollectionUtils.isEmpty(processTaskIdSet) && CollectionUtils.isEmpty(processTaskStepIdSet)) {
             return resultMap;
@@ -226,15 +226,15 @@ public class ProcessAuthManager {
             userUuidList.add(UserContext.get().getUserUuid(true));
             List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
             Set<String> hashSet = processTaskList.stream().map(ProcessTaskVo::getConfigHash).collect(Collectors.toSet());
-            long startTime3 = System.currentTimeMillis();
+//            long startTime3 = System.currentTimeMillis();
             List<ProcessTaskConfigVo> processTaskConfigList = selectContentByHashMapper.getProcessTaskConfigListByHashList(new ArrayList<>(hashSet));
-            logger.error("D:" + (System.currentTimeMillis() - startTime3));
+//            logger.error("D:" + (System.currentTimeMillis() - startTime3));
             Map<String, String> processTaskConfigMap = processTaskConfigList.stream().collect(Collectors.toMap(e->e.getHash(), e -> e.getConfig()));
-            logger.error("A:" + (System.currentTimeMillis() - startTime));
+//            logger.error("A:" + (System.currentTimeMillis() - startTime));
             Map<String, List<String>> channelUuidFromUserUuidList = new HashMap<>();
             for (ProcessTaskVo processTaskVo : processTaskList) {
                 processTaskVo.setConfig(processTaskConfigMap.get(processTaskVo.getConfigHash()));
-                startTime = System.currentTimeMillis();
+//                startTime = System.currentTimeMillis();
                 processTaskVo.setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 processTaskVo.setStepRelList(processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
@@ -254,7 +254,7 @@ public class ProcessAuthManager {
                     userUuidList.addAll(fromUserUuidList);
                 }
                 resultMap.putAll(getOperateMap(processTaskVo, userUuidList, operationTypeSet));
-                logger.error("B(" + processTaskVo.getId() + "):" + (System.currentTimeMillis() - startTime));
+//                logger.error("B(" + processTaskVo.getId() + "):" + (System.currentTimeMillis() - startTime));
             }
         }
         return resultMap;

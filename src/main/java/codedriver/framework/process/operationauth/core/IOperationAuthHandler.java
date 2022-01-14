@@ -12,11 +12,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public interface IOperationAuthHandler {
-    Logger logger = LoggerFactory.getLogger(IOperationAuthHandler.class);
     /**
      * 
     * @Time:2020年12月21日
@@ -51,9 +48,7 @@ public interface IOperationAuthHandler {
                 TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String> predicate =
                     getOperationBiPredicateMap().get(operationType);
                 if (predicate != null) {
-                    long startTime = System.currentTimeMillis();
                     resultMap.put(operationType, predicate.test(processTaskVo, processTaskStepVo, userUuid));
-                    logger.error(operationType.getValue() + ":" + (System.currentTimeMillis() - startTime));
                 }
             }
         } else {
@@ -61,9 +56,7 @@ public interface IOperationAuthHandler {
             for (Entry<ProcessTaskOperationType,
                 TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String>> entry : getOperationBiPredicateMap()
                     .entrySet()) {
-                long startTime = System.currentTimeMillis();
                 resultMap.put(entry.getKey(), entry.getValue().test(processTaskVo, processTaskStepVo, userUuid));
-                logger.error(entry.getKey().getValue() + ":" + (System.currentTimeMillis() - startTime));
             }
         }
         return resultMap;
