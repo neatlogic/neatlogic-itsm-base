@@ -258,7 +258,7 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepAutomaticRequestVo> getAllProcessTaskStepAutomaticRequestList();
 
-    List<ProcessTaskStepVo> getProcessTaskStepByFileId(Long fileId);
+    List<ProcessTaskStepVo> getProcessTaskStepVoListByFileId(Long fileId);
 
     ProcessTaskStepTimerVo getProcessTaskStepTimerById(Long id);
 
