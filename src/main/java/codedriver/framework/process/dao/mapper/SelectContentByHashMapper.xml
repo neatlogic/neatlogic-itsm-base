@@ -7,6 +7,14 @@
 		SELECT `config` FROM `processtask_config` WHERE `hash` = #{value}
 	</select>
 
+	<select id="getProcessTaskConfigListByHashList" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskConfigVo">
+		SELECT `hash`, `config` FROM `processtask_config`
+		WHERE `hash` IN
+		<foreach collection="list" item="hash" open="(" separator="," close=")">
+			#{hash}
+		</foreach>
+	</select>
+
 	<select id="getProcessTaskStepConfigByHash" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT
 		`config`

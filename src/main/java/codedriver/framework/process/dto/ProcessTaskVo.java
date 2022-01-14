@@ -35,7 +35,8 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "优先级uuid", type = ApiParamType.STRING)
     private String priorityUuid;
     //    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
-//    private String config;
+    @JSONField(serialize = false)
+    private String config;
 //    private String configPath;
 //    private JSONObject configObj;
     @EntityField(name = "状态", type = ApiParamType.STRING)
@@ -746,6 +747,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setIsNeedPriority(Integer isNeedPriority) {
         this.isNeedPriority = isNeedPriority;
+    }
+
+    public String getConfig() {
+        return config;
+    }
+
+    public void setConfig(String config) {
+        this.config = config;
     }
 
     public Integer getIndex() {
