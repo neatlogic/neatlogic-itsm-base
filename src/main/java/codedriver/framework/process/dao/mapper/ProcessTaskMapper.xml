@@ -2208,7 +2208,7 @@
     </select>
 
     <select id="getProcessTaskStepVoListByFileId" resultType="java.lang.Long">
-        select `processtask_id` as processTaskId
+        select `processtask_id` as processTaskId, `processtask_step_id` as id
         from processtask_file
         where `file_id` = #{value}
     </select>
