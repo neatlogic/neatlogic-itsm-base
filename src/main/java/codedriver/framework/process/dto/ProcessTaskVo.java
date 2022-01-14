@@ -169,6 +169,11 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "工单来源", type = ApiParamType.STRING)
     private String source = "process";
 
+
+    @JSONField(serialize = false)
+    @EntityField(name = "工单中心工单排序下标", type = ApiParamType.INTEGER)
+    private Integer index;
+
     public ProcessTaskVo() {
 
     }
@@ -741,5 +746,13 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setIsNeedPriority(Integer isNeedPriority) {
         this.isNeedPriority = isNeedPriority;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 }
