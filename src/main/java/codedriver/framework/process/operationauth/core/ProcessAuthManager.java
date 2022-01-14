@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
+import codedriver.framework.process.dto.*;
 import codedriver.framework.process.service.ProcessTaskAgentService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -21,11 +23,6 @@ import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
-import codedriver.framework.process.dto.ProcessTaskStepRelVo;
-import codedriver.framework.process.dto.ProcessTaskStepUserVo;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 
 /**
@@ -39,11 +36,12 @@ public class ProcessAuthManager {
     private final static Logger logger = LoggerFactory.getLogger(ProcessAuthManager.class);
     private static ProcessTaskMapper processTaskMapper;
     private static ProcessTaskAgentService processTaskAgentService;
-
+    private static SelectContentByHashMapper selectContentByHashMapper;
     @Autowired
-    private ProcessAuthManager(ProcessTaskAgentService _processTaskAgentService, ProcessTaskMapper _processTaskMapper) {
+    private ProcessAuthManager(ProcessTaskAgentService _processTaskAgentService, ProcessTaskMapper _processTaskMapper, SelectContentByHashMapper _selectContentByHashMapper) {
         processTaskAgentService = _processTaskAgentService;
         processTaskMapper = _processTaskMapper;
+        selectContentByHashMapper = _selectContentByHashMapper;
     }
 
     private Set<Long> processTaskIdSet;
@@ -227,9 +225,15 @@ public class ProcessAuthManager {
             List<String> userUuidList = new ArrayList<>();
             userUuidList.add(UserContext.get().getUserUuid(true));
             List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
+            Set<String> hashSet = processTaskList.stream().map(ProcessTaskVo::getConfigHash).collect(Collectors.toSet());
+//            long startTime3 = System.currentTimeMillis();
+            List<ProcessTaskConfigVo> processTaskConfigList = selectContentByHashMapper.getProcessTaskConfigListByHashList(new ArrayList<>(hashSet));
+//            logger.error("D:" + (System.currentTimeMillis() - startTime3));
+            Map<String, String> processTaskConfigMap = processTaskConfigList.stream().collect(Collectors.toMap(e->e.getHash(), e -> e.getConfig()));
 //            logger.error("A:" + (System.currentTimeMillis() - startTime));
             Map<String, List<String>> channelUuidFromUserUuidList = new HashMap<>();
             for (ProcessTaskVo processTaskVo : processTaskList) {
+                processTaskVo.setConfig(processTaskConfigMap.get(processTaskVo.getConfigHash()));
 //                startTime = System.currentTimeMillis();
                 processTaskVo.setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 processTaskVo.setStepRelList(processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
@@ -242,13 +246,15 @@ public class ProcessAuthManager {
                     String channelUuid = processTaskVo.getChannelUuid();
                     List<String> fromUserUuidList = channelUuidFromUserUuidList.get(channelUuid);
                     if (fromUserUuidList == null) {
+//                        long startTime2 = System.currentTimeMillis();
                         fromUserUuidList = processTaskAgentService.getFromUserUuidListByToUserUuidAndChannelUuid(UserContext.get().getUserUuid(true), channelUuid);
+//                        logger.error("c(" + channelUuid + "):" + (System.currentTimeMillis() - startTime2));
                         channelUuidFromUserUuidList.put(channelUuid, fromUserUuidList);
                     }
                     userUuidList.addAll(fromUserUuidList);
                 }
                 resultMap.putAll(getOperateMap(processTaskVo, userUuidList, operationTypeSet));
-//                logger.error("B:" + (System.currentTimeMillis() - startTime));
+//                logger.error("B(" + processTaskVo.getId() + "):" + (System.currentTimeMillis() - startTime));
             }
         }
         return resultMap;
