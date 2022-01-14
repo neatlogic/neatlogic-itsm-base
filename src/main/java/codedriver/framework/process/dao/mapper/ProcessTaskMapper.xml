@@ -2207,9 +2207,10 @@
         FROM `processtask_step_automatic_request`
     </select>
 
-    <select id="getProcessTaskStepVoListByFileId" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
-        select `processtask_id` as processTaskId, `processtask_step_id` as id
-        from processtask_file
+    <select id="getProcessTaskStepVoListByFileId" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+        select pf.`processtask_id` as id, p.channel_uuid as channelUuid
+        from processtask_file pf
+                 join processtask p on p.id = pf.processtask_id
         where `file_id` = #{value}
     </select>
 
