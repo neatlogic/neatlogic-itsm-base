@@ -360,7 +360,7 @@ public class ProcessAuthManager {
     }
 
     /**
-     *
+     *  获取授权给当前用户处理服务工单的用户列表
      * @param channelUuidFromUserUuidListMap
      * @param processTaskAgentListMap
      * @param channelUuid
