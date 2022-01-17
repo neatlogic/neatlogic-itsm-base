@@ -230,9 +230,6 @@ public class ProcessAuthManager {
                         .add(processTaskStepRelVo);
             }
 
-            String userUuid = UserContext.get().getUserUuid(true);
-//            List<String> userUuidList = new ArrayList<>();
-//            userUuidList.add(UserContext.get().getUserUuid(true));
             List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
             Set<String> hashSet = processTaskList.stream().map(ProcessTaskVo::getConfigHash).collect(Collectors.toSet());
 //            long startTime3 = System.currentTimeMillis();
@@ -247,7 +244,7 @@ public class ProcessAuthManager {
 //                startTime = System.currentTimeMillis();
                 processTaskVo.setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 processTaskVo.setStepRelList(processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
-                resultMap.putAll(getOperateMap(processTaskVo, userUuid, channelUuidFromUserUuidListMap, processTaskAgentListMap));
+                resultMap.putAll(getOperateMap(processTaskVo, channelUuidFromUserUuidListMap, processTaskAgentListMap));
 //                logger.error("B(" + processTaskVo.getId() + "):" + (System.currentTimeMillis() - startTime));
             }
         }
@@ -259,7 +256,7 @@ public class ProcessAuthManager {
      * @Description: 返回一个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表
      * @return Map<Long,Set<ProcessTaskOperationType>>
      */
-    private Map<Long, Set<ProcessTaskOperationType>> getOperateMap(ProcessTaskVo processTaskVo, String userUuid, Map<String, List<String>> channelUuidFromUserUuidListMap, Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap) {
+    private Map<Long, Set<ProcessTaskOperationType>> getOperateMap(ProcessTaskVo processTaskVo, Map<String, List<String>> channelUuidFromUserUuidListMap, Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap) {
         Set<ProcessTaskOperationType> taskOperationTypeSet = new HashSet<>();
         Set<ProcessTaskOperationType> stepOperationTypeSet = new HashSet<>();
         List<ProcessTaskOperationType> taskOperationTypeList = OperationAuthHandlerType.TASK.getOperationTypeList();
@@ -277,6 +274,7 @@ public class ProcessAuthManager {
             }
         }
         Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
+        String userUuid = UserContext.get().getUserUuid(true);
         if (CollectionUtils.isNotEmpty(taskOperationTypeSet)) {
             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
             Set<ProcessTaskOperationType> resultSet = new HashSet<>();
