@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
+import codedriver.framework.process.dao.mapper.*;
 import codedriver.framework.process.dto.*;
-import codedriver.framework.process.service.ProcessTaskAgentService;
+import codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo;
+import codedriver.framework.process.dto.agent.ProcessTaskAgentVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
-import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 
 /**
@@ -35,13 +34,22 @@ import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissio
 public class ProcessAuthManager {
     private final static Logger logger = LoggerFactory.getLogger(ProcessAuthManager.class);
     private static ProcessTaskMapper processTaskMapper;
-    private static ProcessTaskAgentService processTaskAgentService;
+    private static ProcessTaskAgentMapper processTaskAgentMapper;
     private static SelectContentByHashMapper selectContentByHashMapper;
+    private static ChannelMapper channelMapper;
+    private static CatalogMapper catalogMapper;
     @Autowired
-    private ProcessAuthManager(ProcessTaskAgentService _processTaskAgentService, ProcessTaskMapper _processTaskMapper, SelectContentByHashMapper _selectContentByHashMapper) {
-        processTaskAgentService = _processTaskAgentService;
+    private ProcessAuthManager(
+            ProcessTaskAgentMapper _processTaskAgentMapper,
+            ProcessTaskMapper _processTaskMapper,
+            SelectContentByHashMapper _selectContentByHashMapper,
+            ChannelMapper _channelMapper,
+            CatalogMapper _catalogMapper) {
+        processTaskAgentMapper = _processTaskAgentMapper;
         processTaskMapper = _processTaskMapper;
         selectContentByHashMapper = _selectContentByHashMapper;
+        channelMapper = _channelMapper;
+        catalogMapper = _catalogMapper;
     }
 
     private Set<Long> processTaskIdSet;
@@ -94,7 +102,7 @@ public class ProcessAuthManager {
     }
 
     /**
-     * 
+     *
      * @Time:2020年12月15日
      * @ClassName: TaskOperationChecker
      * @Description: 校验工单级权限
@@ -114,7 +122,7 @@ public class ProcessAuthManager {
     }
 
     /**
-     * 
+     *
      * @Time:2020年12月15日
      * @ClassName: StepOperationChecker
      * @Description: 校验步骤级权限
@@ -157,10 +165,10 @@ public class ProcessAuthManager {
         checkOperationTypeMap.put(checker.processTaskStepId, checker.operationType);
     }
     /**
-     * 
-    * @Time:2020年12月21日
-    * @Description: 返回多个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表 
-    * @return Map<Long,Set<ProcessTaskOperationType>>
+     *
+     * @Time:2020年12月21日
+     * @Description: 返回多个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表
+     * @return Map<Long,Set<ProcessTaskOperationType>>
      */
     public Map<Long, Set<ProcessTaskOperationType>> getOperateMap() {
 //        long startTime = System.currentTimeMillis();
@@ -177,53 +185,54 @@ public class ProcessAuthManager {
                 processTaskIdSet = new HashSet<>();
             }
             List<ProcessTaskStepVo> processTaskStepList =
-                processTaskMapper.getProcessTaskStepListByIdList(new ArrayList<>(processTaskStepIdSet));
+                    processTaskMapper.getProcessTaskStepListByIdList(new ArrayList<>(processTaskStepIdSet));
             for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
                 processTaskIdSet.add(processTaskStepVo.getProcessTaskId());
                 processTaskStepIdSetMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new HashSet<>())
-                    .add(processTaskStepVo.getId());
+                        .add(processTaskStepVo.getId());
             }
         }
         if (CollectionUtils.isNotEmpty(processTaskIdSet)) {
             List<Long> processTaskIdList = new ArrayList<>(processTaskIdSet);
             List<ProcessTaskStepWorkerVo> processTaskStepWorkerList =
-                processTaskMapper.getProcessTaskStepWorkerListByProcessTaskIdList(processTaskIdList);
+                    processTaskMapper.getProcessTaskStepWorkerListByProcessTaskIdList(processTaskIdList);
             Map<Long, List<ProcessTaskStepWorkerVo>> processTaskStepWorkerListMap = new HashMap<>();
             for (ProcessTaskStepWorkerVo processTaskStepWorkerVo : processTaskStepWorkerList) {
                 processTaskStepWorkerListMap
-                    .computeIfAbsent(processTaskStepWorkerVo.getProcessTaskStepId(), k -> new ArrayList<>())
-                    .add(processTaskStepWorkerVo);
+                        .computeIfAbsent(processTaskStepWorkerVo.getProcessTaskStepId(), k -> new ArrayList<>())
+                        .add(processTaskStepWorkerVo);
             }
             List<ProcessTaskStepUserVo> processTaskStepUserList =
-                processTaskMapper.getProcessTaskStepUserListByProcessTaskIdList(processTaskIdList);
+                    processTaskMapper.getProcessTaskStepUserListByProcessTaskIdList(processTaskIdList);
             Map<Long, List<ProcessTaskStepUserVo>> processTaskStepUserListMap = new HashMap<>();
             for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepUserList) {
                 processTaskStepUserListMap
-                    .computeIfAbsent(processTaskStepUserVo.getProcessTaskStepId(), k -> new ArrayList<>())
-                    .add(processTaskStepUserVo);
+                        .computeIfAbsent(processTaskStepUserVo.getProcessTaskStepId(), k -> new ArrayList<>())
+                        .add(processTaskStepUserVo);
             }
             List<ProcessTaskStepVo> processTaskStepList =
-                processTaskMapper.getProcessTaskStepListByProcessTaskIdList(processTaskIdList);
+                    processTaskMapper.getProcessTaskStepListByProcessTaskIdList(processTaskIdList);
             Map<Long, List<ProcessTaskStepVo>> processTaskStepListMap = new HashMap<>();
             for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
                 processTaskStepVo.setWorkerList(
-                    processTaskStepWorkerListMap.computeIfAbsent(processTaskStepVo.getId(), k -> new ArrayList<>()));
+                        processTaskStepWorkerListMap.computeIfAbsent(processTaskStepVo.getId(), k -> new ArrayList<>()));
                 processTaskStepVo.setUserList(
-                    processTaskStepUserListMap.computeIfAbsent(processTaskStepVo.getId(), k -> new ArrayList<>()));
+                        processTaskStepUserListMap.computeIfAbsent(processTaskStepVo.getId(), k -> new ArrayList<>()));
                 processTaskStepListMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new ArrayList<>())
-                    .add(processTaskStepVo);
+                        .add(processTaskStepVo);
             }
             List<ProcessTaskStepRelVo> processTaskStepRelList =
-                processTaskMapper.getProcessTaskStepRelListByProcessTaskIdList(processTaskIdList);
+                    processTaskMapper.getProcessTaskStepRelListByProcessTaskIdList(processTaskIdList);
             Map<Long, List<ProcessTaskStepRelVo>> processTaskStepRelListMap = new HashMap<>();
             for (ProcessTaskStepRelVo processTaskStepRelVo : processTaskStepRelList) {
                 processTaskStepRelListMap
-                    .computeIfAbsent(processTaskStepRelVo.getProcessTaskId(), k -> new ArrayList<>())
-                    .add(processTaskStepRelVo);
+                        .computeIfAbsent(processTaskStepRelVo.getProcessTaskId(), k -> new ArrayList<>())
+                        .add(processTaskStepRelVo);
             }
 
-            List<String> userUuidList = new ArrayList<>();
-            userUuidList.add(UserContext.get().getUserUuid(true));
+            String userUuid = UserContext.get().getUserUuid(true);
+//            List<String> userUuidList = new ArrayList<>();
+//            userUuidList.add(UserContext.get().getUserUuid(true));
             List<ProcessTaskVo> processTaskList = processTaskMapper.getProcessTaskListByIdList(processTaskIdList);
             Set<String> hashSet = processTaskList.stream().map(ProcessTaskVo::getConfigHash).collect(Collectors.toSet());
 //            long startTime3 = System.currentTimeMillis();
@@ -231,115 +240,177 @@ public class ProcessAuthManager {
 //            logger.error("D:" + (System.currentTimeMillis() - startTime3));
             Map<String, String> processTaskConfigMap = processTaskConfigList.stream().collect(Collectors.toMap(e->e.getHash(), e -> e.getConfig()));
 //            logger.error("A:" + (System.currentTimeMillis() - startTime));
-            Map<String, List<String>> channelUuidFromUserUuidList = new HashMap<>();
+            Map<String, List<String>> channelUuidFromUserUuidListMap = new HashMap<>();
+            Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap = new HashMap<>();
             for (ProcessTaskVo processTaskVo : processTaskList) {
                 processTaskVo.setConfig(processTaskConfigMap.get(processTaskVo.getConfigHash()));
 //                startTime = System.currentTimeMillis();
                 processTaskVo.setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 processTaskVo.setStepRelList(processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
-                /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-                if (!SystemUser.SYSTEM.getUserUuid().equals(UserContext.get().getUserUuid(true))) {
-//                    String uuid = userMapper.getUserUuidByAgentUuidAndFunc(UserContext.get().getUserUuid(true), "processtask");
-//                    if (StringUtils.isNotBlank(uuid)) {
-//                        userUuidList.add(uuid);
-//                    }
-                    String channelUuid = processTaskVo.getChannelUuid();
-                    List<String> fromUserUuidList = channelUuidFromUserUuidList.get(channelUuid);
-                    if (fromUserUuidList == null) {
-//                        long startTime2 = System.currentTimeMillis();
-                        fromUserUuidList = processTaskAgentService.getFromUserUuidListByToUserUuidAndChannelUuid(UserContext.get().getUserUuid(true), channelUuid);
-//                        logger.error("c(" + channelUuid + "):" + (System.currentTimeMillis() - startTime2));
-                        channelUuidFromUserUuidList.put(channelUuid, fromUserUuidList);
-                    }
-                    userUuidList.addAll(fromUserUuidList);
-                }
-                resultMap.putAll(getOperateMap(processTaskVo, userUuidList, operationTypeSet));
+                resultMap.putAll(getOperateMap(processTaskVo, userUuid, channelUuidFromUserUuidListMap, processTaskAgentListMap));
 //                logger.error("B(" + processTaskVo.getId() + "):" + (System.currentTimeMillis() - startTime));
             }
         }
         return resultMap;
     }
     /**
-     * 
-    * @Time:2020年12月21日
-    * @Description: 返回一个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表 
-    * @return Map<Long,Set<ProcessTaskOperationType>>
+     *
+     * @Time:2020年12月21日
+     * @Description: 返回一个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表
+     * @return Map<Long,Set<ProcessTaskOperationType>>
      */
-    private Map<Long, Set<ProcessTaskOperationType>> getOperateMap(ProcessTaskVo processTaskVo, List<String> userUuidList,
-        Set<ProcessTaskOperationType> operationTypeSet) {
+    private Map<Long, Set<ProcessTaskOperationType>> getOperateMap(ProcessTaskVo processTaskVo, String userUuid, Map<String, List<String>> channelUuidFromUserUuidListMap, Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap) {
+        Set<ProcessTaskOperationType> taskOperationTypeSet = new HashSet<>();
+        Set<ProcessTaskOperationType> stepOperationTypeSet = new HashSet<>();
+        List<ProcessTaskOperationType> taskOperationTypeList = OperationAuthHandlerType.TASK.getOperationTypeList();
+        List<ProcessTaskOperationType> stepOperationTypeList = OperationAuthHandlerType.STEP.getOperationTypeList();
+        if (CollectionUtils.isEmpty(operationTypeSet)) {
+            taskOperationTypeSet.addAll(taskOperationTypeList);
+            stepOperationTypeSet.addAll(stepOperationTypeList);
+        } else {
+            for (ProcessTaskOperationType operationType : operationTypeSet) {
+                if (taskOperationTypeList.contains(operationType)) {
+                    taskOperationTypeSet.add(operationType);
+                } else if (stepOperationTypeList.contains(operationType)) {
+                    stepOperationTypeSet.add(operationType);
+                }
+            }
+        }
         Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
-        if (CollectionUtils.isEmpty(operationTypeSet)
-            || OperationAuthHandlerType.TASK.getOperationTypeList().removeAll(operationTypeSet)) {
-            IOperationAuthHandler handler =
-                OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
+        if (CollectionUtils.isNotEmpty(taskOperationTypeSet)) {
+            IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
             Set<ProcessTaskOperationType> resultSet = new HashSet<>();
-            for (String userUuid : userUuidList) {
-                // 系统用户拥有所有权限
-                if (SystemUser.SYSTEM.getUserUuid().equals(userUuid)) {
-                    if (CollectionUtils.isNotEmpty(operationTypeSet)) {
-                        resultSet.addAll(operationTypeSet);
+            // 系统用户拥有所有权限
+            if (SystemUser.SYSTEM.getUserUuid().equals(userUuid)) {
+                resultSet.addAll(taskOperationTypeSet);
+            } else {
+                for (ProcessTaskOperationType operationType : taskOperationTypeSet) {
+                    boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType);
+                    if (result) {
+                        resultSet.add(operationType);
                     } else {
-                        resultSet.addAll(OperationAuthHandlerType.TASK.getOperationTypeList());
-                    }
-                } else {
-                    Map<ProcessTaskOperationType, Boolean> operateMap =
-                        handler.getOperateMap(processTaskVo, userUuid, operationTypeSet);
-                    for (Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
-                        if (entry.getValue() == Boolean.TRUE) {
-                            resultSet.add(entry.getKey());
+                        /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
+                        List<String> fromUuidList = getFromUuidListByChannelUuid(channelUuidFromUserUuidListMap, processTaskAgentListMap,processTaskVo.getChannelUuid());
+                        if (CollectionUtils.isNotEmpty(fromUuidList)) {
+                            for (String fromUuid : fromUuidList) {
+                                result = handler.getOperateMap(processTaskVo, fromUuid, operationType);
+                                if (result) {
+                                    resultSet.add(operationType);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
-                resultMap.put(processTaskVo.getId(), resultSet);
             }
+            resultMap.put(processTaskVo.getId(), resultSet);
         }
-        if (CollectionUtils.isEmpty(operationTypeSet)
-            || OperationAuthHandlerType.STEP.getOperationTypeList().removeAll(operationTypeSet)) {
+        if (CollectionUtils.isNotEmpty(stepOperationTypeSet)) {
             Set<Long> processTaskStepIdList = processTaskStepIdSetMap.get(processTaskVo.getId());
             if (CollectionUtils.isNotEmpty(processTaskStepIdList)) {
-                IOperationAuthHandler stepHandler =
-                    OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.STEP.getValue());
-                Map<Long, ProcessTaskStepVo> processTaskStepMap =
-                    processTaskVo.getStepList().stream().collect(Collectors.toMap(e -> e.getId(), e -> e));
-                for (Long processTaskStepId : processTaskStepIdList) {
-                    ProcessTaskStepVo processTaskStepVo = processTaskStepMap.get(processTaskStepId);
-                    if (processTaskStepVo != null) {
+                IOperationAuthHandler stepHandler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.STEP.getValue());
+                for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
+                    if (processTaskStepIdList.contains(processTaskStepVo.getId())) {
                         Set<ProcessTaskOperationType> resultSet = new HashSet<>();
-                        for (String userUuid : userUuidList) {
-                            // 系统用户拥有所有权限
-                            if (SystemUser.SYSTEM.getUserUuid().equals(userUuid)) {
-                                if (CollectionUtils.isNotEmpty(operationTypeSet)) {
-                                    resultSet.addAll(operationTypeSet);
-                                } else {
-                                    resultSet.addAll(OperationAuthHandlerType.STEP.getOperationTypeList());
-                                }
-                            } else {
-                                Map<ProcessTaskOperationType, Boolean> operateMap = stepHandler
-                                    .getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
-                                IOperationAuthHandler handler =
-                                    OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
+                        // 系统用户拥有所有权限
+                        if (SystemUser.SYSTEM.getUserUuid().equals(userUuid)) {
+                            resultSet.addAll(stepOperationTypeSet);
+                        } else {
+                            for (ProcessTaskOperationType operationType : stepOperationTypeSet) {
+                                Boolean result = null;
+                                IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
                                 if (handler != null) {
-                                    Map<ProcessTaskOperationType, Boolean> nextOperateMap = handler
-                                        .getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationTypeSet);
-                                    if (MapUtils.isNotEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
-                                        operateMap.putAll(nextOperateMap);
-                                    } else if (MapUtils.isEmpty(operateMap) && MapUtils.isNotEmpty(nextOperateMap)) {
-                                        operateMap = nextOperateMap;
+                                    result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType);
+                                }
+                                if(result == null) {
+                                    result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType);
+                                    if (result == null) {
+                                        result = false;
                                     }
                                 }
-                                for (Entry<ProcessTaskOperationType, Boolean> entry : operateMap.entrySet()) {
-                                    if (entry.getValue() == Boolean.TRUE) {
-                                        resultSet.add(entry.getKey());
+                                if (result) {
+                                    resultSet.add(operationType);
+                                } else {
+                                    /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
+                                    List<String> fromUuidList = getFromUuidListByChannelUuid(channelUuidFromUserUuidListMap, processTaskAgentListMap, processTaskVo.getChannelUuid());
+                                    if (CollectionUtils.isNotEmpty(fromUuidList)) {
+                                        for (String fromUuid : fromUuidList) {
+                                            if (handler != null) {
+                                                result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType);
+                                            }
+                                            if(result == null) {
+                                                result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType);
+                                                if (result == null) {
+                                                    result = false;
+                                                }
+                                            }
+                                            if (result) {
+                                                resultSet.add(operationType);
+                                                break;
+                                            }
+                                        }
                                     }
                                 }
                             }
-                            resultMap.put(processTaskStepVo.getId(), resultSet);
                         }
+                        resultMap.put(processTaskStepVo.getId(), resultSet);
                     }
                 }
             }
         }
         return resultMap;
+    }
+
+    /**
+     *
+     * @param channelUuidFromUserUuidListMap
+     * @param processTaskAgentListMap
+     * @param channelUuid
+     * @return
+     */
+    private List<String> getFromUuidListByChannelUuid(Map<String, List<String>> channelUuidFromUserUuidListMap, Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap, String channelUuid) {
+        List<String> fromUserUuidList = channelUuidFromUserUuidListMap.get(channelUuid);
+        if (fromUserUuidList == null) {
+            fromUserUuidList = new ArrayList<>();
+            List<ProcessTaskAgentVo> processTaskAgentList = processTaskAgentListMap.get(UserContext.get().getUserUuid(true));
+            if (processTaskAgentList == null) {
+                processTaskAgentList = processTaskAgentMapper.getProcessTaskAgentDetailListByToUserUuid(UserContext.get().getUserUuid(true));
+                processTaskAgentListMap.put(UserContext.get().getUserUuid(true), processTaskAgentList);
+            }
+            if (CollectionUtils.isNotEmpty(processTaskAgentList)) {
+                for (ProcessTaskAgentVo processTaskAgentVo : processTaskAgentList) {
+                    String fromUserUuid = processTaskAgentVo.getFromUserUuid();
+                    if (fromUserUuidList.contains(fromUserUuid)) {
+                        continue;
+                    }
+                    boolean flag = false;
+                    List<String> catalogUuidList = new ArrayList<>();
+                    List<ProcessTaskAgentTargetVo> processTaskAgentTargetList = processTaskAgentVo.getProcessTaskAgentTargetVos();
+                    for (ProcessTaskAgentTargetVo processTaskAgentTargetVo : processTaskAgentTargetList) {
+                        String type = processTaskAgentTargetVo.getType();
+                        if ("channel".equals(type)) {
+                            if (channelUuid.equals(processTaskAgentTargetVo.getTarget())) {
+                                flag = true;
+                                break;
+                            }
+                        } else if ("catalog".equals(type)) {
+                            catalogUuidList.add(processTaskAgentTargetVo.getTarget());
+                        }
+                    }
+                    if (!flag && CollectionUtils.isNotEmpty(catalogUuidList)) {
+                        ChannelVo channelVo = channelMapper.getChannelByUuid(channelUuid);
+                        CatalogVo catalogVo = catalogMapper.getCatalogByUuid(channelVo.getParentUuid());
+                        List<String> upwardUuidList = catalogMapper.getUpwardUuidListByLftRht(catalogVo.getLft(), catalogVo.getRht());
+                        flag = catalogUuidList.removeAll(upwardUuidList);
+                    }
+                    if (flag) {
+                        fromUserUuidList.add(fromUserUuid);
+                    }
+                }
+            }
+            channelUuidFromUserUuidListMap.put(channelUuid, fromUserUuidList);
+        }
+        return fromUserUuidList;
     }
     /**
      * 
