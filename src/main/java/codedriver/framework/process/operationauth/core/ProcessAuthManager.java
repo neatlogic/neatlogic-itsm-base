@@ -287,6 +287,13 @@ public class ProcessAuthManager {
                     if (result) {
                         resultSet.add(operationType);
                     } else {
+                        /** 因为上报权限不能授权，所以转报和复制上报权限不能授权 **/
+                        if (ProcessTaskOperationType.PROCESSTASK_TRANFERREPORT == operationType) {
+                            continue;
+                        }
+                        if (ProcessTaskOperationType.PROCESSTASK_COPYPROCESSTASK == operationType) {
+                            continue;
+                        }
                         /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
                         List<String> fromUuidList = getFromUuidListByChannelUuid(channelUuidFromUserUuidListMap, processTaskAgentListMap,processTaskVo.getChannelUuid());
                         if (CollectionUtils.isNotEmpty(fromUuidList)) {
