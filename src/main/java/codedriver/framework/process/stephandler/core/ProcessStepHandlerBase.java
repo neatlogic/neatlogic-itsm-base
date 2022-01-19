@@ -288,10 +288,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             logger.error(e.getMessage(), e);
             currentProcessTaskStepVo.setIsActive(0);
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-            currentProcessTaskStepVo.setError(e.getMessage(true));
+            currentProcessTaskStepVo.setError(e.getMessage());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
             /* 异常提醒 **/
-            IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), e.getMessage(true), ProcessTaskStepRemindType.ERROR);
+            IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), e.getMessage(), ProcessTaskStepRemindType.ERROR);
         } finally {
             if (ProcessTaskStatus.FAILED.getValue().equals(currentProcessTaskStepVo.getStatus())) {
                 /*
@@ -627,7 +627,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             } catch (ProcessTaskException ex) {
                 logger.error(ex.getMessage(), ex);
-                currentProcessTaskStepVo.setError(ex.getMessage(true));
+                currentProcessTaskStepVo.setError(ex.getMessage());
                 currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
                 updateProcessTaskStepStatus(currentProcessTaskStepVo);
             } finally {/* 告诉超时探测器步骤已经完成 **/
@@ -658,7 +658,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     } catch (ProcessTaskException ex) {
                         logger.error(ex.getMessage(), ex);
                         currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-                        currentProcessTaskStepVo.setError(ex.getMessage(true));
+                        currentProcessTaskStepVo.setError(ex.getMessage());
                         updateProcessTaskStepStatus(currentProcessTaskStepVo);
                     } catch (Exception ex) {
                         logger.error(ex.getMessage(), ex);
@@ -742,7 +742,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
-            currentProcessTaskStepVo.setError(ex.getMessage(true));
+            currentProcessTaskStepVo.setError(ex.getMessage());
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
         } finally {
@@ -892,12 +892,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             } catch (ProcessTaskException ex) {
                 logger.error(ex.getMessage(), ex);
-                currentProcessTaskStepVo.setError(ex.getMessage(true));
+                currentProcessTaskStepVo.setError(ex.getMessage());
                 currentProcessTaskStepVo.setIsActive(0);
                 currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
                 updateProcessTaskStepStatus(currentProcessTaskStepVo);
                 /* 异常提醒 **/
-                IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(true), ProcessTaskStepRemindType.ERROR);
+                IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(), ProcessTaskStepRemindType.ERROR);
                 /* 触发通知 **/
                 IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
                 /* 执行动作 **/
@@ -1052,12 +1052,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 //                }
             } catch (ProcessTaskException ex) {
                 logger.error(ex.getMessage(), ex);
-                currentProcessTaskStepVo.setError(ex.getMessage(true));
+                currentProcessTaskStepVo.setError(ex.getMessage());
                 currentProcessTaskStepVo.setIsActive(0);
                 currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
                 updateProcessTaskStepStatus(currentProcessTaskStepVo);
                 /* 异常提醒 **/
-                IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(true), ProcessTaskStepRemindType.ERROR);
+                IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), ex.getMessage(), ProcessTaskStepRemindType.ERROR);
                 /* 触发通知 **/
                 IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
                 /* 执行动作 **/
@@ -1134,7 +1134,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.RETREAT);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
-            currentProcessTaskStepVo.setError(ex.getMessage(true));
+            currentProcessTaskStepVo.setError(ex.getMessage());
             currentProcessTaskStepVo.setIsActive(1);
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
@@ -1280,7 +1280,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     logger.error(e.getMessage(), e);
                     currentProcessTaskStepVo.setIsActive(-1);
                     currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-                    currentProcessTaskStepVo.setError(e.getMessage(true));
+                    currentProcessTaskStepVo.setError(e.getMessage());
                 }
             }
             for (ProcessTaskStepWorkerVo worker : workerSet) {
@@ -1363,7 +1363,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.PAUSE);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
-            currentProcessTaskStepVo.setError(ex.getMessage(true));
+            currentProcessTaskStepVo.setError(ex.getMessage());
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
         } finally {
@@ -1417,7 +1417,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
         } catch (ProcessTaskRuntimeException ex) {
             logger.error(ex.getMessage(), ex);
-            currentProcessTaskStepVo.setError(ex.getMessage(true));
+            currentProcessTaskStepVo.setError(ex.getMessage());
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
         }
@@ -1520,7 +1520,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             );
         } catch (ProcessTaskException e) {
             logger.error(e.getMessage(), e);
-            processTaskStepVo.setError(e.getMessage(true));
+            processTaskStepVo.setError(e.getMessage());
             processTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
             updateProcessTaskStepStatus(processTaskStepVo);
         } finally {
@@ -1591,7 +1591,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.BACK);
         } catch (ProcessTaskException e) {
             logger.error(e.getMessage(), e);
-            currentProcessTaskStepVo.setError(e.getMessage(true));
+            currentProcessTaskStepVo.setError(e.getMessage());
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
         }
@@ -1824,7 +1824,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setIsActive(1);
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-            currentProcessTaskStepVo.setError(ex.getMessage(true));
+            currentProcessTaskStepVo.setError(ex.getMessage());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
         }
 
@@ -1922,7 +1922,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setIsActive(1);
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
-            currentProcessTaskStepVo.setError(ex.getMessage(true));
+            currentProcessTaskStepVo.setError(ex.getMessage());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
             /* 触发通知 **/
             IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
@@ -1971,13 +1971,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             if (ex.getMessage() != null && !ex.getMessage().equals("")) {
-                currentProcessTaskStepVo.appendError(ex.getMessage(true));
+                currentProcessTaskStepVo.appendError(ex.getMessage());
             } else {
                 currentProcessTaskStepVo.appendError(ExceptionUtils.getStackTrace(ex));
             }
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
             /* 异常提醒 **/
-            IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), ex.getMessage(true), ProcessTaskStepRemindType.ERROR);
+            IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), ex.getMessage(), ProcessTaskStepRemindType.ERROR);
         }
 
         /* 更新路径isHit=1，在active方法里需要根据isHit状态判断路径是否经通过 **/
@@ -2170,7 +2170,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), currentProcessTaskStepVo.getParamObj().getString("content"), ProcessTaskStepRemindType.REDO);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
-            currentProcessTaskStepVo.setError(ex.getMessage(true));
+            currentProcessTaskStepVo.setError(ex.getMessage());
             currentProcessTaskStepVo.setIsActive(1);
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.FAILED.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
