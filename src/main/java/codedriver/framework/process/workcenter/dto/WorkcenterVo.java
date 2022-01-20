@@ -64,6 +64,8 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private Long catalogId;
     @EntityField(name = "菜单类型名称", type = ApiParamType.STRING)
     private String catalogName;
+    @EntityField(name = "simple：简单模式  custom：高级模式", type = ApiParamType.STRING)
+    private String handlerType;
 
 
 
@@ -400,4 +402,18 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     public void setCatalogName(String catalogName) {
         this.catalogName = catalogName;
     }
+
+    public String getHandlerType() {
+        if(StringUtils.isBlank(handlerType) && StringUtils.isNotBlank(conditionConfig)){
+            JSONObject conditionConfigJson = JSONObject.parseObject(conditionConfig);
+            //兼容老数据
+            handlerType = conditionConfigJson.getString("handlerType");
+            if(StringUtils.isBlank(handlerType) && conditionConfigJson.containsKey("conditionConfig")){
+                conditionConfigJson = conditionConfigJson.getJSONObject("conditionConfig");
+                handlerType = conditionConfigJson.getString("handlerType");
+            }
+        }
+        return handlerType;
+    }
+
 }
