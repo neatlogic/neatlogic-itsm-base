@@ -191,7 +191,7 @@
 		FROM `process_workcenter_catalog`
 		<where>
 			<if test="name != null and name != ''">
-				and `name` like CONCAT('%', #{name}, '%')
+				and `name` like CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
 	</select>
