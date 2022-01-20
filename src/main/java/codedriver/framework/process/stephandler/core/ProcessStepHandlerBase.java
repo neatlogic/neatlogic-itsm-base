@@ -518,12 +518,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         if (startProcessTaskStepId == null) {
             startProcessTaskStepId = currentProcessTaskStepVo.getId();
         }
-        ProcessTaskStepVo startProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(startProcessTaskStepId);
-        if (Objects.equals(startProcessTaskStepVo.getEnableReapproval(), 1)) {
-            List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByToId(startProcessTaskStepId);
-            for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
-                if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
+        List<ProcessTaskStepRelVo> relList = processTaskMapper.getProcessTaskStepRelByFromId(startProcessTaskStepId);
+        for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
+            if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
+                ProcessTaskStepVo toProcessTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(processTaskStepRelVo.getToProcessTaskStepId());
+                if (Objects.equals(toProcessTaskStepVo.getEnableReapproval(), 1)) {
                     flag = true;
+                    break;
                 }
             }
         }
@@ -829,6 +830,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
                     /* 清空worker表 **/
                     processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
+                    processTaskMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(currentProcessTaskStepVo.getId());
                 }
                 /* 保存描述内容 **/
                 IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
@@ -947,7 +949,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
         }
         if (needActiveStepId != null) {
-            List<ProcessTaskStepReapprovalRestoreBackupVo> processTaskStepReapprovalRestoreBackupList = processTaskMapper.getProcessTaskStepReapprovalRestoreBackupListByBackupStepId(currentProcessTaskStepVo.getId());
+            List<ProcessTaskStepReapprovalRestoreBackupVo> processTaskStepReapprovalRestoreBackupList = processTaskMapper.getProcessTaskStepReapprovalRestoreBackupListByBackupStepId(needActiveStepId);
             for (ProcessTaskStepReapprovalRestoreBackupVo processTaskStepReapprovalRestoreBackupVo : processTaskStepReapprovalRestoreBackupList) {
                 JSONObject config = processTaskStepReapprovalRestoreBackupVo.getConfig();
                 Integer isActive = config.getInteger("isActive");
@@ -973,7 +975,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             }
 
-            processTaskMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(currentProcessTaskStepVo.getId());
+            processTaskMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(needActiveStepId);
             try {
                 JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
                 if (this.getMode().equals(ProcessStepMode.MT)) {
@@ -2066,7 +2068,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             if (!processTaskStepId.equals(endStepVo.getId())) {
                 List<ProcessTaskStepVo> convergeStepList = processTaskMapper.getProcessTaskStepByConvergeId(processTaskStepId);
                 List<Long> convergeStepIdList = convergeStepList.stream().map(ProcessTaskStepVo::getId).collect(Collectors.toList());
-                List<Long> toProcessTaskStepIdList = processTaskMapper.getToProcessTaskStepIdListByFromIdAndType(processTaskStepId, null);
+                List<Long> toProcessTaskStepIdList = processTaskMapper.getToProcessTaskStepIdListByFromIdAndType(processTaskStepId, ProcessFlowDirection.FORWARD.getValue());
                 for (int i = 0; i < toProcessTaskStepIdList.size(); i++) {
                     Long toProcessTaskStepId = toProcessTaskStepIdList.get(i);
                     /* 当前节点不是别人的汇聚节点时，才记录进路由，这是为了避免因为出现打回路径而产生错误的汇聚数据 **/
