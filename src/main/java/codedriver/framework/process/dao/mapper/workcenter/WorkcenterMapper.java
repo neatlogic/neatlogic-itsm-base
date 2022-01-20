@@ -19,7 +19,7 @@ public interface WorkcenterMapper {
 	
 	List<WorkcenterVo> getAuthorizedWorkcenterListByUuidList(@Param("uuidList")List<String> uuidList);
 
-	List<WorkcenterCatalogVo> getWorkcenterCatalogListByName(String name);
+	List<WorkcenterCatalogVo> getWorkcenterCatalogListByName(String keyword);
 
 	Integer checkWorkcenterNameIsRepeat(@Param("name")String workcenterName,@Param("uuid")String workcenterUuid);
 

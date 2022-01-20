@@ -1,16 +1,15 @@
 package codedriver.framework.process.workcenter.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
-
-import java.io.Serializable;
 
 /**
  * @author longrf
  * @date 2022/1/10 2:41 下午
  */
-public class WorkcenterCatalogVo implements Serializable {
+public class WorkcenterCatalogVo extends BasePageVo {
     private static final long serialVersionUID = 1122061508451906324L;
 
     @EntityField(name = "工单中心类型id", type = ApiParamType.LONG)
