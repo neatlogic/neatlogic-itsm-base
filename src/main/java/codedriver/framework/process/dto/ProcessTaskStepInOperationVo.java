@@ -9,6 +9,9 @@ public class ProcessTaskStepInOperationVo {
     private Long processTaskStepId;
     private String operationType;
     private Date expireTime;
+    public ProcessTaskStepInOperationVo() {
+
+    }
     public ProcessTaskStepInOperationVo(Long processTaskId, Long processTaskStepId, String operationType) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;

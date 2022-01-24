@@ -6,6 +6,7 @@ import codedriver.framework.file.dao.mapper.FileMapper;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
+import codedriver.framework.process.dto.ProcessTaskStepInOperationVo;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.worktime.dao.mapper.WorktimeMapper;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
@@ -180,5 +181,12 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     public Integer getEnableReapprovalByConfigHash(String configHash) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
         return (Integer)JSONPath.read(stepConfig, "enableReapproval");
+    }
+
+    @Override
+    public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo) {
+        int insert = processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+        System.out.println(processTaskStepInOperationVo.getId());
+        return insert;
     }
 }

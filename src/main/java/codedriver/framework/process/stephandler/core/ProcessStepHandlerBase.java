@@ -2116,7 +2116,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 thread.getProcessTaskStepVo().getId(),
                 operationTypeValue
         );
-        processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+        IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(thread.getProcessTaskStepVo().getHandler());
+        if (processStepInternalHandler != null) {
+            processStepInternalHandler.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+        }
+//        int i = 1/0;
+//        processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
         thread.setSupplier(() ->
         {
             processTaskMapper.deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(processTaskStepInOperationVo.getId());
