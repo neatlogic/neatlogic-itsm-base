@@ -208,6 +208,8 @@ public interface ProcessTaskMapper {
 
     int getProcessTaskStepInOperationCountByProcessTaskId(Long processTaskId);
 
+    List<ProcessTaskStepInOperationVo> getProcessTaskStepInOperationListByProcessTaskId(Long processTaskId);
+
     int getProcessTaskCountByChannelTypeUuidAndStartTime(ProcessTaskVo processTaskVo);
 
     List<ProcessTaskVo> getProcessTaskListByChannelTypeUuidAndStartTime(ProcessTaskVo processTaskVo);
@@ -427,8 +429,7 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskTagByProcessTaskId(Long processTaskId);
 
-    int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(
-            ProcessTaskStepInOperationVo processTaskStepInOperationVo);
+    int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(Long id);
 
     int deleteProcessTaskStepWorkerMinorByProcessTaskStepId(Long processTaskStepId);
 
