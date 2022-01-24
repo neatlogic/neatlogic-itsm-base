@@ -185,8 +185,6 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
 
     @Override
     public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo) {
-        int insert = processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
-        System.out.println(processTaskStepInOperationVo.getId());
-        return insert;
+        return processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
     }
 }

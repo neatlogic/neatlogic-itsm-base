@@ -2111,22 +2111,18 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         if (operationType != null) {
             operationTypeValue = operationType.getValue();
         }
+        ProcessTaskStepVo processTaskStepVo = thread.getProcessTaskStepVo();
         ProcessTaskStepInOperationVo processTaskStepInOperationVo = new ProcessTaskStepInOperationVo(
-                thread.getProcessTaskStepVo().getProcessTaskId(),
-                thread.getProcessTaskStepVo().getId(),
+                processTaskStepVo.getProcessTaskId(),
+                processTaskStepVo.getId(),
                 operationTypeValue
         );
-        IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(thread.getProcessTaskStepVo().getHandler());
-        if (processStepInternalHandler != null) {
-            processStepInternalHandler.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+        IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(processTaskStepVo.getHandler());
+        if (processStepInternalHandler == null) {
+            throw new ProcessStepUtilHandlerNotFoundException(processTaskStepVo.getHandler());
         }
-//        int i = 1/0;
-//        processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
-        thread.setSupplier(() ->
-        {
-            processTaskMapper.deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(processTaskStepInOperationVo.getId());
-            return 0;
-        });
+        processStepInternalHandler.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+        thread.setSupplier(() -> processTaskMapper.deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(processTaskStepInOperationVo.getId()));
         TransactionSynchronizationPool.execute(thread);
     }
 
