@@ -1,7 +1,11 @@
 package codedriver.framework.process.operationauth.core;
 
 public enum OperationAuthHandlerType implements IOperationAuthHandlerType {
-	TASK("task", "工单"), STEP("step", "步骤"), OMNIPOTENT("omnipotent", "普通组件"), AUTOMATIC("automatic", "自动组件");
+	TASK("task", "工单"),
+    STEP("step", "步骤"),
+    OMNIPOTENT("omnipotent", "普通组件"),
+    AUTOMATIC("automatic", "自动组件"),
+    TIMER("timer", "定时组件");
 
     private OperationAuthHandlerType(String value, String text) {
         this.value = value;
