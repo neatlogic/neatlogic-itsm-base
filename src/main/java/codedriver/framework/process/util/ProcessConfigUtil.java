@@ -325,7 +325,7 @@ public class ProcessConfigUtil {
             policyObj.put("type", WorkerPolicy.FORM.getValue());
             policyObj.put("isChecked", 0);
             JSONObject config = new JSONObject();
-            config.put("attributeUuid", "");
+            config.put("attributeUuidList", new ArrayList<>());
             policyObj.put("config", config);
             policyMap.put(WorkerPolicy.FORM, policyObj);
         }
@@ -397,9 +397,9 @@ public class ProcessConfigUtil {
                                 }
                                 break;
                             case FORM:
-                                String attributeUuid = configObj.getString("attributeUuid");
-                                if (StringUtils.isNotBlank(attributeUuid)) {
-                                    configObject.put("attributeUuid", attributeUuid);
+                                JSONArray attributeUuidList = configObj.getJSONArray("attributeUuidList");
+                                if (CollectionUtils.isNotEmpty(attributeUuidList)) {
+                                    configObject.put("attributeUuidList", attributeUuidList);
                                 }
                                 break;
                             case AUTOMATIC:
