@@ -1,8 +1,11 @@
 package codedriver.framework.process.stephandler.core;
 
 import codedriver.framework.process.dto.ProcessStepVo;
+import codedriver.framework.process.dto.ProcessTaskStepInOperationVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -131,4 +134,7 @@ public interface IProcessStepInternalHandler {
      * @return
      */
     public Integer getEnableReapprovalByConfigHash(String configHash);
+
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 }

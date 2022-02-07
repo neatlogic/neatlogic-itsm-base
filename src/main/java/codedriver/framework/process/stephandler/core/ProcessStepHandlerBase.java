@@ -2107,15 +2107,22 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     }
 
     protected synchronized static void doNext(ProcessTaskOperationType operationType, ProcessStepThread thread) {
+        String operationTypeValue = "";
         if (operationType != null) {
-            ProcessTaskStepInOperationVo processTaskStepInOperationVo = new ProcessTaskStepInOperationVo(
-                    thread.getProcessTaskStepVo().getProcessTaskId(),
-                    thread.getProcessTaskStepVo().getId(),
-                    operationType.getValue()
-            );
-            processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
-            thread.setSupplier(() -> processTaskMapper.deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(processTaskStepInOperationVo));
+            operationTypeValue = operationType.getValue();
         }
+        ProcessTaskStepVo processTaskStepVo = thread.getProcessTaskStepVo();
+        ProcessTaskStepInOperationVo processTaskStepInOperationVo = new ProcessTaskStepInOperationVo(
+                processTaskStepVo.getProcessTaskId(),
+                processTaskStepVo.getId(),
+                operationTypeValue
+        );
+        IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(processTaskStepVo.getHandler());
+        if (processStepInternalHandler == null) {
+            throw new ProcessStepUtilHandlerNotFoundException(processTaskStepVo.getHandler());
+        }
+        processStepInternalHandler.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+        thread.setSupplier(() -> processTaskMapper.deleteProcessTaskStepInOperationById(processTaskStepInOperationVo.getId()));
         TransactionSynchronizationPool.execute(thread);
     }
 
