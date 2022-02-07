@@ -429,7 +429,7 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskTagByProcessTaskId(Long processTaskId);
 
-    int deleteProcessTaskStepInOperationByProcessTaskStepIdAndOperationType(Long id);
+    int deleteProcessTaskStepInOperationById(Long id);
 
     int deleteProcessTaskStepWorkerMinorByProcessTaskStepId(Long processTaskStepId);
 
