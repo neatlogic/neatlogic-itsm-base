@@ -340,7 +340,7 @@
         ORDER BY id DESC
     </select>
 
-    <select id="getProcessTaskStepContentByProcessTaskStepIdList" parameterType="java.lang.Long"
+    <select id="getProcessTaskStepContentByProcessTaskId" parameterType="java.lang.Long"
             resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
         SELECT `id`,
         `processtask_id` AS processTaskId,
@@ -352,10 +352,7 @@
         `lcd`,
         `lcu`
         FROM `processtask_step_content`
-        WHERE `processtask_step_id` IN
-        <foreach collection="list" item="processTaskStepId" open="(" separator="," close=")">
-            #{processTaskStepId}
-        </foreach>
+        WHERE `processtask_id` = #{value}
         ORDER BY `lcd` DESC
     </select>
 
