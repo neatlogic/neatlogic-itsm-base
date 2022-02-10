@@ -52,7 +52,7 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
 
-    List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskStepIdList(List<Long> processTaskStepIdList);
+    List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskId(Long processTaskId);
 
     List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
             @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
