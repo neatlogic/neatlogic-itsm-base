@@ -1969,7 +1969,7 @@
             <result property="name" column="priorityName"/>
             <result property="color" column="priorityColor"/>
         </association>
-        <collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
+        <!--<collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
             <id column="processTaskStepId" property="id"/>
             <result column="processTaskStepName" property="name"/>
             <result column="processTaskStepStatus" property="status"/>
@@ -2003,7 +2003,7 @@
                 <result column="slaStepId" property="processTaskStepId"/>
                 <result column="slaId" property="slaId"/>
             </collection>
-        </collection>
+        </collection>-->
         <collection property="focusUserList" ofType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="focusUuid"/>
             <result property="userName" column="focusName"/>
@@ -2027,6 +2027,81 @@
 
     <select id="getProcessTaskBySql" parameterType="java.lang.String" resultMap="workcenterProcessTaskMap">
         ${value }
+    </select>
+
+    <resultMap id="workcenterProcessTaskCurrentStepMap" type="codedriver.framework.process.dto.ProcessTaskStepVo">
+        <id column="processTaskStepId" property="id"/>
+        <result column="processTaskStepName" property="name"/>
+        <result column="processTaskStepStatus" property="status"/>
+        <result column="processTaskStepType" property="type"/>
+        <result column="processTaskStepHandler" property="handler"/>
+        <result column="processTaskStepIsActive" property="isActive"/>
+        <result column="processTaskStepStartTime" property="startTime"/>
+        <result column="processTaskStepConfigHash" property="configHash"/>
+        <result column="processTaskStepIsActive" property="isActive"/>
+        <result column="processTaskStepEndTime" property="endTime"/>
+        <result column="processTaskConfigHash" property="configHash"/>
+        <collection property="workerList" ofType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
+            <result column="stepWorkerType" property="type"/>
+            <result column="stepWorkerUserType" property="userType"/>
+            <result column="stepWorkerUuid" property="uuid"/>
+        </collection>
+        <collection property="userList" ofType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+            <result column="stepUserUserType" property="userType"/>
+            <result column="stepUserUserStatus" property="status"/>
+            <result column="stepUserUserUuid" property="userUuid"/>
+            <result column="stepUserUserName" property="userName"/>
+            <association property="userVo" javaType="codedriver.framework.dto.UserVo">
+                <result column="stepUserUserUuid" property="uuid"/>
+                <result column="stepUserUserName" property="userName"/>
+                <result column="stepUserUserInfo" property="userInfo"/>
+                <result column="stepUserUserVipLevel" property="vipLevel"/>
+                <result column="stepUserUserPinyin" property="pinyin"/>
+            </association>
+        </collection>
+        <collection property="slaTimeList" ofType="codedriver.framework.process.dto.ProcessTaskSlaTimeVo">
+            <result column="slaStepId" property="processTaskStepId"/>
+            <result column="slaId" property="slaId"/>
+        </collection>
+    </resultMap>
+
+    <select id="getProcessTaskCurrentStepByProcessTaskId" parameterType="java.lang.Long" resultMap="workcenterProcessTaskCurrentStepMap">
+        SELECT
+            pts.id AS processTaskStepId,
+            pts.NAME AS processTaskStepName,
+            pts.processtask_id AS processTaskId,
+            pts.is_active AS processTaskStepIsActive,
+            pts.STATUS AS processTaskStepStatus,
+            pts.config_hash AS processTaskConfigHash,
+            pts.HANDLER AS processTaskStepHandler,
+            ptsw.uuid AS stepWorkerUuid,
+            ptsw.type AS stepWorkerType,
+            ptsw.user_type AS stepWorkerUserType,
+            ptsu.STATUS AS stepUserUserStatus,
+            ptsu.user_type AS stepUserUserType,
+            ptsuser.user_name AS stepUserUserName,
+            ptsuser.uuid AS stepUserUserUuid,
+            ptsuser.user_info AS stepUserUserInfo,
+            ptsuser.vip_level AS stepUserUserVipLevel,
+            ptsuser.pinyin AS stepUserUserPinyin,
+            ptsl.id AS processTaskSlaId,
+            ptsl.NAME AS processTaskSlaName,
+            ptsl.config AS processTaskSlaConfig,
+            ptslt.expire_time AS expireTime,
+            ptslt.realexpire_time AS realExpireTime,
+            ptslt.time_left AS timeLeft,
+            ptslt.realtime_left AS realTimeLeft,
+            ptssl.processtask_step_id AS slaStepId,
+            ptssl.sla_id AS slaId
+        FROM
+            processtask_step pts
+                LEFT JOIN processtask_step_user ptsu ON pts.processtask_id = ptsu.processtask_id AND pts.id = ptsu.processtask_step_id
+                LEFT JOIN processtask_step_worker ptsw ON pts.processtask_id = ptsw.processtask_id AND pts.id = ptsw.processtask_step_id
+                LEFT JOIN `user` ptsuser ON ptsu.user_uuid = ptsuser.uuid
+                LEFT JOIN processtask_sla ptsl ON pts.processtask_id = ptsl.processtask_id
+                LEFT JOIN processtask_step_sla ptssl ON pts.id = ptssl.processtask_step_id
+                LEFT JOIN processtask_sla_time ptslt ON ptssl.sla_id = ptslt.sla_id
+        WHERE pts.processtask_id = #{value} and pts.STATUS = 'running'
     </select>
 
     <select id="getProcessTaskIdByChannelUuidLimitOne" parameterType="java.lang.String" resultType="java.lang.Long">
