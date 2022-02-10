@@ -222,6 +222,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskVo> getProcessTaskBySql(String searchSql);
 
+    List<ProcessTaskStepVo> getProcessTaskCurrentStepByProcessTaskId(Long processTaskId);
+
     Long getProcessTaskIdByChannelUuidLimitOne(String channelUuid);
 
     Long getProcessTaskIdByPriorityUuidLimitOne(String prioriryUuid);
