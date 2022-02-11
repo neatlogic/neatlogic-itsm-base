@@ -2312,6 +2312,16 @@
         WHERE `id` = #{value}
     </select>
 
+    <select id="getProcessTaskStepTimerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
+        SELECT
+            `id`,
+            `processtask_id` AS processTaskId,
+            `processtask_step_id` AS processTaskStepId,
+            `trigger_time` AS triggerTime
+        FROM `processtask_step_timer`
+        WHERE `processtask_step_id` = #{value}
+    </select>
+
     <select id="getAllProcessTaskStepTimerList" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
         SELECT
             `id`,
