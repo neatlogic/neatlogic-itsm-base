@@ -266,6 +266,8 @@ public interface ProcessTaskMapper {
 
     ProcessTaskStepTimerVo getProcessTaskStepTimerById(Long id);
 
+    ProcessTaskStepTimerVo getProcessTaskStepTimerByProcessTaskStepId(Long processTaskStepId);
+
     List<ProcessTaskStepTimerVo> getAllProcessTaskStepTimerList();
 
     List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdAndProcessStepUuidList(@Param("processTaskId") Long processTaskId,@Param("processStepUuidList") List<String> processStepUuidList);
