@@ -2302,19 +2302,8 @@
         where `file_id` = #{value}
     </select>
 
-    <select id="getProcessTaskStepTimerById" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
-        SELECT
-            `id`,
-            `processtask_id` AS processTaskId,
-            `processtask_step_id` AS processTaskStepId,
-            `trigger_time` AS triggerTime
-        FROM `processtask_step_timer`
-        WHERE `id` = #{value}
-    </select>
-
     <select id="getProcessTaskStepTimerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
         SELECT
-            `id`,
             `processtask_id` AS processTaskId,
             `processtask_step_id` AS processTaskStepId,
             `trigger_time` AS triggerTime
@@ -2324,7 +2313,6 @@
 
     <select id="getAllProcessTaskStepTimerList" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
         SELECT
-            `id`,
             `processtask_id` AS processTaskId,
             `processtask_step_id` AS processTaskStepId,
             `trigger_time` AS triggerTime
@@ -2997,9 +2985,6 @@
     </insert>
 
     <insert id="insertProcessTaskStepTimer" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
-        <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
-            select LAST_INSERT_ID() as id
-        </selectKey>
         INSERT INTO `processtask_step_timer` (
             `processtask_id`,
             `processtask_step_id`,
@@ -3113,7 +3098,7 @@
     </update>
 
     <update id="updateProcessTaskStepTimerTriggerTimeById" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
-        UPDATE  `processtask_step_timer` SET `trigger_time` = #{triggerTime} where `id` = #{id}
+        UPDATE  `processtask_step_timer` SET `trigger_time` = #{triggerTime} where `processtask_step_id` = #{processTaskStepId}
     </update>
 
     <delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
@@ -3338,9 +3323,9 @@
         WHERE `id` = #{value}
     </delete>
 
-    <delete id="deleteProcessTaskStepTimerById">
+    <delete id="deleteProcessTaskStepTimerByProcessTaskStepId">
         DELETE
         FROM `processtask_step_timer`
-        WHERE `id` = #{value}
+        WHERE `processtask_step_id` = #{value}
     </delete>
 </mapper>
