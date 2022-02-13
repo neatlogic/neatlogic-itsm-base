@@ -3323,6 +3323,12 @@
         WHERE `id` = #{value}
     </delete>
 
+    <delete id="deleteProcessTaskStepAutomaticRequestByProcessTaskStepId">
+        DELETE
+        FROM `processtask_step_automatic_request`
+        WHERE `processtask_step_id` = #{value}
+    </delete>
+
     <delete id="deleteProcessTaskStepTimerByProcessTaskStepId">
         DELETE
         FROM `processtask_step_timer`

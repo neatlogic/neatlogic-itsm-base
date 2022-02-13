@@ -445,6 +445,8 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskStepAutomaticRequestById(Long id);
 
+    int deleteProcessTaskStepAutomaticRequestByProcessTaskStepId(Long id);
+
     int deleteProcessTaskStepTimerByProcessTaskStepId(Long processTaskStepId);
 
 }
