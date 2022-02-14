@@ -12,18 +12,9 @@ import java.util.Date;
  * @since 2021/12/28 9:43
  **/
 public class ProcessTaskStepTimerVo {
-    private Long id;
     private Long processTaskId;
     private Long processTaskStepId;
     private Date triggerTime;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getProcessTaskId() {
         return processTaskId;
