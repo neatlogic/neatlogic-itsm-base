@@ -2343,6 +2343,14 @@
         </foreach>
 
     </select>
+
+    <select id="getAllProcessTaskCount" resultType="java.lang.Integer">
+        select count(id) from processtask
+    </select>
+
+    <select id="getProcessTaskIdList" resultType="java.lang.Long">
+        select id from processtask order by id LIMIT #{startNum}, #{pageSize}
+    </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
