@@ -66,6 +66,11 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
         this.newUuid = newUuid;
     }
 
+    public ProcessTaskStepWorkerVo(Long processTaskStepId, String userType) {
+        this.processTaskStepId = processTaskStepId;
+        this.userType = userType;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

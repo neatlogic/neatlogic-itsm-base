@@ -66,7 +66,14 @@ public class ProcessTaskStepUserVo {
         this.newUserUuid = newUserUuid;
     }
 
-    public Long getProcessTaskStepId() {
+	public ProcessTaskStepUserVo(Long processTaskStepId, String userUuid, String userName, String status) {
+		this.processTaskStepId = processTaskStepId;
+		this.userUuid = userUuid;
+		this.userName = userName;
+		this.status = status;
+	}
+
+	public Long getProcessTaskStepId() {
 		return processTaskStepId;
 	}
 
