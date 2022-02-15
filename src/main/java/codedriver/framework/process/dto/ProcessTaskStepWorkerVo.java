@@ -14,7 +14,7 @@ import java.util.List;
  * @Description: 记录当前流程任务谁可以处理
  */
 public class ProcessTaskStepWorkerVo extends BasePageVo {
-//    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
+    //    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
     private Long processTaskId;
     private Long processTaskStepId;
     private String type;
@@ -48,7 +48,7 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
     }
 
     public ProcessTaskStepWorkerVo(Long processTaskId, Long processTaskStepId, String type, String uuid,
-        String userType) {
+                                   String userType) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
         this.type = type;
@@ -57,13 +57,18 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
     }
 
     public ProcessTaskStepWorkerVo(Long processTaskId, Long processTaskStepId, String type, String uuid,
-        String userType, String newUuid) {
+                                   String userType, String newUuid) {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
         this.type = type;
         this.uuid = uuid;
         this.userType = userType;
         this.newUuid = newUuid;
+    }
+
+    public ProcessTaskStepWorkerVo(Long processTaskStepId, String userType) {
+        this.processTaskStepId = processTaskStepId;
+        this.userType = userType;
     }
 
     @Override
@@ -85,7 +90,7 @@ public class ProcessTaskStepWorkerVo extends BasePageVo {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ProcessTaskStepWorkerVo other = (ProcessTaskStepWorkerVo)obj;
+        ProcessTaskStepWorkerVo other = (ProcessTaskStepWorkerVo) obj;
         if (processTaskId == null) {
             if (other.processTaskId != null)
                 return false;

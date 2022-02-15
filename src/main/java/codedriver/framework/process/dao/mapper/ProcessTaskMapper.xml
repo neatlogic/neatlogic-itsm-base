@@ -3109,6 +3109,24 @@
         UPDATE  `processtask_step_timer` SET `trigger_time` = #{triggerTime} where `processtask_step_id` = #{processTaskStepId}
     </update>
 
+    <update id="updateProcessTaskStepStatusByStepId" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
+        UPDATE
+            `processtask_step`
+        SET
+            `status` = #{status},
+            `is_active` = #{isActive}
+        WHERE `id` = #{id}
+    </update>
+
+    <update id="updateProcessTaskStepMajorUserAndStatus" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+        UPDATE `processtask_step_user`
+        SET `user_uuid` = #{userUuid},
+            `user_name` = #{userName},
+            `status` = #{status}
+        WHERE `processtask_step_id` = #{processTaskStepId}
+        AND `user_type` = 'major'
+    </update>
+
     <delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_converge`

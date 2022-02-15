@@ -392,6 +392,10 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskStepTimerTriggerTimeById(ProcessTaskStepTimerVo processTaskStepTimerVo);
 
+    int updateProcessTaskStepStatusByStepId(ProcessTaskStepVo processTaskStepVo);
+
+    int updateProcessTaskStepMajorUserAndStatus(ProcessTaskStepUserVo processTaskStepUserVo);
+
     int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
     int deleteProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
