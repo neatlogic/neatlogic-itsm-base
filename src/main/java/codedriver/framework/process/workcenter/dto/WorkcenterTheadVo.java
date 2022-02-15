@@ -24,7 +24,7 @@ public class WorkcenterTheadVo {
 	private Integer width = 1;
 	@EntityField(name = "字段是否展示", type = ApiParamType.INTEGER)
 	private Integer isShow = 1;
-	@EntityField(name = "字段是否可用", type = ApiParamType.INTEGER)
+	@EntityField(name = "是否可以控制该字段是否显示", type = ApiParamType.INTEGER)
 	private Integer disabled;
 	@JSONField(serialize = false)
 	@EntityField(name = "所属用户", type = ApiParamType.STRING)
@@ -59,6 +59,7 @@ public class WorkcenterTheadVo {
 		this.sort = column.getSort();
 		this.disabled = column.getDisabled() ? 1 : 0;
 		this.isExport = column.getIsExport() ? 1 : 0;
+		this.isShow = column.getIsShow() ? 1 : 0;
 	}
 	
 	public WorkcenterTheadVo(String _workcenterUuid,String _userUuid) {
