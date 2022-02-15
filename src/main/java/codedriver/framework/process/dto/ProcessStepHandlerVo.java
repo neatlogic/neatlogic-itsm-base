@@ -37,6 +37,14 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Se
 	private JSONObject chartConfig;
 	@JSONField(serialize=false)
 	private String configStr;
+	@EntityField(name = "正向输入数量", type = ApiParamType.INTEGER)
+	private int forwardInputQuantity;
+	@EntityField(name = "正向输出数量", type = ApiParamType.INTEGER)
+	private int forwardOutputQuantity;
+	@EntityField(name = "回退输入数量", type = ApiParamType.INTEGER)
+	private int backwardInputQuantity;
+	@EntityField(name = "回退输出数量", type = ApiParamType.INTEGER)
+	private int backwardOutputQuantity;
 
 	public ProcessStepHandlerVo() {
 	}
@@ -143,5 +151,37 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Se
 			configStr = this.config.toJSONString();
 		}
 		return configStr;
+	}
+
+	public int getForwardInputQuantity() {
+		return forwardInputQuantity;
+	}
+
+	public void setForwardInputQuantity(int forwardInputQuantity) {
+		this.forwardInputQuantity = forwardInputQuantity;
+	}
+
+	public int getForwardOutputQuantity() {
+		return forwardOutputQuantity;
+	}
+
+	public void setForwardOutputQuantity(int forwardOutputQuantity) {
+		this.forwardOutputQuantity = forwardOutputQuantity;
+	}
+
+	public int getBackwardInputQuantity() {
+		return backwardInputQuantity;
+	}
+
+	public void setBackwardInputQuantity(int backwardInputQuantity) {
+		this.backwardInputQuantity = backwardInputQuantity;
+	}
+
+	public int getBackwardOutputQuantity() {
+		return backwardOutputQuantity;
+	}
+
+	public void setBackwardOutputQuantity(int backwardOutputQuantity) {
+		this.backwardOutputQuantity = backwardOutputQuantity;
 	}
 }
