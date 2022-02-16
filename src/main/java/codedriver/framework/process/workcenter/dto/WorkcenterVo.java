@@ -106,6 +106,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.sortList = jsonObj.getJSONArray("sortList");
         this.uuid = jsonObj.getString("uuid");
         this.setCurrentPage(jsonObj.getInteger("currentPage"));
+        this.setExpectOffsetRowNum(jsonObj.getInteger("expectOffsetRowNum"));
         this.setPageSize(jsonObj.getInteger("pageSize"));
         this.resultColumnList = conditionConfig.getJSONArray("resultColumnList");
         JSONArray conditionGroupArray = conditionConfig.getJSONArray("conditionGroupList");
