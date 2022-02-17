@@ -8,6 +8,7 @@ package codedriver.framework.process.stephandler.core;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.TransactionSynchronizationPool;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.crossover.CrossoverServiceFactory;
 import codedriver.framework.dao.mapper.RoleMapper;
 import codedriver.framework.dao.mapper.TeamMapper;
@@ -416,7 +417,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     userUuid = workerVo.getUuid();
                 }
                 if (StringUtils.isNotBlank(userUuid)) {
-                    UserVo userVo = userMapper.getUserBaseInfoByUuidWithoutCache(userUuid);
+                    UserVo userVo = null;
+                    if (Objects.equals(SystemUser.SYSTEM.getUserUuid(), userUuid)) {
+                        userVo = SystemUser.SYSTEM.getUserVo();
+                    } else {
+                        userVo = userMapper.getUserBaseInfoByUuidWithoutCache(userUuid);
+                    }
                     if (userVo != null) {
                         ProcessTaskStepUserVo processTaskStepUser = new ProcessTaskStepUserVo(
                                 currentProcessTaskStepVo.getProcessTaskId(),
@@ -935,6 +941,21 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     protected abstract int myCompleteAudit(ProcessTaskStepVo currentProcessTaskStepVo);
 
+    @Override
+    public final int autoComplete(ProcessTaskStepVo currentProcessTaskStepVo) {
+        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+        //未激活的步骤不能自动完成
+        if (!Objects.equals(processTaskStepVo.getIsActive(), 1)) {
+            return 0;
+        }
+        //如果步骤没有开始就先自动开始
+        if (ProcessTaskStatus.PENDING.getValue().equals(processTaskStepVo.getStatus())) {
+            this.accept(currentProcessTaskStepVo);
+            this.start(currentProcessTaskStepVo);
+        }
+        this.complete(currentProcessTaskStepVo);
+        return 1;
+    }
     @Override
     public final int reapproval(ProcessTaskStepVo currentProcessTaskStepVo) {
         /* 锁定当前流程 **/
