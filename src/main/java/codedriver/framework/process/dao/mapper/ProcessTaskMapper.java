@@ -274,6 +274,8 @@ public interface ProcessTaskMapper {
 
     List<Long> getProcessTaskIdList(ProcessTaskVo processTaskVo);
 
+    List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndStepName(ProcessTaskStepVo vo);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,

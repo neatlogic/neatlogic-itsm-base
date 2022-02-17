@@ -189,6 +189,11 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.isActive = isActive;
     }
 
+    public ProcessTaskStepVo(Long processTaskId, String name) {
+        this.processTaskId = processTaskId;
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other)
