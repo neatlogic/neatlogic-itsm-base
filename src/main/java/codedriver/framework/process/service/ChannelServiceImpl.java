@@ -5,11 +5,12 @@
 
 package codedriver.framework.process.service;
 
+import codedriver.framework.crossover.CrossoverServiceFactory;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.process.dao.mapper.CatalogMapper;
 import codedriver.framework.process.dao.mapper.ChannelMapper;
 import codedriver.framework.process.dao.mapper.PriorityMapper;
-import codedriver.framework.process.dao.mapper.ProcessMapper;
+import codedriver.framework.process.crossover.IProcessCrossoverMapper;
 import codedriver.framework.process.dto.CatalogVo;
 import codedriver.framework.process.dto.ChannelPriorityVo;
 import codedriver.framework.process.dto.ChannelRelationVo;
@@ -46,9 +47,6 @@ public class ChannelServiceImpl implements ChannelService {
     private CatalogMapper catalogMapper;
 
     @Resource
-    private ProcessMapper processMapper;
-
-    @Resource
     private PriorityMapper priorityMapper;
 
     @Resource
@@ -80,7 +78,8 @@ public class ChannelServiceImpl implements ChannelService {
         }
         channelVo.setSort(sort);
         channelMapper.replaceChannel(channelVo);
-        if (processMapper.checkProcessIsExists(channelVo.getProcessUuid()) == 0) {
+        IProcessCrossoverMapper processCrossoverMapper = CrossoverServiceFactory.getApi(IProcessCrossoverMapper.class);
+        if (processCrossoverMapper.checkProcessIsExists(channelVo.getProcessUuid()) == 0) {
             throw new ProcessNotFoundException(channelVo.getProcessUuid());
         }
         channelMapper.replaceChannelProcess(uuid, channelVo.getProcessUuid());

@@ -8,6 +8,7 @@ package codedriver.framework.process.stephandler.core;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.asynchronization.threadpool.TransactionSynchronizationPool;
 import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.crossover.CrossoverServiceFactory;
 import codedriver.framework.dao.mapper.RoleMapper;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
@@ -22,6 +23,7 @@ import codedriver.framework.fulltextindex.core.IFullTextIndexHandler;
 import codedriver.framework.notify.dao.mapper.NotifyMapper;
 import codedriver.framework.notify.dto.NotifyPolicyVo;
 import codedriver.framework.process.constvalue.*;
+import codedriver.framework.process.crossover.IProcessCrossoverMapper;
 import codedriver.framework.process.dao.mapper.*;
 import codedriver.framework.process.dao.mapper.score.ProcessTaskScoreMapper;
 import codedriver.framework.process.dto.*;
@@ -72,7 +74,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static AuthenticationInfoService authenticationInfoService;
     protected static ProcessTaskScoreMapper processTaskScoreMapper;
     protected static FormMapper formMapper;
-    protected static ProcessMapper processMapper;
+//    protected static IProcessCrossoverMapper processCrossoverMapper;
     protected static ChannelMapper channelMapper;
     protected static NotifyMapper notifyMapper;
     protected static ProcessTaskSerialNumberMapper processTaskSerialNumberMapper;
@@ -80,10 +82,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static IProcessStepHandlerUtil IProcessStepHandlerUtil;
     protected static ProcessTaskAgentService processTaskAgentService;
 
-    @Resource
-    public void setProcessMapper(ProcessMapper _processMapper) {
-        processMapper = _processMapper;
-    }
+//    @Resource
+//    public void setProcessMapper(IProcessCrossoverMapper _processMapper) {
+//        processCrossoverMapper = _processMapper;
+//    }
 
     @Resource
     public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
@@ -1625,8 +1627,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             if (StringUtils.isNotBlank(source)) {
                 processTaskVo.setSource(source);
             }
-
-            ProcessVo processVo = processMapper.getProcessByUuid(currentProcessTaskStepVo.getProcessUuid());
+            IProcessCrossoverMapper processCrossoverMapper = CrossoverServiceFactory.getApi(IProcessCrossoverMapper.class);
+            ProcessVo processVo = processCrossoverMapper.getProcessByUuid(currentProcessTaskStepVo.getProcessUuid());
             /* 对流程配置进行散列处理 **/
 
             if (MapUtils.isNotEmpty(processVo.getConfig())) {
@@ -1675,7 +1677,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             }
 
-            ProcessScoreTemplateVo processScoreTemplateVo = processMapper.getProcessScoreTemplateByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
+            ProcessScoreTemplateVo processScoreTemplateVo = processCrossoverMapper.getProcessScoreTemplateByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
             if (processScoreTemplateVo != null) {
                 ProcessTaskScoreTemplateVo processTaskScoreTemplateVo = new ProcessTaskScoreTemplateVo(processScoreTemplateVo);
                 if (processTaskScoreTemplateVo.getConfig() != null) {
@@ -1691,7 +1693,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
             Map<String, Long> stepIdMap = new HashMap<>();
             /* 写入所有步骤信息 **/
-            List<ProcessStepVo> processStepList = processMapper.getProcessStepDetailByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
+            List<ProcessStepVo> processStepList = processCrossoverMapper.getProcessStepDetailByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
             for (ProcessStepVo stepVo : processStepList) {
                 ProcessTaskStepVo ptStepVo = new ProcessTaskStepVo(stepVo);
                 ptStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -1730,7 +1732,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     currentProcessTaskStepVo.setId(ptStepVo.getId());
                 }
 
-                Long notifyPolicyId = processMapper.getNotifyPolicyIdByProcessStepUuid(ptStepVo.getProcessStepUuid());
+                Long notifyPolicyId = processCrossoverMapper.getNotifyPolicyIdByProcessStepUuid(ptStepVo.getProcessStepUuid());
                 if (notifyPolicyId != null) {
                     NotifyPolicyVo notifyPolicyVo = notifyMapper.getNotifyPolicyById(notifyPolicyId);
                     if (notifyPolicyVo != null) {
@@ -1745,7 +1747,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     }
                 }
 
-                List<Long> tagIdList = processMapper.getProcessStepTagIdListByProcessStepUuid(stepVo.getUuid());
+                List<Long> tagIdList = processCrossoverMapper.getProcessStepTagIdListByProcessStepUuid(stepVo.getUuid());
                 if (CollectionUtils.isNotEmpty(tagIdList)) {
                     ProcessTaskStepTagVo processTaskStepTagVo = new ProcessTaskStepTagVo();
                     processTaskStepTagVo.setProcessTaskId(processTaskVo.getId());
@@ -1758,7 +1760,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             /* 写入关系信息 **/
-            List<ProcessStepRelVo> processStepRelList = processMapper.getProcessStepRelByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
+            List<ProcessStepRelVo> processStepRelList = processCrossoverMapper.getProcessStepRelByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
             for (ProcessStepRelVo relVo : processStepRelList) {
                 ProcessTaskStepRelVo processTaskStepRelVo = new ProcessTaskStepRelVo(relVo);
                 processTaskStepRelVo.setProcessTaskId(processTaskVo.getId());
@@ -1771,9 +1773,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             /* 写入sla信息 **/
-            List<ProcessSlaVo> processSlaList = processMapper.getProcessSlaByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
+            List<ProcessSlaVo> processSlaList = processCrossoverMapper.getProcessSlaByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
             for (ProcessSlaVo slaVo : processSlaList) {
-                List<String> slaStepUuidList = processMapper.getProcessStepUuidBySlaUuid(slaVo.getUuid());
+                List<String> slaStepUuidList = processCrossoverMapper.getProcessStepUuidBySlaUuid(slaVo.getUuid());
                 if (CollectionUtils.isNotEmpty(slaStepUuidList)) {
                     ProcessTaskSlaVo processTaskSlaVo = new ProcessTaskSlaVo(slaVo);
                     processTaskSlaVo.setProcessTaskId(processTaskVo.getId());
