@@ -146,7 +146,7 @@ public interface IProcessStepHandler {
     int complete(ProcessTaskStepVo currentProcessTaskStepVo);
 
     /**
-     * 完成流程步骤
+     * 自动完成流程步骤
      *
      * @param currentProcessTaskStepVo 步骤信息
      * @return 1代表成功
