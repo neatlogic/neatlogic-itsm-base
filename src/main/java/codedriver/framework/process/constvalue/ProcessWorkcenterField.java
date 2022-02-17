@@ -1,6 +1,8 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessWorkcenterField {
+import codedriver.framework.dashboard.constvalue.IDashboardGroupField;
+
+public enum ProcessWorkcenterField  implements IDashboardGroupField {
 	ID("id", "工单id"),
 	SERIAL_NUMBER("serialnumber","工单号"),
 	TITLE("title", "标题"),
@@ -31,27 +33,29 @@ public enum ProcessWorkcenterField {
 	FOCUS_USERS("focususers", "关注此工单的用户");
 	private final String value;
 	private final String valuePro;
-	private final String name;
+	private final String text;
 
 
-	private ProcessWorkcenterField(String _value, String _name) {
+	private ProcessWorkcenterField(String _value, String _text) {
 		this.value = _value;
-		this.name = _name;
+		this.text = _text;
 		this.valuePro = _value;
 	}
 
-	private ProcessWorkcenterField(String _value, String _name,String _vaulePro) {
+	private ProcessWorkcenterField(String _value, String _text,String _vaulePro) {
 		this.value = _value;
 		this.valuePro = _vaulePro;
-		this.name = _name;
+		this.text = _text;
 	}
 
+	@Override
 	public String getValue() {
 		return value;
 	}
 
-	public String getName() {
-		return name;
+	@Override
+	public String getText() {
+		return text;
 	}
 
 	public String getValuePro() {
@@ -67,10 +71,10 @@ public enum ProcessWorkcenterField {
 		return null;
 	}
 
-	public static String getName(String _value) {
+	public static String getText(String _value) {
 		for (ProcessWorkcenterField s : ProcessWorkcenterField.values()) {
 			if (s.getValue().equals(_value)) {
-				return s.getName();
+				return s.getText();
 			}
 		}
 		return "";

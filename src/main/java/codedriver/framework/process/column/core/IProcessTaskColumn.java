@@ -146,4 +146,5 @@ public interface IProcessTaskColumn {
      * @Returns: java.util.List<java.lang.String>
      **/
     void getExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList, WorkcenterVo workcenterVo);
+
 }
