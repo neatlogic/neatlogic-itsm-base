@@ -2351,6 +2351,26 @@
     <select id="getProcessTaskIdList" resultType="java.lang.Long">
         select id from processtask order by id LIMIT #{startNum}, #{pageSize}
     </select>
+
+    <select id="getProcessTaskStepByProcessTaskIdAndStepName" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+        SELECT `id`,
+               `processtask_id`    AS processTaskId,
+               `name`,
+               `process_step_uuid` AS processStepUuid,
+               `status`,
+               `result`,
+               `type`,
+               `handler`,
+               `is_active`         AS isActive,
+               `config_hash`       AS configHash,
+               `active_time`       AS activeTime,
+               `start_time`        AS startTime,
+               `end_time`          AS endTime,
+               `error`
+        FROM `processtask_step`
+        WHERE `processtask_id` = #{processTaskId} AND `name` = #{name}
+    </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
