@@ -5,12 +5,9 @@
 
 package codedriver.framework.process.crossover;
 
-import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.crossover.ICrossoverService;
-import codedriver.framework.dependency.annotation.Dependency;
 import codedriver.framework.process.dto.*;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
