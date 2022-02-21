@@ -1,6 +1,6 @@
 package codedriver.framework.process.column.core;
 
-import codedriver.framework.dashboard.dto.DashboardDataVo;
+import codedriver.framework.dashboard.dto.DashboardWidgetDataVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.TableSelectColumnVo;
@@ -136,7 +136,7 @@ public interface IProcessTaskColumn {
      * @Params: [mapList]
      * @Returns: com.alibaba.fastjson.JSONArray
      **/
-    void getDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList);
+    void getDashboardDataVo(DashboardWidgetDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList);
 
     /**
      * @Description: 将数据集提取groupList, 用于过滤，并按list 权重排序

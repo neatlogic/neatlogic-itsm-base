@@ -1,7 +1,7 @@
 package codedriver.framework.process.column.core;
 
 
-import codedriver.framework.dashboard.dto.DashboardDataVo;
+import codedriver.framework.dashboard.dto.DashboardWidgetDataVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
@@ -76,17 +76,17 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
     }
 
     @Override
-    public void getDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
+    public void getDashboardDataVo(DashboardWidgetDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
         getMyDashboardDataVo(dashboardDataVo, workcenterVo, mapList);
     }
 
-    protected void getMyDashboardDataVo(DashboardDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
+    protected void getMyDashboardDataVo(DashboardWidgetDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
 
     }
 
     @Override
     public void getExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList, WorkcenterVo workcenterVo) {
-        workcenterVo.getDashboardConfigVo().setGroupDataCountMap(getMyExchangeToDashboardGroupDataMap(mapList));
+        workcenterVo.getDashboardWidgetChartConfigVo().setGroupDataCountMap(getMyExchangeToDashboardGroupDataMap(mapList));
     }
 
     protected LinkedHashMap<String, Object> getMyExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList) {

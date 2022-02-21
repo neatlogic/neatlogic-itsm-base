@@ -3,7 +3,7 @@ package codedriver.framework.process.workcenter.dto;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.util.CommonUtil;
-import codedriver.framework.dashboard.dto.DashboardConfigVo;
+import codedriver.framework.dashboard.dto.DashboardWidgetChartConfigVo;
 import codedriver.framework.dto.AuthorityVo;
 import codedriver.framework.dto.condition.ConditionConfigVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -89,7 +89,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private String keywordText;
 
     //用于dashboard 搜索入参
-    private DashboardConfigVo dashboardConfigVo ;
+    private DashboardWidgetChartConfigVo dashboardWidgetChartConfigVo;
 
     public WorkcenterVo() {
     }
@@ -377,15 +377,15 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.keywordConditionList = keywordConditionList;
     }
 
-    public DashboardConfigVo getDashboardConfigVo() {
-        if(dashboardConfigVo == null){
-            dashboardConfigVo = new DashboardConfigVo();
+    public DashboardWidgetChartConfigVo getDashboardWidgetChartConfigVo() {
+        if(dashboardWidgetChartConfigVo == null){
+            dashboardWidgetChartConfigVo = new DashboardWidgetChartConfigVo();
         }
-        return dashboardConfigVo;
+        return dashboardWidgetChartConfigVo;
     }
 
-    public void setDashboardConfigVo(DashboardConfigVo dashboardConfigVo) {
-        this.dashboardConfigVo = dashboardConfigVo;
+    public void setDashboardWidgetChartConfigVo(DashboardWidgetChartConfigVo dashboardWidgetChartConfigVo) {
+        this.dashboardWidgetChartConfigVo = dashboardWidgetChartConfigVo;
     }
 
     public Long getCatalogId() {
