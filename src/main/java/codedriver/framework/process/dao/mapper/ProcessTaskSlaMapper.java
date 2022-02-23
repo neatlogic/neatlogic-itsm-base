@@ -56,6 +56,8 @@ public interface ProcessTaskSlaMapper {
 
     int insertProcessTaskStepSla(@Param("processTaskStepId") Long processTaskStepId, @Param("slaId") Long slaId);
 
+    int insertProcessTaskStepSlaTime(ProcessTaskStepSlaTimeVo processTaskStepSlaTimeVo);
+
     int updateProcessTaskSlaTransfer(ProcessTaskSlaTransferVo processTaskSlaTransferVo);
 
     int updateProcessTaskSlaNotify(ProcessTaskSlaNotifyVo processTaskNotifyVo);
@@ -71,4 +73,6 @@ public interface ProcessTaskSlaMapper {
     int deleteProcessTaskSlaNotifyBySlaId(Long slaId);
 
     int deleteProcessTaskSlaTimeBySlaId(Long slaId);
+
+    int deleteProcessTaskStepSlaTimeBySlaId(Long slaId);
 }

@@ -6,6 +6,7 @@
 package codedriver.framework.process.sla.core;
 
 import codedriver.framework.process.constvalue.SlaStatus;
+import codedriver.framework.process.constvalue.SlaType;
 import codedriver.framework.process.dto.ProcessTaskSlaTimeCostVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import org.springframework.util.ClassUtils;
@@ -21,8 +22,8 @@ public interface ISlaCalculateHandler {
         return ClassUtils.getUserClass(this.getClass()).getSimpleName();
     }
     String getName();
+    SlaType getType();
     String getDescription();
-
     /**
      * 控制关联步骤下拉框单选或多选
      * @return

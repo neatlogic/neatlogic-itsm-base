@@ -1482,7 +1482,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
                 for (ProcessTaskStepUserVo oldUser : oldUserList) {
                     if (workerUserUuidList.contains(oldUser.getUserUuid())) {
-                        throw new ProcessTaskStepUserIsExistsException(oldUser.getUserName());
+                        String userName = oldUser.getUserName();
+                        if (StringUtils.isBlank(userName)) {
+                            UserVo userVo = userMapper.getUserBaseInfoByUuid(oldUser.getUserUuid());
+                            if (userVo != null) {
+                                userName = userVo.getUserName();
+                            }
+                        }
+                        throw new ProcessTaskStepUserIsExistsException(userName);
                     }
                 }
                 /* 清空user表 **/
