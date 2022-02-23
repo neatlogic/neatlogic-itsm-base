@@ -3042,7 +3042,9 @@
         `status` = #{status}
         WHERE
         `processtask_step_id` = #{processTaskStepId}
-        AND `user_uuid` = #{userUuid}
+        <if test="userUuid != null and userUuid != ''">
+            AND `user_uuid` = #{userUuid}
+        </if>
         AND `user_type` = #{userType}
     </update>
 
