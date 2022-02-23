@@ -64,6 +64,8 @@ public interface ProcessTaskSlaMapper {
 
     int updateProcessTaskSlaTime(ProcessTaskSlaTimeVo processTaskSlaTimeVo);
 
+    int updateProcessTaskSlaIsActiveBySlaId(ProcessTaskSlaVo processTaskSlaVo);
+
     int deleteProcessTaskSlaNotifyById(Long id);
 
     int deleteProcessTaskSlaTransferById(Long id);

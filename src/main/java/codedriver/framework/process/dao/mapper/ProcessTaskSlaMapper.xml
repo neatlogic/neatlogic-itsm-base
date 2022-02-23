@@ -214,12 +214,14 @@
         INSERT INTO `processtask_sla` (
         `processtask_id`,
         `name`,
+        `is_active`,
         `config`
         )
         VALUES
         (
         #{processTaskId},
         #{name},
+        #{isActive},
         #{config}
         )
     </insert>
@@ -296,6 +298,10 @@
             `time_sum`        = #{timeSum},
             `status`        = #{status}
         WHERE `sla_id` = #{slaId}
+    </update>
+
+    <update id="updateProcessTaskSlaIsActiveBySlaId" parameterType="codedriver.framework.process.dto.ProcessTaskSlaVo">
+        UPDATE `processtask_sla` SET `is_active` = #{isActive} WHERE `id` = #{id}
     </update>
 
     <delete id="deleteProcessTaskSlaNotifyById" parameterType="java.lang.Long">

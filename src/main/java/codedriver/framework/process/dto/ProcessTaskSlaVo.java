@@ -17,6 +17,7 @@ public class ProcessTaskSlaVo {
 	private Long processTaskId;
 	@EntityField(name = "名称", type = ApiParamType.STRING)
 	private String name;
+	private Integer isActive;
 	@EntityField(name = "配置", type = ApiParamType.JSONOBJECT)
 	private String config;
 	@JSONField(serialize=false)
@@ -82,6 +83,14 @@ public class ProcessTaskSlaVo {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Integer isActive) {
+		this.isActive = isActive;
 	}
 
 	public ProcessTaskSlaTimeVo getSlaTimeVo() {
