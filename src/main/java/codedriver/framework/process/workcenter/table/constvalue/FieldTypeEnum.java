@@ -15,7 +15,9 @@ public enum FieldTypeEnum {
     TOTAL_COUNT("totalCount", "总个数"),
     LIMIT_COUNT("limitCount", "部分个数"),
     FULL_TEXT("fullText", "全文检索"),
-    GROUP_COUNT("groupCount", "分组计数");//目前暂用于dashboard
+    GROUP_COUNT("groupCount", "分组计数"),//目前暂用于dashboard
+    SUB_GROUP_COUNT("subGroupCount", "二级分组计数"),//目前暂用于dashboard
+    GROUP_SUM("groupSum", "分组累积总数");//目前暂用于dashboard
     private final String name;
     private final String text;
 
