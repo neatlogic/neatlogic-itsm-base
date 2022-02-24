@@ -49,6 +49,7 @@ import codedriver.framework.process.service.ProcessTaskAgentService;
 import codedriver.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import codedriver.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import codedriver.framework.service.AuthenticationInfoService;
+import codedriver.framework.worktime.dao.mapper.WorktimeMapper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -83,7 +84,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static SelectContentByHashMapper selectContentByHashMapper;
     protected static IProcessStepHandlerUtil IProcessStepHandlerUtil;
     protected static ProcessTaskAgentService processTaskAgentService;
-
+    protected static WorktimeMapper worktimeMapper;
 //    @Resource
 //    public void setProcessMapper(IProcessCrossoverMapper _processMapper) {
 //        processCrossoverMapper = _processMapper;
@@ -159,6 +160,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskAgentService = _processTaskAgentService;
     }
 
+    @Resource
+    public void setWorktimeMapper(WorktimeMapper _worktimeMapper) {
+        worktimeMapper = _worktimeMapper;
+    }
+
     private int updateProcessTaskStatus(Long processTaskId) {
         List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
 
@@ -181,6 +187,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
         }
 
+        boolean needCalculateTimeCost = false;
         ProcessTaskVo processTaskVo = new ProcessTaskVo();
         processTaskVo.setId(processTaskId);
         if (draftCount > 0) {
@@ -189,16 +196,45 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
         } else if (abortedCount > 0) {
             processTaskVo.setStatus(ProcessTaskStatus.ABORTED.getValue());
+            needCalculateTimeCost = true;
         } else if (failedCount > 0) {
             processTaskVo.setStatus(ProcessTaskStatus.FAILED.getValue());
+            needCalculateTimeCost = true;
         } else if (succeedCount > 0) {
             processTaskVo.setStatus(ProcessTaskStatus.SUCCEED.getValue());
+            needCalculateTimeCost = true;
         } else if (hangCount > 0) {
             processTaskVo.setStatus(ProcessTaskStatus.HANG.getValue());
         } else {
             return 1;
         }
         processTaskMapper.updateProcessTaskStatus(processTaskVo);
+        //如果工单状态为“已完成”、“已取消”、“异常”时，计算工单耗时
+        if (needCalculateTimeCost) {
+            ProcessTaskVo processTask = processTaskMapper.getProcessTaskById(processTaskId);
+            Date startTime = processTask.getStartTime();
+            Date endTime = processTask.getEndTime();
+            String worktimeUuid = processTask.getWorktimeUuid();
+            if (startTime != null && endTime != null) {
+                long startTimeLong = startTime.getTime();
+                long endTimeLong = endTime.getTime();
+                ProcessTaskTimeCostVo processTaskTimeCostVo = new ProcessTaskTimeCostVo();
+                processTaskTimeCostVo.setProcessTaskId(processTaskId);
+                long realTimeCost = endTimeLong - startTimeLong;
+                processTaskTimeCostVo.setRealTimeCost(realTimeCost);
+                if (worktimeUuid != null) {
+                    long timeCost = worktimeMapper.calculateCostTime(worktimeUuid, startTimeLong, endTimeLong);
+                    processTaskTimeCostVo.setTimeCost(timeCost);
+                } else {
+                    processTaskTimeCostVo.setTimeCost(realTimeCost);
+                }
+                System.out.println("inser");
+                processTaskMapper.insertProcessTaskTimeCost(processTaskTimeCostVo);
+            }
+        } else {
+            System.out.println("delete");
+            processTaskMapper.deleteProcessTaskTimeCostByProcessTaskId(processTaskId);
+        }
         return 1;
     }
 

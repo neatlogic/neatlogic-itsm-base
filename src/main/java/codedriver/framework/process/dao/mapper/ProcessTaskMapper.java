@@ -364,6 +364,8 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepTimer(ProcessTaskStepTimerVo processTaskStepTimerVo);
 
+    void insertProcessTaskTimeCost(ProcessTaskTimeCostVo processTaskTimeCostVo);
+
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
@@ -459,4 +461,5 @@ public interface ProcessTaskMapper {
 
     int deleteProcessTaskStepTimerByProcessTaskStepId(Long processTaskStepId);
 
+    int deleteProcessTaskTimeCostByProcessTaskId(Long processTaskId);
 }

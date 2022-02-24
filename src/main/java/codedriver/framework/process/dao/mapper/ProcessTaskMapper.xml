@@ -3044,6 +3044,20 @@
         )
     </insert>
 
+    <insert id="insertProcessTaskTimeCost" parameterType="codedriver.framework.process.dto.ProcessTaskTimeCostVo">
+        INSERT INTO `processtask_time_cost` (
+             `processtask_id`,
+             `time_cost`,
+             `realtime_cost`
+        )
+        VALUES
+        (
+            #{processTaskId},
+            #{timeCost},
+            #{realTimeCost}
+        )
+    </insert>
+
     <update id="updateProcessTaskStepUserStatus" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
         UPDATE
         `processtask_step_user`
@@ -3355,14 +3369,14 @@
     <delete id="deleteProcessTaskStepInOperationById" parameterType="java.lang.Long">
         DELETE FROM `processtask_step_in_operation` WHERE `id` = #{id}
     </delete>
-    <delete id="deleteProcessTaskStepWorkerMinorByProcessTaskStepId">
+    <delete id="deleteProcessTaskStepWorkerMinorByProcessTaskStepId" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_step_worker`
         where `processtask_step_id` = #{processTaskStepId}
           and `user_type` = 'minor'
     </delete>
 
-    <delete id="deleteProcessTaskStepUserMinorByProcessTaskStepId">
+    <delete id="deleteProcessTaskStepUserMinorByProcessTaskStepId" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_step_user`
         where `processtask_step_id` = #{processTaskStepId}
@@ -3381,21 +3395,25 @@
         WHERE `backup_step_id` = #{value}
     </delete>
 
-    <delete id="deleteProcessTaskStepAutomaticRequestById">
+    <delete id="deleteProcessTaskStepAutomaticRequestById" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_step_automatic_request`
         WHERE `id` = #{value}
     </delete>
 
-    <delete id="deleteProcessTaskStepAutomaticRequestByProcessTaskStepId">
+    <delete id="deleteProcessTaskStepAutomaticRequestByProcessTaskStepId" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_step_automatic_request`
         WHERE `processtask_step_id` = #{value}
     </delete>
 
-    <delete id="deleteProcessTaskStepTimerByProcessTaskStepId">
+    <delete id="deleteProcessTaskStepTimerByProcessTaskStepId" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_step_timer`
         WHERE `processtask_step_id` = #{value}
+    </delete>
+
+    <delete id="deleteProcessTaskTimeCostByProcessTaskId" parameterType="java.lang.Long">
+        DELETE FROM `processtask_time_cost` WHERE `processtask_id` = #{value}
     </delete>
 </mapper>
