@@ -746,6 +746,24 @@
         WHERE to_processtask_step_id = #{value}
     </select>
 
+    <select id="getProcessTaskStepRelListByToIdList" parameterType="java.lang.Long"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
+        SELECT `processtask_id`                         AS processTaskId,
+               `from_process_step_uuid`                 AS fromProcessStepUuid,
+               `to_process_step_uuid`                   AS toProcessStepUuid,
+               `from_processtask_step_id`               AS fromProcessTaskStepId,
+               `to_processtask_step_id`                 AS toProcessTaskStepId,
+               `condition`,
+               `is_hit`                                 AS isHit,
+               `name`,
+               `type`
+        FROM `processtask_step_rel`
+        WHERE `to_processtask_step_id` IN
+        <foreach collection="list" item="toStepId" open="(" separator="," close=")">
+            #{toStepId}
+        </foreach>
+    </select>
+
     <select id="getProcessTaskStepRelByFromId" parameterType="java.lang.Long"
             resultType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
         SELECT `processtask_id`                         AS processTaskId,

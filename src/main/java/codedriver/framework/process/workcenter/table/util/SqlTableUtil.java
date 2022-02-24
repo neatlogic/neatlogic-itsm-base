@@ -113,7 +113,7 @@ public class SqlTableUtil {
         return new ArrayList<TableSelectColumnVo>() {
             {
                 add(new TableSelectColumnVo(new ProcessTaskSqlTable(), Collections.singletonList(
-                        new SelectColumnVo(ProcessTaskSqlTable.FieldEnum.STATUS.getValue(), ProcessTaskSqlTable.FieldEnum.STATUS.getProValue(), true)
+                        new SelectColumnVo(ProcessTaskSqlTable.FieldEnum.STATUS.getValue(), ProcessTaskSqlTable.FieldEnum.STATUS.getProValue())
                 )));
                 add(new TableSelectColumnVo(new ProcessTaskStepSqlTable(), Arrays.asList(
                         new SelectColumnVo(ProcessTaskStepSqlTable.FieldEnum.ID.getValue(), "processTaskStepId"),

@@ -94,6 +94,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepRelVo> getProcessTaskStepRelByToId(Long toProcessTaskStepId);
 
+    List<ProcessTaskStepRelVo> getProcessTaskStepRelListByToIdList(List<Long> toStepIdList);
+
     List<ProcessTaskStepRelVo> getProcessTaskStepRelByProcessTaskId(Long processTaskId);
 
     List<ProcessTaskStepRelVo> getProcessTaskStepRelListByProcessTaskIdList(List<Long> processTaskIdList);
