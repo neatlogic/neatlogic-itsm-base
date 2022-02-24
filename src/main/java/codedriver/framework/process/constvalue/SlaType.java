@@ -6,6 +6,7 @@
 package codedriver.framework.process.constvalue;
 
 /**
+ * 时效类型，如响应时效、处理时效
  * @author linbq
  * @since 2022/2/22 16:27
  **/

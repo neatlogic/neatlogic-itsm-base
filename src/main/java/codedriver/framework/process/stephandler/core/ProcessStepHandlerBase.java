@@ -2052,7 +2052,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             updateProcessTaskStepRelVo.setFromProcessTaskStepId(currentProcessTaskStepId);
             updateProcessTaskStepRelVo.setIsHit(-1);
             for (Long unactiveStepId : unactiveStepIdList) {
-                boolean flag = true;
+                boolean invalid = true;
                 updateProcessTaskStepRelVo.setToProcessTaskStepId(unactiveStepId);
                 processTaskMapper.updateProcessTaskStepRelIsHit(updateProcessTaskStepRelVo);
                 List<ProcessTaskStepRelVo> fromStepRelList = toStepIdMap.computeIfAbsent(unactiveStepId, k -> new ArrayList<>());
@@ -2063,12 +2063,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     }
                     if (processTaskStepRelVo.getType().equals(ProcessFlowDirection.FORWARD.getValue())) {
                         if (!Objects.equals(processTaskStepRelVo.getIsHit(), -1)) {
-                            flag = false;
+                            invalid = false;
                             break;
                         }
                     }
                 }
-                if (flag) {
+                if (invalid) {
                     //节点失效, 更新节点状态，继续判断后续节点是否也是失效的
                     identifyPostInvalidStepRelIsHit(unactiveStepId, null);
                 }

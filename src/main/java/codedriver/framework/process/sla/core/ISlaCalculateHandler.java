@@ -21,8 +21,23 @@ public interface ISlaCalculateHandler {
     default String getHandler() {
         return ClassUtils.getUserClass(this.getClass()).getSimpleName();
     }
+
+    /**
+     * 名称
+     * @return
+     */
     String getName();
+
+    /**
+     * 类型
+     * @return
+     */
     SlaType getType();
+
+    /**
+     * 描述
+     * @return
+     */
     String getDescription();
     /**
      * 控制关联步骤下拉框单选或多选
