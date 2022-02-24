@@ -228,11 +228,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 } else {
                     processTaskTimeCostVo.setTimeCost(realTimeCost);
                 }
-                System.out.println("inser");
                 processTaskMapper.insertProcessTaskTimeCost(processTaskTimeCostVo);
             }
         } else {
-            System.out.println("delete");
             processTaskMapper.deleteProcessTaskTimeCostByProcessTaskId(processTaskId);
         }
         return 1;
