@@ -43,6 +43,9 @@ public class SlaCalculateHandlerFactory extends ModuleInitializedListenerBase im
             if (StringUtils.isBlank(handler)) {
                 continue;
             }
+            if (bean.getType() == null) {
+                continue;
+            }
             if (map.containsKey(handler)) {
                 logger.error("sla计算规则处理器：'" + handler + "'已存在");
                 System.exit(1);

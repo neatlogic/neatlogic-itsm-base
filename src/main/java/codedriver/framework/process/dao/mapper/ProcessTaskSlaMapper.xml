@@ -214,12 +214,14 @@
         INSERT INTO `processtask_sla` (
         `processtask_id`,
         `name`,
+        `is_active`,
         `config`
         )
         VALUES
         (
         #{processTaskId},
         #{name},
+        #{isActive},
         #{config}
         )
     </insert>
@@ -250,6 +252,30 @@
         VALUES (#{processTaskStepId}, #{slaId});
     </insert>
 
+    <insert id="insertProcessTaskStepSlaTime" parameterType="codedriver.framework.process.dto.ProcessTaskStepSlaTimeVo">
+        INSERT INTO `codedriver_develop`.`processtask_step_sla_time` (
+            `processtask_id`,
+            `processtask_step_id`,
+            `type`,
+            `sla_id`,
+            `time_sum`,
+            `time_cost`,
+            `realtime_cost`,
+            `is_timeout`
+        )
+        VALUES
+        (
+            #{processTaskId},
+            #{processTaskStepId},
+            #{type},
+            #{slaId},
+            #{timeSum},
+            #{timeCost},
+            #{realTimeCost},
+            #{isTimeout}
+        )
+    </insert>
+
     <update id="updateProcessTaskSlaTransfer" parameterType="codedriver.framework.process.dto.ProcessTaskSlaTransferVo">
         UPDATE `processtask_sla_transfer`
         SET `trigger_time` = #{triggerTime}
@@ -274,6 +300,10 @@
         WHERE `sla_id` = #{slaId}
     </update>
 
+    <update id="updateProcessTaskSlaIsActiveBySlaId" parameterType="codedriver.framework.process.dto.ProcessTaskSlaVo">
+        UPDATE `processtask_sla` SET `is_active` = #{isActive} WHERE `id` = #{id}
+    </update>
+
     <delete id="deleteProcessTaskSlaNotifyById" parameterType="java.lang.Long">
         DELETE FROM `processtask_sla_notify` WHERE `id` = #{value}
     </delete>
@@ -292,5 +322,9 @@
 
     <delete id="deleteProcessTaskSlaTimeBySlaId" parameterType="java.lang.Long">
         DELETE FROM `processtask_sla_time` WHERE `sla_id` = #{value}
+    </delete>
+
+    <delete id="deleteProcessTaskStepSlaTimeBySlaId" parameterType="java.lang.Long">
+        DELETE FROM `processtask_step_sla_time` WHERE `sla_id` = #{value}
     </delete>
 </mapper>
