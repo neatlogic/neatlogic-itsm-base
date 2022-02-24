@@ -143,6 +143,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private int updateEndTime;
     @JSONField(serialize = false)
     private String nextStepName;// 下一步骤名称
+    @JSONField(serialize = false)
+    private Long nextStepId;// 下一步骤id
     /**
      * 并行激活节点
      */
@@ -772,4 +774,11 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.nextStepName = nextStepName;
     }
 
+    public Long getNextStepId() {
+        return nextStepId;
+    }
+
+    public void setNextStepId(Long nextStepId) {
+        this.nextStepId = nextStepId;
+    }
 }
