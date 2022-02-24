@@ -141,6 +141,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private int updateStartTime;
     @JSONField(serialize = false)
     private int updateEndTime;
+    @JSONField(serialize = false)
+    private String nextStepName;// 下一步骤名称
     /**
      * 并行激活节点
      */
@@ -761,4 +763,13 @@ public class ProcessTaskStepVo extends BasePageVo {
     public void setProcessTagList(List<ProcessTagVo> processTagList) {
         this.processTagList = processTagList;
     }
+
+    public String getNextStepName() {
+        return nextStepName;
+    }
+
+    public void setNextStepName(String nextStepName) {
+        this.nextStepName = nextStepName;
+    }
+
 }

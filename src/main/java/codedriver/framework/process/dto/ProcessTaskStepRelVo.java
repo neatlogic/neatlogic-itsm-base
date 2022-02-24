@@ -31,6 +31,12 @@ public class ProcessTaskStepRelVo {
 		this.setType(processStepRelVo.getType());
 	}
 
+	public ProcessTaskStepRelVo(Long fromProcessTaskStepId, Long toProcessTaskStepId, Integer isHit) {
+		this.fromProcessTaskStepId = fromProcessTaskStepId;
+		this.toProcessTaskStepId = toProcessTaskStepId;
+		this.isHit = isHit;
+	}
+
 	public Long getProcessTaskId() {
 		return processTaskId;
 	}
