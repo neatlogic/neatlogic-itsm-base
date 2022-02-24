@@ -3074,7 +3074,9 @@
         `status` = #{status}
         WHERE
         `processtask_step_id` = #{processTaskStepId}
-        AND `user_uuid` = #{userUuid}
+        <if test="userUuid != null and userUuid != ''">
+            AND `user_uuid` = #{userUuid}
+        </if>
         AND `user_type` = #{userType}
     </update>
 
@@ -3174,6 +3176,15 @@
         UPDATE `processtask_step_user`
         SET `user_uuid` = #{userUuid},
             `user_name` = #{userName},
+            <choose>
+                <when test="status == 'doing'">
+                    `start_time` = NOW(3),
+                    `end_time` = NULL,
+                </when>
+                <when test="status == 'done'">
+                    `end_time` = NOW(3),
+                </when>
+            </choose>
             `status` = #{status}
         WHERE `processtask_step_id` = #{processTaskStepId}
         AND `user_type` = 'major'

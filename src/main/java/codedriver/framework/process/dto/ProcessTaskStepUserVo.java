@@ -73,6 +73,11 @@ public class ProcessTaskStepUserVo {
         this.status = status;
     }
 
+    public ProcessTaskStepUserVo(Long processTaskStepId, String userType) {
+        this.processTaskStepId = processTaskStepId;
+        this.userType = userType;
+    }
+
     public Long getProcessTaskStepId() {
         return processTaskStepId;
     }
