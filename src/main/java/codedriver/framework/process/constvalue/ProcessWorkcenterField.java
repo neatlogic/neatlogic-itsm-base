@@ -15,6 +15,7 @@ public enum ProcessWorkcenterField  implements IDashboardGroupField {
 	CONTENT_INCLUDE_HTML("contentincludehtml", "上报内容"),
 	ENDTIME("endtime", "结束时间","endTime"),
 	STARTTIME("starttime", "开始时间","startTime"),
+	ACTIVETIME("activetime", "激活时间","activeTime"),
 	EXPIRED_TIME("expiretime", "剩余时间"),
 	OWNER("owner", "上报人"),
 	REPORTER("reporter", "代报人"),

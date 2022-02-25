@@ -1,6 +1,6 @@
 package codedriver.framework.process.workcenter.table;
 
-import codedriver.framework.process.workcenter.table.constvalue.FieldTypeEnum;
+import codedriver.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,7 +49,7 @@ public class ProcessTaskSlaTimeSqlTable implements ISqlTable {
         }
 
         public static String getText(String value) {
-            for (FieldTypeEnum f : FieldTypeEnum.values()) {
+            for (ProcessSqlTypeEnum f : ProcessSqlTypeEnum.values()) {
                 if (f.getValue().equals(value)) {
                     return f.getText();
                 }
