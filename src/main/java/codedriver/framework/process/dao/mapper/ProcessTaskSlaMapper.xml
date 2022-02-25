@@ -253,7 +253,7 @@
     </insert>
 
     <insert id="insertProcessTaskStepSlaTime" parameterType="codedriver.framework.process.dto.ProcessTaskStepSlaTimeVo">
-        INSERT INTO `codedriver_develop`.`processtask_step_sla_time` (
+        INSERT INTO `processtask_step_sla_time` (
             `processtask_id`,
             `processtask_step_id`,
             `type`,
