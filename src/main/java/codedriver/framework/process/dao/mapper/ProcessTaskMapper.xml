@@ -2405,6 +2405,9 @@
         <if test="toProcessTaskStepId != null">
             AND `to_processtask_step_id` = #{toProcessTaskStepId}
         </if>
+        <if test="type != null and type != ''">
+            AND `type` = #{type}
+        </if>
     </update>
 
     <update id="updateProcessTaskStepStatus" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">

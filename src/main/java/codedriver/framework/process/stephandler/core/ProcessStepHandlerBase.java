@@ -2301,6 +2301,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 .build()
                 .checkAndNoPermissionThrowException();
         try {
+            //让结束节点到重做节点的回退线的isHit=1，流程图中显示绿色
+            List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(currentProcessTaskStepVo.getProcessTaskId(), ProcessStepType.END.getValue());
+            ProcessTaskStepRelVo processTaskStepRelVo = new ProcessTaskStepRelVo();
+            processTaskStepRelVo.setFromProcessTaskStepId(processTaskStepList.get(0).getId());
+            processTaskStepRelVo.setToProcessTaskStepId(currentProcessTaskStepVo.getId());
+            processTaskStepRelVo.setIsHit(1);
+            processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
+
             stepMajorUserRegulate(currentProcessTaskStepVo);
             /* 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
