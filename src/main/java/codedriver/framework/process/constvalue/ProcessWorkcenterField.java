@@ -24,6 +24,7 @@ public enum ProcessWorkcenterField  implements IDashboardGroupField {
 	STEP("step","步骤"),
 	STEP_STATUS("stepstatus","步骤状态"),
 	STEP_USER("stepuser","步骤处理人"),
+	STEP_NAME("stepname","步骤名"),
 	STEP_TEAM("stepteam","步骤处理组"),
 	CURRENT_STEP("currentstep","当前步骤"),
 	WOKRTIME("worktime","时间窗口"),

@@ -17,7 +17,9 @@ public enum ProcessSqlTypeEnum {
     FULL_TEXT("fullText", "全文检索"),
     GROUP_COUNT("groupCount", "分组计数"),//目前暂用于dashboard
     SUB_GROUP_COUNT("subGroupCount", "二级分组计数"),//目前暂用于dashboard
-    GROUP_SUM("groupSum", "分组累积总数");//目前暂用于dashboard
+    GROUP_SUM("groupSum", "分组累积总数"),
+    GROUP_AVG_TIME_COST("group_avg_time_cost","平均耗时")
+    ;//目前暂用于dashboard
     private final String name;
     private final String text;
 
