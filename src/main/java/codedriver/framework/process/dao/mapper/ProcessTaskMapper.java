@@ -270,13 +270,15 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepTimerVo> getAllProcessTaskStepTimerList();
 
-    List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdAndProcessStepUuidList(@Param("processTaskId") Long processTaskId,@Param("processStepUuidList") List<String> processStepUuidList);
+    List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskIdAndProcessStepUuidList(@Param("processTaskId") Long processTaskId, @Param("processStepUuidList") List<String> processStepUuidList);
 
     Integer getAllProcessTaskCount();
 
     List<Long> getProcessTaskIdList(ProcessTaskVo processTaskVo);
 
     List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndStepName(ProcessTaskStepVo vo);
+
+    List<Map<String, Object>> getProcessTaskListWhichIsProcessingByUserAndTag(@Param("tag") String tag, @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 

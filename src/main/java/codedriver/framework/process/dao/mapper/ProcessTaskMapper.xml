@@ -2389,6 +2389,50 @@
         FROM `processtask_step`
         WHERE `processtask_id` = #{processTaskId} AND `name` = #{name}
     </select>
+
+    <select id="getProcessTaskListWhichIsProcessingByUserAndTag" resultType="java.util.Map">
+        SELECT
+        p.`id`,
+        p.`title`,
+        '处理中' as status,
+        GROUP_CONCAT(pts.`name`) as stepName,
+        GROUP_CONCAT(CASE WHEN pts.`status` = 'pending' THEN '待处理' WHEN pts.`status` = 'running' THEN '处理中' WHEN pts.`status` = 'draft' THEN '草稿' END) as stepStatus,
+        GROUP_CONCAT(u.`user_id`) as userId,
+        GROUP_CONCAT(u.`user_name`) as userName,
+        GROUP_CONCAT(t.`name`) as teamName,
+        GROUP_CONCAT(r.`name`) as roleName
+        FROM
+        `processtask` p
+        LEFT JOIN `processtask_step` pts ON p.id = pts.`processtask_id`
+        LEFT JOIN `processtask_step_worker` ptsw ON pts.`processtask_id` = ptsw.`processtask_id` AND pts.`id` = ptsw.`processtask_step_id`
+        LEFT JOIN `processtask_step_tag` pst ON pts.`id` = pst.`processtask_step_id`
+        LEFT JOIN `process_tag` pt ON pt.`id` = pst.`tag_id`
+        LEFT JOIN `user` u ON u.`uuid` = ptsw.`uuid`
+        LEFT JOIN `team` t ON t.`uuid` = ptsw.`uuid`
+        LEFT JOIN `role` r ON r.`uuid` = ptsw.`uuid`
+        WHERE
+        p.`status` = 'running'
+        AND (pts.`status` IN ( 'draft', 'running' ) OR (pts.`status` = 'pending' AND pts.`is_active` = 1))
+        AND pt.`name` = #{tag}
+        AND (
+            ptsw.`uuid` = #{userUuid} AND ptsw.`type` IN ( 'user' )
+            <if test="teamUuidList != null and teamUuidList.size() > 0">
+                OR ptsw.`uuid` IN
+                <foreach collection="teamUuidList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                AND ptsw.`type` = 'team'
+            </if>
+            <if test="roleUuidList != null and roleUuidList.size() > 0">
+                OR ptsw.`uuid` IN
+                <foreach collection="roleUuidList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                AND ptsw.`type` = 'role'
+            </if>
+        )
+        group by p.`id`
+    </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
