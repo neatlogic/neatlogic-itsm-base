@@ -19,7 +19,9 @@ public enum ProcessSqlTypeEnum {
     SUB_GROUP_COUNT("subGroupCount", "二级分组计数"),//目前暂用于dashboard
     GROUP_SUM("groupSum", "分组累积总数"),
     GROUP_AVG_COST_TIME("group_avg_cost_time","平均处理耗时"),
-    GROUP_AVG_RESPONSE_COST_TIME("group_avg_response_cost_time","平均响应耗时")
+    GROUP_AVG_RESPONSE_COST_TIME("group_avg_response_cost_time","平均响应耗时"),
+    GROUP_RESPONSE_PUNCTUALITY("group_response_punctuality","响应准时率"),
+    GROUP_HANDLE_PUNCTUALITY("group_handle_punctuality","处理准时率")
     ;//目前暂用于dashboard
     private final String name;
     private final String text;

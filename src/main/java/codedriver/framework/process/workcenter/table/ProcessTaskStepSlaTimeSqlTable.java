@@ -29,7 +29,8 @@ public class ProcessTaskStepSlaTimeSqlTable implements ISqlTable {
         PROCESSTASK_STEP_ID("processtask_step_id", "步骤ID"),
         TYPE("type", "类型"),
         PROCESSTASK_ID("processtask_id","工单id"),
-        TIME_COST("time_cost","耗时")
+        TIME_COST("time_cost","耗时"),
+        IS_TIMEOUT("is_timeout","耗时")
         ;
         private final String name;
         private final String text;
