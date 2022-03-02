@@ -2415,7 +2415,7 @@
         AND (pts.`status` IN ( 'draft', 'running' ) OR (pts.`status` = 'pending' AND pts.`is_active` = 1))
         AND pt.`name` = #{tag}
         AND (
-            ptsw.`uuid` = #{userUuid} AND ptsw.`type` IN ( 'user' )
+            ptsw.`uuid` = #{userUuid} AND ptsw.`type` = 'user'
             <if test="teamUuidList != null and teamUuidList.size() > 0">
                 OR ptsw.`uuid` IN
                 <foreach collection="teamUuidList" item="item" open="(" separator="," close=")">
