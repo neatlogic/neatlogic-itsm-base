@@ -2412,7 +2412,7 @@
         LEFT JOIN `role` r ON r.`uuid` = ptsw.`uuid`
         WHERE
         p.`status` = 'running'
-        AND (pts.`status` IN ( 'draft', 'running' ) OR (pts.`status` = 'pending' AND pts.`is_active` = 1))
+        AND (pts.`status` = 'running' OR (pts.`status` = 'pending' AND pts.`is_active` = 1))
         AND pt.`name` = #{tag}
         AND (
             ptsw.`uuid` = #{userUuid} AND ptsw.`type` = 'user'
