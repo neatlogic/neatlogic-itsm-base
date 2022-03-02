@@ -2394,13 +2394,13 @@
         SELECT
         p.`id`,
         p.`title`,
-        '处理中' as status,
-        GROUP_CONCAT(pts.`name`) as stepName,
-        GROUP_CONCAT(CASE WHEN pts.`status` = 'pending' THEN '待处理' WHEN pts.`status` = 'running' THEN '处理中' WHEN pts.`status` = 'draft' THEN '草稿' END) as stepStatus,
-        GROUP_CONCAT(u.`user_id`) as userId,
-        GROUP_CONCAT(u.`user_name`) as userName,
-        GROUP_CONCAT(t.`name`) as teamName,
-        GROUP_CONCAT(r.`name`) as roleName
+        '处理中' AS status,
+        GROUP_CONCAT(pts.`name`) AS stepName,
+        GROUP_CONCAT(CASE WHEN pts.`status` = 'pending' THEN '待处理' WHEN pts.`status` = 'running' THEN '处理中' WHEN pts.`status` = 'draft' THEN '草稿' END) AS stepStatus,
+        GROUP_CONCAT(u.`user_id`) AS userId,
+        GROUP_CONCAT(u.`user_name`) AS userName,
+        GROUP_CONCAT(t.`name`) AS teamName,
+        GROUP_CONCAT(r.`name`) AS roleName
         FROM
         `processtask` p
         LEFT JOIN `processtask_step` pts ON p.id = pts.`processtask_id`
@@ -2431,7 +2431,7 @@
                 AND ptsw.`type` = 'role'
             </if>
         )
-        group by p.`id`
+        GROUP BY p.`id`
     </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
