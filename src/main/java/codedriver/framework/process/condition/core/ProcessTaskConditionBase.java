@@ -184,11 +184,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
     public void getDateSqlWhereByValueList(ConditionVo condition, StringBuilder sqlSb,String tableShortName,String columnName) {
         JSONArray dateJSONArray = JSONArray.parseArray(JSON.toJSONString(condition.getValueList()));
         if (CollectionUtils.isNotEmpty(dateJSONArray)) {
-            String startTime = dateJSONArray.getString(0);
-            String endTime = dateJSONArray.getString(1);
-            JSONObject dateValue = new JSONObject();
-            dateValue.put("startTime",startTime);
-            dateValue.put("endTime",endTime);
+            JSONObject dateValue = JSONObject.parseObject(dateJSONArray.get(0).toString());
             getDateSqlWhere(dateValue,sqlSb,tableShortName,columnName);
         }
     }
