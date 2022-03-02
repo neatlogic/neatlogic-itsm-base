@@ -9,7 +9,7 @@ package codedriver.framework.process.workcenter.table.constvalue;
  * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
  * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  **/
-public enum FieldTypeEnum {
+public enum ProcessSqlTypeEnum {
     DISTINCT_ID("distinctId", "去重工单ID"),
     FIELD("field", "选择字段"),
     TOTAL_COUNT("totalCount", "总个数"),
@@ -17,11 +17,16 @@ public enum FieldTypeEnum {
     FULL_TEXT("fullText", "全文检索"),
     GROUP_COUNT("groupCount", "分组计数"),//目前暂用于dashboard
     SUB_GROUP_COUNT("subGroupCount", "二级分组计数"),//目前暂用于dashboard
-    GROUP_SUM("groupSum", "分组累积总数");//目前暂用于dashboard
+    GROUP_SUM("groupSum", "分组累积总数"),
+    GROUP_AVG_COST_TIME("group_avg_cost_time","平均处理耗时"),
+    GROUP_AVG_RESPONSE_COST_TIME("group_avg_response_cost_time","平均响应耗时"),
+    GROUP_RESPONSE_PUNCTUALITY("group_response_punctuality","响应准时率"),
+    GROUP_HANDLE_PUNCTUALITY("group_handle_punctuality","处理准时率")
+    ;//目前暂用于dashboard
     private final String name;
     private final String text;
 
-    private FieldTypeEnum(String _value, String _text) {
+    private ProcessSqlTypeEnum(String _value, String _text) {
         this.name = _value;
         this.text = _text;
     }
@@ -35,7 +40,7 @@ public enum FieldTypeEnum {
     }
 
     public static String getText(String value) {
-        for (FieldTypeEnum f : FieldTypeEnum.values()) {
+        for (ProcessSqlTypeEnum f : ProcessSqlTypeEnum.values()) {
             if (f.getValue().equals(value)) {
                 return f.getText();
             }

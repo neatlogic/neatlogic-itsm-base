@@ -1,6 +1,6 @@
 package codedriver.framework.process.workcenter.table;
 
-import codedriver.framework.process.workcenter.table.constvalue.FieldTypeEnum;
+import codedriver.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,7 +33,8 @@ public class ProcessTaskStepSqlTable implements ISqlTable {
         HANDLER("handler","步骤处理器"),
         STATUS("status", "步骤状态"),
         CONFIG_HASH("config_hash","配置hash"),
-        IS_ACTIVE("is_active", "步骤状态")
+        IS_ACTIVE("is_active", "步骤状态"),
+        ACTIVE_TIME("active_time","激活时间")
         ;
         private final String name;
         private final String text;
@@ -52,7 +53,7 @@ public class ProcessTaskStepSqlTable implements ISqlTable {
         }
 
         public static String getText(String value) {
-            for (FieldTypeEnum f : FieldTypeEnum.values()) {
+            for (ProcessSqlTypeEnum f : ProcessSqlTypeEnum.values()) {
                 if (f.getValue().equals(value)) {
                     return f.getText();
                 }
