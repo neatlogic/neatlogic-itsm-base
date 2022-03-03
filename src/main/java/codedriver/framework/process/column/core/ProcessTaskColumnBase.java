@@ -1,7 +1,7 @@
 package codedriver.framework.process.column.core;
 
 
-import codedriver.framework.dashboard.dto.DashboardWidgetDataVo;
+import codedriver.framework.dashboard.dto.DashboardWidgetDataGroupVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.WorkcenterVo;
@@ -76,11 +76,11 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
     }
 
     @Override
-    public void getDashboardDataVo(DashboardWidgetDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
+    public void getDashboardDataVo(DashboardWidgetDataGroupVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
         getMyDashboardDataVo(dashboardDataVo, workcenterVo, mapList);
     }
 
-    protected void getMyDashboardDataVo(DashboardWidgetDataVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
+    protected void getMyDashboardDataVo(DashboardWidgetDataGroupVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
 
     }
 
