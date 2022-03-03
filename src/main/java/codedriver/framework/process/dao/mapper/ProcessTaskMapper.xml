@@ -2433,6 +2433,56 @@
         )
         GROUP BY p.`id`
     </select>
+
+    <select id="getProcessTaskIdListWhichCurrentProcessTaskStepCountIsOverOneByProcessTaskIdList" parameterType="java.util.List" resultType="java.lang.Long">
+        SELECT
+            pts.`processtask_id`
+        FROM
+            `processtask_step` pts
+        WHERE
+            (pts.`status` = 'running' OR ( pts.`status` = 'pending' AND pts.`is_active` = 1 ))
+            <if test="list != null and list.size() > 0">
+                AND pts.`processtask_id` IN
+                <foreach collection="list" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        GROUP BY
+            pts.`processtask_id`
+        HAVING
+            count( 1 ) > 1
+    </select>
+
+    <select id="getCurrentProcessTaskStepListByProcessTaskIdListAndTag"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+        SELECT
+        pts.`processtask_id` AS processTaskId,
+        pts.`id`,
+        pts.`name`,
+        pts.`type`,
+        pts.`handler`
+        FROM
+        `processtask_step` pts
+        WHERE
+        (pts.`status` = 'running' OR ( pts.`status` = 'pending' AND pts.`is_active` = 1 ))
+        <if test="list != null and list.size() > 0">
+            AND pts.`processtask_id` IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="tag != null and tag != ''">
+            AND EXISTS (
+            SELECT
+            1
+            FROM
+            `processtask_step_tag` ptst
+            JOIN `process_tag` pt ON ptst.`tag_id` = pt.`id`
+            WHERE
+            ptst.`processtask_step_id` = pts.`id`
+            AND pt.`name` = #{tag})
+        </if>
+    </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
