@@ -2433,6 +2433,45 @@
         )
         GROUP BY p.`id`
     </select>
+
+    <select id="checkCurrentProcessTaskStepCountIsOneByProcessTaskIdList" parameterType="java.util.List" resultType="java.lang.Long">
+        SELECT
+            pts.`processtask_id`
+        FROM
+            `processtask_step` pts
+        WHERE
+            (pts.`status` = 'running' OR ( pts.`status` = 'pending' AND pts.`is_active` = 1 ))
+            <if test="list != null and list.size() > 0">
+                AND pts.`processtask_id` IN
+                <foreach collection="list" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        GROUP BY
+            pts.`processtask_id`
+        HAVING
+            count( 1 ) = 1
+    </select>
+
+    <select id="getCurrentProcessTaskStepIdByProcessTaskIdList" parameterType="java.util.List"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
+        SELECT
+        pts.`processtask_id` as processTaskId,
+        pts.`id`,
+        pts.`name`,
+        pts.`type`,
+        pts.`handler`
+        FROM
+        `processtask_step` pts
+        WHERE
+        (pts.`status` = 'running' OR ( pts.`status` = 'pending' AND pts.`is_active` = 1 ))
+        <if test="list != null and list.size() > 0">
+            AND pts.`processtask_id` IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}

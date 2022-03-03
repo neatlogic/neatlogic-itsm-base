@@ -280,6 +280,10 @@ public interface ProcessTaskMapper {
 
     List<Map<String, Object>> getProcessTaskListWhichIsProcessingByUserAndTag(@Param("tag") String tag, @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList);
 
+    List<Long> checkCurrentProcessTaskStepCountIsOneByProcessTaskIdList(@Param("list") List<Long> processTaskIdList);
+
+    List<ProcessTaskStepVo> getCurrentProcessTaskStepIdByProcessTaskIdList(@Param("list") List<Long> processTaskIdList);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
