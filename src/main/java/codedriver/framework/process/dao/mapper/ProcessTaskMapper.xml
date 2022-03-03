@@ -2434,7 +2434,7 @@
         GROUP BY p.`id`
     </select>
 
-    <select id="checkCurrentProcessTaskStepCountIsOneByProcessTaskIdList" parameterType="java.util.List" resultType="java.lang.Long">
+    <select id="checkCurrentProcessTaskStepCountIsOverOneByProcessTaskIdList" parameterType="java.util.List" resultType="java.lang.Long">
         SELECT
             pts.`processtask_id`
         FROM
@@ -2450,7 +2450,7 @@
         GROUP BY
             pts.`processtask_id`
         HAVING
-            count( 1 ) = 1
+            count( 1 ) > 1
     </select>
 
     <select id="getCurrentProcessTaskStepIdByProcessTaskIdList" parameterType="java.util.List"
