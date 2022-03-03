@@ -280,6 +280,16 @@ public interface ProcessTaskMapper {
 
     List<Map<String, Object>> getProcessTaskListWhichIsProcessingByUserAndTag(@Param("tag") String tag, @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList);
 
+    /**
+     * 根据给定的工单ID，查询其中当前步骤超过一个的工单id列表
+     *
+     * @param processTaskIdList 工单ID列表
+     * @return
+     */
+    List<Long> getProcessTaskIdListWhichCurrentProcessTaskStepCountIsOverOneByProcessTaskIdList(@Param("list") List<Long> processTaskIdList);
+
+    List<ProcessTaskStepVo> getCurrentProcessTaskStepListByProcessTaskIdListAndTag(@Param("list") List<Long> processTaskIdList, @Param("tag") String tag);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
