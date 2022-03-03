@@ -4,6 +4,8 @@ import java.util.*;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.dto.AuthenticationInfoVo;
+import codedriver.framework.process.constvalue.*;
+import codedriver.framework.process.exception.operationauth.*;
 import codedriver.framework.service.AuthenticationInfoService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,11 +17,6 @@ import com.alibaba.fastjson.JSONPath;
 
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.UserType;
-import codedriver.framework.process.constvalue.ProcessFlowDirection;
-import codedriver.framework.process.constvalue.ProcessStepMode;
-import codedriver.framework.process.constvalue.ProcessTaskGroupSearch;
-import codedriver.framework.process.constvalue.ProcessTaskOperationType;
-import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
 import codedriver.framework.process.dto.ProcessTaskStepRelVo;
@@ -410,6 +407,126 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                         return checkIsRetractableStepByProcessTaskStepId(processTaskVo, processTaskStepVo.getId(),
                             userUuid);
                     }
+                }
+            }
+        }
+        return false;
+    }
+
+    protected boolean checkProcessTaskStatus(
+            Long id,
+            ProcessTaskOperationType operationType,
+            String processTaskStatus,
+            Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap,
+            ProcessTaskStatus ... statuss) {
+        if (statuss != null) {
+            for (ProcessTaskStatus status : statuss) {
+                switch (status) {
+                    case DRAFT:
+                        if (ProcessTaskStatus.DRAFT.getValue().equals(processTaskStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskUnsubmittedException());
+                            return true;
+                        }
+                        break;
+                    case SUCCEED:
+                        if (ProcessTaskStatus.SUCCEED.getValue().equals(processTaskStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskSucceededException());
+                            return true;
+                        }
+                        break;
+                    case ABORTED:
+                        if (ProcessTaskStatus.ABORTED.getValue().equals(processTaskStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskAbortedException());
+                            return true;
+                        }
+                        break;
+                    case FAILED:
+                        if (ProcessTaskStatus.FAILED.getValue().equals(processTaskStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskFailedException());
+                            return true;
+                        }
+                        break;
+                    case HANG:
+                        if (ProcessTaskStatus.HANG.getValue().equals(processTaskStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskHangException());
+                            return true;
+                        }
+                        break;
+                    case SCORED:
+                        if (ProcessTaskStatus.SCORED.getValue().equals(processTaskStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskScoredException());
+                            return true;
+                        }
+                        break;
+                    case RUNNING:
+                        if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskRunningException());
+                            return true;
+                        }
+                        break;
+                }
+            }
+        }
+        return false;
+    }
+    protected boolean checkProcessTaskStepStatus(
+            Long id,
+            ProcessTaskOperationType operationType,
+            String processTaskStepStatus,
+            Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap,
+            ProcessTaskStatus ... statuss) {
+        if (statuss != null) {
+            for (ProcessTaskStatus status : statuss) {
+                switch (status) {
+                    case DRAFT:
+                        if (ProcessTaskStatus.DRAFT.getValue().equals(processTaskStepStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskStepUnsubmittedException());
+                            return true;
+                        }
+                        break;
+                    case PENDING:
+                        if (ProcessTaskStatus.PENDING.getValue().equals(processTaskStepStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskStepPendingException());
+                            return true;
+                        }
+                        break;
+                    case RUNNING:
+                        if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskStepStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskStepRunningException());
+                            return true;
+                        }
+                        break;
+                    case SUCCEED:
+                        if (ProcessTaskStatus.SUCCEED.getValue().equals(processTaskStepStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskStepSucceededException());
+                            return true;
+                        }
+                        break;
+                    case FAILED:
+                        if (ProcessTaskStatus.FAILED.getValue().equals(processTaskStepStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskStepFailedException());
+                            return true;
+                        }
+                        break;
+                    case HANG:
+                        if (ProcessTaskStatus.HANG.getValue().equals(processTaskStepStatus)) {
+                            operationTypePermissionDeniedExceptionMap.computeIfAbsent(id, key -> new HashMap<>())
+                                    .put(operationType, new ProcessTaskStepHangException());
+                            return true;
+                        }
+                        break;
                 }
             }
         }

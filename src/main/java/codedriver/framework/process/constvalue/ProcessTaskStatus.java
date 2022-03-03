@@ -12,7 +12,7 @@ public enum ProcessTaskStatus implements IEnum {
 	SUCCEED("succeed", "已完成","#25b865"),
 	PENDING("pending", "待处理","#8E949F"),
 	FAILED("failed", "异常","#f71010"),
-	ABORTING("aborting", "终止中","#8E949F"),
+//	ABORTING("aborting", "终止中","#8E949F"),
 	BACK("back", "已回退","#8E949F"),
 	HANG("hang", "已挂起","#ffba5a"),
 	SCORED("scored", "已评分","#25b865"),

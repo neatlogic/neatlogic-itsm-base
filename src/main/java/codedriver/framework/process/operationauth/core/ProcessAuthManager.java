@@ -12,6 +12,7 @@ import codedriver.framework.process.dao.mapper.*;
 import codedriver.framework.process.dto.*;
 import codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo;
 import codedriver.framework.process.dto.agent.ProcessTaskAgentVo;
+import codedriver.framework.process.exception.operationauth.ProcessTaskPermissionDeniedException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
@@ -52,12 +53,22 @@ public class ProcessAuthManager {
         catalogMapper = _catalogMapper;
     }
 
+    /** 需要校验的工单id列表 **/
     private Set<Long> processTaskIdSet;
+    /** 需要校验的步骤id列表 **/
     private Set<Long> processTaskStepIdSet;
+    /** 工单id与步骤idList的键值对 **/
     private Map<Long, Set<Long>> processTaskStepIdSetMap;
+    /** 需要校验的权限列表 **/
     private Set<ProcessTaskOperationType> operationTypeSet;
+    /** 需要校验的某个工单或步骤的某个权限 **/
     private Map<Long, ProcessTaskOperationType> checkOperationTypeMap;
-
+    /** 缓存作用，保存授权给当前用户处理服务工单的用户列表 **/
+    private Map<String, List<String>> channelUuidFromUserUuidListMap = new HashMap<>();
+    /** 缓存作用，保存当前用户授权列表 **/
+    private Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap = new HashMap<>();
+    /** 保存某个工单或步骤的某个权限检验时，导致失败的原因 **/
+    private Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap = new HashMap<>();
     public static class Builder {
         private Set<Long> processTaskIdSet = new HashSet<>();
         private Set<Long> processTaskStepIdSet = new HashSet<>();
@@ -237,14 +248,12 @@ public class ProcessAuthManager {
 //            logger.error("D:" + (System.currentTimeMillis() - startTime3));
             Map<String, String> processTaskConfigMap = processTaskConfigList.stream().collect(Collectors.toMap(e->e.getHash(), e -> e.getConfig()));
 //            logger.error("A:" + (System.currentTimeMillis() - startTime));
-            Map<String, List<String>> channelUuidFromUserUuidListMap = new HashMap<>();
-            Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap = new HashMap<>();
             for (ProcessTaskVo processTaskVo : processTaskList) {
                 processTaskVo.setConfig(processTaskConfigMap.get(processTaskVo.getConfigHash()));
 //                startTime = System.currentTimeMillis();
                 processTaskVo.setStepList(processTaskStepListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
                 processTaskVo.setStepRelList(processTaskStepRelListMap.computeIfAbsent(processTaskVo.getId(), k -> new ArrayList<>()));
-                resultMap.putAll(getOperateMap(processTaskVo, channelUuidFromUserUuidListMap, processTaskAgentListMap));
+                resultMap.putAll(getOperateMap(processTaskVo));
 //                logger.error("B(" + processTaskVo.getId() + "):" + (System.currentTimeMillis() - startTime));
             }
         }
@@ -256,7 +265,7 @@ public class ProcessAuthManager {
      * @Description: 返回一个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表
      * @return Map<Long,Set<ProcessTaskOperationType>>
      */
-    private Map<Long, Set<ProcessTaskOperationType>> getOperateMap(ProcessTaskVo processTaskVo, Map<String, List<String>> channelUuidFromUserUuidListMap, Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap) {
+    private Map<Long, Set<ProcessTaskOperationType>> getOperateMap(ProcessTaskVo processTaskVo) {
         Set<ProcessTaskOperationType> taskOperationTypeSet = new HashSet<>();
         Set<ProcessTaskOperationType> stepOperationTypeSet = new HashSet<>();
         List<ProcessTaskOperationType> taskOperationTypeList = OperationAuthHandlerType.TASK.getOperationTypeList();
@@ -283,7 +292,7 @@ public class ProcessAuthManager {
                 resultSet.addAll(taskOperationTypeSet);
             } else {
                 for (ProcessTaskOperationType operationType : taskOperationTypeSet) {
-                    boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType);
+                    boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
                     if (result) {
                         resultSet.add(operationType);
                     } else {
@@ -295,10 +304,10 @@ public class ProcessAuthManager {
                             continue;
                         }
                         /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-                        List<String> fromUuidList = getFromUuidListByChannelUuid(channelUuidFromUserUuidListMap, processTaskAgentListMap,processTaskVo.getChannelUuid());
+                        List<String> fromUuidList = getFromUuidListByChannelUuid(processTaskVo.getChannelUuid());
                         if (CollectionUtils.isNotEmpty(fromUuidList)) {
                             for (String fromUuid : fromUuidList) {
-                                result = handler.getOperateMap(processTaskVo, fromUuid, operationType);
+                                result = handler.getOperateMap(processTaskVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
                                 if (result) {
                                     resultSet.add(operationType);
                                     break;
@@ -325,10 +334,10 @@ public class ProcessAuthManager {
                                 Boolean result = null;
                                 IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
                                 if (handler != null) {
-                                    result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType);
+                                    result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
                                 }
                                 if(result == null) {
-                                    result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType);
+                                    result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
                                     if (result == null) {
                                         result = false;
                                     }
@@ -337,14 +346,14 @@ public class ProcessAuthManager {
                                     resultSet.add(operationType);
                                 } else {
                                     /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-                                    List<String> fromUuidList = getFromUuidListByChannelUuid(channelUuidFromUserUuidListMap, processTaskAgentListMap, processTaskVo.getChannelUuid());
+                                    List<String> fromUuidList = getFromUuidListByChannelUuid(processTaskVo.getChannelUuid());
                                     if (CollectionUtils.isNotEmpty(fromUuidList)) {
                                         for (String fromUuid : fromUuidList) {
                                             if (handler != null) {
-                                                result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType);
+                                                result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
                                             }
                                             if(result == null) {
-                                                result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType);
+                                                result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
                                                 if (result == null) {
                                                     result = false;
                                                 }
@@ -368,12 +377,10 @@ public class ProcessAuthManager {
 
     /**
      *  获取授权给当前用户处理服务工单的用户列表
-     * @param channelUuidFromUserUuidListMap
-     * @param processTaskAgentListMap
      * @param channelUuid
      * @return
      */
-    private List<String> getFromUuidListByChannelUuid(Map<String, List<String>> channelUuidFromUserUuidListMap, Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap, String channelUuid) {
+    private List<String> getFromUuidListByChannelUuid(String channelUuid) {
         List<String> fromUserUuidList = channelUuidFromUserUuidListMap.get(channelUuid);
         if (fromUserUuidList == null) {
             fromUserUuidList = new ArrayList<>();
@@ -441,6 +448,13 @@ public class ProcessAuthManager {
     public boolean checkAndNoPermissionThrowException() {
         if (!check()) {
             for (Map.Entry<Long, ProcessTaskOperationType> entry : checkOperationTypeMap.entrySet()) {
+                Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException> map = operationTypePermissionDeniedExceptionMap.get(entry.getKey());
+                if (MapUtils.isNotEmpty(map)) {
+                    ProcessTaskPermissionDeniedException exception = map.get(entry.getValue());
+                    if (exception != null) {
+                        throw exception;
+                    }
+                }
                 throw new ProcessTaskNoPermissionException(entry.getValue().getText());
             }
         }
