@@ -4,30 +4,33 @@ import codedriver.framework.process.workcenter.table.constvalue.ProcessSqlTypeEn
 import org.springframework.stereotype.Component;
 
 /**
- * @Title: ProcessTaskTable
+ * @Title: ProcessTaskStepTable
  * @Package: codedriver.module.process.workcenter.core.table
- * @Description: 工单表
+ * @Description: TODO
  * @Author: 89770
- * @Date: 2021/1/15 16:02
+ * @Date: 2022/2/28 16:37
  * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
  * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  **/
-@Component
-public class WorkTimeSqlTable implements ISqlTable {
 
+@Component
+public class ProcessTaskStepSlaTimeSqlTable implements ISqlTable {
     @Override
     public String getName() {
-        return "worktime";
+        return "processtask_step_sla_time";
     }
 
     @Override
     public String getShortName() {
-        return "wt";
+        return "ptsst";
     }
 
     public enum FieldEnum {
-        UUID("uuid", "时间窗口UUID"),
-         NAME("name","时间窗口名")
+        PROCESSTASK_STEP_ID("processtask_step_id", "步骤ID"),
+        TYPE("type", "类型"),
+        PROCESSTASK_ID("processtask_id","工单id"),
+        TIME_COST("time_cost","耗时"),
+        IS_TIMEOUT("is_timeout","耗时")
         ;
         private final String name;
         private final String text;
