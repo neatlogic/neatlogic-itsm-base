@@ -288,7 +288,7 @@ public interface ProcessTaskMapper {
      */
     List<Long> getProcessTaskIdListWhichCurrentProcessTaskStepCountIsOverOneByProcessTaskIdList(@Param("list") List<Long> processTaskIdList);
 
-    List<ProcessTaskStepVo> getCurrentProcessTaskStepIdByProcessTaskIdList(@Param("list") List<Long> processTaskIdList);
+    List<ProcessTaskStepVo> getCurrentProcessTaskStepListByProcessTaskIdListAndTag(@Param("list") List<Long> processTaskIdList, @Param("tag") String tag);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 

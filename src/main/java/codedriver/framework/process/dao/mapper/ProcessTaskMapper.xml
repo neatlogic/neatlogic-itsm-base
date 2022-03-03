@@ -2453,10 +2453,10 @@
             count( 1 ) > 1
     </select>
 
-    <select id="getCurrentProcessTaskStepIdByProcessTaskIdList" parameterType="java.util.List"
+    <select id="getCurrentProcessTaskStepListByProcessTaskIdListAndTag"
             resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
         SELECT
-        pts.`processtask_id` as processTaskId,
+        pts.`processtask_id` AS processTaskId,
         pts.`id`,
         pts.`name`,
         pts.`type`,
@@ -2470,6 +2470,17 @@
             <foreach collection="list" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
+        </if>
+        <if test="tag != null and tag != ''">
+            AND EXISTS (
+            SELECT
+            1
+            FROM
+            `processtask_step_tag` ptst
+            JOIN `process_tag` pt ON ptst.`tag_id` = pt.`id`
+            WHERE
+            ptst.`processtask_step_id` = pts.`id`
+            AND pt.`name` = #{tag})
         </if>
     </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
