@@ -9,10 +9,10 @@ package codedriver.framework.process.exception.operationauth;
  * @author linbq
  * @since 2022/3/1 11:27
  **/
-public class ProcessTaskStepPendingException extends ProcessTaskPermissionDeniedException {
-    private static final long serialVersionUID = 9216337410118158651L;
+public class ProcessTaskStepUndoneException extends ProcessTaskPermissionDeniedException {
+    private static final long serialVersionUID = 9216337410118158661L;
 
-    public ProcessTaskStepPendingException() {
-        super("步骤未开始");
+    public ProcessTaskStepUndoneException() {
+        super("步骤未完成");
     }
 }

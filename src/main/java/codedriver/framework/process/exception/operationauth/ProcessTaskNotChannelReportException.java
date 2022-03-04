@@ -13,6 +13,6 @@ public class ProcessTaskNotChannelReportException extends ProcessTaskPermissionD
     private static final long serialVersionUID = 9216337410118158628L;
 
     public ProcessTaskNotChannelReportException(String channelName) {
-        super("没有【" + channelName + "】服务的上报权限");
+        super("您没有【" + channelName + "】服务的上报权限");
     }
 }
