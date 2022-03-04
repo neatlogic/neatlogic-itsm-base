@@ -89,10 +89,11 @@ public class ProcessConfigUtil {
      * @return
      */
     public static boolean getEditableFormAttr(JSONObject configObj, Set<String> editableAttrs, Set<Integer> editableAttrRows) {
-        boolean allAttrCanEdit = false;
+        boolean allAttrCanEdit = true;
         String firstStepUuid = getFirstStepUuid(configObj);
         JSONArray authorityList = (JSONArray) JSONPath.read(configObj.toJSONString(), "process.formConfig.authorityList");
         if (StringUtils.isNotBlank(firstStepUuid) && CollectionUtils.isNotEmpty(authorityList)) {
+            allAttrCanEdit = false;
             for (int i = 0; i < authorityList.size(); i++) {
                 JSONObject object = authorityList.getJSONObject(i);
                 String action = object.getString("action");
