@@ -2256,13 +2256,22 @@
         SELECT `tag_id` FROM `processtask_step_tag` WHERE `processtask_step_id` = #{value}
     </select>
 
-    <select id="getProcessTaskCountByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultType="int">
-        SELECT count(1)
-        FROM `processtask`
+    <sql id="getProcessTaskListByOwnerCondition">
         WHERE `owner` = #{owner}
         <if test="status != null and status !=''">
             AND `status` = #{status}
         </if>
+        <if test="channelName != null and channelName != ''">
+            AND EXISTS (
+            SELECT 1 FROM `channel` c WHERE c.`uuid` = pt.`channel_uuid` AND c.`name` = #{channelName}
+            )
+        </if>
+    </sql>
+
+    <select id="getProcessTaskCountByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultType="int">
+        SELECT count(1)
+        FROM `processtask` pt
+        <include refid="getProcessTaskListByOwnerCondition"/>
     </select>
 
     <select id="getProcessTaskListByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultMap="processTaskMap">
@@ -2283,11 +2292,8 @@
                `is_show`,
                `serial_number`,
                `source`
-        FROM `processtask`
-        WHERE `owner` = #{owner}
-        <if test="status != null and status !=''">
-            AND `status` = #{status}
-        </if>
+        FROM `processtask` pt
+        <include refid="getProcessTaskListByOwnerCondition"/>
         ORDER BY `id` DESC
         LIMIT #{startNum}, #{pageSize}
     </select>
