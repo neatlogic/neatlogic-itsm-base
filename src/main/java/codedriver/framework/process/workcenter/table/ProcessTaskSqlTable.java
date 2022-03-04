@@ -63,7 +63,7 @@ public class ProcessTaskSqlTable implements ISqlTable {
             return text;
         }
 
-        public String getProValue() {
+        public String getProName() {
             return proName;
         }
 
