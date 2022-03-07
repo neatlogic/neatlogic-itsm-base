@@ -67,7 +67,7 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     @EntityField(name = "simple：简单模式  custom：高级模式", type = ApiParamType.STRING)
     private String handlerType;
     @EntityField(name = "数据源handler", type = ApiParamType.STRING)
-    private String dataSourceHandler = "processtask";
+    private String dataSourceHandler;
 
 
     //params
