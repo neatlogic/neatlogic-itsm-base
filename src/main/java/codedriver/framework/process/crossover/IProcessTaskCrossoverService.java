@@ -9,8 +9,10 @@ import codedriver.framework.crossover.ICrossoverService;
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IProcessTaskCrossoverService extends ICrossoverService {
 
@@ -35,6 +37,7 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
 
     /**
      * 获取用户拥有此工单的哪些工单干系人身份
+     *
      * @param processTaskId
      * @param authenticationInfoVo
      * @return
@@ -49,4 +52,20 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @return true：有权限   false：没有权限
      */
     boolean getProcessFileHasDownloadAuthWithFileIdAndProcessTaskIdList(Long fileId, List<Long> processTaskIdList);
+
+    /**
+     * 某个用户的待办的工单中当前处理节点是打了某个标签的节点的工单列表
+     *
+     * @param jsonObj 参数结构见processtask/currentstepistagstepofmine/list接口
+     * @return
+     */
+    List<Map<String, Object>> getProcessTaskListWhichIsProcessingByUserAndTag(JSONObject jsonObj);
+
+    /**
+     * 批量审批工单
+     *
+     * @param jsonObj 参数结构见processtask/step/batch/complete接口
+     * @return
+     */
+    JSONObject batchCompleteProcessTaskStep(JSONObject jsonObj);
 }
