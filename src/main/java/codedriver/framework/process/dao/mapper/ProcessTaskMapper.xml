@@ -2204,8 +2204,8 @@
         <foreach collection="keywordList" item="keyword" separator="," open="(" close=")">
             #{keyword}
         </foreach>
-        GROUP BY pt.`${targetType}`
-        ORDER BY MAX(ff.counter) DESC
+        GROUP BY pt.`${targetType}`,pt.id
+        ORDER BY count(ff.counter) DESC
         limit 0,#{limit}
     </select>
 
