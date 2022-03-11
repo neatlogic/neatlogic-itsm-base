@@ -7,6 +7,7 @@ package codedriver.framework.process.crossover;
 
 import codedriver.framework.crossover.ICrossoverService;
 import codedriver.framework.dto.AuthenticationInfoVo;
+import codedriver.framework.process.dto.AssignableWorkerStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import com.alibaba.fastjson.JSONObject;
@@ -68,4 +69,10 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @return
      */
     JSONObject batchCompleteProcessTaskStep(JSONObject jsonObj);
+
+    List<AssignableWorkerStepVo> getAssignableWorkerStepList(Long processTaskId, String processStepUuid);
+
+    List<ProcessTaskStepVo> getForwardNextStepListByProcessTaskStepId(Long processTaskStepId);
+
+    List<ProcessTaskStepVo> getBackwardNextStepListByProcessTaskStepId(Long processTaskStepId);
 }
