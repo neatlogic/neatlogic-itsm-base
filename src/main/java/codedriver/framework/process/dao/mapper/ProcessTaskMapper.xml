@@ -309,6 +309,19 @@
         WHERE `processtask_id` = #{value}
     </select>
 
+    <select id="getProcessTaskStepFormAttributeDataListByType" parameterType="java.lang.String"
+            resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
+        SELECT `processtask_id`  AS processTaskId,
+               `attribute_uuid`  AS attributeUuid,
+               `attribute_label` AS attributeLabel,
+               `type`            AS type,
+               `data`,
+               `sort`
+        FROM `processtask_formattribute_data`
+        WHERE `type` = #{value}
+        ORDER BY `processtask_id`
+    </select>
+
     <select id="getProcessTaskStepFormAttributeDataByProcessTaskIdList" parameterType="java.util.List"
             resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
         SELECT `processtask_id` AS processTaskId,
@@ -2491,6 +2504,14 @@
             AND pt.`name` = #{tag})
         </if>
     </select>
+
+    <select id="getProcessTaskFormContentListByContentLikeKeyword" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
+        SELECT
+            `hash` AS formContentHash,
+            `content` AS formContent
+        FROM `processtask_form_content`
+        WHERE `content` LIKE CONCAT('%',#{value},'%')
+    </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
@@ -3295,6 +3316,19 @@
         AND `user_type` = 'major'
     </update>
 
+    <update id="updateProcessTaskFormFormContentHashByFormContentHash">
+        UPDATE `processtask_form`
+        SET `form_content_hash` = #{newFormConfigHash}
+        WHERE `form_content_hash` = #{oldFormConfigHash}
+    </update>
+
+    <update id="updateProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
+        UPDATE `processtask_formattribute_data`
+        SET `data` = #{data}
+        WHERE `processtask_id` = #{processTaskId}
+          AND `attribute_uuid` = #{attributeUuid}
+    </update>
+
     <delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_converge`
@@ -3531,5 +3565,9 @@
 
     <delete id="deleteProcessTaskTimeCostByProcessTaskId" parameterType="java.lang.Long">
         DELETE FROM `processtask_time_cost` WHERE `processtask_id` = #{value}
+    </delete>
+
+    <delete id="deleteProcessTaskFormContentByHash" parameterType="java.lang.String">
+        DELETE FROM `processtask_form_content` WHERE `hash` = #{value}
     </delete>
 </mapper>
