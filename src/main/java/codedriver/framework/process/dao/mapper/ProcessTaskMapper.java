@@ -206,7 +206,7 @@ public interface ProcessTaskMapper {
     int checkProcessTaskFocusExists(@Param("processTaskId") Long processTaskId,
                                     @Param("userUuid") String userUuid);
 
-    List<String> getFocusUsersOfProcessTask(Long processTaskId);
+//    List<String> getFocusUsersOfProcessTask(Long processTaskId);
 
     List<String> getFocusUserListByTaskId(Long processTaskId);
 

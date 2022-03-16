@@ -1776,11 +1776,11 @@
           and `user_uuid` = #{userUuid}
     </select>
 
-    <select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
+    <!--<select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
         SELECT CONCAT("user#", `user_uuid`)
         FROM `processtask_focus`
         WHERE `processtask_id` = #{value}
-    </select>
+    </select>-->
 
     <select id="getFocusUserListByTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
         SELECT CONCAT('user#', `user_uuid`)
