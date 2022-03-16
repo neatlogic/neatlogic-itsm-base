@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-
+@Deprecated
 public class ProcessTaskUtil {
     /**
      * @param processTaskVo 工单信息
