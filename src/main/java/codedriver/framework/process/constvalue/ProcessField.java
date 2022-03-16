@@ -1,5 +1,6 @@
 package codedriver.framework.process.constvalue;
 
+@Deprecated
 public enum ProcessField {
     ID("id", "工单号"),
     STEPID("stepid", "步骤id"),

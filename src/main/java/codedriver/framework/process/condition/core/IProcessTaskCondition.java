@@ -2,7 +2,7 @@ package codedriver.framework.process.condition.core;
 
 import codedriver.framework.condition.core.IConditionHandler;
 import codedriver.framework.dto.condition.ConditionVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.SqlDecoratorVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 
@@ -33,7 +33,7 @@ public interface IProcessTaskCondition extends IConditionHandler {
      *
      * @return 数据
      */
-    default Object getConditionParamData(ProcessTaskVo processTaskVo) {
+    default Object getConditionParamData(ProcessTaskStepVo processTaskStepVo) {
         return null;
     }
 

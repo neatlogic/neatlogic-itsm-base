@@ -30,6 +30,13 @@ public interface CatalogMapper {
 			@Param("catalogUuid") String catalogUuid
 			);
 
+	List<String> getAuthorizedCatalogUuidListByCatalogUuidList(
+			@Param("userUuid")String userUuid,
+			@Param("teamUuidList")List<String> teamUuidList,
+			@Param("roleUuidList")List<String> roleUuidList,
+			@Param("catalogUuidList") List<String> catalogUuid
+			);
+
 	String getCatalogLockByUuid(String uuid);
 
 	List<CatalogVo> getCatalogListByParentUuid(String parentUuid);

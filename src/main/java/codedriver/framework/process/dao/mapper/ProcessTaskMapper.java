@@ -56,6 +56,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskId(Long processTaskId);
 
+    String getProcessTaskStartContentByProcessTaskId(Long processTaskId);
+
     List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
             @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
 
@@ -204,7 +206,7 @@ public interface ProcessTaskMapper {
     int checkProcessTaskFocusExists(@Param("processTaskId") Long processTaskId,
                                     @Param("userUuid") String userUuid);
 
-    List<String> getFocusUsersOfProcessTask(Long processTaskId);
+//    List<String> getFocusUsersOfProcessTask(Long processTaskId);
 
     List<String> getFocusUserListByTaskId(Long processTaskId);
 
