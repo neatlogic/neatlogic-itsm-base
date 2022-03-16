@@ -369,6 +369,15 @@
         ORDER BY `lcd` DESC
     </select>
 
+    <select id="getProcessTaskStartContentByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT b.`content`
+        FROM `processtask_step_content` a
+        JOIN `processtask_content` b ON b.`hash` = a.`content_hash`
+        WHERE a.`type` = 'startprocess'
+          AND a.`processtask_id` = #{value}
+        LIMIT 1
+    </select>
+
     <resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
         <result column="processtask_id" property="processTaskId"/>
         <result column="processtask_step_id" property="processTaskStepId"/>
