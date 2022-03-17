@@ -128,9 +128,9 @@
 		DISTINCT a.`catalog_uuid`
 		FROM `catalog_authority` a
 		JOIN `catalog` b ON b.`uuid` = a.`catalog_uuid` AND b.`is_active` = 1
-		WHERE
+		WHERE a.`catalog_uuid` IN
 		<foreach collection="catalogUuidList" item="catalogUuid" open="(" separator="," close=")">
-			a.`catalog_uuid` = #{catalogUuid}
+			 #{catalogUuid}
 		</foreach>
 		  AND (
 			(type = 'common' AND a.`uuid` = 'alluser')
