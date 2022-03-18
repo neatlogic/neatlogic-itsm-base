@@ -28,15 +28,6 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
     ProcessTaskVo getProcessTaskDetailById(Long processTaskId);
 
     /**
-     * @param processTaskStepId 步骤id
-     * @return ProcessTaskStepVo
-     * @Author: linbq
-     * @Time:2020年8月21日
-     * @Description: 获取当前步骤信息
-     */
-    ProcessTaskStepVo getCurrentProcessTaskStepById(Long processTaskStepId);
-
-    /**
      * 获取用户拥有此工单的哪些工单干系人身份
      *
      * @param processTaskId
