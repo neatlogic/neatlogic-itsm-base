@@ -38,7 +38,7 @@ public class ProcessTaskAgentServiceImpl implements ProcessTaskAgentService {
     @Override
     public List<String> getFromUserUuidListByToUserUuidAndChannelUuid(String toUserUuid, String channelUuid) {
         List<String> fromUserUuidList = new ArrayList<>();
-        List<ProcessTaskAgentVo> processTaskAgentList = processTaskAgentMapper.getProcessTaskAgentListByToUserUuid(toUserUuid);
+        List<ProcessTaskAgentVo> processTaskAgentList = processTaskAgentMapper.getProcessTaskAgentDetailListByToUserUuid(toUserUuid);
         for (ProcessTaskAgentVo processTaskAgentVo : processTaskAgentList) {
             String fromUserUuid = processTaskAgentVo.getFromUserUuid();
             if (fromUserUuidList.contains(fromUserUuid)) {
@@ -46,7 +46,7 @@ public class ProcessTaskAgentServiceImpl implements ProcessTaskAgentService {
             }
             boolean flag = false;
             List<String> catalogUuidList = new ArrayList<>();
-            List<ProcessTaskAgentTargetVo> processTaskAgentTargetList = processTaskAgentMapper.getProcessTaskAgentTargetListByProcessTaskAgentId(processTaskAgentVo.getId());
+            List<ProcessTaskAgentTargetVo> processTaskAgentTargetList = processTaskAgentVo.getProcessTaskAgentTargetVos();
             for (ProcessTaskAgentTargetVo processTaskAgentTargetVo : processTaskAgentTargetList) {
                 String type = processTaskAgentTargetVo.getType();
                 if ("channel".equals(type)) {
