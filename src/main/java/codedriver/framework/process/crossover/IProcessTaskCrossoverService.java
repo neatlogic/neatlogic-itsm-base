@@ -25,8 +25,6 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
 
     ProcessTaskStepVo getStartProcessTaskStepByProcessTaskId(Long processTaskId);
 
-    ProcessTaskVo getProcessTaskDetailById(Long processTaskId);
-
     /**
      * 获取用户拥有此工单的哪些工单干系人身份
      *
