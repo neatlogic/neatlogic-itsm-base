@@ -200,7 +200,7 @@
 		SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
 	</select>
 
-	<select id="getAncestorsAndSelfByLftRht" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
+	<select id="getAncestorsAndSelfByLftRht" resultType="codedriver.framework.process.dto.CatalogVo" useCache="true">
 	SELECT
 	a.`uuid`,
 	a.`name`,

@@ -15,6 +15,8 @@ public interface SelectContentByHashMapper {
 
     public String getProcessTaskFromContentByHash(String hash);
 
+    public String getProcessTaskFromContentByProcessTaskId(Long processTaskId);
+
     public int getProcessTaskFromContentCountByHash(String hash);
 
     public int checkProcessTaskScoreTempleteConfigIsExists(String hash);
