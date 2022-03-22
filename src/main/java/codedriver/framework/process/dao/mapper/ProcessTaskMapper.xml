@@ -84,11 +84,11 @@
         <!--<result column="reporterName" property="reporterName" />-->
         <result column="expire_time" property="expireTime"/>
         <result column="worktime_uuid" property="worktimeUuid"/>
-        <result column="error" property="error"/>
+        <!--<result column="error" property="error"/>-->
         <result column="is_show" property="isShow"/>
         <result column="serial_number" property="serialNumber"/>
         <result column="source" property="source"/>
-        <association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
+        <!--<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="owner"/>
             <result property="userName" column="ownerName"/>
             <result property="userInfo" column="ownerInfo"/>
@@ -101,7 +101,7 @@
             <result property="userInfo" column="reporterInfo"/>
             <result property="vipLevel" column="reporterVipLevel"/>
             <result property="pinyin" column="reporterPinyin"/>
-        </association>
+        </association>-->
     </resultMap>
 
     <select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultMap="processTaskMap">
@@ -116,16 +116,9 @@
                `start_time`,
                `end_time`,
                `owner`,
-               (SELECT user_name FROM `user` x WHERE x.uuid = `owner`)    AS
-                                                                             ownerName,
-               (SELECT vip_level
-                FROM `user` x
-                WHERE x.uuid = `owner`)                                   AS ownerVipLevel,
                `reporter`,
-               (SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
                `expire_time`,
                `worktime_uuid`,
-               `error`,
                `is_show`,
                `serial_number`,
                `source`
@@ -1638,9 +1631,7 @@
         `start_time`,
         `end_time`,
         `owner`,
-        (SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
         `reporter`,
-        (SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
         `expire_time`,
         `worktime_uuid`,
         `serial_number`,
@@ -2310,7 +2301,6 @@
                `reporter`,
                `expire_time`,
                `worktime_uuid`,
-               `error`,
                `is_show`,
                `serial_number`,
                `source`
