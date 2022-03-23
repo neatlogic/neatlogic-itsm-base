@@ -1956,7 +1956,7 @@
         <result column="channel_uuid" property="channelUuid"/>
         <result column="config_hash" property="configHash"/>
         <result column="priority_uuid" property="priorityUuid"/>
-        <result column="status" property="status"/>
+        <result column="processTaskStatus" property="status"/>
         <result column="start_time" property="startTime"/>
         <result column="end_time" property="endTime"/>
         <result column="ownerUuid" property="owner"/>
