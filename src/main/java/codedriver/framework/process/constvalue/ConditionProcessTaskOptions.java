@@ -12,10 +12,7 @@ public enum ConditionProcessTaskOptions {
     OWNERCOMPANY("ownercompany", "上报人公司"),
     OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
     OWNERROLE("ownerrole", "上报人角色"),
-    OWNERLEVEL("ownerlevel", "上报人级别")//,
-//    STEPTASK("steptask", "子任务"),
-//    ACTIONTRIGGERUSER("actiontriggeruser", "动作触发人"),
-//    STEPTASKID("steptaskid", "子任务ID")
+    OWNERLEVEL("ownerlevel", "上报人级别")
     ;
     private String value;
     private String text;
