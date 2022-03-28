@@ -60,6 +60,7 @@ public class ProcessTaskStepVo extends BasePageVo {
     private String error;
     private String result;
     private String configHash;
+    private String taskConfigHash;// 工单配置hash
     private Boolean isAllDone = false;
     private Boolean isCurrentUserDone = false;
     private Boolean isWorkerPolicyListSorted = false;
@@ -780,5 +781,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setNextStepId(Long nextStepId) {
         this.nextStepId = nextStepId;
+    }
+
+    public String getTaskConfigHash() {
+        return taskConfigHash;
+    }
+
+    public void setTaskConfigHash(String taskConfigHash) {
+        this.taskConfigHash = taskConfigHash;
     }
 }

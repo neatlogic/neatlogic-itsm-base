@@ -561,6 +561,29 @@
         UPDATE
     </select>
 
+    <select id="getProcessTaskVoLockById" parameterType="java.lang.Long" resultMap="processTaskMap">
+        SELECT `id`,
+               `serial_number`,
+               `title`,
+               `process_uuid`,
+               `channel_uuid`,
+               `config_hash`,
+               `priority_uuid`,
+               `status`,
+               `start_time`,
+               `end_time`,
+               `owner`,
+               `reporter`,
+               `expire_time`,
+               `worktime_uuid`,
+               `is_show`,
+               `serial_number`,
+               `source`
+        FROM `processtask`
+        WHERE id = #{value}
+        FOR UPDATE
+    </select>
+
     <select id="getToProcessTaskStepByFromIdAndType" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
         SELECT
         a.`id`,
