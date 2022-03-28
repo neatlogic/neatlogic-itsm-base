@@ -1,12 +1,12 @@
 package codedriver.framework.process.column.core;
 
-import codedriver.framework.dashboard.dto.DashboardWidgetDataGroupVo;
+import codedriver.framework.dashboard.dto.DashboardWidgetAllGroupDefineVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.dto.TableSelectColumnVo;
-import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -133,10 +133,10 @@ public interface IProcessTaskColumn {
      * @Description: 获取dashboard 映射关系
      * @Author: 89770
      * @Date: 2021/3/5 17:01
-     * @Params: [mapList]
+     * @Params: [dbDataMapList]
      * @Returns: com.alibaba.fastjson.JSONArray
      **/
-    void getDashboardDataVo(DashboardWidgetDataGroupVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList);
+    void getDashboardAllGroupDefine(DashboardWidgetAllGroupDefineVo dashboardWidgetAllGroupDefineVo, List<Map<String, Object>> dbDataMapList);
 
     /**
      * @Description: 将数据集提取groupList, 用于过滤，并按list 权重排序
@@ -145,6 +145,6 @@ public interface IProcessTaskColumn {
      * @Params: [mapList]
      * @Returns: java.util.List<java.lang.String>
      **/
-    void getExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList, WorkcenterVo workcenterVo);
+    LinkedHashMap<String, Object> getExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList);
 
 }

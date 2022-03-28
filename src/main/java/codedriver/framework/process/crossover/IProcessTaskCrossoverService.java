@@ -7,6 +7,7 @@ package codedriver.framework.process.crossover;
 
 import codedriver.framework.crossover.ICrossoverService;
 import codedriver.framework.dto.AuthenticationInfoVo;
+import codedriver.framework.process.dto.AssignableWorkerStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import com.alibaba.fastjson.JSONObject;
@@ -23,17 +24,6 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
     void setProcessTaskFormInfo(ProcessTaskVo processTaskVo);
 
     ProcessTaskStepVo getStartProcessTaskStepByProcessTaskId(Long processTaskId);
-
-    ProcessTaskVo getProcessTaskDetailById(Long processTaskId);
-
-    /**
-     * @param processTaskStepId 步骤id
-     * @return ProcessTaskStepVo
-     * @Author: linbq
-     * @Time:2020年8月21日
-     * @Description: 获取当前步骤信息
-     */
-    ProcessTaskStepVo getCurrentProcessTaskStepById(Long processTaskStepId);
 
     /**
      * 获取用户拥有此工单的哪些工单干系人身份
@@ -68,4 +58,10 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @return
      */
     JSONObject batchCompleteProcessTaskStep(JSONObject jsonObj);
+
+    List<AssignableWorkerStepVo> getAssignableWorkerStepList(Long processTaskId, String processStepUuid);
+
+    List<ProcessTaskStepVo> getForwardNextStepListByProcessTaskStepId(Long processTaskStepId);
+
+    List<ProcessTaskStepVo> getBackwardNextStepListByProcessTaskStepId(Long processTaskStepId);
 }

@@ -49,6 +49,10 @@ public interface ChannelMapper {
         @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
         @Param("channelUuid") String channelUuid);
 
+    List<String> getActiveAuthorizedChannelUuidList(@Param("userUuid") String userUuid,
+        @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
+        @Param("channelUuid") String channelUuid);
+
     public List<ChannelVo> getAuthorizedChannelListByParentUuid(@Param("userUuid") String userUuid,
         @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
         @Param("parentUuid") String parentUuid);

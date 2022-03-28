@@ -123,6 +123,37 @@
 		</where>
 	</select>
 
+	<select id="getAuthorizedCatalogUuidListByCatalogUuidList" resultType="java.lang.String" useCache="false">
+		SELECT
+		DISTINCT a.`catalog_uuid`
+		FROM `catalog_authority` a
+		JOIN `catalog` b ON b.`uuid` = a.`catalog_uuid` AND b.`is_active` = 1
+		WHERE a.`catalog_uuid` IN
+		<foreach collection="catalogUuidList" item="catalogUuid" open="(" separator="," close=")">
+			 #{catalogUuid}
+		</foreach>
+		  AND (
+			(type = 'common' AND a.`uuid` = 'alluser')
+			<if test="userUuid != null and userUuid != ''">
+				OR (type = 'user' AND a.`uuid` = #{userUuid})
+			</if>
+			<if test="teamUuidList != null and teamUuidList.size() > 0">
+				OR (type = 'team' AND a.`uuid` IN
+				<foreach collection="teamUuidList" item="teamUuid" open="(" separator="," close=")">
+					#{teamUuid}
+				</foreach>
+				)
+			</if>
+			<if test="roleUuidList != null and roleUuidList.size() > 0">
+				OR (type = 'role' AND a.`uuid` IN
+				<foreach collection="roleUuidList" item="roleUuid" open="(" separator="," close=")">
+					#{roleUuid}
+				</foreach>
+				)
+			</if>
+		)
+	</select>
+
 	<select id="getCatalogLockByUuid" parameterType="java.lang.String" resultType="java.lang.String" useCache="false">
 		SELECT `uuid` FROM `catalog` WHERE `uuid` = #{uuid} FOR UPDATE
 	</select>
@@ -169,7 +200,7 @@
 		SELECT COUNT(1) FROM `catalog` WHERE `uuid` = #{uuid} AND `lft` &gt; #{lft} AND `rht` &lt; #{rht}
 	</select>
 
-	<select id="getAncestorsAndSelfByLftRht" resultType="codedriver.framework.process.dto.CatalogVo" useCache="false">
+	<select id="getAncestorsAndSelfByLftRht" resultType="codedriver.framework.process.dto.CatalogVo" useCache="true">
 	SELECT
 	a.`uuid`,
 	a.`name`,

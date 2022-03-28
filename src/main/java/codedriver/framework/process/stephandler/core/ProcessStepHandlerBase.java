@@ -1700,12 +1700,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
             if (MapUtils.isNotEmpty(processVo.getConfig())) {
                 //如果不存在优先级List则默认不显示优先级
-                List<ChannelPriorityVo> channelPriorityList = channelMapper.getChannelPriorityListByChannelUuid(processTaskVo.getChannelUuid());
-                if (CollectionUtils.isEmpty(channelPriorityList)) {
-                    processVo.getConfig().put("isNeedPriority", 0);
-                } else {
-                    processVo.getConfig().put("isNeedPriority", 1);
-                }
+//                List<ChannelPriorityVo> channelPriorityList = channelMapper.getChannelPriorityListByChannelUuid(processTaskVo.getChannelUuid());
+//                if (CollectionUtils.isEmpty(channelPriorityList)) {
+//                    processVo.getConfig().put("isNeedPriority", 0);
+//                } else {
+//                    processVo.getConfig().put("isNeedPriority", 1);
+//                }
                 String configStr = processVo.getConfigStr();
                 String hash = DigestUtils.md5DigestAsHex(configStr.getBytes());
                 processTaskVo.setConfigHash(hash);

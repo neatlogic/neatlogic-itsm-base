@@ -1,10 +1,9 @@
 package codedriver.framework.process.column.core;
 
 
-import codedriver.framework.dashboard.dto.DashboardWidgetDataGroupVo;
+import codedriver.framework.dashboard.dto.DashboardWidgetAllGroupDefineVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
-import codedriver.framework.process.workcenter.dto.WorkcenterVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -76,17 +75,17 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
     }
 
     @Override
-    public void getDashboardDataVo(DashboardWidgetDataGroupVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
-        getMyDashboardDataVo(dashboardDataVo, workcenterVo, mapList);
+    public void getDashboardAllGroupDefine(DashboardWidgetAllGroupDefineVo dashboardDataVo, List<Map<String, Object>> dbDataMapList) {
+        getMyDashboardAllGroupDefine(dashboardDataVo, dbDataMapList);
     }
 
-    protected void getMyDashboardDataVo(DashboardWidgetDataGroupVo dashboardDataVo, WorkcenterVo workcenterVo, List<Map<String, Object>> mapList) {
+    protected void getMyDashboardAllGroupDefine(DashboardWidgetAllGroupDefineVo dashboardDataVo, List<Map<String, Object>> mapList) {
 
     }
 
     @Override
-    public void getExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList, WorkcenterVo workcenterVo) {
-        workcenterVo.getDashboardWidgetChartConfigVo().setGroupDataCountMap(getMyExchangeToDashboardGroupDataMap(mapList));
+    public LinkedHashMap<String, Object> getExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList) {
+        return getMyExchangeToDashboardGroupDataMap(mapList);
     }
 
     protected LinkedHashMap<String, Object> getMyExchangeToDashboardGroupDataMap(List<Map<String, Object>> mapList) {

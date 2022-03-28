@@ -48,11 +48,15 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskId(Long processTaskId);
 
+    List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataListByType(String type);
+
     List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskIdList(List<Long> existsFormProcessTaskIdList);
 
     List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
 
     List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskId(Long processTaskId);
+
+    String getProcessTaskStartContentByProcessTaskId(Long processTaskId);
 
     List<ProcessTaskStepUserVo> getProcessTaskStepUserByStepId(
             @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType);
@@ -202,7 +206,7 @@ public interface ProcessTaskMapper {
     int checkProcessTaskFocusExists(@Param("processTaskId") Long processTaskId,
                                     @Param("userUuid") String userUuid);
 
-    List<String> getFocusUsersOfProcessTask(Long processTaskId);
+//    List<String> getFocusUsersOfProcessTask(Long processTaskId);
 
     List<String> getFocusUserListByTaskId(Long processTaskId);
 
@@ -289,6 +293,8 @@ public interface ProcessTaskMapper {
     List<Long> getProcessTaskIdListWhichCurrentProcessTaskStepCountIsOverOneByProcessTaskIdList(@Param("list") List<Long> processTaskIdList);
 
     List<ProcessTaskStepVo> getCurrentProcessTaskStepListByProcessTaskIdListAndTag(@Param("list") List<Long> processTaskIdList, @Param("tag") String tag);
+
+    List<ProcessTaskFormVo> getProcessTaskFormContentListByContentLikeKeyword(String formstaticlist);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
@@ -414,6 +420,10 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskStepMajorUserAndStatus(ProcessTaskStepUserVo processTaskStepUserVo);
 
+    int updateProcessTaskFormFormContentHashByFormContentHash(@Param("oldFormConfigHash") String oldFormConfigHash, @Param("newFormConfigHash") String newFormConfigHash);
+
+    int updateProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(ProcessTaskFormAttributeDataVo processTaskFormAttributeData);
+
     int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
     int deleteProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
@@ -474,4 +484,6 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskStepTimerByProcessTaskStepId(Long processTaskStepId);
 
     int deleteProcessTaskTimeCostByProcessTaskId(Long processTaskId);
+
+    int deleteProcessTaskFormContentByHash(String hash);
 }

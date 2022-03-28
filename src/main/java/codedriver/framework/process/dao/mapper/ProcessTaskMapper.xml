@@ -84,11 +84,11 @@
         <!--<result column="reporterName" property="reporterName" />-->
         <result column="expire_time" property="expireTime"/>
         <result column="worktime_uuid" property="worktimeUuid"/>
-        <result column="error" property="error"/>
+        <!--<result column="error" property="error"/>-->
         <result column="is_show" property="isShow"/>
         <result column="serial_number" property="serialNumber"/>
         <result column="source" property="source"/>
-        <association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
+        <!--<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="owner"/>
             <result property="userName" column="ownerName"/>
             <result property="userInfo" column="ownerInfo"/>
@@ -101,7 +101,7 @@
             <result property="userInfo" column="reporterInfo"/>
             <result property="vipLevel" column="reporterVipLevel"/>
             <result property="pinyin" column="reporterPinyin"/>
-        </association>
+        </association>-->
     </resultMap>
 
     <select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultMap="processTaskMap">
@@ -116,16 +116,9 @@
                `start_time`,
                `end_time`,
                `owner`,
-               (SELECT user_name FROM `user` x WHERE x.uuid = `owner`)    AS
-                                                                             ownerName,
-               (SELECT vip_level
-                FROM `user` x
-                WHERE x.uuid = `owner`)                                   AS ownerVipLevel,
                `reporter`,
-               (SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
                `expire_time`,
                `worktime_uuid`,
-               `error`,
                `is_show`,
                `serial_number`,
                `source`
@@ -309,6 +302,19 @@
         WHERE `processtask_id` = #{value}
     </select>
 
+    <select id="getProcessTaskStepFormAttributeDataListByType" parameterType="java.lang.String"
+            resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
+        SELECT `processtask_id`  AS processTaskId,
+               `attribute_uuid`  AS attributeUuid,
+               `attribute_label` AS attributeLabel,
+               `type`            AS type,
+               `data`,
+               `sort`
+        FROM `processtask_formattribute_data`
+        WHERE `type` = #{value}
+        ORDER BY `processtask_id`
+    </select>
+
     <select id="getProcessTaskStepFormAttributeDataByProcessTaskIdList" parameterType="java.util.List"
             resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
         SELECT `processtask_id` AS processTaskId,
@@ -354,6 +360,15 @@
         FROM `processtask_step_content`
         WHERE `processtask_id` = #{value}
         ORDER BY `lcd` DESC
+    </select>
+
+    <select id="getProcessTaskStartContentByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT b.`content`
+        FROM `processtask_step_content` a
+        JOIN `processtask_content` b ON b.`hash` = a.`content_hash`
+        WHERE a.`type` = 'startprocess'
+          AND a.`processtask_id` = #{value}
+        LIMIT 1
     </select>
 
     <resultMap id="processTaskStepUserMap" type="codedriver.framework.process.dto.ProcessTaskStepUserVo">
@@ -1616,9 +1631,7 @@
         `start_time`,
         `end_time`,
         `owner`,
-        (SELECT user_name FROM `user` x WHERE x.uuid = `owner`) AS ownerName,
         `reporter`,
-        (SELECT user_name FROM `user` x WHERE x.uuid = `reporter`) AS reporterName,
         `expire_time`,
         `worktime_uuid`,
         `serial_number`,
@@ -1754,11 +1767,11 @@
           and `user_uuid` = #{userUuid}
     </select>
 
-    <select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
+    <!--<select id="getFocusUsersOfProcessTask" parameterType="java.lang.Long" resultType="java.lang.String">
         SELECT CONCAT("user#", `user_uuid`)
         FROM `processtask_focus`
         WHERE `processtask_id` = #{value}
-    </select>
+    </select>-->
 
     <select id="getFocusUserListByTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
         SELECT CONCAT('user#', `user_uuid`)
@@ -1943,7 +1956,7 @@
         <result column="channel_uuid" property="channelUuid"/>
         <result column="config_hash" property="configHash"/>
         <result column="priority_uuid" property="priorityUuid"/>
-        <result column="status" property="status"/>
+        <result column="processTaskStatus" property="status"/>
         <result column="start_time" property="startTime"/>
         <result column="end_time" property="endTime"/>
         <result column="ownerUuid" property="owner"/>
@@ -2204,8 +2217,8 @@
         <foreach collection="keywordList" item="keyword" separator="," open="(" close=")">
             #{keyword}
         </foreach>
-        GROUP BY pt.`${targetType}`
-        ORDER BY MAX(ff.counter) DESC
+        GROUP BY pt.`${targetType}`,pt.id
+        ORDER BY count(ff.counter) DESC
         limit 0,#{limit}
     </select>
 
@@ -2288,7 +2301,6 @@
                `reporter`,
                `expire_time`,
                `worktime_uuid`,
-               `error`,
                `is_show`,
                `serial_number`,
                `source`
@@ -2490,6 +2502,14 @@
             ptst.`processtask_step_id` = pts.`id`
             AND pt.`name` = #{tag})
         </if>
+    </select>
+
+    <select id="getProcessTaskFormContentListByContentLikeKeyword" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
+        SELECT
+            `hash` AS formContentHash,
+            `content` AS formContent
+        FROM `processtask_form_content`
+        WHERE `content` LIKE CONCAT('%',#{value},'%')
     </select>
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
@@ -3295,6 +3315,19 @@
         AND `user_type` = 'major'
     </update>
 
+    <update id="updateProcessTaskFormFormContentHashByFormContentHash">
+        UPDATE `processtask_form`
+        SET `form_content_hash` = #{newFormConfigHash}
+        WHERE `form_content_hash` = #{oldFormConfigHash}
+    </update>
+
+    <update id="updateProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
+        UPDATE `processtask_formattribute_data`
+        SET `data` = #{data}
+        WHERE `processtask_id` = #{processTaskId}
+          AND `attribute_uuid` = #{attributeUuid}
+    </update>
+
     <delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_converge`
@@ -3531,5 +3564,9 @@
 
     <delete id="deleteProcessTaskTimeCostByProcessTaskId" parameterType="java.lang.Long">
         DELETE FROM `processtask_time_cost` WHERE `processtask_id` = #{value}
+    </delete>
+
+    <delete id="deleteProcessTaskFormContentByHash" parameterType="java.lang.String">
+        DELETE FROM `processtask_form_content` WHERE `hash` = #{value}
     </delete>
 </mapper>

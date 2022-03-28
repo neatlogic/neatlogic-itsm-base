@@ -3,9 +3,8 @@ package codedriver.framework.process.workcenter.dto;
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.util.CommonUtil;
-import codedriver.framework.dashboard.dto.DashboardWidgetChartConfigVo;
 import codedriver.framework.dto.AuthorityVo;
-import codedriver.framework.dto.condition.ConditionConfigVo;
+import codedriver.framework.process.dto.SqlDecoratorVo;
 import codedriver.framework.restful.annotation.EntityField;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -14,9 +13,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-public class WorkcenterVo extends ConditionConfigVo implements Serializable {
+public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
     private static final long serialVersionUID = 1952066708451908924L;
 
     @EntityField(name = "工单中心分类uuid", type = ApiParamType.STRING)
@@ -66,9 +67,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private String catalogName;
     @EntityField(name = "simple：简单模式  custom：高级模式", type = ApiParamType.STRING)
     private String handlerType;
-    @EntityField(name = "数据源handler", type = ApiParamType.STRING)
-    private String dataSourceHandler;
-
 
     //params
     private List<String> channelUuidList;
@@ -78,8 +76,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
 
     private List<Long> processTaskIdList;
 
-    private String sqlFieldType;
-
     //关键字全文检索字段名（工单号、工单标题、工单内容）
     private String keywordHandler;
 
@@ -88,9 +84,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
     private String keywordColumn;
 
     private String keywordText;
-
-    //用于dashboard 搜索入参
-    private DashboardWidgetChartConfigVo dashboardWidgetChartConfigVo;
 
     public WorkcenterVo() {
     }
@@ -306,14 +299,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.sortList = sortList;
     }
 
-    public String getSqlFieldType() {
-        return sqlFieldType;
-    }
-
-    public void setSqlFieldType(String sqlFieldType) {
-        this.sqlFieldType = sqlFieldType;
-    }
-
     public List<Long> getProcessTaskIdList() {
         return processTaskIdList;
     }
@@ -378,17 +363,6 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
         this.keywordConditionList = keywordConditionList;
     }
 
-    public DashboardWidgetChartConfigVo getDashboardWidgetChartConfigVo() {
-        if(dashboardWidgetChartConfigVo == null){
-            dashboardWidgetChartConfigVo = new DashboardWidgetChartConfigVo();
-        }
-        return dashboardWidgetChartConfigVo;
-    }
-
-    public void setDashboardWidgetChartConfigVo(DashboardWidgetChartConfigVo dashboardWidgetChartConfigVo) {
-        this.dashboardWidgetChartConfigVo = dashboardWidgetChartConfigVo;
-    }
-
     public Long getCatalogId() {
         return catalogId;
     }
@@ -416,13 +390,5 @@ public class WorkcenterVo extends ConditionConfigVo implements Serializable {
             }
         }
         return handlerType;
-    }
-
-    public String getDataSourceHandler() {
-        return dataSourceHandler;
-    }
-
-    public void setDataSourceHandler(String dataSourceHandler) {
-        this.dataSourceHandler = dataSourceHandler;
     }
 }
