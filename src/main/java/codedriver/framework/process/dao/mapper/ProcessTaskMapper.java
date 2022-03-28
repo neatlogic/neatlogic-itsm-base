@@ -18,7 +18,21 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskVo> getProcessTaskByStatusList(@Param("statusList") List<String> statusList, @Param("count") Integer count);
 
+    /**
+     * 获取工单基本信息（已删除则忽略）
+     *
+     * @param processTaskId
+     * @return
+     */
     ProcessTaskVo getProcessTaskBaseInfoById(Long processTaskId);
+
+    /**
+     * 获取工单基本信息（不限是否已删除）
+     *
+     * @param processTaskId
+     * @return
+     */
+    ProcessTaskVo getProcessTaskBaseInfoByIdIncludeIsDeleted(Long processTaskId);
 
     List<ProcessTaskVo> getTaskListByIdList(List<Long> idList);
 
@@ -75,6 +89,8 @@ public interface ProcessTaskMapper {
     List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskStepIdListAndUserType(@Param("processTaskStepIdList") List<Long> processTaskStepIdList, @Param("userType") String userType);
 
     Long getProcessTaskLockById(Long processTaskId);
+
+    ProcessTaskVo getProcessTaskVoLockById(Long processTaskId);
 
     int checkProcessTaskConvergeIsExists(ProcessTaskConvergeVo processTaskStepConvergeVo);
 
@@ -423,6 +439,8 @@ public interface ProcessTaskMapper {
     int updateProcessTaskFormFormContentHashByFormContentHash(@Param("oldFormConfigHash") String oldFormConfigHash, @Param("newFormConfigHash") String newFormConfigHash);
 
     int updateProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(ProcessTaskFormAttributeDataVo processTaskFormAttributeData);
+
+    int updateProcessTaskIsDeletedById(@Param("id") Long id, @Param("isDeleted") Integer isDeleted);
 
     int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
 
