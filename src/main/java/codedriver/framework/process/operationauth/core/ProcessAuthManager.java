@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import codedriver.framework.asynchronization.threadlocal.UserContext;
-import codedriver.framework.common.constvalue.SystemUser;
 import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.exception.processtask.ProcessTaskNoPermissionException;
 
@@ -287,31 +286,26 @@ public class ProcessAuthManager {
         if (CollectionUtils.isNotEmpty(taskOperationTypeSet)) {
             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
             Set<ProcessTaskOperationType> resultSet = new HashSet<>();
-            // 系统用户拥有所有权限
-            if (SystemUser.SYSTEM.getUserUuid().equals(userUuid)) {
-                resultSet.addAll(taskOperationTypeSet);
-            } else {
-                for (ProcessTaskOperationType operationType : taskOperationTypeSet) {
-                    boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
-                    if (result) {
-                        resultSet.add(operationType);
-                    } else {
-                        /** 因为上报权限不能授权，所以转报和复制上报权限不能授权 **/
-                        if (ProcessTaskOperationType.PROCESSTASK_TRANFERREPORT == operationType) {
-                            continue;
-                        }
-                        if (ProcessTaskOperationType.PROCESSTASK_COPYPROCESSTASK == operationType) {
-                            continue;
-                        }
-                        /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-                        List<String> fromUuidList = getFromUuidListByChannelUuid(processTaskVo.getChannelUuid());
-                        if (CollectionUtils.isNotEmpty(fromUuidList)) {
-                            for (String fromUuid : fromUuidList) {
-                                result = handler.getOperateMap(processTaskVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
-                                if (result) {
-                                    resultSet.add(operationType);
-                                    break;
-                                }
+            for (ProcessTaskOperationType operationType : taskOperationTypeSet) {
+                boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                if (result) {
+                    resultSet.add(operationType);
+                } else {
+                    /** 因为上报权限不能授权，所以转报和复制上报权限不能授权 **/
+                    if (ProcessTaskOperationType.PROCESSTASK_TRANFERREPORT == operationType) {
+                        continue;
+                    }
+                    if (ProcessTaskOperationType.PROCESSTASK_COPYPROCESSTASK == operationType) {
+                        continue;
+                    }
+                    /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
+                    List<String> fromUuidList = getFromUuidListByChannelUuid(processTaskVo.getChannelUuid());
+                    if (CollectionUtils.isNotEmpty(fromUuidList)) {
+                        for (String fromUuid : fromUuidList) {
+                            result = handler.getOperateMap(processTaskVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                            if (result) {
+                                resultSet.add(operationType);
+                                break;
                             }
                         }
                     }
@@ -326,42 +320,37 @@ public class ProcessAuthManager {
                 for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
                     if (processTaskStepIdList.contains(processTaskStepVo.getId())) {
                         Set<ProcessTaskOperationType> resultSet = new HashSet<>();
-                        // 系统用户拥有所有权限
-                        if (SystemUser.SYSTEM.getUserUuid().equals(userUuid)) {
-                            resultSet.addAll(stepOperationTypeSet);
-                        } else {
-                            for (ProcessTaskOperationType operationType : stepOperationTypeSet) {
-                                Boolean result = null;
-                                IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
-                                if (handler != null) {
-                                    result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                        for (ProcessTaskOperationType operationType : stepOperationTypeSet) {
+                            Boolean result = null;
+                            IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
+                            if (handler != null) {
+                                result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                            }
+                            if(result == null) {
+                                result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                                if (result == null) {
+                                    result = false;
                                 }
-                                if(result == null) {
-                                    result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
-                                    if (result == null) {
-                                        result = false;
-                                    }
-                                }
-                                if (result) {
-                                    resultSet.add(operationType);
-                                } else {
-                                    /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
-                                    List<String> fromUuidList = getFromUuidListByChannelUuid(processTaskVo.getChannelUuid());
-                                    if (CollectionUtils.isNotEmpty(fromUuidList)) {
-                                        for (String fromUuid : fromUuidList) {
-                                            if (handler != null) {
-                                                result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                            }
+                            if (result) {
+                                resultSet.add(operationType);
+                            } else {
+                                /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
+                                List<String> fromUuidList = getFromUuidListByChannelUuid(processTaskVo.getChannelUuid());
+                                if (CollectionUtils.isNotEmpty(fromUuidList)) {
+                                    for (String fromUuid : fromUuidList) {
+                                        if (handler != null) {
+                                            result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                                        }
+                                        if(result == null) {
+                                            result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                                            if (result == null) {
+                                                result = false;
                                             }
-                                            if(result == null) {
-                                                result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
-                                                if (result == null) {
-                                                    result = false;
-                                                }
-                                            }
-                                            if (result) {
-                                                resultSet.add(operationType);
-                                                break;
-                                            }
+                                        }
+                                        if (result) {
+                                            resultSet.add(operationType);
+                                            break;
                                         }
                                     }
                                 }

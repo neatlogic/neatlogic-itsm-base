@@ -378,14 +378,14 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     /**
      * 
     * @Time:2020年12月21日
-    * @Description: 判断userUuid用户是否拥有pProcessTaskStepId步骤的撤回权限 
+    * @Description: 判断userUuid用户是否拥有processTaskStepId步骤的撤回权限
     * @param processTaskVo 工单信息
     * @param processTaskStepId 步骤id
     * @param userUuid 用户
     * @return boolean
      */
     protected boolean checkCurrentStepIsRetractableByProcessTaskStepId(ProcessTaskVo processTaskVo,
-        Long processTaskStepId, String userUuid) {
+        Long processTaskStepId) {
         /** 所有后置置步骤id **/
         List<Long> toStepIdList = new ArrayList<>();
         for (ProcessTaskStepRelVo processTaskStepRelVo : processTaskVo.getStepRelList()) {
@@ -404,8 +404,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                             return true;
                         }
                     } else {// 自动处理节点，继续找前置节点
-                        return checkIsRetractableStepByProcessTaskStepId(processTaskVo, processTaskStepVo.getId(),
-                            userUuid);
+                        return checkCurrentStepIsRetractableByProcessTaskStepId(processTaskVo, processTaskStepVo.getId());
                     }
                 }
             }
