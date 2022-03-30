@@ -37,7 +37,7 @@ public class ProcessTaskVo extends BasePageVo {
     //    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
     @JSONField(serialize = false)
     private String config;
-//    private String configPath;
+    //    private String configPath;
 //    private JSONObject configObj;
     @EntityField(name = "状态", type = ApiParamType.STRING)
     private String status;
@@ -169,6 +169,9 @@ public class ProcessTaskVo extends BasePageVo {
 
     @EntityField(name = "工单来源", type = ApiParamType.STRING)
     private String source = "process";
+
+    @EntityField(name = "是否已删除，1：是，0：否", type = ApiParamType.INTEGER)
+    private Integer isDeleted = 0;
 
 
     @JSONField(serialize = false)
@@ -763,5 +766,13 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setIndex(Integer index) {
         this.index = index;
+    }
+
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
