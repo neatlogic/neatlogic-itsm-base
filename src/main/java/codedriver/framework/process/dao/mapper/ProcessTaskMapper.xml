@@ -88,6 +88,7 @@
         <result column="is_show" property="isShow"/>
         <result column="serial_number" property="serialNumber"/>
         <result column="source" property="source"/>
+        <result column="is_deleted" property="isDeleted"/>
         <!--<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="owner"/>
             <result property="userName" column="ownerName"/>
@@ -104,7 +105,7 @@
         </association>-->
     </resultMap>
 
-    <select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultMap="processTaskMap">
+    <sql id="getProcessTaskBaseInfoColumnSql">
         SELECT `id`,
                `serial_number`,
                `title`,
@@ -121,9 +122,19 @@
                `worktime_uuid`,
                `is_show`,
                `serial_number`,
-               `source`
+               `source`,
+               `is_deleted`
         FROM `processtask`
-        WHERE id = #{value}
+    </sql>
+
+    <select id="getProcessTaskBaseInfoById" parameterType="java.lang.Long" resultMap="processTaskMap">
+        <include refid="getProcessTaskBaseInfoColumnSql"/>
+        WHERE `id` = #{value} AND (`is_deleted` IS NULL OR `is_deleted` != 1)
+    </select>
+
+    <select id="getProcessTaskBaseInfoByIdIncludeIsDeleted" parameterType="java.lang.Long" resultMap="processTaskMap">
+        <include refid="getProcessTaskBaseInfoColumnSql"/>
+        WHERE `id` = #{value}
     </select>
 
     <sql id="getProcessingTaskByConditionSql">
@@ -3349,6 +3360,14 @@
         SET `data` = #{data}
         WHERE `processtask_id` = #{processTaskId}
           AND `attribute_uuid` = #{attributeUuid}
+    </update>
+
+    <update id="updateProcessTaskIsDeletedById">
+        UPDATE
+            `processtask`
+        SET
+            `is_deleted` = #{isDeleted}
+        WHERE `id` = #{id}
     </update>
 
     <delete id="deleteProcessTaskConvergeByStepId" parameterType="java.lang.Long">
