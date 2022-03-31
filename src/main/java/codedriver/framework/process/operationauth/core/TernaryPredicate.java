@@ -6,10 +6,11 @@ package codedriver.framework.process.operationauth.core;
 * @Description: 三元断言函数式接口
 * @param <T>
 * @param <U>
-* @param <S>
+* @param <V>
+* @param <W>
  */
 @FunctionalInterface
-public interface TernaryPredicate<T, U, V> {
+public interface TernaryPredicate<T, U, V, W> {
     
-    boolean test(T t, U u, V v);
+    boolean test(T t, U u, V v, W w);
 }
