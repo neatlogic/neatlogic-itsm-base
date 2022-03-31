@@ -449,4 +449,18 @@ public class ProcessAuthManager {
         }
         return true;
     }
+
+    /**
+     * 根据工单id或步骤id和操作权限类型获取没有权限的原因
+     * @param id 工单id或步骤id
+     * @param operationType 操作权限类型
+     * @return
+     */
+    public ProcessTaskPermissionDeniedException getProcessTaskPermissionDeniedException(Long id, ProcessTaskOperationType operationType) {
+        Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException> map = operationTypePermissionDeniedExceptionMap.get(id);
+        if (MapUtils.isNotEmpty(map)) {
+            return map.get(operationType);
+        }
+        return null;
+    }
 }
