@@ -72,6 +72,6 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @param relationId 转报关系id
      * @return
      */
-    boolean checkTranferreportAuthorization(ProcessTaskVo processTaskVo, String userUuid, Long relationId);
+    boolean checkTranferReportAuthorization(ProcessTaskVo processTaskVo, String userUuid, Long relationId);
 }
 
