@@ -39,7 +39,7 @@ public enum ProcessTaskOperationType implements IOperationType {
     PROCESSTASK_SHOW("show","取消隐藏"),
     PROCESSTASK_HIDE("hide","隐藏"),
     PROCESSTASK_DELETE("delete","删除"),
-    PROCESSTASK_TRANFERREPORT("tranferreport", "转报"),
+    PROCESSTASK_TRANSFERREPORT("tranferreport", "转报"),
     PROCESSTASK_MARKREPEAT("markrepeat", "标记重复"),
     PROCESSTASK_COPYPROCESSTASK("copyprocesstask", "复制上报"),
     PROCESSTASK_FOCUSUSER_UPDATE("updatefocususer", "修改工单关注人"),

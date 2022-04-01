@@ -108,7 +108,7 @@ public class ProcessTaskRelationVo extends BasePageVo {
     }
     public Integer getIsDeletable() {
         if(isDeletable == null) {
-            if(ProcessTaskOperationType.PROCESSTASK_TRANFERREPORT.getValue().equals(action)) {
+            if(ProcessTaskOperationType.PROCESSTASK_TRANSFERREPORT.getValue().equals(action)) {
                 isDeletable = 0;
             }else {
                 isDeletable = 1;
