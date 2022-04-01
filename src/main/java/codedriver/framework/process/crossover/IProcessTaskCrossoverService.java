@@ -64,4 +64,13 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
     List<ProcessTaskStepVo> getForwardNextStepListByProcessTaskStepId(Long processTaskStepId);
 
     List<ProcessTaskStepVo> getBackwardNextStepListByProcessTaskStepId(Long processTaskStepId);
+
+    /**
+     * 判断当前用户是否拥有工单转报权限
+     * @param processTaskVo 工单信息
+     * @param userUuid 用户uuid
+     * @param relationId 转报关系id
+     * @return
+     */
+    boolean checkTranferreportAuthorize(ProcessTaskVo processTaskVo, String userUuid, Long relationId);
 }

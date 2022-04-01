@@ -298,6 +298,9 @@ public class ProcessAuthManager {
                     if (ProcessTaskOperationType.PROCESSTASK_COPYPROCESSTASK == operationType) {
                         continue;
                     }
+                    if (ProcessTaskOperationType.PROCESSTASK_START == operationType) {
+                        continue;
+                    }
                     /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
                     List<String> fromUuidList = getFromUuidListByChannelUuid(processTaskVo.getChannelUuid());
                     if (CollectionUtils.isNotEmpty(fromUuidList)) {
