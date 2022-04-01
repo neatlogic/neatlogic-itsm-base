@@ -205,7 +205,7 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskVo> getProcessTaskListByKeywordAndChannelUuidList(ProcessTaskSearchVo processTaskSearchVo);
 
-    ProcessTaskTranferReportVo getProcessTaskTransferReportByToProcessTaskId(Long toProcessTaskId);
+    ProcessTaskTransferReportVo getProcessTaskTransferReportByToProcessTaskId(Long toProcessTaskId);
 
     ProcessTaskRelationVo getProcessTaskRelationById(Long id);
 
@@ -365,7 +365,7 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepNotifyPolicy(ProcessTaskStepNotifyPolicyVo processTaskStepNotifyPolicyVo);
 
-    int insertProcessTaskTransferReport(ProcessTaskTranferReportVo processTaskTranferReportVo);
+    int insertProcessTaskTransferReport(ProcessTaskTransferReportVo processTaskTransferReportVo);
 
     int replaceProcessTaskRelation(ProcessTaskRelationVo processTaskRelationVo);
 

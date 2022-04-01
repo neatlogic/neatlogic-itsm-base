@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.util.SnowflakeUtil;
 
-public class ProcessTaskTranferReportVo {
+public class ProcessTaskTransferReportVo {
 
     private Long id;
     private Long channelTypeRelationId;
@@ -13,8 +13,8 @@ public class ProcessTaskTranferReportVo {
     @JSONField(serialize=false)
     private Boolean isAutoGenerateId = true;
     
-    public ProcessTaskTranferReportVo() {}
-    public ProcessTaskTranferReportVo(Long channelTypeRelationId, Long fromProcessTaskId, Long toProcessTaskId) {
+    public ProcessTaskTransferReportVo() {}
+    public ProcessTaskTransferReportVo(Long channelTypeRelationId, Long fromProcessTaskId, Long toProcessTaskId) {
         this.channelTypeRelationId = channelTypeRelationId;
         this.fromProcessTaskId = fromProcessTaskId;
         this.toProcessTaskId = toProcessTaskId;

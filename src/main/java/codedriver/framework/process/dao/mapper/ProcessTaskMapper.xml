@@ -1698,7 +1698,7 @@
     </select>
 
     <select id="getProcessTaskTransferReportByToProcessTaskId" parameterType="java.lang.Long"
-            resultType="codedriver.framework.process.dto.ProcessTaskTranferReportVo">
+            resultType="codedriver.framework.process.dto.ProcessTaskTransferReportVo">
         SELECT `id`,
                `channel_type_relation_id` AS channelTypeRelationId,
                `from_processtask_id`      AS
@@ -3011,7 +3011,7 @@
     </insert>
 
     <insert id="insertProcessTaskTransferReport"
-            parameterType="codedriver.framework.process.dto.ProcessTaskTranferReportVo">
+            parameterType="codedriver.framework.process.dto.ProcessTaskTransferReportVo">
         INSERT INTO `processtask_tranfer_report` (`id`,
                                                   `channel_type_relation_id`,
                                                   `from_processtask_id`,

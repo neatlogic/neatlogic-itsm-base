@@ -292,7 +292,7 @@ public class ProcessAuthManager {
                     resultSet.add(operationType);
                 } else {
                     /** 因为上报权限不能授权，所以转报和复制上报权限不能授权 **/
-                    if (ProcessTaskOperationType.PROCESSTASK_TRANFERREPORT == operationType) {
+                    if (ProcessTaskOperationType.PROCESSTASK_TRANSFERREPORT == operationType) {
                         continue;
                     }
                     if (ProcessTaskOperationType.PROCESSTASK_COPYPROCESSTASK == operationType) {

@@ -80,8 +80,6 @@ public interface ChannelTypeMapper {
             @Param("channelTypeUuidList") List<String> channelTypeUuidList
     );
 
-//    List<ChannelTypeRelationVo> getChannelTypeRelationReferenceCountListByChannelTypeRelationIdList(List<Long> channelTypeRelationIdList);
-
     Long checkChannelTypeRelationIsUsedByChannelTypeRelationId(Long channelTypeRelationId);
 
     Set<String> getChannelTypeRelationReferenceUuidListByChannelTypeRelationId(Long channelTypeRelationId);

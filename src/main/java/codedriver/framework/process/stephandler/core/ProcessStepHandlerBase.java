@@ -1866,7 +1866,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             Long fromProcessTaskId = paramObj.getLong("fromProcessTaskId");
             Long channelTypeRelationId = paramObj.getLong("channelTypeRelationId");
             if (fromProcessTaskId != null && channelTypeRelationId != null) {
-                processTaskMapper.insertProcessTaskTransferReport(new ProcessTaskTranferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
+                processTaskMapper.insertProcessTaskTransferReport(new ProcessTaskTransferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
             }
         } else {
             /* 锁定当前流程 **/
@@ -2003,17 +2003,17 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
         } finally {
             /* 处理历史记录 **/
-            ProcessTaskTranferReportVo processTaskTranferReportVo = processTaskMapper.getProcessTaskTransferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
-            if (processTaskTranferReportVo != null) {
-                currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
-                currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASK.getParamName(), processTaskTranferReportVo.getFromProcessTaskId());
+            ProcessTaskTransferReportVo processTaskTransferReportVo = processTaskMapper.getProcessTaskTransferReportByToProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+            if (processTaskTransferReportVo != null) {
+                currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTransferReportVo.getChannelTypeRelationId());
+                currentProcessTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASK.getParamName(), processTaskTransferReportVo.getFromProcessTaskId());
                 IProcessStepHandlerUtil.audit(currentProcessTaskStepVo, ProcessTaskAuditType.REPORTRELATION);
 
                 ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
-                processTaskStepVo.setProcessTaskId(processTaskTranferReportVo.getFromProcessTaskId());
-                processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTranferReportVo.getChannelTypeRelationId());
+                processTaskStepVo.setProcessTaskId(processTaskTransferReportVo.getFromProcessTaskId());
+                processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.CHANNELTYPERELATION.getParamName(), processTaskTransferReportVo.getChannelTypeRelationId());
                 processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.PROCESSTASKLIST.getParamName(), JSON.toJSONString(Arrays.asList(currentProcessTaskStepVo.getProcessTaskId())));
-                IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.TRANFERREPORT);
+                IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.TRANSFERREPORT);
             } else {
                 IProcessStepHandlerUtil.audit(currentProcessTaskStepVo, ProcessTaskAuditType.STARTPROCESS);
             }

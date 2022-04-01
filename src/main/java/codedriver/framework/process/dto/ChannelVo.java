@@ -92,12 +92,6 @@ public class ChannelVo extends BasePageVo {
     @EntityField(name = "服务类型", type = ApiParamType.JSONOBJECT)
     private ChannelTypeVo channelTypeVo;
 
-//    @EntityField(name = "是否允许转报", type = ApiParamType.INTEGER)
-//    private int allowTranferReport;
-//
-//    @EntityField(name = "转报设置列表", type = ApiParamType.JSONARRAY)
-//    private List<ChannelRelationVo> channelRelationList = new ArrayList<>();
-
     @EntityField(name = "类型#uuid", type = ApiParamType.STRING)
     private String typeAndUuid;
 
@@ -422,22 +416,6 @@ public class ChannelVo extends BasePageVo {
             return false;
         return true;
     }
-
-//    public int getAllowTranferReport() {
-//        return allowTranferReport;
-//    }
-//
-//    public void setAllowTranferReport(int allowTranferReport) {
-//        this.allowTranferReport = allowTranferReport;
-//    }
-//
-//    public List<ChannelRelationVo> getChannelRelationList() {
-//        return channelRelationList;
-//    }
-//
-//    public void setChannelRelationList(List<ChannelRelationVo> channelRelationList) {
-//        this.channelRelationList = channelRelationList;
-//    }
 
     public String getTypeAndUuid() {
         if (StringUtils.isBlank(typeAndUuid) && StringUtils.isNotBlank(getUuid())) {
