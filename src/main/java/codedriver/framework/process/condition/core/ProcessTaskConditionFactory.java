@@ -8,12 +8,12 @@ package codedriver.framework.process.condition.core;
 import codedriver.framework.applicationlistener.core.ModuleInitializedListenerBase;
 import codedriver.framework.bootstrap.CodedriverWebApplicationContext;
 import codedriver.framework.common.RootComponent;
-import codedriver.framework.process.constvalue.ConditionProcessTaskOptions;
 import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RootComponent
@@ -25,12 +25,12 @@ public class ProcessTaskConditionFactory extends ModuleInitializedListenerBase {
         return conditionComponentMap.get(name);
     }
 
-    public static JSONObject getConditionParamData(ConditionProcessTaskOptions[] options, ProcessTaskStepVo processTaskStepVo) {
+    public static JSONObject getConditionParamData(List<String> options, ProcessTaskStepVo processTaskStepVo) {
         JSONObject resultObj = new JSONObject();
-        for (ConditionProcessTaskOptions option : options) {
-            IProcessTaskCondition handler = conditionComponentMap.get(option.getValue());
+        for (String option : options) {
+            IProcessTaskCondition handler = conditionComponentMap.get(option);
             if (handler != null) {
-                resultObj.put(option.getValue(), handler.getConditionParamData(processTaskStepVo));
+                resultObj.put(option, handler.getConditionParamData(processTaskStepVo));
             }
         }
         IProcessTaskCondition handler = conditionComponentMap.get(ProcessFieldType.FORM.getValue());
