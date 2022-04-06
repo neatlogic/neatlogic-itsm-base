@@ -8,6 +8,7 @@ import codedriver.framework.process.constvalue.ProcessTaskOperationType;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.operationauth.ProcessTaskPermissionDeniedException;
+import com.alibaba.fastjson.JSONObject;
 
 public interface IOperationAuthHandler {
     /**
@@ -16,16 +17,17 @@ public interface IOperationAuthHandler {
     * @Description: 保存权限类型和该权限的判断逻辑 
     * @return Map<ProcessTaskOperationType,TernaryPredicate<ProcessTaskVo,ProcessTaskStepVo,String>>
      */
-    Map<ProcessTaskOperationType, TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String, Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>>>>
+    Map<ProcessTaskOperationType, TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String, Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>>, JSONObject>>
         getOperationBiPredicateMap();
 
     String getHandler();
 
     default Boolean getOperateMap(ProcessTaskVo processTaskVo, String userUuid,
                                   ProcessTaskOperationType operationType,
-                                  Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap
+                                  Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap,
+                                  JSONObject extraParam
     ) {
-        return getOperateMap(processTaskVo, null, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
+        return getOperateMap(processTaskVo, null, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
     }
 
     /**
@@ -40,12 +42,13 @@ public interface IOperationAuthHandler {
                                   ProcessTaskStepVo processTaskStepVo,
                                   String userUuid,
                                   ProcessTaskOperationType operationType,
-                                  Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap
+                                  Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap,
+                                  JSONObject extraParam
     ) {
-        TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String, Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>>> predicate =
+        TernaryPredicate<ProcessTaskVo, ProcessTaskStepVo, String, Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>>, JSONObject> predicate =
                 getOperationBiPredicateMap().get(operationType);
         if (predicate != null) {
-            return predicate.test(processTaskVo, processTaskStepVo, userUuid, operationTypePermissionDeniedExceptionMap);
+            return predicate.test(processTaskVo, processTaskStepVo, userUuid, operationTypePermissionDeniedExceptionMap, extraParam);
         }
         return null;
     }

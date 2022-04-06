@@ -13,6 +13,7 @@ import codedriver.framework.process.dto.*;
 import codedriver.framework.process.dto.agent.ProcessTaskAgentTargetVo;
 import codedriver.framework.process.dto.agent.ProcessTaskAgentVo;
 import codedriver.framework.process.exception.operationauth.ProcessTaskPermissionDeniedException;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
@@ -68,6 +69,8 @@ public class ProcessAuthManager {
     private Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap = new HashMap<>();
     /** 保存某个工单或步骤的某个权限检验时，导致失败的原因 **/
     private Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap = new HashMap<>();
+    /** 保存额外参数 **/
+    private Map<Long, JSONObject> extraParamMap = new HashMap<>();
     public static class Builder {
         private Set<Long> processTaskIdSet = new HashSet<>();
         private Set<Long> processTaskStepIdSet = new HashSet<>();
@@ -120,12 +123,20 @@ public class ProcessAuthManager {
     public static class TaskOperationChecker {
         private Long processTaskId;
         private ProcessTaskOperationType operationType;
+        private JSONObject extraParam;
 
         public TaskOperationChecker(Long processTaskId, ProcessTaskOperationType operationType) {
             this.processTaskId = processTaskId;
             this.operationType = operationType;
         }
 
+        public TaskOperationChecker addExtraParam(String key, Object data) {
+            if (extraParam == null) {
+                extraParam = new JSONObject();
+            }
+            extraParam.put(key, data);
+            return this;
+        }
         public ProcessAuthManager build() {
             return new ProcessAuthManager(this);
         }
@@ -140,10 +151,19 @@ public class ProcessAuthManager {
     public static class StepOperationChecker {
         private Long processTaskStepId;
         private ProcessTaskOperationType operationType;
+        private JSONObject extraParam;
 
         public StepOperationChecker(Long processTaskStepId, ProcessTaskOperationType operationType) {
             this.processTaskStepId = processTaskStepId;
             this.operationType = operationType;
+        }
+
+        public StepOperationChecker addExtraParam(String key, Object data) {
+            if (extraParam == null) {
+                extraParam = new JSONObject();
+            }
+            extraParam.put(key, data);
+            return this;
         }
 
         public ProcessAuthManager build() {
@@ -164,6 +184,7 @@ public class ProcessAuthManager {
         operationTypeSet.add(checker.operationType);
         this.checkOperationTypeMap = new HashMap<>();
         checkOperationTypeMap.put(checker.processTaskId, checker.operationType);
+        extraParamMap.put(checker.processTaskId, checker.extraParam);
     }
 
     private ProcessAuthManager(StepOperationChecker checker) {
@@ -173,6 +194,7 @@ public class ProcessAuthManager {
         operationTypeSet.add(checker.operationType);
         this.checkOperationTypeMap = new HashMap<>();
         checkOperationTypeMap.put(checker.processTaskStepId, checker.operationType);
+        extraParamMap.put(checker.processTaskStepId, checker.extraParam);
     }
     /**
      *
@@ -283,11 +305,12 @@ public class ProcessAuthManager {
         }
         Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
         String userUuid = UserContext.get().getUserUuid(true);
+        JSONObject extraParam = extraParamMap.get(processTaskVo.getId());
         if (CollectionUtils.isNotEmpty(taskOperationTypeSet)) {
             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
             Set<ProcessTaskOperationType> resultSet = new HashSet<>();
             for (ProcessTaskOperationType operationType : taskOperationTypeSet) {
-                boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                 if (result) {
                     resultSet.add(operationType);
                 } else {
@@ -305,7 +328,7 @@ public class ProcessAuthManager {
                     List<String> fromUuidList = getFromUuidListByChannelUuid(processTaskVo.getChannelUuid());
                     if (CollectionUtils.isNotEmpty(fromUuidList)) {
                         for (String fromUuid : fromUuidList) {
-                            result = handler.getOperateMap(processTaskVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                            result = handler.getOperateMap(processTaskVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                             if (result) {
                                 resultSet.add(operationType);
                                 break;
@@ -322,15 +345,16 @@ public class ProcessAuthManager {
                 IOperationAuthHandler stepHandler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.STEP.getValue());
                 for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
                     if (processTaskStepIdList.contains(processTaskStepVo.getId())) {
+                        extraParam = extraParamMap.get(processTaskStepVo.getId());
                         Set<ProcessTaskOperationType> resultSet = new HashSet<>();
                         for (ProcessTaskOperationType operationType : stepOperationTypeSet) {
                             Boolean result = null;
                             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
                             if (handler != null) {
-                                result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                                result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                             }
                             if(result == null) {
-                                result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                                result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                 if (result == null) {
                                     result = false;
                                 }
@@ -343,10 +367,10 @@ public class ProcessAuthManager {
                                 if (CollectionUtils.isNotEmpty(fromUuidList)) {
                                     for (String fromUuid : fromUuidList) {
                                         if (handler != null) {
-                                            result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                                            result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                         }
                                         if(result == null) {
-                                            result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap);
+                                            result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                             if (result == null) {
                                                 result = false;
                                             }
