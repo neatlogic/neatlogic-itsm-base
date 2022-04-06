@@ -305,7 +305,7 @@ public class ProcessAuthManager {
         }
         Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
         String userUuid = UserContext.get().getUserUuid(true);
-        JSONObject extraParam = extraParamMap.get(processTaskVo.getId());
+        JSONObject extraParam = extraParamMap.computeIfAbsent(processTaskVo.getId(), key -> new JSONObject());
         if (CollectionUtils.isNotEmpty(taskOperationTypeSet)) {
             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
             Set<ProcessTaskOperationType> resultSet = new HashSet<>();
@@ -345,7 +345,7 @@ public class ProcessAuthManager {
                 IOperationAuthHandler stepHandler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.STEP.getValue());
                 for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
                     if (processTaskStepIdList.contains(processTaskStepVo.getId())) {
-                        extraParam = extraParamMap.get(processTaskStepVo.getId());
+                        extraParam = extraParamMap.computeIfAbsent(processTaskStepVo.getId(), key -> new JSONObject());
                         Set<ProcessTaskOperationType> resultSet = new HashSet<>();
                         for (ProcessTaskOperationType operationType : stepOperationTypeSet) {
                             Boolean result = null;
