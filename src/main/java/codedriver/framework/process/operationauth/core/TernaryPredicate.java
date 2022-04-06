@@ -10,7 +10,7 @@ package codedriver.framework.process.operationauth.core;
 * @param <W>
  */
 @FunctionalInterface
-public interface TernaryPredicate<T, U, V, W> {
+public interface TernaryPredicate<T, U, V, W, X> {
     
-    boolean test(T t, U u, V v, W w);
+    boolean test(T t, U u, V v, W w, X x);
 }
