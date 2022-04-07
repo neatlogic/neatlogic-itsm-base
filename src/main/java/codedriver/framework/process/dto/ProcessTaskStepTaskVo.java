@@ -46,10 +46,10 @@ public class ProcessTaskStepTaskVo implements Serializable {
     private String owner;
     @EntityField(name = "创建人")
     private UserVo ownerVo;
-    @EntityField(name = "状态", type = ApiParamType.STRING)
-    private String status;
-    @EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
-    private ProcessTaskStatusVo statusVo;
+//    @EntityField(name = "状态", type = ApiParamType.STRING)
+//    private String status;
+//    @EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+//    private ProcessTaskStatusVo statusVo;
     @EntityField(name = "创建时间", type = ApiParamType.LONG)
     private Date createTime;
     @EntityField(name = "结束时间", type = ApiParamType.LONG)
@@ -111,24 +111,24 @@ public class ProcessTaskStepTaskVo implements Serializable {
         this.ownerVo = ownerVo;
     }
 
-    public String getStatus() {
-        return status;
-    }
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public ProcessTaskStatusVo getStatusVo() {
-        if (statusVo == null && StringUtils.isNotBlank(status)) {
-            statusVo = new ProcessTaskStatusVo(status);
-        }
-        return statusVo;
-    }
-
-    public void setStatusVo(ProcessTaskStatusVo statusVo) {
-        this.statusVo = statusVo;
-    }
+//    public ProcessTaskStatusVo getStatusVo() {
+//        if (statusVo == null && StringUtils.isNotBlank(status)) {
+//            statusVo = new ProcessTaskStatusVo(status);
+//        }
+//        return statusVo;
+//    }
+//
+//    public void setStatusVo(ProcessTaskStatusVo statusVo) {
+//        this.statusVo = statusVo;
+//    }
 
     public Date getCreateTime() {
         return createTime;

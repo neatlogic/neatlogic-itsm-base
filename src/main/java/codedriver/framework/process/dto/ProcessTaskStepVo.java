@@ -97,9 +97,12 @@ public class ProcessTaskStepVo extends BasePageVo {
     //	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
 //	private List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = new ArrayList<>();
     @EntityField(name = "任务json", type = ApiParamType.JSONOBJECT)
+    @Deprecated
     private JSONObject processTaskStepTask = new JSONObject();
-    @EntityField(name = "任务列表vo", type = ApiParamType.JSONARRAY)
-    private List<ProcessTaskStepTaskVo> processTaskStepTaskVoList;
+//    @EntityField(name = "任务列表vo", type = ApiParamType.JSONARRAY)
+//    private List<ProcessTaskStepTaskVo> processTaskStepTaskVoList;
+    @EntityField(name = "任务策略列表", type = ApiParamType.JSONARRAY)
+    private List<TaskConfigVo> taskConfigList;
     @EntityField(name = "任务列表", type = ApiParamType.JSONOBJECT)
     private ProcessTaskStepTaskVo processTaskStepTaskVo;
     @EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
@@ -726,21 +729,29 @@ public class ProcessTaskStepVo extends BasePageVo {
     public void setCommentTemplate(ProcessCommentTemplateVo commentTemplate) {
         this.commentTemplate = commentTemplate;
     }
-
+    @Deprecated
     public JSONObject getProcessTaskStepTask() {
         return processTaskStepTask;
     }
-
+    @Deprecated
     public void setProcessTaskStepTask(JSONObject processTaskStepTask) {
         this.processTaskStepTask = processTaskStepTask;
     }
 
-    public List<ProcessTaskStepTaskVo> getProcessTaskStepTaskVoList() {
-        return processTaskStepTaskVoList;
+//    public List<ProcessTaskStepTaskVo> getProcessTaskStepTaskVoList() {
+//        return processTaskStepTaskVoList;
+//    }
+//
+//    public void setProcessTaskStepTaskVoList(List<ProcessTaskStepTaskVo> processTaskStepTaskVoList) {
+//        this.processTaskStepTaskVoList = processTaskStepTaskVoList;
+//    }
+
+    public List<TaskConfigVo> getTaskConfigList() {
+        return taskConfigList;
     }
 
-    public void setProcessTaskStepTaskVoList(List<ProcessTaskStepTaskVo> processTaskStepTaskVoList) {
-        this.processTaskStepTaskVoList = processTaskStepTaskVoList;
+    public void setTaskConfigList(List<TaskConfigVo> taskConfigList) {
+        this.taskConfigList = taskConfigList;
     }
 
     public ProcessTaskStepTaskVo getProcessTaskStepTaskVo() {
