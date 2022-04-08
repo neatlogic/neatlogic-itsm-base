@@ -91,6 +91,7 @@
                `processtask_step_task_id` as processTaskStepTaskId,
                `user_uuid`                as userUuid,
                `end_time`                 as endTime,
+               `status`,
                `is_delete`                as isDelete
         FROM `processtask_step_task_user`
         where `processtask_step_task_id` = #{processTaskStepTaskId}
