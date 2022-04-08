@@ -10,6 +10,8 @@ import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 
+import java.util.List;
+
 /**
  * @author lvzk
  * @since 2021/9/1 12:11
@@ -28,6 +30,10 @@ public class TaskConfigVo extends BaseEditorVo {
     private Integer isActive;
     @EntityField(name = "依赖数", type = ApiParamType.INTEGER)
     private Integer referenceCount;
+    @EntityField(name = "任务列表", type = ApiParamType.JSONARRAY)
+    private List<ProcessTaskStepTaskVo> processTaskStepTaskList;
+    @EntityField(name = "处理人过滤范围", type = ApiParamType.JSONARRAY)
+    private List<String> rangeList;
 
     public Long getId() {
         if(id == null) {
@@ -78,5 +84,21 @@ public class TaskConfigVo extends BaseEditorVo {
 
     public void setReferenceCount(Integer referenceCount) {
         this.referenceCount = referenceCount;
+    }
+
+    public List<ProcessTaskStepTaskVo> getProcessTaskStepTaskList() {
+        return processTaskStepTaskList;
+    }
+
+    public void setProcessTaskStepTaskList(List<ProcessTaskStepTaskVo> processTaskStepTaskList) {
+        this.processTaskStepTaskList = processTaskStepTaskList;
+    }
+
+    public List<String> getRangeList() {
+        return rangeList;
+    }
+
+    public void setRangeList(List<String> rangeList) {
+        this.rangeList = rangeList;
     }
 }

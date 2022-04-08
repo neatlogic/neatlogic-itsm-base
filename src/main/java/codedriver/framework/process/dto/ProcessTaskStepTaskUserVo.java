@@ -43,6 +43,8 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
     private List<ProcessTaskStepTaskUserContentVo> stepTaskUserContentVoList = new ArrayList<>();
     @EntityField(name = "是否删除", type = ApiParamType.INTEGER)
     private Integer isDelete;
+    @EntityField(name = "是否可以回复", type = ApiParamType.INTEGER)
+    private Integer isReplyable;
 
     public ProcessTaskStepTaskUserVo() {
     }
@@ -142,5 +144,13 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
 
     public void setProcessTaskStepTaskUserContentId(Long processTaskStepTaskUserContentId) {
         this.processTaskStepTaskUserContentId = processTaskStepTaskUserContentId;
+    }
+
+    public Integer getIsReplyable() {
+        return isReplyable;
+    }
+
+    public void setIsReplyable(Integer isReplyable) {
+        this.isReplyable = isReplyable;
     }
 }
