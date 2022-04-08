@@ -19,7 +19,6 @@
         <id column="id" property="id"/>
         <result column="processTaskId" property="processTaskId"/>
         <result column="processTaskStepId" property="processTaskStepId"/>
-        <result column="status" property="status"/>
         <result column="taskConfigName" property="taskConfigName"/>
         <result column="taskConfigPolicy" property="taskConfigPolicy"/>
         <result column="taskConfigId" property="taskConfigId"/>
@@ -54,7 +53,6 @@
                pst.`processtask_step_id` as processTaskStepId,
                pst.`id`,
                pst.`owner`,
-               pst.`status`,
                pst.`create_time`         as createTime,
                pst.`end_time`            as endTime,
                pst.`task_config_id`      as taskConfigId,
@@ -72,7 +70,6 @@
                pst.`processtask_step_id` as processTaskStepId,
                pst.`id`,
                pst.`owner`,
-               pst.`status`,
                pst.`create_time`         as createTime,
                pst.`end_time`            as endTime,
                pst.`task_config_id`      as taskConfigId
@@ -94,7 +91,6 @@
                `processtask_step_task_id` as processTaskStepTaskId,
                `user_uuid`                as userUuid,
                `end_time`                 as endTime,
-               `status`,
                `is_delete`                as isDelete
         FROM `processtask_step_task_user`
         where `processtask_step_task_id` = #{processTaskStepTaskId}
@@ -107,7 +103,6 @@
                pst.`processtask_step_id` AS processTaskStepId,
                pst.`id`,
                pst.`owner`,
-               pst.`status`,
                pst.`create_time`         AS createTime,
                pst.`end_time`            AS endTime,
                pst.`task_config_id`      AS taskConfigId,
@@ -135,7 +130,6 @@
                pst.`processtask_step_id` as processTaskStepId,
                pst.`id`,
                pst.`owner`,
-               pst.`status`,
                pst.`create_time`         as createTime,
                pst.`end_time`            as endTime,
                pst.`task_config_id`      as taskConfigId,
@@ -340,7 +334,6 @@
                                              `processtask_step_id`,
                                              `id`,
                                              `owner`,
-                                             `status`,
                                              `create_time`,
                                              `content_hash`,
                                              `task_config_id`)
@@ -348,7 +341,6 @@
                 #{processTaskStepId},
                 #{id},
                 #{ownerVo.uuid},
-                #{status},
                 now(3),
                 #{contentHash},
                 #{taskConfigId})
