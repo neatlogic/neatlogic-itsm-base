@@ -32,6 +32,8 @@ public class TaskConfigVo extends BaseEditorVo {
     private Integer referenceCount;
     @EntityField(name = "任务列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepTaskVo> processTaskStepTaskList;
+    @EntityField(name = "处理人过滤范围", type = ApiParamType.JSONARRAY)
+    private List<String> rangeList;
 
     public Long getId() {
         if(id == null) {
@@ -90,5 +92,13 @@ public class TaskConfigVo extends BaseEditorVo {
 
     public void setProcessTaskStepTaskList(List<ProcessTaskStepTaskVo> processTaskStepTaskList) {
         this.processTaskStepTaskList = processTaskStepTaskList;
+    }
+
+    public List<String> getRangeList() {
+        return rangeList;
+    }
+
+    public void setRangeList(List<String> rangeList) {
+        this.rangeList = rangeList;
     }
 }
