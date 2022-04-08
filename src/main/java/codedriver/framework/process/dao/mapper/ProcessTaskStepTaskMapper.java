@@ -42,6 +42,8 @@ public interface ProcessTaskStepTaskMapper {
 
     ProcessTaskStepTaskUserContentVo getStepTaskUserContentByIdAndUserUuid(@Param("userContentId") Long processTaskStepTaskUserContentId, @Param("userUuid") String userUuid);
 
+    ProcessTaskStepTaskUserContentVo getStepTaskUserContentById(Long id);
+
     List<ProcessTaskStepTaskUserVo> getStepTaskUserListByTaskIdAndStatus(@Param("processtaskStepTaskId") Long processtaskStepTaskId, @Param("status") String status);
 
     List<ProcessTaskStepTaskUserVo> getStepTaskUserListByStepTaskId(Long processtaskStepTaskId);
@@ -62,9 +64,13 @@ public interface ProcessTaskStepTaskMapper {
 
     int updateTaskUserByTaskIdAndUserUuid(@Param("status") String status, @Param("processTaskStepTaskId") Long processtaskStepTaskId, @Param("userUuid") String userUuid);
 
+    int updateTaskUserById(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
+
     int updateDeleteTaskUserByUserListAndId(@Param("userList") List<String> userList, @Param("processTaskStepTaskId") Long processTaskStepTaskId, @Param("isDelete") Integer isDelete);
 
     int updateTaskUserContent(@Param("processTaskStepTaskUserContentId") Long processTaskStepTaskUserContentId, @Param("contentHash") String contentHash, @Param("userUuid") String userUuid);
+
+    int updateTaskUserContentById(ProcessTaskStepTaskUserContentVo userContentVo);
 
     int deleteTaskById(Long processTaskStepTaskId);
 

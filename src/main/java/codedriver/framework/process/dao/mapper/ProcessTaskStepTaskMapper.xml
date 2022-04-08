@@ -295,6 +295,17 @@
         where pstuc.`id` = #{userContentId}
           and pstuc.`user_uuid` = #{userUuid}
     </select>
+
+    <select id="getStepTaskUserContentById"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo" useCache="false">
+        SELECT `id`,
+               `processtask_step_task_id`      as processTaskStepTaskId,
+               `processtask_step_task_user_id` as processTaskStepTaskUserId,
+               `user_uuid`                     as userUuid,
+               `fcd`
+        FROM `processtask_step_task_user_content`
+        where `id` = #{value}
+    </select>
     <select id="getStepTaskUserById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo"
             useCache="false">
         SELECT `id`,
@@ -391,12 +402,29 @@
           and `user_uuid` = #{userUuid}
     </update>
 
+    <update id="updateTaskUserById" parameterType = "codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+        UPDATE
+            `processtask_step_task_user`
+        SET `end_time` = now(3),
+            `user_uuid` = #{userUuid},
+            `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
+
     <update id="updateTaskUserContent">
         update `processtask_step_task_user_content`
         set `content_hash` = #{contentHash},
             `lcd`          = now(3)
         where `id` = #{processTaskStepTaskUserContentId}
           and `user_uuid` = #{userUuid}
+    </update>
+
+    <update id="updateTaskUserContentById" parameterType = "codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">
+        update `processtask_step_task_user_content`
+        set `content_hash` = #{contentHash},
+            `user_uuid` = #{userUuid},
+            `lcd` = now(3)
+        where `id` = #{id}
     </update>
 
     <delete id="updateDeleteTaskUserByUserListAndId">
