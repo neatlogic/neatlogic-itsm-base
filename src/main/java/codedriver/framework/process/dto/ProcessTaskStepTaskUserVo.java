@@ -45,6 +45,8 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
     private Integer isDelete;
     @EntityField(name = "是否可以回复", type = ApiParamType.INTEGER)
     private Integer isReplyable;
+    @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
+    private String originalUser;
 
     public ProcessTaskStepTaskUserVo() {
     }
@@ -152,5 +154,13 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
 
     public void setIsReplyable(Integer isReplyable) {
         this.isReplyable = isReplyable;
+    }
+
+    public String getOriginalUser() {
+        return originalUser;
+    }
+
+    public void setOriginalUser(String originalUser) {
+        this.originalUser = originalUser;
     }
 }

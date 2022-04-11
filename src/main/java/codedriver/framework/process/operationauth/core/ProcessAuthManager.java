@@ -353,7 +353,7 @@ public class ProcessAuthManager {
                             if (handler != null) {
                                 result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                             }
-                            if(result == null) {
+                            if(result == null || result) {
                                 result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                 if (result == null) {
                                     result = false;
@@ -369,7 +369,7 @@ public class ProcessAuthManager {
                                         if (handler != null) {
                                             result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                         }
-                                        if(result == null) {
+                                        if(result == null || result) {
                                             result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                             if (result == null) {
                                                 result = false;

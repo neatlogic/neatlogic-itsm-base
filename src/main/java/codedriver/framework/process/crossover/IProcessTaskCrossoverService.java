@@ -7,9 +7,11 @@ package codedriver.framework.process.crossover;
 
 import codedriver.framework.crossover.ICrossoverService;
 import codedriver.framework.dto.AuthenticationInfoVo;
+import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.dto.AssignableWorkerStepVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
+import codedriver.framework.process.exception.operationauth.ProcessTaskPermissionDeniedException;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
@@ -64,5 +66,21 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
     List<ProcessTaskStepVo> getForwardNextStepListByProcessTaskStepId(Long processTaskStepId);
 
     List<ProcessTaskStepVo> getBackwardNextStepListByProcessTaskStepId(Long processTaskStepId);
+
+    /**
+     * 检查工单状态，如果processTaskStatus属于status其中一员，则返回对应的异常对象，否则返回null
+     * @param processTaskStatus 工单状态
+     * @param statuss 状态列表
+     * @return
+     */
+    ProcessTaskPermissionDeniedException checkProcessTaskStatus(String processTaskStatus, ProcessTaskStatus... statuss);
+
+    /**
+     * 检查步骤状态，如果stepStatus属于status其中一员，则返回对应的异常对象，否则返回null
+     * @param stepStatus 步骤状态
+     * @param statuss 状态列表
+     * @return
+     */
+    ProcessTaskPermissionDeniedException checkProcessTaskStepStatus(String stepStatus, ProcessTaskStatus ... statuss);
 }
 

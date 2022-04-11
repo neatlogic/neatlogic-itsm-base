@@ -141,6 +141,19 @@
         WHERE pst.`processtask_step_id` = #{value}
     </select>
 
+    <select id="getStepTaskListByProcessTaskStepId"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo" useCache="false">
+        SELECT `processtask_id`      as processTaskId,
+               `processtask_step_id` as processTaskStepId,
+               `id`,
+               `owner`,
+               `create_time`         as createTime,
+               `end_time`            as endTime,
+               `task_config_id`      as taskConfigId
+        FROM `processtask_step_task`
+        WHERE `processtask_step_id` = #{value}
+    </select>
+
     <resultMap id="stepTaskUserMap" type="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
         <id column="id" property="id"/>
         <result column="processTaskStepTaskId" property="processTaskStepTaskId"/>
@@ -293,6 +306,17 @@
         where pstuc.`id` = #{userContentId}
           and pstuc.`user_uuid` = #{userUuid}
     </select>
+
+    <select id="getStepTaskUserContentById"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo" useCache="false">
+        SELECT `id`,
+               `processtask_step_task_id`      as processTaskStepTaskId,
+               `processtask_step_task_user_id` as processTaskStepTaskUserId,
+               `user_uuid`                     as userUuid,
+               `fcd`
+        FROM `processtask_step_task_user_content`
+        where `id` = #{value}
+    </select>
     <select id="getStepTaskUserById" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo"
             useCache="false">
         SELECT `id`,
@@ -326,6 +350,29 @@
         pstuc.`user_uuid` as userUuid
         FROM `processtask_step_task_user_content` pstuc
         where pstuc.`processtask_step_task_user_id` = #{value}
+    </select>
+
+    <select id="getProcessTaskStepTaskUserAgentByStepTaskUserId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserAgentVo">
+        SELECT
+            `processtask_step_task_user_id` AS processTaskStepTaskUserId,
+            `processtask_step_task_id` AS processTaskStepTaskId,
+            `user_uuid` AS userUuid,
+            `agent_uuid` AS agentUuid
+        FROM `processtask_step_task_user_agent`
+        WHERE `processtask_step_task_user_id` = #{value}
+    </select>
+
+    <select id="getProcessTaskStepTaskUserAgentListByStepTaskUserIdList" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserAgentVo">
+        SELECT
+            `processtask_step_task_user_id` AS processTaskStepTaskUserId,
+            `processtask_step_task_id` AS processTaskStepTaskId,
+            `user_uuid` AS userUuid,
+            `agent_uuid` AS agentUuid
+        FROM `processtask_step_task_user_agent`
+        WHERE `processtask_step_task_user_id` IN
+        <foreach collection="list" item="stepTaskUserId" open="(" separator="," close=")">
+            #{stepTaskUserId}
+        </foreach>
     </select>
 
     <insert id="insertTask">
@@ -372,6 +419,22 @@
                 now(3))
     </insert>
 
+    <insert id="insertProcessTaskStepTaskUserAgent" parameterType="codedriver.framework.process.dto.ProcessTaskStepTaskUserAgentVo">
+        INSERT INTO `processtask_step_task_user_agent` (
+            `processtask_step_task_user_id`,
+            `processtask_step_task_id`,
+            `user_uuid`,
+            `agent_uuid`
+        )
+        VALUES
+        (
+            #{processTaskStepTaskUserId},
+            #{processTaskStepTaskId},
+            #{userUuid},
+            #{agentUuid}
+        )
+    </insert>
+
     <update id="updateTask">
         UPDATE
             `processtask_step_task`
@@ -389,12 +452,29 @@
           and `user_uuid` = #{userUuid}
     </update>
 
+    <update id="updateTaskUserById" parameterType = "codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">
+        UPDATE
+            `processtask_step_task_user`
+        SET `end_time` = now(3),
+            `user_uuid` = #{userUuid},
+            `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
+
     <update id="updateTaskUserContent">
         update `processtask_step_task_user_content`
         set `content_hash` = #{contentHash},
             `lcd`          = now(3)
         where `id` = #{processTaskStepTaskUserContentId}
           and `user_uuid` = #{userUuid}
+    </update>
+
+    <update id="updateTaskUserContentById" parameterType = "codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo">
+        update `processtask_step_task_user_content`
+        set `content_hash` = #{contentHash},
+            `user_uuid` = #{userUuid},
+            `lcd` = now(3)
+        where `id` = #{id}
     </update>
 
     <delete id="updateDeleteTaskUserByUserListAndId">
@@ -430,4 +510,7 @@
         WHERE `processtask_step_task_id` = #{value};
     </delete>
 
+    <delete id="deleteProcessTaskStepTaskUserAgentByStepTaskUserId" parameterType="java.lang.Long">
+        DELETE FROM `processtask_step_task_user_agent` WHERE `processtask_step_task_user_id` = #{value}
+    </delete>
 </mapper>
