@@ -32,6 +32,8 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskVo> getStepTaskByProcessTaskStepId(Long processTaskStepId);
 
+    List<Long> getStepTaskIdListByProcessTaskStepId(Long processTaskStepId);
+
     List<ProcessTaskStepTaskUserVo> getStepTaskUserByStepTaskIdList(@Param("stepTaskIdList") List<Long> collect);
 
     List<ProcessTaskStepTaskUserVo> getStepTaskUserByStepTaskIdListAndUserUuid(@Param("stepTaskIdList") List<Long> collect, @Param("userUuid") String userUuid);
@@ -77,5 +79,4 @@ public interface ProcessTaskStepTaskMapper {
     int deleteTaskUserByTaskId(Long processTaskStepTaskId);
 
     int deleteTaskUserContentByTaskId(Long processTaskStepTaskId);
-
 }

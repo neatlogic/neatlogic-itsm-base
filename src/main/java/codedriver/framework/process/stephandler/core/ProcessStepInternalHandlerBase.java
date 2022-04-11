@@ -1,25 +1,30 @@
 package codedriver.framework.process.stephandler.core;
 
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dao.mapper.TeamMapper;
 import codedriver.framework.dao.mapper.UserMapper;
+import codedriver.framework.dto.UserVo;
 import codedriver.framework.file.dao.mapper.FileMapper;
+import codedriver.framework.process.constvalue.ProcessTaskStatus;
+import codedriver.framework.process.constvalue.ProcessTaskStepUserStatus;
+import codedriver.framework.process.constvalue.ProcessUserType;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.ProcessTaskMapper;
+import codedriver.framework.process.dao.mapper.ProcessTaskStepTaskMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
-import codedriver.framework.process.dto.ProcessTaskStepInOperationVo;
+import codedriver.framework.process.dto.*;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.worktime.dao.mapper.WorktimeMapper;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class ProcessStepInternalHandlerBase implements IProcessStepInternalHandler {
     protected static ProcessTaskMapper processTaskMapper;
@@ -29,6 +34,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     protected static WorktimeMapper worktimeMapper;
     protected static FileMapper fileMapper;
     protected static ProcessStepHandlerMapper processStepHandlerMapper;
+    protected static ProcessTaskStepTaskMapper processTaskStepTaskMapper;
 
     @Autowired
     public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
@@ -63,6 +69,11 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     @Autowired
     public void setProcessStepHandlerMapper(ProcessStepHandlerMapper _processStepHandlerMapper) {
         processStepHandlerMapper = _processStepHandlerMapper;
+    }
+
+    @Autowired
+    public void setProcessTaskStepTaskMapper(ProcessTaskStepTaskMapper _processTaskStepTaskMapper) {
+        processTaskStepTaskMapper = _processTaskStepTaskMapper;
     }
 
     @Override
@@ -186,5 +197,108 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     @Override
     public int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo) {
         return processTaskMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+    }
+
+    protected void defaultUpdateProcessTaskStepUserAndWorker(Long processTaskId, Long processTaskStepId) {
+        /** 查出processtask_step_subtask表中当前步骤子任务处理人列表 **/
+        Set<String> runningSubtaskUserUuidSet = new HashSet<>();
+        Set<String> succeedSubtaskUserUuidSet = new HashSet<>();
+
+        List<Long> stepTaskIdList = processTaskStepTaskMapper.getStepTaskIdListByProcessTaskStepId(processTaskStepId);
+        if (CollectionUtils.isNotEmpty(stepTaskIdList)) {
+            List<ProcessTaskStepTaskUserVo> stepTaskUserList = processTaskStepTaskMapper.getStepTaskUserByStepTaskIdList(stepTaskIdList);
+            for (ProcessTaskStepTaskUserVo stepTaskUserVo : stepTaskUserList) {
+                if (Objects.equals(stepTaskUserVo.getIsDelete(), 1)) {
+                    continue;
+                }
+                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED)) {
+                    succeedSubtaskUserUuidSet.add(stepTaskUserVo.getUserUuid());
+                } else {
+                    runningSubtaskUserUuidSet.add(stepTaskUserVo.getUserUuid());
+                }
+            }
+        }
+//        List<ProcessTaskStepSubtaskVo> processTaskStepSubtaskList = processTaskStepSubtaskMapper.getProcessTaskStepSubtaskListByProcessTaskStepId(processTaskStepId);
+//        for (ProcessTaskStepSubtaskVo subtaskVo : processTaskStepSubtaskList) {
+//            if (ProcessTaskStatus.RUNNING.getValue().equals(subtaskVo.getStatus())) {
+//                runningSubtaskUserUuidSet.add(subtaskVo.getUserUuid());
+//            } else if (ProcessTaskStatus.SUCCEED.getValue().equals(subtaskVo.getStatus())) {
+//                succeedSubtaskUserUuidSet.add(subtaskVo.getUserUuid());
+//            }
+//        }
+
+        /** 查出processtask_step_worker表中当前步骤子任务处理人列表 **/
+        Set<String> workerMinorUserUuidSet = new HashSet<>();
+        List<ProcessTaskStepWorkerVo> workerList = processTaskMapper.getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(processTaskId, processTaskStepId);
+        for (ProcessTaskStepWorkerVo workerVo : workerList) {
+            if (ProcessUserType.MINOR.getValue().equals(workerVo.getUserType())) {
+                workerMinorUserUuidSet.add(workerVo.getUuid());
+            }
+        }
+
+        /** 查出processtask_step_user表中当前步骤子任务处理人列表 **/
+        Set<String> doingMinorUserUuidSet = new HashSet<>();
+        Set<String> doneMinorUserUuidSet = new HashSet<>();
+        List<ProcessTaskStepUserVo> minorUserList = processTaskMapper.getProcessTaskStepUserByStepId(processTaskStepId, ProcessUserType.MINOR.getValue());
+        for (ProcessTaskStepUserVo userVo : minorUserList) {
+            if (ProcessTaskStepUserStatus.DOING.getValue().equals(userVo.getStatus())) {
+                doingMinorUserUuidSet.add(userVo.getUserUuid());
+            } else if (ProcessTaskStepUserStatus.DONE.getValue().equals(userVo.getStatus())) {
+                doneMinorUserUuidSet.add(userVo.getUserUuid());
+            }
+        }
+
+        ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo();
+        processTaskStepWorkerVo.setProcessTaskId(processTaskId);
+        processTaskStepWorkerVo.setProcessTaskStepId(processTaskStepId);
+        processTaskStepWorkerVo.setType(GroupSearch.USER.getValue());
+        processTaskStepWorkerVo.setUserType(ProcessUserType.MINOR.getValue());
+
+        ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo();
+        processTaskStepUserVo.setProcessTaskId(processTaskId);
+        processTaskStepUserVo.setProcessTaskStepId(processTaskStepId);
+        processTaskStepUserVo.setUserType(ProcessUserType.MINOR.getValue());
+        /** 删除processtask_step_worker表中当前步骤多余的子任务处理人 **/
+        List<String> needDeleteUserList = ListUtils.removeAll(workerMinorUserUuidSet, runningSubtaskUserUuidSet);
+        for (String userUuid : needDeleteUserList) {
+            processTaskStepWorkerVo.setUuid(userUuid);
+            processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
+            if (succeedSubtaskUserUuidSet.contains(userUuid)) {
+                if (doingMinorUserUuidSet.contains(userUuid)) {
+                    /** 完成子任务 **/
+                    processTaskStepUserVo.setUserUuid(userUuid);
+                    processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
+                    processTaskMapper.updateProcessTaskStepUserStatus(processTaskStepUserVo);
+                }
+            } else {
+                if (doingMinorUserUuidSet.contains(userUuid)) {
+                    /** 取消子任务 **/
+                    processTaskStepUserVo.setUserUuid(userUuid);
+                    processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+                }
+            }
+        }
+        /** 向processtask_step_worker表中插入当前步骤的子任务处理人 **/
+        List<String> needInsertUserList = ListUtils.removeAll(runningSubtaskUserUuidSet, workerMinorUserUuidSet);
+        for (String userUuid : needInsertUserList) {
+            processTaskStepWorkerVo.setUuid(userUuid);
+            processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
+
+            if (doneMinorUserUuidSet.contains(userUuid)) {
+                /** 重做子任务 **/
+                processTaskStepUserVo.setUserUuid(userUuid);
+                processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
+                processTaskMapper.updateProcessTaskStepUserStatus(processTaskStepUserVo);
+            } else if (!doingMinorUserUuidSet.contains(userUuid)) {
+                /** 创建子任务 **/
+                UserVo userVo = userMapper.getUserBaseInfoByUuid(userUuid);
+                if (userVo != null) {
+                    processTaskStepUserVo.setUserUuid(userVo.getUuid());
+                    processTaskStepUserVo.setUserName(userVo.getUserName());
+                    processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
+                    processTaskMapper.insertProcessTaskStepUser(processTaskStepUserVo);
+                }
+            }
+        }
     }
 }
