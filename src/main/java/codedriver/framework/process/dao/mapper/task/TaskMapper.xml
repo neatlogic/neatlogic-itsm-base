@@ -6,7 +6,8 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="codedriver.framework.process.dao.mapper.task.TaskMapper">
-    <select id="searchTaskConfigCount" resultType="java.lang.Integer">
+    <cache-ref namespace="codedriver.framework.process.dao.mapper.ProcessTaskStepTaskMapper"/>
+    <select id="searchTaskConfigCount" resultType="java.lang.Integer" useCache="false">
         SELECT
         count(1)
         FROM
@@ -21,7 +22,7 @@
         </where>
     </select>
 
-    <select id="searchTaskConfig" resultType="codedriver.framework.process.dto.TaskConfigVo">
+    <select id="searchTaskConfig" resultType="codedriver.framework.process.dto.TaskConfigVo" useCache="false">
         SELECT
         `id`,
         `name`,
@@ -49,14 +50,14 @@
     </select>
 
     <select id="checkTaskConfigNameIsRepeat" parameterType="codedriver.framework.process.dto.TaskConfigVo"
-            resultType="int">
+            resultType="int" useCache="false">
         SELECT COUNT(1)
         FROM `task_config`
         WHERE `name` = #{name}
           AND `id` != #{id}
     </select>
 
-    <select id="getTaskConfigById" resultType="codedriver.framework.process.dto.TaskConfigVo">
+    <select id="getTaskConfigById" resultType="codedriver.framework.process.dto.TaskConfigVo" useCache="false">
         SELECT `id`,
                `name`,
                `num`,
@@ -69,7 +70,7 @@
         FROM `task_config`
         WHERE `id` = #{value}
     </select>
-    <select id="getTaskConfigByIdList" resultType="codedriver.framework.process.dto.TaskConfigVo">
+    <select id="getTaskConfigByIdList" resultType="codedriver.framework.process.dto.TaskConfigVo" useCache="false">
         SELECT
         `id`,
         `name`,
@@ -88,7 +89,7 @@
             #{id}
         </foreach>
     </select>
-    <select id="getTaskConfigReferenceCountMap" resultType="java.util.HashMap">
+    <select id="getTaskConfigReferenceCountMap" resultType="java.util.HashMap" useCache="false">
         SELECT task_config_id as taskConfigId, COUNT(1) as `count`
         FROM `process_step_task_config`
         where task_config_id in
@@ -97,7 +98,7 @@
         </foreach>
         GROUP BY task_config_id
     </select>
-    <select id="getTaskConfigReferenceProcessList" resultType="codedriver.framework.common.dto.ValueTextVo">
+    <select id="getTaskConfigReferenceProcessList" resultType="codedriver.framework.common.dto.ValueTextVo" useCache="false">
         SELECT CONCAT(p.name,'-',GROUP_CONCAT(ps.name)) AS `text`,p.uuid AS `value` FROM `process_step_task_config` pst
         JOIN process_step ps ON ps.uuid = pst.process_step_uuid
         JOIN `process` p ON ps.process_uuid = p.uuid
@@ -108,7 +109,7 @@
         </if>
     </select>
 
-    <select id="getTaskConfigReferenceProcessCount" resultType="java.lang.Integer">
+    <select id="getTaskConfigReferenceProcessCount" resultType="java.lang.Integer" useCache="false">
         SELECT COUNT(1)
         FROM (
                  SELECT p.uuid
