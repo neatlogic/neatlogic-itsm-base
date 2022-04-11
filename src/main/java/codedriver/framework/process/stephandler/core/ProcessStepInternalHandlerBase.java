@@ -246,6 +246,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                     if (insertedsucceedSubtaskUserUuidSet.contains(stepTaskUserVo.getUserUuid())) {
                         continue;
                     }
+                    insertedsucceedSubtaskUserUuidSet.contains(stepTaskUserVo.getUserUuid());
                     processTaskStepUserVo.setUserUuid(stepTaskUserVo.getUserUuid());
                     processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
                     processTaskStepUserVo.setEndTime(stepTaskUserVo.getEndTime());
@@ -254,6 +255,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                     if (insertedRunningSubtaskUserUuidSet.contains(stepTaskUserVo.getUserUuid())) {
                         continue;
                     }
+                    insertedRunningSubtaskUserUuidSet.add(stepTaskUserVo.getUserUuid());
                     processTaskStepUserVo.setUserUuid(stepTaskUserVo.getUserUuid());
                     processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
                     processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
