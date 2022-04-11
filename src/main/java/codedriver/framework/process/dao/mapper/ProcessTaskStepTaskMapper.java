@@ -5,6 +5,7 @@
 
 package codedriver.framework.process.dao.mapper;
 
+import codedriver.framework.process.dto.ProcessTaskStepTaskUserAgentVo;
 import codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo;
 import codedriver.framework.process.dto.ProcessTaskStepTaskUserVo;
 import codedriver.framework.process.dto.ProcessTaskStepTaskVo;
@@ -56,11 +57,15 @@ public interface ProcessTaskStepTaskMapper {
 
     ProcessTaskStepTaskUserContentVo getStepTaskUserContentByStepTaskUserId(Long processTaskStepTaskUserId);
 
+    ProcessTaskStepTaskUserAgentVo getProcessTaskStepTaskUserAgentByStepTaskUserId(Long stepTaskUserId);
+
     int insertTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
     int insertIgnoreTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
 
     int insertTaskUserContent(ProcessTaskStepTaskUserContentVo processTaskStepTaskUserContentVo);
+
+    int insertProcessTaskStepTaskUserAgent(ProcessTaskStepTaskUserAgentVo processTaskStepTaskUserAgentVo);
 
     int updateTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
@@ -79,4 +84,6 @@ public interface ProcessTaskStepTaskMapper {
     int deleteTaskUserByTaskId(Long processTaskStepTaskId);
 
     int deleteTaskUserContentByTaskId(Long processTaskStepTaskId);
+
+    int deleteProcessTaskStepTaskUserAgentByStepTaskUserId(Long stepTaskUserId);
 }

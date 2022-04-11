@@ -412,100 +412,100 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         return false;
     }
 
-    /**
-     * 检查工单状态，如果processTaskStatus属于status其中一员，则返回对应的异常对象，否则返回null
-     * @param processTaskStatus 工单状态
-     * @param statuss 状态列表
-     * @return
-     */
-    protected ProcessTaskPermissionDeniedException checkProcessTaskStatus(String processTaskStatus, ProcessTaskStatus ... statuss) {
-        if (statuss != null) {
-            for (ProcessTaskStatus status : statuss) {
-                switch (status) {
-                    case DRAFT:
-                        if (ProcessTaskStatus.DRAFT.getValue().equals(processTaskStatus)) {
-                            return new ProcessTaskUnsubmittedException();
-                        }
-                        break;
-                    case SUCCEED:
-                        if (ProcessTaskStatus.SUCCEED.getValue().equals(processTaskStatus)) {
-                            return new ProcessTaskSucceededException();
-                        }
-                        break;
-                    case ABORTED:
-                        if (ProcessTaskStatus.ABORTED.getValue().equals(processTaskStatus)) {
-                            return new ProcessTaskAbortedException();
-                        }
-                        break;
-                    case FAILED:
-                        if (ProcessTaskStatus.FAILED.getValue().equals(processTaskStatus)) {
-                            return new ProcessTaskFailedException();
-                        }
-                        break;
-                    case HANG:
-                        if (ProcessTaskStatus.HANG.getValue().equals(processTaskStatus)) {
-                            return new ProcessTaskHangException();
-                        }
-                        break;
-                    case SCORED:
-                        if (ProcessTaskStatus.SCORED.getValue().equals(processTaskStatus)) {
-                            return new ProcessTaskScoredException();
-                        }
-                        break;
-                    case RUNNING:
-                        if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskStatus)) {
-                            return new ProcessTaskRunningException();
-                        }
-                        break;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 检查步骤状态，如果stepStatus属于status其中一员，则返回对应的异常对象，否则返回null
-     * @param stepStatus 步骤状态
-     * @param statuss 状态列表
-     * @return
-     */
-    protected ProcessTaskPermissionDeniedException checkProcessTaskStepStatus(String stepStatus, ProcessTaskStatus ... statuss) {
-        if (statuss != null) {
-            for (ProcessTaskStatus status : statuss) {
-                switch (status) {
-                    case DRAFT:
-                        if (ProcessTaskStatus.DRAFT.getValue().equals(stepStatus)) {
-                            return new ProcessTaskStepUnsubmittedException();
-                        }
-                        break;
-                    case PENDING:
-                        if (ProcessTaskStatus.PENDING.getValue().equals(stepStatus)) {
-                            return new ProcessTaskStepPendingException();
-                        }
-                        break;
-                    case RUNNING:
-                        if (ProcessTaskStatus.RUNNING.getValue().equals(stepStatus)) {
-                            return new ProcessTaskStepRunningException();
-                        }
-                        break;
-                    case SUCCEED:
-                        if (ProcessTaskStatus.SUCCEED.getValue().equals(stepStatus)) {
-                            return new ProcessTaskStepSucceededException();
-                        }
-                        break;
-                    case FAILED:
-                        if (ProcessTaskStatus.FAILED.getValue().equals(stepStatus)) {
-                            return new ProcessTaskStepFailedException();
-                        }
-                        break;
-                    case HANG:
-                        if (ProcessTaskStatus.HANG.getValue().equals(stepStatus)) {
-                            return new ProcessTaskStepHangException();
-                        }
-                        break;
-                }
-            }
-        }
-        return null;
-    }
+//    /**
+//     * 检查工单状态，如果processTaskStatus属于status其中一员，则返回对应的异常对象，否则返回null
+//     * @param processTaskStatus 工单状态
+//     * @param statuss 状态列表
+//     * @return
+//     */
+//    protected ProcessTaskPermissionDeniedException checkProcessTaskStatus(String processTaskStatus, ProcessTaskStatus ... statuss) {
+//        if (statuss != null) {
+//            for (ProcessTaskStatus status : statuss) {
+//                switch (status) {
+//                    case DRAFT:
+//                        if (ProcessTaskStatus.DRAFT.getValue().equals(processTaskStatus)) {
+//                            return new ProcessTaskUnsubmittedException();
+//                        }
+//                        break;
+//                    case SUCCEED:
+//                        if (ProcessTaskStatus.SUCCEED.getValue().equals(processTaskStatus)) {
+//                            return new ProcessTaskSucceededException();
+//                        }
+//                        break;
+//                    case ABORTED:
+//                        if (ProcessTaskStatus.ABORTED.getValue().equals(processTaskStatus)) {
+//                            return new ProcessTaskAbortedException();
+//                        }
+//                        break;
+//                    case FAILED:
+//                        if (ProcessTaskStatus.FAILED.getValue().equals(processTaskStatus)) {
+//                            return new ProcessTaskFailedException();
+//                        }
+//                        break;
+//                    case HANG:
+//                        if (ProcessTaskStatus.HANG.getValue().equals(processTaskStatus)) {
+//                            return new ProcessTaskHangException();
+//                        }
+//                        break;
+//                    case SCORED:
+//                        if (ProcessTaskStatus.SCORED.getValue().equals(processTaskStatus)) {
+//                            return new ProcessTaskScoredException();
+//                        }
+//                        break;
+//                    case RUNNING:
+//                        if (ProcessTaskStatus.RUNNING.getValue().equals(processTaskStatus)) {
+//                            return new ProcessTaskRunningException();
+//                        }
+//                        break;
+//                }
+//            }
+//        }
+//        return null;
+//    }
+//
+//    /**
+//     * 检查步骤状态，如果stepStatus属于status其中一员，则返回对应的异常对象，否则返回null
+//     * @param stepStatus 步骤状态
+//     * @param statuss 状态列表
+//     * @return
+//     */
+//    protected ProcessTaskPermissionDeniedException checkProcessTaskStepStatus(String stepStatus, ProcessTaskStatus ... statuss) {
+//        if (statuss != null) {
+//            for (ProcessTaskStatus status : statuss) {
+//                switch (status) {
+//                    case DRAFT:
+//                        if (ProcessTaskStatus.DRAFT.getValue().equals(stepStatus)) {
+//                            return new ProcessTaskStepUnsubmittedException();
+//                        }
+//                        break;
+//                    case PENDING:
+//                        if (ProcessTaskStatus.PENDING.getValue().equals(stepStatus)) {
+//                            return new ProcessTaskStepPendingException();
+//                        }
+//                        break;
+//                    case RUNNING:
+//                        if (ProcessTaskStatus.RUNNING.getValue().equals(stepStatus)) {
+//                            return new ProcessTaskStepRunningException();
+//                        }
+//                        break;
+//                    case SUCCEED:
+//                        if (ProcessTaskStatus.SUCCEED.getValue().equals(stepStatus)) {
+//                            return new ProcessTaskStepSucceededException();
+//                        }
+//                        break;
+//                    case FAILED:
+//                        if (ProcessTaskStatus.FAILED.getValue().equals(stepStatus)) {
+//                            return new ProcessTaskStepFailedException();
+//                        }
+//                        break;
+//                    case HANG:
+//                        if (ProcessTaskStatus.HANG.getValue().equals(stepStatus)) {
+//                            return new ProcessTaskStepHangException();
+//                        }
+//                        break;
+//                }
+//            }
+//        }
+//        return null;
+//    }
 }
