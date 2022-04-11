@@ -141,8 +141,17 @@
         WHERE pst.`processtask_step_id` = #{value}
     </select>
 
-    <select id="getStepTaskIdListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.Long">
-        SELECT`id` FROM `processtask_step_task` WHERE `processtask_step_id` = #{value}
+    <select id="getStepTaskListByProcessTaskStepId"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTaskVo" useCache="false">
+        SELECT `processtask_id`      as processTaskId,
+               `processtask_step_id` as processTaskStepId,
+               `id`,
+               `owner`,
+               `create_time`         as createTime,
+               `end_time`            as endTime,
+               `task_config_id`      as taskConfigId
+        FROM `processtask_step_task`
+        WHERE `processtask_step_id` = #{value}
     </select>
 
     <resultMap id="stepTaskUserMap" type="codedriver.framework.process.dto.ProcessTaskStepTaskUserVo">

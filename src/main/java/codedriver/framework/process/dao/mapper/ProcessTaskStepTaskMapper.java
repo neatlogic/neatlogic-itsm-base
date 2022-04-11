@@ -33,7 +33,7 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskVo> getStepTaskByProcessTaskStepId(Long processTaskStepId);
 
-    List<Long> getStepTaskIdListByProcessTaskStepId(Long processTaskStepId);
+    List<ProcessTaskStepTaskVo> getStepTaskListByProcessTaskStepId(Long processTaskStepId);
 
     List<ProcessTaskStepTaskUserVo> getStepTaskUserByStepTaskIdList(@Param("stepTaskIdList") List<Long> collect);
 
