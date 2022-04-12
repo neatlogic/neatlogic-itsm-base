@@ -118,7 +118,7 @@
                tc.name                   as taskConfigName
         FROM `processtask_step_task` pst
                  LEFT JOIN `task_config` tc on pst.`task_config_id` = tc.id
-                 JOIN `processtask_step_task_user` pstu ON pst.`id` = pstu.processtask_step_task_id AND pstu.`is_delete` = 1
+                 JOIN `processtask_step_task_user` pstu ON pst.`id` = pstu.processtask_step_task_id AND pstu.`is_delete` = 0
                  LEFT JOIN `user` u ON pstu.`user_uuid` = u.uuid
         where pst.`processtask_step_id` = #{value}
     </select>
