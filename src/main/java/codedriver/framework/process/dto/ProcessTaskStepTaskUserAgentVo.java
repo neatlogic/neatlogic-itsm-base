@@ -5,7 +5,9 @@
 
 package codedriver.framework.process.dto;
 
-public class ProcessTaskStepTaskUserAgentVo {
+import java.io.Serializable;
+
+public class ProcessTaskStepTaskUserAgentVo implements Serializable {
     private Long processTaskStepTaskUserId;
     private Long processTaskStepTaskId;
     private String userUuid;

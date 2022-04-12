@@ -46,7 +46,9 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
     @EntityField(name = "是否可以回复", type = ApiParamType.INTEGER)
     private Integer isReplyable;
     @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
-    private String originalUser;
+    private String originalUserUuid;
+    @EntityField(name = "用户", type = ApiParamType.JSONOBJECT)
+    private UserVo originalUserVo;
 
     public ProcessTaskStepTaskUserVo() {
     }
@@ -156,11 +158,19 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
         this.isReplyable = isReplyable;
     }
 
-    public String getOriginalUser() {
-        return originalUser;
+    public String getOriginalUserUuid() {
+        return originalUserUuid;
     }
 
-    public void setOriginalUser(String originalUser) {
-        this.originalUser = originalUser;
+    public void setOriginalUserUuid(String originalUserUuid) {
+        this.originalUserUuid = originalUserUuid;
+    }
+
+    public UserVo getOriginalUserVo() {
+        return originalUserVo;
+    }
+
+    public void setOriginalUserVo(UserVo originalUserVo) {
+        this.originalUserVo = originalUserVo;
     }
 }
