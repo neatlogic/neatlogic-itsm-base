@@ -61,6 +61,8 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskUserAgentVo> getProcessTaskStepTaskUserAgentListByStepTaskUserIdList(List<Long> stepTaskUserIdList);
 
+    List<ProcessTaskStepTaskUserAgentVo> getProcessTaskStepTaskUserAgentListByStepTaskIdList(List<Long> stepTaskIdList);
+
     int insertTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
     int insertIgnoreTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
@@ -92,4 +94,6 @@ public interface ProcessTaskStepTaskMapper {
     int deleteTaskUserContentByTaskId(Long processTaskStepTaskId);
 
     int deleteProcessTaskStepTaskUserAgentByStepTaskUserId(Long stepTaskUserId);
+
+    int deleteProcessTaskStepTaskUserAgentByStepTaskUserIdList(List<Long> stepTaskUserIdList);
 }

@@ -376,6 +376,19 @@
         </foreach>
     </select>
 
+    <select id="getProcessTaskStepTaskUserAgentListByStepTaskIdList" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserAgentVo">
+        SELECT
+            `processtask_step_task_user_id` AS processTaskStepTaskUserId,
+            `processtask_step_task_id` AS processTaskStepTaskId,
+            `user_uuid` AS userUuid,
+            `agent_uuid` AS agentUuid
+        FROM `processtask_step_task_user_agent`
+        WHERE `processtask_step_task_id` IN
+        <foreach collection="list" item="stepTaskId" open="(" separator="," close=")">
+            #{stepTaskId}
+        </foreach>
+    </select>
+
     <insert id="insertTask">
         INSERT INTO `processtask_step_task` (`processtask_id`,
                                              `processtask_step_id`,
@@ -535,5 +548,13 @@
 
     <delete id="deleteProcessTaskStepTaskUserAgentByStepTaskUserId" parameterType="java.lang.Long">
         DELETE FROM `processtask_step_task_user_agent` WHERE `processtask_step_task_user_id` = #{value}
+    </delete>
+
+    <delete id="deleteProcessTaskStepTaskUserAgentByStepTaskUserIdList" parameterType="java.lang.Long">
+        DELETE FROM `processtask_step_task_user_agent`
+        WHERE `processtask_step_task_user_id` in
+        <foreach collection="list" item="stepTaskUserId" open="(" separator="," close=")">
+            #{stepTaskUserId}
+        </foreach>
     </delete>
 </mapper>

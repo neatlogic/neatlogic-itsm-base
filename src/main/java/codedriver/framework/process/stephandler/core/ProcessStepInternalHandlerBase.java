@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class ProcessStepInternalHandlerBase implements IProcessStepInternalHandler {
     protected static ProcessTaskMapper processTaskMapper;
@@ -223,6 +224,9 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 stepTaskIdList.add(processTaskStepTaskVo.getId());
                 processTaskStepTaskVoMap.put(processTaskStepTaskVo.getId(), processTaskStepTaskVo);
             }
+
+            List<ProcessTaskStepTaskUserAgentVo> processTaskStepTaskUserAgentList = processTaskStepTaskMapper.getProcessTaskStepTaskUserAgentListByStepTaskIdList(stepTaskIdList);
+            Map<Long, ProcessTaskStepTaskUserAgentVo> processTaskStepTaskUserAgentMap = processTaskStepTaskUserAgentList.stream().collect(Collectors.toMap(e -> e.getProcessTaskStepTaskUserId(), e -> e));
             List<ProcessTaskStepTaskUserVo> stepTaskUserList = processTaskStepTaskMapper.getStepTaskUserByStepTaskIdList(stepTaskIdList);
             for (ProcessTaskStepTaskUserVo stepTaskUserVo : stepTaskUserList) {
                 if (Objects.equals(stepTaskUserVo.getIsDelete(), 1)) {
@@ -239,30 +243,36 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 ProcessTaskStepTaskVo processTaskStepTaskVo = processTaskStepTaskVoMap.get(stepTaskUserVo.getProcessTaskStepTaskId());
                 processTaskStepUserVo.setActiveTime(processTaskStepTaskVo.getCreateTime());
                 processTaskStepUserVo.setStartTime(processTaskStepTaskVo.getCreateTime());
-                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED)) {
-                    if (runningSubtaskUserUuidSet.contains(stepTaskUserVo.getUserUuid())) {
-                        continue;
-                    }
-                    if (insertedsucceedSubtaskUserUuidSet.contains(stepTaskUserVo.getUserUuid())) {
-                        continue;
-                    }
-                    insertedsucceedSubtaskUserUuidSet.contains(stepTaskUserVo.getUserUuid());
-                    processTaskStepUserVo.setUserUuid(stepTaskUserVo.getUserUuid());
-                    processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
-                    processTaskStepUserVo.setEndTime(stepTaskUserVo.getEndTime());
-                    processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
-                } else {
-                    if (insertedRunningSubtaskUserUuidSet.contains(stepTaskUserVo.getUserUuid())) {
-                        continue;
-                    }
-                    insertedRunningSubtaskUserUuidSet.add(stepTaskUserVo.getUserUuid());
-                    processTaskStepUserVo.setUserUuid(stepTaskUserVo.getUserUuid());
-                    processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
-                    processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
+                String userUuid = stepTaskUserVo.getUserUuid();
+                processTaskStepUserVo.setUserUuid(userUuid);
 
-                    processTaskStepWorkerVo.setUuid(stepTaskUserVo.getUserUuid());
+                ProcessTaskStepTaskUserAgentVo processTaskStepTaskUserAgentVo = processTaskStepTaskUserAgentMap.get(stepTaskUserVo.getId());
+                if (processTaskStepTaskUserAgentVo != null) {
+                    processTaskStepWorkerVo.setUuid(processTaskStepTaskUserAgentVo.getUserUuid());
                     processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
                 }
+
+                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED)) {
+                    if (runningSubtaskUserUuidSet.contains(userUuid)) {
+                        continue;
+                    }
+                    if (insertedsucceedSubtaskUserUuidSet.contains(userUuid)) {
+                        continue;
+                    }
+                    insertedsucceedSubtaskUserUuidSet.add(userUuid);
+                    processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
+                    processTaskStepUserVo.setEndTime(stepTaskUserVo.getEndTime());
+                } else {
+                    if (insertedRunningSubtaskUserUuidSet.contains(userUuid)) {
+                        continue;
+                    }
+                    insertedRunningSubtaskUserUuidSet.add(userUuid);
+                    processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
+                }
+                processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
+
+                processTaskStepWorkerVo.setUuid(userUuid);
+                processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
             }
         }
 //        /** 查出processtask_step_worker表中当前步骤子任务处理人列表 **/
