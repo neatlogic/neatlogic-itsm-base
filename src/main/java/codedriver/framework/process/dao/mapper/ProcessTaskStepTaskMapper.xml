@@ -70,7 +70,7 @@
                pst.`owner`,
                pst.`create_time`         as createTime,
                pst.`end_time`            as endTime,
-               pst.`task_config_id`      as taskConfigId
+               pst.`task_config_id`      as taskConfigId,
                pst.`content_hash`        as contentHash
         FROM `processtask_step_task` pst
         WHERE pst.id = #{value}
@@ -387,7 +387,7 @@
         VALUES (#{processTaskId},
                 #{processTaskStepId},
                 #{id},
-                #{ownerVo.uuid},
+                #{owner},
                 now(3),
                 #{contentHash},
                 #{taskConfigId})
@@ -403,6 +403,19 @@
                 #{userUuid},
                 #{status});
 
+    </insert>
+
+    <insert id="insertTaskUser">
+        INSERT INTO `processtask_step_task_user` (
+            `id`,
+            `processtask_step_task_id`,
+            `user_uuid`,
+            `status`)
+        VALUES (
+            #{id},
+            #{processTaskStepTaskId},
+            #{userUuid},
+            #{status})
     </insert>
 
     <insert id="insertTaskUserContent">

@@ -65,6 +65,8 @@ public interface ProcessTaskStepTaskMapper {
 
     int insertIgnoreTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
 
+    int insertTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
+
     int insertTaskUserContent(ProcessTaskStepTaskUserContentVo processTaskStepTaskUserContentVo);
 
     int insertProcessTaskStepTaskUserAgent(ProcessTaskStepTaskUserAgentVo processTaskStepTaskUserAgentVo);
@@ -81,7 +83,7 @@ public interface ProcessTaskStepTaskMapper {
 
     int updateTaskUserContentById(ProcessTaskStepTaskUserContentVo userContentVo);
 
-    int updateTaskUserIsDeleteByIdList(@Param("idList") List<Long> needRecoverStepTaskUserIdList, @Param("isDelete") Integer isDelete);
+    int updateTaskUserIsDeleteByIdList(@Param("idList") List<Long> idList, @Param("isDelete") Integer isDelete);
 
     int deleteTaskById(Long processTaskStepTaskId);
 
