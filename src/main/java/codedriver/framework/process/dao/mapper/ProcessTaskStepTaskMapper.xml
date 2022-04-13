@@ -71,6 +71,7 @@
                pst.`create_time`         as createTime,
                pst.`end_time`            as endTime,
                pst.`task_config_id`      as taskConfigId
+               pst.`content_hash`        as contentHash
         FROM `processtask_step_task` pst
         WHERE pst.id = #{value}
     </select>
@@ -438,7 +439,7 @@
     <update id="updateTask">
         UPDATE
             `processtask_step_task`
-        SET `owner`        = #{ownerVo.uuid},
+        SET `owner`        = #{owner},
             `content_hash` = #{contentHash}
         WHERE `id` = #{id};
     </update>
@@ -475,6 +476,15 @@
             `user_uuid` = #{userUuid},
             `lcd` = now(3)
         where `id` = #{id}
+    </update>
+
+    <update id="updateTaskUserIsDeleteByIdList">
+        UPDATE `processtask_step_task_user`
+        SET `is_delete` = #{isDelete}
+        WHERE `id` IN
+        <foreach collection="idList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </update>
 
     <delete id="updateDeleteTaskUserByUserListAndId">

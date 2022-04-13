@@ -81,6 +81,8 @@ public interface ProcessTaskStepTaskMapper {
 
     int updateTaskUserContentById(ProcessTaskStepTaskUserContentVo userContentVo);
 
+    int updateTaskUserIsDeleteByIdList(@Param("idList") List<Long> needRecoverStepTaskUserIdList, @Param("isDelete") Integer isDelete);
+
     int deleteTaskById(Long processTaskStepTaskId);
 
     int deleteTaskUserByTaskId(Long processTaskStepTaskId);
