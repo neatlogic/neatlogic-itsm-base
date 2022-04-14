@@ -96,4 +96,6 @@ public interface ProcessTaskStepTaskMapper {
     int deleteProcessTaskStepTaskUserAgentByStepTaskUserId(Long stepTaskUserId);
 
     int deleteProcessTaskStepTaskUserAgentByStepTaskUserIdList(List<Long> stepTaskUserIdList);
+
+    int deleteProcessTaskStepTaskUserAgentByStepTaskId(Long processTaskStepTaskId);
 }

@@ -557,4 +557,8 @@
             #{stepTaskUserId}
         </foreach>
     </delete>
+
+    <delete id="deleteProcessTaskStepTaskUserAgentByStepTaskId" parameterType="java.lang.Long">
+        DELETE FROM `processtask_step_task_user_agent` WHERE `processtask_step_task_id` = #{value}
+    </delete>
 </mapper>
