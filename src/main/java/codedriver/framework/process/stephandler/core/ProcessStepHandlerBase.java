@@ -2301,10 +2301,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 .build()
                 .checkAndNoPermissionThrowException();
         try {
-            //让结束节点到重做节点的回退线的isHit=1，流程图中显示绿色
             List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(currentProcessTaskStepVo.getProcessTaskId(), ProcessStepType.END.getValue());
+            Long endProcessTaskStepId = processTaskStepList.get(0).getId();
+            currentProcessTaskStepVo.setFromProcessTaskStepId(endProcessTaskStepId);
+            currentProcessTaskStepVo.setStartProcessTaskStepId(endProcessTaskStepId);
+            List<Long> parallelActivateStepIdList = new ArrayList<>();
+            parallelActivateStepIdList.add(currentProcessTaskStepVo.getId());
+            currentProcessTaskStepVo.setParallelActivateStepIdList(parallelActivateStepIdList);
+            //让结束节点到重做节点的回退线的isHit=1，流程图中显示绿色
             ProcessTaskStepRelVo processTaskStepRelVo = new ProcessTaskStepRelVo();
-            processTaskStepRelVo.setFromProcessTaskStepId(processTaskStepList.get(0).getId());
+            processTaskStepRelVo.setFromProcessTaskStepId(endProcessTaskStepId);
             processTaskStepRelVo.setToProcessTaskStepId(currentProcessTaskStepVo.getId());
             processTaskStepRelVo.setIsHit(1);
             processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
