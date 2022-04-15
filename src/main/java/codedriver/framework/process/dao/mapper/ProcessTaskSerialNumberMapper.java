@@ -11,6 +11,8 @@ public interface ProcessTaskSerialNumberMapper {
     public ProcessTaskSerialNumberPolicyVo
         getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(String channelTypeUuid);
 
+    ProcessTaskSerialNumberPolicyVo getProcessTaskSerialNumberPolicyByChannelTypeUuid(String channelTypeUuid);
+
     public List<ProcessTaskSerialNumberPolicyVo> getProcessTaskSerialNumberPolicyListByHandler(String handler);
 
     public int insertProcessTaskSerialNumberPolicy(ProcessTaskSerialNumberPolicyVo policyVo);
