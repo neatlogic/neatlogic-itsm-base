@@ -12,6 +12,19 @@
 		`end_time` AS endTime
 		FROM `processtask_serial_number_policy`
 		WHERE `channel_type_uuid` = #{value}
+		FOR UPDATE
+	</select>
+
+	<select id="getProcessTaskSerialNumberPolicyByChannelTypeUuid" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
+		SELECT
+		`channel_type_uuid` AS channelTypeUuid,
+		`handler`,
+		`config`,
+		`serial_number_seed` AS serialNumberSeed,
+		`start_time` AS startTime,
+		`end_time` AS endTime
+		FROM `processtask_serial_number_policy`
+		WHERE `channel_type_uuid` = #{value}
 	</select>
 
 	<select id="getProcessTaskSerialNumberPolicyListByHandler" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo">
