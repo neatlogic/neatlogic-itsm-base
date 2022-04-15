@@ -8,28 +8,25 @@ import codedriver.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 
 public interface ProcessTaskSerialNumberMapper {
 
-    public ProcessTaskSerialNumberPolicyVo
-        getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(String channelTypeUuid);
+    ProcessTaskSerialNumberPolicyVo getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(String channelTypeUuid);
 
     ProcessTaskSerialNumberPolicyVo getProcessTaskSerialNumberPolicyByChannelTypeUuid(String channelTypeUuid);
 
-    public List<ProcessTaskSerialNumberPolicyVo> getProcessTaskSerialNumberPolicyListByHandler(String handler);
+    List<ProcessTaskSerialNumberPolicyVo> getProcessTaskSerialNumberPolicyListByHandler(String handler);
 
-    public int insertProcessTaskSerialNumberPolicy(ProcessTaskSerialNumberPolicyVo policyVo);
+    int insertProcessTaskSerialNumberPolicy(ProcessTaskSerialNumberPolicyVo policyVo);
 
-    public int insertProcessTaskSerialNumber(@Param("processTaskId") Long processTaskId,
-        @Param("serialNumber") String serialNumber);
+    int insertProcessTaskSerialNumber(@Param("processTaskId") Long processTaskId, @Param("serialNumber") String serialNumber);
 
-    public int updateProcessTaskSerialNumberPolicyByChannelTypeUuid(ProcessTaskSerialNumberPolicyVo policyVo);
+    int updateProcessTaskSerialNumberPolicyByChannelTypeUuid(ProcessTaskSerialNumberPolicyVo policyVo);
 
-    public int updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(
-        @Param("channelTypeUuid") String channelTypeUuid, @Param("serialNumberSeed") Long serialNumberSeed);
+    int updateProcessTaskSerialNumberPolicySerialNumberSeedByChannelTypeUuid(@Param("channelTypeUuid") String channelTypeUuid, @Param("serialNumberSeed") Long serialNumberSeed);
 
-    public int updateProcessTaskSerialNumberPolicyStartTimeByChannelTypeUuid(String channelTypeUuid);
+    int updateProcessTaskSerialNumberPolicyStartTimeByChannelTypeUuid(String channelTypeUuid);
 
-    public int updateProcessTaskSerialNumberPolicyEndTimeByChannelTypeUuid(String channelTypeUuid);
+    int updateProcessTaskSerialNumberPolicyEndTimeByChannelTypeUuid(String channelTypeUuid);
 
-    public int deleteProcessTaskSerialNumberPolicyByChannelTypeUuid(String channelTypeUuid);
+    int deleteProcessTaskSerialNumberPolicyByChannelTypeUuid(String channelTypeUuid);
 
-    public int deleteProcessTaskSerialNumberByProcessTaskId(Long processTaskId);
+    int deleteProcessTaskSerialNumberByProcessTaskId(Long processTaskId);
 }
