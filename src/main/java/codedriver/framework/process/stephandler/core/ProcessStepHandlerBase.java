@@ -1719,7 +1719,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             String worktimeUuid = channelMapper.getWorktimeUuidByChannelUuid(processTaskVo.getChannelUuid());
             processTaskVo.setWorktimeUuid(worktimeUuid);
             /* 生成工单号 **/
-            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelVo.getChannelTypeUuid());
+            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyByChannelTypeUuid(channelVo.getChannelTypeUuid());
             if (processTaskSerialNumberPolicyVo == null) {
                 throw new ProcessTaskSerialNumberPolicyNotFoundException(channelVo.getChannelTypeUuid());
             }
