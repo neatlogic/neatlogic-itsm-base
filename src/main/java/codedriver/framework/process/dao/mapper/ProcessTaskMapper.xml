@@ -360,14 +360,14 @@
     <select id="getProcessTaskStepContentByProcessTaskId" parameterType="java.lang.Long"
             resultType="codedriver.framework.process.dto.ProcessTaskStepContentVo">
         SELECT `id`,
-        `processtask_id` AS processTaskId,
-        `processtask_step_id` AS processTaskStepId,
-        `content_hash` AS contentHash,
-        `type`,
-        `fcd`,
-        `fcu`,
-        `lcd`,
-        `lcu`
+               `processtask_id`      AS processTaskId,
+               `processtask_step_id` AS processTaskStepId,
+               `content_hash`        AS contentHash,
+               `type`,
+               `fcd`,
+               `fcu`,
+               `lcd`,
+               `lcu`
         FROM `processtask_step_content`
         WHERE `processtask_id` = #{value}
         ORDER BY `lcd` DESC
@@ -376,7 +376,7 @@
     <select id="getProcessTaskStartContentByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
         SELECT b.`content`
         FROM `processtask_step_content` a
-        JOIN `processtask_content` b ON b.`hash` = a.`content_hash`
+                 JOIN `processtask_content` b ON b.`hash` = a.`content_hash`
         WHERE a.`type` = 'startprocess'
           AND a.`processtask_id` = #{value}
         LIMIT 1
@@ -429,7 +429,7 @@
         FROM `processtask_step_user`
         WHERE processtask_step_id in
         <foreach collection="processTaskStepIdList" separator="," open="(" close=")" item="processTaskStepId">
-          #{processTaskStepId}
+            #{processTaskStepId}
         </foreach>
         <if test="userType != null and userType != ''">
             and user_type = #{userType}
@@ -592,7 +592,8 @@
                `source`
         FROM `processtask`
         WHERE id = #{value}
-        FOR UPDATE
+            FOR
+        UPDATE
     </select>
 
     <select id="getToProcessTaskStepByFromIdAndType" resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
@@ -797,15 +798,15 @@
 
     <select id="getProcessTaskStepRelListByToIdList" parameterType="java.lang.Long"
             resultType="codedriver.framework.process.dto.ProcessTaskStepRelVo">
-        SELECT `processtask_id`                         AS processTaskId,
-               `from_process_step_uuid`                 AS fromProcessStepUuid,
-               `to_process_step_uuid`                   AS toProcessStepUuid,
-               `from_processtask_step_id`               AS fromProcessTaskStepId,
-               `to_processtask_step_id`                 AS toProcessTaskStepId,
-               `condition`,
-               `is_hit`                                 AS isHit,
-               `name`,
-               `type`
+        SELECT `processtask_id` AS processTaskId,
+        `from_process_step_uuid` AS fromProcessStepUuid,
+        `to_process_step_uuid` AS toProcessStepUuid,
+        `from_processtask_step_id` AS fromProcessTaskStepId,
+        `to_processtask_step_id` AS toProcessTaskStepId,
+        `condition`,
+        `is_hit` AS isHit,
+        `name`,
+        `type`
         FROM `processtask_step_rel`
         WHERE `to_processtask_step_id` IN
         <foreach collection="list" item="toStepId" open="(" separator="," close=")">
@@ -1838,13 +1839,13 @@
         WHERE `processtask_id` = #{value}
     </select>
 
-    <select id="getProcessTaskStepInOperationListByProcessTaskId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepInOperationVo">
-        SELECT
-            `processtask_id` AS processTaskId,
-            `processtask_step_id` AS processTaskStepId,
-            `operation_type` AS operationType,
-            `operation_time` AS operationTime,
-            `expire_time` AS expireTime
+    <select id="getProcessTaskStepInOperationListByProcessTaskId" parameterType="java.lang.Long"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepInOperationVo">
+        SELECT `processtask_id`      AS processTaskId,
+               `processtask_step_id` AS processTaskStepId,
+               `operation_type`      AS operationType,
+               `operation_time`      AS operationTime,
+               `expire_time`         AS expireTime
         FROM `processtask_step_in_operation`
         WHERE `processtask_id` = #{value}
     </select>
@@ -2130,43 +2131,45 @@
         </collection>
     </resultMap>
 
-    <select id="getProcessTaskCurrentStepByProcessTaskId" parameterType="java.lang.Long" resultMap="workcenterProcessTaskCurrentStepMap">
-        SELECT
-            pts.id AS processTaskStepId,
-            pts.NAME AS processTaskStepName,
-            pts.processtask_id AS processTaskId,
-            pts.is_active AS processTaskStepIsActive,
-            pts.STATUS AS processTaskStepStatus,
-            pts.config_hash AS processTaskConfigHash,
-            pts.HANDLER AS processTaskStepHandler,
-            ptsw.uuid AS stepWorkerUuid,
-            ptsw.type AS stepWorkerType,
-            ptsw.user_type AS stepWorkerUserType,
-            ptsu.STATUS AS stepUserUserStatus,
-            ptsu.user_type AS stepUserUserType,
-            ptsuser.user_name AS stepUserUserName,
-            ptsuser.uuid AS stepUserUserUuid,
-            ptsuser.user_info AS stepUserUserInfo,
-            ptsuser.vip_level AS stepUserUserVipLevel,
-            ptsuser.pinyin AS stepUserUserPinyin,
-            ptsl.id AS processTaskSlaId,
-            ptsl.NAME AS processTaskSlaName,
-            ptsl.config AS processTaskSlaConfig,
-            ptslt.expire_time AS expireTime,
-            ptslt.realexpire_time AS realExpireTime,
-            ptslt.time_left AS timeLeft,
-            ptslt.realtime_left AS realTimeLeft,
-            ptssl.processtask_step_id AS slaStepId,
-            ptssl.sla_id AS slaId
-        FROM
-            processtask_step pts
-                LEFT JOIN processtask_step_user ptsu ON pts.processtask_id = ptsu.processtask_id AND pts.id = ptsu.processtask_step_id
-                LEFT JOIN processtask_step_worker ptsw ON pts.processtask_id = ptsw.processtask_id AND pts.id = ptsw.processtask_step_id
-                LEFT JOIN `user` ptsuser ON ptsu.user_uuid = ptsuser.uuid
-                LEFT JOIN processtask_sla ptsl ON pts.processtask_id = ptsl.processtask_id
-                LEFT JOIN processtask_step_sla ptssl ON pts.id = ptssl.processtask_step_id
-                LEFT JOIN processtask_sla_time ptslt ON ptssl.sla_id = ptslt.sla_id
-        WHERE pts.processtask_id = #{value} and ( pts.status = 'running' or (pts.status = 'pending' and pts.is_active = 1 ))
+    <select id="getProcessTaskCurrentStepByProcessTaskId" parameterType="java.lang.Long"
+            resultMap="workcenterProcessTaskCurrentStepMap">
+        SELECT pts.id                    AS processTaskStepId,
+               pts.NAME                  AS processTaskStepName,
+               pts.processtask_id        AS processTaskId,
+               pts.is_active             AS processTaskStepIsActive,
+               pts.STATUS                AS processTaskStepStatus,
+               pts.config_hash           AS processTaskConfigHash,
+               pts.HANDLER               AS processTaskStepHandler,
+               ptsw.uuid                 AS stepWorkerUuid,
+               ptsw.type                 AS stepWorkerType,
+               ptsw.user_type            AS stepWorkerUserType,
+               ptsu.STATUS               AS stepUserUserStatus,
+               ptsu.user_type            AS stepUserUserType,
+               ptsuser.user_name         AS stepUserUserName,
+               ptsuser.uuid              AS stepUserUserUuid,
+               ptsuser.user_info         AS stepUserUserInfo,
+               ptsuser.vip_level         AS stepUserUserVipLevel,
+               ptsuser.pinyin            AS stepUserUserPinyin,
+               ptsl.id                   AS processTaskSlaId,
+               ptsl.NAME                 AS processTaskSlaName,
+               ptsl.config               AS processTaskSlaConfig,
+               ptslt.expire_time         AS expireTime,
+               ptslt.realexpire_time     AS realExpireTime,
+               ptslt.time_left           AS timeLeft,
+               ptslt.realtime_left       AS realTimeLeft,
+               ptssl.processtask_step_id AS slaStepId,
+               ptssl.sla_id              AS slaId
+        FROM processtask_step pts
+                 LEFT JOIN processtask_step_user ptsu
+                           ON pts.processtask_id = ptsu.processtask_id AND pts.id = ptsu.processtask_step_id
+                 LEFT JOIN processtask_step_worker ptsw
+                           ON pts.processtask_id = ptsw.processtask_id AND pts.id = ptsw.processtask_step_id
+                 LEFT JOIN `user` ptsuser ON ptsu.user_uuid = ptsuser.uuid
+                 LEFT JOIN processtask_sla ptsl ON pts.processtask_id = ptsl.processtask_id
+                 LEFT JOIN processtask_step_sla ptssl ON pts.id = ptssl.processtask_step_id
+                 LEFT JOIN processtask_sla_time ptslt ON ptssl.sla_id = ptslt.sla_id
+        WHERE pts.processtask_id = #{value}
+          and (pts.status = 'running' or (pts.status = 'pending' and pts.is_active = 1))
     </select>
 
     <select id="getProcessTaskIdByChannelUuidLimitOne" parameterType="java.lang.String" resultType="java.lang.Long">
@@ -2243,7 +2246,7 @@
 
     <select id="getProcessTaskColumnByIndexKeyword"
             resultType="codedriver.framework.process.dto.ProcessTaskVo">
-        SELECT pt.`${targetType}` as ${columnPro}
+        SELECT pt.`${targetType}` as ${columnPro},pt.id
         FROM processtask pt
         JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_field` = #{targetType}
         JOIN `fulltextindex_target_process` ft ON ff.`target_id` = ft.`target_id` AND ft.`target_type` = 'processtask'
@@ -2300,7 +2303,9 @@
     </select>
 
     <select id="getTagIdListByProcessTaskStepId" parameterType="java.lang.Long" resultType="java.lang.Long">
-        SELECT `tag_id` FROM `processtask_step_tag` WHERE `processtask_step_id` = #{value}
+        SELECT `tag_id`
+        FROM `processtask_step_tag`
+        WHERE `processtask_step_id` = #{value}
     </select>
 
     <sql id="getProcessTaskListByOwnerCondition">
@@ -2315,29 +2320,31 @@
         </if>
     </sql>
 
-    <select id="getProcessTaskCountByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultType="int">
+    <select id="getProcessTaskCountByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo"
+            resultType="int">
         SELECT count(1)
         FROM `processtask` pt
         <include refid="getProcessTaskListByOwnerCondition"/>
     </select>
 
-    <select id="getProcessTaskListByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo" resultMap="processTaskMap">
+    <select id="getProcessTaskListByOwner" parameterType="codedriver.framework.process.dto.ProcessTaskVo"
+            resultMap="processTaskMap">
         SELECT `id`,
-               `title`,
-               `process_uuid`,
-               `channel_uuid`,
-               `config_hash`,
-               `priority_uuid`,
-               `status`,
-               `start_time`,
-               `end_time`,
-               `owner`,
-               `reporter`,
-               `expire_time`,
-               `worktime_uuid`,
-               `is_show`,
-               `serial_number`,
-               `source`
+        `title`,
+        `process_uuid`,
+        `channel_uuid`,
+        `config_hash`,
+        `priority_uuid`,
+        `status`,
+        `start_time`,
+        `end_time`,
+        `owner`,
+        `reporter`,
+        `expire_time`,
+        `worktime_uuid`,
+        `is_show`,
+        `serial_number`,
+        `source`
         FROM `processtask` pt
         <include refid="getProcessTaskListByOwnerCondition"/>
         ORDER BY `id` DESC
@@ -2372,20 +2379,19 @@
         where `file_id` = #{value}
     </select>
 
-    <select id="getProcessTaskStepTimerByProcessTaskStepId" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
-        SELECT
-            `processtask_id` AS processTaskId,
-            `processtask_step_id` AS processTaskStepId,
-            `trigger_time` AS triggerTime
+    <select id="getProcessTaskStepTimerByProcessTaskStepId" parameterType="java.lang.Long"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
+        SELECT `processtask_id`      AS processTaskId,
+               `processtask_step_id` AS processTaskStepId,
+               `trigger_time`        AS triggerTime
         FROM `processtask_step_timer`
         WHERE `processtask_step_id` = #{value}
     </select>
 
     <select id="getAllProcessTaskStepTimerList" resultType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
-        SELECT
-            `processtask_id` AS processTaskId,
-            `processtask_step_id` AS processTaskStepId,
-            `trigger_time` AS triggerTime
+        SELECT `processtask_id`      AS processTaskId,
+               `processtask_step_id` AS processTaskStepId,
+               `trigger_time`        AS triggerTime
         FROM `processtask_step_timer`
     </select>
     <select id="getProcessTaskStepListByProcessTaskIdAndProcessStepUuidList"
@@ -2415,14 +2421,19 @@
     </select>
 
     <select id="getAllProcessTaskCount" resultType="java.lang.Integer">
-        select count(id) from processtask
+        select count(id)
+        from processtask
     </select>
 
     <select id="getProcessTaskIdList" resultType="java.lang.Long">
-        select id from processtask order by id LIMIT #{startNum}, #{pageSize}
+        select id
+        from processtask
+        order by id
+        LIMIT #{startNum}, #{pageSize}
     </select>
 
-    <select id="getProcessTaskStepByProcessTaskIdAndStepName" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo"
+    <select id="getProcessTaskStepByProcessTaskIdAndStepName"
+            parameterType="codedriver.framework.process.dto.ProcessTaskStepVo"
             resultType="codedriver.framework.process.dto.ProcessTaskStepVo">
         SELECT `id`,
                `processtask_id`    AS processTaskId,
@@ -2439,7 +2450,8 @@
                `end_time`          AS endTime,
                `error`
         FROM `processtask_step`
-        WHERE `processtask_id` = #{processTaskId} AND `name` = #{name}
+        WHERE `processtask_id` = #{processTaskId}
+          AND `name` = #{name}
     </select>
 
     <select id="getProcessTaskListWhichIsProcessingByUserAndTag" resultType="java.util.Map">
@@ -2449,7 +2461,8 @@
         c.`name` AS channelName,
         '处理中' AS status,
         GROUP_CONCAT(pts.`name`) AS stepName,
-        GROUP_CONCAT(CASE WHEN pts.`status` = 'pending' THEN '待处理' WHEN pts.`status` = 'running' THEN '处理中' WHEN pts.`status` = 'draft' THEN '草稿' END) AS stepStatus,
+        GROUP_CONCAT(CASE WHEN pts.`status` = 'pending' THEN '待处理' WHEN pts.`status` = 'running' THEN '处理中' WHEN
+        pts.`status` = 'draft' THEN '草稿' END) AS stepStatus,
         GROUP_CONCAT(u.`user_id`) AS userId,
         GROUP_CONCAT(u.`user_name`) AS userName,
         GROUP_CONCAT(t.`name`) AS teamName,
@@ -2457,7 +2470,8 @@
         FROM
         `processtask` p
         LEFT JOIN `processtask_step` pts ON p.id = pts.`processtask_id`
-        LEFT JOIN `processtask_step_worker` ptsw ON pts.`processtask_id` = ptsw.`processtask_id` AND pts.`id` = ptsw.`processtask_step_id`
+        LEFT JOIN `processtask_step_worker` ptsw ON pts.`processtask_id` = ptsw.`processtask_id` AND pts.`id` =
+        ptsw.`processtask_step_id`
         LEFT JOIN `processtask_step_tag` pst ON pts.`id` = pst.`processtask_step_id`
         LEFT JOIN `process_tag` pt ON pt.`id` = pst.`tag_id`
         LEFT JOIN `channel` c ON p.`channel_uuid` = c.`uuid`
@@ -2469,42 +2483,43 @@
         AND (pts.`status` = 'running' OR (pts.`status` = 'pending' AND pts.`is_active` = 1))
         AND pt.`name` = #{tag}
         AND (
-            ptsw.`uuid` = #{userUuid} AND ptsw.`type` = 'user'
-            <if test="teamUuidList != null and teamUuidList.size() > 0">
-                OR ptsw.`uuid` IN
-                <foreach collection="teamUuidList" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-                AND ptsw.`type` = 'team'
-            </if>
-            <if test="roleUuidList != null and roleUuidList.size() > 0">
-                OR ptsw.`uuid` IN
-                <foreach collection="roleUuidList" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-                AND ptsw.`type` = 'role'
-            </if>
+        ptsw.`uuid` = #{userUuid} AND ptsw.`type` = 'user'
+        <if test="teamUuidList != null and teamUuidList.size() > 0">
+            OR ptsw.`uuid` IN
+            <foreach collection="teamUuidList" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND ptsw.`type` = 'team'
+        </if>
+        <if test="roleUuidList != null and roleUuidList.size() > 0">
+            OR ptsw.`uuid` IN
+            <foreach collection="roleUuidList" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND ptsw.`type` = 'role'
+        </if>
         )
         GROUP BY p.`id`
     </select>
 
-    <select id="getProcessTaskIdListWhichCurrentProcessTaskStepCountIsOverOneByProcessTaskIdList" parameterType="java.util.List" resultType="java.lang.Long">
+    <select id="getProcessTaskIdListWhichCurrentProcessTaskStepCountIsOverOneByProcessTaskIdList"
+            parameterType="java.util.List" resultType="java.lang.Long">
         SELECT
-            pts.`processtask_id`
+        pts.`processtask_id`
         FROM
-            `processtask_step` pts
+        `processtask_step` pts
         WHERE
-            (pts.`status` = 'running' OR ( pts.`status` = 'pending' AND pts.`is_active` = 1 ))
-            <if test="list != null and list.size() > 0">
-                AND pts.`processtask_id` IN
-                <foreach collection="list" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
+        (pts.`status` = 'running' OR ( pts.`status` = 'pending' AND pts.`is_active` = 1 ))
+        <if test="list != null and list.size() > 0">
+            AND pts.`processtask_id` IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         GROUP BY
-            pts.`processtask_id`
+        pts.`processtask_id`
         HAVING
-            count( 1 ) > 1
+        count( 1 ) > 1
     </select>
 
     <select id="getCurrentProcessTaskStepListByProcessTaskIdListAndTag"
@@ -2538,13 +2553,50 @@
         </if>
     </select>
 
-    <select id="getProcessTaskFormContentListByContentLikeKeyword" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
-        SELECT
-            `hash` AS formContentHash,
-            `content` AS formContent
+    <select id="getProcessTaskFormContentListByContentLikeKeyword" parameterType="java.lang.String"
+            resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
+        SELECT `hash`    AS formContentHash,
+               `content` AS formContent
         FROM `processtask_form_content`
-        WHERE `content` LIKE CONCAT('%',#{value},'%')
+        WHERE `content` LIKE CONCAT('%', #{value}, '%')
     </select>
+
+    <resultMap id="processTaskChannelMap" type="codedriver.framework.process.dto.ProcessTaskVo">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="process_uuid" property="processUuid"/>
+        <result column="channel_uuid" property="channelUuid"/>
+        <result column="config_hash" property="configHash"/>
+        <result column="priority_uuid" property="priorityUuid"/>
+        <result column="status" property="status"/>
+        <result column="owner" property="owner"/>
+        <result column="reporter" property="reporter"/>
+        <result column="worktime_uuid" property="worktimeUuid"/>
+        <result column="start_time" property="startTime"/>
+        <result column="isShow" property="isShow"/>
+        <result column="endTime" property="endTime"/>
+        <association property="channelVo" javaType="codedriver.framework.process.dto.ChannelVo">
+            <result property="uuid" column="channelUuid"/>
+            <result property="name" column="channelName"/>
+            <association property="channelTypeVo" javaType="codedriver.framework.process.dto.ChannelTypeVo">
+                <result property="uuid" column="channelTypeUuid"/>
+                <result property="color" column="channelTypeColor"/>
+                <result property="name" column="channelTypeName"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <select id="getProcessTaskListWithChannelVoByTaskIdList" resultMap="processTaskChannelMap">
+        select pt.id,c.uuid as channelUuid,ct.uuid as channelTypeUuid,ct.`name` as channelTypeName
+        from processtask pt
+        left join channel c on pt.channel_uuid = c.uuid
+        left join channel_type ct on c.channel_type_uuid = ct.uuid
+        where pt.id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
@@ -3125,15 +3177,15 @@
             select LAST_INSERT_ID() as id
         </selectKey>
         INSERT IGNORE INTO `processtask_step_in_operation` (`processtask_id`,
-                                                            `processtask_step_id`,
-                                                            `operation_type`,
-                                                            `operation_time`,
-                                                            `expire_time`)
+        `processtask_step_id`,
+        `operation_type`,
+        `operation_time`,
+        `expire_time`)
         VALUES (#{processTaskId},
-                #{processTaskStepId},
-                #{operationType},
-                NOW(3),
-                #{expireTime})
+        #{processTaskStepId},
+        #{operationType},
+        NOW(3),
+        #{expireTime})
     </insert>
 
     <insert id="insertProcessTaskStepTag" parameterType="codedriver.framework.process.dto.ProcessTaskStepTagVo">
@@ -3190,31 +3242,21 @@
     </insert>
 
     <insert id="insertProcessTaskStepTimer" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
-        INSERT INTO `processtask_step_timer` (
-            `processtask_id`,
-            `processtask_step_id`,
-            `trigger_time`
-        )
-        VALUES
-        (
-            #{processTaskId},
-            #{processTaskStepId},
-            #{triggerTime}
-        )
+        INSERT INTO `processtask_step_timer` (`processtask_id`,
+                                              `processtask_step_id`,
+                                              `trigger_time`)
+        VALUES (#{processTaskId},
+                #{processTaskStepId},
+                #{triggerTime})
     </insert>
 
     <insert id="insertProcessTaskTimeCost" parameterType="codedriver.framework.process.dto.ProcessTaskTimeCostVo">
-        INSERT INTO `processtask_time_cost` (
-             `processtask_id`,
-             `time_cost`,
-             `realtime_cost`
-        )
-        VALUES
-        (
-            #{processTaskId},
-            #{timeCost},
-            #{realTimeCost}
-        )
+        INSERT INTO `processtask_time_cost` (`processtask_id`,
+                                             `time_cost`,
+                                             `realtime_cost`)
+        VALUES (#{processTaskId},
+                #{timeCost},
+                #{realTimeCost})
     </insert>
 
     <update id="updateProcessTaskStepUserStatus" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
@@ -3318,33 +3360,36 @@
         WHERE `id` = #{id}
     </update>
 
-    <update id="updateProcessTaskStepTimerTriggerTimeById" parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
-        UPDATE  `processtask_step_timer` SET `trigger_time` = #{triggerTime} where `processtask_step_id` = #{processTaskStepId}
+    <update id="updateProcessTaskStepTimerTriggerTimeById"
+            parameterType="codedriver.framework.process.dto.ProcessTaskStepTimerVo">
+        UPDATE `processtask_step_timer`
+        SET `trigger_time` = #{triggerTime}
+        where `processtask_step_id` = #{processTaskStepId}
     </update>
 
     <update id="updateProcessTaskStepStatusByStepId" parameterType="codedriver.framework.process.dto.ProcessTaskStepVo">
         UPDATE
             `processtask_step`
-        SET
-            `status` = #{status},
+        SET `status`    = #{status},
             `is_active` = #{isActive}
         WHERE `id` = #{id}
     </update>
 
-    <update id="updateProcessTaskStepMajorUserAndStatus" parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
+    <update id="updateProcessTaskStepMajorUserAndStatus"
+            parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
         UPDATE `processtask_step_user`
         SET `user_uuid` = #{userUuid},
-            `user_name` = #{userName},
-            <choose>
-                <when test="status == 'doing'">
-                    `start_time` = NOW(3),
-                    `end_time` = NULL,
-                </when>
-                <when test="status == 'done'">
-                    `end_time` = NOW(3),
-                </when>
-            </choose>
-            `status` = #{status}
+        `user_name` = #{userName},
+        <choose>
+            <when test="status == 'doing'">
+                `start_time` = NOW(3),
+                `end_time` = NULL,
+            </when>
+            <when test="status == 'done'">
+                `end_time` = NOW(3),
+            </when>
+        </choose>
+        `status` = #{status}
         WHERE `processtask_step_id` = #{processTaskStepId}
         AND `user_type` = 'major'
     </update>
@@ -3355,7 +3400,8 @@
         WHERE `form_content_hash` = #{oldFormConfigHash}
     </update>
 
-    <update id="updateProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid" parameterType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
+    <update id="updateProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid"
+            parameterType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
         UPDATE `processtask_formattribute_data`
         SET `data` = #{data}
         WHERE `processtask_id` = #{processTaskId}
@@ -3365,8 +3411,7 @@
     <update id="updateProcessTaskIsDeletedById">
         UPDATE
             `processtask`
-        SET
-            `is_deleted` = #{isDeleted}
+        SET `is_deleted` = #{isDeleted}
         WHERE `id` = #{id}
     </update>
 
@@ -3558,7 +3603,9 @@
     </delete>
 
     <delete id="deleteProcessTaskStepInOperationById" parameterType="java.lang.Long">
-        DELETE FROM `processtask_step_in_operation` WHERE `id` = #{id}
+        DELETE
+        FROM `processtask_step_in_operation`
+        WHERE `id` = #{id}
     </delete>
     <delete id="deleteProcessTaskStepWorkerMinorByProcessTaskStepId" parameterType="java.lang.Long">
         DELETE
@@ -3605,10 +3652,14 @@
     </delete>
 
     <delete id="deleteProcessTaskTimeCostByProcessTaskId" parameterType="java.lang.Long">
-        DELETE FROM `processtask_time_cost` WHERE `processtask_id` = #{value}
+        DELETE
+        FROM `processtask_time_cost`
+        WHERE `processtask_id` = #{value}
     </delete>
 
     <delete id="deleteProcessTaskFormContentByHash" parameterType="java.lang.String">
-        DELETE FROM `processtask_form_content` WHERE `hash` = #{value}
+        DELETE
+        FROM `processtask_form_content`
+        WHERE `hash` = #{value}
     </delete>
 </mapper>
