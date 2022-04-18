@@ -86,6 +86,10 @@ public class PrioritySqlTable implements ISqlTable {
             return isPrimary;
         }
 
+        public String getProName() {
+            return proName;
+        }
+
         public static String getText(String value) {
             for (FieldEnum f : FieldEnum.values()) {
                 if (f.getValue().equals(value)) {

@@ -1,19 +1,18 @@
 package codedriver.framework.process.column.core;
 
 
+import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.dashboard.dto.DashboardWidgetAllGroupDefineVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.workcenter.dto.JoinTableColumnVo;
 import codedriver.framework.process.workcenter.table.ISqlTable;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
-
+public abstract class ProcessTaskColumnBase implements IDashBoardProcessTaskColumn, IProcessTaskColumn {
     @Override
     public Boolean getIsShow() {
         return getMyIsShow();
@@ -75,8 +74,8 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
     }
 
     @Override
-    public void getDashboardAllGroupDefine(DashboardWidgetAllGroupDefineVo dashboardDataVo, List<Map<String, Object>> dbDataMapList) {
-        getMyDashboardAllGroupDefine(dashboardDataVo, dbDataMapList);
+    public void getDashboardAllGroupDefine(DashboardWidgetAllGroupDefineVo dashboardWidgetAllGroupDefineVo, List<Map<String, Object>> dbDataMapList) {
+        getMyDashboardAllGroupDefine(dashboardWidgetAllGroupDefineVo, dbDataMapList);
     }
 
     protected void getMyDashboardAllGroupDefine(DashboardWidgetAllGroupDefineVo dashboardDataVo, List<Map<String, Object>> mapList) {
@@ -92,6 +91,57 @@ public abstract class ProcessTaskColumnBase implements IProcessTaskColumn {
         return null;
     }
 
-    ;
+    /**
+     * //如果存在一级分组二级过滤，如：多值图，则补充count为0的group,以及text
+     *
+     * @param dashboardWidgetAllGroupDefineVo group声明参
+     * @param dbDataMapList                   db数据Map
+     * @param groupSqlProName                 对应group的sql as Name
+     * @param groupSqlTextName                对应group的sql as Text
+     */
+    protected void getNoExistGroup(DashboardWidgetAllGroupDefineVo dashboardWidgetAllGroupDefineVo, List<Map<String, Object>> dbDataMapList, String groupSqlProName, String groupSqlTextName) {
+        //如果存在一级分组二级过滤，如：多值图，则补充count为0的group,以及text
+        if (CollectionUtils.isNotEmpty(dashboardWidgetAllGroupDefineVo.getChartConfigVo().getConfigList())) {
+            List<String> statusList = dashboardWidgetAllGroupDefineVo.getChartConfigVo().getConfigList().toJavaList(String.class);
+            List<String> noExistGroupNameList = statusList.stream().filter(o -> dbDataMapList.stream().noneMatch(d -> Objects.equals(d.get(groupSqlProName), GroupSearch.removePrefix(o)))).collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(noExistGroupNameList)) {
+                Map<String, String> groupNameTextMap = getGroupNameTextMap(noExistGroupNameList);
+                for (String noExistGroupName : noExistGroupNameList) {
+                    if (groupNameTextMap.containsKey(noExistGroupName)) {
+                        Map<String, Object> groupDataMap = new HashMap<>();
+                        groupDataMap.put(groupSqlProName, noExistGroupName);
+                        groupDataMap.put("count", 0);
+                        groupDataMap.put(groupSqlTextName, groupNameTextMap.get(noExistGroupName));
+                        dbDataMapList.add(groupDataMap);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 如果存在一级分组二级过滤，如：多值图，则补充count为0的group
+     *
+     * @param dashboardWidgetAllGroupDefineVo group声明参
+     * @param dbDataMapList                   db数据Map
+     * @param groupSqlProName                 对应group的sql as Name
+     */
+    protected void getNoExistGroup(DashboardWidgetAllGroupDefineVo dashboardWidgetAllGroupDefineVo, List<Map<String, Object>> dbDataMapList, String groupSqlProName) {
+        if (CollectionUtils.isNotEmpty(dashboardWidgetAllGroupDefineVo.getChartConfigVo().getConfigList())) {
+            List<String> statusList = dashboardWidgetAllGroupDefineVo.getChartConfigVo().getConfigList().toJavaList(String.class);
+            List<String> noExistStatusList = statusList.stream().filter(o -> dbDataMapList.stream().noneMatch(d -> Objects.equals(d.get(groupSqlProName), o))).collect(Collectors.toList());
+            for (String noExistStatus : noExistStatusList) {
+                Map<String, Object> statusDataMap = new HashMap<>();
+                statusDataMap.put(groupSqlProName, noExistStatus);
+                statusDataMap.put("count", "0");
+                dbDataMapList.add(statusDataMap);
+            }
+        }
+    }
+
+    @Override
+    public Map<String, String> getGroupNameTextMap(List<String> groupNameList) {
+        return new HashMap<>();
+    }
 
 }

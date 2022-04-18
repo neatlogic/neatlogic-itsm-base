@@ -4,7 +4,6 @@ import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.process.dto.ChannelTypeRelationChannelVo;
 import codedriver.framework.process.dto.ChannelTypeRelationVo;
 import codedriver.framework.process.dto.ChannelTypeVo;
-import codedriver.framework.process.dto.ChannelVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,6 +27,8 @@ public interface ChannelTypeMapper {
     List<ValueTextVo> searchChannelTypeListForSelect(ChannelTypeVo channelTypeVo);
 
     ChannelTypeVo getChannelTypeByUuid(String uuid);
+
+    List<ChannelTypeVo> getChannelTypeByUuidList(List<String> uuidList);
 
     int checkChannelTypeIsExists(String uuid);
 

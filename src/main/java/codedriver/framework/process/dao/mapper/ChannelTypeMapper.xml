@@ -77,6 +77,23 @@
         WHERE `uuid` = #{uuid}
     </select>
 
+    <select id="getChannelTypeByUuidList" resultType="codedriver.framework.process.dto.ChannelTypeVo" useCache="true">
+        SELECT
+            `uuid`,
+            `name`,
+            `is_active` AS isActive,
+            `icon`,
+            `color`,
+            `description`,
+            `sort`,
+            `prefix`
+        FROM `channel_type`
+        WHERE `uuid` in
+        <foreach collection="list" item="uuid" close=")" open="(" separator=",">
+            #{uuid}
+        </foreach>
+    </select>
+
     <select id="checkChannelTypeIsExists" parameterType="java.lang.String" resultType="int" useCache="false">
         SELECT COUNT(`uuid`) FROM `channel_type` WHERE `uuid` = #{uuid}
     </select>

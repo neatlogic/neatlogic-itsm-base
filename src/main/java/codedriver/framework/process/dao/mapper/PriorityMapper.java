@@ -1,53 +1,54 @@
 package codedriver.framework.process.dao.mapper;
 
-import java.util.List;
-
 import codedriver.framework.common.dto.ValueTextVo;
+import codedriver.framework.process.dto.PriorityVo;
 import org.apache.ibatis.annotations.Param;
 
-import codedriver.framework.process.dto.PriorityVo;
+import java.util.List;
 
 public interface PriorityMapper {
 
-	public int searchPriorityCount(PriorityVo priorityVo);
+	int searchPriorityCount(PriorityVo priorityVo);
 
-	public List<PriorityVo> searchPriorityList(PriorityVo priorityVo);
+	List<PriorityVo> searchPriorityList(PriorityVo priorityVo);
 
-	public List<ValueTextVo> searchPriorityListForSelect(PriorityVo priorityVo);
+	List<ValueTextVo> searchPriorityListForSelect(PriorityVo priorityVo);
 
-	public int checkPriorityIsExists(String uuid);
+	int checkPriorityIsExists(String uuid);
 
-	public PriorityVo getPriorityByUuid(String uuid);
-	
-    public PriorityVo getPriorityByName(String objValue);
+	PriorityVo getPriorityByUuid(String uuid);
 
-	public int checkPriorityNameIsRepeat(PriorityVo priorityVo);
+	List<PriorityVo> getPriorityByUuidList(List<String> uuidList);
 
-	public Integer getMaxSort();
+    PriorityVo getPriorityByName(String objValue);
 
-	public int checkPriorityIsInvoked(String uuid);
+	int checkPriorityNameIsRepeat(PriorityVo priorityVo);
 
-	public int insertPriority(PriorityVo priorityVo);
+	Integer getMaxSort();
 
-	public int updatePriority(PriorityVo priorityVo);
+	int checkPriorityIsInvoked(String uuid);
+
+	int insertPriority(PriorityVo priorityVo);
+
+	int updatePriority(PriorityVo priorityVo);
 	/**
 	 * 
-	* @Time:2020年7月8日
-	* @Description: 从fromSort到toSort之间（fromSort和toSort）的序号加一 
+	* @date 2020年7月8日
+	* @description 从fromSort到toSort之间（fromSort和toSort）的序号加一
 	* @param fromSort
 	* @param toSort
 	* @return int
 	 */
-	public int updateSortIncrement(@Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+	int updateSortIncrement(@Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 	/**
 	 * 
-	* @Time:2020年7月8日
-	* @Description: 从fromSort到toSort之间（fromSort和toSort）的序号减一 
+	* @date 2020年7月8日
+	* @description 从fromSort到toSort之间（fromSort和toSort）的序号减一
 	* @param fromSort
 	* @param toSort
 	* @return int
 	 */
-	public int updateSortDecrement(@Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
+	int updateSortDecrement(@Param("fromSort")Integer fromSort, @Param("toSort")Integer toSort);
 
-	public int deletePriorityByUuid(String uuid);
+	int deletePriorityByUuid(String uuid);
 }

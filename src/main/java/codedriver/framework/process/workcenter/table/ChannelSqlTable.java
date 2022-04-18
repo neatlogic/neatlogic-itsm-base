@@ -86,6 +86,10 @@ public class ChannelSqlTable implements ISqlTable {
             return isPrimary;
         }
 
+        public String getProName() {
+            return proName;
+        }
+
         public static String getText(String value) {
             for (PrioritySqlTable.FieldEnum f : PrioritySqlTable.FieldEnum.values()) {
                 if (f.getValue().equals(value)) {

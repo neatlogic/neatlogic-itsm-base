@@ -81,6 +81,22 @@
 		FROM `priority`
 		WHERE `uuid` = #{uuid}
 	</select>
+
+	<select id="getPriorityByUuidList" resultType="codedriver.framework.process.dto.PriorityVo" useCache="true">
+		SELECT
+			`uuid`,
+			`name`,
+			`is_active` AS isActive,
+			`desc`,
+			`icon`,
+			`color`,
+			`sort`
+		FROM `priority`
+		WHERE `uuid` in
+		<foreach collection="list" item="uuid" close=")" open="(" separator=",">
+			#{uuid}
+		</foreach>
+	</select>
 	
 	<select id="getPriorityByName" parameterType="java.lang.String" resultType="codedriver.framework.process.dto.PriorityVo" useCache="false">
 		SELECT
