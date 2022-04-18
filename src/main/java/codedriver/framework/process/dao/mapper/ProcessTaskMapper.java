@@ -300,8 +300,6 @@ public interface ProcessTaskMapper {
 
     List<Map<String, Object>> getProcessTaskListWhichIsProcessingByUserAndTag(@Param("tag") String tag, @Param("userUuid") String userUuid, @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList);
 
-    List<ProcessTaskVo> getProcessTaskListWithChannelVoByTaskIdList(List<Long> processTaskIdList);
-
     /**
      * 根据给定的工单ID，查询其中当前步骤超过一个的工单id列表
      *

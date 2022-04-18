@@ -2246,7 +2246,7 @@
 
     <select id="getProcessTaskColumnByIndexKeyword"
             resultType="codedriver.framework.process.dto.ProcessTaskVo">
-        SELECT pt.`${targetType}` as ${columnPro},pt.id
+        SELECT distinct pt.`${targetType}` as ${columnPro}
         FROM processtask pt
         JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_field` = #{targetType}
         JOIN `fulltextindex_target_process` ft ON ff.`target_id` = ft.`target_id` AND ft.`target_type` = 'processtask'
@@ -2254,7 +2254,7 @@
         <foreach collection="keywordList" item="keyword" separator="," open="(" close=")">
             #{keyword}
         </foreach>
-        GROUP BY pt.`${targetType}`,pt.id
+        GROUP BY pt.`${targetType}`
         ORDER BY count(ff.counter) DESC
         limit 0,#{limit}
     </select>
@@ -2559,42 +2559,6 @@
                `content` AS formContent
         FROM `processtask_form_content`
         WHERE `content` LIKE CONCAT('%', #{value}, '%')
-    </select>
-
-    <resultMap id="processTaskChannelMap" type="codedriver.framework.process.dto.ProcessTaskVo">
-        <id column="id" property="id"/>
-        <result column="title" property="title"/>
-        <result column="process_uuid" property="processUuid"/>
-        <result column="channel_uuid" property="channelUuid"/>
-        <result column="config_hash" property="configHash"/>
-        <result column="priority_uuid" property="priorityUuid"/>
-        <result column="status" property="status"/>
-        <result column="owner" property="owner"/>
-        <result column="reporter" property="reporter"/>
-        <result column="worktime_uuid" property="worktimeUuid"/>
-        <result column="start_time" property="startTime"/>
-        <result column="isShow" property="isShow"/>
-        <result column="endTime" property="endTime"/>
-        <association property="channelVo" javaType="codedriver.framework.process.dto.ChannelVo">
-            <result property="uuid" column="channelUuid"/>
-            <result property="name" column="channelName"/>
-            <association property="channelTypeVo" javaType="codedriver.framework.process.dto.ChannelTypeVo">
-                <result property="uuid" column="channelTypeUuid"/>
-                <result property="color" column="channelTypeColor"/>
-                <result property="name" column="channelTypeName"/>
-            </association>
-        </association>
-    </resultMap>
-
-    <select id="getProcessTaskListWithChannelVoByTaskIdList" resultMap="processTaskChannelMap">
-        select pt.id,c.uuid as channelUuid,ct.uuid as channelTypeUuid,ct.`name` as channelTypeName
-        from processtask pt
-        left join channel c on pt.channel_uuid = c.uuid
-        left join channel_type ct on c.channel_type_uuid = ct.uuid
-        where pt.id in
-        <foreach collection="list" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
     </select>
 
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
