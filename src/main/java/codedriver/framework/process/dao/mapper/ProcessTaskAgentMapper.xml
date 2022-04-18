@@ -23,6 +23,21 @@
         WHERE `from_user_uuid` = #{value}
     </select>
 
+    <select id="getProcessTaskAgentListByFromUserUuidList" parameterType="java.util.List" resultType="codedriver.framework.process.dto.agent.ProcessTaskAgentVo">
+        SELECT
+            `id`,
+            `from_user_uuid` AS fromUserUuid,
+            `to_user_uuid` AS toUserUuid,
+            `begin_time` AS beginTime,
+            `end_time` AS endTime,
+            `is_active` as isActive
+        FROM `processtask_agent`
+        WHERE `from_user_uuid` in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <resultMap id="agentMap" type="codedriver.framework.process.dto.agent.ProcessTaskAgentVo">
         <id property="id" column="id"/>
         <result property="fromUserUuid" column="fromUserUuid"/>
