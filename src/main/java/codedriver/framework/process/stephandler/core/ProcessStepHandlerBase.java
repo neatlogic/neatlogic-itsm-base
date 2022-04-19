@@ -289,6 +289,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     currentProcessTaskStepVo.setIsActive(1);
                     myActive(currentProcessTaskStepVo);
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
+                    IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
+                    if (processStepUtilHandler != null) {
+                        processStepUtilHandler.updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+                    }
 
                     /* 写入时间审计 **/
                     IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_ACTIVE);
@@ -1715,7 +1719,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             String worktimeUuid = channelMapper.getWorktimeUuidByChannelUuid(processTaskVo.getChannelUuid());
             processTaskVo.setWorktimeUuid(worktimeUuid);
             /* 生成工单号 **/
-            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyLockByChannelTypeUuid(channelVo.getChannelTypeUuid());
+            ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyByChannelTypeUuid(channelVo.getChannelTypeUuid());
             if (processTaskSerialNumberPolicyVo == null) {
                 throw new ProcessTaskSerialNumberPolicyNotFoundException(channelVo.getChannelTypeUuid());
             }
@@ -2301,10 +2305,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 .build()
                 .checkAndNoPermissionThrowException();
         try {
-            //让结束节点到重做节点的回退线的isHit=1，流程图中显示绿色
             List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepByProcessTaskIdAndType(currentProcessTaskStepVo.getProcessTaskId(), ProcessStepType.END.getValue());
+            Long endProcessTaskStepId = processTaskStepList.get(0).getId();
+            currentProcessTaskStepVo.setFromProcessTaskStepId(endProcessTaskStepId);
+            currentProcessTaskStepVo.setStartProcessTaskStepId(endProcessTaskStepId);
+            List<Long> parallelActivateStepIdList = new ArrayList<>();
+            parallelActivateStepIdList.add(currentProcessTaskStepVo.getId());
+            currentProcessTaskStepVo.setParallelActivateStepIdList(parallelActivateStepIdList);
+            //让结束节点到重做节点的回退线的isHit=1，流程图中显示绿色
             ProcessTaskStepRelVo processTaskStepRelVo = new ProcessTaskStepRelVo();
-            processTaskStepRelVo.setFromProcessTaskStepId(processTaskStepList.get(0).getId());
+            processTaskStepRelVo.setFromProcessTaskStepId(endProcessTaskStepId);
             processTaskStepRelVo.setToProcessTaskStepId(currentProcessTaskStepVo.getId());
             processTaskStepRelVo.setIsHit(1);
             processTaskMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
