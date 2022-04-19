@@ -391,13 +391,6 @@
         </foreach>
     </select>
 
-    <select id="checkUserIsAgentByAgentUuidAndProcessTaskStepTaskId" resultType="int">
-        SELECT
-        count(1)
-        FROM `processtask_step_task_user_agent`
-        WHERE `processtask_step_task_id`  = #{processTaskStepTaskId} AND `agent_uuid` = #{agentUuid}
-    </select>
-
     <insert id="insertTask">
         INSERT INTO `processtask_step_task` (`processtask_id`,
                                              `processtask_step_id`,

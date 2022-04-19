@@ -63,8 +63,6 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskUserAgentVo> getProcessTaskStepTaskUserAgentListByStepTaskIdList(List<Long> stepTaskIdList);
 
-    int checkUserIsAgentByAgentUuidAndProcessTaskStepTaskId(@Param("processTaskStepTaskId") Long processTaskStepTaskId, @Param("agentUuid") String agentUuid);
-
     int insertTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
     int insertIgnoreTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
