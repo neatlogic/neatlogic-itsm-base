@@ -53,7 +53,7 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskUserVo> getStepTaskUserListByProcessTaskStepId(Long processTaskStepId);
 
-    ProcessTaskStepTaskUserVo getStepTaskUserByTaskIdAndUserUuid(@Param("processTaskStepTaskId") Long processTaskStepTaskId, @Param("userUuid") String userUuid);
+    List<ProcessTaskStepTaskUserVo> getStepTaskUserByTaskIdAndUserUuid(@Param("processTaskStepTaskId") Long processTaskStepTaskId, @Param("userUuid") String userUuid);
 
     ProcessTaskStepTaskUserContentVo getStepTaskUserContentByStepTaskUserId(Long processTaskStepTaskUserId);
 
@@ -61,9 +61,13 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskUserAgentVo> getProcessTaskStepTaskUserAgentListByStepTaskUserIdList(List<Long> stepTaskUserIdList);
 
+    List<ProcessTaskStepTaskUserAgentVo> getProcessTaskStepTaskUserAgentListByStepTaskIdList(List<Long> stepTaskIdList);
+
     int insertTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
     int insertIgnoreTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
+
+    int insertTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
 
     int insertTaskUserContent(ProcessTaskStepTaskUserContentVo processTaskStepTaskUserContentVo);
 
@@ -81,6 +85,8 @@ public interface ProcessTaskStepTaskMapper {
 
     int updateTaskUserContentById(ProcessTaskStepTaskUserContentVo userContentVo);
 
+    int updateTaskUserIsDeleteByIdList(@Param("idList") List<Long> idList, @Param("isDelete") Integer isDelete);
+
     int deleteTaskById(Long processTaskStepTaskId);
 
     int deleteTaskUserByTaskId(Long processTaskStepTaskId);
@@ -88,4 +94,8 @@ public interface ProcessTaskStepTaskMapper {
     int deleteTaskUserContentByTaskId(Long processTaskStepTaskId);
 
     int deleteProcessTaskStepTaskUserAgentByStepTaskUserId(Long stepTaskUserId);
+
+    int deleteProcessTaskStepTaskUserAgentByStepTaskUserIdList(List<Long> stepTaskUserIdList);
+
+    int deleteProcessTaskStepTaskUserAgentByStepTaskId(Long processTaskStepTaskId);
 }

@@ -289,6 +289,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     currentProcessTaskStepVo.setIsActive(1);
                     myActive(currentProcessTaskStepVo);
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
+                    IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
+                    if (processStepUtilHandler != null) {
+                        processStepUtilHandler.updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+                    }
 
                     /* 写入时间审计 **/
                     IProcessStepHandlerUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_ACTIVE);
