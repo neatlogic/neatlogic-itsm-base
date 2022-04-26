@@ -242,6 +242,8 @@ public class ProcessAuthManager {
                         .computeIfAbsent(processTaskStepUserVo.getProcessTaskStepId(), k -> new ArrayList<>())
                         .add(processTaskStepUserVo);
             }
+            List<ProcessTaskStepAgentVo> processTaskStepAgentList = processTaskMapper.getProcessTaskStepAgentListByProcessTaskIdList(processTaskIdList);
+            Map<Long, ProcessTaskStepAgentVo> processTaskStepAgentMap = processTaskStepAgentList.stream().collect(Collectors.toMap(e -> e.getProcessTaskStepId(), e -> e));
             List<ProcessTaskStepVo> processTaskStepList =
                     processTaskMapper.getProcessTaskStepListByProcessTaskIdList(processTaskIdList);
             Map<Long, List<ProcessTaskStepVo>> processTaskStepListMap = new HashMap<>();
@@ -250,6 +252,10 @@ public class ProcessAuthManager {
                         processTaskStepWorkerListMap.computeIfAbsent(processTaskStepVo.getId(), k -> new ArrayList<>()));
                 processTaskStepVo.setUserList(
                         processTaskStepUserListMap.computeIfAbsent(processTaskStepVo.getId(), k -> new ArrayList<>()));
+                ProcessTaskStepAgentVo processTaskStepAgentVo = processTaskStepAgentMap.get(processTaskStepVo.getId());
+                if (processTaskStepAgentVo != null) {
+                    processTaskStepVo.setOriginalUser(processTaskStepAgentVo.getUserUuid());
+                }
                 processTaskStepListMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new ArrayList<>())
                         .add(processTaskStepVo);
             }

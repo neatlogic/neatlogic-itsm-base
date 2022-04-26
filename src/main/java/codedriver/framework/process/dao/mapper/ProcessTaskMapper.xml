@@ -1824,6 +1824,19 @@
         WHERE `processtask_step_id` = #{value}
     </select>
 
+    <select id="getProcessTaskStepAgentListByProcessTaskIdList" parameterType="java.lang.Long"
+            resultType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
+        SELECT `processtask_id`      AS processTaskId,
+               `processtask_step_id` AS processTaskStepId,
+               `user_uuid`           AS userUuid,
+               `agent_uuid`          AS agentUuid
+        FROM `processtask_step_agent`
+        WHERE `processtask_id` IN
+        <foreach collection="list" item="processTaskId" open="(" separator="," close=")">
+            #{processTaskId}
+        </foreach>
+    </select>
+
     <select id="getProcessTaskTagListByProcessTaskId" parameterType="java.lang.Long"
             resultType="codedriver.framework.process.dto.ProcessTagVo">
         SELECT b.`id`,
