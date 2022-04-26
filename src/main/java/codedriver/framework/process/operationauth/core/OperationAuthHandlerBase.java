@@ -144,12 +144,8 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
      */
     protected boolean checkIsProcessTaskStepUser(ProcessTaskVo processTaskVo, String userType, String userUuid) {
         for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
-            for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepVo.getUserList()) {
-                if (userType == null || userType.equals(processTaskStepUserVo.getUserType())) {
-                    if (userUuid.equals(processTaskStepUserVo.getUserUuid())) {
-                        return true;
-                    }
-                }
+            if (checkIsProcessTaskStepUser(processTaskStepVo, userType, userUuid)) {
+                return true;
             }
         }
         return false;
@@ -175,6 +171,12 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                 if (userUuid.equals(processTaskStepUserVo.getUserUuid())) {
                     return true;
                 }
+            }
+        }
+        // 判断当前用户是否是原处理人
+        if (userType == null || Objects.equals(userType, ProcessUserType.MAJOR.getValue())) {
+            if (Objects.equals(processTaskStepVo.getOriginalUser(), userUuid)) {
+                return true;
             }
         }
         return false;
@@ -330,7 +332,18 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         for (ProcessTaskStepRelVo processTaskStepRelVo : processTaskVo.getStepRelList()) {
             if (processTaskStepRelVo.getFromProcessTaskStepId().equals(processTaskStepId)) {
                 if (processTaskStepRelVo.getType().equals(flowDirection.getValue())) {
-                    return true;
+                    if (flowDirection == ProcessFlowDirection.BACKWARD) {
+                        List<ProcessTaskStepVo> processTaskStepList = processTaskVo.getStepList();
+                        for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
+                            if (Objects.equals(processTaskStepVo.getId(), processTaskStepRelVo.getToProcessTaskStepId())) {
+                                if (!Objects.equals(processTaskStepVo.getIsActive(), 0)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    } else {
+                        return true;
+                    }
                 }
             }
         }
@@ -381,7 +394,6 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     * @Description: 判断userUuid用户是否拥有processTaskStepId步骤的撤回权限
     * @param processTaskVo 工单信息
     * @param processTaskStepId 步骤id
-    * @param userUuid 用户
     * @return boolean
      */
     protected boolean checkCurrentStepIsRetractableByProcessTaskStepId(ProcessTaskVo processTaskVo,

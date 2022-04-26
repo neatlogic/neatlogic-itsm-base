@@ -219,6 +219,8 @@ public interface ProcessTaskMapper {
 
     ProcessTaskStepAgentVo getProcessTaskStepAgentByProcessTaskStepId(Long processTaskStepId);
 
+    List<ProcessTaskStepAgentVo> getProcessTaskStepAgentListByProcessTaskIdList(List<Long> processTaskIdList);
+
     int checkProcessTaskFocusExists(@Param("processTaskId") Long processTaskId,
                                     @Param("userUuid") String userUuid);
 
