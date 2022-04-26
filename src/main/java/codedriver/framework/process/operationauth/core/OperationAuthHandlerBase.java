@@ -144,18 +144,8 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
      */
     protected boolean checkIsProcessTaskStepUser(ProcessTaskVo processTaskVo, String userType, String userUuid) {
         for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
-            for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepVo.getUserList()) {
-                if (userType == null || userType.equals(processTaskStepUserVo.getUserType())) {
-                    if (userUuid.equals(processTaskStepUserVo.getUserUuid())) {
-                        return true;
-                    }
-                }
-            }
-            // 判断当前用户是否是原处理人
-            if (userType == null || Objects.equals(userType, ProcessUserType.MAJOR.getValue())) {
-                if (Objects.equals(processTaskStepVo.getOriginalUser(), userUuid)) {
-                    return true;
-                }
+            if (checkIsProcessTaskStepUser(processTaskStepVo, userType, userUuid)) {
+                return true;
             }
         }
         return false;
