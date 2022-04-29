@@ -1,7 +1,15 @@
+/*
+ * Copyright(c) 2022 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.workcenter.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.GroupSearch;
+import codedriver.framework.process.exception.workcenter.AuthStringIrregularException;
 import codedriver.framework.restful.annotation.EntityField;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
@@ -20,6 +28,20 @@ public class WorkcenterAuthorityVo implements Serializable {
     @EntityField(name = "uuid", type = ApiParamType.STRING)
     private String uuid;
 
+    public WorkcenterAuthorityVo(String authString) {
+        if (authString.startsWith(GroupSearch.ROLE.getValuePlugin())) {
+            this.setType(GroupSearch.ROLE.getValue());
+            this.setUuid(authString.replaceAll(GroupSearch.ROLE.getValuePlugin(), StringUtils.EMPTY));
+        } else if (authString.startsWith(GroupSearch.USER.getValuePlugin())) {
+            this.setType(GroupSearch.USER.getValue());
+            this.setUuid(authString.replaceAll(GroupSearch.USER.getValuePlugin(), StringUtils.EMPTY));
+        } else if (authString.startsWith(GroupSearch.COMMON.getValuePlugin())) {
+            this.setType(GroupSearch.COMMON.getValue());
+            this.setUuid(authString.replaceAll(GroupSearch.COMMON.getValuePlugin(), StringUtils.EMPTY));
+        } else {
+            throw new AuthStringIrregularException(authString);
+        }
+    }
 
     public WorkcenterAuthorityVo(String workcenterUuid, String type, String uuid) {
         this.workcenterUuid = workcenterUuid;

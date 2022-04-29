@@ -1,7 +1,14 @@
+/*
+ * Copyright(c) 2022 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.common.dto.ValueTextVo;
 import codedriver.framework.dto.AuthorityVo;
+import codedriver.framework.form.dto.FormAttributeVo;
+import codedriver.framework.form.dto.FormVersionVo;
 import codedriver.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -46,83 +53,87 @@ public interface ChannelMapper {
     public List<AuthorityVo> getChannelAuthorityListByChannelUuid(String uuid);
 
     public List<String> getAuthorizedChannelUuidList(@Param("userUuid") String userUuid,
-        @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
-        @Param("channelUuid") String channelUuid);
+                                                     @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
+                                                     @Param("channelUuid") String channelUuid);
 
     List<String> getActiveAuthorizedChannelUuidList(@Param("userUuid") String userUuid,
-        @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
-        @Param("channelUuid") String channelUuid);
+                                                    @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
+                                                    @Param("channelUuid") String channelUuid);
 
     public List<ChannelVo> getAuthorizedChannelListByParentUuid(@Param("userUuid") String userUuid,
-        @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
-        @Param("parentUuid") String parentUuid);
+                                                                @Param("teamUuidList") List<String> teamUuidList, @Param("roleUuidList") List<String> roleUuidList,
+                                                                @Param("parentUuid") String parentUuid);
 
     public List<String> getAllAncestorNameListByParentUuid(String parentUuid);
 
     public int checkChannelIsFavorite(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
-    public List<ChannelVo> getChannelListByChannelTypeUuidList(List<String> channelTypeUuidList);
+    List<ChannelVo> getChannelListByChannelTypeUuidList(List<String> channelTypeUuidList);
 
-    public List<ChannelRelationVo> getChannelRelationListBySource(String channelUuid);
+    List<ChannelRelationVo> getChannelRelationListBySource(String channelUuid);
 
-    public List<ChannelRelationVo> getChannelRelationAuthorityListBySource(String channelUuid);
+    List<ChannelRelationVo> getChannelRelationAuthorityListBySource(String channelUuid);
 
-    public List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
+    List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
 
-    public List<ChannelVo> getFavoriteChannelList(ChannelVo channelVo);
+    List<ChannelVo> getFavoriteChannelList(ChannelVo channelVo);
+
+    FormVersionVo getFormVersionByChannelUuid(String channelUuid);
+
+    List<FormAttributeVo> getFormAttributeByChannelUuid(String channelUuid);
 
     List<String> getFormUuidListByChannelUuidList(List<String> channelUuidList);
 
     Integer getChannelRelationIsUsePreOwnerBySourceAndChannelTypeRelationId(ChannelRelationVo channelRelationVo);
 
-    public int replaceChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
+    int replaceChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
-    public int replaceChannel(ChannelVo channelVo);
+    int replaceChannel(ChannelVo channelVo);
 
-    public int insertChannelPriority(ChannelPriorityVo channelPriority);
+    int insertChannelPriority(ChannelPriorityVo channelPriority);
 
-    public int replaceChannelProcess(@Param("channelUuid") String channelUuid,
-        @Param("processUuid") String processUuid);
+    int replaceChannelProcess(@Param("channelUuid") String channelUuid,
+                              @Param("processUuid") String processUuid);
 
-    public int replaceChannelWorktime(@Param("channelUuid") String channelUuid,
-        @Param("worktimeUuid") String worktimeUuid);
+    int replaceChannelWorktime(@Param("channelUuid") String channelUuid,
+                               @Param("worktimeUuid") String worktimeUuid);
 
-    public int insertChannelAuthority(@Param("authorityVo") AuthorityVo authority,
-        @Param("channelUuid") String channelUuid);
+    int insertChannelAuthority(@Param("authorityVo") AuthorityVo authority,
+                               @Param("channelUuid") String channelUuid);
 
-    public int insertChannelRelation(ChannelRelationVo channelRelationVo);
+    int insertChannelRelation(ChannelRelationVo channelRelationVo);
 
-    public int insertChannelRelationAuthority(ChannelRelationVo channelRelationVo);
+    int insertChannelRelationAuthority(ChannelRelationVo channelRelationVo);
 
     int insertChannelRelationIsUsePreOwner(ChannelRelationVo channelRelationVo);
 
-    public int updateChannelForMove(ChannelVo channelVo);
+    int updateChannelForMove(ChannelVo channelVo);
 
-    public int updateSortIncrement(@Param("parentUuid") String parentUuid, @Param("fromSort") Integer fromSort,
-        @Param("toSort") Integer toSort);
+    int updateSortIncrement(@Param("parentUuid") String parentUuid, @Param("fromSort") Integer fromSort,
+                            @Param("toSort") Integer toSort);
 
-    public int updateSortDecrement(@Param("parentUuid") String parentUuid, @Param("fromSort") Integer fromSort,
-        @Param("toSort") Integer toSort);
+    int updateSortDecrement(@Param("parentUuid") String parentUuid, @Param("fromSort") Integer fromSort,
+                            @Param("toSort") Integer toSort);
 
     int updateChannelConfig(ChannelVo channelVo);
 
-    public int deleteChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
+    int deleteChannelUser(@Param("userUuid") String userUuid, @Param("channelUuid") String channelUuid);
 
-    public int deleteChannelByUuid(String uuid);
+    int deleteChannelByUuid(String uuid);
 
-    public int deleteChannelPriorityByChannelUuid(String channelUuid);
+    int deleteChannelPriorityByChannelUuid(String channelUuid);
 
-    public int deleteChannelProcessByChannelUuid(String channelUuid);
+    int deleteChannelProcessByChannelUuid(String channelUuid);
 
-    public int deleteChannelWorktimeByChannelUuid(String channelUuid);
+    int deleteChannelWorktimeByChannelUuid(String channelUuid);
 
-    public int deleteChannelUserByChannelUuid(String channelUuid);
+    int deleteChannelUserByChannelUuid(String channelUuid);
 
-    public int deleteChannelAuthorityByChannelUuid(String uuid);
+    int deleteChannelAuthorityByChannelUuid(String uuid);
 
-    public int deleteChannelRelationBySource(String channelUuid);
+    int deleteChannelRelationBySource(String channelUuid);
 
-    public int deleteChannelRelationAuthorityBySource(String channelUuid);
+    int deleteChannelRelationAuthorityBySource(String channelUuid);
 
     int deleteChannelRelationIsUsePreOwnerBySource(String channelUuid);
 }

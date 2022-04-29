@@ -1,5 +1,5 @@
 /*
- * Copyright (c)  2022 TechSure Co.,Ltd.  All Rights Reserved.
+ * Copyright(c) 2022 TechSure Co., Ltd. All Rights Reserved.
  * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  */
 
@@ -28,13 +28,18 @@ public class DashboardWidgetParamVo extends SqlDecoratorVo implements Serializab
     public DashboardWidgetParamVo() {
     }
 
+    @Override
+    public void init() {
+        //什么都不需要做
+    }
+
     public DashboardWidgetParamVo(JSONObject conditionConfig, Integer currentPage, DashboardWidgetChartConfigVo dashboardWidgetChartConfigVo, String dataSourceHandler) {
         super(conditionConfig);
         this.setPageSize(currentPage);
         //上报时间过滤条件
-        if(conditionConfig.containsKey("startTimeCondition")) {
+        if (conditionConfig.containsKey("startTimeCondition")) {
             startTimeCondition = conditionConfig.getJSONObject("startTimeCondition");
-        }else{
+        } else {
             startTimeCondition = JSONObject.parseObject("{\"timeRange\":\"1\",\"timeUnit\":\"year\"}");//默认展示一年
         }
         this.dataSourceHandler = dataSourceHandler;

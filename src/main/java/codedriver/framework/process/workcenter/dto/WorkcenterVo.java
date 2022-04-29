@@ -1,15 +1,24 @@
+/*
+ * Copyright(c) 2022 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.workcenter.dto;
 
+import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.common.constvalue.ApiParamType;
+import codedriver.framework.common.constvalue.DeviceType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.util.CommonUtil;
 import codedriver.framework.dto.AuthorityVo;
+import codedriver.framework.process.constvalue.ProcessWorkcenterType;
 import codedriver.framework.process.dto.SqlDecoratorVo;
 import codedriver.framework.restful.annotation.EntityField;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -26,39 +35,43 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
     private String name;
     @EntityField(name = "custom类型,工单中心分类所属人", type = ApiParamType.ENUM)
     private String owner;
+    @EntityField(name = "判断当前工单分类是否属于当前用户", type = ApiParamType.BOOLEAN)
+    private boolean isMine;
     @EntityField(name = "default:默认出厂  system：系统分类  custom：自定义分类", type = ApiParamType.ENUM)
-    private String type;
+    private String type = ProcessWorkcenterType.CUSTOM.getValue();
     @JSONField(serialize = false)
     @EntityField(name = "排序", type = ApiParamType.INTEGER)
     private Integer sort;
     @EntityField(name = "数量", type = ApiParamType.INTEGER)
     private String count;
-    @EntityField(name = "过滤条件", type = ApiParamType.STRING)
-    private String conditionConfig;
+    @EntityField(name = "过滤条件", type = ApiParamType.JSONOBJECT)
+    private JSONObject conditionConfig;
+    @JSONField(serialize = false)
+    private String conditionConfigStr;
     @EntityField(name = "all:所有设备,mobile:手机端,pc:电脑端", type = ApiParamType.ENUM)
-    private String support;
+    private String support = DeviceType.ALL.getValue();
     @JSONField(serialize = false)
     @EntityField(name = "显示的字段", type = ApiParamType.JSONARRAY)
     private JSONArray headerList;
     @JSONField(serialize = false)
     private List<AuthorityVo> authorityList;
     @EntityField(name = "角色列表", type = ApiParamType.JSONARRAY)
-    private List<String> valueList;
+    private List<String> authList;
     @EntityField(name = "是否拥有编辑权限", type = ApiParamType.INTEGER)
     private Integer isCanEdit;
     @EntityField(name = "是否拥有授权权限", type = ApiParamType.INTEGER)
     private Integer isCanRole;
-    @EntityField(name = "是否附加待我处理条件", type = ApiParamType.INTEGER)
-    private Integer isProcessingOfMine = 0;
+    //@EntityField(name = "是否附加待我处理条件", type = ApiParamType.INTEGER)
+    //private Integer isProcessingOfMine = 0;
     @EntityField(name = "待我处理的数量", type = ApiParamType.STRING)
     private String processingOfMineCount;
     @JSONField(serialize = false)
     @EntityField(name = "设备类型", type = ApiParamType.STRING)
     private String device;
-    @EntityField(name = "排序的字段", type = ApiParamType.JSONARRAY)
-    private JSONArray sortList;
-    @EntityField(name = "上报时间条件", type = ApiParamType.JSONOBJECT)
-    private JSONObject startTimeCondition;
+    @EntityField(name = "排序的字段", type = ApiParamType.JSONOBJECT)
+    private JSONObject sortConfig;
+    /*@EntityField(name = "上报时间条件", type = ApiParamType.JSONOBJECT)
+    private JSONObject startTimeCondition;*/
     @EntityField(name = "关键字搜索条件", type = ApiParamType.JSONOBJECT)
     private JSONArray keywordConditionList;
     @EntityField(name = "菜单类型id", type = ApiParamType.LONG)
@@ -88,22 +101,35 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
     public WorkcenterVo() {
     }
 
+    @Override
+    public void init() {
+        super.init(this.getConditionConfig());
+    }
+
+    public boolean getIsMine() {
+        if (StringUtils.isNotBlank(this.owner)) {
+            isMine = this.owner.equalsIgnoreCase(UserContext.get().getUserUuid(true));
+        }
+        return isMine;
+    }
+
+
     public WorkcenterVo(String _name) {
         this.name = _name;
     }
 
     public WorkcenterVo(JSONObject jsonObj) {
         super(jsonObj.getJSONObject("conditionConfig"));
-        JSONObject conditionConfig = jsonObj.getJSONObject("conditionConfig");
+        this.conditionConfig = jsonObj.getJSONObject("conditionConfig");
         super.setKeyword(jsonObj.getString("keyword"));
-        this.isProcessingOfMine = conditionConfig.getInteger("isProcessingOfMine") != null ? conditionConfig.getInteger("isProcessingOfMine") : 0;
-        this.sortList = jsonObj.getJSONArray("sortList");
+        //this.isProcessingOfMine = this.conditionConfig.getInteger("isProcessingOfMine") != null ? this.conditionConfig.getInteger("isProcessingOfMine") : 0;
+        this.sortConfig = jsonObj.getJSONObject("sortConfig");
         this.uuid = jsonObj.getString("uuid");
         this.setCurrentPage(jsonObj.getInteger("currentPage"));
         this.setExpectOffsetRowNum(jsonObj.getInteger("expectOffsetRowNum"));
         this.setPageSize(jsonObj.getInteger("pageSize"));
-        this.resultColumnList = conditionConfig.getJSONArray("resultColumnList");
-        JSONArray conditionGroupArray = conditionConfig.getJSONArray("conditionGroupList");
+        this.resultColumnList = this.conditionConfig.getJSONArray("resultColumnList");
+        /*JSONArray conditionGroupArray = conditionConfig.getJSONArray("conditionGroupList");
         if (CollectionUtils.isNotEmpty(conditionGroupArray)) {
             channelUuidList = new ArrayList<String>();
             for (Object conditionGroup : conditionGroupArray) {
@@ -115,16 +141,17 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
                 }
                 channelUuidList.addAll(channelUuidListTmp);
             }
-        }
+        }*/
         //上报时间过滤条件
-        if(conditionConfig.containsKey("startTimeCondition")) {
+        /*if (conditionConfig.containsKey("startTimeCondition")) {
             startTimeCondition = conditionConfig.getJSONObject("startTimeCondition");
-        }else{
+        } else {
             startTimeCondition = JSONObject.parseObject("{\"timeRange\":\"1\",\"timeUnit\":\"year\"}");//默认展示一年
-        }
+        }*/
 
         this.keywordConditionList = conditionConfig.getJSONArray("keywordConditionList");
     }
+
 
     public String getUuid() {
         if (StringUtils.isBlank(uuid)) {
@@ -179,11 +206,18 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
         this.sort = sort;
     }
 
-    public String getConditionConfig() {
+    public JSONObject getConditionConfig() {
+        if (conditionConfig == null && StringUtils.isNotBlank(conditionConfigStr)) {
+            try {
+                conditionConfig = JSONObject.parseObject(conditionConfigStr);
+            } catch (Exception ignored) {
+
+            }
+        }
         return conditionConfig;
     }
 
-    public void setConditionConfig(String conditionConfig) {
+    public void setConditionConfig(JSONObject conditionConfig) {
         this.conditionConfig = conditionConfig;
     }
 
@@ -211,25 +245,27 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
         this.count = count;
     }
 
-    public List<String> getValueList() {
-        if (valueList == null) {
-            valueList = new ArrayList<String>();
-            for (AuthorityVo workcenterAuthorityVo : this.authorityList) {
-                if (workcenterAuthorityVo.getType().equals(GroupSearch.ROLE.getValue())) {
-                    valueList.add(GroupSearch.ROLE.getValuePlugin() + workcenterAuthorityVo.getUuid());
-                } else if (workcenterAuthorityVo.getType().equals(GroupSearch.USER.getValue())) {
-                    valueList.add(GroupSearch.USER.getValuePlugin() + workcenterAuthorityVo.getUuid());
-                }
-                if (workcenterAuthorityVo.getType().equals(GroupSearch.COMMON.getValue())) {
-                    valueList.add(GroupSearch.COMMON.getValuePlugin() + workcenterAuthorityVo.getUuid());
+    public List<String> getAuthList() {
+        if (authList == null) {
+            authList = new ArrayList<>();
+            if (CollectionUtils.isNotEmpty(this.authorityList)) {
+                for (AuthorityVo workcenterAuthorityVo : this.authorityList) {
+                    if (workcenterAuthorityVo.getType().equals(GroupSearch.ROLE.getValue())) {
+                        authList.add(GroupSearch.ROLE.getValuePlugin() + workcenterAuthorityVo.getUuid());
+                    } else if (workcenterAuthorityVo.getType().equals(GroupSearch.USER.getValue())) {
+                        authList.add(GroupSearch.USER.getValuePlugin() + workcenterAuthorityVo.getUuid());
+                    }
+                    if (workcenterAuthorityVo.getType().equals(GroupSearch.COMMON.getValue())) {
+                        authList.add(GroupSearch.COMMON.getValuePlugin() + workcenterAuthorityVo.getUuid());
+                    }
                 }
             }
         }
-        return valueList;
+        return authList;
     }
 
-    public void setValueList(List<String> valueList) {
-        this.valueList = valueList;
+    public void setAuthList(List<String> authList) {
+        this.authList = authList;
     }
 
     public Integer getIsCanEdit() {
@@ -249,6 +285,21 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
     }
 
     public List<String> getChannelUuidList() {
+        if (CollectionUtils.isEmpty(channelUuidList) && this.getConditionConfig() != null) {
+            JSONArray conditionGroupArray = this.getConditionConfig().getJSONArray("conditionGroupList");
+            if (CollectionUtils.isNotEmpty(conditionGroupArray)) {
+                channelUuidList = new ArrayList<>();
+                for (Object conditionGroup : conditionGroupArray) {
+                    JSONObject conditionGroupJson = (JSONObject) JSONObject.toJSON(conditionGroup);
+                    JSONArray channelArray = conditionGroupJson.getJSONArray("channelUuidList");
+                    List<String> channelUuidListTmp = new ArrayList<>();
+                    if (CollectionUtils.isNotEmpty(channelArray)) {
+                        channelUuidListTmp = JSONObject.parseArray(channelArray.toJSONString(), String.class);
+                    }
+                    channelUuidList.addAll(channelUuidListTmp);
+                }
+            }
+        }
         return channelUuidList;
     }
 
@@ -256,13 +307,13 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
         this.channelUuidList = channelUuidList;
     }
 
-    public Integer getIsProcessingOfMine() {
+    /*public Integer getIsProcessingOfMine() {
         return isProcessingOfMine;
-    }
+    }*/
 
-    public void setIsProcessingOfMine(Integer isProcessingOfMine) {
+    /*public void setIsProcessingOfMine(Integer isProcessingOfMine) {
         this.isProcessingOfMine = isProcessingOfMine;
-    }
+    }*/
 
     public String getProcessingOfMineCount() {
         return processingOfMineCount;
@@ -291,12 +342,12 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
         this.device = device;
     }
 
-    public JSONArray getSortList() {
-        return sortList;
+    public JSONObject getSortConfig() {
+        return sortConfig;
     }
 
-    public void setSortList(JSONArray sortList) {
-        this.sortList = sortList;
+    public void setSortConfig(JSONObject sortConfig) {
+        this.sortConfig = sortConfig;
     }
 
     public List<Long> getProcessTaskIdList() {
@@ -315,13 +366,19 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
         this.theadVoList = theadVoList;
     }
 
-    public JSONObject getStartTimeCondition() {
+    /*public JSONObject getStartTimeCondition() {
+        //上报时间过滤条件
+        if (this.getConditionConfig() != null && this.getConditionConfig().containsKey("startTimeCondition")) {
+            startTimeCondition = this.getConditionConfig().getJSONObject("startTimeCondition");
+        } else {
+            startTimeCondition = JSONObject.parseObject("{\"timeRange\":\"1\",\"timeUnit\":\"year\"}");//默认展示一年
+        }
         return startTimeCondition;
     }
 
     public void setStartTimeCondition(JSONObject startTimeCondition) {
         this.startTimeCondition = startTimeCondition;
-    }
+    }*/
 
     public String getKeywordHandler() {
         return keywordHandler;
@@ -356,6 +413,9 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
     }
 
     public JSONArray getKeywordConditionList() {
+        if (this.getConditionConfig() != null) {
+            this.keywordConditionList = this.getConditionConfig().getJSONArray("keywordConditionList");
+        }
         return keywordConditionList;
     }
 
@@ -379,16 +439,28 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
         this.catalogName = catalogName;
     }
 
+    public String getConditionConfigStr() {
+        if (conditionConfig != null) {
+            conditionConfigStr = conditionConfig.toJSONString();
+        }
+        return conditionConfigStr;
+    }
+
+    public void setConditionConfigStr(String conditionConfigStr) {
+        this.conditionConfigStr = conditionConfigStr;
+    }
+
     public String getHandlerType() {
-        if(StringUtils.isBlank(handlerType) && StringUtils.isNotBlank(conditionConfig)){
-            JSONObject conditionConfigJson = JSONObject.parseObject(conditionConfig);
+        if (StringUtils.isBlank(handlerType) && MapUtils.isNotEmpty(this.getConditionConfig())) {
             //兼容老数据
-            handlerType = conditionConfigJson.getString("handlerType");
-            if(StringUtils.isBlank(handlerType) && conditionConfigJson.containsKey("conditionConfig")){
+            handlerType = this.getConditionConfig().getString("handlerType");
+            /*if (StringUtils.isBlank(handlerType) && this.getConditionConfig().containsKey("conditionConfig")) {
                 conditionConfigJson = conditionConfigJson.getJSONObject("conditionConfig");
                 handlerType = conditionConfigJson.getString("handlerType");
-            }
+            }*/
         }
         return handlerType;
     }
+
+
 }
