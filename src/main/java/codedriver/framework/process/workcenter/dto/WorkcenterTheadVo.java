@@ -50,13 +50,13 @@ public class WorkcenterTheadVo {
 
     public WorkcenterTheadVo(JSONObject obj) {
         this.name = obj.getString("name");
-        this.sort = obj.getInteger("sort");
-        this.width = obj.getInteger("width");
-        this.isShow = obj.getInteger("isShow");
+        this.sort = obj.getIntValue("sort");
+        this.width = obj.getIntValue("width");
+        this.isShow = obj.getIntValue("isShow");
         this.userUuid = UserContext.get().getUserUuid();
         this.type = obj.getString("type");
         this.className = obj.getString("className");
-        this.isSortable = obj.getInteger("isSortable");
+        this.isSortable = obj.getIntValue("isSortable");
     }
 
     public WorkcenterTheadVo(IProcessTaskColumn column) {
