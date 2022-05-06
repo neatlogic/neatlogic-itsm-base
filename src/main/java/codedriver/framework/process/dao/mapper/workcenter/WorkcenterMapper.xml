@@ -122,9 +122,15 @@
                pw.`support`,
                pw.`sort`,
                pw.`condition_config`,
-               pwo.`user_uuid` as `owner`
+               pwo.`user_uuid` AS `owner`,
+               pw.`catalog_id` AS catalogId,
+               pwc.`name`      AS catalogName,
+               pwa.type        AS authType,
+               pwa.uuid        AS authUuid
         FROM `process_workcenter` pw
                  LEFT JOIN `process_workcenter_owner` pwo ON pw.`uuid` = pwo.`workcenter_uuid`
+                 LEFT JOIN `process_workcenter_catalog` pwc ON pw.catalog_id = pwc.id
+                 LEFT JOIN `process_workcenter_authority` pwa ON pw.uuid = pwa.workcenter_uuid
         where pw.`uuid` = #{uuid}
     </select>
 
@@ -223,7 +229,7 @@
     <select id="checkWorkcenterCatalogIsUsed" resultType="int">
         SELECT COUNT(1)
         FROM process_workcenter
-        WHERE catalog_id = #{id}
+        WHERE catalog_id = #{value}
     </select>
 
     <delete id="deleteWorkcenterByUuid" parameterType="java.lang.String">
@@ -321,7 +327,7 @@
     </insert>
 
     <insert id="insertWorkcenterOwner" parameterType="java.lang.String">
-        INSERT INTO `process_workcenter_owner` (`workcenter_uuid`, `user_uuid`)
+        INSERT IGNORE INTO `process_workcenter_owner` (`workcenter_uuid`, `user_uuid`)
         VALUES (#{uuid}, #{userUuid});
     </insert>
 
