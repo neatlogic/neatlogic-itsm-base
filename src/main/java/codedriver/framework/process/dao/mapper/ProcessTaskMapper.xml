@@ -1826,10 +1826,10 @@
 
     <select id="getProcessTaskStepAgentListByProcessTaskIdList" parameterType="java.lang.Long"
             resultType="codedriver.framework.process.dto.ProcessTaskStepAgentVo">
-        SELECT `processtask_id`      AS processTaskId,
-               `processtask_step_id` AS processTaskStepId,
-               `user_uuid`           AS userUuid,
-               `agent_uuid`          AS agentUuid
+        SELECT `processtask_id` AS processTaskId,
+        `processtask_step_id` AS processTaskStepId,
+        `user_uuid` AS userUuid,
+        `agent_uuid` AS agentUuid
         FROM `processtask_step_agent`
         WHERE `processtask_id` IN
         <foreach collection="list" item="processTaskId" open="(" separator="," close=")">
@@ -2572,6 +2572,56 @@
                `content` AS formContent
         FROM `processtask_form_content`
         WHERE `content` LIKE CONCAT('%', #{value}, '%')
+    </select>
+
+    <select id="getProcessTaskByIdStrList" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+        SELECT `id`,
+        `title`,
+        `process_uuid` AS processUuid,
+        `channel_uuid` AS channelUuid,
+        `config_hash` AS configHash,
+        `priority_uuid` AS priorityUuid,
+        `status`,
+        `start_time` AS startTime,
+        `end_time` AS endTime,
+        `owner`,
+        `reporter`,
+        `expire_time` AS expireTime,
+        `worktime_uuid` AS worktimeUuid,
+        `error`,
+        `is_show` as isShow,
+        `serial_number` AS serialNumber,
+        `source`
+        FROM `processtask`
+        WHERE `id` in
+        <foreach collection="list" item="id" close=")" open="(" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getProcessTaskBySerialNumberList" resultType="codedriver.framework.process.dto.ProcessTaskVo">
+        SELECT `id`,
+        `title`,
+        `process_uuid` AS processUuid,
+        `channel_uuid` AS channelUuid,
+        `config_hash` AS configHash,
+        `priority_uuid` AS priorityUuid,
+        `status`,
+        `start_time` AS startTime,
+        `end_time` AS endTime,
+        `owner`,
+        `reporter`,
+        `expire_time` AS expireTime,
+        `worktime_uuid` AS worktimeUuid,
+        `error`,
+        `is_show` as isShow,
+        `serial_number` AS serialNumber,
+        `source`
+        FROM `processtask`
+        WHERE `serial_number` in
+        <foreach collection="list" item="serialNumber" close=")" open="(" separator=",">
+            #{serialNumber}
+        </foreach>
     </select>
 
     <!--<update id="updateProcessTaskStepConvergeIsCheck">

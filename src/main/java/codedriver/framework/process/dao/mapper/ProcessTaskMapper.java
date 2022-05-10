@@ -135,6 +135,10 @@ public interface ProcessTaskMapper {
 
     ProcessTaskVo getProcessTaskById(Long id);
 
+    List<ProcessTaskVo> getProcessTaskByIdStrList(List<String> idList);
+
+    List<ProcessTaskVo> getProcessTaskBySerialNumberList(List<String> serialNumberList);
+
     List<ProcessTaskStepAuditVo> getProcessTaskStepAuditList(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
     List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
