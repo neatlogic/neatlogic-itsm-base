@@ -175,6 +175,7 @@ public class ProcessVo extends BaseEditorVo {
                     processSlaVo.setProcessUuid(this.getUuid());
                     processSlaVo.setUuid(slaObj.getString("uuid"));
                     processSlaVo.setName(slaObj.getString("name"));
+                    processSlaVo.setCalculateHandler(slaObj.getString("calculateHandler"));
                     processSlaVo.setConfig(slaObj.toJSONString());
                     this.slaList.add(processSlaVo);
                     for (int p = 0; p < processStepUuidList.size(); p++) {

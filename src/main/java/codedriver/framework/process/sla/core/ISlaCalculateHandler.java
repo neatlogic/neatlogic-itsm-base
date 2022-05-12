@@ -46,6 +46,11 @@ public interface ISlaCalculateHandler {
     boolean getMultiple();
 
     /**
+     * 如果关联了多个步骤，是否是多个步骤共用一个时效
+     * @return
+     */
+    int isSum();
+    /**
      * 根据时效关联的步骤状态返回时效的状态
      * @param processTaskStepList 时效关联的步骤列表
      * @return
