@@ -1,15 +1,21 @@
+/*
+ * Copyright(c) 2022 TechSure Co., Ltd. All Rights Reserved.
+ * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
+ */
+
 package codedriver.framework.process.stepremind.core;
 
+import org.reflections.Reflections;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.reflections.Reflections;
 
 public class ProcessTaskStepRemindTypeFactory {
     /** 标记是否未初始化数据，只初始化一次 **/
     private static volatile boolean isUninitialized = true;
-    
-    private static Set<IProcessTaskStepRemindType> set = new HashSet<>();
+
+    private static final Set<IProcessTaskStepRemindType> set = new HashSet<>();
     
     public static Set<IProcessTaskStepRemindType> getRemindTypeList(){        
         if(isUninitialized) {
@@ -19,9 +25,7 @@ public class ProcessTaskStepRemindTypeFactory {
                     Set<Class<? extends IProcessTaskStepRemindType>> classSet = reflections.getSubTypesOf(IProcessTaskStepRemindType.class);
                     for (Class<? extends IProcessTaskStepRemindType> c : classSet) {
                         try {
-                            for(IProcessTaskStepRemindType type : c.getEnumConstants()) {
-                                set.add(type);
-                            }
+                            Collections.addAll(set, c.getEnumConstants());
                         }catch(Exception e) {
                             
                         }       
