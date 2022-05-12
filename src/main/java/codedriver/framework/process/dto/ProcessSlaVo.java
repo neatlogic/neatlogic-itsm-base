@@ -11,6 +11,7 @@ public class ProcessSlaVo implements Serializable {
     private String processUuid;
     private String uuid;
     private String name;
+    private String calculateHandler;
     private String config;
     private List<String> processStepUuidList;
     private List<Long> notifyPolicyIdList = new ArrayList<>();
@@ -29,6 +30,14 @@ public class ProcessSlaVo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCalculateHandler() {
+        return calculateHandler;
+    }
+
+    public void setCalculateHandler(String calculateHandler) {
+        this.calculateHandler = calculateHandler;
     }
 
     public String getProcessUuid() {
