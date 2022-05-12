@@ -38,6 +38,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private String processStepUuid;
     @EntityField(name = "步骤名称", type = ApiParamType.STRING)
     private String name;
+    @EntityField(name = "步骤别名", type = ApiParamType.STRING)
+    private String aliasName;
     @EntityField(name = "状态", type = ApiParamType.STRING)
     private String status;
     @EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
@@ -111,8 +113,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     private List<AssignableWorkerStepVo> assignableWorkerStepList = new ArrayList<>();
     @EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
-    @JSONField(serialize = false)
-    private String aliasName;
     @JSONField(serialize = false)
     private Boolean isAutoGenerateId = false;
 
