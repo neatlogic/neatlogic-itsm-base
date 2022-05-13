@@ -9,26 +9,26 @@ import codedriver.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
 import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
 
 public interface IWorkerPolicyHandler {
-	String getType();
+    String getType();
 
-	String getName();
+    String getName();
 
-	/**
-	 * 是否只分配一次处理人
-	 * @return
-	 */
-	int isOnlyOnceExecute();
-	/**
-	 * @Author: chenqiwei
-	 * @Time:Sep 18, 2019
-	 * @Description: TODO
-	 * @param @param
-	 *            workerPolicyVo
-	 * @param @param
-	 *            currentProcessTaskStepVo
-	 * @param @return
-	 * @return Boolean 成功分配到处理人则返回true，分配不到则返回false
-	 */
-	@Transactional
-	List<ProcessTaskStepWorkerVo> execute(ProcessTaskStepWorkerPolicyVo workerPolicyVo, ProcessTaskStepVo currentProcessTaskStepVo);
+    /**
+     * 是否只分配一次处理人
+     *
+     * @return
+     */
+    int isOnlyOnceExecute();
+
+    /**
+     * @param @param  workerPolicyVo
+     * @param @param  currentProcessTaskStepVo
+     * @param @return
+     * @return Boolean 成功分配到处理人则返回true，分配不到则返回false
+     * @Author: chenqiwei
+     * @Time:Sep 18, 2019
+     * @Description: TODO
+     */
+    @Transactional
+    List<ProcessTaskStepWorkerVo> execute(ProcessTaskStepWorkerPolicyVo workerPolicyVo, ProcessTaskStepVo currentProcessTaskStepVo);
 }
