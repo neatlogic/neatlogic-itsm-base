@@ -140,21 +140,17 @@ public class ProcessVo extends BaseEditorVo {
                                 String processStepUuid = processStepUuidList.getString(j);
                                 for (int k = 0; k < attributeUuidList.size(); k++) {
                                     String attributeUuid = attributeUuidList.getString(k);
-                                    ProcessStepFormAttributeVo processStepFormAttributeVo =
-                                            new ProcessStepFormAttributeVo();
+                                    ProcessStepFormAttributeVo processStepFormAttributeVo = new ProcessStepFormAttributeVo();
                                     processStepFormAttributeVo.setProcessUuid(this.getUuid());
                                     processStepFormAttributeVo.setFormUuid(this.getFormUuid());
                                     processStepFormAttributeVo.setProcessStepUuid(processStepUuid);
                                     processStepFormAttributeVo.setAttributeUuid(attributeUuid);
                                     processStepFormAttributeVo.setAction(action);
                                     processStepFormAttributeVo.setType(type);
-                                    List<ProcessStepFormAttributeVo> processStepFormAttributeList =
-                                            processStepFormAttributeMap.get(processStepUuid);
-                                    if (processStepFormAttributeList == null) {
-                                        processStepFormAttributeList = new ArrayList<>();
-                                        processStepFormAttributeMap.put(processStepUuid, processStepFormAttributeList);
+                                    List<ProcessStepFormAttributeVo> processStepFormAttributeList = processStepFormAttributeMap.computeIfAbsent(processStepUuid, key -> new ArrayList<>());
+                                    if (!processStepFormAttributeList.contains(processStepFormAttributeVo)) {
+                                        processStepFormAttributeList.add(processStepFormAttributeVo);
                                     }
-                                    processStepFormAttributeList.add(processStepFormAttributeVo);
                                 }
 
                             }

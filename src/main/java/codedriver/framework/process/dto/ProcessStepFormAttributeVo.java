@@ -1,6 +1,7 @@
 package codedriver.framework.process.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class ProcessStepFormAttributeVo implements Serializable {
 	private static final long serialVersionUID = -6435866167443319573L;
@@ -13,37 +14,6 @@ public class ProcessStepFormAttributeVo implements Serializable {
 
 	public ProcessStepFormAttributeVo() {
 
-	}
-
-	public ProcessStepFormAttributeVo(String _processStepUuid, String _attributeUuid) {
-		this.processStepUuid = _processStepUuid;
-		this.attributeUuid = _attributeUuid;
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		if (this == other)
-			return true;
-		if (other == null)
-			return false;
-		if (!(other instanceof ProcessStepFormAttributeVo))
-			return false;
-
-		final ProcessStepFormAttributeVo attribute = (ProcessStepFormAttributeVo) other;
-		try {
-			if (getAttributeUuid().equals(attribute.getAttributeUuid())) {
-				return true;
-			}
-		} catch (Exception ex) {
-			return false;
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		int result = getAttributeUuid().hashCode() * 29;
-		return result;
 	}
 
 	public String getProcessStepUuid() {
@@ -94,4 +64,16 @@ public class ProcessStepFormAttributeVo implements Serializable {
 		this.action = action;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ProcessStepFormAttributeVo that = (ProcessStepFormAttributeVo) o;
+		return processStepUuid.equals(that.processStepUuid) && attributeUuid.equals(that.attributeUuid) && action.equals(that.action);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(processStepUuid, attributeUuid, action);
+	}
 }
