@@ -28,6 +28,8 @@ public class ProcessTaskStepUserVo {
 
     private String newUserUuid;
 
+    private String taskType;
+
     public ProcessTaskStepUserVo() {
 
     }
@@ -224,5 +226,13 @@ public class ProcessTaskStepUserVo {
 
     public void setActiveTime(Date activeTime) {
         this.activeTime = activeTime;
+    }
+
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
 }
