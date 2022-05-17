@@ -69,7 +69,7 @@ public class ProcessStepFormAttributeVo implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ProcessStepFormAttributeVo that = (ProcessStepFormAttributeVo) o;
-		return processStepUuid.equals(that.processStepUuid) && attributeUuid.equals(that.attributeUuid) && action.equals(that.action);
+		return Objects.equals(processStepUuid, that.processStepUuid) && Objects.equals(attributeUuid, that.attributeUuid) && Objects.equals(action, that.action);
 	}
 
 	@Override

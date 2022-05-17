@@ -138,6 +138,9 @@ public class ProcessVo extends BaseEditorVo {
                                 && CollectionUtils.isNotEmpty(attributeUuidList) && StringUtils.isNotBlank(action)) {
                             for (int j = 0; j < processStepUuidList.size(); j++) {
                                 String processStepUuid = processStepUuidList.getString(j);
+                                if (StringUtils.isBlank(processStepUuid)) {
+                                    continue;
+                                }
                                 for (int k = 0; k < attributeUuidList.size(); k++) {
                                     String attributeUuid = attributeUuidList.getString(k);
                                     ProcessStepFormAttributeVo processStepFormAttributeVo = new ProcessStepFormAttributeVo();
