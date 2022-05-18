@@ -2099,6 +2099,7 @@
                 <result column="realExpireTime" property="realExpireTime"/>
                 <result column="timeLeft" property="timeLeft"/>
                 <result column="realTimeLeft" property="realTimeLeft"/>
+                <result column="slaTimeStatus" property="status"/>
             </association>
         </collection>
 
