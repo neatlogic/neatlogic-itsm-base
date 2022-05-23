@@ -318,6 +318,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskFormVo> getProcessTaskFormContentListByContentLikeKeyword(String formstaticlist);
 
+    List<ProcessTaskFormVo> getProcessTaskFormContentList();
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,

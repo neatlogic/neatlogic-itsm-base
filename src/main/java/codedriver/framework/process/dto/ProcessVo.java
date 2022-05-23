@@ -133,7 +133,13 @@ public class ProcessVo extends BaseEditorVo {
                         JSONArray processStepUuidList = authorityObj.getJSONArray("processStepUuidList");
                         JSONArray attributeUuidList = authorityObj.getJSONArray("attributeUuidList");
                         String action = authorityObj.getString("action");
+                        if (StringUtils.isBlank(action)) {
+                            continue;
+                        }
                         String type = authorityObj.getString("type");
+                        if (StringUtils.isBlank(type)) {
+                            continue;
+                        }
                         if (CollectionUtils.isNotEmpty(processStepUuidList)
                                 && CollectionUtils.isNotEmpty(attributeUuidList) && StringUtils.isNotBlank(action)) {
                             for (int j = 0; j < processStepUuidList.size(); j++) {
@@ -143,6 +149,9 @@ public class ProcessVo extends BaseEditorVo {
                                 }
                                 for (int k = 0; k < attributeUuidList.size(); k++) {
                                     String attributeUuid = attributeUuidList.getString(k);
+                                    if (StringUtils.isBlank(attributeUuid)) {
+                                        continue;
+                                    }
                                     ProcessStepFormAttributeVo processStepFormAttributeVo = new ProcessStepFormAttributeVo();
                                     processStepFormAttributeVo.setProcessUuid(this.getUuid());
                                     processStepFormAttributeVo.setFormUuid(this.getFormUuid());
