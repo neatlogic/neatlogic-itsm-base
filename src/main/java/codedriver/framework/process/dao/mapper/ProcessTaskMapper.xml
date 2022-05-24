@@ -2575,6 +2575,12 @@
         WHERE `content` LIKE CONCAT('%', #{value}, '%')
     </select>
 
+    <select id="getProcessTaskFormContentList" resultType="codedriver.framework.process.dto.ProcessTaskFormVo">
+        SELECT `hash`    AS formContentHash,
+               `content` AS formContent
+        FROM `processtask_form_content`
+    </select>
+
     <select id="getProcessTaskByIdStrList" resultType="codedriver.framework.process.dto.ProcessTaskVo">
         SELECT `id`,
         `title`,
