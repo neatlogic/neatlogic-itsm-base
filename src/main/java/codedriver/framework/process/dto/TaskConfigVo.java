@@ -9,6 +9,9 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -34,6 +37,10 @@ public class TaskConfigVo extends BaseEditorVo {
     private List<ProcessTaskStepTaskVo> processTaskStepTaskList;
     @EntityField(name = "处理人过滤范围", type = ApiParamType.JSONARRAY)
     private List<String> rangeList;
+    @EntityField(name = "配置信息", type = ApiParamType.JSONOBJECT)
+    private JSONObject config;
+    @JSONField(serialize = false)
+    private String configStr;
 
     public Long getId() {
         if(id == null) {
@@ -100,5 +107,27 @@ public class TaskConfigVo extends BaseEditorVo {
 
     public void setRangeList(List<String> rangeList) {
         this.rangeList = rangeList;
+    }
+
+    public JSONObject getConfig() {
+        if (config == null && StringUtils.isNotBlank(configStr)) {
+            config = JSONObject.parseObject(configStr);
+        }
+        return config;
+    }
+
+    public void setConfig(JSONObject config) {
+        this.config = config;
+    }
+
+    public String getConfigStr() {
+        if (configStr == null && config != null) {
+            configStr = config.toJSONString();
+        }
+        return configStr;
+    }
+
+    public void setConfigStr(String configStr) {
+        this.configStr = configStr;
     }
 }
