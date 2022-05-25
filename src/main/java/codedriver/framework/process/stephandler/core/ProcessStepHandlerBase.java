@@ -1174,7 +1174,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 设置当前步骤状态为未开始 **/
             currentProcessTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
             /* 保存撤回原因 **/
-            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_RETREAT);
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_RETREAT);
             myRetreat(currentProcessTaskStepVo);
 
             /* 遍历后续节点所有步骤，写入汇聚步骤数据 **/
