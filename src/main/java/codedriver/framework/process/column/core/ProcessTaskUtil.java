@@ -2,8 +2,8 @@ package codedriver.framework.process.column.core;
 
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dto.TeamVo;
-import codedriver.framework.form.attribute.core.FormAttributeHandlerFactory;
-import codedriver.framework.form.attribute.core.FormHandlerBase;
+import codedriver.framework.form.attribute.core.FormAttributeDataConversionHandlerFactory;
+import codedriver.framework.form.attribute.core.IFormAttributeDataConversionHandler;
 import codedriver.framework.form.dto.AttributeDataVo;
 import codedriver.framework.form.dto.FormAttributeVo;
 import codedriver.framework.form.dto.FormVersionVo;
@@ -97,7 +97,7 @@ public class ProcessTaskUtil {
                     for (FormAttributeVo formAttribute : formAttributeList) {
                         Object attributeValue = formAttributeDataMap.get(formAttribute.getUuid());
                         if (attributeValue != null) {
-                            FormHandlerBase handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
+                            IFormAttributeDataConversionHandler handler = FormAttributeDataConversionHandlerFactory.getHandler(formAttribute.getHandler());
                             if (handler != null) {
                                 AttributeDataVo attributeDataVo = new AttributeDataVo();
                                 attributeDataVo.setAttributeUuid(formAttribute.getUuid());
