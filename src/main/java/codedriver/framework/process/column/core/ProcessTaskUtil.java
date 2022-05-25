@@ -3,13 +3,15 @@ package codedriver.framework.process.column.core;
 import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.form.attribute.core.FormAttributeHandlerFactory;
-import codedriver.framework.form.attribute.core.IFormAttributeHandler;
+import codedriver.framework.form.attribute.core.FormHandlerBase;
 import codedriver.framework.form.dto.AttributeDataVo;
 import codedriver.framework.form.dto.FormAttributeVo;
 import codedriver.framework.form.dto.FormVersionVo;
 import codedriver.framework.process.condition.core.IProcessTaskCondition;
 import codedriver.framework.process.constvalue.ProcessField;
-import codedriver.framework.process.dto.*;
+import codedriver.framework.process.dto.ProcessTaskStepReplyVo;
+import codedriver.framework.process.dto.ProcessTaskStepVo;
+import codedriver.framework.process.dto.ProcessTaskVo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -17,8 +19,12 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
 @Deprecated
 public class ProcessTaskUtil {
     /**
@@ -37,17 +43,17 @@ public class ProcessTaskUtil {
         resultObj.put(ProcessField.OWNER.getValue(), isValue ? processTaskVo.getOwner() : processTaskVo.getOwnerVo().getUserName());
         resultObj.put(ProcessField.OWNERLEVEL.getValue(), processTaskVo.getOwnerVo().getVipLevel());
         resultObj.put(ProcessField.REPORTER.getValue(), isValue ? processTaskVo.getReporter() : processTaskVo.getReporterVo().getUserName());
-        if(processTaskVo.getPriority() != null) {
+        if (processTaskVo.getPriority() != null) {
             resultObj.put(ProcessField.PRIORITY.getValue(), isValue ? processTaskVo.getPriority().getUuid() : processTaskVo.getPriority().getName());
         }
         resultObj.put(ProcessField.STATUS.getValue(), isValue ? processTaskVo.getStatusVo().getStatus() : processTaskVo.getStatusVo().getText());
         resultObj.put(ProcessField.OWNERCOMPANY.getValue(), isValue ? processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerCompanyList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessField.OWNERDEPARTMENT.getValue(), isValue ? processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getUuid).collect(Collectors.toList()) : processTaskVo.getOwnerDepartmentList().stream().map(TeamVo::getName).collect(Collectors.toList()));
         resultObj.put(ProcessField.STEPID.getValue(), processTaskVo.getCurrentProcessTaskStep() != null ? processTaskVo.getCurrentProcessTaskStep().getId() : null);
-        resultObj.put(ProcessField.OWNERROLE.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.OWNERROLE.getValue())).getConditionParamData(processTaskVo.getCurrentProcessTaskStep()));
-        resultObj.put(ProcessField.STEPTASK.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.STEPTASK.getValue())).getConditionParamData(processTaskVo.getCurrentProcessTaskStep()));
-        resultObj.put(ProcessField.STEPTASKID.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.STEPTASKID.getValue())).getConditionParamData(processTaskVo.getCurrentProcessTaskStep()));
-        resultObj.put(ProcessField.ACTIONTRIGGERUSER.getValue(), ((IProcessTaskCondition)ConditionHandlerFactory.getHandler(ProcessField.ACTIONTRIGGERUSER.getValue())).getConditionParamData(processTaskVo.getCurrentProcessTaskStep()));
+        resultObj.put(ProcessField.OWNERROLE.getValue(), ((IProcessTaskCondition) ConditionHandlerFactory.getHandler(ProcessField.OWNERROLE.getValue())).getConditionParamData(processTaskVo.getCurrentProcessTaskStep()));
+        resultObj.put(ProcessField.STEPTASK.getValue(), ((IProcessTaskCondition) ConditionHandlerFactory.getHandler(ProcessField.STEPTASK.getValue())).getConditionParamData(processTaskVo.getCurrentProcessTaskStep()));
+        resultObj.put(ProcessField.STEPTASKID.getValue(), ((IProcessTaskCondition) ConditionHandlerFactory.getHandler(ProcessField.STEPTASKID.getValue())).getConditionParamData(processTaskVo.getCurrentProcessTaskStep()));
+        resultObj.put(ProcessField.ACTIONTRIGGERUSER.getValue(), ((IProcessTaskCondition) ConditionHandlerFactory.getHandler(ProcessField.ACTIONTRIGGERUSER.getValue())).getConditionParamData(processTaskVo.getCurrentProcessTaskStep()));
         ProcessTaskStepVo startProcessTaskStep = processTaskVo.getStartProcessTaskStep();
         ProcessTaskStepReplyVo comment = startProcessTaskStep.getComment();
         if (comment != null && StringUtils.isNotBlank(comment.getContent())) {
@@ -91,7 +97,7 @@ public class ProcessTaskUtil {
                     for (FormAttributeVo formAttribute : formAttributeList) {
                         Object attributeValue = formAttributeDataMap.get(formAttribute.getUuid());
                         if (attributeValue != null) {
-                            IFormAttributeHandler handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
+                            FormHandlerBase handler = FormAttributeHandlerFactory.getHandler(formAttribute.getHandler());
                             if (handler != null) {
                                 AttributeDataVo attributeDataVo = new AttributeDataVo();
                                 attributeDataVo.setAttributeUuid(formAttribute.getUuid());
