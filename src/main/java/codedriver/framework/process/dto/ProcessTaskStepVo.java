@@ -94,6 +94,10 @@ public class ProcessTaskStepVo extends BasePageVo {
     private Integer enableReapproval;
     @EntityField(name = "可替换文本列表", type = ApiParamType.JSONARRAY)
     private JSONArray replaceableTextList;
+    @EntityField(name = "可替换文本列表", type = ApiParamType.JSONARRAY)
+    private JSONArray customButtonList;
+    @EntityField(name = "可替换文本列表", type = ApiParamType.JSONARRAY)
+    private JSONArray customStatusList;
     @EntityField(name = "流转方向", type = ApiParamType.STRING)
     private String flowDirection;
     //	@EntityField(name = "子任务列表", type = ApiParamType.JSONARRAY)
@@ -357,6 +361,22 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setReplaceableTextList(JSONArray replaceableTextList) {
         this.replaceableTextList = replaceableTextList;
+    }
+
+    public JSONArray getCustomButtonList() {
+        return customButtonList;
+    }
+
+    public void setCustomButtonList(JSONArray customButtonList) {
+        this.customButtonList = customButtonList;
+    }
+
+    public JSONArray getCustomStatusList() {
+        return customStatusList;
+    }
+
+    public void setCustomStatusList(JSONArray customStatusList) {
+        this.customStatusList = customStatusList;
     }
 
     public void setIsNeedContent(Integer isNeedContent) {
