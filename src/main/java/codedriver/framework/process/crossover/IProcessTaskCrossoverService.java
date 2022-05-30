@@ -9,6 +9,7 @@ import codedriver.framework.crossover.ICrossoverService;
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.constvalue.ProcessTaskStatus;
 import codedriver.framework.process.dto.AssignableWorkerStepVo;
+import codedriver.framework.process.dto.ProcessCommentTemplateVo;
 import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.operationauth.ProcessTaskPermissionDeniedException;
@@ -69,18 +70,29 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
 
     /**
      * 检查工单状态，如果processTaskStatus属于status其中一员，则返回对应的异常对象，否则返回null
+     *
      * @param processTaskStatus 工单状态
-     * @param statuss 状态列表
+     * @param statuss           状态列表
      * @return
      */
     ProcessTaskPermissionDeniedException checkProcessTaskStatus(String processTaskStatus, ProcessTaskStatus... statuss);
 
     /**
      * 检查步骤状态，如果stepStatus属于status其中一员，则返回对应的异常对象，否则返回null
+     *
      * @param stepStatus 步骤状态
-     * @param statuss 状态列表
+     * @param statuss    状态列表
      * @return
      */
-    ProcessTaskPermissionDeniedException checkProcessTaskStepStatus(String stepStatus, ProcessTaskStatus ... statuss);
+    ProcessTaskPermissionDeniedException checkProcessTaskStepStatus(String stepStatus, ProcessTaskStatus... statuss);
+
+    /**
+     * 获取步骤回复模版
+     *
+     * @param processStepUuid      步骤uuid
+     * @param authenticationInfoVo 用户授权
+     * @return
+     */
+    ProcessCommentTemplateVo getProcessStepCommentTemplate(String processStepUuid, AuthenticationInfoVo authenticationInfoVo);
 }
 
