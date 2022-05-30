@@ -2189,7 +2189,7 @@
     <select id="getProcessTaskIdByChannelUuidLimitOne" parameterType="java.lang.String" resultType="java.lang.Long">
         SELECT `id`
         FROM `processtask`
-        WHERE `channel_uuid` = #{value}
+        WHERE `is_deleted` = 0 and `channel_uuid` = #{value}
         LIMIT 1
     </select>
 
