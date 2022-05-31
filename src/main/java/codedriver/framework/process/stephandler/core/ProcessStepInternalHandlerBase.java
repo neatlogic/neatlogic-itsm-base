@@ -214,7 +214,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
         if (CollectionUtils.isNotEmpty(stepTaskList)) {
             processTaskStepUserVo.setProcessTaskId(processTaskId);
             processTaskStepWorkerVo.setType(GroupSearch.USER.getValue());
-            /** 查出processtask_step_subtask表中当前步骤子任务处理人列表 **/
+            /** 查出processtask_step_task表中当前步骤子任务处理人列表 **/
             Set<String> runningSubtaskUserUuidSet = new HashSet<>();
             Set<String> insertedRunningSubtaskUserUuidSet = new HashSet<>();
             Set<String> insertedsucceedSubtaskUserUuidSet = new HashSet<>();
@@ -232,7 +232,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 if (Objects.equals(stepTaskUserVo.getIsDelete(), 1)) {
                     continue;
                 }
-                if (!Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED)) {
+                if (!Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
                     runningSubtaskUserUuidSet.add(stepTaskUserVo.getUserUuid());
                 }
             }
@@ -252,7 +252,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                     processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
                 }
 
-                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED)) {
+                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
                     if (runningSubtaskUserUuidSet.contains(userUuid)) {
                         continue;
                     }
@@ -268,11 +268,11 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                     }
                     insertedRunningSubtaskUserUuidSet.add(userUuid);
                     processTaskStepUserVo.setStatus(ProcessTaskStepUserStatus.DOING.getValue());
+
+                    processTaskStepWorkerVo.setUuid(userUuid);
+                    processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
                 }
                 processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
-
-                processTaskStepWorkerVo.setUuid(userUuid);
-                processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
             }
         }
 //        /** 查出processtask_step_worker表中当前步骤子任务处理人列表 **/
