@@ -7,6 +7,7 @@ package codedriver.framework.process.dto;
 
 import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.dto.UserVo;
+import codedriver.framework.file.dto.FileVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -49,7 +50,10 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
     private String originalUserUuid;
     @EntityField(name = "用户", type = ApiParamType.JSONOBJECT)
     private UserVo originalUserVo;
-
+    @EntityField(name = "附件id列表", type = ApiParamType.JSONARRAY)
+    private List<Long> fileIdList;
+    @EntityField(name = "附件信息列表", type = ApiParamType.JSONARRAY)
+    private List<FileVo> fileList;
     public ProcessTaskStepTaskUserVo() {
     }
 
@@ -172,5 +176,21 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
 
     public void setOriginalUserVo(UserVo originalUserVo) {
         this.originalUserVo = originalUserVo;
+    }
+
+    public List<Long> getFileIdList() {
+        return fileIdList;
+    }
+
+    public void setFileIdList(List<Long> fileIdList) {
+        this.fileIdList = fileIdList;
+    }
+
+    public List<FileVo> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<FileVo> fileList) {
+        this.fileList = fileList;
     }
 }

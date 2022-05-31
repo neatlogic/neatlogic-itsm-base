@@ -17,9 +17,10 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	//任务
 	CREATETASK("createtask", "创建子任务", "创建${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
 	EDITTASK("edittask", "编辑子任务", "编辑${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	ABORTTASK("deletetask", "删除子任务", "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
 	COMPLETETASK("completetask", "回复子任务", "完成${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	DELETETASK("deletetask", "回复子任务", "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
+	DELETETASK("deletetask", "删除子任务", "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
+	SAVETASKFILE("savetaskfile", "上传子任务附件", "${DATA.replaceable_task}【${DATA.processTaskStepName}】 上传附件"),
+	DELETETASKFILE("deletetaskfile", "删除子任务附件", "${DATA.replaceable_task}【${DATA.processTaskStepName}】 删除附件"),
 
 
 	START("start", "开始", "开始【${DATA.processTaskStepName}】"),
