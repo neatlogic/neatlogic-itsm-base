@@ -5,10 +5,7 @@
 
 package codedriver.framework.process.dao.mapper;
 
-import codedriver.framework.process.dto.ProcessTaskStepTaskUserAgentVo;
-import codedriver.framework.process.dto.ProcessTaskStepTaskUserContentVo;
-import codedriver.framework.process.dto.ProcessTaskStepTaskUserVo;
-import codedriver.framework.process.dto.ProcessTaskStepTaskVo;
+import codedriver.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -63,6 +60,8 @@ public interface ProcessTaskStepTaskMapper {
 
     List<ProcessTaskStepTaskUserAgentVo> getProcessTaskStepTaskUserAgentListByStepTaskIdList(List<Long> stepTaskIdList);
 
+    List<ProcessTaskStepTaskUserFileVo> getStepTaskUserFileListByStepTaskUserIdList(List<Long> stepTaskUserIdList);
+
     int insertTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
     int insertIgnoreTaskUser(ProcessTaskStepTaskUserVo processTaskStepTaskUserVo);
@@ -72,6 +71,8 @@ public interface ProcessTaskStepTaskMapper {
     int insertTaskUserContent(ProcessTaskStepTaskUserContentVo processTaskStepTaskUserContentVo);
 
     int insertProcessTaskStepTaskUserAgent(ProcessTaskStepTaskUserAgentVo processTaskStepTaskUserAgentVo);
+
+    int insertProcessTaskStepTaskUserFile(ProcessTaskStepTaskUserFileVo processTaskStepTaskUserFileVo);
 
     int updateTask(ProcessTaskStepTaskVo processTaskStepTaskVo);
 
@@ -98,4 +99,6 @@ public interface ProcessTaskStepTaskMapper {
     int deleteProcessTaskStepTaskUserAgentByStepTaskUserIdList(List<Long> stepTaskUserIdList);
 
     int deleteProcessTaskStepTaskUserAgentByStepTaskId(Long processTaskStepTaskId);
+
+    int deleteProcessTaskStepTaskUserFile(ProcessTaskStepTaskUserFileVo processTaskStepTaskUserFileVo);
 }

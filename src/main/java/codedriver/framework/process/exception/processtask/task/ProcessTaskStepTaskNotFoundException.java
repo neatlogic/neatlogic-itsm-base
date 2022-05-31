@@ -18,4 +18,8 @@ public class ProcessTaskStepTaskNotFoundException extends ProcessTaskRuntimeExce
     public ProcessTaskStepTaskNotFoundException(String name) {
         super("流程步骤任务: '" + name + "' 不存在");
     }
+
+    public ProcessTaskStepTaskNotFoundException(Long id) {
+        super("流程步骤任务: '" + id + "' 不存在");
+    }
 }

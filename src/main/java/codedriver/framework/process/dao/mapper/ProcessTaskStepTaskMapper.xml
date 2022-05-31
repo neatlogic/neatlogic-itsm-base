@@ -392,6 +392,20 @@
         </foreach>
     </select>
 
+    <select id="getStepTaskUserFileListByStepTaskUserIdList" parameterType="java.lang.Long" resultType="codedriver.framework.process.dto.ProcessTaskStepTaskUserFileVo">
+        SELECT
+            `processtask_step_task_id` AS processTaskStepTaskId,
+            `processtask_step_task_user_id` AS processTaskStepTaskUserId,
+            `file_id` AS  fileId,
+            `fcd`
+        FROM `processtask_step_task_user_file`
+        WHERE `processtask_step_task_user_id` IN
+        <foreach collection="list" item="stepTaskUserId" open="(" separator="," close=")">
+            #{stepTaskUserId}
+        </foreach>
+        ORDER BY `processtask_step_task_user_id`, `fcd`
+    </select>
+
     <insert id="insertTask">
         INSERT INTO `processtask_step_task` (`processtask_id`,
                                              `processtask_step_id`,
@@ -463,6 +477,22 @@
             #{userUuid},
             #{agentUuid}
         )
+    </insert>
+
+    <insert id="insertProcessTaskStepTaskUserFile" parameterType="codedriver.framework.process.dto.ProcessTaskStepTaskUserFileVo">
+        INSERT IGNORE INTO `processtask_step_task_user_file` (
+          `processtask_step_task_id`,
+          `processtask_step_task_user_id`,
+          `file_id`,
+          `fcd`
+        )
+        VALUES
+          (
+            #{processTaskStepTaskId},
+            #{processTaskStepTaskUserId},
+            #{fileId},
+            NOW()
+          )
     </insert>
 
     <update id="updateTask">
@@ -563,5 +593,12 @@
 
     <delete id="deleteProcessTaskStepTaskUserAgentByStepTaskId" parameterType="java.lang.Long">
         DELETE FROM `processtask_step_task_user_agent` WHERE `processtask_step_task_id` = #{value}
+    </delete>
+
+    <delete id="deleteProcessTaskStepTaskUserFile" parameterType="codedriver.framework.process.dto.ProcessTaskStepTaskUserFileVo">
+        DELETE FROM `processtask_step_task_user_file`
+        WHERE `processtask_step_task_id` = #{processTaskStepTaskId}
+          AND `processtask_step_task_user_id` = #{processTaskStepTaskUserId}
+          AND `file_id` = #{fileId}
     </delete>
 </mapper>
