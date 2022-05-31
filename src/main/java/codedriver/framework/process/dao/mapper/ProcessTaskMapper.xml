@@ -1350,8 +1350,8 @@
         <if test="userType != null and userType != ''">
             AND `user_type` = #{userType}
         </if>
-        <if test="userVo != null and userVo.uuid != null and userVo.uuid != ''">
-            AND user_uuid = #{userVo.uuid}
+        <if test="userUuid != null and userUuid != ''">
+            AND user_uuid = #{userUuid}
         </if>
     </select>
 
@@ -3365,8 +3365,7 @@
         UPDATE `processtask_step_user`
         SET `user_uuid` = #{newUserUuid}
         WHERE `processtask_step_id` = #{processTaskStepId}
-          AND `user_uuid` =
-              #{userVo.uuid}
+          AND `user_uuid` = #{userUuid}
           AND `user_type` = #{userType}
     </update>
 
@@ -3497,7 +3496,7 @@
         <if test="userType != null and userType != ''">
             AND `user_type` = #{userType}
         </if>
-        <if test="userVo != null and userVo.uuid != null and userVo.uuid != ''">
+        <if test="userUuid != null and userUuid != ''">
             AND `user_uuid` = #{userUuid}
         </if>
     </delete>
