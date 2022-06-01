@@ -69,43 +69,6 @@ public class ProcessTaskAgentServiceImpl implements ProcessTaskAgentService {
     }
 
     @Override
-    public List<String> getToUserUuidListByFromUserUuidAndChannelUuid(String fromUserUuid, String channelUuid) {
-        List<String> toUserUuidList = new ArrayList<>();
-        List<String> fromUserUuidList = Arrays.asList(fromUserUuid);
-        List<ProcessTaskAgentVo> processTaskAgentList = processTaskAgentMapper.getProcessTaskAgentDetailListByFromUserUuidList(fromUserUuidList);
-        for (ProcessTaskAgentVo processTaskAgentVo : processTaskAgentList) {
-            String toUserUuid = processTaskAgentVo.getToUserUuid();
-            if (toUserUuidList.contains(toUserUuid)) {
-                continue;
-            }
-            boolean flag = false;
-            List<String> catalogUuidList = new ArrayList<>();
-            List<ProcessTaskAgentTargetVo> processTaskAgentTargetList = processTaskAgentVo.getProcessTaskAgentTargetVos();
-            for (ProcessTaskAgentTargetVo processTaskAgentTargetVo : processTaskAgentTargetList) {
-                String type = processTaskAgentTargetVo.getType();
-                if ("channel".equals(type)) {
-                    if (channelUuid.equals(processTaskAgentTargetVo.getTarget())) {
-                        flag = true;
-                        break;
-                    }
-                } else if ("catalog".equals(type)) {
-                    catalogUuidList.add(processTaskAgentTargetVo.getTarget());
-                }
-            }
-            if (!flag && CollectionUtils.isNotEmpty(catalogUuidList)) {
-                ChannelVo channelVo = channelMapper.getChannelByUuid(channelUuid);
-                CatalogVo catalogVo = catalogMapper.getCatalogByUuid(channelVo.getParentUuid());
-                List<String> upwardUuidList = catalogMapper.getUpwardUuidListByLftRht(catalogVo.getLft(), catalogVo.getRht());
-                flag = catalogUuidList.removeAll(upwardUuidList);
-            }
-            if (flag) {
-                toUserUuidList.add(toUserUuid);
-            }
-        }
-        return toUserUuidList;
-    }
-
-    @Override
     public List<String> getChannelUuidListByProcessTaskAgentId(Long processTaskAgentId) {
         List<String> resultList = new ArrayList<>();
         Set<String> catalogUuidList = new HashSet<>();
