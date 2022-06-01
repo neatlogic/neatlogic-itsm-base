@@ -15,5 +15,7 @@ public interface ProcessTaskAgentService {
 
     List<String> getFromUserUuidListByToUserUuidAndChannelUuid(String toUserUuid, String channelUuid);
 
+    List<String> getToUserUuidListByFromUserUuidAndChannelUuid(String fromUserUuid, String channelUuid);
+
     List<String> getChannelUuidListByProcessTaskAgentId(Long processTaskAgentId);
 }
