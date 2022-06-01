@@ -2392,6 +2392,14 @@
         from processtask_file pf
                  join processtask p on p.id = pf.processtask_id
         where `file_id` = #{value}
+        UNION
+        SELECT
+            c.`id`,
+            c.`channel_uuid` AS channelUuid
+        FROM `processtask_step_task_user_file` a
+        JOIN `processtask_step_task` b ON b.`id` = a.`processtask_step_task_id`
+        JOIN `processtask` c ON c.`id` = b.`processtask_id`
+        WHERE a.`file_id` = #{value}
     </select>
 
     <select id="getProcessTaskStepTimerByProcessTaskStepId" parameterType="java.lang.Long"
