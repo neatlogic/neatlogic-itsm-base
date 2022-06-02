@@ -225,8 +225,8 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 processTaskStepTaskVoMap.put(processTaskStepTaskVo.getId(), processTaskStepTaskVo);
             }
 
-            List<ProcessTaskStepTaskUserAgentVo> processTaskStepTaskUserAgentList = processTaskStepTaskMapper.getProcessTaskStepTaskUserAgentListByStepTaskIdList(stepTaskIdList);
-            Map<Long, ProcessTaskStepTaskUserAgentVo> processTaskStepTaskUserAgentMap = processTaskStepTaskUserAgentList.stream().collect(Collectors.toMap(e -> e.getProcessTaskStepTaskUserId(), e -> e));
+//            List<ProcessTaskStepTaskUserAgentVo> processTaskStepTaskUserAgentList = processTaskStepTaskMapper.getProcessTaskStepTaskUserAgentListByStepTaskIdList(stepTaskIdList);
+//            Map<Long, ProcessTaskStepTaskUserAgentVo> processTaskStepTaskUserAgentMap = processTaskStepTaskUserAgentList.stream().collect(Collectors.toMap(e -> e.getProcessTaskStepTaskUserId(), e -> e));
             List<ProcessTaskStepTaskUserVo> stepTaskUserList = processTaskStepTaskMapper.getStepTaskUserByStepTaskIdList(stepTaskIdList);
             for (ProcessTaskStepTaskUserVo stepTaskUserVo : stepTaskUserList) {
                 if (Objects.equals(stepTaskUserVo.getIsDelete(), 1)) {
@@ -246,11 +246,11 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 String userUuid = stepTaskUserVo.getUserUuid();
                 processTaskStepUserVo.setUserUuid(userUuid);
 
-                ProcessTaskStepTaskUserAgentVo processTaskStepTaskUserAgentVo = processTaskStepTaskUserAgentMap.get(stepTaskUserVo.getId());
-                if (processTaskStepTaskUserAgentVo != null) {
-                    processTaskStepWorkerVo.setUuid(processTaskStepTaskUserAgentVo.getUserUuid());
-                    processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
-                }
+//                ProcessTaskStepTaskUserAgentVo processTaskStepTaskUserAgentVo = processTaskStepTaskUserAgentMap.get(stepTaskUserVo.getId());
+//                if (processTaskStepTaskUserAgentVo != null) {
+//                    processTaskStepWorkerVo.setUuid(processTaskStepTaskUserAgentVo.getUserUuid());
+//                    processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
+//                }
 
                 if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
                     if (runningSubtaskUserUuidSet.contains(userUuid)) {
