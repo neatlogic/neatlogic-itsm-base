@@ -2,7 +2,7 @@ package codedriver.framework.process.exception.processtask;
 
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 
-public class ProcessTaskAutomaticNotAllowNextStepsException extends ProcessTaskRuntimeException  {
+public class ProcessTaskAutomaticNotAllowNextStepsException extends ProcessTaskRuntimeException {
 
 	private static final long serialVersionUID = -7145916738483615561L;
 

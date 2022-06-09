@@ -31,7 +31,7 @@ import codedriver.framework.process.dto.*;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.dto.score.ProcessTaskScoreVo;
 import codedriver.framework.process.dto.score.ScoreTemplateDimensionVo;
-import codedriver.framework.process.exception.core.ProcessTaskException;
+import codedriver.framework.process.exception.processtask.ProcessTaskException;
 import codedriver.framework.process.exception.core.ProcessTaskRuntimeException;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
