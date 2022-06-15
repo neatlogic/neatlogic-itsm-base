@@ -2261,7 +2261,7 @@
 
     <select id="getProcessTaskColumnByIndexKeyword"
             resultType="codedriver.framework.process.dto.ProcessTaskVo">
-        SELECT distinct pt.`${targetType}` as ${columnPro}
+        SELECT pt.`${targetType}` as ${columnPro}
         FROM processtask pt
         JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_field` = #{targetType}
         JOIN `fulltextindex_target_process` ft ON ff.`target_id` = ft.`target_id` AND ft.`target_type` = 'processtask'
