@@ -2189,7 +2189,8 @@
     <select id="getProcessTaskIdByChannelUuidLimitOne" parameterType="java.lang.String" resultType="java.lang.Long">
         SELECT `id`
         FROM `processtask`
-        WHERE `is_deleted` = 0 and `channel_uuid` = #{value}
+        WHERE `is_deleted` = 0
+          and `channel_uuid` = #{value}
         LIMIT 1
     </select>
 
@@ -2261,15 +2262,14 @@
 
     <select id="getProcessTaskColumnByIndexKeyword"
             resultType="codedriver.framework.process.dto.ProcessTaskVo">
-        SELECT pt.`${targetType}` as ${columnPro}
+        SELECT distinct pt.`${targetType}` as ${columnPro},count( ff.counter ) as counter
         FROM processtask pt
         JOIN fulltextindex_field_process ff ON ff.target_id = pt.id AND ff.`target_field` = #{targetType}
-        JOIN `fulltextindex_target_process` ft ON ff.`target_id` = ft.`target_id` AND ft.`target_type` = 'processtask'
         JOIN `fulltextindex_word` fw ON fw.id = ff.`word_id` AND fw.word IN
         <foreach collection="keywordList" item="keyword" separator="," open="(" close=")">
             #{keyword}
         </foreach>
-        GROUP BY pt.`${targetType}`
+        GROUP BY pt.id,pt.`${targetType}`
         ORDER BY count(ff.counter) DESC
         limit 0,#{limit}
     </select>
@@ -2393,12 +2393,11 @@
                  join processtask p on p.id = pf.processtask_id
         where `file_id` = #{value}
         UNION
-        SELECT
-            c.`id`,
-            c.`channel_uuid` AS channelUuid
+        SELECT c.`id`,
+               c.`channel_uuid` AS channelUuid
         FROM `processtask_step_task_user_file` a
-        JOIN `processtask_step_task` b ON b.`id` = a.`processtask_step_task_id`
-        JOIN `processtask` c ON c.`id` = b.`processtask_id`
+                 JOIN `processtask_step_task` b ON b.`id` = a.`processtask_step_task_id`
+                 JOIN `processtask` c ON c.`id` = b.`processtask_id`
         WHERE a.`file_id` = #{value}
     </select>
 
