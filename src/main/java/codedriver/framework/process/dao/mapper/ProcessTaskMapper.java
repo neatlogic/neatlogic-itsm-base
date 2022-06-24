@@ -6,6 +6,7 @@
 package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.dto.AuthenticationInfoVo;
+import codedriver.framework.file.dto.FileVo;
 import codedriver.framework.process.dto.*;
 import codedriver.framework.process.dto.automatic.ProcessTaskStepAutomaticRequestVo;
 import org.apache.ibatis.annotations.Param;
@@ -321,6 +322,18 @@ public interface ProcessTaskMapper {
     List<ProcessTaskFormVo> getProcessTaskFormContentListByContentLikeKeyword(String formstaticlist);
 
     List<ProcessTaskFormVo> getProcessTaskFormContentList();
+
+    List<FileVo> getFileListByProcessTaskId(Long processTaskId);
+
+    List<FileVo> getFileDetailListByProcessTaskId(Long processTaskId);
+
+    /**
+     * 根据工单ID查询所有子任务附件
+     *
+     * @param processTaskId 工单ID
+     * @return
+     */
+    List<FileVo> getProcessTaskStepTaskFileListByProcessTaskId(Long processTaskId);
 
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
