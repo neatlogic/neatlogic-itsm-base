@@ -64,6 +64,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataListByType(String type);
 
+    List<ProcessTaskFormAttributeDataVo> getProcessTaskFormAttributeDataListByProcessTaskIdAndFormType(@Param("processTaskId") Long processTaskId, @Param("type") String type);
+
     List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskIdList(List<Long> existsFormProcessTaskIdList);
 
     List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);

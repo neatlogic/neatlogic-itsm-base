@@ -326,6 +326,18 @@
         ORDER BY `processtask_id`
     </select>
 
+    <select id="getProcessTaskFormAttributeDataListByProcessTaskIdAndFormType"
+            resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
+        SELECT `processtask_id`  AS processTaskId,
+               `attribute_uuid`  AS attributeUuid,
+               `attribute_label` AS attributeLabel,
+               `type`            AS type,
+               `data`,
+               `sort`
+        FROM `processtask_formattribute_data`
+        WHERE `processtask_id` = #{processTaskId} AND `type` = #{type}
+    </select>
+
     <select id="getProcessTaskStepFormAttributeDataByProcessTaskIdList" parameterType="java.util.List"
             resultType="codedriver.framework.process.dto.ProcessTaskFormAttributeDataVo">
         SELECT `processtask_id` AS processTaskId,
