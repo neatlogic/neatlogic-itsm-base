@@ -4,6 +4,7 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.UserVo;
+import codedriver.framework.process.constvalue.ProcessTaskChannelFactory;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
@@ -169,6 +170,11 @@ public class ProcessTaskVo extends BasePageVo {
 
     @EntityField(name = "工单来源", type = ApiParamType.STRING)
     private String source = "process";
+
+    @EntityField(name = "上报渠道", type = ApiParamType.STRING)
+    private String reportChannel;
+    @EntityField(name = "上报渠道中文名", type = ApiParamType.STRING)
+    private String reportChannelText;
 
     @EntityField(name = "是否已删除，1：是，0：否", type = ApiParamType.INTEGER)
     private Integer isDeleted = 0;
@@ -774,5 +780,20 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setIsDeleted(Integer isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public String getReportChannel() {
+        return reportChannel;
+    }
+
+    public void setReportChannel(String reportChannel) {
+        this.reportChannel = reportChannel;
+    }
+
+    public String getReportChannelText() {
+        if (StringUtils.isNotBlank(reportChannel)) {
+            reportChannelText = ProcessTaskChannelFactory.getChannelText(reportChannel);
+        }
+        return reportChannelText;
     }
 }
