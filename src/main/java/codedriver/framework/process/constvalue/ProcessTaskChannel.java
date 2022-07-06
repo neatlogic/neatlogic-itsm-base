@@ -3,7 +3,8 @@ package codedriver.framework.process.constvalue;
 public enum ProcessTaskChannel implements IProcessTaskChannel {
 
     PC("pc", "PC端"),
-    MOBILE("mobile", "移动端");
+    MOBILE("mobile", "移动端"),
+    SYSTEM("system", "系统");
 
     private String value;
     private String text;
