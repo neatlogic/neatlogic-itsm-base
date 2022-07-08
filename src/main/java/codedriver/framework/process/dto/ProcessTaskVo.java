@@ -171,11 +171,6 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "工单来源", type = ApiParamType.STRING)
     private String source = "process";
 
-    @EntityField(name = "上报渠道", type = ApiParamType.STRING)
-    private String reportChannel;
-    @EntityField(name = "上报渠道中文名", type = ApiParamType.STRING)
-    private String reportChannelText;
-
     @EntityField(name = "是否已删除，1：是，0：否", type = ApiParamType.INTEGER)
     private Integer isDeleted = 0;
 
@@ -782,18 +777,4 @@ public class ProcessTaskVo extends BasePageVo {
         this.isDeleted = isDeleted;
     }
 
-    public String getReportChannel() {
-        return reportChannel;
-    }
-
-    public void setReportChannel(String reportChannel) {
-        this.reportChannel = reportChannel;
-    }
-
-    public String getReportChannelText() {
-        if (StringUtils.isNotBlank(reportChannel)) {
-            reportChannelText = ProcessTaskChannelFactory.getChannelText(reportChannel);
-        }
-        return reportChannelText;
-    }
 }

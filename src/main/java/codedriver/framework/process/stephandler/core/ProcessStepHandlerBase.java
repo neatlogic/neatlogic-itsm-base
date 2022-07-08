@@ -1703,7 +1703,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             if (StringUtils.isNotBlank(source)) {
                 processTaskVo.setSource(source);
             }
-            processTaskVo.setReportChannel(paramObj.getString("reportChannel"));
             IProcessCrossoverMapper processCrossoverMapper = CrossoverServiceFactory.getApi(IProcessCrossoverMapper.class);
             ProcessVo processVo = processCrossoverMapper.getProcessByUuid(currentProcessTaskStepVo.getProcessUuid());
             /* 对流程配置进行散列处理 **/

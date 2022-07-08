@@ -88,7 +88,6 @@
         <result column="is_show" property="isShow"/>
         <result column="serial_number" property="serialNumber"/>
         <result column="source" property="source"/>
-        <result column="report_channel" property="reportChannel"/>
         <result column="is_deleted" property="isDeleted"/>
         <!--<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
             <result property="uuid" column="owner"/>
@@ -124,7 +123,6 @@
                `is_show`,
                `serial_number`,
                `source`,
-               `report_channel`,
                `is_deleted`
         FROM `processtask`
     </sql>
@@ -2982,8 +2980,7 @@
         `expire_time`,
         `worktime_uuid`,
         `serial_number`,
-        `source`,
-        `report_channel`
+        `source`
         )
         VALUES
         (
@@ -3000,8 +2997,7 @@
         #{expireTime},
         #{worktimeUuid},
         #{serialNumber},
-        #{source},
-        #{reportChannel}
+        #{source}
         )
     </insert>
 
