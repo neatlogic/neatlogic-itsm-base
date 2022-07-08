@@ -1,6 +1,6 @@
 package codedriver.framework.process.constvalue;
 
-public enum ProcessTaskSource implements IProcessTaskChannel {
+public enum ProcessTaskSource implements IProcessTaskSource {
 
     PC("pc", "PC端"),
     MOBILE("mobile", "移动端"),

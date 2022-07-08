@@ -11,7 +11,7 @@ package codedriver.framework.process.constvalue;
  * @author laiwt
  * @since 2022/7/6 14:17
  **/
-public interface IProcessTaskChannel {
+public interface IProcessTaskSource {
 
     String getValue();
 

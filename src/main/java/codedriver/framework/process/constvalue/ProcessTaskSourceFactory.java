@@ -11,18 +11,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ProcessTaskChannelFactory {
+public class ProcessTaskSourceFactory {
 
     private static final Map<String, String> channelValueTextMap = new HashMap<>();
 
     static {
         Reflections reflections = new Reflections("codedriver");
-        Set<Class<? extends IProcessTaskChannel>> clazz = reflections.getSubTypesOf(IProcessTaskChannel.class);
-        for (Class<? extends IProcessTaskChannel> c : clazz) {
+        Set<Class<? extends IProcessTaskSource>> clazz = reflections.getSubTypesOf(IProcessTaskSource.class);
+        for (Class<? extends IProcessTaskSource> c : clazz) {
             try {
                 Object[] objects = c.getEnumConstants();
                 for (Object o : objects) {
-                    channelValueTextMap.put(((IProcessTaskChannel) o).getValue(), ((IProcessTaskChannel) o).getText());
+                    channelValueTextMap.put(((IProcessTaskSource) o).getValue(), ((IProcessTaskSource) o).getText());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
