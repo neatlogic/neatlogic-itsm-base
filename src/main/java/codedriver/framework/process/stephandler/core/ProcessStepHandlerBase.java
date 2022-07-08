@@ -77,7 +77,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static AuthenticationInfoService authenticationInfoService;
     protected static ProcessTaskScoreMapper processTaskScoreMapper;
     protected static FormMapper formMapper;
-//    protected static IProcessCrossoverMapper processCrossoverMapper;
+    //    protected static IProcessCrossoverMapper processCrossoverMapper;
     protected static ChannelMapper channelMapper;
     protected static NotifyMapper notifyMapper;
     protected static ProcessTaskSerialNumberMapper processTaskSerialNumberMapper;
@@ -1002,6 +1002,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         this.complete(currentProcessTaskStepVo);
         return 1;
     }
+
     @Override
     public final int reapproval(ProcessTaskStepVo currentProcessTaskStepVo) {
         /* 锁定当前流程 **/
@@ -2070,8 +2071,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     /**
      * 标识失效步骤，将失效步骤的正向流转连线isHit设置为-1
+     *
      * @param currentProcessTaskStepId 当前步骤id
-     * @param activeStepIdSet 激活步骤列表
+     * @param activeStepIdSet          激活步骤列表
      */
     private void identifyPostInvalidStepRelIsHit(Long currentProcessTaskStepId, Set<Long> activeStepIdSet) {
         List<Long> unactiveStepIdList = null;
@@ -2100,7 +2102,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 List<ProcessTaskStepRelVo> fromStepRelList = toStepIdMap.computeIfAbsent(unactiveStepId, k -> new ArrayList<>());
                 for (ProcessTaskStepRelVo processTaskStepRelVo : fromStepRelList) {
                     if (Objects.equals(currentProcessTaskStepId, processTaskStepRelVo.getFromProcessTaskStepId())
-                        || (Objects.equals(unactiveStepId, processTaskStepRelVo.getToProcessTaskStepId()))) {
+                            || (Objects.equals(unactiveStepId, processTaskStepRelVo.getToProcessTaskStepId()))) {
                         continue;
                     }
                     if (processTaskStepRelVo.getType().equals(ProcessFlowDirection.FORWARD.getValue())) {
@@ -2120,6 +2122,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     /**
      * 将当前步骤的所有后续步骤间的连线的isHit设置为0
+     *
      * @param currentProcessTaskStepId 当前步骤id
      */
     private void resetPostStepRelIsHit(Long currentProcessTaskStepId) {
@@ -2138,6 +2141,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     /**
      * 将当前步骤的所有后续步骤中流转过的步骤都进行挂起操作
+     *
      * @param currentProcessTaskStepVo
      */
     private void hangPostStep(ProcessTaskStepVo currentProcessTaskStepVo) {
@@ -2179,7 +2183,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (handler != null) {
                     toStepVo.setStartProcessTaskStepId(currentProcessTaskStepVo.getStartProcessTaskStepId());
                     toStepVo.setFromProcessTaskStepId(currentProcessTaskStepVo.getId());
-                    doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(toStepVo){
+                    doNext(ProcessTaskOperationType.STEP_HANG, new ProcessStepThread(toStepVo) {
                         @Override
                         protected void myExecute() {
                             handler.hang(toStepVo);

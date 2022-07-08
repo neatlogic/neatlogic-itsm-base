@@ -4,6 +4,8 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.dto.BasePageVo;
 import codedriver.framework.dto.TeamVo;
 import codedriver.framework.dto.UserVo;
+import codedriver.framework.process.constvalue.ProcessTaskSourceFactory;
+import codedriver.framework.process.constvalue.ProcessTaskSource;
 import codedriver.framework.process.dto.score.ScoreTemplateVo;
 import codedriver.framework.restful.annotation.EntityField;
 import codedriver.framework.util.SnowflakeUtil;
@@ -168,7 +170,9 @@ public class ProcessTaskVo extends BasePageVo {
     private Integer canEditFocusUser;
 
     @EntityField(name = "工单来源", type = ApiParamType.STRING)
-    private String source = "process";
+    private String source = ProcessTaskSource.PC.getValue();
+    @EntityField(name = "工单来源中文名", type = ApiParamType.STRING)
+    private String sourceName;
 
     @EntityField(name = "是否已删除，1：是，0：否", type = ApiParamType.INTEGER)
     private Integer isDeleted = 0;
@@ -774,5 +778,12 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setIsDeleted(Integer isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public String getSourceName() {
+        if (StringUtils.isNotBlank(source)) {
+            sourceName = ProcessTaskSourceFactory.getSourceName(source);
+        }
+        return sourceName;
     }
 }
