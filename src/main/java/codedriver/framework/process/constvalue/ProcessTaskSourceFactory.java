@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class ProcessTaskSourceFactory {
 
-    private static final Map<String, String> channelValueTextMap = new HashMap<>();
+    private static final Map<String, String> sourcelValueTextMap = new HashMap<>();
 
     static {
         Reflections reflections = new Reflections("codedriver");
@@ -22,7 +22,7 @@ public class ProcessTaskSourceFactory {
             try {
                 Object[] objects = c.getEnumConstants();
                 for (Object o : objects) {
-                    channelValueTextMap.put(((IProcessTaskSource) o).getValue(), ((IProcessTaskSource) o).getText());
+                    sourcelValueTextMap.put(((IProcessTaskSource) o).getValue(), ((IProcessTaskSource) o).getText());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -30,8 +30,8 @@ public class ProcessTaskSourceFactory {
         }
     }
 
-    public static String getChannelText(String value) {
-        return channelValueTextMap.get(value);
+    public static String getSourceName(String value) {
+        return sourcelValueTextMap.get(value);
     }
 
 }

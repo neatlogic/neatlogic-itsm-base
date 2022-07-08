@@ -782,7 +782,7 @@ public class ProcessTaskVo extends BasePageVo {
 
     public String getSourceName() {
         if (StringUtils.isNotBlank(source)) {
-            sourceName = ProcessTaskSourceFactory.getChannelText(source);
+            sourceName = ProcessTaskSourceFactory.getSourceName(source);
         }
         return sourceName;
     }
