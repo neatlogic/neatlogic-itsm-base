@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
+ * Copyright(c) 2022 TechSure Co., Ltd. All Rights Reserved.
  * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
  */
 
@@ -9,7 +9,7 @@ import codedriver.framework.applicationlistener.core.ModuleInitializedListenerBa
 import codedriver.framework.asynchronization.threadlocal.TenantContext;
 import codedriver.framework.bootstrap.CodedriverWebApplicationContext;
 import codedriver.framework.common.RootComponent;
-import codedriver.framework.dto.ModuleVo;
+import codedriver.framework.dto.module.ModuleVo;
 import codedriver.framework.process.constvalue.ProcessStepType;
 import codedriver.framework.process.dto.ProcessStepHandlerVo;
 import org.springframework.core.annotation.Order;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RootComponent
 @Order(10)
 public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
-	private static final Map<String, IProcessStepHandler> componentMap = new HashMap<String, IProcessStepHandler>();
+	private static final Map<String, IProcessStepHandler> componentMap = new HashMap<>();
 	private static final List<ProcessStepHandlerVo> processStepHandlerList = new ArrayList<>();
 
 	public static IProcessStepHandler getHandler(String handler) {
