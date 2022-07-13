@@ -105,7 +105,8 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         AuthenticationInfoVo authenticationInfoVo = null;
         if (Objects.equals(UserContext.get().getUserUuid(), userUuid)) {
             authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
-        } else {
+        }
+        if (authenticationInfoVo == null) {
             authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(userUuid);
         }
         List<String> teamUuidList = authenticationInfoVo.getTeamUuidList();
