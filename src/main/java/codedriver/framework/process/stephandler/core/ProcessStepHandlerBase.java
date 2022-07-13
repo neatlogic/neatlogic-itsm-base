@@ -1249,6 +1249,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         /* 处理历史记录 **/
         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
+        processTaskStepVo.getParamObj().put("source", currentProcessTaskVo.getParamObj().getString("source"));
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.ABORTPROCESSTASK);
         /* 触发通知 **/
         IProcessStepHandlerUtil.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.ABORTPROCESSTASK);
@@ -1315,6 +1316,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         /* 处理历史记录 **/
         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
+        processTaskStepVo.getParamObj().put("source", currentProcessTaskVo.getParamObj().getString("source"));
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.RECOVERPROCESSTASK);
         /* 触发通知 **/
         IProcessStepHandlerUtil.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.RECOVERPROCESSTASK);
@@ -2423,6 +2425,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
         processTaskStepVo.getParamObj().put(ProcessTaskAuditDetailType.SCORE.getParamName(), contentObj);
+        processTaskStepVo.getParamObj().put("source", paramObj.getString("source"));
         /* 生成活动 */
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.SCORE);
         /* 触发通知 **/

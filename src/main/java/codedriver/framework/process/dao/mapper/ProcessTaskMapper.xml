@@ -360,6 +360,7 @@
                `processtask_step_id` AS processTaskStepId,
                `content_hash`        AS contentHash,
                `type`,
+               `source`,
                `fcd`,
                `fcu`,
                `lcd`,
@@ -376,6 +377,7 @@
                `processtask_step_id` AS processTaskStepId,
                `content_hash`        AS contentHash,
                `type`,
+               `source`,
                `fcd`,
                `fcu`,
                `lcd`,
@@ -939,6 +941,7 @@
         <result column="step_status" property="stepStatus"/>
         <result column="description_hash" property="descriptionHash"/>
         <result column="original_user" property="originalUser"/>
+        <result column="source" property="source"/>
         <collection property="auditDetailList" ofType="codedriver.framework.process.dto.ProcessTaskStepAuditDetailVo">
             <result column="audit_id" property="auditId"/>
             <result column="type" property="type"/>
@@ -958,6 +961,7 @@
         a.`step_status`,
         a.`original_user`,
         a.`description_hash`,
+        a.`source`,
         b.`audit_id`,
         b.`type`,
         b.`old_content`,
@@ -1220,6 +1224,7 @@
         `user_uuid` as userUuid,
         `action_time` as actionTime,
         `action`,
+        `source`,
         `step_status` as stepStatus,
         `original_user` as
         originalUser
@@ -1333,6 +1338,7 @@
                `processtask_step_id` AS processTaskStepId,
                `content_hash`        AS contentHash,
                `type`,
+               `source`,
                `fcd`,
                `fcu`,
                `lcd`,
@@ -2794,7 +2800,8 @@
         `action`,
         `step_status`,
         `original_user`,
-        `description_hash`
+        `description_hash`,
+        `source`
         )
         VALUES
         (
@@ -2806,7 +2813,8 @@
         #{action},
         #{stepStatus},
         #{originalUser},
-        #{descriptionHash}
+        #{descriptionHash},
+        #{source}
         )
     </insert>
 
@@ -3047,6 +3055,7 @@
                                                 `processtask_step_id`,
                                                 `content_hash`,
                                                 `type`,
+                                                `source`,
                                                 `fcd`,
                                                 `fcu`,
                                                 `lcd`,
@@ -3056,6 +3065,7 @@
                 #{processTaskStepId},
                 #{contentHash},
                 #{type},
+                #{source},
                 NOW(3),
                 #{fcu},
                 NOW(3),
@@ -3431,6 +3441,7 @@
     <update id="updateProcessTaskStepContentById">
         UPDATE `processtask_step_content`
         SET `content_hash` = #{contentHash},
+            `source`       = #{source},
             `lcd`          = NOW(3),
             `lcu`          = #{lcu}
         WHERE `id` = #{id}

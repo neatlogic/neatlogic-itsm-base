@@ -35,6 +35,10 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 	private Integer isDeletable;
 	@JSONField(serialize=false)
 	private String contentHash;
+	@EntityField(name = "来源", type = ApiParamType.STRING)
+	private String source;
+	@EntityField(name = "来源中文名", type = ApiParamType.STRING)
+	private String sourceName;
 	public ProcessTaskStepReplyVo() {}
 	public ProcessTaskStepReplyVo(ProcessTaskStepContentVo processTaskStepContentVo) {
 	    super.setFcd(processTaskStepContentVo.getFcd());
@@ -46,6 +50,8 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 	    this.processTaskStepId = processTaskStepContentVo.getProcessTaskStepId();
 	    this.type = processTaskStepContentVo.getType();
 	    this.contentHash = processTaskStepContentVo.getContentHash();
+	    this.source = processTaskStepContentVo.getSource();
+	    this.sourceName = processTaskStepContentVo.getSourceName();
 	}
     public Long getId() {
         return id;
@@ -133,4 +139,19 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
         this.contentHash = contentHash;
     }
 
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getSourceName() {
+		return sourceName;
+	}
+
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
+	}
 }

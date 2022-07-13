@@ -1,9 +1,11 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.process.constvalue.ProcessTaskSourceFactory;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.util.SnowflakeUtil;
+import org.apache.commons.lang3.StringUtils;
 
 public class ProcessTaskStepContentVo extends BaseEditorVo {
 	private Long id;
@@ -11,6 +13,8 @@ public class ProcessTaskStepContentVo extends BaseEditorVo {
 	private Long processTaskStepId;
 	private String contentHash;
 	private String type;
+	private String source;
+	private String sourceName;
 	@JSONField(serialize=false)
     private Boolean isAutoGenerateId = true;
 
@@ -73,12 +77,27 @@ public class ProcessTaskStepContentVo extends BaseEditorVo {
         this.type = type;
     }
 
-    public Boolean getIsAutoGenerateId() {
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public Boolean getIsAutoGenerateId() {
         return isAutoGenerateId;
     }
 
     public void setIsAutoGenerateId(Boolean isAutoGenerateId) {
         this.isAutoGenerateId = isAutoGenerateId;
     }
+
+	public String getSourceName() {
+		if (StringUtils.isNotBlank(source)) {
+			sourceName = ProcessTaskSourceFactory.getSourceName(source);
+		}
+		return sourceName;
+	}
 
 }

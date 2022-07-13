@@ -5,6 +5,8 @@ import java.util.List;
 
 import codedriver.framework.dto.UserVo;
 import codedriver.framework.dto.WorkAssignmentUnitVo;
+import codedriver.framework.process.constvalue.ProcessTaskSource;
+import codedriver.framework.process.constvalue.ProcessTaskSourceFactory;
 import codedriver.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +43,10 @@ public class ProcessTaskStepAuditVo {
     private String originalUser;
 	@JSONField(serialize = false)
 	private String descriptionHash;
+	@EntityField(name = "来源", type = ApiParamType.STRING)
+	private String source;
+	@EntityField(name = "来源中文名", type = ApiParamType.STRING)
+	private String sourceName;
 
 	public ProcessTaskStepAuditVo() { 
 	}
@@ -174,5 +180,20 @@ public class ProcessTaskStepAuditVo {
 
 	public void setDescriptionHash(String descriptionHash) {
 		this.descriptionHash = descriptionHash;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getSourceName() {
+		if (StringUtils.isNotBlank(source)) {
+			sourceName = ProcessTaskSourceFactory.getSourceName(source);
+		}
+		return sourceName;
 	}
 }
