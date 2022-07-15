@@ -2787,6 +2787,25 @@
                 #{newContent})
     </insert>
 
+    <insert id="batchInsertProcessTaskStepAuditDetail" parameterType="java.util.List">
+        INSERT INTO `processtask_step_audit_detail`
+            (
+              `audit_id`,
+              `type`,
+              `old_content`,
+              `new_content`
+            )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.auditId},
+            #{item.type},
+            #{item.oldContent},
+            #{item.newContent}
+            )
+        </foreach>
+    </insert>
+
     <insert id="insertProcessTaskStepAudit" parameterType="codedriver.framework.process.dto.ProcessTaskStepAuditVo">
         <!--		<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">-->
         <!--			select LAST_INSERT_ID() as id-->
@@ -2816,6 +2835,36 @@
         #{descriptionHash},
         #{source}
         )
+    </insert>
+
+    <insert id="batchInsertProcessTaskStepAudit" parameterType="java.util.List">
+        INSERT INTO `processtask_step_audit` (
+        `id`,
+        `processtask_id`,
+        `processtask_step_id`,
+        `user_uuid`,
+        `action_time`,
+        `action`,
+        `step_status`,
+        `original_user`,
+        `description_hash`,
+        `source`
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},
+            #{item.processTaskId},
+            #{item.processTaskStepId},
+            #{item.userUuid},
+            #{item.actionTime},
+            #{item.action},
+            #{item.stepStatus},
+            #{item.originalUser},
+            #{item.descriptionHash},
+            #{item.source}
+            )
+        </foreach>
     </insert>
 
     <insert id="insertProcessTaskForm" parameterType="codedriver.framework.process.dto.ProcessTaskFormVo">
@@ -3047,6 +3096,17 @@
     <insert id="insertIgnoreProcessTaskContent" parameterType="codedriver.framework.process.dto.ProcessTaskContentVo">
         INSERT IGNORE INTO `processtask_content` (`content`, `hash`)
         VALUES (#{content}, #{hash})
+    </insert>
+
+    <insert id="batchInsertIgnoreProcessTaskContent" parameterType="codedriver.framework.process.dto.ProcessTaskContentVo">
+        INSERT IGNORE INTO `processtask_content` (`content`, `hash`)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.content},
+            #{item.hash}
+            )
+        </foreach>
     </insert>
 
     <insert id="insertProcessTaskStepContent" parameterType="codedriver.framework.process.dto.ProcessTaskStepContentVo">

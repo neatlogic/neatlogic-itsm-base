@@ -350,6 +350,8 @@ public interface ProcessTaskMapper {
 
     int insertIgnoreProcessTaskContent(ProcessTaskContentVo processTaskContentVo);
 
+    int batchInsertIgnoreProcessTaskContent(List<ProcessTaskContentVo> list);
+
     int insertProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
 
     int replaceProcessTaskStep(ProcessTaskStepVo processTaskStepVo);
@@ -364,7 +366,11 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepAudit(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
+    int batchInsertProcessTaskStepAudit(List<ProcessTaskStepAuditVo> list);
+
     int insertProcessTaskStepAuditDetail(ProcessTaskStepAuditDetailVo processTaskStepAuditDetailVo);
+
+    int batchInsertProcessTaskStepAuditDetail(List<ProcessTaskStepAuditDetailVo> list);
 
     int insertIgnoreProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
