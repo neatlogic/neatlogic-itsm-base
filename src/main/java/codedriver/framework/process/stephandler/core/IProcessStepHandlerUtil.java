@@ -7,6 +7,8 @@ import codedriver.framework.process.dto.ProcessTaskStepVo;
 import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.stepremind.core.IProcessTaskStepRemindType;
 
+import java.util.List;
+
 /**
  * @Title: ProcessStepHandlerUtilService
  * @Package codedriver.framework.process.stephandler.core
@@ -113,6 +115,15 @@ public interface IProcessStepHandlerUtil {
      * @Returns:boolean
      **/
     public boolean assignWorkerValid(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    /**
+     * 找出流转到哪些步骤时，需要指定targetStepId步骤的处理人
+     * @param processTaskId 工单id
+     * @param currentStepId 当前流转步骤id
+     * @param targetStepId 配置了由当前步骤处理人指定处理人的步骤id
+     * @return
+     */
+    List<Long> getNextStepIdList(Long processTaskId, Long currentStepId, Long targetStepId);
 
     /**
      * @Description: 保存步骤提醒

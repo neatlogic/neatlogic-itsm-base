@@ -28,6 +28,10 @@ public class AssignableWorkerStepVo {
     private JSONArray rangeList;
     @EntityField(name = "目标列表", type = ApiParamType.JSONARRAY)
     private JSONArray groupList;
+    @EntityField(name = "流转到下列步骤时才需要指定处理人", type = ApiParamType.JSONARRAY)
+    private List<Long> nextStepIdList;
+    @EntityField(name = "流转到下列步骤时才需要指定处理人", type = ApiParamType.JSONARRAY)
+    private List<String> nextStepUuidList;
 
     public Long getId() {
         return id;
@@ -75,5 +79,21 @@ public class AssignableWorkerStepVo {
 
     public void setGroupList(JSONArray groupList) {
         this.groupList = groupList;
+    }
+
+    public List<Long> getNextStepIdList() {
+        return nextStepIdList;
+    }
+
+    public void setNextStepIdList(List<Long> nextStepIdList) {
+        this.nextStepIdList = nextStepIdList;
+    }
+
+    public List<String> getNextStepUuidList() {
+        return nextStepUuidList;
+    }
+
+    public void setNextStepUuidList(List<String> nextStepUuidList) {
+        this.nextStepUuidList = nextStepUuidList;
     }
 }
