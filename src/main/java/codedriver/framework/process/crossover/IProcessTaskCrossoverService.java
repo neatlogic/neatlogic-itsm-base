@@ -64,6 +64,13 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
 
     List<AssignableWorkerStepVo> getAssignableWorkerStepList(ProcessTaskStepVo currentProcessTaskStepVo);
 
+    /**
+     * 获取需指派处理人的步骤列表
+     * @param currentProcessTaskStepVo 工单步骤信息
+     * @return
+     */
+    Map<Long, List<AssignableWorkerStepVo>> getAssignableWorkerStepMap(ProcessTaskStepVo currentProcessTaskStepVo);
+
     List<ProcessTaskStepVo> getForwardNextStepListByProcessTaskStepId(Long processTaskStepId);
 
     List<ProcessTaskStepVo> getBackwardNextStepListByProcessTaskStepId(Long processTaskStepId);
