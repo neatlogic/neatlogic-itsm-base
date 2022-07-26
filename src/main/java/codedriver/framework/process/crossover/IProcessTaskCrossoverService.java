@@ -62,8 +62,6 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      */
     JSONObject batchCompleteProcessTaskStep(JSONObject jsonObj);
 
-    List<AssignableWorkerStepVo> getAssignableWorkerStepList(ProcessTaskStepVo currentProcessTaskStepVo);
-
     /**
      * 获取需指派处理人的步骤列表
      * @param currentProcessTaskStepVo 工单步骤信息
