@@ -62,7 +62,19 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      */
     JSONObject batchCompleteProcessTaskStep(JSONObject jsonObj);
 
-    List<AssignableWorkerStepVo> getAssignableWorkerStepList(Long processTaskId, String processStepUuid);
+    /**
+     * 获取需指派处理人的步骤列表
+     * @param currentProcessTaskStepVo 工单步骤信息
+     * @return
+     */
+    Map<Long, List<AssignableWorkerStepVo>> getAssignableWorkerStepMap(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    /**
+     * 设置下一步骤列表
+     *
+     * @param processTaskStepVo 步骤信息
+     */
+    void setNextStepList(ProcessTaskStepVo processTaskStepVo);
 
     List<ProcessTaskStepVo> getForwardNextStepListByProcessTaskStepId(Long processTaskStepId);
 
