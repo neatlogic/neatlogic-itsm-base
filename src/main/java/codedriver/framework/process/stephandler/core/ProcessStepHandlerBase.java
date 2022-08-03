@@ -1734,7 +1734,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             if (policyHandler == null) {
                 throw new ProcessTaskSerialNumberPolicyHandlerNotFoundException(processTaskSerialNumberPolicyVo.getHandler());
             }
-            String serialNumber = policyHandler.genarate(processTaskSerialNumberPolicyVo);
+            String serialNumber = policyHandler.genarate(channelVo.getChannelTypeUuid());
             processTaskVo.setSerialNumber(serialNumber);
             processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTaskVo.getId(), serialNumber);
             /* 创建工单 **/

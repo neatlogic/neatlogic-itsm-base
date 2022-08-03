@@ -19,7 +19,7 @@ public interface IProcessTaskSerialNumberPolicyHandler {
     JSONObject makeupConfig(JSONObject jsonObj);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
-    String genarate(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo);
+    String genarate(String channelTypeUuid);
 
     int batchUpdateHistoryProcessTask(ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo);
 
