@@ -64,9 +64,7 @@
 		UPDATE `processtask_serial_number_policy`
 		SET
 		`handler` = #{handler},
-		`config` = #{configStr},
-		`serial_number_seed`
-		= #{serialNumberSeed}
+		`config` = #{configStr}
 		WHERE `channel_type_uuid` = #{channelTypeUuid}
 	</update>
 
