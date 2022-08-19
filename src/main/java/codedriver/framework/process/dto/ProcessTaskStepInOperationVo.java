@@ -16,6 +16,7 @@ public class ProcessTaskStepInOperationVo {
         this.processTaskId = processTaskId;
         this.processTaskStepId = processTaskStepId;
         this.operationType = operationType;
+        //设置数据默认有效时间为6秒
         this.expireTime = new Date(System.currentTimeMillis() + 6000);
     }
     public ProcessTaskStepInOperationVo(Long processTaskId, Long processTaskStepId, String operationType, Date expireTime) {
