@@ -12,6 +12,10 @@ public interface PriorityMapper {
 
 	List<PriorityVo> searchPriorityList(PriorityVo priorityVo);
 
+	int searchPriorityCountForMatrix(PriorityVo priorityVo);
+
+	List<PriorityVo> searchPriorityListForMatrix(PriorityVo priorityVo);
+
 	List<ValueTextVo> searchPriorityListForSelect(PriorityVo priorityVo);
 
 	int checkPriorityIsExists(String uuid);
