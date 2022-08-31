@@ -65,7 +65,7 @@
 		`uuid`,
 		`name`
 		FROM `priority`
-		WHERE `is_active` = #{isActive}
+		WHERE `is_active` = 1
 		<if test="keyword != null">
 			AND `name` LIKE CONCAT('%', #{keyword}, '%')
 		</if>
