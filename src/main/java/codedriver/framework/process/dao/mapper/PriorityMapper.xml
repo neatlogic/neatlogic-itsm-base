@@ -44,7 +44,7 @@
 		</if>
 	</select>
 
-	<select id="searchPriorityCountForMatrix" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="int" useCache="false">
+	<select id="searchPriorityCountForMatrix" parameterType="codedriver.framework.process.dto.PrioritySearchVo" resultType="int" useCache="false">
 		SELECT
 		COUNT(1)
 		FROM `priority`
@@ -60,7 +60,7 @@
 		</if>
 	</select>
 
-	<select id="searchPriorityListForMatrix" parameterType="codedriver.framework.process.dto.PriorityVo" resultType="codedriver.framework.process.dto.PriorityVo" useCache="false">
+	<select id="searchPriorityListForMatrix" parameterType="codedriver.framework.process.dto.PrioritySearchVo" resultType="codedriver.framework.process.dto.PriorityVo" useCache="false">
 		SELECT
 		`uuid`,
 		`name`

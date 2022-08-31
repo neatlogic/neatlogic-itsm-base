@@ -1,6 +1,7 @@
 package codedriver.framework.process.dao.mapper;
 
 import codedriver.framework.common.dto.ValueTextVo;
+import codedriver.framework.process.dto.PrioritySearchVo;
 import codedriver.framework.process.dto.PriorityVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,9 +13,9 @@ public interface PriorityMapper {
 
 	List<PriorityVo> searchPriorityList(PriorityVo priorityVo);
 
-	int searchPriorityCountForMatrix(PriorityVo priorityVo);
+	int searchPriorityCountForMatrix(PrioritySearchVo searchVo);
 
-	List<PriorityVo> searchPriorityListForMatrix(PriorityVo priorityVo);
+	List<PriorityVo> searchPriorityListForMatrix(PrioritySearchVo searchVo);
 
 	List<ValueTextVo> searchPriorityListForSelect(PriorityVo priorityVo);
 
