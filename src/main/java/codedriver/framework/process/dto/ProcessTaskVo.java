@@ -177,6 +177,8 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "是否已删除，1：是，0：否", type = ApiParamType.INTEGER)
     private Integer isDeleted = 0;
 
+    @EntityField(name = "是否默认展开基本信息", type = ApiParamType.INTEGER)
+    private Integer isShowBaseInfo = 0;
 
     @JSONField(serialize = false)
     @EntityField(name = "工单中心工单排序下标", type = ApiParamType.INTEGER)
@@ -785,5 +787,13 @@ public class ProcessTaskVo extends BasePageVo {
             sourceName = ProcessTaskSourceFactory.getSourceName(source);
         }
         return sourceName;
+    }
+
+    public Integer getIsShowBaseInfo() {
+        return isShowBaseInfo;
+    }
+
+    public void setIsShowBaseInfo(Integer isShowBaseInfo) {
+        this.isShowBaseInfo = isShowBaseInfo;
     }
 }
