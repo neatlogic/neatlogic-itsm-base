@@ -178,7 +178,7 @@ public class ProcessTaskVo extends BasePageVo {
     private Integer isDeleted = 0;
 
     @EntityField(name = "是否默认展开基本信息", type = ApiParamType.INTEGER)
-    private Integer isShowBaseInfo = 1;
+    private Integer isShowBaseInfo = 0;
 
     @JSONField(serialize = false)
     @EntityField(name = "工单中心工单排序下标", type = ApiParamType.INTEGER)
