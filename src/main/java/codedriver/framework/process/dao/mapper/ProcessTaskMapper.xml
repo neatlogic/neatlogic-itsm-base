@@ -87,6 +87,7 @@
         <!--<result column="error" property="error"/>-->
         <result column="is_show" property="isShow"/>
         <result column="serial_number" property="serialNumber"/>
+        <result column="need_score" property="needScore"/>
         <result column="source" property="source"/>
         <result column="is_deleted" property="isDeleted"/>
         <!--<association property="ownerVo" javaType="codedriver.framework.dto.UserVo">
@@ -122,6 +123,7 @@
                `worktime_uuid`,
                `is_show`,
                `serial_number`,
+               `need_score`,
                `source`,
                `is_deleted`
         FROM `processtask`
@@ -603,6 +605,7 @@
                `worktime_uuid`,
                `is_show`,
                `serial_number`,
+               `need_score`,
                `source`
         FROM `processtask`
         WHERE id = #{value}
@@ -926,6 +929,7 @@
                `error`,
                `is_show`       as isShow,
                `serial_number` AS serialNumber,
+               `need_score`    AS needScore,
                `source`
         FROM `processtask`
         WHERE `id` = #{id}
@@ -1259,6 +1263,7 @@
         `worktime_uuid`,
         `is_show`,
         `serial_number`,
+        `need_score`,
         `source`
         FROM `processtask`
         WHERE `id` IN
@@ -1688,6 +1693,7 @@
         `expire_time`,
         `worktime_uuid`,
         `serial_number`,
+        `need_score`,
         `source`
         FROM `processtask`
         <where>
@@ -1930,6 +1936,7 @@
         a.`worktime_uuid`,
         a.`is_show`,
         a.`serial_number`,
+        a.`need_score`,
         a.`source`
         FROM `processtask` a
         JOIN channel b ON b.`uuid` = a.`channel_uuid`
@@ -1960,6 +1967,7 @@
         <result column="worktime_uuid" property="worktimeUuid"/>
         <result column="is_show" property="isShow"/>
         <result column="serial_number" property="serialNumber"/>
+        <result column="need_score" property="needScore"/>
 
         <collection property="stepList" ofType="codedriver.framework.process.dto.ProcessTaskStepVo">
             <id column="bId" property="id"/>
@@ -2377,6 +2385,7 @@
         `worktime_uuid`,
         `is_show`,
         `serial_number`,
+        `need_score`,
         `source`
         FROM `processtask` pt
         <include refid="getProcessTaskListByOwnerCondition"/>
@@ -2624,6 +2633,7 @@
         `error`,
         `is_show` as isShow,
         `serial_number` AS serialNumber,
+        `need_score` AS needScore,
         `source`
         FROM `processtask`
         WHERE `id` in
@@ -2649,6 +2659,7 @@
         `error`,
         `is_show` as isShow,
         `serial_number` AS serialNumber,
+        `need_score` AS needScore,
         `source`
         FROM `processtask`
         WHERE `serial_number` in
@@ -3037,6 +3048,7 @@
         `expire_time`,
         `worktime_uuid`,
         `serial_number`,
+        `need_score`,
         `source`
         )
         VALUES
@@ -3054,6 +3066,7 @@
         #{expireTime},
         #{worktimeUuid},
         #{serialNumber},
+        #{needScore},
         #{source}
         )
     </insert>
@@ -3530,6 +3543,15 @@
         UPDATE `processtask`
         SET `is_show` = #{isShow}
         WHERE id = #{id}
+    </update>
+
+    <update id="updateProcessTaskNeedScoreByIdList">
+        UPDATE `processtask`
+        SET `need_score` = #{needScore}
+        WHERE `id` IN
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </update>
 
     <update id="updateProcessTaskPriorityUuidById">

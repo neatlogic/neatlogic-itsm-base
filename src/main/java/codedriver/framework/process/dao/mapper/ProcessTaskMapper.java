@@ -443,6 +443,8 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskIsShow(ProcessTaskVo processTaskVo);
 
+    int updateProcessTaskNeedScoreByIdList(@Param("idList")List<Long> idList, @Param("needScore")Integer needScore);
+
     int updateProcessTaskTitleOwnerPriorityUuid(ProcessTaskVo processTaskVo);
 
     int updateProcessTaskStepContentById(ProcessTaskStepContentVo processTaskStepContentVo);
