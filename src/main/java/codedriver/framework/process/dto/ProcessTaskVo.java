@@ -184,6 +184,9 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "工单中心工单排序下标", type = ApiParamType.INTEGER)
     private Integer index;
 
+    @EntityField(name = "是否需要评分，1：是，0：否", type = ApiParamType.INTEGER)
+    private Integer needScore;
+
     public ProcessTaskVo() {
 
     }
@@ -795,5 +798,13 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setIsShowBaseInfo(Integer isShowBaseInfo) {
         this.isShowBaseInfo = isShowBaseInfo;
+    }
+
+    public Integer getNeedScore() {
+        return needScore;
+    }
+
+    public void setNeedScore(Integer needScore) {
+        this.needScore = needScore;
     }
 }

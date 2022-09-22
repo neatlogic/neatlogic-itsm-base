@@ -1709,7 +1709,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             ProcessVo processVo = processCrossoverMapper.getProcessByUuid(currentProcessTaskStepVo.getProcessUuid());
             /* 对流程配置进行散列处理 **/
 
-            if (MapUtils.isNotEmpty(processVo.getConfig())) {
+            JSONObject config = processVo.getConfig();
+            if (MapUtils.isNotEmpty(config)) {
                 //如果不存在优先级List则默认不显示优先级
 //                List<ChannelPriorityVo> channelPriorityList = channelMapper.getChannelPriorityListByChannelUuid(processTaskVo.getChannelUuid());
 //                if (CollectionUtils.isEmpty(channelPriorityList)) {
@@ -1717,6 +1718,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 //                } else {
 //                    processVo.getConfig().put("isNeedPriority", 1);
 //                }
+                JSONObject process = config.getJSONObject("process");
+                JSONObject scoreConfig = process.getJSONObject("scoreConfig");
+                if (MapUtils.isNotEmpty(scoreConfig)) {
+                    Integer isActive = scoreConfig.getInteger("isActive");
+                    if (Objects.equals(isActive, 1)) {
+                        processTaskVo.setNeedScore(1);
+                    } else {
+                        processTaskVo.setNeedScore(0);
+                    }
+                }
                 String configStr = processVo.getConfigStr();
                 String hash = DigestUtils.md5DigestAsHex(configStr.getBytes());
                 processTaskVo.setConfigHash(hash);
