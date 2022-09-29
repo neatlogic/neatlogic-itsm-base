@@ -80,6 +80,8 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
     private String catalogName;
     @EntityField(name = "simple：简单模式  custom：高级模式", type = ApiParamType.STRING)
     private String handlerType;
+    @EntityField(name = "是否显示总数，默认0：显示待办数", type = ApiParamType.INTEGER)
+    private Integer isShowTotal = 0;
 
     //params
     private List<String> channelUuidList;
@@ -462,5 +464,11 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
         return handlerType;
     }
 
+    public Integer getIsShowTotal() {
+        return isShowTotal;
+    }
 
+    public void setIsShowTotal(Integer isShowTotal) {
+        this.isShowTotal = isShowTotal;
+    }
 }

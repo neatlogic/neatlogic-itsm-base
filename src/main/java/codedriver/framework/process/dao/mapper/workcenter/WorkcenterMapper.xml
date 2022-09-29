@@ -22,6 +22,7 @@
         <result column="support" property="support"/>
         <result column="sort" property="sort"/>
         <result column="condition_config" property="conditionConfigStr"/>
+        <result column="is_show_total" property="isShowTotal"/>
         <collection property="authorityList" ofType="codedriver.framework.dto.AuthorityVo">
             <result column="authUuid" property="uuid"/>
             <result column="authType" property="type"/>
@@ -79,6 +80,7 @@
         pw.`support`,
         pw.`sort`,
         pw.`condition_config`,
+        pw.`is_show_total`,
         pwa.`type` as authType,
         pwa.`uuid` as authUuid,
         pwo.`user_uuid` as `owner`,
@@ -122,6 +124,7 @@
                pw.`support`,
                pw.`sort`,
                pw.`condition_config`,
+               pw.`is_show_total`,
                pwo.`user_uuid` AS `owner`,
                pw.`catalog_id` AS catalogId,
                pwc.`name`      AS catalogName,
@@ -171,7 +174,8 @@
         `name`,
         `sort`,
         `type`,
-        `support`
+        `support`,
+        `is_show_total`
         from `process_workcenter`
         where `uuid` in
         <foreach collection="uuidList" item="uuid" separator="," open="(" close=")">
@@ -281,6 +285,7 @@
                                           `type`,
                                           `sort`,
                                           `condition_config`,
+                                          `is_show_total`,
                                           `support`,
                                           `catalog_id`)
         VALUES (#{uuid},
@@ -288,12 +293,14 @@
                 #{type},
                 #{sort},
                 #{conditionConfigStr},
+                #{isShowTotal},
                 #{support},
                 #{catalogId})
         ON DUPLICATE KEY UPDATE `name`            = #{name},
                                 `type`            = #{type},
                                 `sort`            = #{sort},
                                 `condition_config`=#{conditionConfigStr},
+                                `is_show_total`=#{isShowTotal},
                                 `support`= #{support},
                                 `catalog_id`= #{catalogId}
     </insert>
@@ -346,7 +353,8 @@
         </if>
         `type` = #{type},
         `support` = #{support},
-        `catalog_id` = #{catalogId}
+        `catalog_id` = #{catalogId},
+        `is_show_total` = #{isShowTotal}
         WHERE `uuid` = #{uuid}
     </update>
 
