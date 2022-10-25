@@ -854,6 +854,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
                     IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.COMPLETEPROCESSTASK);
                     IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.COMPLETEPROCESSTASK);
+                    ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
+                    if (Objects.equals(processTaskVo.getNeedScore(), 1)) {
+                        IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.WAITINGSCOREPROCESSTASK);
+                        IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.WAITINGSCOREPROCESSTASK);
+                    }
                     myCompleteAudit(currentProcessTaskStepVo);
                     return 1;
                 }
