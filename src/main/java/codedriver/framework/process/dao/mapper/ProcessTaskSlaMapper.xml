@@ -101,6 +101,8 @@
         <result column="realTimeLeft" property="realTimeLeft"/>
         <result column="timeSum" property="timeSum"/>
         <result column="status" property="status"/>
+        <result column="calculationTime" property="calculationTime"/>
+        <result column="calculationTimeLong" property="calculationTimeLong"/>
     </resultMap>
     <select id="getProcessTaskSlaTimeByProcessTaskStepIdList" parameterType="java.util.List" resultMap="processTaskSlaTimeMap">
         SELECT
@@ -115,7 +117,9 @@
         c.`time_left` as timeLeft,
         c.`realtime_left` as realTimeLeft,
         c.`time_sum` as timeSum,
-        c.`status` as status
+        c.`status` as status,
+        c.`calculation_time` as calculationTime,
+        UNIX_TIMESTAMP(c.`calculation_time`) * 1000 AS calculationTimeLong
         FROM `processtask_sla` a
         JOIN `processtask_step_sla` b ON a.`id` = b.`sla_id`
         JOIN `processtask_sla_time` c ON a.`id` = c.`sla_id`
@@ -137,7 +141,9 @@
         c.`time_left` as timeLeft,
         c.`realtime_left` as realTimeLeft,
         c.`time_sum` as timeSum,
-        c.`status` as status
+        c.`status` as status,
+        c.`calculation_time` as calculationTime,
+        UNIX_TIMESTAMP(c.`calculation_time`) * 1000 AS calculationTimeLong
         FROM `processtask_sla` a
         JOIN `processtask_sla_time` c ON a.`id` = c.`sla_id`
         WHERE c.`sla_id` in
@@ -156,7 +162,9 @@
                `time_left`       as timeLeft,
                `realtime_left`   as realTimeLeft,
                `time_sum`        as timeSum,
-               `status`        as status
+               `status`        as status,
+               `calculation_time`        as calculationTime,
+               UNIX_TIMESTAMP(`calculation_time`) * 1000 AS calculationTimeLong
         FROM `processtask_sla_time`
         WHERE sla_id = #{value}
     </select>
@@ -234,7 +242,8 @@
             `realexpire_time`,
             `time_left`,
             `realtime_left`,
-            `status`
+            `status`,
+            `calculation_time`
             )
         VALUES (
             #{slaId},
@@ -243,7 +252,8 @@
             #{realExpireTime},
             #{timeLeft},
             #{realTimeLeft},
-            #{status}
+            #{status},
+            #{calculationTime}
             )
     </insert>
 
@@ -296,7 +306,8 @@
             `time_left`       = #{timeLeft},
             `realtime_left`   = #{realTimeLeft},
             `time_sum`        = #{timeSum},
-            `status`        = #{status}
+            `status`        = #{status},
+            `calculation_time` = #{calculationTime}
         WHERE `sla_id` = #{slaId}
     </update>
 
