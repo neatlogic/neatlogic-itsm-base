@@ -29,6 +29,11 @@ public class ProcessTaskSlaTimeVo {
 	private String status;
 	private Long expireTimeLong;
 	private Long realExpireTimeLong;
+	@EntityField(name = "上次耗时计算时间点", type = ApiParamType.LONG)
+	private Date calculationTime;
+	private Long calculationTimeLong;
+	@EntityField(name = "工单时效超时后显示方式", type = ApiParamType.STRING)
+	private String displayModeAfterTimeout;
 
 	public Long getProcessTaskId() {
 		return processTaskId;
@@ -126,7 +131,31 @@ public class ProcessTaskSlaTimeVo {
 		this.realExpireTimeLong = realExpireTimeLong;
 	}
 
-    @Override
+	public Date getCalculationTime() {
+		return calculationTime;
+	}
+
+	public void setCalculationTime(Date calculationTime) {
+		this.calculationTime = calculationTime;
+	}
+
+	public Long getCalculationTimeLong() {
+		return calculationTimeLong;
+	}
+
+	public void setCalculationTimeLong(Long calculationTimeLong) {
+		this.calculationTimeLong = calculationTimeLong;
+	}
+
+	public String getDisplayModeAfterTimeout() {
+		return displayModeAfterTimeout;
+	}
+
+	public void setDisplayModeAfterTimeout(String displayModeAfterTimeout) {
+		this.displayModeAfterTimeout = displayModeAfterTimeout;
+	}
+
+	@Override
     public String toString() {
         return "{slaId=" + slaId
 				+ ", status=" + status
