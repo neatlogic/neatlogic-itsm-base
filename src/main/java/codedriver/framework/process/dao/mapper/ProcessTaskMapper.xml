@@ -2037,7 +2037,7 @@
         <result column="reporterUuid" property="reporter"/>
         <!--<result column="reporterName" property="reporterName" />-->
         <result column="expire_time" property="expireTime"/>
-        <result column="worktime_uuid" property="worktimeUuid"/>
+        <result column="worktimeUuid" property="worktimeUuid"/>
         <result column="worktimeName" property="worktimeName"/>
         <result column="error" property="error"/>
         <result column="is_show" property="isShow"/>
@@ -2126,6 +2126,7 @@
                 <result column="timeLeft" property="timeLeft"/>
                 <result column="realTimeLeft" property="realTimeLeft"/>
                 <result column="slaTimeStatus" property="status"/>
+                <result column="calculationTime" property="calculationTime"/>
             </association>
         </collection>
 

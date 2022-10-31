@@ -31,7 +31,8 @@ public class ProcessTaskSlaTimeSqlTable implements ISqlTable {
         REALEXPIRE_TIME("realexpire_time", "自然超时时间点"),
         TIME_LEFT("time_left", "剩余时间"),
         STATUS("status", "状态"),
-        REALTIME_LEFT("realtime_left", "自然剩余时间")
+        REALTIME_LEFT("realtime_left", "自然剩余时间"),
+        CALCULATION_TIME("calculation_time", "上次耗时计算时间点")
         ;
         private final String name;
         private final String text;
