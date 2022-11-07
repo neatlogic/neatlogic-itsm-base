@@ -454,6 +454,10 @@ public class ProcessConfigUtil {
         Integer autoStart = configObj.getInteger("autoStart");
         autoStart = autoStart == null ? 1 : autoStart;
         resultObj.put("autoStart", autoStart);
+        /** 启用上传附件 **/
+        Integer isNeedUploadFile = configObj.getInteger("isNeedUploadFile");
+        isNeedUploadFile = isNeedUploadFile == null ? 1 : isNeedUploadFile;
+        resultObj.put("isNeedUploadFile", isNeedUploadFile);
         /** 启用描述 **/
         Integer isNeedContent = configObj.getInteger("isNeedContent");
         isNeedContent = isNeedContent == null ? 1 : isNeedContent;

@@ -86,6 +86,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private ProcessTaskStepReplyVo comment;
     @EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
+    @EntityField(name = "是否需要上传文件", type = ApiParamType.INTEGER)
+    private Integer isNeedUploadFile;
     @EntityField(name = "是否需要回复框", type = ApiParamType.INTEGER)
     private Integer isNeedContent;
     @EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
@@ -337,6 +339,13 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.isRequired = isRequired;
     }
 
+    public Integer getIsNeedUploadFile() {
+        if (isNeedUploadFile == null && StringUtils.isNotBlank(configHash)) {
+            isNeedUploadFile = ProcessStepInternalHandlerFactory.getHandler().getIsNeedUploadFileByConfigHash(configHash);
+        }
+        return isNeedUploadFile;
+    }
+
     public Integer getIsNeedContent() {
         if (isNeedContent == null && StringUtils.isNotBlank(configHash)) {
             isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
@@ -377,6 +386,10 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setCustomStatusList(JSONArray customStatusList) {
         this.customStatusList = customStatusList;
+    }
+
+    public void setIsNeedUploadFile(Integer isNeedUploadFile) {
+        this.isNeedUploadFile = isNeedUploadFile;
     }
 
     public void setIsNeedContent(Integer isNeedContent) {

@@ -129,6 +129,13 @@ public interface IProcessStepInternalHandler {
     public Integer getIsNeedContentByConfigHash(String configHash);
 
     /**
+     * 获取步骤配置信息中isNeedUploadFile(是否启用上传文件)字段值
+     * @param configHash
+     * @return
+     */
+    Integer getIsNeedUploadFileByConfigHash(String configHash);
+
+    /**
      * 获取步骤配置信息中enableReapproval(启用重审)字段值
      * @param configHash
      * @return
