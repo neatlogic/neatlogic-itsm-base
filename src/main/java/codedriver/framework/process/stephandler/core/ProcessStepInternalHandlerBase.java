@@ -190,6 +190,12 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     }
 
     @Override
+    public Integer getIsNeedUploadFileByConfigHash(String configHash) {
+        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
+        return (Integer)JSONPath.read(stepConfig, "isNeedUploadFile");
+    }
+
+    @Override
     public Integer getEnableReapprovalByConfigHash(String configHash) {
         String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(configHash);
         return (Integer)JSONPath.read(stepConfig, "enableReapproval");
