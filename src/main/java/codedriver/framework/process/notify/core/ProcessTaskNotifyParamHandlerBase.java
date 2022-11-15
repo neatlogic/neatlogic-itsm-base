@@ -16,7 +16,10 @@ public abstract class ProcessTaskNotifyParamHandlerBase implements INotifyParamH
 
     @Override
     public Object getText(Object object) {
-        return getMyText((ProcessTaskStepVo) object);
+        if (object instanceof ProcessTaskStepVo) {
+            return getMyText((ProcessTaskStepVo) object);
+        }
+        return null;
     }
 
     public abstract Object getMyText(ProcessTaskStepVo processTaskStepVo);
