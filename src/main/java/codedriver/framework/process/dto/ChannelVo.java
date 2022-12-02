@@ -101,6 +101,9 @@ public class ChannelVo extends BasePageVo {
     @EntityField(name = "被引用个数", type = ApiParamType.INTEGER)
     private int childrenCount = 0;
 
+    @EntityField(name = "是否有上报权限", type = ApiParamType.BOOLEAN)
+    private Boolean effectiveAuthority;
+
     @JSONField(serialize = false)
     private boolean isAuthority = false;
     @JSONField(serialize = false)
@@ -499,5 +502,13 @@ public class ChannelVo extends BasePageVo {
 
     public void setIsNeedPriority(Integer isNeedPriority) {
         this.isNeedPriority = isNeedPriority;
+    }
+
+    public Boolean getEffectiveAuthority() {
+        return effectiveAuthority;
+    }
+
+    public void setEffectiveAuthority(boolean effectiveAuthority) {
+        this.effectiveAuthority = effectiveAuthority;
     }
 }
