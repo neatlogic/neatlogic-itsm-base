@@ -3821,6 +3821,13 @@
         FROM `processtask_step_in_operation`
         WHERE `id` = #{id}
     </delete>
+
+    <delete id="deleteProcessTaskStepInOperationByProcessTaskId" parameterType="java.lang.Long">
+        DELETE
+        FROM `processtask_step_in_operation`
+        WHERE `processtask_id` = #{value}
+    </delete>
+
     <delete id="deleteProcessTaskStepWorkerMinorByProcessTaskStepId" parameterType="java.lang.Long">
         DELETE
         FROM `processtask_step_worker`
