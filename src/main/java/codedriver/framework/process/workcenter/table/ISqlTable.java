@@ -1,14 +1,5 @@
 package codedriver.framework.process.workcenter.table;
 
-/**
- * @Title: SqlTable
- * @Package: codedriver.module.process.workcenter.core.table
- * @Description: TODO
- * @Author: 89770
- * @Date: 2021/1/15 15:43
- * Copyright(c) 2021 TechSure Co., Ltd. All Rights Reserved.
- * 本内容仅限于深圳市赞悦科技有限公司内部传阅，禁止外泄以及用于其他的商业项目。
- **/
 public interface ISqlTable {
 
     /**
@@ -18,7 +9,7 @@ public interface ISqlTable {
      * @Params: []
      * @Returns: java.lang.String
      **/
-    public String getName();
+    String getName();
 
     /**
      * @Description: 表缩略名
@@ -27,6 +18,6 @@ public interface ISqlTable {
      * @Params: []
      * @Returns: java.lang.String
      **/
-    public String getShortName();
+    String getShortName();
 
 }

@@ -10,7 +10,11 @@ import codedriver.framework.common.constvalue.ApiParamType;
 import codedriver.framework.common.constvalue.DeviceType;
 import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.util.CommonUtil;
+import codedriver.framework.condition.core.ConditionHandlerFactory;
 import codedriver.framework.dto.AuthorityVo;
+import codedriver.framework.dto.condition.ConditionVo;
+import codedriver.framework.process.condition.core.IProcessTaskCondition;
+import codedriver.framework.process.constvalue.ProcessFieldType;
 import codedriver.framework.process.constvalue.ProcessWorkcenterType;
 import codedriver.framework.process.dto.SqlDecoratorVo;
 import codedriver.framework.restful.annotation.EntityField;
@@ -470,5 +474,15 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
 
     public void setIsShowTotal(Integer isShowTotal) {
         this.isShowTotal = isShowTotal;
+    }
+
+    @Override
+    public void buildMyConditionWhereSql(StringBuilder sqlSb, String handler, List<ConditionVo> conditionVoList, int conditionIndex) {
+        ConditionVo conditionVo = conditionVoList.get(conditionIndex);
+        if (conditionVo.getType().equals(ProcessFieldType.FORM.getValue())) {
+            handler = ProcessFieldType.FORM.getValue();
+        }
+        IProcessTaskCondition sqlCondition = (IProcessTaskCondition) ConditionHandlerFactory.getHandler(handler);
+        sqlCondition.getSqlConditionWhere(conditionVoList, conditionIndex, sqlSb);
     }
 }
