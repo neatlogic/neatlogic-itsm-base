@@ -1,5 +1,6 @@
 package codedriver.framework.process.dto;
 
+import codedriver.framework.process.dto.processconfig.NotifyPolicyConfigVo;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,7 @@ public class ProcessStepVo implements Serializable {
 	private List<String> tagList;
 	private ProcessStepTaskConfigVo taskConfigVo;
 	@JSONField(serialize=false)
-	private Long notifyPolicyId;
+	private NotifyPolicyConfigVo notifyPolicyConfig;
 	@JSONField(serialize=false)
 	private List<String> integrationUuidList;
 
@@ -203,12 +204,12 @@ public class ProcessStepVo implements Serializable {
 		this.formUuid = formUuid;
 	}
 
-	public Long getNotifyPolicyId() {
-		return notifyPolicyId;
+	public NotifyPolicyConfigVo getNotifyPolicyConfig() {
+		return notifyPolicyConfig;
 	}
 
-	public void setNotifyPolicyId(Long notifyPolicyId) {
-		this.notifyPolicyId = notifyPolicyId;
+	public void setNotifyPolicyConfig(NotifyPolicyConfigVo notifyPolicyConfig) {
+		this.notifyPolicyConfig = notifyPolicyConfig;
 	}
 
 	public List<String> getIntegrationUuidList() {
