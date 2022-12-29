@@ -14,6 +14,10 @@ import java.util.List;
  **/
 public class NotifyPolicyConfigVo {
     private Long policyId;
+
+    private String policyName;
+
+    private String policyPath;
     private List<NotifyPolicyParamMappingVo> paramMappingList = new ArrayList<>();
     private String handler;
     public Long getPolicyId() {
@@ -22,6 +26,22 @@ public class NotifyPolicyConfigVo {
 
     public void setPolicyId(Long policyId) {
         this.policyId = policyId;
+    }
+
+    public String getPolicyName() {
+        return policyName;
+    }
+
+    public void setPolicyName(String policyName) {
+        this.policyName = policyName;
+    }
+
+    public String getPolicyPath() {
+        return policyPath;
+    }
+
+    public void setPolicyPath(String policyPath) {
+        this.policyPath = policyPath;
     }
 
     public List<NotifyPolicyParamMappingVo> getParamMappingList() {
