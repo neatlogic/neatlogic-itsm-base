@@ -10,7 +10,7 @@ import codedriver.framework.common.dto.BaseEditorVo;
 import codedriver.framework.process.constvalue.ProcessFlowDirection;
 import codedriver.framework.process.constvalue.ProcessStepHandlerType;
 import codedriver.framework.process.constvalue.ProcessStepType;
-import codedriver.framework.process.dto.processconfig.NotifyPolicyConfigVo;
+import codedriver.framework.notify.dto.InvokeNotifyPolicyConfigVo;
 import codedriver.framework.process.dto.score.ProcessScoreTemplateVo;
 import codedriver.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import codedriver.framework.process.stephandler.core.IProcessStepInternalHandler;
@@ -58,7 +58,7 @@ public class ProcessVo extends BaseEditorVo {
 
     private ProcessScoreTemplateVo processScoreTemplateVo;
     @JSONField(serialize = false)
-    private NotifyPolicyConfigVo notifyPolicyConfig;
+    private InvokeNotifyPolicyConfigVo notifyPolicyConfig;
     @JSONField(serialize = false)
     private List<String> integrationUuidList = new ArrayList<>();
 
@@ -193,11 +193,11 @@ public class ProcessVo extends BaseEditorVo {
 
                     JSONArray notifyPolicyList = slaObj.getJSONArray("notifyPolicyList");
                     if (CollectionUtils.isNotEmpty(notifyPolicyList)) {
-                        List<NotifyPolicyConfigVo> notifyPolicyConfigList = new ArrayList<>();
+                        List<InvokeNotifyPolicyConfigVo> notifyPolicyConfigList = new ArrayList<>();
                         for (int j = 0; j < notifyPolicyList.size(); j++) {
                             JSONObject notifyPolicy = notifyPolicyList.getJSONObject(j);
                             if (MapUtils.isNotEmpty(notifyPolicy)) {
-                                notifyPolicyConfigList.add(notifyPolicy.getObject("notifyPolicyConfig", NotifyPolicyConfigVo.class));
+                                notifyPolicyConfigList.add(notifyPolicy.getObject("notifyPolicyConfig", InvokeNotifyPolicyConfigVo.class));
                             }
                         }
                         processSlaVo.setNotifyPolicyConfigList(notifyPolicyConfigList);
@@ -291,7 +291,7 @@ public class ProcessVo extends BaseEditorVo {
         /** 组装通知策略 **/
         JSONObject processConfig = processObj.getJSONObject("processConfig");
         if (MapUtils.isNotEmpty(processConfig)) {
-            notifyPolicyConfig = processConfig.getObject("notifyPolicyConfig", NotifyPolicyConfigVo.class);
+            notifyPolicyConfig = processConfig.getObject("notifyPolicyConfig", InvokeNotifyPolicyConfigVo.class);
         }
 
         JSONArray actionList = (JSONArray) JSONPath.read(configStr, "process.processConfig.actionConfig.actionList");
@@ -352,11 +352,11 @@ public class ProcessVo extends BaseEditorVo {
         this.processScoreTemplateVo = processScoreTemplateVo;
     }
 
-    public NotifyPolicyConfigVo getNotifyPolicyConfig() {
+    public InvokeNotifyPolicyConfigVo getNotifyPolicyConfig() {
         return notifyPolicyConfig;
     }
 
-    public void setNotifyPolicyConfig(NotifyPolicyConfigVo notifyPolicyConfig) {
+    public void setNotifyPolicyConfig(InvokeNotifyPolicyConfigVo notifyPolicyConfig) {
         this.notifyPolicyConfig = notifyPolicyConfig;
     }
 
