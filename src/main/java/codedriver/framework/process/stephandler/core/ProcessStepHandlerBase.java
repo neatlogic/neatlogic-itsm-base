@@ -517,6 +517,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         if (CollectionUtils.isEmpty(workerPolicyList)) {
             return autoStart;
         }
+        Set<ProcessTaskStepWorkerVo> newWorkerSet = new HashSet<>();
         for (ProcessTaskStepWorkerPolicyVo workerPolicyVo : workerPolicyList) {
             IWorkerPolicyHandler workerPolicyHandler = WorkerPolicyHandlerFactory.getHandler(workerPolicyVo.getPolicy());
             if (workerPolicyHandler == null) {
@@ -553,13 +554,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 /* 顺序分配处理人 **/
                 if ("sort".equals(executeMode)) {
                     // 找到处理人，则退出
-                    workerSet.addAll(tmpWorkerList);
+                    newWorkerSet.addAll(tmpWorkerList);
                     break;
                 } else if ("batch".equals(executeMode)) {
-                    workerSet.addAll(tmpWorkerList);
+                    newWorkerSet.addAll(tmpWorkerList);
                 }
             }
         }
+        workerSet.addAll(newWorkerSet);
         return autoStart;
     }
 
@@ -2521,7 +2523,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             ProcessUserType.MAJOR.getValue(),
                             currentUserUuid
                     );
-                    processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                    processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
+                    processTaskStepWorkerVo.setUuid(currentUserUuid);
+                    processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
+//                    processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
                     ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
                             currentProcessTaskStepVo.getProcessTaskId(),
                             currentProcessTaskStepVo.getId(),
@@ -2529,7 +2534,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             ProcessUserType.MAJOR.getValue(),
                             currentUserUuid
                     );
-                    processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                    processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+                    processTaskStepUserVo.setUserUuid(currentUserUuid);
+                    processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
+//                    processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
                     currentProcessTaskStepVo.setOriginalUser(userUuid);
                 }
             }
@@ -2546,7 +2554,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         ProcessUserType.MAJOR.getValue(),
                         currentUserUuid
                 );
-                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
+                processTaskStepWorkerVo.setUuid(currentUserUuid);
+                processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
+//                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
                 ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
                         currentProcessTaskStepVo.getProcessTaskId(),
                         currentProcessTaskStepVo.getId(),
@@ -2554,7 +2565,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         ProcessUserType.MAJOR.getValue(),
                         currentUserUuid
                 );
-                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+                processTaskStepUserVo.setUserUuid(currentUserUuid);
+                processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
+//                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
             } else if (currentUserUuid.equals(processTaskStepAgentVo.getAgentUuid())) {
                 // 当前用户是B
                 currentProcessTaskStepVo.setOriginalUser(processTaskStepAgentVo.getUserUuid());
@@ -2575,7 +2589,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         ProcessUserType.MAJOR.getValue(),
                         currentUserUuid
                 );
-                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
+                processTaskStepWorkerVo.setUuid(currentUserUuid);
+                processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
+//                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
                 ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
                         currentProcessTaskStepVo.getProcessTaskId(),
                         currentProcessTaskStepVo.getId(),
@@ -2583,7 +2600,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         ProcessUserType.MAJOR.getValue(),
                         currentUserUuid
                 );
-                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+                processTaskStepUserVo.setUserUuid(currentUserUuid);
+                processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
+//                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
                 currentProcessTaskStepVo.setOriginalUser(processTaskStepAgentVo.getAgentUuid());
             }
         }
