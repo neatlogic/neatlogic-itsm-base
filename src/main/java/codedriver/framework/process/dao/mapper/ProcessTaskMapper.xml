@@ -3521,7 +3521,7 @@
         WHERE `id` = #{id}
     </update>
 
-    <update id="updateProcessTaskStepWorkerUuid"
+    <!--<update id="updateProcessTaskStepWorkerUuid"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepWorkerVo">
         UPDATE `processtask_step_worker`
         SET `uuid` = #{newUuid}
@@ -3529,16 +3529,16 @@
           AND `type` = #{type}
           AND `uuid` = #{uuid}
           AND `user_type` = #{userType}
-    </update>
+    </update>-->
 
-    <update id="updateProcessTaskStepUserUserUuid"
+    <!--<update id="updateProcessTaskStepUserUserUuid"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
         UPDATE `processtask_step_user`
         SET `user_uuid` = #{newUserUuid}
         WHERE `processtask_step_id` = #{processTaskStepId}
           AND `user_uuid` = #{userUuid}
           AND `user_type` = #{userType}
-    </update>
+    </update>-->
 
     <update id="updateProcessTaskIsShow" parameterType="codedriver.framework.process.dto.ProcessTaskVo">
         UPDATE `processtask`

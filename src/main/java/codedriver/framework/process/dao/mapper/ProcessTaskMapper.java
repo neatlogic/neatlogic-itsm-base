@@ -449,9 +449,9 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskStepContentById(ProcessTaskStepContentVo processTaskStepContentVo);
 
-    int updateProcessTaskStepWorkerUuid(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+//    int updateProcessTaskStepWorkerUuid(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
-    int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
+//    int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
 
     int updateProcessTaskPriorityUuidById(@Param("id") Long processTaskId,
                                           @Param("priorityUuid") String priorityUuid);
