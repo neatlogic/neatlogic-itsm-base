@@ -142,7 +142,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
     private String originalUser;
     @EntityField(name = "原始处理人")
-    private UserVo originalUserVo;
+    private UserVo originalUserVo;    @EntityField(name = "代办信息", type = ApiParamType.JSONOBJECT)
+    private ProcessTaskStepAgentVo processTaskStepAgentVo;
     @EntityField(name = "回复模版", type = ApiParamType.JSONOBJECT)
     private ProcessCommentTemplateVo commentTemplate;
     @JSONField(serialize = false)
@@ -729,6 +730,14 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setOriginalUserVo(UserVo originalUserVo) {
         this.originalUserVo = originalUserVo;
+    }
+
+    public ProcessTaskStepAgentVo getProcessTaskStepAgentVo() {
+        return processTaskStepAgentVo;
+    }
+
+    public void setProcessTaskStepAgentVo(ProcessTaskStepAgentVo processTaskStepAgentVo) {
+        this.processTaskStepAgentVo = processTaskStepAgentVo;
     }
 
     public int getUpdateActiveTime() {
