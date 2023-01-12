@@ -123,6 +123,37 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                 }
             }
         }
+        ProcessTaskStepAgentVo processTaskStepAgentVo = processTaskStepVo.getProcessTaskStepAgentVo();
+        if (processTaskStepAgentVo != null) {
+            if (Objects.equals(processTaskStepAgentVo.getUserUuid(), userUuid)) {
+                authenticationInfoVo = null;
+                if (Objects.equals(UserContext.get().getUserUuid(), processTaskStepAgentVo.getAgentUuid())) {
+                    authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
+                }
+                if (authenticationInfoVo == null) {
+                    authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(processTaskStepAgentVo.getAgentUuid());
+                }
+                teamUuidList = authenticationInfoVo.getTeamUuidList();
+                roleUuidList = authenticationInfoVo.getRoleUuidList();
+                for (ProcessTaskStepWorkerVo workerVo : processTaskStepVo.getWorkerList()) {
+                    if (userType == null || userType.equals(workerVo.getUserType())) {
+                        if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
+                            if (processTaskStepAgentVo.getAgentUuid().equals(workerVo.getUuid())) {
+                                return true;
+                            }
+                        } else if (GroupSearch.TEAM.getValue().equals(workerVo.getType())) {
+                            if (teamUuidList.contains(workerVo.getUuid())) {
+                                return true;
+                            }
+                        } else if (GroupSearch.ROLE.getValue().equals(workerVo.getType())) {
+                            if (roleUuidList.contains(workerVo.getUuid())) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
