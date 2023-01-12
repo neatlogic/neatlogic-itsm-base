@@ -2523,10 +2523,17 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             ProcessUserType.MAJOR.getValue(),
                             currentUserUuid
                     );
-                    processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
-                    processTaskStepWorkerVo.setUuid(currentUserUuid);
-                    processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
-//                    processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                    if (processTaskMapper.checkProcessTaskStepWorkerIsExistsByPrimaryKey(processTaskStepWorkerVo) > 0) {
+                        processTaskStepWorkerVo.setUuid(currentUserUuid);
+                        if (processTaskMapper.checkProcessTaskStepWorkerIsExistsByPrimaryKey(processTaskStepWorkerVo) > 0) {
+                            processTaskStepWorkerVo.setUuid(userUuid);
+                            processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
+                        } else {
+                            processTaskStepWorkerVo.setUuid(userUuid);
+                            processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                        }
+                    }
+
                     ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
                             currentProcessTaskStepVo.getProcessTaskId(),
                             currentProcessTaskStepVo.getId(),
@@ -2534,10 +2541,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             ProcessUserType.MAJOR.getValue(),
                             currentUserUuid
                     );
-                    processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
-                    processTaskStepUserVo.setUserUuid(currentUserUuid);
-                    processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
-//                    processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                    if (processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                        processTaskStepUserVo.setUserUuid(currentUserUuid);
+                        if (processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                            processTaskStepUserVo.setUserUuid(userUuid);
+                            processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+                        } else {
+                            processTaskStepUserVo.setUserUuid(userUuid);
+                            processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                        }
+                    }
                     currentProcessTaskStepVo.setOriginalUser(userUuid);
                 }
             }
@@ -2554,10 +2567,17 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         ProcessUserType.MAJOR.getValue(),
                         currentUserUuid
                 );
-                processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
-                processTaskStepWorkerVo.setUuid(currentUserUuid);
-                processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
-//                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                if (processTaskMapper.checkProcessTaskStepWorkerIsExistsByPrimaryKey(processTaskStepWorkerVo) > 0) {
+                    processTaskStepWorkerVo.setUuid(currentUserUuid);
+                    if (processTaskMapper.checkProcessTaskStepWorkerIsExistsByPrimaryKey(processTaskStepWorkerVo) > 0) {
+                        processTaskStepWorkerVo.setUuid(processTaskStepAgentVo.getAgentUuid());
+                        processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
+                    } else {
+                        processTaskStepWorkerVo.setUuid(processTaskStepAgentVo.getAgentUuid());
+                        processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                    }
+                }
+
                 ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
                         currentProcessTaskStepVo.getProcessTaskId(),
                         currentProcessTaskStepVo.getId(),
@@ -2565,10 +2585,17 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         ProcessUserType.MAJOR.getValue(),
                         currentUserUuid
                 );
-                processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
-                processTaskStepUserVo.setUserUuid(currentUserUuid);
-                processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
-//                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                if (processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                    processTaskStepUserVo.setUserUuid(currentUserUuid);
+                    if (processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                        processTaskStepUserVo.setUserUuid(processTaskStepAgentVo.getAgentUuid());
+                        processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+                    } else {
+                        processTaskStepUserVo.setUserUuid(processTaskStepAgentVo.getAgentUuid());
+                        processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                    }
+                }
+
             } else if (currentUserUuid.equals(processTaskStepAgentVo.getAgentUuid())) {
                 // 当前用户是B
                 currentProcessTaskStepVo.setOriginalUser(processTaskStepAgentVo.getUserUuid());
@@ -2581,6 +2608,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         currentUserUuid
                 );
                 processTaskMapper.replaceProcessTaskStepAgent(processTaskStepAgent);
+
                 ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
                         currentProcessTaskStepVo.getProcessTaskId(),
                         currentProcessTaskStepVo.getId(),
@@ -2589,10 +2617,17 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         ProcessUserType.MAJOR.getValue(),
                         currentUserUuid
                 );
-                processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
-                processTaskStepWorkerVo.setUuid(currentUserUuid);
-                processTaskMapper.insertIgnoreProcessTaskStepWorker(processTaskStepWorkerVo);
-//                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                if (processTaskMapper.checkProcessTaskStepWorkerIsExistsByPrimaryKey(processTaskStepWorkerVo) > 0) {
+                    processTaskStepWorkerVo.setUuid(currentUserUuid);
+                    if (processTaskMapper.checkProcessTaskStepWorkerIsExistsByPrimaryKey(processTaskStepWorkerVo) > 0) {
+                        processTaskStepWorkerVo.setUuid(processTaskStepAgentVo.getAgentUuid());
+                        processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
+                    } else {
+                        processTaskStepWorkerVo.setUuid(processTaskStepAgentVo.getAgentUuid());
+                        processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+                    }
+                }
+
                 ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
                         currentProcessTaskStepVo.getProcessTaskId(),
                         currentProcessTaskStepVo.getId(),
@@ -2600,10 +2635,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         ProcessUserType.MAJOR.getValue(),
                         currentUserUuid
                 );
-                processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
-                processTaskStepUserVo.setUserUuid(currentUserUuid);
-                processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
-//                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                if (processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                    processTaskStepUserVo.setUserUuid(currentUserUuid);
+                    if (processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                        processTaskStepUserVo.setUserUuid(processTaskStepAgentVo.getAgentUuid());
+                        processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+                    } else {
+                        processTaskStepUserVo.setUserUuid(processTaskStepAgentVo.getAgentUuid());
+                        processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                    }
+                }
                 currentProcessTaskStepVo.setOriginalUser(processTaskStepAgentVo.getAgentUuid());
             }
         }

@@ -91,6 +91,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskStepWorkerVo> getProcessTaskStepWorkerListByProcessTaskStepIdListAndUserType(@Param("processTaskStepIdList") List<Long> processTaskStepIdList, @Param("userType") String userType);
 
+    int checkProcessTaskStepWorkerIsExistsByPrimaryKey(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+
     Long getProcessTaskLockById(Long processTaskId);
 
     ProcessTaskVo getProcessTaskVoLockById(Long processTaskId);
@@ -449,9 +451,9 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskStepContentById(ProcessTaskStepContentVo processTaskStepContentVo);
 
-//    int updateProcessTaskStepWorkerUuid(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
+    int updateProcessTaskStepWorkerUuid(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 
-//    int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
+    int updateProcessTaskStepUserUserUuid(ProcessTaskStepUserVo processTaskStepUserVo);
 
     int updateProcessTaskPriorityUuidById(@Param("id") Long processTaskId,
                                           @Param("priorityUuid") String priorityUuid);

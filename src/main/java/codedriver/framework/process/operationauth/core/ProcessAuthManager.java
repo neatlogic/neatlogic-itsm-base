@@ -255,6 +255,7 @@ public class ProcessAuthManager {
                 ProcessTaskStepAgentVo processTaskStepAgentVo = processTaskStepAgentMap.get(processTaskStepVo.getId());
                 if (processTaskStepAgentVo != null) {
                     processTaskStepVo.setOriginalUser(processTaskStepAgentVo.getUserUuid());
+                    processTaskStepVo.setProcessTaskStepAgentVo(processTaskStepAgentVo);
                 }
                 processTaskStepListMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new ArrayList<>())
                         .add(processTaskStepVo);
