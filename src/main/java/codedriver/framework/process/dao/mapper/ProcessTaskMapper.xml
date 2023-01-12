@@ -3544,7 +3544,7 @@
     <update id="updateProcessTaskStepUserUserUuid"
             parameterType="codedriver.framework.process.dto.ProcessTaskStepUserVo">
         UPDATE `processtask_step_user`
-        SET `user_uuid` = #{newUserUuid}
+        SET `user_uuid` = #{newUserUuid}, `user_name` = #{userName}
         WHERE `processtask_step_id` = #{processTaskStepId}
           AND `user_uuid` = #{userUuid}
           AND `user_type` = #{userType}

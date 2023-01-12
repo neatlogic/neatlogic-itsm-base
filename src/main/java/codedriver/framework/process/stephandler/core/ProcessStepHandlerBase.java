@@ -2599,6 +2599,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
             } else {
                 processTaskStepUserVo.setUserUuid(oldUserUuid);
+                UserVo userVo = userMapper.getUserBaseInfoByUuid(newUserUuid);
+                processTaskStepUserVo.setUserName(userVo.getUserName());
                 processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
             }
         }
