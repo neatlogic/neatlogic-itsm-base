@@ -2549,6 +2549,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     }
 
+    /**
+     * 更新processtask_step_worker表的uuid字段值
+     * @param processTaskId 工单ID
+     * @param processTaskStepId 步骤ID
+     * @param oldUuid 旧值
+     * @param newUuid 新值
+     */
     private void updateProcessTaskStepWorkerUuid(Long processTaskId, Long processTaskStepId, String oldUuid, String newUuid) {
         ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
                 processTaskId,
@@ -2570,6 +2577,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         }
     }
 
+    /**
+     * 更新processtask_step_user表的user_uuid字段值
+     * @param processTaskId 工单ID
+     * @param processTaskStepId 步骤ID
+     * @param oldUserUuid 旧值
+     * @param newUserUuid 新值
+     */
     private void updateProcessTaskStepUserUserUuid(Long processTaskId, Long processTaskStepId, String oldUserUuid, String newUserUuid) {
         ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
                 processTaskId,
