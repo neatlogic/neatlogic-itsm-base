@@ -477,7 +477,7 @@ public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
     }
 
     @Override
-    public void buildMyConditionWhereSql(StringBuilder sqlSb, String handler, List<ConditionVo> conditionVoList, int conditionIndex) {
+    public void buildMyConditionWhereSql(StringBuilder sqlSb, String handler, List<ConditionVo> conditionVoList, int conditionIndex, String searchMode) {
         ConditionVo conditionVo = conditionVoList.get(conditionIndex);
         if (conditionVo.getType().equals(ProcessFieldType.FORM.getValue())) {
             handler = ProcessFieldType.FORM.getValue();
