@@ -5,7 +5,7 @@ import java.util.*;
 import codedriver.framework.asynchronization.threadlocal.UserContext;
 import codedriver.framework.dto.AuthenticationInfoVo;
 import codedriver.framework.process.constvalue.*;
-import codedriver.framework.process.exception.operationauth.*;
+import codedriver.framework.process.dto.*;
 import codedriver.framework.service.AuthenticationInfoService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,11 +19,6 @@ import codedriver.framework.common.constvalue.GroupSearch;
 import codedriver.framework.common.constvalue.UserType;
 import codedriver.framework.process.dao.mapper.ProcessStepHandlerMapper;
 import codedriver.framework.process.dao.mapper.SelectContentByHashMapper;
-import codedriver.framework.process.dto.ProcessTaskStepRelVo;
-import codedriver.framework.process.dto.ProcessTaskStepUserVo;
-import codedriver.framework.process.dto.ProcessTaskStepVo;
-import codedriver.framework.process.dto.ProcessTaskStepWorkerVo;
-import codedriver.framework.process.dto.ProcessTaskVo;
 import codedriver.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import codedriver.framework.process.stephandler.core.IProcessStepHandler;
 import codedriver.framework.process.stephandler.core.IProcessStepInternalHandler;
@@ -128,6 +123,37 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                 }
             }
         }
+        ProcessTaskStepAgentVo processTaskStepAgentVo = processTaskStepVo.getProcessTaskStepAgentVo();
+        if (processTaskStepAgentVo != null) {
+            if (Objects.equals(processTaskStepAgentVo.getUserUuid(), userUuid)) {
+                authenticationInfoVo = null;
+                if (Objects.equals(UserContext.get().getUserUuid(), processTaskStepAgentVo.getAgentUuid())) {
+                    authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
+                }
+                if (authenticationInfoVo == null) {
+                    authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(processTaskStepAgentVo.getAgentUuid());
+                }
+                teamUuidList = authenticationInfoVo.getTeamUuidList();
+                roleUuidList = authenticationInfoVo.getRoleUuidList();
+                for (ProcessTaskStepWorkerVo workerVo : processTaskStepVo.getWorkerList()) {
+                    if (userType == null || userType.equals(workerVo.getUserType())) {
+                        if (GroupSearch.USER.getValue().equals(workerVo.getType())) {
+                            if (processTaskStepAgentVo.getAgentUuid().equals(workerVo.getUuid())) {
+                                return true;
+                            }
+                        } else if (GroupSearch.TEAM.getValue().equals(workerVo.getType())) {
+                            if (teamUuidList.contains(workerVo.getUuid())) {
+                                return true;
+                            }
+                        } else if (GroupSearch.ROLE.getValue().equals(workerVo.getType())) {
+                            if (roleUuidList.contains(workerVo.getUuid())) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -176,8 +202,20 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         }
         // 判断当前用户是否是原处理人
         if (userType == null || Objects.equals(userType, ProcessUserType.MAJOR.getValue())) {
-            if (Objects.equals(processTaskStepVo.getOriginalUser(), userUuid)) {
-                return true;
+//            if (Objects.equals(processTaskStepVo.getOriginalUser(), userUuid)) {
+//                return true;
+//            }
+            ProcessTaskStepAgentVo processTaskStepAgentVo = processTaskStepVo.getProcessTaskStepAgentVo();
+            if (processTaskStepAgentVo != null) {
+                if (Objects.equals(processTaskStepAgentVo.getUserUuid(), userUuid)) {
+                    for (ProcessTaskStepUserVo processTaskStepUserVo : processTaskStepVo.getUserList()) {
+                        if (userType == null || userType.equals(processTaskStepUserVo.getUserType())) {
+                            if (Objects.equals(processTaskStepAgentVo.getAgentUuid(), processTaskStepUserVo.getUserUuid())) {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
         }
         return false;

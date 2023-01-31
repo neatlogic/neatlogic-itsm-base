@@ -517,6 +517,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         if (CollectionUtils.isEmpty(workerPolicyList)) {
             return autoStart;
         }
+        Set<ProcessTaskStepWorkerVo> newWorkerSet = new HashSet<>();
         for (ProcessTaskStepWorkerPolicyVo workerPolicyVo : workerPolicyList) {
             IWorkerPolicyHandler workerPolicyHandler = WorkerPolicyHandlerFactory.getHandler(workerPolicyVo.getPolicy());
             if (workerPolicyHandler == null) {
@@ -553,13 +554,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 /* 顺序分配处理人 **/
                 if ("sort".equals(executeMode)) {
                     // 找到处理人，则退出
-                    workerSet.addAll(tmpWorkerList);
+                    newWorkerSet.addAll(tmpWorkerList);
                     break;
                 } else if ("batch".equals(executeMode)) {
-                    workerSet.addAll(tmpWorkerList);
+                    newWorkerSet.addAll(tmpWorkerList);
                 }
             }
         }
+        workerSet.addAll(newWorkerSet);
         return autoStart;
     }
 
@@ -2459,6 +2461,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
      * 3.将processtask_step_user表中该步骤的主处理人user_uuid改为代办人(当前用户)
      */
     private void stepMajorUserRegulate(ProcessTaskStepVo currentProcessTaskStepVo) {
+        Long processTaskId = currentProcessTaskStepVo.getProcessTaskId();
+        Long processTaskStepId = currentProcessTaskStepVo.getId();
         String currentUserUuid = UserContext.get().getUserUuid(true);
         /* 能进入这个方法，说明当前用户有权限处理当前步骤，可能是三类处理人：第一处理人(A)、代办人(B)、代办人的代办人(C) 。其中A授权给B，B授权给C **/
         ProcessTaskStepAgentVo processTaskStepAgentVo = processTaskMapper.getProcessTaskStepAgentByProcessTaskStepId(currentProcessTaskStepVo.getId());
@@ -2513,23 +2517,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             currentUserUuid
                     );
                     processTaskMapper.replaceProcessTaskStepAgent(processTaskStepAgent);
-                    ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
-                            currentProcessTaskStepVo.getProcessTaskId(),
-                            currentProcessTaskStepVo.getId(),
-                            GroupSearch.USER.getValue(),
-                            userUuid,
-                            ProcessUserType.MAJOR.getValue(),
-                            currentUserUuid
-                    );
-                    processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
-                    ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
-                            currentProcessTaskStepVo.getProcessTaskId(),
-                            currentProcessTaskStepVo.getId(),
-                            userUuid,
-                            ProcessUserType.MAJOR.getValue(),
-                            currentUserUuid
-                    );
-                    processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                    updateProcessTaskStepWorkerUuid(processTaskId, processTaskStepId, userUuid, currentUserUuid);
+                    updateProcessTaskStepUserUserUuid(processTaskId, processTaskStepId, userUuid, currentUserUuid);
                     currentProcessTaskStepVo.setOriginalUser(userUuid);
                 }
             }
@@ -2538,23 +2527,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             if (currentUserUuid.equals(processTaskStepAgentVo.getUserUuid())) {
                 // 当前用户是A
                 processTaskMapper.deleteProcessTaskStepAgentByProcessTaskStepId(currentProcessTaskStepVo.getId());
-                ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
-                        currentProcessTaskStepVo.getProcessTaskId(),
-                        currentProcessTaskStepVo.getId(),
-                        GroupSearch.USER.getValue(),
-                        processTaskStepAgentVo.getAgentUuid(),
-                        ProcessUserType.MAJOR.getValue(),
-                        currentUserUuid
-                );
-                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
-                ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
-                        currentProcessTaskStepVo.getProcessTaskId(),
-                        currentProcessTaskStepVo.getId(),
-                        processTaskStepAgentVo.getAgentUuid(),
-                        ProcessUserType.MAJOR.getValue(),
-                        currentUserUuid
-                );
-                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                updateProcessTaskStepWorkerUuid(processTaskId, processTaskStepId, processTaskStepAgentVo.getAgentUuid(), currentUserUuid);
+                updateProcessTaskStepUserUserUuid(processTaskId, processTaskStepId, processTaskStepAgentVo.getAgentUuid(), currentUserUuid);
             } else if (currentUserUuid.equals(processTaskStepAgentVo.getAgentUuid())) {
                 // 当前用户是B
                 currentProcessTaskStepVo.setOriginalUser(processTaskStepAgentVo.getUserUuid());
@@ -2567,27 +2541,69 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         currentUserUuid
                 );
                 processTaskMapper.replaceProcessTaskStepAgent(processTaskStepAgent);
-                ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
-                        currentProcessTaskStepVo.getProcessTaskId(),
-                        currentProcessTaskStepVo.getId(),
-                        GroupSearch.USER.getValue(),
-                        processTaskStepAgentVo.getAgentUuid(),
-                        ProcessUserType.MAJOR.getValue(),
-                        currentUserUuid
-                );
-                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
-                ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
-                        currentProcessTaskStepVo.getProcessTaskId(),
-                        currentProcessTaskStepVo.getId(),
-                        processTaskStepAgentVo.getAgentUuid(),
-                        ProcessUserType.MAJOR.getValue(),
-                        currentUserUuid
-                );
-                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+                updateProcessTaskStepWorkerUuid(processTaskId, processTaskStepId, processTaskStepAgentVo.getAgentUuid(), currentUserUuid);
+                updateProcessTaskStepUserUserUuid(processTaskId, processTaskStepId, processTaskStepAgentVo.getAgentUuid(), currentUserUuid);
                 currentProcessTaskStepVo.setOriginalUser(processTaskStepAgentVo.getAgentUuid());
             }
         }
 
+    }
+
+    /**
+     * 更新processtask_step_worker表的uuid字段值
+     * @param processTaskId 工单ID
+     * @param processTaskStepId 步骤ID
+     * @param oldUuid 旧值
+     * @param newUuid 新值
+     */
+    private void updateProcessTaskStepWorkerUuid(Long processTaskId, Long processTaskStepId, String oldUuid, String newUuid) {
+        ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
+                processTaskId,
+                processTaskStepId,
+                GroupSearch.USER.getValue(),
+                oldUuid,
+                ProcessUserType.MAJOR.getValue(),
+                newUuid
+        );
+        if (processTaskMapper.checkProcessTaskStepWorkerIsExistsByPrimaryKey(processTaskStepWorkerVo) > 0) {
+            processTaskStepWorkerVo.setUuid(newUuid);
+            if (processTaskMapper.checkProcessTaskStepWorkerIsExistsByPrimaryKey(processTaskStepWorkerVo) > 0) {
+                processTaskStepWorkerVo.setUuid(oldUuid);
+                processTaskMapper.deleteProcessTaskStepWorker(processTaskStepWorkerVo);
+            } else {
+                processTaskStepWorkerVo.setUuid(oldUuid);
+                processTaskMapper.updateProcessTaskStepWorkerUuid(processTaskStepWorkerVo);
+            }
+        }
+    }
+
+    /**
+     * 更新processtask_step_user表的user_uuid字段值
+     * @param processTaskId 工单ID
+     * @param processTaskStepId 步骤ID
+     * @param oldUserUuid 旧值
+     * @param newUserUuid 新值
+     */
+    private void updateProcessTaskStepUserUserUuid(Long processTaskId, Long processTaskStepId, String oldUserUuid, String newUserUuid) {
+        ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
+                processTaskId,
+                processTaskStepId,
+                oldUserUuid,
+                ProcessUserType.MAJOR.getValue(),
+                newUserUuid
+        );
+        if (processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+            processTaskStepUserVo.setUserUuid(newUserUuid);
+            if (processTaskMapper.checkIsProcessTaskStepUser(processTaskStepUserVo) > 0) {
+                processTaskStepUserVo.setUserUuid(oldUserUuid);
+                processTaskMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+            } else {
+                processTaskStepUserVo.setUserUuid(oldUserUuid);
+                UserVo userVo = userMapper.getUserBaseInfoByUuid(newUserUuid);
+                processTaskStepUserVo.setUserName(userVo.getUserName());
+                processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
+            }
+        }
     }
 
     @Override
