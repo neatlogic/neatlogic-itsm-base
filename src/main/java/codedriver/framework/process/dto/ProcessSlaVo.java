@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import codedriver.framework.process.dto.processconfig.NotifyPolicyConfigVo;
+import codedriver.framework.notify.dto.InvokeNotifyPolicyConfigVo;
 import org.apache.commons.lang3.StringUtils;
 
 public class ProcessSlaVo implements Serializable {
@@ -15,7 +15,7 @@ public class ProcessSlaVo implements Serializable {
     private String calculateHandler;
     private String config;
     private List<String> processStepUuidList;
-    private List<NotifyPolicyConfigVo> notifyPolicyConfigList = new ArrayList<>();
+    private List<InvokeNotifyPolicyConfigVo> notifyPolicyConfigList = new ArrayList<>();
 
     public String getUuid() {
         return uuid;
@@ -74,11 +74,11 @@ public class ProcessSlaVo implements Serializable {
         }
     }
 
-    public List<NotifyPolicyConfigVo> getNotifyPolicyConfigList() {
+    public List<InvokeNotifyPolicyConfigVo> getNotifyPolicyConfigList() {
         return notifyPolicyConfigList;
     }
 
-    public void setNotifyPolicyConfigList(List<NotifyPolicyConfigVo> notifyPolicyConfigList) {
+    public void setNotifyPolicyConfigList(List<InvokeNotifyPolicyConfigVo> notifyPolicyConfigList) {
         this.notifyPolicyConfigList = notifyPolicyConfigList;
     }
 }

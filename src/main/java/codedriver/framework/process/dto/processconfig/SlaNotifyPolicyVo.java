@@ -5,7 +5,7 @@
 
 package codedriver.framework.process.dto.processconfig;
 
-import com.alibaba.fastjson.JSONObject;
+import codedriver.framework.notify.dto.InvokeNotifyPolicyConfigVo;
 
 /**
  * @author linbq
@@ -19,7 +19,7 @@ public class SlaNotifyPolicyVo {
     private Integer time = 0;
     private String uuid = "";
     private Integer intervalTime;
-    private NotifyPolicyConfigVo notifyPolicyConfig;
+    private InvokeNotifyPolicyConfigVo notifyPolicyConfig;
 
     public String getExecuteType() {
         return executeType;
@@ -77,11 +77,11 @@ public class SlaNotifyPolicyVo {
         this.intervalTime = intervalTime;
     }
 
-    public NotifyPolicyConfigVo getNotifyPolicyConfig() {
+    public InvokeNotifyPolicyConfigVo getNotifyPolicyConfig() {
         return notifyPolicyConfig;
     }
 
-    public void setNotifyPolicyConfig(NotifyPolicyConfigVo notifyPolicyConfig) {
+    public void setNotifyPolicyConfig(InvokeNotifyPolicyConfigVo notifyPolicyConfig) {
         this.notifyPolicyConfig = notifyPolicyConfig;
     }
 }
