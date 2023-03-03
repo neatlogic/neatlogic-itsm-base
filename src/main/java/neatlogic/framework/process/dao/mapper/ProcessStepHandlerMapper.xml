@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="neatlogic.framework.process.dao.mapper.ProcessStepHandlerMapper">
+	<cache type="neatlogic.framework.dao.cache.NeatLogicCache" flushInterval="30000" size="10"></cache>
+	<select id="getProcessStepHandlerConfig" resultType="neatlogic.framework.process.dto.ProcessStepHandlerVo">
+		SELECT
+		`handler`,
+		`config`
+		FROM `process_step_handler`
+	</select>
+
+	<select id="getProcessStepHandlerConfigByHandler" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT `config` FROM `process_step_handler` WHERE `handler` = #{handler}
+	</select>
+
+	<insert id="replaceProcessStepHandlerConfig" parameterType="neatlogic.framework.process.dto.ProcessStepHandlerVo">
+		REPLACE 	INTO `process_step_handler` (
+		`handler`,
+		`config`
+		) VALUES (
+		#{handler},
+		#{configStr}
+		)
+	</insert>
+</mapper>
