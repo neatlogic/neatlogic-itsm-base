@@ -58,7 +58,7 @@ public enum AutoExecJobProcessSource implements IAutoexecJobSource {
         for (AutoExecJobProcessSource s : AutoExecJobProcessSource.values()) {
             AutoexecJobSourceVo source = new AutoexecJobSourceVo();
             source.setSource(s.value);
-            source.setSourceName(s.text);
+            source.setSourceName(s.getText());
             source.setType(s.getType());
             list.add(source);
         }
