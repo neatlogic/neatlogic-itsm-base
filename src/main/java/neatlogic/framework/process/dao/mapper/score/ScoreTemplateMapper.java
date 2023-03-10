@@ -30,6 +30,8 @@ public interface ScoreTemplateMapper {
 
     public ProcessScoreTemplateVo getProcessScoreTemplateByProcessUuid(String processUuid);
 
+    List<ScoreTemplateDimensionVo> getScoreTemplateDimensionListByScoreTemplateId(Long scoreTemplateId);
+
     public void updateScoreTemplate(ScoreTemplateVo scoreTemplateVo);
 
     public void updateScoreTemplateStatus(ScoreTemplateVo scoreTemplateVo);
