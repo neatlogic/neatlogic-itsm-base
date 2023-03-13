@@ -348,6 +348,10 @@ public interface ProcessTaskMapper {
      */
     List<FileVo> getProcessTaskStepTaskFileListByProcessTaskId(Long processTaskId);
 
+    String getProcessTaskLastUrgeUserUuidByProcessTaskId(Long processTaskId);
+
+    int getProcessTaskUrgeCountByProcessTaskId(Long processTaskId);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -441,6 +445,8 @@ public interface ProcessTaskMapper {
     int insertProcessTaskStepTimer(ProcessTaskStepTimerVo processTaskStepTimerVo);
 
     void insertProcessTaskTimeCost(ProcessTaskTimeCostVo processTaskTimeCostVo);
+
+    void insertProcessTaskUrge(@Param("processTaskId") Long processTaskId, @Param("lcu") String lcu);
 
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
@@ -548,5 +554,4 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskTimeCostByProcessTaskId(Long processTaskId);
 
     int deleteProcessTaskFormContentByHash(String hash);
-
 }
