@@ -21,7 +21,7 @@ limitations under the License.
 		<artifactId>neatlogic-parent</artifactId>
 		<version>[3.0.0, 4.0.0)</version>
 	</parent>
-	<artifactId>neatlogic-process-base</artifactId>
+	<artifactId>neatlogic-itsm-base</artifactId>
     <version>0.3.0.0-SNAPSHOT</version>
 	<build>
 		<resources>
