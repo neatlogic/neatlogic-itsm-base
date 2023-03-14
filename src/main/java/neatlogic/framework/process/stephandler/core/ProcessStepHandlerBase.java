@@ -1573,7 +1573,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             /* 保存描述内容 **/
-            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_TRANSFER);
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_TRANSFER);
 
             /* 根据子类需要把最终处理人放进来，引擎将自动写入数据库，也可能为空，例如一些特殊的流程节点 **/
             processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
