@@ -15,6 +15,8 @@ public interface ProcessTaskScoreMapper {
     
     String getProcessTaskAutoScoreConfigByProcessTaskId(Long processTaskId);
 
+    String getProcessTaskScoreContentHashByProcessTaskId(Long processTaskId);
+
     void insertProcessTaskScore(ProcessTaskScoreVo vo);
 
     void insertProcessTaskScoreContent(ProcessTaskScoreVo vo);

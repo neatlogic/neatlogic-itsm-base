@@ -38,7 +38,11 @@
 	<select id="getProcessTaskAutoScoreConfigByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String" useCache="false">
 	SELECT `config` FROM `processtask_auto_score` WHERE `processtask_id` = #{value}
 	</select>
-	
+
+	<select id="getProcessTaskScoreContentHashByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT `content_hash` FROM `processtask_score_content` WHERE `processtask_id` = #{value}
+	</select>
+
 	<insert id="insertProcessTaskScore" parameterType="neatlogic.framework.process.dto.score.ProcessTaskScoreVo" >
 		INSERT INTO `processtask_score` (
 		`processtask_id`,

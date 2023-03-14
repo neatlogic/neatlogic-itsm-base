@@ -152,6 +152,15 @@
 		where `process_uuid` = #{value}
 	</select>
 
+	<select id="getScoreTemplateDimensionListByScoreTemplateId" parameterType="java.lang.Long" resultType="neatlogic.framework.process.dto.score.ScoreTemplateDimensionVo">
+		SELECT
+			`id`,
+			`name`,
+			`description`
+		FROM `score_template_dimension`
+		WHERE `score_template_id` = #{value}
+	</select>
+
 	<update id="updateScoreTemplate" parameterType="neatlogic.framework.process.dto.score.ScoreTemplateVo">
 		UPDATE `score_template` SET
 		 `name` = #{name},

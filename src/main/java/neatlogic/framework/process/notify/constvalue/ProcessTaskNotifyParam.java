@@ -40,6 +40,10 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
     REPORTERNAME("reporterName", "代报人", ParamType.STRING),
     OWNERCOMPANYLIST("ownerCompanyList", "上报人公司列表", ParamType.ARRAY),
     STATUSTEXT("statusText", "工单状态", ParamType.STRING),
+    PROCESS_TASK_SCORE("processTaskScore", "工单评分", ParamType.STRING),
+    PROCESS_TASK_SCORE_CONTENT("processTaskScoreContent", "工单评分内容", ParamType.STRING),
+    PROCESS_TASK_URGE_USER("processTaskUrgeUser", "工单催办用户", ParamType.STRING),
+    PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "工单催办次数", ParamType.NUMBER),
     APPROVALCOMMENTLIST("approvalCommentList", "审批意见", ParamType.ARRAY),
     FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??>\n" +
             "\t<#list DATA.form as attributeItem>\t\t\t\t   \n" +

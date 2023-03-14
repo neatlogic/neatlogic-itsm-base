@@ -38,6 +38,7 @@ import neatlogic.framework.process.constvalue.*;
 import neatlogic.framework.process.crossover.IProcessCrossoverMapper;
 import neatlogic.framework.process.dao.mapper.*;
 import neatlogic.framework.process.dao.mapper.score.ProcessTaskScoreMapper;
+import neatlogic.framework.process.dao.mapper.score.ScoreTemplateMapper;
 import neatlogic.framework.process.dto.*;
 import neatlogic.framework.process.dto.score.ProcessScoreTemplateVo;
 import neatlogic.framework.process.dto.score.ProcessTaskScoreVo;
@@ -95,6 +96,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static IProcessStepHandlerUtil IProcessStepHandlerUtil;
     protected static ProcessTaskAgentService processTaskAgentService;
     protected static WorktimeMapper worktimeMapper;
+    protected static ScoreTemplateMapper scoreTemplateMapper;
 //    @Resource
 //    public void setProcessMapper(IProcessCrossoverMapper _processMapper) {
 //        processCrossoverMapper = _processMapper;
@@ -175,6 +177,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         worktimeMapper = _worktimeMapper;
     }
 
+    @Resource
+    public void setScoreTemplateMapper(ScoreTemplateMapper _scoreTemplateMapper) {
+        scoreTemplateMapper = _scoreTemplateMapper;
+    }
     private int updateProcessTaskStatus(Long processTaskId) {
         List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
 
@@ -1567,7 +1573,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             /* 保存描述内容 **/
-            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_TRANSFER);
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_TRANSFER);
 
             /* 根据子类需要把最终处理人放进来，引擎将自动写入数据库，也可能为空，例如一些特殊的流程节点 **/
             processTaskStepVo.setStatus(ProcessTaskStatus.PENDING.getValue());
@@ -1786,8 +1792,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             ProcessScoreTemplateVo processScoreTemplateVo = processCrossoverMapper.getProcessScoreTemplateByProcessUuid(currentProcessTaskStepVo.getProcessUuid());
             if (processScoreTemplateVo != null) {
                 ProcessTaskScoreTemplateVo processTaskScoreTemplateVo = new ProcessTaskScoreTemplateVo(processScoreTemplateVo);
-                if (processTaskScoreTemplateVo.getConfig() != null) {
-                    ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo = new ProcessTaskScoreTemplateConfigVo(processTaskScoreTemplateVo.getConfigStr());
+                JSONObject processTaskScoreTemplateConfig = processTaskScoreTemplateVo.getConfig();
+                if (processTaskScoreTemplateConfig != null) {
+                    List<ScoreTemplateDimensionVo> scoreTemplateDimensionList = scoreTemplateMapper.getScoreTemplateDimensionListByScoreTemplateId(processTaskScoreTemplateVo.getScoreTemplateId());
+                    processTaskScoreTemplateConfig.put("scoreTemplateDimensionList", scoreTemplateDimensionList);
+                    ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo = new ProcessTaskScoreTemplateConfigVo(processTaskScoreTemplateConfig.toJSONString());
                     if (StringUtils.isNotBlank(processTaskScoreTemplateConfigVo.getHash())
                             && selectContentByHashMapper.checkProcessTaskScoreTempleteConfigIsExists(processTaskScoreTemplateConfigVo.getHash()) == 0) {
                         processTaskMapper.insertProcessTaskScoreTemplateConfig(processTaskScoreTemplateConfigVo);

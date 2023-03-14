@@ -2757,6 +2757,19 @@ limitations under the License.
         )
     </select>
 
+    <select id="getProcessTaskLastUrgeUserUuidByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+       SELECT
+           `lcu`
+       FROM `processtask_urge`
+       WHERE `processtask_id` = #{value}
+       ORDER BY `id` DESC
+       LIMIT 1
+    </select>
+
+    <select id="getProcessTaskUrgeCountByProcessTaskId" parameterType="java.lang.Long" resultType="int">
+       SELECT COUNT(1) FROM `processtask_urge` WHERE `processtask_id` = #{value}
+    </select>
+
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
@@ -3485,6 +3498,11 @@ limitations under the License.
         VALUES (#{processTaskId},
                 #{timeCost},
                 #{realTimeCost})
+    </insert>
+
+    <insert id="insertProcessTaskUrge" parameterType="java.util.Map">
+        INSERT INTO `processtask_urge` (`processtask_id`, `lcu`, `lcd`)
+        VALUES (#{processTaskId}, #{lcu}, NOW(3))
     </insert>
 
     <update id="updateProcessTaskStepUserStatus" parameterType="neatlogic.framework.process.dto.ProcessTaskStepUserVo">
