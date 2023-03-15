@@ -2762,7 +2762,7 @@ limitations under the License.
            `lcu`
        FROM `processtask_urge`
        WHERE `processtask_id` = #{value}
-       ORDER BY `id` DESC
+       ORDER BY `lcd` DESC
        LIMIT 1
     </select>
 
