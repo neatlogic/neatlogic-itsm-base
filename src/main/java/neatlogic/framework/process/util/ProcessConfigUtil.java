@@ -150,7 +150,7 @@ public class ProcessConfigUtil {
                 this.put("action", stepAction.getValue());
                 this.put("text", stepAction.getText());
                 this.put("defaultValue", stepAction.getDefaultValue());
-                this.put("acceptList", new ArrayList<>());
+                this.put("acceptList", null);
                 this.put("groupList", stepAction.getGroupList());
             }});
         }
