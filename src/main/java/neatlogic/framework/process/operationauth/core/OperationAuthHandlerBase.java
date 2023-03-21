@@ -288,6 +288,9 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
             String action = authorityObj.getString("action");
             if (operationType.getValue().equals(action)) {
                 JSONArray acceptList = authorityObj.getJSONArray("acceptList");
+                if (acceptList == null) {
+                    acceptList = authorityObj.getJSONArray("defaultValue");
+                }
                 if (CollectionUtils.isNotEmpty(acceptList)) {
                     AuthenticationInfoVo authenticationInfoVo = null;
                     if (Objects.equals(UserContext.get().getUserUuid(), userUuid)) {
