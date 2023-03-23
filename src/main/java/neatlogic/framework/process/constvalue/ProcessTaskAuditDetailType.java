@@ -1,25 +1,26 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.audithandler.core.IProcessTaskAuditDetailType;
+import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 
-    CHANNELTYPERELATION("channeltyperelation", "关系类型", "channelTypeRelationId", "oldChannelTypeRelationId", 1, false),
-    PROCESSTASKLIST("processtasklist", "工单", "processTaskIdList", "oldProcessTaskIdList", 2, false),
-    PROCESSTASK("fromprocesstask", "原工单", "fromProcessTaskId", "oldFromProcessTaskId", 3, false),
-	CONTENT("content", "内容", "content", "oldContent", 4, true),
-	TITLE("title", "标题", "title", "oldTitle", 5, true),
-	PRIORITY("priority", "优先级", "priorityUuid", "oldPriorityUuid", 6, false),
-	FORM("form", "表单", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 7, false),
-	WORKERLIST("workerlist", "处理人", "workerList", "oldWorkerList", 8, false),
-	FILE("file", "文件", "fileIdList", "oldFileIdList", 10, false),
-	RESTFULACTION("restfulaction", "RESTFUL动作", "restfulAction", "oldRestfulAction", 12, false),
-	CAUSE("cause", "原因", "cause", "oldCause", 13, true),
-	RULE("rule", "流转规则", "rule", "oldRule", 14, false),
-	SCORE("score", "评分", "score", "oldScore", 15, false),
-	TAGLIST("taglist","标签","tagList","oldTagList",16, false),
-	FOCUSUSER("focususer","工单关注人","focusUser","oldFocusUser",17, false),
-	TASK("task", "任务", "task", "oldTask", 18, false),
+    CHANNELTYPERELATION("channeltyperelation", "enum.process.processtaskauditdetailtype.channeltyperelation", "channelTypeRelationId", "oldChannelTypeRelationId", 1, false),
+    PROCESSTASKLIST("processtasklist", "enum.process.processtaskauditdetailtype.processtasklist", "processTaskIdList", "oldProcessTaskIdList", 2, false),
+    PROCESSTASK("fromprocesstask", "enum.process.processtaskauditdetailtype.processtask", "fromProcessTaskId", "oldFromProcessTaskId", 3, false),
+	CONTENT("content", "enum.process.processtaskauditdetailtype.content", "content", "oldContent", 4, true),
+	TITLE("title", "enum.process.processtaskauditdetailtype.title", "title", "oldTitle", 5, true),
+	PRIORITY("priority", "enum.process.processtaskauditdetailtype.priority", "priorityUuid", "oldPriorityUuid", 6, false),
+	FORM("form", "enum.process.processtaskauditdetailtype.form=", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 7, false),
+	WORKERLIST("workerlist", "enum.process.processtaskauditdetailtype.workerlist", "workerList", "oldWorkerList", 8, false),
+	FILE("file", "enum.process.processtaskauditdetailtype.file", "fileIdList", "oldFileIdList", 10, false),
+	RESTFULACTION("restfulaction", "enum.process.processtaskauditdetailtype.restfulaction", "restfulAction", "oldRestfulAction", 12, false),
+	CAUSE("cause", "enum.process.processtaskauditdetailtype.cause", "cause", "oldCause", 13, true),
+	RULE("rule", "enum.process.processtaskauditdetailtype.rule", "rule", "oldRule", 14, false),
+	SCORE("score", "enum.process.processtaskauditdetailtype.score", "score", "oldScore", 15, false),
+	TAGLIST("taglist","enum.process.processtaskauditdetailtype.taglist","tagList","oldTagList",16, false),
+	FOCUSUSER("focususer","enum.process.processtaskauditdetailtype.focususer","focusUser","oldFocusUser",17, false),
+	TASK("task", "enum.process.processtaskauditdetailtype.task", "task", "oldTask", 18, false),
 	;
 	
 	private String value;
@@ -43,7 +44,7 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	}
 
 	public String getText() {
-		return text;
+		return I18nUtils.getMessage(text);
 	}
 
 	public String getParamName() {

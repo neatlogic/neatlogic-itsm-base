@@ -16,10 +16,12 @@
 
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18nUtils;
+
 public enum ProcessStepType {
-    START("start", "开始"),
-    PROCESS("process", "处理节点"),
-    END("end", "结束");
+    START("start", "enum.process.processsteptype.start"),
+    PROCESS("process", "enum.process.processsteptype.process"),
+    END("end", "enum.process.processsteptype.end");
 
     private final String type;
     private final String name;
@@ -34,7 +36,7 @@ public enum ProcessStepType {
     }
 
     public String getName() {
-        return name;
+        return I18nUtils.getMessage(name);
     }
 
     public static String getValue(String _type) {

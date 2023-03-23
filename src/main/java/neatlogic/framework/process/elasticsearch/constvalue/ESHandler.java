@@ -1,7 +1,9 @@
 package neatlogic.framework.process.elasticsearch.constvalue;
 
+import neatlogic.framework.util.I18nUtils;
+
 public enum ESHandler {
-	PROCESSTASK("processtask","工单");
+	PROCESSTASK("processtask","enum.process.eshandler.processtask");
 
 	private String value;
 	private String text;
@@ -16,7 +18,7 @@ public enum ESHandler {
 	}
 
 	public String getText() {
-		return text;
+		return I18nUtils.getMessage(text);
 	}
 
 	public static String getValue(String _status) {

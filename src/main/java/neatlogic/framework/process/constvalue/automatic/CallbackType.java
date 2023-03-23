@@ -2,11 +2,12 @@ package neatlogic.framework.process.constvalue.automatic;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.util.I18nUtils;
 
 public enum CallbackType {
-    NONE("none", "无需回调"),
-    INTERVAL("interval", "轮询"),
-    WAIT("wait", "等待回调")
+    NONE("none", "enum.process.callbacktype.none"),
+    INTERVAL("interval", "enum.process.callbacktype.interval"),
+    WAIT("wait", "enum.process.callbacktype.wait")
     ;
 
     private String value;
@@ -22,7 +23,7 @@ public enum CallbackType {
     }
 
     public String getText() {
-        return name;
+        return I18nUtils.getMessage(name);
     }
 
     public static String getValue(String _value) {

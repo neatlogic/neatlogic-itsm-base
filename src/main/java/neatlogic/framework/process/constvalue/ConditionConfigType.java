@@ -1,7 +1,10 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18nUtils;
+
 public enum ConditionConfigType {
-  WORKCENTER("workcenter", "工单中心"),DEFAULT("default","默认");
+  WORKCENTER("workcenter", "enum.process.conditionconfigtype.workcenter"),
+  DEFAULT("default","enum.process.conditionconfigtype.default");
 
   private final String value;
   private final String name;
@@ -16,7 +19,7 @@ public enum ConditionConfigType {
   }
 
   public String getName() {
-    return name;
+    return I18nUtils.getMessage(name);
   }
 
   public static String getValue(String _value) {

@@ -1,7 +1,12 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18nUtils;
+
 public enum ProcessFieldType {
-    COMMON("common", "工单固有属性"), FORM("form", "表单属性"), CUSTOM("custom", "自定义属性"), CONSTANT("constant", "常量属性");
+    COMMON("common", "enum.process.processfieldtype.common"),
+    FORM("form", "enum.process.processfieldtype.form"),
+    CUSTOM("custom", "enum.process.processfieldtype.custom"),
+    CONSTANT("constant", "enum.process.processfieldtype.constant");
     private String value;
     private String name;
 
@@ -15,7 +20,7 @@ public enum ProcessFieldType {
     }
 
     public String getName() {
-        return name;
+        return I18nUtils.getMessage(name);
     }
 
     public static String getValue(String _value) {

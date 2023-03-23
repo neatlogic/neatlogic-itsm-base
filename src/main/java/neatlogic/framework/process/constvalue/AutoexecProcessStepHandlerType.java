@@ -17,13 +17,14 @@ limitations under the License.
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.stephandler.core.IProcessStepHandlerType;
+import neatlogic.framework.util.I18nUtils;
 
 /**
  * @author linbq
  * @since 2021/9/2 14:40
  **/
 public enum AutoexecProcessStepHandlerType implements IProcessStepHandlerType {
-    AUTOEXEC("autoexec", "process", "自动化");
+    AUTOEXEC("autoexec", "process", "enum.process.autoexecprocessstephandlertype.autoexec");
     private String handler;
     private String name;
     private String type;
@@ -40,7 +41,7 @@ public enum AutoexecProcessStepHandlerType implements IProcessStepHandlerType {
 
     @Override
     public String getName() {
-        return name;
+        return I18nUtils.getMessage(name);
     }
 
     @Override

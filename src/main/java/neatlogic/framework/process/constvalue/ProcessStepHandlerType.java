@@ -1,11 +1,17 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.stephandler.core.IProcessStepHandlerType;
+import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessStepHandlerType implements IProcessStepHandlerType {
-    START("start", "start", "开始"), OMNIPOTENT("omnipotent", "process", "通用节点"), END("end", "end", "结束"),
-    CONDITION("condition", "converge", "条件"), DISTRIBUTARY("distributary", "converge", "分流"),
-    OCTOPUS("octopus", "process", "自动化"), AUTOMATIC("automatic", "process", "自动处理"), TIMER("timer", "process", "定时节点")
+    START("start", "start", "enum.process.processstephandlertype.start"),
+    OMNIPOTENT("omnipotent", "process", "enum.process.processstephandlertype.omnipotent"),
+    END("end", "end", "enum.process.processstephandlertype.end"),
+    CONDITION("condition", "converge", "enum.process.processstephandlertype.condition"),
+    DISTRIBUTARY("distributary", "converge", "enum.process.processstephandlertype.distributary"),
+    OCTOPUS("octopus", "process", "enum.process.processstephandlertype.octopus"),
+    AUTOMATIC("automatic", "process", "enum.process.processstephandlertype.automatic"),
+    TIMER("timer", "process", "enum.process.processstephandlertype.timer")
     ;
 
     private String handler;
@@ -23,7 +29,7 @@ public enum ProcessStepHandlerType implements IProcessStepHandlerType {
     }
 
     public String getName() {
-        return name;
+        return I18nUtils.getMessage(name);
     }
 
     public String getType() {

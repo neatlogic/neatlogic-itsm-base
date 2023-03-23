@@ -5,9 +5,10 @@ import java.util.List;
 
 import neatlogic.framework.knowledge.dto.SyncSourceVo;
 import neatlogic.framework.knowledge.source.ISyncSource;
+import neatlogic.framework.util.I18nUtils;
 
 public enum KnowledgeSyncSource implements ISyncSource{
-    PROCESSTASK("processtask", "工单");
+    PROCESSTASK("processtask", "enum.process.knowledgesyncsource.processtask");
 
     private String value;
     private String name;
@@ -22,7 +23,7 @@ public enum KnowledgeSyncSource implements ISyncSource{
     }
 
     public String getName() {
-        return name;
+        return I18nUtils.getMessage(name);
     }
 
     public static String getValue(String _value) {

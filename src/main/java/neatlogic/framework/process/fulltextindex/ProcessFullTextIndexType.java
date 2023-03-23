@@ -17,13 +17,14 @@
 package neatlogic.framework.process.fulltextindex;
 
 import neatlogic.framework.fulltextindex.core.IFullTextIndexType;
+import neatlogic.framework.util.I18nUtils;
 
 /**
  * @author lvzk
  * @since 2021/03/23
  */
 public enum ProcessFullTextIndexType implements IFullTextIndexType {
-    PROCESSTASK("processtask", "工单");
+    PROCESSTASK("processtask", "enum.process.processfulltextindextype.processtask");
 //    PROCESSTASK_FORM("processtask_form", "工单_表单");
 
     private final String type;
@@ -41,7 +42,7 @@ public enum ProcessFullTextIndexType implements IFullTextIndexType {
 
     @Override
     public String getTypeName() {
-        return typeName;
+        return I18nUtils.getMessage(typeName);
     }
 
     @Override

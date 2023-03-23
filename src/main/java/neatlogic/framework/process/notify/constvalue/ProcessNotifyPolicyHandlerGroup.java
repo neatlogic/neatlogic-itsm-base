@@ -17,9 +17,10 @@
 package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.notify.core.INotifyPolicyHandlerGroup;
+import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessNotifyPolicyHandlerGroup implements INotifyPolicyHandlerGroup {
-    TASKSTEP("TaskStep", "工单步骤");
+    TASKSTEP("TaskStep", "enum.process.processnotifypolicyhandlergroup.taskstep");
     private final String value;
     private final String text;
 
@@ -35,6 +36,6 @@ public enum ProcessNotifyPolicyHandlerGroup implements INotifyPolicyHandlerGroup
 
     @Override
     public String getText() {
-        return text;
+        return I18nUtils.getMessage(text);
     }
 }
