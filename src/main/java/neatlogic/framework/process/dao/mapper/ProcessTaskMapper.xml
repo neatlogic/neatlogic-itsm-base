@@ -3535,6 +3535,7 @@ limitations under the License.
             <when test="status == 'succeed' or status == 'failed' or status == 'aborted'">
                 `end_time` = NOW(3),
             </when>
+            <when test="status == 'scored'"></when>    
             <otherwise>
                 `end_time` = null,
             </otherwise>
