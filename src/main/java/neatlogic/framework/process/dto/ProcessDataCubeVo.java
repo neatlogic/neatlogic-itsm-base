@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import neatlogic.framework.util.I18nUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,9 @@ public class ProcessDataCubeVo implements Serializable {
 	private static final long serialVersionUID = 6320662638466626455L;
 
 	public enum DataCubeType {
-		STATIC("static", "静态"), SQL("sql", "数据库"), REST("url", "RESTFul接口");
+		STATIC("static", "enum.process.datacubetype.static"),
+		SQL("sql", "enum.process.datacubetype.sql"),
+		REST("url", "enum.process.datacubetype.rest");
 		private String type;
 		private String name;
 
@@ -32,7 +35,7 @@ public class ProcessDataCubeVo implements Serializable {
 		}
 
 		public String getText() {
-			return name;
+			return I18nUtils.getMessage(name);
 		}
 
 		public String getText(String _type) {

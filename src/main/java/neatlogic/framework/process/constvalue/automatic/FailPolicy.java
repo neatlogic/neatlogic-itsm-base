@@ -2,12 +2,13 @@ package neatlogic.framework.process.constvalue.automatic;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.util.I18nUtils;
 
 public enum FailPolicy {
-    HANG("hang", "人工处理"), 
-    KEEP_ON("keepon", "向后流转"),
-    BACK("back", "步骤回退"),
-    CANCEL("cancel", "取消工单"),
+    HANG("hang", "enum.process.failpolicy.hang"),
+    KEEP_ON("keepon", "enum.process.failpolicy.keep_on"),
+    BACK("back", "enum.process.failpolicy.back"),
+    CANCEL("cancel", "enum.process.failpolicy.cancel"),
     ;
 
     private String value;
@@ -23,7 +24,7 @@ public enum FailPolicy {
     }
 
     public String getText() {
-        return name;
+        return I18nUtils.getMessage(name);
     }
 
     public static String getValue(String _value) {

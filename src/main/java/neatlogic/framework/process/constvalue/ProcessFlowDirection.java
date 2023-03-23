@@ -1,8 +1,10 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18nUtils;
+
 public enum ProcessFlowDirection {
-	FORWARD("forward", "流转至："),
-	BACKWARD("backward", "回退至：");
+	FORWARD("forward", "enum.process.processflowdirection.forward"),
+	BACKWARD("backward", "enum.process.processflowdirection.backward");
 	
 	private String value;
 	private String text;
@@ -17,7 +19,7 @@ public enum ProcessFlowDirection {
 	}
 
 	public String getText() {
-		return text;
+		return I18nUtils.getMessage(text);
 	}
 
 }
