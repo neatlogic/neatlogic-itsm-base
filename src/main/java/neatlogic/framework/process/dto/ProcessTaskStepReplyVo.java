@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-import neatlogic.framework.asynchronization.threadlocal.UserContext;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.dto.BaseEditorVo;
 import neatlogic.framework.file.dto.FileVo;
@@ -105,28 +104,12 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 	}
 
 	public Integer getIsEditable() {
-		if(isEditable == null) {
-			String currentUser = UserContext.get().getUserUuid();
-			if(currentUser != null && currentUser.equals(super.getFcu())) {
-				isEditable = 1;
-			}else {
-				isEditable = 0;
-			}
-		}
 		return isEditable;
 	}
 	public void setIsEditable(Integer isEditable) {
 		this.isEditable = isEditable;
 	}
 	public Integer getIsDeletable() {
-		if(isDeletable == null) {
-			String currentUser = UserContext.get().getUserUuid();
-			if(currentUser != null && currentUser.equals(super.getFcu())) {
-				isDeletable = 1;
-			}else {
-				isDeletable = 0;
-			}
-		}
 		return isDeletable;
 	}
 	public void setIsDeletable(Integer isDeletable) {
