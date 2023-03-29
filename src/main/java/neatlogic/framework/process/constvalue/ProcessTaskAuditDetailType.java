@@ -11,7 +11,7 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	CONTENT("content", "enum.process.processtaskauditdetailtype.content", "content", "oldContent", 4, true),
 	TITLE("title", "enum.process.processtaskauditdetailtype.title", "title", "oldTitle", 5, true),
 	PRIORITY("priority", "enum.process.processtaskauditdetailtype.priority", "priorityUuid", "oldPriorityUuid", 6, false),
-	FORM("form", "enum.process.processtaskauditdetailtype.form=", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 7, false),
+	FORM("form", "enum.process.processtaskauditdetailtype.form", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 7, false),
 	WORKERLIST("workerlist", "enum.process.processtaskauditdetailtype.workerlist", "workerList", "oldWorkerList", 8, false),
 	FILE("file", "enum.process.processtaskauditdetailtype.file", "fileIdList", "oldFileIdList", 10, false),
 	RESTFULACTION("restfulaction", "enum.process.processtaskauditdetailtype.restfulaction", "restfulAction", "oldRestfulAction", 12, false),
