@@ -25,6 +25,7 @@ import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.process.column.core.IProcessTaskColumn;
 import neatlogic.framework.process.constvalue.ProcessFieldType;
 import neatlogic.framework.restful.annotation.EntityField;
+import neatlogic.framework.util.I18nUtils;
 
 public class WorkcenterTheadVo {
 
@@ -73,7 +74,7 @@ public class WorkcenterTheadVo {
     public WorkcenterTheadVo(IProcessTaskColumn column) {
         this.name = column.getName();
         this.userUuid = UserContext.get().getUserUuid();
-        this.displayName = column.getDisplayName();
+        this.displayName = I18nUtils.getMessage(column.getDisplayName());
         this.type = ProcessFieldType.COMMON.getValue();
         this.className = column.getClassName();
         this.sort = column.getSort();
