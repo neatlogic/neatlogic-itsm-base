@@ -18,34 +18,35 @@ package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.common.constvalue.ParamType;
 import neatlogic.framework.notify.core.INotifyParam;
+import neatlogic.framework.util.I18nUtils;
 
 /**
  * @author linbq
  * @since 2021/10/15 17:12
  **/
 public enum ProcessTaskNotifyParam implements INotifyParam {
-    ID("id", "工单ID", ParamType.NUMBER),
-    SERIALNUMBER("serialNumber", "工单号", ParamType.STRING),
-    TITLE("title", "标题", ParamType.STRING),
-    PRIORITYNAME("priorityName", "优先级", ParamType.STRING),
-    CHANNELNAME("channelName", "服务名称", ParamType.STRING),
-    CHANNELPATH("channelPath", "服务路径", ParamType.STRING),
-    CHANNELTYPENAME("channelTypeName", "服务类型", ParamType.STRING),
-    CONTENT("content", "上报内容", ParamType.STRING),
-    STARTTIME("startTime", "开始时间", ParamType.DATE),
-    STARTDATE("startDate", "开始日期", ParamType.DATE),
-    ENDTIME("endTime", "结束时间", ParamType.DATE),
-    OWNERNAME("ownerName", "上报人", ParamType.STRING),
-    DEPARTMENTANDOWNERNAME("departmentAndOwnerName", "部门/上报人", ParamType.STRING),
-    REPORTERNAME("reporterName", "代报人", ParamType.STRING),
-    OWNERCOMPANYLIST("ownerCompanyList", "上报人公司列表", ParamType.ARRAY),
-    STATUSTEXT("statusText", "工单状态", ParamType.STRING),
-    PROCESS_TASK_SCORE("processTaskScore", "工单评分", ParamType.STRING),
-    PROCESS_TASK_SCORE_CONTENT("processTaskScoreContent", "工单评分内容", ParamType.STRING),
-    PROCESS_TASK_URGE_USER("processTaskUrgeUser", "工单催办用户", ParamType.STRING),
-    PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "工单催办次数", ParamType.NUMBER),
-    APPROVALCOMMENTLIST("approvalCommentList", "审批意见", ParamType.ARRAY),
-    FORM("form", "表单", ParamType.ARRAY, "<#if DATA.form??>\n" +
+    ID("id", "enum.process.processtasknotifyparam.id", ParamType.NUMBER),
+    SERIALNUMBER("serialNumber", "enum.process.processtasknotifyparam.serialnumber", ParamType.STRING),
+    TITLE("title", "enum.process.processtasknotifyparam.title", ParamType.STRING),
+    PRIORITYNAME("priorityName", "enum.process.processtasknotifyparam.priorityname", ParamType.STRING),
+    CHANNELNAME("channelName", "enum.process.processtasknotifyparam.channelname", ParamType.STRING),
+    CHANNELPATH("channelPath", "enum.process.processtasknotifyparam.channelpath", ParamType.STRING),
+    CHANNELTYPENAME("channelTypeName", "enum.process.processtasknotifyparam.channeltypename", ParamType.STRING),
+    CONTENT("content", "enum.process.processtasknotifyparam.content", ParamType.STRING),
+    STARTTIME("startTime", "enum.process.processtasknotifyparam.starttime", ParamType.DATE),
+    STARTDATE("startDate", "enum.process.processtasknotifyparam.startdate", ParamType.DATE),
+    ENDTIME("endTime", "enum.process.processtasknotifyparam.endtime", ParamType.DATE),
+    OWNERNAME("ownerName", "enum.process.processtasknotifyparam.ownername", ParamType.STRING),
+    DEPARTMENTANDOWNERNAME("departmentAndOwnerName", "enum.process.processtasknotifyparam.departmentandownername", ParamType.STRING),
+    REPORTERNAME("reporterName", "enum.process.processtasknotifyparam.reportername", ParamType.STRING),
+    OWNERCOMPANYLIST("ownerCompanyList", "enum.process.processtasknotifyparam.ownercompanylist", ParamType.ARRAY),
+    STATUSTEXT("statusText", "enum.process.processtasknotifyparam.statustext", ParamType.STRING),
+    PROCESS_TASK_SCORE("processTaskScore", "enum.process.processtasknotifyparam.process_task_score", ParamType.STRING),
+    PROCESS_TASK_SCORE_CONTENT("processTaskScoreContent", "enum.process.processtasknotifyparam.process_task_score_content", ParamType.STRING),
+    PROCESS_TASK_URGE_USER("processTaskUrgeUser", "enum.process.processtasknotifyparam.process_task_urge_user", ParamType.STRING),
+    PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "enum.process.processtasknotifyparam.process_task_urge_count", ParamType.NUMBER),
+    APPROVALCOMMENTLIST("approvalCommentList", "enum.process.processtasknotifyparam.approvalcommentlist", ParamType.ARRAY),
+    FORM("form", "enum.process.processtasknotifyparam.form", ParamType.ARRAY, "<#if DATA.form??>\n" +
             "\t<#list DATA.form as attributeItem>\t\t\t\t   \n" +
             "\t\t<#if attributeItem.type=='forminput'>\n" +
             "\t\t${attributeItem.label}：${attributeItem.dataObj!''}\n" +
@@ -326,7 +327,7 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
 
     @Override
     public String getText() {
-        return text;
+        return I18nUtils.getMessage(text);
     }
 
     @Override

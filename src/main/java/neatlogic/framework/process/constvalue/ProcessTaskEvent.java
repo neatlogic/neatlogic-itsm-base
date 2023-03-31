@@ -1,8 +1,16 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18nUtils;
+
 public enum ProcessTaskEvent {
 
-	ACTIVE("active", "激活"), SUCCEED("succeed", "成功"), FAILED("failed", "失败"), REDO("redo", "重做"), ABORT("abort", "终止"), HANDLE("handle", "处理"), TIMEOUT("timeout", "超时");
+	ACTIVE("active", "enum.process.processtaskevent.active"),
+	SUCCEED("succeed", "enum.process.processtaskevent.succeed"),
+	FAILED("failed", "enum.process.processtaskevent.failed"),
+	REDO("redo", "enum.process.processtaskevent.redo"),
+	ABORT("abort", "enum.process.processtaskevent.abort"),
+	HANDLE("handle", "enum.process.processtaskevent.handle"),
+	TIMEOUT("timeout", "enum.process.processtaskevent.timeout");
 	private String name;
 	private String text;
 
@@ -16,7 +24,7 @@ public enum ProcessTaskEvent {
 	}
 
 	public String getText() {
-		return text;
+		return I18nUtils.getMessage(text);
 	}
 
 	public static String getText(String name) {
