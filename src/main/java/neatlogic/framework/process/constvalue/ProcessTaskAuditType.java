@@ -1,47 +1,48 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.audithandler.core.IProcessTaskAuditType;
+import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessTaskAuditType implements IProcessTaskAuditType {
-	COMMENT("comment", "回复", "回复【${DATA.processTaskStepName}】"),
-	EDITCOMMENT("editcomment", "编辑回复", "编辑回复【${DATA.processTaskStepName}】"),
-	DELETECOMMENT("deletecomment", "删除回复", "删除回复【${DATA.processTaskStepName}】"),
-	UPDATE("update", "上报内容", "修改工单"),
-	URGE("urge","催办","发起催办"),
+	COMMENT("comment", "enum.process.processtaskaudittype.comment", "enum.process.processtaskaudittype.comment.1"),
+	EDITCOMMENT("editcomment", "enum.process.processtaskaudittype.editcomment", "enum.process.processtaskaudittype.editcomment.1"),
+	DELETECOMMENT("deletecomment", "enum.process.processtaskaudittype.deletecomment", "enum.process.processtaskaudittype.deletecomment.1"),
+	UPDATE("update", "enum.process.processtaskaudittype.update", "enum.process.processtaskaudittype.update.1"),
+	URGE("urge","enum.process.processtaskaudittype.urge","enum.process.processtaskaudittype.urge.1"),
 
 	//任务
-	CREATETASK("createtask", "创建子任务", "创建${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	EDITTASK("edittask", "编辑子任务", "编辑${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	COMPLETETASK("completetask", "回复子任务", "完成${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	DELETETASK("deletetask", "删除子任务", "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】"),
-	SAVETASKFILE("savetaskfile", "上传子任务附件", "${DATA.replaceable_task}【${DATA.processTaskStepName}】 上传附件"),
-	DELETETASKFILE("deletetaskfile", "删除子任务附件", "${DATA.replaceable_task}【${DATA.processTaskStepName}】 删除附件"),
+	CREATETASK("createtask", "enum.process.processtaskaudittype.createtask", "enum.process.processtaskaudittype.createtask.1"),
+	EDITTASK("edittask", "enum.process.processtaskaudittype.edittask", "enum.process.processtaskaudittype.edittask.1"),
+	COMPLETETASK("completetask", "enum.process.processtaskaudittype.completetask", "enum.process.processtaskaudittype.completetask.1"),
+	DELETETASK("deletetask", "enum.process.processtaskaudittype.deletetask", "enum.process.processtaskaudittype.deletetask.1"),
+	SAVETASKFILE("savetaskfile", "enum.process.processtaskaudittype.savetaskfile", "enum.process.processtaskaudittype.savetaskfile.1"),
+	DELETETASKFILE("deletetaskfile", "enum.process.processtaskaudittype.deletetaskfile", "enum.process.processtaskaudittype.deletetaskfile.1"),
 
 
-	START("start", "开始", "开始【${DATA.processTaskStepName}】"),
+	START("start", "enum.process.processtaskaudittype.start", "enum.process.processtaskaudittype.start.1"),
 	RETREAT("retreat", "撤回", "撤回【${DATA.processTaskStepName}】"),
-	ABORTPROCESSTASK("abort", "取消", "取消工单"),
-	RECOVERPROCESSTASK("recover", "恢复", "恢复工单"),
-	PAUSE("pause", "暂停", "暂停【${DATA.processTaskStepName}】"),
-	TRANSFER("transfer", "转交", "转交【${DATA.processTaskStepName}】"),
-	STARTPROCESS("startprocess", "上报", "提交工单"),
-	RESTFULACTION("restfulaction", "RESTFUL动作","【${DATA.processTaskStepName}】"),
-	COMPLETE("complete", "流转", "完成【${DATA.processTaskStepName}】"),
-	REAPPROVAL("reapproval", "重审", "重审【${DATA.processTaskStepName}】"),
-	BACK("back", "回退", "回退【${DATA.processTaskStepName}】至【${DATA.nextStepName}】"),
-	CONDITION("condition", "条件", "条件 <span style=\"color:${DATA.stepStatusVo.color};vertical-align: baseline;\">${DATA.stepStatusVo.text}</span> "),
-	SCORE("score", "评分", "评价工单"),
-    TRANSFERREPORT("tranferreport", "转报", "转报并关联工单"),
-    REPORTRELATION("reportrelation", "上报关联", "上报并关联工单"),
-    RELATION("relation", "关联", "关联工单"),
-    DELETERELATION("deleterelation", "解除关联", "解除关联工单"),
-    REDO("redo", "回退", "回退至【${DATA.processTaskStepName}】"),
-    TRANSFERKNOWLEDGE("transferknowledge", "转知识", "提交工单转知识"),
-    UPDATEFOCUSUSER("updatefocususer", "修改工单关注人", "修改工单关注人"),
-    FOCUSTASK("focustask", "关注工单", "关注工单"),
-    UNDOFOCUSTASK("undofocustask", "取消关注工单", "取消关注工单"),
-	BINDREPEAT("bindrepeat", "绑定重复工单", "绑定重复工单"),
-	UNBINDREPEAT("unbindrepeat", "解绑重复工单", "解绑重复工单")
+	ABORTPROCESSTASK("abort", "enum.process.processtaskaudittype.abortprocesstask", "enum.process.processtaskaudittype.abortprocesstask.1"),
+	RECOVERPROCESSTASK("recover", "enum.process.processtaskaudittype.recoverprocesstask", "enum.process.processtaskaudittype.recoverprocesstask.1"),
+	PAUSE("pause", "enum.process.processtaskaudittype.pause", "enum.process.processtaskaudittype.pause.1"),
+	TRANSFER("transfer", "enum.process.processtaskaudittype.transfer", "enum.process.processtaskaudittype.transfer.1"),
+	STARTPROCESS("startprocess", "enum.process.processtaskaudittype.startprocess", "enum.process.processtaskaudittype.startprocess.1"),
+	RESTFULACTION("restfulaction", "enum.process.processtaskaudittype.restfulaction","enum.process.processtaskaudittype.restfulaction.1"),
+	COMPLETE("complete", "enum.process.processtaskaudittype.complete", "enum.process.processtaskaudittype.complete.1"),
+	REAPPROVAL("reapproval", "enum.process.processtaskaudittype.reapproval", "enum.process.processtaskaudittype.reapproval.1"),
+	BACK("back", "enum.process.processtaskaudittype.back", "enum.process.processtaskaudittype.back.1"),
+	CONDITION("condition", "enum.process.processtaskaudittype.condition", "enum.process.processtaskaudittype.condition.1"),
+	SCORE("score", "enum.process.processtaskaudittype.score", "enum.process.processtaskaudittype.score.1"),
+    TRANSFERREPORT("tranferreport", "enum.process.processtaskaudittype.transferreport", "enum.process.processtaskaudittype.transferreport.1"),
+    REPORTRELATION("reportrelation", "enum.process.processtaskaudittype.reportrelation", "enum.process.processtaskaudittype.reportrelation.1"),
+    RELATION("relation", "enum.process.processtaskaudittype.relation", "enum.process.processtaskaudittype.relation.1"),
+    DELETERELATION("deleterelation", "enum.process.processtaskaudittype.deleterelation", "enum.process.processtaskaudittype.deleterelation.1"),
+    REDO("redo", "enum.process.processtaskaudittype.redo", "enum.process.processtaskaudittype.redo.1"),
+    TRANSFERKNOWLEDGE("transferknowledge", "enum.process.processtaskaudittype.transferknowledge", "enum.process.processtaskaudittype.transferknowledge.1"),
+    UPDATEFOCUSUSER("updatefocususer", "enum.process.processtaskaudittype.updatefocususer", "enum.process.processtaskaudittype.updatefocususer"),
+    FOCUSTASK("focustask", "enum.process.processtaskaudittype.focustask", "enum.process.processtaskaudittype.focustask"),
+    UNDOFOCUSTASK("undofocustask", "enum.process.processtaskaudittype.undofocustask", "enum.process.processtaskaudittype.undofocustask"),
+	BINDREPEAT("bindrepeat", "enum.process.processtaskaudittype.bindrepeat", "enum.process.processtaskaudittype.bindrepeat"),
+	UNBINDREPEAT("unbindrepeat", "enum.process.processtaskaudittype.unbindrepeat", "enum.process.processtaskaudittype.unbindrepeat")
 
 	;
 	private String value;
@@ -61,12 +62,12 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 
 	@Override
 	public String getText() {
-		return text;
+		return I18nUtils.getMessage(text);
 	}
 
 	@Override
 	public String getDescription() {
-		return description;
+		return I18nUtils.getMessage(description);
 	}
 
 	public static ProcessTaskAuditType getProcessTaskAuditType(String _value) {
