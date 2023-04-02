@@ -16,12 +16,8 @@
 
 package neatlogic.framework.process.constvalue;
 
-import neatlogic.framework.autoexec.dto.AutoexecJobSourceVo;
 import neatlogic.framework.autoexec.source.IAutoexecJobSource;
 import neatlogic.framework.util.I18nUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public enum AutoExecJobProcessSource implements IAutoexecJobSource {
     ITSM("enum.process.autoexecjobprocesssource.itsm", "itsm");
@@ -48,21 +44,5 @@ public enum AutoExecJobProcessSource implements IAutoexecJobSource {
             }
         }
         return "";
-    }
-
-    /**
-     * @return 返回对应的来源
-     */
-    @Override
-    public List<AutoexecJobSourceVo> getSource() {
-        List<AutoexecJobSourceVo> list = new ArrayList<>();
-        for (AutoExecJobProcessSource s : AutoExecJobProcessSource.values()) {
-            AutoexecJobSourceVo source = new AutoexecJobSourceVo();
-            source.setSource(s.value);
-            source.setSourceName(s.getText());
-            source.setType(s.getType());
-            list.add(source);
-        }
-        return list;
     }
 }
