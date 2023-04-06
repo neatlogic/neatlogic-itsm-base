@@ -2,15 +2,9 @@ package neatlogic.framework.process.dto;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
-
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.process.audithandler.core.ProcessTaskAuditDetailTypeFactory;
 import neatlogic.framework.restful.annotation.EntityField;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepAuditDetailVo>{
 	@EntityField(name = "活动id", type = ApiParamType.LONG)
