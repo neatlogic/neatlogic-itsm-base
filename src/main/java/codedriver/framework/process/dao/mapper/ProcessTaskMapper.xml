@@ -1055,16 +1055,17 @@
         FROM `processtask_step_worker` a
         JOIN `processtask` b ON b.`id` = a.`processtask_id` and b.`status` = 'running'
         JOIN `processtask_serial_number` c ON c.`processtask_id` = a.`processtask_id`
-        WHERE ((`type` = 'user' AND a.`uuid` = #{authenticationInfoVo.userUuid})
+        JOIN `processtask_step` d ON d.`processtask_id` = a.`processtask_id` AND d.`id` = a.`processtask_step_id` AND (d.`status` = 'running' OR d.`status` = 'pending')
+        WHERE ((a.`type` = 'user' AND a.`uuid` = #{authenticationInfoVo.userUuid})
         <if test="authenticationInfoVo.teamUuidList != null and authenticationInfoVo.teamUuidList.size() > 0">
-            OR (`type` = 'team' AND a.`uuid` in
+            OR (a.`type` = 'team' AND a.`uuid` in
             <foreach collection="authenticationInfoVo.teamUuidList" item="teamUuid" open="(" separator="," close=")">
                 #{teamUuid}
             </foreach>
             )
         </if>
         <if test="authenticationInfoVo.roleUuidList != null and authenticationInfoVo.roleUuidList.size() > 0">
-            OR (`type` = 'role' AND a.`uuid` in
+            OR (a.`type` = 'role' AND a.`uuid` in
             <foreach collection="authenticationInfoVo.roleUuidList" item="roleUuid" open="(" separator="," close=")">
                 #{roleUuid}
             </foreach>
@@ -3505,6 +3506,7 @@
             <when test="status == 'succeed' or status == 'failed' or status == 'aborted'">
                 `end_time` = NOW(3),
             </when>
+            <when test="status == 'scored'"></when>
             <otherwise>
                 `end_time` = null,
             </otherwise>
