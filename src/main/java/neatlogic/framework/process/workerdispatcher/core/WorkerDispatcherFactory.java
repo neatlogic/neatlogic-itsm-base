@@ -16,14 +16,15 @@
 
 package neatlogic.framework.process.workerdispatcher.core;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.applicationlistener.core.ModuleInitializedListenerBase;
 import neatlogic.framework.asynchronization.threadlocal.TenantContext;
 import neatlogic.framework.bootstrap.NeatLogicWebApplicationContext;
 import neatlogic.framework.common.RootComponent;
 import neatlogic.framework.dto.module.ModuleVo;
 import neatlogic.framework.process.dto.WorkerDispatcherVo;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.process.exception.workcenter.HandlerDispatchComponentTypeNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -36,7 +37,7 @@ public class WorkerDispatcherFactory extends ModuleInitializedListenerBase {
 
 	public static IWorkerDispatcher getDispatcher(String name) {
 		if (!componentMap.containsKey(name) || componentMap.get(name) == null) {
-			throw new RuntimeException("找不到类型为：" + name + "的处理人分派组件");
+            throw new HandlerDispatchComponentTypeNotFoundException(name);
 		}
 		return componentMap.get(name);
 	}
@@ -85,6 +86,6 @@ public class WorkerDispatcherFactory extends ModuleInitializedListenerBase {
 
     @Override
     protected void myInit() {
-        
+
     }
 }

@@ -19,6 +19,7 @@ package neatlogic.framework.process.datacube;
 import neatlogic.framework.applicationlistener.core.ModuleInitializedListenerBase;
 import neatlogic.framework.bootstrap.NeatLogicWebApplicationContext;
 import neatlogic.framework.common.RootComponent;
+import neatlogic.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class DataCubeFactory extends ModuleInitializedListenerBase {
 
     public static IDataCubeHandler getComponent(String type) {
         if (!componentMap.containsKey(type) || componentMap.get(type) == null) {
-            throw new RuntimeException("找不到类型为：" + type + "的流程组件");
+            throw new ProcessStepHandlerNotFoundException(type);
         }
         return componentMap.get(type);
     }
