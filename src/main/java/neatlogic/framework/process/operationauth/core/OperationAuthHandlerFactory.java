@@ -19,6 +19,7 @@ package neatlogic.framework.process.operationauth.core;
 import neatlogic.framework.applicationlistener.core.ModuleInitializedListenerBase;
 import neatlogic.framework.bootstrap.NeatLogicWebApplicationContext;
 import neatlogic.framework.common.RootComponent;
+import neatlogic.framework.process.exception.operationauth.OperationProcessorIsExistsException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class OperationAuthHandlerFactory extends ModuleInitializedListenerBase {
             IOperationAuthHandler component = entry.getValue();
             if (component.getHandler() != null) {
                 if (componentMap.containsKey(component.getHandler())) {
-                    throw new RuntimeException("操作处理器：" + component.getHandler() + "已存在，请修改代码");
+                    throw new OperationProcessorIsExistsException(component.getHandler());
                 }
                 componentMap.put(component.getHandler(), component);
             }

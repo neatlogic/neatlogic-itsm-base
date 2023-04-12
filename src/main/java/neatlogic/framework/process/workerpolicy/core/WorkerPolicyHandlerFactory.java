@@ -20,6 +20,7 @@ import neatlogic.framework.applicationlistener.core.ModuleInitializedListenerBas
 import neatlogic.framework.bootstrap.NeatLogicWebApplicationContext;
 import neatlogic.framework.common.RootComponent;
 import neatlogic.framework.process.dto.WorkerPolicyVo;
+import neatlogic.framework.process.exception.workcenter.ProcessorAllocationPolicyTypeNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class WorkerPolicyHandlerFactory extends ModuleInitializedListenerBase {
 
     public static IWorkerPolicyHandler getHandler(String name) {
         if (!componentMap.containsKey(name) || componentMap.get(name) == null) {
-            throw new RuntimeException("找不到类型为：" + name + "的处理人分配策略");
+            throw new ProcessorAllocationPolicyTypeNotFoundException(name);
         }
         return componentMap.get(name);
     }
