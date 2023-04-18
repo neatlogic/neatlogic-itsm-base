@@ -43,5 +43,4 @@ public interface ProcessCommentTemplateMapper {
     public int deleteTemplate(Long id);
 
     public int deleteTemplateAuthority(Long id);
-
 }
