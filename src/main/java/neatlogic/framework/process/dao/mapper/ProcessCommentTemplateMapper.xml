@@ -16,7 +16,7 @@
 		`process_comment_template`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and `content` LIKE CONCAT('%', #{keyword}, '%')
+				AND (`name` LIKE concat('%', #{keyword}, '%') OR `content` LIKE concat('%', #{keyword}, '%'))
 			</if>
 			<if test="type != null and keyword != ''">
 				and `type` = #{type}
@@ -26,6 +26,7 @@
 
 	<resultMap id="templateMap" type="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
 		<id column="id" property="id" />
+		<result column="name" property="name" />
 		<result column="content" property="content" />
 		<result column="type" property="type" />
 		<result column="fcu" property="fcu" />
@@ -41,6 +42,7 @@
 	<select id="searchTemplate" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo" resultMap="templateMap" useCache="false">
 		SELECT
 		a.`id`,
+		a.`name`,
 		a.`content`,
 		a.`type`,
 		a.`fcu`,
@@ -53,6 +55,7 @@
 		(
 		SELECT
 		`id`,
+		`name`,
 		`content`,
 		`type`,
 		`fcu`,
@@ -62,7 +65,7 @@
 		from `process_comment_template`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and `content` LIKE CONCAT('%', #{keyword}, '%')
+				AND (`name` LIKE concat('%', #{keyword}, '%') OR `content` LIKE concat('%', #{keyword}, '%'))
 			</if>
 			<if test="type != null and type != ''">
 				and `type` = #{type}
@@ -81,6 +84,7 @@
 	<select id="getTemplateById" parameterType="java.lang.Long" resultMap="templateMap">
 		select
 		a.`id`,
+		a.`name`,
 		a.`content`,
 		a.`type`,
 		a.`fcu`,
@@ -107,7 +111,7 @@
 		on a.`id` = b.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+				and a.`name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type != null and keyword != ''">
 				and a.`type` = #{type}
@@ -126,6 +130,7 @@
 		SELECT
 		distinct
 		a.`id`,
+		a.`name`,
 		a.`content`,
 		a.`type`,
 		a.`fcu`,
@@ -140,7 +145,7 @@
 		on a.`id` = c.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and `content` LIKE CONCAT('%', #{keyword}, '%')
+				and `name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="type != null and keyword != ''">
 				and `type` = #{type}
@@ -165,7 +170,7 @@
 		FROM `process_comment_template` a
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and a.`content` LIKE CONCAT('%', #{keyword}, '%')
+				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
 			</if>
 			<if test="type != null and keyword != ''">
 				and a.`type` = #{type}
@@ -181,6 +186,7 @@
 		SELECT
 		DISTINCT
 		a.`id`,
+		a.`name`,
 		a.`content`
 		FROM `process_comment_template` a
 		JOIN `process_step_comment_template` b ON a.`id` = b.`comment_template_id`
@@ -205,10 +211,18 @@
 		for update
 	</select>
 
+	<select id="checkTemplateNameIsRepeat" resultType="java.lang.Integer">
+		SELECT count(id)
+		FROM `process_comment_template`
+		where id != #{id}
+		  and name =#{name}
+	</select>
+
 	<update id="updateTemplate" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
 		update
 		`process_comment_template`
 		set
+		`name` = #{name},
 		`content` = #{content},
 		`lcu` = #{lcu},
 		`lcd` = now(3)
@@ -226,6 +240,7 @@
 	<insert id="insertTemplate" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
 		insert into `process_comment_template`(
 		`id`,
+		`name`,
 		`content`,
 		`type`,
 		`fcu`,
@@ -234,6 +249,7 @@
 		`lcd`)
 		values(
 		#{id},
+		#{name},
 		#{content},
 		#{type},
 		#{fcu},

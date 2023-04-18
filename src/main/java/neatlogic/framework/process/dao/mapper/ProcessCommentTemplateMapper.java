@@ -28,6 +28,8 @@ public interface ProcessCommentTemplateMapper {
 
     public ProcessCommentTemplateUseCountVo getTemplateUseCount(@Param("templateId") Long id, @Param("userUuid") String uuid);
 
+    int checkTemplateNameIsRepeat(ProcessCommentTemplateVo vo);
+
     public int updateTemplate(ProcessCommentTemplateVo vo);
 
     public int updateTemplateUseCount(@Param("templateId") Long id, @Param("userUuid") String uuid);
@@ -41,4 +43,5 @@ public interface ProcessCommentTemplateMapper {
     public int deleteTemplate(Long id);
 
     public int deleteTemplateAuthority(Long id);
+
 }
