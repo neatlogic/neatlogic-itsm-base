@@ -17,16 +17,15 @@ limitations under the License.
 package neatlogic.framework.process.stephandler.core;
 
 /**
-* @Author:chenqiwei
-* @Time:2020年11月10日
-* @ClassName: IProcessStepHandlerType 
-* @Description: 流程组件处理器枚举类型接口
+* @author  chenqiwei
+* @date 2020年11月10日
+* @description  流程组件处理器枚举类型接口
  */
 public interface IProcessStepHandlerType {
 
-    public String getHandler();
+    String getHandler();
 
-    public String getName();
+    String getName();
 
-    public String getType();
+    String getType();
 }

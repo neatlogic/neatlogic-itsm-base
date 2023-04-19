@@ -17,7 +17,6 @@ limitations under the License.
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.stephandler.core.IProcessStepHandlerType;
-import neatlogic.framework.util.I18nUtils;
 
 /**
  * @author linbq
@@ -41,7 +40,7 @@ public enum AutoexecProcessStepHandlerType implements IProcessStepHandlerType {
 
     @Override
     public String getName() {
-        return I18nUtils.getMessage(name);
+        return name;
     }
 
     @Override

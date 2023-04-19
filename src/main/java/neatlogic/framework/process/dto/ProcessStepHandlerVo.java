@@ -1,18 +1,16 @@
 package neatlogic.framework.process.dto;
 
-import java.io.Serializable;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
-
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.restful.annotation.EntityField;
+import org.apache.commons.lang3.StringUtils;
 
-public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Serializable {
+import java.io.Serializable;
+
+public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Serializable,Cloneable {
 
     private static final long serialVersionUID = -5961832237506853192L;
     @EntityField(name = "类型", type = ApiParamType.STRING)
@@ -183,5 +181,10 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Se
 
 	public void setBackwardOutputQuantity(int backwardOutputQuantity) {
 		this.backwardOutputQuantity = backwardOutputQuantity;
+	}
+
+	@Override
+	public ProcessStepHandlerVo clone() throws CloneNotSupportedException {
+		return (ProcessStepHandlerVo) super.clone();
 	}
 }

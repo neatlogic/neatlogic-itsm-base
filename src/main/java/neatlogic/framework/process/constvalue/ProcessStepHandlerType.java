@@ -1,7 +1,6 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.stephandler.core.IProcessStepHandlerType;
-import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessStepHandlerType implements IProcessStepHandlerType {
     START("start", "start", "enum.process.processstephandlertype.start"),
@@ -29,7 +28,7 @@ public enum ProcessStepHandlerType implements IProcessStepHandlerType {
     }
 
     public String getName() {
-        return I18nUtils.getMessage(name);
+        return name;
     }
 
     public String getType() {

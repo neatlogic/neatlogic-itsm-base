@@ -23,6 +23,7 @@ import neatlogic.framework.common.RootComponent;
 import neatlogic.framework.dto.module.ModuleVo;
 import neatlogic.framework.process.constvalue.ProcessStepType;
 import neatlogic.framework.process.dto.ProcessStepHandlerVo;
+import neatlogic.framework.util.I18nUtils;
 import org.springframework.core.annotation.Order;
 
 import java.util.*;
@@ -50,18 +51,20 @@ public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
 		return new ArrayList<>(componentMap.values());
 	}
 
-	public static List<ProcessStepHandlerVo> getActiveProcessStepHandler() {
+	public static List<ProcessStepHandlerVo> getActiveProcessStepHandler() throws CloneNotSupportedException {
 		TenantContext tenantContext = TenantContext.get();
 		List<ModuleVo> moduleList = tenantContext.getActiveModuleList();
 		List<ProcessStepHandlerVo> returnProcessStepHandlerList = new ArrayList<>();
 		for (ProcessStepHandlerVo processStepHandler : processStepHandlerList) {
+			ProcessStepHandlerVo processStepHandlerVo = processStepHandler.clone();
+			processStepHandlerVo.setName(I18nUtils.getMessage(processStepHandler.getName()));
 			//开始组件不用返回给前端
-			if(processStepHandler.getType().equals(ProcessStepType.START.getValue())) {
+			if(processStepHandlerVo.getType().equals(ProcessStepType.START.getValue())) {
 				continue;
 			}
 			for (ModuleVo moduleVo : moduleList) {
-				if (moduleVo.getId().equalsIgnoreCase(processStepHandler.getModuleId())) {
-					returnProcessStepHandlerList.add(processStepHandler);
+				if (moduleVo.getId().equalsIgnoreCase(processStepHandlerVo.getModuleId())) {
+					returnProcessStepHandlerList.add(processStepHandlerVo);
 					break;
 				}
 			}
