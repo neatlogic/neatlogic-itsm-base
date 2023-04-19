@@ -49,8 +49,8 @@ public enum KnowledgeSyncSource implements ISyncSource{
         List<SyncSourceVo> list = new ArrayList<>();
         for (KnowledgeSyncSource s : KnowledgeSyncSource.values()) {
            SyncSourceVo syncSource = new SyncSourceVo();
-           syncSource.setSource(s.value);
-           syncSource.setSourceName(s.name);
+           syncSource.setSource(s.getValue());
+           syncSource.setSourceName(s.getName());
            list.add(syncSource);
         }
         return list;

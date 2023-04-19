@@ -33,7 +33,12 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
     PROCESS_TASK_STEP_TRANSFER_CONTENT("processTaskStepTransferContent", "步骤转交原因", ParamType.STRING),
     PROCESS_TASK_STEP_TRANSFER_WORKER("processTaskStepTransferWorker", "步骤转交对象", ParamType.STRING),
     PROCESS_TASK_CURRENT_STEP_COMPLETE_CONTENT("processTaskCurrentStepCompleteContent", "当前步骤处理内容", ParamType.STRING),
-    PROCESS_TASK_STEP_SLA("processTaskStepSla", "步骤时效", ParamType.ARRAY),
+    PROCESS_TASK_STEP_SLA("processTaskStepSla", "步骤时效", ParamType.ARRAY, "<#if DATA.processTaskStepSla?? && (DATA.processTaskStepSla?size > 0)>\n" +
+            "\t\t\t\t<#list DATA.processTaskStepSla as item>\n" +
+            "\t\t\t\t\t${item_index}-${item.id}-${item.name}-${item.status}-${item.timeLeft}-${item.timeLeftFormat}-${item.timeCostFormat}-${item.expireTimeFormat}\n" +
+            "\t\t\t\t\t<#if item_has_next>,</#if>\n" +
+            "\t\t\t\t</#list>\n" +
+            "\t\t\t</#if>"),
     STEPWORKER("stepWorker", "步骤处理人", ParamType.STRING),
     STEPSTAYTIME("stepStayTime", "步骤停留时间", ParamType.ARRAY),
     REASON("reason", "原因", ParamType.STRING),
@@ -42,11 +47,16 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
     private final String value;
     private final String text;
     private final ParamType paramType;
+    private String freemarkerTemplate;
 
     ProcessTaskStepNotifyParam(String value, String text, ParamType paramType) {
+        this(value, text, paramType, null);
+    }
+    ProcessTaskStepNotifyParam(String value, String text, ParamType paramType, String freemarkerTemplate) {
         this.value = value;
         this.text = text;
         this.paramType = paramType;
+        this.freemarkerTemplate = freemarkerTemplate;
     }
     @Override
     public String getValue() {
@@ -61,5 +71,13 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
     @Override
     public ParamType getParamType() {
         return paramType;
+    }
+
+    @Override
+    public String getFreemarkerTemplate() {
+        if (freemarkerTemplate == null && paramType != null) {
+            freemarkerTemplate = paramType.getFreemarkerTemplate(value);
+        }
+        return freemarkerTemplate;
     }
 }
