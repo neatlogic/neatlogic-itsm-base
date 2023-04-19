@@ -35,7 +35,7 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
     PROCESS_TASK_CURRENT_STEP_COMPLETE_CONTENT("processTaskCurrentStepCompleteContent", "当前步骤处理内容", ParamType.STRING),
     PROCESS_TASK_STEP_SLA("processTaskStepSla", "步骤时效", ParamType.ARRAY, "<#if DATA.processTaskStepSla?? && (DATA.processTaskStepSla?size > 0)>\n" +
             "\t\t\t\t<#list DATA.processTaskStepSla as item>\n" +
-            "\t\t\t\t\t${item_index}-${item.id}-${item.name}-${item.status}-${item.timeLeft}-${item.timeLeftFormat}-${item.timeCost}-${item.expireTime}\n" +
+            "\t\t\t\t\t${item_index}-${item.id}-${item.name}-${item.status}-${item.timeLeft}-${item.timeLeftFormat}-${item.timeCostFormat}-${item.expireTimeFormat}\n" +
             "\t\t\t\t\t<#if item_has_next>,</#if>\n" +
             "\t\t\t\t</#list>\n" +
             "\t\t\t</#if>"),
