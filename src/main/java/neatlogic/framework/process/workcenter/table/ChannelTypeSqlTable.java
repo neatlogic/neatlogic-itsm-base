@@ -1,5 +1,6 @@
 package neatlogic.framework.process.workcenter.table;
 
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -26,31 +27,31 @@ public class ChannelTypeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", "服务类型UUID","channelTypeUuid"),
-        NAME("name","服务类型名","channelTypeName"),
-        COLOR("color","服务类型颜色","channelTypeColor")
+        UUID("uuid", new I18n("enum.process.channelsqltable.fieldenum.uuid"),"channelTypeUuid"),
+        NAME("name",new I18n("enum.process.channeltypesqltable.fieldenum.name"),"channelTypeName"),
+        COLOR("color",new I18n("enum.process.channeltypesqltable.fieldenum.color"),"channelTypeColor")
         ;
         private final String name;
-        private final String text;
+        private final I18n text;
         private final String proName;
         private final Boolean isPrimary;
 
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
             this.proName = _value;
             this.isPrimary = false;
         }
 
-        private FieldEnum(String _value, String _text,String _proName) {
+        private FieldEnum(String _value, I18n _text,String _proName) {
             this.name = _value;
             this.text = _text;
             this.proName = _proName;
             this.isPrimary = false;
         }
 
-        private FieldEnum(String _value, String _text,String _proName,Boolean _isPrimary) {
+        private FieldEnum(String _value, I18n _text,String _proName,Boolean _isPrimary) {
             this.name = _value;
             this.text = _text;
             this.proName = _proName;
@@ -72,7 +73,7 @@ public class ChannelTypeSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public String getProValue() {

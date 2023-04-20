@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,18 +25,18 @@ public class ProcessTaskStepUserSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", "工单ID"),
-        PROCESSTASK_STEP_ID("processtask_step_id", "工单步骤ID"),
-        USER_UUID("user_uuid", "用户uuid"),
-        USER_TYPE("user_type", "用户类型"),
-        OWNER("owner", "上报人"),
-        STATUS("status", "处理状态")
+        PROCESSTASK_ID("processtask_id",  new I18n("enum.process.fieldenum.processtask_id")),
+        PROCESSTASK_STEP_ID("processtask_step_id",  new I18n("enum.process.fieldenum.processtask_step_id")),
+        USER_UUID("user_uuid",  new I18n("enum.process.fieldenum.user_uuid")),
+        USER_TYPE("user_type",  new I18n("enum.process.processtaskstepusersqltablefieldenum.user_type")),
+        OWNER("owner",  new I18n("enum.process.fieldenum.owner")),
+        STATUS("status",  new I18n("enum.process.fieldenum.expire_time"))
         ;
 
         private final String name;
-        private final String text;
+        private final I18n text;
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
         }
@@ -45,7 +46,7 @@ public class ProcessTaskStepUserSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public static String getText(String value) {

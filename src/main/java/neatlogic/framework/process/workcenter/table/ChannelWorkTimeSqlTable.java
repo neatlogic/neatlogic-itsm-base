@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,13 +25,12 @@ public class ChannelWorkTimeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        CHANNEL_UUID("channel_uuid", "服务UUID"),
-        WORKTIME_UUID("worktime_uuid","时间窗口UUID")
-        ;
+        CHANNEL_UUID("channel_uuid", new I18n("enum.process.channelworktimesqltable.fieldenum.channel_uuid")),
+        WORKTIME_UUID("worktime_uuid", new I18n("enum.process.fieldenum.worktime_uuid"));
         private final String name;
-        private final String text;
+        private final I18n text;
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
         }
@@ -40,7 +40,7 @@ public class ChannelWorkTimeSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public static String getText(String value) {

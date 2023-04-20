@@ -16,16 +16,21 @@ limitations under the License.
 
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18n;
+
 /**
  * @author lvzk
  * @since 2021/9/6 11:55
  **/
 public enum ProcessWorkcenterInitType {
-    ALL_PROCESSTASK("allProcessTask", "所有工单"), DRAFT_PROCESSTASK("draftProcessTask", "我的草稿"), DONE_OF_MINE_PROCESSTASK("doneOfMineProcessTask", "我的已办"), PROCESSING_OF_MINE_PROCESSTASK("processingOfMineProcessTask", "我的待办");
+    ALL_PROCESSTASK("allProcessTask", new I18n("enum.process.processworkcenterinittype.all_processtask")),
+    DRAFT_PROCESSTASK("draftProcessTask", new I18n("enum.process.processworkcenterinittype.draft_processtask")),
+    DONE_OF_MINE_PROCESSTASK("doneOfMineProcessTask", new I18n("enum.process.processworkcenterinittype.done_of_mine_processtask")),
+    PROCESSING_OF_MINE_PROCESSTASK("processingOfMineProcessTask", new I18n("enum.process.processworkcenterinittype.processing_of_mine_processtask"));
     private final String value;
-    private final String name;
+    private final I18n name;
 
-    private ProcessWorkcenterInitType(String _value, String _name) {
+    private ProcessWorkcenterInitType(String _value, I18n _name) {
         this.value = _value;
         this.name = _name;
     }
@@ -35,7 +40,7 @@ public enum ProcessWorkcenterInitType {
     }
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
     public static String getValue(String _value) {

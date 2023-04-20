@@ -16,13 +16,15 @@
 
 package neatlogic.framework.process.constvalue;
 
-public enum ProcessTaskStepDataType implements IProcessTaskStepDataType {
-    STEPDRAFTSAVE("stepdraftsave", "步骤草稿暂存"),
-    AUTOMATIC("automatic", "auto节点数据");
-    private final String value;
-    private final String text;
+import neatlogic.framework.util.I18n;
 
-    ProcessTaskStepDataType(String value, String text) {
+public enum ProcessTaskStepDataType implements IProcessTaskStepDataType {
+    STEPDRAFTSAVE("stepdraftsave", new I18n("enum.process.processtaskstepdatatype.stepdraftsave")),
+    AUTOMATIC("automatic", new I18n("enum.process.processtaskstepdatatype.automatic"));
+    private final String value;
+    private final I18n text;
+
+    ProcessTaskStepDataType(String value, I18n text) {
         this.value = value;
         this.text = text;
     }
@@ -34,7 +36,7 @@ public enum ProcessTaskStepDataType implements IProcessTaskStepDataType {
 
     @Override
     public String getText() {
-        return this.text;
+        return this.text.toString();
     }
 
 }

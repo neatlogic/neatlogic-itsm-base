@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,30 +25,31 @@ public class ProcessTaskSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        ID("id", "工单ID"),
-        SERIAL_NUMBER("serial_number", "工单号", "serialNumber","serialnumber"),
-        START_TIME("start_time", "创建时间"),
-        END_TIME("end_time", "结束时间"),
-        OWNER("owner", "上报人"),
-        REPORTER("reporter", "上报人"),
-        STATUS("status", "工单状态","processTaskStatus","status"),
-        PRIORITY_UUID("priority_uuid", "工单状态"),
-        CHANNEL_UUID("channel_uuid", "工单状态"),
-        IS_SHOW("is_show", "工单是否隐藏"),
-        NEED_SCORE("need_score", "工单是否需要评分"),
-        TITLE("title", "标题");
+        ID("id", new I18n("enum.process.fieldenum.id")),
+        SERIAL_NUMBER("serial_number", new I18n("enum.process.fieldenum.serial_number"), "serialNumber", "serialnumber"),
+        START_TIME("start_time", new I18n("enum.process.fieldenum.start_time")),
+        END_TIME("end_time", new I18n("enum.process.fieldenum.end_time")),
+        OWNER("owner", new I18n("enum.process.fieldenum.owner")),
+        REPORTER("reporter", new I18n("enum.process.fieldenum.reporter")),
+        STATUS("status", new I18n("enum.process.fieldenum.status"), "processTaskStatus", "status"),
+        PRIORITY_UUID("priority_uuid", new I18n("enum.process.fieldenum.priority_uuid")),
+        CHANNEL_UUID("channel_uuid", new I18n("enum.process.fieldenum.channel_uuid")),
+        IS_SHOW("is_show", new I18n("enum.process.fieldenum.is_show")),
+        NEED_SCORE("need_score", new I18n("enum.process.fieldenum.need_score")),
+        TITLE("title", new I18n("enum.process.fieldenum.title"));
         private final String name;
-        private final String text;
+        private final I18n text;
         private final String proName;
         private String handlerName;
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
             this.handlerName = _value;
             this.proName = _value;
         }
-        private FieldEnum(String _value, String _text,String _proName,String _handlerName) {
+
+        private FieldEnum(String _value, I18n _text, String _proName, String _handlerName) {
             this.name = _value;
             this.text = _text;
             this.proName = _proName;
@@ -59,7 +61,7 @@ public class ProcessTaskSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public String getProName() {
@@ -67,7 +69,7 @@ public class ProcessTaskSqlTable implements ISqlTable {
         }
 
         public String getHandlerName() {
-            if(handlerName == null){
+            if (handlerName == null) {
                 handlerName = name;
             }
             return handlerName;

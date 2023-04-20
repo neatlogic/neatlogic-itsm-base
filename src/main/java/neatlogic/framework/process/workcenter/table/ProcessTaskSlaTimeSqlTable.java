@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,18 +25,17 @@ public class ProcessTaskSlaTimeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        SLA_ID("sla_id", "sla ID"),
-        EXPIRE_TIME("expire_time", "超时时间点"),
-        REALEXPIRE_TIME("realexpire_time", "自然超时时间点"),
-        TIME_LEFT("time_left", "剩余时间"),
-        STATUS("status", "状态"),
-        REALTIME_LEFT("realtime_left", "自然剩余时间"),
-        CALCULATION_TIME("calculation_time", "上次耗时计算时间点")
-        ;
+        SLA_ID("sla_id",  new I18n("enum.process.processtaskslatimesqltable.fieldenum.sla_id")),
+        EXPIRE_TIME("expire_time", new I18n("enum.process.fieldenum.expire_time")),
+        REALEXPIRE_TIME("realexpire_time", new I18n("enum.process.fieldenum.realexpire_time")),
+        TIME_LEFT("time_left", new I18n("enum.process.fieldenum.time_left")),
+        STATUS("status", new I18n("enum.process.processtaskslatimesqltable.fieldenum.status")),
+        REALTIME_LEFT("realtime_left", new I18n("enum.process.fieldenum.realtime_left")),
+        CALCULATION_TIME("calculation_time", new I18n("enum.process.fieldenum.calculation_time"));
         private final String name;
-        private final String text;
+        private final I18n text;
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
         }
@@ -45,7 +45,7 @@ public class ProcessTaskSlaTimeSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public static String getText(String value) {

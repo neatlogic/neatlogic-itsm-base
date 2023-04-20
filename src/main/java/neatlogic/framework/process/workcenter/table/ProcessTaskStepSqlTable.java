@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,27 +25,26 @@ public class ProcessTaskStepSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        ID("id", "步骤ID", "processTaskStepId"),
-        NAME("name", "步骤名称", "processTaskStepName"),
-        PROCESSTASK_ID("processtask_id","工单id", "processTaskId"),
-        TYPE("type","节点类型", "processTaskStepType"),
-        HANDLER("handler","步骤处理器", "processTaskStepHandler"),
-        STATUS("status", "步骤状态", "processTaskStepStatus"),
-        CONFIG_HASH("config_hash","配置hash", "processTaskStepConfigHash"),
-        IS_ACTIVE("is_active", "步骤状态", "processTaskStepIsActive"),
-        ACTIVE_TIME("active_time","激活时间", "processTaskStepActiveTime")
-        ;
+        ID("id", new I18n("enum.process.processtaskstepsqltable.fieldenum.id"), "processTaskStepId"),
+        NAME("name", new I18n("enum.process.processtaskstepsqltable.fieldenum.name"), "processTaskStepName"),
+        PROCESSTASK_ID("processtask_id", new I18n("enum.process.fieldenum.processtask_id"), "processTaskId"),
+        TYPE("type", new I18n("enum.process.channeltypesqltable.fieldenum.type"), "processTaskStepType"),
+        HANDLER("handler", new I18n("enum.process.fieldenum.handler"), "processTaskStepHandler"),
+        STATUS("status", new I18n("enum.process.channeltypesqltable.fieldenum.status"), "processTaskStepStatus"),
+        CONFIG_HASH("config_hash", new I18n("enum.process.fieldenum.config_hash"), "processTaskStepConfigHash"),
+        IS_ACTIVE("is_active", new I18n("enum.process.fieldenum.is_active"), "processTaskStepIsActive"),
+        ACTIVE_TIME("active_time", new I18n("enum.process.fieldenum.active_time"), "processTaskStepActiveTime");
         private final String name;
-        private final String text;
+        private final I18n text;
         private final String proName;
 
-        private FieldEnum(String _value, String _text,String _proName) {
+        private FieldEnum(String _value, I18n _text, String _proName) {
             this.name = _value;
             this.text = _text;
             this.proName = _proName;
         }
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
             this.proName = _value;
@@ -55,7 +55,7 @@ public class ProcessTaskStepSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public String getProName() {

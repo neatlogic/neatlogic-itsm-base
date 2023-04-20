@@ -1,43 +1,46 @@
 package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.notify.core.INotifyTriggerType;
+import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepTaskNotifyTriggerType implements INotifyTriggerType {
-	CREATETASK("createtask", "子任务创建","步骤处理人为当前步骤创建子任务时触发通知"),
-	EDITTASK("edittask", "子任务编辑","步骤处理人编辑子任务内容时触发通知"),
-	DELETETASK("deletetask", "子任务删除","步骤处理人删除子任务时触发通知"),
-	COMPLETETASK("completetask", "子任务完成","任务处理人完成子任务时触发通知"),
-	COMPLETEALLTASK("completealltask", "子任务满足步骤流转","所有子任务满足流转条件时触发通知");
+    CREATETASK("createtask", new I18n("enum.process.processtasksteptasknotifytriggertype.createtask"), new I18n("enum.process.processtasksteptasknotifytriggertype.createtask.1")),
+    EDITTASK("edittask", new I18n("enum.process.processtasksteptasknotifytriggertype.edittask"), new I18n("enum.process.processtasksteptasknotifytriggertype.edittask.1")),
+    DELETETASK("deletetask", new I18n("enum.process.processtasksteptasknotifytriggertype.deletetask"), new I18n("enum.process.processtasksteptasknotifytriggertype.deletetask.1")),
+    COMPLETETASK("completetask", new I18n("enum.process.processtasksteptasknotifytriggertype.completetask"), new I18n("enum.process.processtasksteptasknotifytriggertype.completetask.1")),
+    COMPLETEALLTASK("completealltask", new I18n("enum.process.processtasksteptasknotifytriggertype.completealltask"), new I18n("enum.process.processtasksteptasknotifytriggertype.completealltask.1"));
 
-	private String trigger;
-	private String text;
-	private String description;
+    private String trigger;
+    private I18n text;
+    private I18n description;
 
-	private ProcessTaskStepTaskNotifyTriggerType(String _trigger, String _text, String _description) {
-		this.trigger = _trigger;
-		this.text = _text;
-		this.description = _description;
-	}
+    private ProcessTaskStepTaskNotifyTriggerType(String _trigger, I18n _text, I18n _description) {
+        this.trigger = _trigger;
+        this.text = _text;
+        this.description = _description;
+    }
 
-	@Override
-	public String getTrigger() {
-		return trigger;
-	}
-	@Override
-	public String getText() {
-		return text;
-	}
-	@Override
-	public String getDescription() {
-		return description;
-	}
-	
-	public static String getText(String trigger) {
-		for(ProcessTaskStepTaskNotifyTriggerType n : values()) {
-			if(n.getTrigger().equals(trigger)) {
-				return n.getText();
-			}
-		}
-		return "";
-	}
+    @Override
+    public String getTrigger() {
+        return trigger;
+    }
+
+    @Override
+    public String getText() {
+        return text.toString();
+    }
+
+    @Override
+    public String getDescription() {
+        return description.toString();
+    }
+
+    public static String getText(String trigger) {
+        for (ProcessTaskStepTaskNotifyTriggerType n : values()) {
+            if (n.getTrigger().equals(trigger)) {
+                return n.getText();
+            }
+        }
+        return "";
+    }
 }

@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,25 +25,25 @@ public class UserTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", "用户UUID"),
-        USER_ID("user_id", "用户ID"),
-        USER_NAME("user_name", "用户名"),
-        USER_INFO("user_info", "用户信息"),
-        VIP_LEVEL("vip_level", "vip等级"),
-        PINYIN("pinyin", "拼音")
-        ;
+        UUID("uuid", new I18n("enum.process.usertable.fieldenum.uuid")),
+        USER_ID("user_id", new I18n("enum.process.fieldenum.user_id")),
+        USER_NAME("user_name", new I18n("enum.process.fieldenum.user_name")),
+        USER_INFO("user_info", new I18n("enum.process.fieldenum.user_info")),
+        VIP_LEVEL("vip_level", new I18n("enum.process.fieldenum.vip_level")),
+        PINYIN("pinyin", new I18n("enum.process.fieldenum.pinyin"));
         private final String name;
-        private final String text;
+        private final I18n text;
         private final String proName;
         private String handlerName;
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
             this.handlerName = _value;
             this.proName = _value;
         }
-        private FieldEnum(String _value, String _text,String _proName,String _handlerName) {
+
+        private FieldEnum(String _value, I18n _text, String _proName, String _handlerName) {
             this.name = _value;
             this.text = _text;
             this.proName = _proName;
@@ -54,7 +55,7 @@ public class UserTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public String getProValue() {
@@ -62,7 +63,7 @@ public class UserTable implements ISqlTable {
         }
 
         public String getHandlerName() {
-            if(handlerName == null){
+            if (handlerName == null) {
                 handlerName = name;
             }
             return handlerName;

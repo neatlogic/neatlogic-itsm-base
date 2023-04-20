@@ -18,25 +18,26 @@ package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.common.constvalue.IUserType;
 import neatlogic.framework.dto.UserTypeVo;
+import neatlogic.framework.util.I18n;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public enum ProcessUserType implements IUserType {
-    MAJOR("major", "处理人", true),
-    MINOR("minor", "协助处理人", true),
+    MAJOR("major", new I18n("enum.process.processusertype.major"), true),
+    MINOR("minor", new I18n("enum.process.processusertype.minor"), true),
     //	AGENT("agent","代办人",true),
-    OWNER("owner", "上报人", true),
-    REPORTER("reporter", "代报人", true),
-    WORKER("worker", "待处理人", true),
-    DEFAULT_WORKER("defaultworker", "异常处理人", false),
-    FOCUS_USER("focususer", "关注人", false);
+    OWNER("owner", new I18n("enum.process.processusertype.owner"), true),
+    REPORTER("reporter", new I18n("enum.process.processusertype.reporter"), true),
+    WORKER("worker", new I18n("enum.process.processusertype.worker"), true),
+    DEFAULT_WORKER("defaultworker", new I18n("enum.process.processusertype.default_worker"), false),
+    FOCUS_USER("focususer", new I18n("enum.process.processusertype.focus_user"), false);
 
     private final String status;
-    private final String text;
+    private final I18n text;
     private final boolean isShow;
 
-    private ProcessUserType(String _status, String _text, boolean _isShow) {
+    private ProcessUserType(String _status, I18n _text, boolean _isShow) {
         this.status = _status;
         this.text = _text;
         this.isShow = _isShow;
@@ -47,7 +48,7 @@ public enum ProcessUserType implements IUserType {
     }
 
     public String getText() {
-        return text;
+        return text.toString();
     }
 
     public boolean getIsShow() {
@@ -77,9 +78,9 @@ public enum ProcessUserType implements IUserType {
     public UserTypeVo getUserType() {
         UserTypeVo vo = new UserTypeVo();
         vo.setModuleId(getModuleId());
-        Map<String,String> map = new HashMap<>();
-        for(ProcessUserType type : ProcessUserType.values()){
-            map.put(type.getValue(),type.getText());
+        Map<String, String> map = new HashMap<>();
+        for (ProcessUserType type : ProcessUserType.values()) {
+            map.put(type.getValue(), type.getText());
         }
         vo.setValues(map);
         return vo;

@@ -1,29 +1,30 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18n;
+
 public enum ProcessTaskParams {
-    TASKID("id","工单ID"),
-    STEPID("stepid","步骤ID"),
-    TITLE("title", "标题"),
-    CHANNELTYPE("channeltype", "服务类型"),
-    CONTENT("content", "上报内容"),
-    STARTTIME("starttime", "开始时间"),
-    OWNER("owner", "上报人"),
-    PRIORITY("priority", "优先级"),
-    OWNERCOMPANY("ownercompany", "上报人公司"),
-    OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
-    OWNERROLE("ownerrole", "上报人角色"),
-    OWNERLEVEL("ownerlevel", "上报人级别"),
-    STEPTASK("steptask", "子任务"),
-    ACTIONTRIGGERUSER("actiontriggeruser", "动作触发人"),
-    STEPTASKID("steptaskid", "子任务ID")
-    ;
+    TASKID("id", new I18n("enum.process.processtaskparams.taskid")),
+    STEPID("stepid", new I18n("enum.process.processtaskparams.stepid")),
+    TITLE("title", new I18n("enum.process.processtaskparams.title")),
+    CHANNELTYPE("channeltype", new I18n("enum.process.processtaskparams.channeltype")),
+    CONTENT("content", new I18n("enum.process.processtaskparams.content")),
+    STARTTIME("starttime", new I18n("enum.process.processtaskparams.starttime")),
+    OWNER("owner", new I18n("enum.process.processtaskparams.owner")),
+    PRIORITY("priority", new I18n("enum.process.processtaskparams.priority")),
+    OWNERCOMPANY("ownercompany", new I18n("enum.process.processtaskparams.ownercompany")),
+    OWNERDEPARTMENT("ownerdepartment", new I18n("enum.process.processtaskparams.ownerdepartment")),
+    OWNERROLE("ownerrole", new I18n("enum.process.processtaskparams.ownerrole")),
+    OWNERLEVEL("ownerlevel", new I18n("enum.process.processtaskparams.ownerlevel")),
+    STEPTASK("steptask", new I18n("enum.process.processtaskparams.steptask")),
+    ACTIONTRIGGERUSER("actiontriggeruser", new I18n("enum.process.processtaskparams.actiontriggeruser")),
+    STEPTASKID("steptaskid", new I18n("enum.process.processtaskparams.steptaskid"));
 
     private String value;
-    private String text;
+    private I18n text;
 //    private ParamType paramType;
 //    private String freemarkerTemplate;
 
-    ProcessTaskParams(String value, String text) {
+    ProcessTaskParams(String value, I18n text) {
         this.value = value;
         this.text = text;
     }
@@ -46,7 +47,7 @@ public enum ProcessTaskParams {
     }
 
     public String getText() {
-        return text;
+        return text.toString();
     }
 
 //    public ParamType getParamType() {
