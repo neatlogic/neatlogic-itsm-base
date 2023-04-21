@@ -78,7 +78,12 @@ public enum ProcessTaskOperationType implements IOperationType {
     STEP_RETREAT("retreatcurrentstep", new I18n("enum.process.processtaskoperationtype.step_retreat"), Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),
     STEP_HANG("hang", new I18n("enum.process.processtaskoperationtype.step_hang")),
     STEP_HANDLE("handle", new I18n("enum.process.processtaskoperationtype.step_handle")),
-
+    STEP_PAUSE("pause","暂停", Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),
+    STEP_RECOVER("recover","恢复", Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),
+    STEP_RESTFULACTION("restfulaction", "RESTFUL动作"),
+    STEP_RETREAT("retreatcurrentstep", "撤回", Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValuePlugin() + ProcessUserType.MAJOR.getValue()), Arrays.asList(GroupSearch.COMMON.getValue(), ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue(), GroupSearch.USER.getValue(), GroupSearch.TEAM.getValue(), GroupSearch.ROLE.getValue())),
+    STEP_HANG("hang", "挂起"),
+    STEP_HANDLE("handle", "自动处理"),
     TASK_CREATE("createtask", new I18n("enum.process.processtaskoperationtype.task_create")),
     TASK_EDIT("edittask", new I18n("enum.process.processtaskoperationtype.task_edit")),
     TASK_DELETE("deletetask", new I18n("enum.process.processtaskoperationtype.task_delete")),
