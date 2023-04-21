@@ -5,7 +5,7 @@ import neatlogic.framework.notify.core.INotifyTriggerType;
 public enum ProcessTaskNotifyTriggerType implements INotifyTriggerType {
 
     STARTPROCESS("startprocess", "enum.process.processtasknotifytriggertype.startprocess", "enum.process.processtasknotifytriggertype.startprocess.1"),
-    URGE("urge", "enum.process.processtasknotifytriggertype.urge", "enum.process.processtasknotifytriggertype.urge.1"),
+//    URGE("urge", "enum.process.processtasknotifytriggertype.urge", "enum.process.processtasknotifytriggertype.urge.1"),
     ABORTPROCESSTASK("abortprocesstask", "enum.process.processtasknotifytriggertype.abortprocesstask", "enum.process.processtasknotifytriggertype.abortprocesstask"),
     RECOVERPROCESSTASK("recoverprocesstask", "enum.process.processtasknotifytriggertype.recoverprocesstask", "enum.process.processtasknotifytriggertype.recoverprocesstask.1"),
     COMPLETEPROCESSTASK("completeprocesstask", "enum.process.processtasknotifytriggertype.completeprocesstask", "enum.process.processtasknotifytriggertype.completeprocesstask.1"),

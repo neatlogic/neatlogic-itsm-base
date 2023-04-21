@@ -33,6 +33,19 @@
 		`hash` = #{value}
 	</select>
 
+	<select id="getProcessTaskContentListByHashList" parameterType="java.lang.String" resultType="neatlogic.framework.process.dto.ProcessTaskContentVo">
+		SELECT
+			`hash`,
+			`content`
+		FROM
+			`processtask_content`
+		WHERE
+			`hash` IN
+		<foreach collection="list" item="hash" open="(" separator="," close=")">
+			#{hash}
+		</foreach>
+	</select>
+
 	<select id="getProcessTaskContentStringByHash" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT `content` FROM `processtask_content` WHERE `hash` = #{value}
 	</select>

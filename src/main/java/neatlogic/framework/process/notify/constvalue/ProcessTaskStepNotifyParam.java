@@ -43,6 +43,9 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
     STEPWORKER("stepWorker", new I18n("enum.process.processtaskstepnotifyparam.stepworker"), ParamType.STRING),
     STEPSTAYTIME("stepStayTime", new I18n("enum.process.processtaskstepnotifyparam.stepstaytime"), ParamType.ARRAY),
     REASON("reason", new I18n("enum.process.processtaskstepnotifyparam.reason"), ParamType.STRING),
+    STEP_COMMENT("stepComment", "步骤回复", ParamType.STRING),
+    STEP_COMMENT_USER("stepCommentUser", "步骤回复用户", ParamType.STRING),
+    STEP_COMMENT_LIST("stepCommentList", "步骤回复列表", ParamType.ARRAY),
     ;
 
     private final String value;
