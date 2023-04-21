@@ -1,27 +1,26 @@
 package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.notify.core.INotifyTriggerType;
-import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskNotifyTriggerType implements INotifyTriggerType {
 
-    STARTPROCESS("startprocess", new I18n("enum.process.processtasknotifytriggertype.startprocess"), new I18n("enum.process.processtasknotifytriggertype.startprocess.1")),
-    URGE("urge", new I18n("enum.process.processtasknotifytriggertype.urge"), new I18n("enum.process.processtasknotifytriggertype.urge.1")),
-    ABORTPROCESSTASK("abortprocesstask", new I18n("enum.process.processtasknotifytriggertype.abortprocesstask"), new I18n("enum.process.processtasknotifytriggertype.abortprocesstask")),
-    RECOVERPROCESSTASK("recoverprocesstask", new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask"), new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask.1")),
-    COMPLETEPROCESSTASK("completeprocesstask", new I18n("enum.process.processtasknotifytriggertype.completeprocesstask"), new I18n("enum.process.processtasknotifytriggertype.completeprocesstask.1")),
-    WAITINGSCOREPROCESSTASK("waitingscoreprocesstask", new I18n("enum.process.processtasknotifytriggertype.waitingscoreprocesstask"), new I18n("enum.process.processtasknotifytriggertype.waitingscoreprocesstask.1")),
-    SCOREPROCESSTASK("scoreprocesstask", new I18n("enum.process.processtasknotifytriggertype.scoreprocesstask"), new I18n("enum.process.processtasknotifytriggertype.scoreprocesstask")),
-    REOPENPROCESSTASK("reopenprocesstask", new I18n("enum.process.processtasknotifytriggertype.reopenprocesstask"), new I18n("enum.process.processtasknotifytriggertype.reopenprocesstask.1")),
-    MARKREPEATPROCESSTASK("markrepeatprocesstask", new I18n("enum.process.processtasknotifytriggertype.markrepeatprocesstask"), new I18n("enum.process.processtasknotifytriggertype.markrepeatprocesstask")),
-    DELETEPROCESSTASK("deleteprocesstask", new I18n("enum.process.processtasknotifytriggertype.deleteprocesstask"), new I18n("enum.process.processtasknotifytriggertype.deleteprocesstask")),
+    STARTPROCESS("startprocess", "enum.process.processtasknotifytriggertype.startprocess", "enum.process.processtasknotifytriggertype.startprocess.1"),
+    URGE("urge", "enum.process.processtasknotifytriggertype.urge", "enum.process.processtasknotifytriggertype.urge.1"),
+    ABORTPROCESSTASK("abortprocesstask", "enum.process.processtasknotifytriggertype.abortprocesstask", "enum.process.processtasknotifytriggertype.abortprocesstask"),
+    RECOVERPROCESSTASK("recoverprocesstask", "enum.process.processtasknotifytriggertype.recoverprocesstask", "enum.process.processtasknotifytriggertype.recoverprocesstask.1"),
+    COMPLETEPROCESSTASK("completeprocesstask", "enum.process.processtasknotifytriggertype.completeprocesstask", "enum.process.processtasknotifytriggertype.completeprocesstask.1"),
+    WAITINGSCOREPROCESSTASK("waitingscoreprocesstask", "enum.process.processtasknotifytriggertype.waitingscoreprocesstask", "enum.process.processtasknotifytriggertype.waitingscoreprocesstask.1"),
+    SCOREPROCESSTASK("scoreprocesstask", "enum.process.processtasknotifytriggertype.scoreprocesstask", "enum.process.processtasknotifytriggertype.scoreprocesstask"),
+    REOPENPROCESSTASK("reopenprocesstask", "enum.process.processtasknotifytriggertype.reopenprocesstask", "enum.process.processtasknotifytriggertype.reopenprocesstask.1"),
+    MARKREPEATPROCESSTASK("markrepeatprocesstask", "enum.process.processtasknotifytriggertype.markrepeatprocesstask", "enum.process.processtasknotifytriggertype.markrepeatprocesstask"),
+    DELETEPROCESSTASK("deleteprocesstask", "enum.process.processtasknotifytriggertype.deleteprocesstask", "enum.process.processtasknotifytriggertype.deleteprocesstask"),
     ;
 
     private String trigger;
-    private I18n text;
-    private I18n description;
+    private String text;
+    private String description;
 
-    ProcessTaskNotifyTriggerType(String _trigger, I18n _text, I18n _description) {
+    ProcessTaskNotifyTriggerType(String _trigger, String _text, String _description) {
         this.trigger = _trigger;
         this.text = _text;
         this.description = _description;
@@ -34,12 +33,12 @@ public enum ProcessTaskNotifyTriggerType implements INotifyTriggerType {
 
     @Override
     public String getText() {
-        return text.toString();
+        return text;
     }
 
     @Override
     public String getDescription() {
-        return description.toString();
+        return description;
     }
 
     public static String getText(String trigger) {

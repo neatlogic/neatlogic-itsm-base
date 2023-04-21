@@ -1,29 +1,28 @@
 package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.notify.core.INotifyTriggerType;
-import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
 
-    ACTIVE("active", new I18n("enum.process.processtaskstepnotifytriggertype.active"), new I18n("enum.process.processtaskstepnotifytriggertype.active.1")),
-    //	ASSIGN("assign", "步骤分配处理人","步骤激活后，系统根据配置为该步骤分配处理人时触发通知"),
-    ASSIGNEXCEPTION("assignexception", new I18n("enum.process.processtaskstepnotifytriggertype.assignexception"), new I18n("enum.process.processtaskstepnotifytriggertype.assignexception.1")),
-    START("start", new I18n("enum.process.processtaskstepnotifytriggertype.start"), new I18n("enum.process.processtaskstepnotifytriggertype.start.1")),
-    TRANSFER("transfer", new I18n("enum.process.processtaskstepnotifytriggertype.transfer"), new I18n("enum.process.processtaskstepnotifytriggertype.transfer.1")),
-    SUCCEED("succeed", new I18n("enum.process.processtaskstepnotifytriggertype.succeed"), new I18n("enum.process.processtaskstepnotifytriggertype.succeed.1")),
-    BACK("back", new I18n("enum.process.processtaskstepnotifytriggertype.back"), new I18n("enum.process.processtaskstepnotifytriggertype.back.1")),
-    RETREAT("retreat", new I18n("enum.process.processtaskstepnotifytriggertype.retreat"), new I18n("enum.process.processtaskstepnotifytriggertype.retreat.1")),
-    //	HANG("hang", "步骤挂起","当前步骤被回退或撤回时触发通知，当前步骤将处于挂起状态"),
-    PAUSE("pause", new I18n("enum.process.processtaskstepnotifytriggertype.pause"), new I18n("enum.process.processtaskstepnotifytriggertype.pause")),
-    FAILED("failed", new I18n("enum.process.processtaskstepnotifytriggertype.failed"), new I18n("enum.process.processtaskstepnotifytriggertype.failed.1")),
-    URGE("urge", new I18n("enum.process.processtaskstepnotifytriggertype.urge"), new I18n("enum.process.processtaskstepnotifytriggertype.urge.1")),
+    ACTIVE("active", "enum.process.processtaskstepnotifytriggertype.active", "enum.process.processtaskstepnotifytriggertype.active.1"),
+    //	ASSIGN("assign", "步骤分配处理人","步骤激活后，系统根据配置为该步骤分配处理人时触发通知",
+    ASSIGNEXCEPTION("assignexception", "enum.process.processtaskstepnotifytriggertype.assignexception", "enum.process.processtaskstepnotifytriggertype.assignexception.1"),
+    START("start", "enum.process.processtaskstepnotifytriggertype.start", "enum.process.processtaskstepnotifytriggertype.start.1"),
+    TRANSFER("transfer", "enum.process.processtaskstepnotifytriggertype.transfer", "enum.process.processtaskstepnotifytriggertype.transfer.1"),
+    SUCCEED("succeed", "enum.process.processtaskstepnotifytriggertype.succeed", "enum.process.processtaskstepnotifytriggertype.succeed.1"),
+    BACK("back", "enum.process.processtaskstepnotifytriggertype.back", "enum.process.processtaskstepnotifytriggertype.back.1"),
+    RETREAT("retreat", "enum.process.processtaskstepnotifytriggertype.retreat", "enum.process.processtaskstepnotifytriggertype.retreat.1"),
+    //	HANG("hang", "步骤挂起","当前步骤被回退或撤回时触发通知，当前步骤将处于挂起状态",
+    PAUSE("pause", "enum.process.processtaskstepnotifytriggertype.pause", "enum.process.processtaskstepnotifytriggertype.pause"),
+    FAILED("failed", "enum.process.processtaskstepnotifytriggertype.failed", "enum.process.processtaskstepnotifytriggertype.failed.1"),
+    URGE("urge", "enum.process.processtaskstepnotifytriggertype.urge", "enum.process.processtaskstepnotifytriggertype.urge.1"),
     ;
 
     private String trigger;
-    private I18n text;
-    private I18n description;
+    private String text;
+    private String description;
 
-    private ProcessTaskStepNotifyTriggerType(String _trigger, I18n _text, I18n _description) {
+    private ProcessTaskStepNotifyTriggerType(String _trigger, String _text, String _description) {
         this.trigger = _trigger;
         this.text = _text;
         this.description = _description;
@@ -36,7 +35,7 @@ public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
 
     @Override
     public String getText() {
-        return text.toString();
+        return text;
     }
 
     @Override
