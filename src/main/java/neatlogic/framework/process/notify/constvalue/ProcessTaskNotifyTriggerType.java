@@ -5,7 +5,7 @@ import neatlogic.framework.notify.core.INotifyTriggerType;
 public enum ProcessTaskNotifyTriggerType implements INotifyTriggerType {
 
     STARTPROCESS("startprocess", "上报", "用户上报提交工单时触发通知"),
-    URGE("urge", "催办", "工单完成前，用户对工单进行催办时触发通知"),
+//    URGE("urge", "催办", "工单完成前，用户对工单进行催办时触发通知"),
     ABORTPROCESSTASK("abortprocesstask", "取消工单", "工单完成前，有权限用户取消工单时触发通知"),
     RECOVERPROCESSTASK("recoverprocesstask", "恢复工单", "工单完成前，有权限用户恢复工单时触发通知"),
     COMPLETEPROCESSTASK("completeprocesstask", "完成工单", "工单流转至结束时触发通知"),

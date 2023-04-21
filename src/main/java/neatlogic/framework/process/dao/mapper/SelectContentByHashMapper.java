@@ -10,6 +10,8 @@ public interface SelectContentByHashMapper {
     public String getProcessTaskStepConfigByHash(String hash);
 
     public ProcessTaskContentVo getProcessTaskContentByHash(String hash);
+
+    List<ProcessTaskContentVo> getProcessTaskContentListByHashList(List<String> contentHashList);
     
     public String getProcessTaskContentStringByHash(String hash);
 
