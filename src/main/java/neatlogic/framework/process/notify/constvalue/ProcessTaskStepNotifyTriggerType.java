@@ -16,7 +16,7 @@ public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
     PAUSE("pause", "enum.process.processtaskstepnotifytriggertype.pause", "enum.process.processtaskstepnotifytriggertype.pause"),
     FAILED("failed", "enum.process.processtaskstepnotifytriggertype.failed", "enum.process.processtaskstepnotifytriggertype.failed.1"),
     URGE("urge", "enum.process.processtaskstepnotifytriggertype.urge", "enum.process.processtaskstepnotifytriggertype.urge.1"),
-	COMMENT("comment", "步骤回复","用户对步骤进行回复时触发通知"),
+	COMMENT("comment", "enum.process.processtaskstepnotifytriggertype.comment","enum.process.processtaskstepnotifytriggertype.comment.1"),
 	;
 
     private String trigger;
