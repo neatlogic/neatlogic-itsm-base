@@ -41,8 +41,14 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
     REPORTERNAME("reporterName", "enum.process.processtasknotifyparam.reportername", ParamType.STRING),
     OWNERCOMPANYLIST("ownerCompanyList", "enum.process.processtasknotifyparam.ownercompanylist", ParamType.ARRAY),
     STATUSTEXT("statusText", "enum.process.processtasknotifyparam.statustext", ParamType.STRING),
-    PROCESS_TASK_SCORE("processTaskScore", "enum.process.processtasknotifyparam.process_task_score", ParamType.STRING),
+    PROCESS_TASK_SCORE("processTaskScore", "enum.process.processtasknotifyparam.process_task_score", ParamType.ARRAY, "<#if DATA.processTaskScore?? && (DATA.processTaskScore?size > 0)>\n" +
+            "\t<#list DATA.processTaskScore as item>\n" +
+            "\t\t${item_index}-${item.dimensionName}-${item.score}\n" +
+            "\t\t<#if item_has_next>,</#if>\n" +
+            "\t</#list>\n" +
+            "</#if>"),
     PROCESS_TASK_SCORE_CONTENT("processTaskScoreContent", "enum.process.processtasknotifyparam.process_task_score_content", ParamType.STRING),
+    PROCESS_TASK_SCORE_DIMENSION_LIST("processTaskScoreDimensionList", "enum.process.processtasknotifyparam.process_task_score_dimension_list", ParamType.ARRAY),
     PROCESS_TASK_URGE_USER("processTaskUrgeUser", "enum.process.processtasknotifyparam.process_task_urge_user", ParamType.STRING),
     PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "enum.process.processtasknotifyparam.process_task_urge_count", ParamType.NUMBER),
     APPROVALCOMMENTLIST("approvalCommentList", "enum.process.processtasknotifyparam.approvalcommentlist", ParamType.ARRAY),
