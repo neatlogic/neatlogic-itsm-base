@@ -14,6 +14,7 @@ public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
 	RETREAT("retreat", "步骤撤回","工单完成前，由上一步骤有权限的用户手动撤回工单时触发通知，重新处理上一步骤"),
 //	HANG("hang", "步骤挂起","当前步骤被回退或撤回时触发通知，当前步骤将处于挂起状态"),
 	PAUSE("pause", "步骤暂停","有权限的用户暂停当前步骤时触发通知"),
+	RECOVER("recover", "步骤恢复","有权限的用户恢复当前步骤时触发通知"),
 	FAILED("failed", "步骤失败","当前步骤出现分配异常、流转异常、系统异常导致步骤失败时触发通知"),
 	URGE("urge", "步骤催办","工单完成前，用户对工单进行催办时触发通知"),
 	COMMENT("comment", "步骤回复","用户对步骤进行回复时触发通知"),
