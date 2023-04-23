@@ -48,6 +48,8 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
             "\t</#list>\n" +
             "</#if>"),
     PROCESS_TASK_SCORE_CONTENT("processTaskScoreContent", "enum.process.processtasknotifyparam.process_task_score_content", ParamType.STRING),
+    PROCESS_TASK_ABORT_CONTENT("processTaskAbortContent", "enum.process.processtasknotifyparam.process_task_abort_content", ParamType.STRING),
+    PROCESS_TASK_RECOVER_CONTENT("processTaskRecoverContent", "enum.process.processtasknotifyparam.process_task_recover_content", ParamType.STRING),
     PROCESS_TASK_URGE_USER("processTaskUrgeUser", "enum.process.processtasknotifyparam.process_task_urge_user", ParamType.STRING),
     PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "enum.process.processtasknotifyparam.process_task_urge_count", ParamType.NUMBER),
     APPROVALCOMMENTLIST("approvalCommentList", "enum.process.processtasknotifyparam.approvalcommentlist", ParamType.ARRAY),

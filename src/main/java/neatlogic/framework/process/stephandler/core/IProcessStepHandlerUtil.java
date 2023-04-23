@@ -154,6 +154,13 @@ public interface IProcessStepHandlerUtil {
      **/
     public void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskOperationType action);
 
+    /**
+     * 保存工单级别的操作描述内容
+     * @param currentProcessTaskVo
+     * @param action
+     */
+    void saveProcessTaskOperationContent(ProcessTaskVo currentProcessTaskVo, ProcessTaskOperationType action);
+
     public void chechContentIsRequired(ProcessTaskStepVo currentProcessTaskStepVo);
 
     /**
