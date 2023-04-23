@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,15 +25,14 @@ public class ProcessTaskSlaSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", "工单ID"),
-        ID("id", "sla ID"),
-        NAME("name", "sla 名"),
-        CONFIG("config", "sla 配置")
-        ;
+        PROCESSTASK_ID("processtask_id", new I18n("enum.process.fieldenum.processtask_id")),
+        ID("id", new I18n("enum.process.processtaskslatimesqltable.fieldenum.sla_id")),
+        NAME("name", new I18n("enum.process.processtaskslasqltable.fieldenum.name")),
+        CONFIG("config", new I18n("enum.process.fieldenum.config"));
         private final String name;
-        private final String text;
+        private final I18n text;
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
         }
@@ -42,7 +42,7 @@ public class ProcessTaskSlaSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public static String getText(String value) {

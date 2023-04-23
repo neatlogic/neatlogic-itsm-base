@@ -16,18 +16,21 @@ limitations under the License.
 
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18n;
+
 /**
  * 时效类型，如响应时效、处理时效
+ *
  * @author linbq
  * @since 2022/2/22 16:27
  **/
 public enum SlaType {
-    RESPONSE("response", "响应"),
-    HANDLE("handle", "处理");
+    RESPONSE("response", new I18n("enum.process.slatype.response")),
+    HANDLE("handle", new I18n("enum.process.slatype.handle"));
     private final String value;
-    private final String text;
+    private final I18n text;
 
-    SlaType(String value, String text) {
+    SlaType(String value, I18n text) {
         this.value = value;
         this.text = text;
     }
@@ -37,6 +40,6 @@ public enum SlaType {
     }
 
     public String getText() {
-        return text;
+        return text.toString();
     }
 }

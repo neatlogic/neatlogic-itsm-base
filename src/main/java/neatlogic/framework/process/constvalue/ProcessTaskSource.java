@@ -1,16 +1,18 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18n;
+
 public enum ProcessTaskSource implements IProcessTaskSource {
 
-    PC("pc", "PC端"),
-    MOBILE("mobile", "移动端"),
-    IMPORT("import", "导入"),
-    SYSTEM("system", "系统");
+    PC("pc", new I18n("enum.process.processtasksource.pc")),
+    MOBILE("mobile", new I18n("enum.process.processtasksource.mobile")),
+    IMPORT("import", new I18n("enum.process.processtasksource.import")),
+    SYSTEM("system", new I18n("enum.process.processtasksource.system"));
 
     private String value;
-    private String text;
+    private I18n text;
 
-    ProcessTaskSource(String value, String text) {
+    ProcessTaskSource(String value, I18n text) {
         this.value = value;
         this.text = text;
     }
@@ -22,6 +24,6 @@ public enum ProcessTaskSource implements IProcessTaskSource {
 
     @Override
     public String getText() {
-        return text;
+        return text.toString();
     }
 }

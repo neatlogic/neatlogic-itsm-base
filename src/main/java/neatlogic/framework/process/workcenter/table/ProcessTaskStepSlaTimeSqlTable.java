@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,16 +25,15 @@ public class ProcessTaskStepSlaTimeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_STEP_ID("processtask_step_id", "步骤ID"),
-        TYPE("type", "类型"),
-        PROCESSTASK_ID("processtask_id","工单id"),
-        TIME_COST("time_cost","耗时"),
-        IS_TIMEOUT("is_timeout","耗时")
-        ;
+        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("enum.process.processtaskstepslatimesqltable.fieldenum.processtask_step_id")),
+        TYPE("type", new I18n("enum.process.processtaskstepslatimesqltable.fieldenum.type")),
+        PROCESSTASK_ID("processtask_id", new I18n("enum.process.fieldenum.processtask_id")),
+        TIME_COST("time_cost", new I18n("enum.process.fieldenum.time_cost")),
+        IS_TIMEOUT("is_timeout", new I18n("enum.process.fieldenum.is_timeout"));
         private final String name;
-        private final String text;
+        private final I18n text;
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
         }
@@ -43,7 +43,7 @@ public class ProcessTaskStepSlaTimeSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public static String getText(String value) {

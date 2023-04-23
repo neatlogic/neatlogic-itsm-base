@@ -18,6 +18,7 @@ package neatlogic.framework.process.constvalue.task;
 
 import neatlogic.framework.common.constvalue.IEnum;
 import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.util.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,11 @@ import java.util.List;
  * @since 2021/9/1 16:20
  **/
 public enum TaskConfigPolicy implements IEnum {
-    ANY("any", "任意一人完成"), ALL("all", "所有人完成");
+    ANY("any", new I18n("enum.process.taskconfigpolicy.any")), ALL("all", new I18n("enum.process.taskconfigpolicy.all"));
     private final String value;
-    private final String name;
+    private final I18n name;
 
-    TaskConfigPolicy(String _value, String _name) {
+    TaskConfigPolicy(String _value, I18n _name) {
         this.value = _value;
         this.name = _name;
     }
@@ -41,7 +42,7 @@ public enum TaskConfigPolicy implements IEnum {
     }
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
     public static String getValue(String _value) {

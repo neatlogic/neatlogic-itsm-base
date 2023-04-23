@@ -1,5 +1,6 @@
 package neatlogic.framework.process.workcenter.table;
 
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -26,40 +27,39 @@ public class CatalogSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", "服务目录UUID","catalogUuid"),
-        NAME("name", "服务目录名","catalogName")
-        ;
+        UUID("uuid", new I18n("enum.process.fieldenum.uuid"), "catalogUuid"),
+        NAME("name", new I18n("enum.process.fieldenum.name"), "catalogName");
         private final String name;
-        private final String text;
+        private final I18n text;
         private final String proName;
         private final Boolean isPrimary;
 
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
             this.proName = _value;
             this.isPrimary = false;
         }
 
-        private FieldEnum(String _value, String _text,String _proName) {
+        private FieldEnum(String _value, I18n _text, String _proName) {
             this.name = _value;
             this.text = _text;
             this.proName = _proName;
             this.isPrimary = false;
         }
 
-        private FieldEnum(String _value, String _text,String _proName,Boolean _isPrimary) {
+        private FieldEnum(String _value, I18n _text, String _proName, Boolean _isPrimary) {
             this.name = _value;
             this.text = _text;
             this.proName = _proName;
             this.isPrimary = _isPrimary;
         }
 
-        private List<PrioritySqlTable.FieldEnum> getPrimaryFieldList(){
+        private List<PrioritySqlTable.FieldEnum> getPrimaryFieldList() {
             List<PrioritySqlTable.FieldEnum> primaryFieldEnumList = new ArrayList<>();
             for (PrioritySqlTable.FieldEnum f : PrioritySqlTable.FieldEnum.values()) {
-                if(f.getPrimary()){
+                if (f.getPrimary()) {
                     primaryFieldEnumList.add(f);
                 }
             }
@@ -71,7 +71,7 @@ public class CatalogSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public String getProValue() {

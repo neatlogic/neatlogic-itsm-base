@@ -16,20 +16,21 @@ limitations under the License.
 
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.I18n;
+
 /**
  * @author linbq
  * @since 2021/7/15 11:15
  **/
 public enum ReplaceableText {
-    REPORTCONTENT("replaceableReportcontent", "上报内容"),
-    STEPLIST("replaceableSteplist", "步骤日志"),
-    AUDITLIST("replaceableAuditlist", "活动日志"),
-    RELATIONLIST("replaceableRelationlist", "关联工单")
-    ;
+    REPORTCONTENT("replaceableReportcontent", new I18n("enum.process.replaceabletext.reportcontent")),
+    STEPLIST("replaceableSteplist", new I18n("enum.process.replaceabletext.steplist")),
+    AUDITLIST("replaceableAuditlist", new I18n("enum.process.replaceabletext.auditlist")),
+    RELATIONLIST("replaceableRelationlist", new I18n("enum.process.replaceabletext.relationlist"));
     private final String value;
-    private final String text;
+    private final I18n text;
 
-    ReplaceableText(String value, String text) {
+    ReplaceableText(String value, I18n text) {
         this.value = value;
         this.text = text;
     }
@@ -39,6 +40,6 @@ public enum ReplaceableText {
     }
 
     public String getText() {
-        return text;
+        return text.toString();
     }
 }
