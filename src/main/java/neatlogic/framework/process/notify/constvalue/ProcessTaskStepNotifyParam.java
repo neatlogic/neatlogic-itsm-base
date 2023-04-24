@@ -18,6 +18,7 @@ package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.common.constvalue.ParamType;
 import neatlogic.framework.notify.core.INotifyParam;
+import neatlogic.framework.util.I18n;
 
 /**
  * @author linbq
@@ -25,42 +26,44 @@ import neatlogic.framework.notify.core.INotifyParam;
  **/
 public enum ProcessTaskStepNotifyParam implements INotifyParam {
 
-    STEPID("stepId", "步骤id", ParamType.NUMBER),
-    STEPNAME("stepName", "步骤名", ParamType.STRING),
-    PROCESS_TASK_STEP_ACTIVE_TIME("processTaskStepActiveTime", "步骤激活时间", ParamType.STRING),
-    PROCESS_TASK_STEP_START_TIME("processTaskStepStartTime", "步骤开始时间", ParamType.STRING),
-    PROCESS_TASK_STEP_TRANSFER_TIME("processTaskStepTransferTime", "步骤转交时间", ParamType.STRING),
-    PROCESS_TASK_STEP_TRANSFER_CONTENT("processTaskStepTransferContent", "步骤转交原因", ParamType.STRING),
-    PROCESS_TASK_STEP_TRANSFER_WORKER("processTaskStepTransferWorker", "步骤转交对象", ParamType.STRING),
-    PROCESS_TASK_CURRENT_STEP_COMPLETE_CONTENT("processTaskCurrentStepCompleteContent", "当前步骤处理内容", ParamType.STRING),
-    PROCESS_TASK_STEP_SLA("processTaskStepSla", "步骤时效", ParamType.ARRAY, "<#if DATA.processTaskStepSla?? && (DATA.processTaskStepSla?size > 0)>\n" +
+    STEPID("stepId", new I18n("enum.process.processtaskstepnotifyparam.stepid"), ParamType.NUMBER),
+    STEPNAME("stepName", new I18n("enum.process.processtaskstepnotifyparam.stepname"), ParamType.STRING),
+    PROCESS_TASK_STEP_ACTIVE_TIME("processTaskStepActiveTime", new I18n("enum.process.processtaskstepnotifyparam.processtaskstepactivetime"), ParamType.STRING),
+    PROCESS_TASK_STEP_START_TIME("processTaskStepStartTime", new I18n("enum.process.processtaskstepnotifyparam.processtaskstepstarttime"), ParamType.STRING),
+    PROCESS_TASK_STEP_TRANSFER_TIME("processTaskStepTransferTime", new I18n("enum.process.processtaskstepnotifyparam.processtasksteptransfertime"), ParamType.STRING),
+    PROCESS_TASK_STEP_TRANSFER_CONTENT("processTaskStepTransferContent", new I18n("enum.process.processtaskstepnotifyparam.processtasksteptransfercontent"), ParamType.STRING),
+    PROCESS_TASK_STEP_TRANSFER_WORKER("processTaskStepTransferWorker", new I18n("enum.process.processtaskstepnotifyparam.processtasksteptransferworker"), ParamType.STRING),
+    PROCESS_TASK_CURRENT_STEP_COMPLETE_CONTENT("processTaskCurrentStepCompleteContent", new I18n("enum.process.processtaskstepnotifyparam.processtaskcurrentstepcompletecontent"), ParamType.STRING),
+    PROCESS_TASK_STEP_SLA("processTaskStepSla", new I18n("enum.process.processtaskstepnotifyparam.processtaskstepsla"), ParamType.ARRAY, "<#if DATA.processTaskStepSla?? && (DATA.processTaskStepSla?size > 0)>\n" +
             "\t\t\t\t<#list DATA.processTaskStepSla as item>\n" +
             "\t\t\t\t\t${item_index}-${item.id}-${item.name}-${item.status}-${item.timeLeft}-${item.timeLeftFormat}-${item.timeCostFormat}-${item.expireTimeFormat}\n" +
             "\t\t\t\t\t<#if item_has_next>,</#if>\n" +
             "\t\t\t\t</#list>\n" +
             "\t\t\t</#if>"),
-    STEPWORKER("stepWorker", "步骤处理人", ParamType.STRING),
-    STEPSTAYTIME("stepStayTime", "步骤停留时间", ParamType.ARRAY),
-    REASON("reason", "原因", ParamType.STRING),
-    STEP_COMMENT("stepComment", "步骤回复", ParamType.STRING),
-    STEP_COMMENT_USER("stepCommentUser", "步骤回复用户", ParamType.STRING),
-    STEP_COMMENT_LIST("stepCommentList", "步骤回复列表", ParamType.ARRAY),
+    STEPWORKER("stepWorker", new I18n("enum.process.processtaskstepnotifyparam.stepworker"), ParamType.STRING),
+    STEPSTAYTIME("stepStayTime", new I18n("enum.process.processtaskstepnotifyparam.stepstaytime"), ParamType.ARRAY),
+    REASON("reason", new I18n("enum.process.processtaskstepnotifyparam.reason"), ParamType.STRING),
+    STEP_COMMENT("stepComment", new I18n("enum.process.processtaskstepnotifyparam.stepcomment"), ParamType.STRING),
+    STEP_COMMENT_USER("stepCommentUser", new I18n("enum.process.processtaskstepnotifyparam.stepcommentuser"), ParamType.STRING),
+    STEP_COMMENT_LIST("stepCommentList", new I18n("enum.process.processtaskstepnotifyparam.stepcommentlist"), ParamType.ARRAY),
     ;
 
     private final String value;
-    private final String text;
+    private final I18n text;
     private final ParamType paramType;
     private String freemarkerTemplate;
 
-    ProcessTaskStepNotifyParam(String value, String text, ParamType paramType) {
+    ProcessTaskStepNotifyParam(String value, I18n text, ParamType paramType) {
         this(value, text, paramType, null);
     }
-    ProcessTaskStepNotifyParam(String value, String text, ParamType paramType, String freemarkerTemplate) {
+
+    ProcessTaskStepNotifyParam(String value, I18n text, ParamType paramType, String freemarkerTemplate) {
         this.value = value;
         this.text = text;
         this.paramType = paramType;
         this.freemarkerTemplate = freemarkerTemplate;
     }
+
     @Override
     public String getValue() {
         return value;
@@ -68,7 +71,7 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
 
     @Override
     public String getText() {
-        return text;
+        return text.toString();
     }
 
     @Override

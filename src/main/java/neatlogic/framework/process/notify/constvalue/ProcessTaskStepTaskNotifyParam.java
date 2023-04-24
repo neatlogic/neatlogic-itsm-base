@@ -18,6 +18,7 @@ package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.common.constvalue.ParamType;
 import neatlogic.framework.notify.core.INotifyParam;
+import neatlogic.framework.util.I18n;
 
 /**
  * @author linbq
@@ -25,21 +26,22 @@ import neatlogic.framework.notify.core.INotifyParam;
  **/
 public enum ProcessTaskStepTaskNotifyParam implements INotifyParam {
 
-    TASKCONFIGNAME("taskConfigName", "任务名", ParamType.STRING),
-    TASKWORKER("taskWorker", "任务处理人", ParamType.STRING),
-    TASKCONTENT("taskContent", "任务内容", ParamType.STRING),
-    TASKUSERCONTENT("taskUserContent", "任务用户内容", ParamType.STRING),
+    TASKCONFIGNAME("taskConfigName", new I18n("enum.process.processtasksteptasknotifyparam.taskconfigname"), ParamType.STRING),
+    TASKWORKER("taskWorker", new I18n("enum.process.processtasksteptasknotifyparam.taskworker"), ParamType.STRING),
+    TASKCONTENT("taskContent", new I18n("enum.process.processtasksteptasknotifyparam.taskcontent"), ParamType.STRING),
+    TASKUSERCONTENT("taskUserContent", new I18n("enum.process.processtasksteptasknotifyparam.taskusercontent"), ParamType.STRING),
     ;
 
     private final String value;
-    private final String text;
+    private final I18n text;
     private final ParamType paramType;
 
-    ProcessTaskStepTaskNotifyParam(String value, String text, ParamType paramType) {
+    ProcessTaskStepTaskNotifyParam(String value, I18n text, ParamType paramType) {
         this.value = value;
         this.text = text;
         this.paramType = paramType;
     }
+
     @Override
     public String getValue() {
         return value;
@@ -47,7 +49,7 @@ public enum ProcessTaskStepTaskNotifyParam implements INotifyParam {
 
     @Override
     public String getText() {
-        return text;
+        return text.toString();
     }
 
     @Override

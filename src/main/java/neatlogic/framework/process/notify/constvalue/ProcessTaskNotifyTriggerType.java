@@ -4,16 +4,16 @@ import neatlogic.framework.notify.core.INotifyTriggerType;
 
 public enum ProcessTaskNotifyTriggerType implements INotifyTriggerType {
 
-    STARTPROCESS("startprocess", "上报", "用户上报提交工单时触发通知"),
-//    URGE("urge", "催办", "工单完成前，用户对工单进行催办时触发通知"),
-    ABORTPROCESSTASK("abortprocesstask", "取消工单", "工单完成前，有权限用户取消工单时触发通知"),
-    RECOVERPROCESSTASK("recoverprocesstask", "恢复工单", "工单完成前，有权限用户恢复工单时触发通知"),
-    COMPLETEPROCESSTASK("completeprocesstask", "完成工单", "工单流转至结束时触发通知"),
-    WAITINGSCOREPROCESSTASK("waitingscoreprocesstask", "待评分", "工单完成后需要评分时触发通知"),
-    SCOREPROCESSTASK("scoreprocesstask", "评分", "评分后触发通知"),
-    REOPENPROCESSTASK("reopenprocesstask", "重新打开工单", "工单完成后，用户评分前，有权限的用户重新打开工单并回退至某一步骤重新开始处理时触发通知"),
-    MARKREPEATPROCESSTASK("markrepeatprocesstask", "标记重复事件", "标记重复事件"),
-    DELETEPROCESSTASK("deleteprocesstask", "删除工单", "删除工单"),
+    STARTPROCESS("startprocess", "enum.process.processtasknotifytriggertype.startprocess", "enum.process.processtasknotifytriggertype.startprocess.1"),
+//    URGE("urge", "enum.process.processtasknotifytriggertype.urge", "enum.process.processtasknotifytriggertype.urge.1"),
+    ABORTPROCESSTASK("abortprocesstask", "enum.process.processtasknotifytriggertype.abortprocesstask", "enum.process.processtasknotifytriggertype.abortprocesstask"),
+    RECOVERPROCESSTASK("recoverprocesstask", "enum.process.processtasknotifytriggertype.recoverprocesstask", "enum.process.processtasknotifytriggertype.recoverprocesstask.1"),
+    COMPLETEPROCESSTASK("completeprocesstask", "enum.process.processtasknotifytriggertype.completeprocesstask", "enum.process.processtasknotifytriggertype.completeprocesstask.1"),
+    WAITINGSCOREPROCESSTASK("waitingscoreprocesstask", "enum.process.processtasknotifytriggertype.waitingscoreprocesstask", "enum.process.processtasknotifytriggertype.waitingscoreprocesstask.1"),
+    SCOREPROCESSTASK("scoreprocesstask", "enum.process.processtasknotifytriggertype.scoreprocesstask", "enum.process.processtasknotifytriggertype.scoreprocesstask"),
+    REOPENPROCESSTASK("reopenprocesstask", "enum.process.processtasknotifytriggertype.reopenprocesstask", "enum.process.processtasknotifytriggertype.reopenprocesstask.1"),
+    MARKREPEATPROCESSTASK("markrepeatprocesstask", "enum.process.processtasknotifytriggertype.markrepeatprocesstask", "enum.process.processtasknotifytriggertype.markrepeatprocesstask"),
+    DELETEPROCESSTASK("deleteprocesstask", "enum.process.processtasknotifytriggertype.deleteprocesstask", "enum.process.processtasknotifytriggertype.deleteprocesstask"),
     ;
 
     private String trigger;

@@ -1,34 +1,38 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.stepremind.core.IProcessTaskStepRemindType;
+import neatlogic.framework.util.I18n;
 
-public enum ProcessTaskStepRemindType implements IProcessTaskStepRemindType{
+public enum ProcessTaskStepRemindType implements IProcessTaskStepRemindType {
 
-    BACK("back", "回退提醒", "回退了【processTaskStepName】，原因"),
-    REDO("redo", "回退提醒", "回退了工单，原因"),
-    TRANSFER("transfer", "转交提醒", "转交【processTaskStepName】，原因"),
-    ERROR("error", "异常提醒", "【processTaskStepName】步骤发生异常，原因");
+    BACK("back", new I18n("enum.process.processtaskstepremindtype.back"), new I18n("enum.process.processtaskstepremindtype.back.1")),
+    REDO("redo", new I18n("enum.process.processtaskstepremindtype.redo"), new I18n("enum.process.processtaskstepremindtype.redo.1")),
+    TRANSFER("transfer", new I18n("enum.process.processtaskstepremindtype.transfer"), new I18n("enum.process.processtaskstepremindtype.transfer")),
+    ERROR("error", new I18n("enum.process.processtaskstepremindtype.error"), new I18n("enum.process.processtaskstepremindtype.error"));
     private String value;
-    private String text;
-    private String title;
-    
-    private ProcessTaskStepRemindType(String value, String text, String title) {
+    private I18n text;
+    private I18n title;
+
+    private ProcessTaskStepRemindType(String value, I18n text, I18n title) {
         this.value = value;
         this.text = text;
         this.title = title;
     }
+
     @Override
     public String getValue() {
         return value;
     }
+
     @Override
     public String getText() {
-        return text;
+        return text.toString();
     }
+
     @Override
     public String getTitle() {
-        return title;
+        return title.toString();
     }
-    
-    
+
+
 }

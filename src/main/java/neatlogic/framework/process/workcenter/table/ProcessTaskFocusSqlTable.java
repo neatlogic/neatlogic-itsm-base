@@ -1,6 +1,7 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
+import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,13 +25,13 @@ public class ProcessTaskFocusSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", "工单ID"),
-        USER_UUID("user_uuid", "用户UUID"),
+        PROCESSTASK_ID("processtask_id", new I18n("enum.process.fieldenum.processtask_id")),
+        USER_UUID("user_uuid", new I18n("enum.process.fieldenum.user_uuid")),
         ;
         private final String name;
-        private final String text;
+        private final I18n text;
 
-        private FieldEnum(String _value, String _text) {
+        private FieldEnum(String _value, I18n _text) {
             this.name = _value;
             this.text = _text;
         }
@@ -40,7 +41,7 @@ public class ProcessTaskFocusSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return text.toString();
         }
 
         public static String getText(String value) {
