@@ -3184,7 +3184,7 @@ limitations under the License.
     </insert>
 
     <insert id="insertProcessTaskOperationContent" parameterType="neatlogic.framework.process.dto.ProcessTaskOperationContentVo">
-        INSERT INTO `processtask_step_content` (`id`,
+        INSERT INTO `processtask_operation_content` (`id`,
                                                 `processtask_id`,
                                                 `content_hash`,
                                                 `type`,
