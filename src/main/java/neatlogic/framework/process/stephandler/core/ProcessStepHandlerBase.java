@@ -1584,8 +1584,12 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             myTransfer(processTaskStepVo, workerList);
 
             ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId());
+            /* 获取步骤配置信息 **/
+            String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+            Integer autoStart = (Integer) JSONPath.read(stepConfig, "autoStart");
+            autoStart = autoStart != null ? autoStart : 1;
             /* 当只分配到一个用户时，自动设置为处理人，不需要抢单 **/
-            if (workerList.size() == 1) {
+            if (workerList.size() == 1 && autoStart == 1) {
                 if (StringUtils.isNotBlank(workerList.get(0).getUuid()) && GroupSearch.USER.getValue().equals(workerList.get(0).getType())) {
                     ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(
                             currentProcessTaskStepVo.getProcessTaskId(),
@@ -1594,12 +1598,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             ProcessUserType.MAJOR.getValue()
                     );
                     processTaskMapper.insertProcessTaskStepUser(processTaskStepUserVo);
-                    /* 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
-                    int autoStart = myAssign(processTaskStepVo, new HashSet<>(workerList));
-                    if (autoStart == 1) {
-                        processTaskStepWorkerVo.setUserType(ProcessUserType.MAJOR.getValue());
-                        processTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
-                    }
+                    processTaskStepWorkerVo.setUserType(ProcessUserType.MAJOR.getValue());
+                    processTaskStepVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
                 }
             }
             /* 清空work表，重新写入新数据 **/
