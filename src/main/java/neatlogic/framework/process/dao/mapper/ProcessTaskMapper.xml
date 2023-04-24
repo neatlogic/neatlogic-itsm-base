@@ -3183,6 +3183,27 @@ limitations under the License.
                 #{fcu})
     </insert>
 
+    <insert id="insertProcessTaskOperationContent" parameterType="neatlogic.framework.process.dto.ProcessTaskOperationContentVo">
+        INSERT INTO `processtask_operation_content` (`id`,
+                                                `processtask_id`,
+                                                `content_hash`,
+                                                `type`,
+                                                `source`,
+                                                `fcd`,
+                                                `fcu`,
+                                                `lcd`,
+                                                `lcu`)
+        VALUES (#{id},
+                #{processTaskId},
+                #{contentHash},
+                #{type},
+                #{source},
+                NOW(3),
+                #{fcu},
+                NOW(3),
+                #{fcu})
+    </insert>
+
     <insert id="insertProcessTaskStepUser" parameterType="neatlogic.framework.process.dto.ProcessTaskStepUserVo">
         INSERT INTO `processtask_step_user` (`processtask_id`,
                                              `processtask_step_id`,

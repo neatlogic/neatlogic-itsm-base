@@ -17,6 +17,7 @@ limitations under the License.
 package neatlogic.framework.process.notify.core;
 
 import neatlogic.framework.notify.core.INotifyParamHandler;
+import neatlogic.framework.notify.core.INotifyTriggerType;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
 
 /**
@@ -26,12 +27,12 @@ import neatlogic.framework.process.dto.ProcessTaskStepVo;
 public abstract class ProcessTaskNotifyParamHandlerBase implements INotifyParamHandler {
 
     @Override
-    public Object getText(Object object) {
+    public Object getText(Object object, INotifyTriggerType notifyTriggerType) {
         if (object instanceof ProcessTaskStepVo) {
-            return getMyText((ProcessTaskStepVo) object);
+            return getMyText((ProcessTaskStepVo) object, notifyTriggerType);
         }
         return null;
     }
 
-    public abstract Object getMyText(ProcessTaskStepVo processTaskStepVo);
+    public abstract Object getMyText(ProcessTaskStepVo processTaskStepVo, INotifyTriggerType notifyTriggerType);
 }

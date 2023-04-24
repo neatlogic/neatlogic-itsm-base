@@ -381,6 +381,8 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepContent(ProcessTaskStepContentVo processTaskStepContentVo);
 
+    int insertProcessTaskOperationContent(ProcessTaskOperationContentVo processTaskOperationContentVo);
+
     int insertProcessTaskStepAudit(ProcessTaskStepAuditVo processTaskStepAuditVo);
 
     int batchInsertProcessTaskStepAudit(List<ProcessTaskStepAuditVo> list);
