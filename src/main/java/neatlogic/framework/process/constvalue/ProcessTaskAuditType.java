@@ -24,6 +24,7 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	ABORTPROCESSTASK("abort", "enum.process.processtaskaudittype.abortprocesstask", "enum.process.processtaskaudittype.abortprocesstask.1"),
 	RECOVERPROCESSTASK("recover", "enum.process.processtaskaudittype.recoverprocesstask", "enum.process.processtaskaudittype.recoverprocesstask.1"),
 	PAUSE("pause", "enum.process.processtaskaudittype.pause", "enum.process.processtaskaudittype.pause.1"),
+	RECOVER("recover", "enum.process.processtaskaudittype.recover", "enum.process.processtaskaudittype.recover.1"),
 	TRANSFER("transfer", "enum.process.processtaskaudittype.transfer", "enum.process.processtaskaudittype.transfer.1"),
 	STARTPROCESS("startprocess", "enum.process.processtaskaudittype.startprocess", "enum.process.processtaskaudittype.startprocess.1"),
 	RESTFULACTION("restfulaction", "enum.process.processtaskaudittype.restfulaction","enum.process.processtaskaudittype.restfulaction.1"),
