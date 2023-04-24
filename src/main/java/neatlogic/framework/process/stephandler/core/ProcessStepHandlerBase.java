@@ -1413,10 +1413,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
 
             /* 触发通知 **/
-            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.RECOVERPROCESSTASK);
+            IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.RECOVER);
 
             /* 执行动作 **/
-            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.RECOVERPROCESSTASK);
+            IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.RECOVER);
+            IProcessStepHandlerUtil.audit(currentProcessTaskStepVo, ProcessTaskAuditType.RECOVER);
         }
 
         /* 写入时间审计 **/
