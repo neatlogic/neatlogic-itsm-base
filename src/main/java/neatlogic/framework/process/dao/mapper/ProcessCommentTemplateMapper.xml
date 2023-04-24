@@ -13,13 +13,21 @@
 		SELECT
 		COUNT(1)
 		FROM
-		`process_comment_template`
+		`process_comment_template` a
+		join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				AND (`name` LIKE concat('%', #{keyword}, '%') OR `content` LIKE concat('%', #{keyword}, '%'))
+				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
 			</if>
 			<if test="type != null and keyword != ''">
-				and `type` = #{type}
+				and a.`type` = #{type}
+			</if>
+			<if test="authList != null and authList.size() > 0 ">
+				and b.`uuid` IN
+				<foreach collection="authList" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
 			</if>
 		</where>
 	</select>
@@ -54,24 +62,32 @@
 		FROM
 		(
 		SELECT
-		`id`,
-		`name`,
-		`content`,
-		`type`,
-		`fcu`,
-		`fcd`,
-		`lcu`,
-		`lcd`
-		from `process_comment_template`
+		a.`id`,
+		a.`name`,
+		a.`content`,
+		a.`type`,
+		a.`fcu`,
+		a.`fcd`,
+		a.`lcu`,
+		a.`lcd`
+		from `process_comment_template` a
+		join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				AND (`name` LIKE concat('%', #{keyword}, '%') OR `content` LIKE concat('%', #{keyword}, '%'))
+				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
 			</if>
-			<if test="type != null and type != ''">
-				and `type` = #{type}
+			<if test="type != null and keyword != ''">
+				and a.`type` = #{type}
+			</if>
+			<if test="authList != null and authList.size() > 0 ">
+				and b.`uuid` IN
+				<foreach collection="authList" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
 			</if>
 		</where>
-		ORDER BY `lcd` desc
+		ORDER BY a.`lcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
