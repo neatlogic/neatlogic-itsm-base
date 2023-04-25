@@ -23,11 +23,18 @@
 			<if test="type != null and keyword != ''">
 				and a.`type` = #{type}
 			</if>
-			<if test="authList != null and authList.size() > 0 ">
-				and b.`uuid` IN
-				<foreach collection="authList" item="item" open="(" separator="," close=")">
-					#{item}
-				</foreach>
+			<if test="searchByFcu == 1">
+				and ((a.type = 'custom' and a.fcu = #{fcu})
+				<if test="authList != null and authList.size() > 0 ">
+					or b.`uuid` IN
+					<foreach collection="authList" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="authList == null or authList.size() == 0 ">
+					or a.type = 'system'
+				</if>
+				)
 			</if>
 		</where>
 	</select>
@@ -80,11 +87,18 @@
 			<if test="type != null and keyword != ''">
 				and a.`type` = #{type}
 			</if>
-			<if test="authList != null and authList.size() > 0 ">
-				and b.`uuid` IN
-				<foreach collection="authList" item="item" open="(" separator="," close=")">
-					#{item}
-				</foreach>
+			<if test="searchByFcu == 1">
+				and ((a.type = 'custom' and a.fcu = #{fcu})
+				<if test="authList != null and authList.size() > 0 ">
+					or b.`uuid` IN
+					<foreach collection="authList" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="authList == null or authList.size() == 0 ">
+					or a.type = 'system'
+				</if>
+				)
 			</if>
 		</where>
 		ORDER BY a.`lcd` desc
@@ -166,11 +180,18 @@
 			<if test="type != null and keyword != ''">
 				and `type` = #{type}
 			</if>
-			<if test="authList != null and authList.size() > 0 ">
-				and b.`uuid` IN
-				<foreach collection="authList" item="item" open="(" separator="," close=")">
-					#{item}
-				</foreach>
+			<if test="searchByFcu == 1">
+				and ((a.type = 'custom' and a.fcu = #{fcu})
+				<if test="authList != null and authList.size() > 0 ">
+					or b.`uuid` IN
+					<foreach collection="authList" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="authList == null or authList.size() == 0 ">
+					or a.type = 'system'
+				</if>
+				)
 			</if>
 		</where>
 		ORDER BY c.`count` desc

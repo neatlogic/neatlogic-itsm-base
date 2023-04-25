@@ -57,6 +57,9 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 	@EntityField(name = "当前用户是否可编辑", type = ApiParamType.INTEGER)
 	private Integer isEditable;
 
+	@JSONField(serialize = false)
+	private Integer searchByFcu = 0;
+
 	public ProcessCommentTemplateVo() {}
 
 	public Long getId() {
@@ -125,5 +128,13 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 
 	public void setIsEditable(Integer isEditable) {
 		this.isEditable = isEditable;
+	}
+
+	public Integer getSearchByFcu() {
+		return searchByFcu;
+	}
+
+	public void setSearchByFcu(Integer searchByFcu) {
+		this.searchByFcu = searchByFcu;
 	}
 }
