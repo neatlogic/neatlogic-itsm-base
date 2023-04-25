@@ -16,9 +16,14 @@ limitations under the License.
 
 package neatlogic.framework.process.notify.core;
 
+import neatlogic.framework.dto.UrlInfoVo;
 import neatlogic.framework.notify.core.INotifyParamHandler;
 import neatlogic.framework.notify.core.INotifyTriggerType;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
+import neatlogic.framework.util.HtmlUtil;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * @author linbq
@@ -35,4 +40,15 @@ public abstract class ProcessTaskNotifyParamHandlerBase implements INotifyParamH
     }
 
     public abstract Object getMyText(ProcessTaskStepVo processTaskStepVo, INotifyTriggerType notifyTriggerType);
+
+    protected String processContent(String content) {
+        if (StringUtils.isNotBlank(content)) {
+            content = content.replace("<p>", "");
+            content = content.replace("</p>", "");
+            content = content.replace("<br>", "");
+            List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(content, "<img src=\"", "\"");
+            content = HtmlUtil.urlReplace(content, urlInfoVoList);
+        }
+        return content;
+    }
 }
