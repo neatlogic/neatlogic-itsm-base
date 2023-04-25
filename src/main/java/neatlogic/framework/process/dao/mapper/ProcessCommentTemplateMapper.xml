@@ -16,6 +16,10 @@
 		`process_comment_template` a
 		join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
+		<include refid="searchTemplateWhere"/>
+	</select>
+
+	<sql id="searchTemplateWhere">
 		<where>
 			<if test="keyword != null and keyword != ''">
 				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
@@ -37,7 +41,7 @@
 				)
 			</if>
 		</where>
-	</select>
+	</sql>
 
 	<resultMap id="templateMap" type="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
 		<id column="id" property="id" />
@@ -80,27 +84,7 @@
 		from `process_comment_template` a
 		join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
-		<where>
-			<if test="keyword != null and keyword != ''">
-				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
-			</if>
-			<if test="type != null and keyword != ''">
-				and a.`type` = #{type}
-			</if>
-			<if test="searchByFcu == 1">
-				and ((a.type = 'custom' and a.fcu = #{fcu})
-				<if test="authList != null and authList.size() > 0 ">
-					or b.`uuid` IN
-					<foreach collection="authList" item="item" open="(" separator="," close=")">
-						#{item}
-					</foreach>
-				</if>
-				<if test="authList == null or authList.size() == 0 ">
-					or a.type = 'system'
-				</if>
-				)
-			</if>
-		</where>
+		<include refid="searchTemplateWhere"/>
 		ORDER BY a.`lcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
@@ -198,27 +182,7 @@
 		a.`id` as `value`,
 		a.`content` as `text`
 		FROM `process_comment_template` a
-		<where>
-			<if test="keyword != null and keyword != ''">
-				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
-			</if>
-			<if test="type != null and keyword != ''">
-				and a.`type` = #{type}
-			</if>
-			<if test="searchByFcu == 1">
-				and ((a.type = 'custom' and a.fcu = #{fcu})
-				<if test="authList != null and authList.size() > 0 ">
-					or b.`uuid` IN
-					<foreach collection="authList" item="item" open="(" separator="," close=")">
-						#{item}
-					</foreach>
-				</if>
-				<if test="authList == null or authList.size() == 0 ">
-					or a.type = 'system'
-				</if>
-				)
-			</if>
-		</where>
+		<include refid="searchTemplateWhere"/>
 		ORDER BY a.`lcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
