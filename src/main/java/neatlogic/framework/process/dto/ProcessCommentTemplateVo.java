@@ -58,7 +58,7 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 	private Integer isEditable;
 
 	@JSONField(serialize = false)
-	private Integer searchByFcu = 0;
+	private Integer searchByLcu = 0;
 
 	public ProcessCommentTemplateVo() {}
 
@@ -130,11 +130,11 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 		this.isEditable = isEditable;
 	}
 
-	public Integer getSearchByFcu() {
-		return searchByFcu;
+	public Integer getSearchByLcu() {
+		return searchByLcu;
 	}
 
-	public void setSearchByFcu(Integer searchByFcu) {
-		this.searchByFcu = searchByFcu;
+	public void setSearchByLcu(Integer searchByLcu) {
+		this.searchByLcu = searchByLcu;
 	}
 }
