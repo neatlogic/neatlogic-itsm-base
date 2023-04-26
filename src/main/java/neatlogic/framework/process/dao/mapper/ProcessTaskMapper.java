@@ -352,6 +352,10 @@ public interface ProcessTaskMapper {
 
     int getProcessTaskUrgeCountByProcessTaskId(Long processTaskId);
 
+    int searchProcessTaskCountByOwnerAndExcludeId(ProcessTaskSearchVo searchVo);
+
+    List<ProcessTaskVo> searchProcessTaskListByOwnerAndExcludeId(ProcessTaskSearchVo searchVo);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,

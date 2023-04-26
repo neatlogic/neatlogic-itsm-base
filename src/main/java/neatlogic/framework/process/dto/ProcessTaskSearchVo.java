@@ -28,7 +28,9 @@ import java.util.List;
 public class ProcessTaskSearchVo extends BasePageVo {
     private List<String> includeChannelUuidList;
     private List<Long> excludeIdList;
+    private Long excludeId;
     private String excludeStatus;
+    private String owner;
 
     public void setIncludeChannelUuid(String includeChannelUuid) {
         if (includeChannelUuidList == null) {
@@ -59,5 +61,21 @@ public class ProcessTaskSearchVo extends BasePageVo {
 
     public void setExcludeStatus(String excludeStatus) {
         this.excludeStatus = excludeStatus;
+    }
+
+    public Long getExcludeId() {
+        return excludeId;
+    }
+
+    public void setExcludeId(Long excludeId) {
+        this.excludeId = excludeId;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }
