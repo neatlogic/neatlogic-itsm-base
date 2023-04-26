@@ -34,6 +34,7 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
     PROCESS_TASK_STEP_TRANSFER_CONTENT("processTaskStepTransferContent", new I18n("enum.process.processtaskstepnotifyparam.processtasksteptransfercontent"), ParamType.STRING),
     PROCESS_TASK_STEP_TRANSFER_WORKER("processTaskStepTransferWorker", new I18n("enum.process.processtaskstepnotifyparam.processtasksteptransferworker"), ParamType.STRING),
     PROCESS_TASK_CURRENT_STEP_COMPLETE_CONTENT("processTaskCurrentStepCompleteContent", new I18n("enum.process.processtaskstepnotifyparam.processtaskcurrentstepcompletecontent"), ParamType.STRING),
+    PROCESS_TASK_CURRENT_STEP_BACK_CONTENT("processTaskCurrentStepBackContent", new I18n("enum.process.processtaskstepnotifyparam.processtaskcurrentstepbackcontent"), ParamType.STRING),
     PROCESS_TASK_STEP_SLA("processTaskStepSla", new I18n("enum.process.processtaskstepnotifyparam.processtaskstepsla"), ParamType.ARRAY, "<#if DATA.processTaskStepSla?? && (DATA.processTaskStepSla?size > 0)>\n" +
             "\t\t\t\t<#list DATA.processTaskStepSla as item>\n" +
             "\t\t\t\t\t${item_index}-${item.id}-${item.name}-${item.status}-${item.timeLeft}-${item.timeLeftFormat}-${item.timeCostFormat}-${item.expireTimeFormat}\n" +
@@ -43,6 +44,9 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
     STEPWORKER("stepWorker", new I18n("enum.process.processtaskstepnotifyparam.stepworker"), ParamType.STRING),
     STEPSTAYTIME("stepStayTime", new I18n("enum.process.processtaskstepnotifyparam.stepstaytime"), ParamType.ARRAY),
     REASON("reason", new I18n("enum.process.processtaskstepnotifyparam.reason"), ParamType.STRING),
+    PROCESS_TASK_STEP_PAUSE_CONTENT("processTaskStepPauseContent", new I18n("enum.process.processtaskstepnotifyparam.processtasksteppausecontent"), ParamType.STRING),
+    PROCESS_TASK_STEP_RECOVER_CONTENT("processTaskStepRecoverContent", new I18n("enum.process.processtaskstepnotifyparam.processtasksteprecovercontent"), ParamType.STRING),
+    PROCESS_TASK_STEP_RETREAT_CONTENT("processTaskStepRetreatContent", new I18n("enum.process.processtaskstepnotifyparam.processtaskstepretreatcontent"), ParamType.STRING),
     STEP_COMMENT("stepComment", new I18n("enum.process.processtaskstepnotifyparam.stepcomment"), ParamType.STRING),
     STEP_COMMENT_USER("stepCommentUser", new I18n("enum.process.processtaskstepnotifyparam.stepcommentuser"), ParamType.STRING),
     STEP_COMMENT_LIST("stepCommentList", new I18n("enum.process.processtaskstepnotifyparam.stepcommentlist"), ParamType.ARRAY),

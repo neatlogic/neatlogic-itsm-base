@@ -1268,7 +1268,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             }
         }
-
+        IProcessStepHandlerUtil.saveProcessTaskOperationContent(currentProcessTaskVo, ProcessTaskOperationType.PROCESSTASK_ABORT);
         /* 更新流程作业状态 **/
         updateProcessTaskStatus(currentProcessTaskVo.getId());
 
@@ -1276,6 +1276,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
         processTaskStepVo.getParamObj().put("source", currentProcessTaskVo.getParamObj().getString("source"));
+        processTaskStepVo.getParamObj().put("content", currentProcessTaskVo.getParamObj().getString("content"));
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.ABORTPROCESSTASK);
         /* 触发通知 **/
         IProcessStepHandlerUtil.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.ABORTPROCESSTASK);
@@ -1336,6 +1337,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
         }
 
+        IProcessStepHandlerUtil.saveProcessTaskOperationContent(currentProcessTaskVo, ProcessTaskOperationType.PROCESSTASK_RECOVER);
         /* 更新流程作业状态 **/
         updateProcessTaskStatus(currentProcessTaskVo.getId());
 
@@ -1343,6 +1345,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
         processTaskStepVo.getParamObj().put("source", currentProcessTaskVo.getParamObj().getString("source"));
+        processTaskStepVo.getParamObj().put("content", currentProcessTaskVo.getParamObj().getString("content"));
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.RECOVERPROCESSTASK);
         /* 触发通知 **/
         IProcessStepHandlerUtil.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.RECOVERPROCESSTASK);
@@ -1406,6 +1409,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     .checkAndNoPermissionThrowException();
 
             stepMajorUserRegulate(currentProcessTaskStepVo);
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_RECOVER);
             myRecover(currentProcessTaskStepVo);
 
             /* 更新工单步骤状态为 “进行中” **/
@@ -1444,6 +1448,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 .checkAndNoPermissionThrowException();
         try {
             stepMajorUserRegulate(currentProcessTaskStepVo);
+            IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_PAUSE);
             myPause(currentProcessTaskStepVo);
 
             /* 更新工单步骤状态为 “已挂起” **/
