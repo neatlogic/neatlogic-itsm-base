@@ -22,20 +22,17 @@
 	<sql id="searchTemplateWhere">
 		<where>
 			<if test="keyword != null and keyword != ''">
-				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
+				and (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
 			</if>
-			<if test="type != null and keyword != ''">
+			<if test="type != null and type != ''">
 				and a.`type` = #{type}
 			</if>
-			<if test="searchByLcu == 1">
-				and ((a.type = 'custom' and a.lcu = #{lcu})
-				<if test="authList != null and authList.size() > 0 ">
-					or b.`uuid` IN
-					<foreach collection="authList" item="item" open="(" separator="," close=")">
-						#{item}
-					</foreach>
-				</if>
-				<if test="authList == null or authList.size() == 0 ">
+			<if test="authList != null and authList.size() > 0 ">
+				and ( b.`uuid` IN
+				<foreach collection="authList" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				<if test="isHasModifyAuthority != null and isHasModifyAuthority == 1 ">
 					or a.type = 'system'
 				</if>
 				)
@@ -127,7 +124,7 @@
 			<if test="keyword != null and keyword != ''">
 				and a.`name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			<if test="type != null and keyword != ''">
+			<if test="type != null and type != ''">
 				and a.`type` = #{type}
 			</if>
 			<if test="authList != null and authList.size() > 0 ">
@@ -159,10 +156,10 @@
 		on a.`id` = c.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and `name` LIKE CONCAT('%', #{keyword}, '%')
+				and a.`name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			<if test="type != null and keyword != ''">
-				and `type` = #{type}
+			<if test="type != null and type != ''">
+				and a.`type` = #{type}
 			</if>
 			<if test="authList != null and authList.size() > 0 ">
 				and b.`uuid` IN

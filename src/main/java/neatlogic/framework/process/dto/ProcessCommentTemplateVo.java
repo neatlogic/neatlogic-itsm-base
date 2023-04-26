@@ -1,11 +1,13 @@
 package neatlogic.framework.process.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import neatlogic.framework.auth.core.AuthActionChecker;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.constvalue.GroupSearch;
 import neatlogic.framework.common.dto.BaseEditorVo;
+import neatlogic.framework.process.auth.PROCESS_COMMENT_TEMPLATE_MODIFY;
 import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
-import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 	private Integer isEditable;
 
 	@JSONField(serialize = false)
-	private Integer searchByLcu = 0;
+	private Integer isHasModifyAuthority = 0;
 
 	public ProcessCommentTemplateVo() {}
 
@@ -130,11 +132,18 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 		this.isEditable = isEditable;
 	}
 
-	public Integer getSearchByLcu() {
-		return searchByLcu;
+	public Integer getIsHasModifyAuthority() {
+		if (isHasModifyAuthority == null) {
+			if (AuthActionChecker.check(PROCESS_COMMENT_TEMPLATE_MODIFY.class)) {
+				isHasModifyAuthority = 1;
+			} else {
+				isHasModifyAuthority = 0;
+			}
+		}
+		return isHasModifyAuthority;
 	}
 
-	public void setSearchByLcu(Integer searchByLcu) {
-		this.searchByLcu = searchByLcu;
+	public void setIsHasModifyAuthority(Integer isHasModifyAuthority) {
+		this.isHasModifyAuthority = isHasModifyAuthority;
 	}
 }
