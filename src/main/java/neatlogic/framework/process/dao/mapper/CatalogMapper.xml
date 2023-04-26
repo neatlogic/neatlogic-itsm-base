@@ -310,6 +310,24 @@
 		where `name` = #{value}
 	</select>
 
+	<select id="getCatalogListByUuidList" parameterType="java.util.List" resultType="neatlogic.framework.process.dto.CatalogVo">
+		SELECT
+			`uuid`,
+			`name`,
+			`parent_uuid` AS `parentUuid`,
+			`is_active` AS `isActive`,
+			`icon`,
+			`color`,
+			`desc`,
+			`lft`,
+			`rht`
+		FROM `catalog`
+		WHERE `uuid` IN
+		<foreach collection="list" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</select>
+
     <insert id="insertCatalog" parameterType="neatlogic.framework.process.dto.CatalogVo">
 		INSERT INTO `catalog`(`uuid`, `name`, `parent_uuid`, `is_active`, `icon`, `color`, `desc`, `lft`, `rht`)
 		VALUES(#{uuid}, #{name}, #{parentUuid}, #{isActive}, #{icon}, #{color}, #{desc}, #{lft}, #{rht})

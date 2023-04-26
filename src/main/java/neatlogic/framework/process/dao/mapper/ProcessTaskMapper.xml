@@ -2771,6 +2771,46 @@ limitations under the License.
        SELECT COUNT(1) FROM `processtask_urge` WHERE `processtask_id` = #{value}
     </select>
 
+    <select id="searchProcessTaskCountByOwnerAndExcludeId" parameterType="neatlogic.framework.process.dto.ProcessTaskSearchVo"
+            resultType="int">
+        SELECT
+            COUNT(1)
+        FROM `processtask`
+        WHERE `owner` = #{owner}
+          AND `id` != #{excludeId}
+          AND `is_deleted` = 0
+    </select>
+
+    <select id="searchProcessTaskListByOwnerAndExcludeId" parameterType="neatlogic.framework.process.dto.ProcessTaskSearchVo"
+            resultType="neatlogic.framework.process.dto.ProcessTaskVo">
+        SELECT
+            `id`,
+            `title`,
+            `process_uuid` AS processUuid,
+            `channel_uuid` AS channelUuid,
+            `config_hash` AS configHash,
+            `priority_uuid` AS priorityUuid,
+            `status`,
+            `start_time` AS startTime,
+            `end_time` AS endTime,
+            `owner`,
+            `reporter`,
+            `expire_time` AS expireTime,
+            `worktime_uuid` AS worktimeUuid,
+            `error`,
+            `is_show` AS isShow,
+            `serial_number` AS serialNumber,
+            `source`,
+            `is_deleted` AS isDeleted,
+            `need_score` AS needScore
+        FROM `processtask`
+        WHERE `owner` = #{owner}
+          AND `id` != #{excludeId}
+          AND `is_deleted` = 0
+        ORDER BY `id` DESC
+            LIMIT #{startNum}, #{pageSize}
+    </select>
+
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}

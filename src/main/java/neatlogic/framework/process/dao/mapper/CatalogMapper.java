@@ -1,5 +1,6 @@
 package neatlogic.framework.process.dao.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -91,6 +92,8 @@ public interface CatalogMapper {
 	String getParentUuidByUuid(String uuid);
 
 	List<CatalogVo> getCatalogByName(String name);
+
+	List<CatalogVo> getCatalogListByUuidList(List<String> uuidList);
 
 	int insertCatalog(CatalogVo catalogVo);
 
