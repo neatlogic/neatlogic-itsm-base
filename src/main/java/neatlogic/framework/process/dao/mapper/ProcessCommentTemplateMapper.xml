@@ -13,16 +13,32 @@
 		SELECT
 		COUNT(1)
 		FROM
-		`process_comment_template`
+		`process_comment_template` a
+		join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
+		<include refid="searchTemplateWhere"/>
+	</select>
+
+	<sql id="searchTemplateWhere">
 		<where>
 			<if test="keyword != null and keyword != ''">
-				AND (`name` LIKE concat('%', #{keyword}, '%') OR `content` LIKE concat('%', #{keyword}, '%'))
+				and (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
 			</if>
-			<if test="type != null and keyword != ''">
-				and `type` = #{type}
+			<if test="type != null and type != ''">
+				and a.`type` = #{type}
+			</if>
+			<if test="authList != null and authList.size() > 0 ">
+				and ( b.`uuid` IN
+				<foreach collection="authList" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+				<if test="isHasModifyAuthority != null and isHasModifyAuthority == 1 ">
+					or a.type = 'system'
+				</if>
+				)
 			</if>
 		</where>
-	</select>
+	</sql>
 
 	<resultMap id="templateMap" type="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
 		<id column="id" property="id" />
@@ -54,24 +70,19 @@
 		FROM
 		(
 		SELECT
-		`id`,
-		`name`,
-		`content`,
-		`type`,
-		`fcu`,
-		`fcd`,
-		`lcu`,
-		`lcd`
-		from `process_comment_template`
-		<where>
-			<if test="keyword != null and keyword != ''">
-				AND (`name` LIKE concat('%', #{keyword}, '%') OR `content` LIKE concat('%', #{keyword}, '%'))
-			</if>
-			<if test="type != null and type != ''">
-				and `type` = #{type}
-			</if>
-		</where>
-		ORDER BY `lcd` desc
+		a.`id`,
+		a.`name`,
+		a.`content`,
+		a.`type`,
+		a.`fcu`,
+		a.`fcd`,
+		a.`lcu`,
+		a.`lcd`
+		from `process_comment_template` a
+		join `process_comment_template_authority` b
+		on a.`id` = b.`comment_template_id`
+		<include refid="searchTemplateWhere"/>
+		ORDER BY a.`lcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
 		</if>
@@ -113,7 +124,7 @@
 			<if test="keyword != null and keyword != ''">
 				and a.`name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			<if test="type != null and keyword != ''">
+			<if test="type != null and type != ''">
 				and a.`type` = #{type}
 			</if>
 			<if test="authList != null and authList.size() > 0 ">
@@ -137,7 +148,9 @@
 		a.`fcd`,
 		a.`lcu`,
 		a.`lcd`,
-		c.`count`
+		c.`count`,
+		b.`uuid`,
+		b.`type` as `authType`
 		from `process_comment_template` a
 		join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
@@ -145,10 +158,10 @@
 		on a.`id` = c.`comment_template_id`
 		<where>
 			<if test="keyword != null and keyword != ''">
-				and `name` LIKE CONCAT('%', #{keyword}, '%')
+				and a.`name` LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			<if test="type != null and keyword != ''">
-				and `type` = #{type}
+			<if test="type != null and type != ''">
+				and a.`type` = #{type}
 			</if>
 			<if test="authList != null and authList.size() > 0 ">
 				and b.`uuid` IN
@@ -168,14 +181,7 @@
 		a.`id` as `value`,
 		a.`content` as `text`
 		FROM `process_comment_template` a
-		<where>
-			<if test="keyword != null and keyword != ''">
-				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
-			</if>
-			<if test="type != null and keyword != ''">
-				and a.`type` = #{type}
-			</if>
-		</where>
+		<include refid="searchTemplateWhere"/>
 		ORDER BY a.`lcd` desc
 		<if test="needPage == true">
 			LIMIT #{startNum}, #{pageSize}
@@ -223,6 +229,7 @@
 		`process_comment_template`
 		set
 		`name` = #{name},
+		`type` = #{type},
 		`content` = #{content},
 		`lcu` = #{lcu},
 		`lcd` = now(3)
