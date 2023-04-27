@@ -148,7 +148,9 @@
 		a.`fcd`,
 		a.`lcu`,
 		a.`lcd`,
-		c.`count`
+		c.`count`,
+		b.`uuid`,
+		b.`type` as `authType`
 		from `process_comment_template` a
 		join `process_comment_template_authority` b
 		on a.`id` = b.`comment_template_id`
