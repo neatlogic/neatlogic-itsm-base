@@ -23,7 +23,7 @@ import neatlogic.framework.util.I18n;
  * @since 2021/7/15 11:15
  **/
 public enum ReplaceableText {
-    Content_details("replaceableContentDetails", new I18n("enum.process.replaceabletext.contentdetails")),
+    CONTENT_DETAILS("replaceableContentDetails", new I18n("enum.process.replaceabletext.contentdetails")),
     STEP_LIST("replaceableSteplist", new I18n("enum.process.replaceabletext.steplist")),
     TIME_LINE("replaceableTimeLine", new I18n("enum.process.replaceabletext.timeline")),
     RELATION_LIST("replaceableRelationlist", new I18n("enum.process.replaceabletext.relationlist"));
