@@ -230,7 +230,7 @@ public class ProcessConfigUtil {
      */
     public static JSONArray regulateCustomStatusList(JSONArray customStatusList) {
         JSONArray customStatusArray = new JSONArray();
-        for (ProcessTaskStatus status : ProcessTaskStatus.values()) {
+        for (ProcessTaskStepStatus status : ProcessTaskStepStatus.values()) {
             customStatusArray.add(new JSONObject() {{
                 this.put("name", status.getValue());
                 this.put("text", status.getText());

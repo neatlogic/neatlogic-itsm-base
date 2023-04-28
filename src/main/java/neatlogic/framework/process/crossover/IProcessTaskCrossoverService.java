@@ -19,6 +19,7 @@ package neatlogic.framework.process.crossover;
 import neatlogic.framework.crossover.ICrossoverService;
 import neatlogic.framework.dto.AuthenticationInfoVo;
 import neatlogic.framework.process.constvalue.ProcessTaskStatus;
+import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
 import neatlogic.framework.process.dto.AssignableWorkerStepVo;
 import neatlogic.framework.process.dto.ProcessCommentTemplateVo;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
@@ -104,10 +105,10 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * 检查步骤状态，如果stepStatus属于status其中一员，则返回对应的异常对象，否则返回null
      *
      * @param stepStatus 步骤状态
-     * @param statuss    状态列表
+     * @param status    状态列表
      * @return
      */
-    ProcessTaskPermissionDeniedException checkProcessTaskStepStatus(String stepStatus, ProcessTaskStatus... statuss);
+    ProcessTaskPermissionDeniedException checkProcessTaskStepStatus(String stepStatus, ProcessTaskStepStatus... status);
 
     /**
      * 获取步骤回复模版

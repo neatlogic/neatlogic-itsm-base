@@ -3,9 +3,8 @@ package neatlogic.framework.process.stephandler.core;
 import neatlogic.framework.common.constvalue.GroupSearch;
 import neatlogic.framework.dao.mapper.TeamMapper;
 import neatlogic.framework.dao.mapper.UserMapper;
-import neatlogic.framework.dto.UserVo;
 import neatlogic.framework.file.dao.mapper.FileMapper;
-import neatlogic.framework.process.constvalue.ProcessTaskStatus;
+import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
 import neatlogic.framework.process.constvalue.ProcessTaskStepUserStatus;
 import neatlogic.framework.process.constvalue.ProcessUserType;
 import neatlogic.framework.process.dao.mapper.ProcessStepHandlerMapper;
@@ -19,13 +18,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class ProcessStepInternalHandlerBase implements IProcessStepInternalHandler {
     protected static ProcessTaskMapper processTaskMapper;
@@ -242,7 +239,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 if (Objects.equals(stepTaskUserVo.getIsDelete(), 1)) {
                     continue;
                 }
-                if (!Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
+                if (!Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStepStatus.SUCCEED.getValue())) {
                     runningTaskUserUuidSet.add(stepTaskUserVo.getUserUuid());
                 }
             }
@@ -256,7 +253,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 String userUuid = stepTaskUserVo.getUserUuid();
                 processTaskStepUserVo.setUserUuid(userUuid);
 
-                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
+                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStepStatus.SUCCEED.getValue())) {
                     if (runningTaskUserUuidSet.contains(userUuid)) {
                         continue;
                     }

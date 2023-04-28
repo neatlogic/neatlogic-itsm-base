@@ -24,6 +24,7 @@ import neatlogic.framework.dto.AuthenticationInfoVo;
 import neatlogic.framework.dto.condition.ConditionVo;
 import neatlogic.framework.process.constvalue.ConditionConfigType;
 import neatlogic.framework.process.constvalue.ProcessTaskStatus;
+import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
 import neatlogic.framework.process.constvalue.ProcessWorkcenterField;
 import neatlogic.framework.process.dao.mapper.ProcessTaskAgentMapper;
 import neatlogic.framework.process.dao.mapper.ProcessTaskMapper;
@@ -198,7 +199,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         sqlSb.append(" ) and ( ");
         // step.status
         List<String> stepStatusList =
-                Stream.of(ProcessTaskStatus.PENDING.getValue(), ProcessTaskStatus.RUNNING.getValue())
+                Stream.of(ProcessTaskStepStatus.PENDING.getValue(), ProcessTaskStepStatus.RUNNING.getValue())
                         .map(String::toString).collect(Collectors.toList());
         sqlSb.append(Expression.getExpressionSql(Expression.INCLUDE.getExpression(), new ProcessTaskStepSqlTable().getShortName(), ProcessTaskStepSqlTable.FieldEnum.STATUS.getValue(), String.join("','", stepStatusList)));
         sqlSb.append(" ) and ( ");

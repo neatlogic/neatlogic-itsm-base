@@ -6,6 +6,7 @@ import neatlogic.framework.dto.TeamVo;
 import neatlogic.framework.dto.UserVo;
 import neatlogic.framework.process.constvalue.ProcessTaskSourceFactory;
 import neatlogic.framework.process.constvalue.ProcessTaskSource;
+import neatlogic.framework.process.constvalue.ProcessTaskStatus;
 import neatlogic.framework.process.dto.score.ScoreTemplateVo;
 import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
@@ -193,9 +194,9 @@ public class ProcessTaskVo extends BasePageVo {
 
     }
 
-    public ProcessTaskVo(Long _id, String _status) {
+    public ProcessTaskVo(Long _id, ProcessTaskStatus _status) {
         this.id = _id;
-        this.status = _status;
+        this.status = _status.getValue();
     }
 
     public ProcessTaskVo(Long _id) {
