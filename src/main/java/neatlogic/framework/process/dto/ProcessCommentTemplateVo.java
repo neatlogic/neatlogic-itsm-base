@@ -134,7 +134,7 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
     }
 
     public Integer getIsHasModifyAuthority() {
-        if (isHasModifyAuthority == null) {
+        if (isHasModifyAuthority == 0) {
             isHasModifyAuthority = AuthActionChecker.check(PROCESS_COMMENT_TEMPLATE_MODIFY.class) ? 1 : 0;
         }
         return isHasModifyAuthority;
