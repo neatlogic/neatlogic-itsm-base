@@ -28,6 +28,8 @@ public class ProcessTaskVo extends BasePageVo {
     private String title;
     @EntityField(name = "流程uuid", type = ApiParamType.STRING)
     private String processUuid;
+    @EntityField(name = "服务所在目录名称", type = ApiParamType.STRING)
+    private String catalogName;
     @EntityField(name = "服务")
     private ChannelVo channelVo;
     @EntityField(name = "服务uuid", type = ApiParamType.STRING)
@@ -687,6 +689,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setChannelTypeName(String channelTypeName) {
         this.channelTypeName = channelTypeName;
+    }
+
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public void setCatalogName(String catalogName) {
+        this.catalogName = catalogName;
     }
 
     public String getChannelName() {
