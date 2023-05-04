@@ -27,10 +27,7 @@ public enum ProcessTaskStatus implements IEnum {
     RUNNING("running", new I18n("enum.process.processtaskstatus.running"), "#2d84fb"),
     ABORTED("aborted", new I18n("enum.process.processtaskstatus.aborted"), "#F9A825"),
     SUCCEED("succeed", new I18n("enum.process.processtaskstatus.succeed"), "#25b865"),
-    PENDING("pending", new I18n("enum.process.processtaskstatus.pending"), "#8E949F"),
     FAILED("failed", new I18n("enum.process.processtaskstatus.failed"), "#f71010"),
-    //	ABORTING("aborting", "终止中","#8E949F"),
-    BACK("back", new I18n("enum.process.processtaskstatus.back"), "#8E949F"),
     HANG("hang", new I18n("enum.process.processtaskstatus.hang"), "#ffba5a"),
     SCORED("scored", new I18n("enum.process.processtaskstatus.scored"), "#25b865"),
     DRAFT("draft", new I18n("enum.process.processtaskstatus.draft"), "#8E949F");
@@ -82,19 +79,6 @@ public enum ProcessTaskStatus implements IEnum {
             }
         }
         return "";
-    }
-
-    public static JSONObject getJson(String _status) {
-        JSONObject statusJson = new JSONObject();
-        for (ProcessTaskStatus s : ProcessTaskStatus.values()) {
-            if (s.getValue().equals(_status)) {
-                statusJson.put("value", s.getValue());
-                statusJson.put("color", s.getColor());
-                statusJson.put("text", s.getText());
-                break;
-            }
-        }
-        return statusJson;
     }
 
     @Override

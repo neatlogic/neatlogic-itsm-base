@@ -24,15 +24,12 @@ import neatlogic.framework.util.I18n;
 import java.util.List;
 
 public enum ProcessTaskStepStatus implements IEnum {
-    RUNNING("running", new I18n("enum.process.processtaskstatus.running"), "#2d84fb"),
-//    ABORTED("aborted", new I18n("enum.process.processtaskstatus.aborted"), "#F9A825"),
-    SUCCEED("succeed", new I18n("enum.process.processtaskstatus.succeed"), "#25b865"),
-    PENDING("pending", new I18n("enum.process.processtaskstatus.pending"), "#8E949F"),
-    FAILED("failed", new I18n("enum.process.processtaskstatus.failed"), "#f71010"),
-    BACK("back", new I18n("enum.process.processtaskstatus.back"), "#8E949F"),
-    HANG("hang", new I18n("enum.process.processtaskstatus.hang"), "#ffba5a"),
-//    SCORED("scored", new I18n("enum.process.processtaskstatus.scored"), "#25b865"),
-    DRAFT("draft", new I18n("enum.process.processtaskstatus.draft"), "#8E949F");
+    RUNNING("running", new I18n("enum.process.processtaskstepstatus.running"), "#2d84fb"),
+    SUCCEED("succeed", new I18n("enum.process.processtaskstepstatus.succeed"), "#25b865"),
+    PENDING("pending", new I18n("enum.process.processtaskstepstatus.pending"), "#8E949F"),
+    FAILED("failed", new I18n("enum.process.processtaskstepstatus.failed"), "#f71010"),
+    HANG("hang", new I18n("enum.process.processtaskstepstatus.hang"), "#ffba5a"),
+    DRAFT("draft", new I18n("enum.process.processtaskstepstatus.draft"), "#8E949F");
 
     private final String status;
     private final I18n text;

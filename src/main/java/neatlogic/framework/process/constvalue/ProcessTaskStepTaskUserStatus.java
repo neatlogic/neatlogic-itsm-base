@@ -24,15 +24,9 @@ import neatlogic.framework.util.I18n;
 import java.util.List;
 
 public enum ProcessTaskStepTaskUserStatus implements IEnum {
-    RUNNING("running", new I18n("enum.process.processtaskstatus.running"), "#2d84fb"),
-//    ABORTED("aborted", new I18n("enum.process.processtaskstatus.aborted"), "#F9A825"),
-    SUCCEED("succeed", new I18n("enum.process.processtaskstatus.succeed"), "#25b865"),
-    PENDING("pending", new I18n("enum.process.processtaskstatus.pending"), "#8E949F"),
-    FAILED("failed", new I18n("enum.process.processtaskstatus.failed"), "#f71010"),
-    BACK("back", new I18n("enum.process.processtaskstatus.back"), "#8E949F"),
-    HANG("hang", new I18n("enum.process.processtaskstatus.hang"), "#ffba5a"),
-//    SCORED("scored", new I18n("enum.process.processtaskstatus.scored"), "#25b865"),
-    DRAFT("draft", new I18n("enum.process.processtaskstatus.draft"), "#8E949F");
+    SUCCEED("succeed", new I18n("enum.process.processtasksteptaskuserstatus.succeed"), "#25b865"),
+    PENDING("pending", new I18n("enum.process.processtasksteptaskuserstatus.pending"), "#8E949F")
+    ;
 
     private final String status;
     private final I18n text;
@@ -81,19 +75,6 @@ public enum ProcessTaskStepTaskUserStatus implements IEnum {
             }
         }
         return "";
-    }
-
-    public static JSONObject getJson(String _status) {
-        JSONObject statusJson = new JSONObject();
-        for (ProcessTaskStepTaskUserStatus s : ProcessTaskStepTaskUserStatus.values()) {
-            if (s.getValue().equals(_status)) {
-                statusJson.put("value", s.getValue());
-                statusJson.put("color", s.getColor());
-                statusJson.put("text", s.getText());
-                break;
-            }
-        }
-        return statusJson;
     }
 
     @Override
