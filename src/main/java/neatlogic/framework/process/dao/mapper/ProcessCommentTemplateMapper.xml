@@ -69,7 +69,7 @@
 		b.`type` as `authType`
 		FROM
 		(
-		SELECT
+		SELECT distinct
 		a.`id`,
 		a.`name`,
 		a.`content`,
