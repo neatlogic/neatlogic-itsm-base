@@ -38,6 +38,8 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 	private String source;
 	@EntityField(name = "来源中文名", type = ApiParamType.STRING)
 	private String sourceName;
+	@EntityField(name = "操作人角色", type = ApiParamType.STRING)
+	private String operatorRole;
 	public ProcessTaskStepReplyVo() {}
 	public ProcessTaskStepReplyVo(ProcessTaskStepContentVo processTaskStepContentVo) {
 	    super.setFcd(processTaskStepContentVo.getFcd());
@@ -136,5 +138,13 @@ public class ProcessTaskStepReplyVo extends BaseEditorVo {
 
 	public void setSourceName(String sourceName) {
 		this.sourceName = sourceName;
+	}
+
+	public String getOperatorRole() {
+		return operatorRole;
+	}
+
+	public void setOperatorRole(String operatorRole) {
+		this.operatorRole = operatorRole;
 	}
 }
