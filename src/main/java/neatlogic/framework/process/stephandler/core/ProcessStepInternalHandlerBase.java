@@ -3,7 +3,6 @@ package neatlogic.framework.process.stephandler.core;
 import neatlogic.framework.common.constvalue.GroupSearch;
 import neatlogic.framework.dao.mapper.TeamMapper;
 import neatlogic.framework.dao.mapper.UserMapper;
-import neatlogic.framework.dto.UserVo;
 import neatlogic.framework.file.dao.mapper.FileMapper;
 import neatlogic.framework.process.constvalue.ProcessTaskStatus;
 import neatlogic.framework.process.constvalue.ProcessTaskStepUserStatus;
@@ -19,13 +18,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class ProcessStepInternalHandlerBase implements IProcessStepInternalHandler {
     protected static ProcessTaskMapper processTaskMapper;
