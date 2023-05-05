@@ -4,10 +4,6 @@ import neatlogic.framework.common.constvalue.GroupSearch;
 import neatlogic.framework.dao.mapper.TeamMapper;
 import neatlogic.framework.dao.mapper.UserMapper;
 import neatlogic.framework.file.dao.mapper.FileMapper;
-import neatlogic.framework.notify.core.INotifyPolicyHandler;
-import neatlogic.framework.notify.dao.mapper.NotifyMapper;
-import neatlogic.framework.notify.dto.InvokeNotifyPolicyConfigVo;
-import neatlogic.framework.notify.dto.NotifyPolicyVo;
 import neatlogic.framework.process.constvalue.ProcessTaskStatus;
 import neatlogic.framework.process.constvalue.ProcessTaskStepUserStatus;
 import neatlogic.framework.process.constvalue.ProcessUserType;
@@ -37,7 +33,6 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     protected static FileMapper fileMapper;
     protected static ProcessStepHandlerMapper processStepHandlerMapper;
     protected static ProcessTaskStepTaskMapper processTaskStepTaskMapper;
-    protected static NotifyMapper notifyMapper;
 
     @Autowired
     public void setProcessTaskMapper(ProcessTaskMapper _processTaskMapper) {
@@ -281,24 +276,5 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
             }
         }
-    }
-
-    protected InvokeNotifyPolicyConfigVo regulateNotifyPolicyConfig(JSONObject notifyPolicyConfig, Class< ? extends INotifyPolicyHandler> clazz) {
-        InvokeNotifyPolicyConfigVo invokeNotifyPolicyConfigVo = JSONObject.toJavaObject(notifyPolicyConfig, InvokeNotifyPolicyConfigVo.class);
-        if (invokeNotifyPolicyConfigVo == null) {
-            invokeNotifyPolicyConfigVo = new InvokeNotifyPolicyConfigVo();
-        }
-        String handler = clazz.getName();
-        invokeNotifyPolicyConfigVo.setHandler(handler);
-        if (invokeNotifyPolicyConfigVo.getIsCustom() == 1) {
-            return invokeNotifyPolicyConfigVo;
-        }
-        NotifyPolicyVo notifyPolicyVo = notifyMapper.getDefaultNotifyPolicyByHandler(handler);
-        if (notifyPolicyVo == null) {
-            return invokeNotifyPolicyConfigVo;
-        }
-        invokeNotifyPolicyConfigVo.setPolicyId(notifyPolicyVo.getId());
-        invokeNotifyPolicyConfigVo.setPolicyName(notifyPolicyVo.getName());
-        return invokeNotifyPolicyConfigVo;
     }
 }
