@@ -1,10 +1,7 @@
 package neatlogic.framework.process.workcenter.dto;
 
 import neatlogic.framework.common.constvalue.GroupSearch;
-import neatlogic.framework.process.constvalue.ProcessStepType;
-import neatlogic.framework.process.constvalue.ProcessTaskStatus;
-import neatlogic.framework.process.constvalue.ProcessUserType;
-import neatlogic.framework.process.constvalue.ProcessWorkcenterField;
+import neatlogic.framework.process.constvalue.*;
 import neatlogic.framework.process.dto.*;
 import neatlogic.framework.util.HtmlUtil;
 import com.alibaba.fastjson.JSONArray;
@@ -135,13 +132,13 @@ public class WorkcenterFieldBuilder {
 			 stepJson.put("endtime", step.getEndTime());
 			 stepJson.put("usertypelist", userTypeArray);
 			 //已激活未开始
-			 if(step.getStatus().equals(ProcessTaskStatus.PENDING.getValue()) && step.getIsActive() == 1) {
+			 if(step.getStatus().equals(ProcessTaskStepStatus.PENDING.getValue()) && step.getIsActive() == 1) {
 				 for(ProcessTaskStepWorkerVo worker : step.getWorkerList()) {
 					 JSONObject userTypeJson = userTypeMap.get(ProcessUserType.WORKER.getValue());
 					 userTypeJson.getJSONArray("userlist").add(worker.getWorkerValue());
 					 JSONObject userStatusJson = new JSONObject();
 					 userStatusJson.put("value", worker.getWorkerValue());
-					 userStatusJson.put("status", ProcessTaskStatus.PENDING.getValue());
+					 userStatusJson.put("status", ProcessTaskStepStatus.PENDING.getValue());
 					 userTypeJson.getJSONArray("list").add(userStatusJson);
 				 }
 			 }else {

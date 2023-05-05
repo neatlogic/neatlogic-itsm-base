@@ -16,7 +16,7 @@ limitations under the License.
 
 package neatlogic.framework.process.task;
 
-import neatlogic.framework.process.constvalue.ProcessTaskStatus;
+import neatlogic.framework.process.constvalue.ProcessTaskStepTaskUserStatus;
 import neatlogic.framework.process.constvalue.task.TaskConfigPolicy;
 import neatlogic.framework.process.dto.ProcessTaskStepTaskVo;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,7 +44,7 @@ public class TaskConfigManager {
         configMap.put(TaskConfigPolicy.ALL.getValue(), (processTaskStepTaskVo) -> {
             boolean result = true;
             if (CollectionUtils.isNotEmpty(processTaskStepTaskVo.getStepTaskUserVoList())) {
-                if(processTaskStepTaskVo.getStepTaskUserVoList().stream().anyMatch(t->!Objects.equals(t.getStatus(), ProcessTaskStatus.SUCCEED.getValue()))){
+                if(processTaskStepTaskVo.getStepTaskUserVoList().stream().anyMatch(t->!Objects.equals(t.getStatus(), ProcessTaskStepTaskUserStatus.SUCCEED.getValue()))){
                     result = false;
                 }
             }
@@ -54,7 +54,7 @@ public class TaskConfigManager {
         configMap.put(TaskConfigPolicy.ANY.getValue(), (processTaskStepVo) -> {
             boolean result = false;
             if (CollectionUtils.isNotEmpty(processTaskStepVo.getStepTaskUserVoList())) {
-                if(processTaskStepVo.getStepTaskUserVoList().stream().anyMatch(t->Objects.equals(t.getStatus(), ProcessTaskStatus.SUCCEED.getValue()))){
+                if(processTaskStepVo.getStepTaskUserVoList().stream().anyMatch(t->Objects.equals(t.getStatus(), ProcessTaskStepTaskUserStatus.SUCCEED.getValue()))){
                     result = true;
                 }
             }

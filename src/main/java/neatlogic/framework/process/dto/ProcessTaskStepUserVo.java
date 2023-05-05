@@ -155,7 +155,7 @@ public class ProcessTaskStepUserVo {
 
     public String getStatusName() {
         if (StringUtils.isNotBlank(status) && StringUtils.isBlank(statusName)) {
-            statusName = ProcessTaskStatus.getText(status);
+            statusName = ProcessTaskStepUserStatus.getText(status);
         }
         return statusName;
     }

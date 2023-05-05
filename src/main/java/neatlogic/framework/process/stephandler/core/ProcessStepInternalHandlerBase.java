@@ -4,7 +4,7 @@ import neatlogic.framework.common.constvalue.GroupSearch;
 import neatlogic.framework.dao.mapper.TeamMapper;
 import neatlogic.framework.dao.mapper.UserMapper;
 import neatlogic.framework.file.dao.mapper.FileMapper;
-import neatlogic.framework.process.constvalue.ProcessTaskStatus;
+import neatlogic.framework.process.constvalue.ProcessTaskStepTaskUserStatus;
 import neatlogic.framework.process.constvalue.ProcessTaskStepUserStatus;
 import neatlogic.framework.process.constvalue.ProcessUserType;
 import neatlogic.framework.process.dao.mapper.ProcessStepHandlerMapper;
@@ -239,7 +239,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 if (Objects.equals(stepTaskUserVo.getIsDelete(), 1)) {
                     continue;
                 }
-                if (!Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
+                if (!Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStepTaskUserStatus.SUCCEED.getValue())) {
                     runningTaskUserUuidSet.add(stepTaskUserVo.getUserUuid());
                 }
             }
@@ -253,7 +253,7 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 String userUuid = stepTaskUserVo.getUserUuid();
                 processTaskStepUserVo.setUserUuid(userUuid);
 
-                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
+                if (Objects.equals(stepTaskUserVo.getStatus(), ProcessTaskStepTaskUserStatus.SUCCEED.getValue())) {
                     if (runningTaskUserUuidSet.contains(userUuid)) {
                         continue;
                     }

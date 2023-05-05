@@ -4,6 +4,7 @@ import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.dto.BasePageVo;
 import neatlogic.framework.dto.UserVo;
 import neatlogic.framework.form.dto.FormAttributeVo;
+import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
 import neatlogic.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
@@ -191,9 +192,9 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     }
 
-    public ProcessTaskStepVo(Long id, String status, Integer isActive) {
+    public ProcessTaskStepVo(Long id, ProcessTaskStepStatus status, Integer isActive) {
         this.id = id;
-        this.status = status;
+        this.status = status.getValue();
         this.isActive = isActive;
     }
 

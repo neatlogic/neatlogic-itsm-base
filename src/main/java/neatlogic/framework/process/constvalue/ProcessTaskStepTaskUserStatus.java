@@ -16,27 +16,23 @@
 
 package neatlogic.framework.process.constvalue;
 
-import neatlogic.framework.common.constvalue.IEnum;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.common.constvalue.IEnum;
 import neatlogic.framework.util.I18n;
 
 import java.util.List;
 
-public enum ProcessTaskStatus implements IEnum {
-    RUNNING("running", new I18n("enum.process.processtaskstatus.running"), "#2d84fb"),
-    ABORTED("aborted", new I18n("enum.process.processtaskstatus.aborted"), "#F9A825"),
-    SUCCEED("succeed", new I18n("enum.process.processtaskstatus.succeed"), "#25b865"),
-    FAILED("failed", new I18n("enum.process.processtaskstatus.failed"), "#f71010"),
-    HANG("hang", new I18n("enum.process.processtaskstatus.hang"), "#ffba5a"),
-    SCORED("scored", new I18n("enum.process.processtaskstatus.scored"), "#25b865"),
-    DRAFT("draft", new I18n("enum.process.processtaskstatus.draft"), "#8E949F");
+public enum ProcessTaskStepTaskUserStatus implements IEnum {
+    SUCCEED("succeed", new I18n("enum.process.processtasksteptaskuserstatus.succeed"), "#25b865"),
+    PENDING("pending", new I18n("enum.process.processtasksteptaskuserstatus.pending"), "#8E949F")
+    ;
 
     private final String status;
     private final I18n text;
     private final String color;
 
-    ProcessTaskStatus(String _status, I18n _text, String _color) {
+    ProcessTaskStepTaskUserStatus(String _status, I18n _text, String _color) {
         this.status = _status;
         this.text = _text;
         this.color = _color;
@@ -55,7 +51,7 @@ public enum ProcessTaskStatus implements IEnum {
     }
 
     public static String getValue(String _status) {
-        for (ProcessTaskStatus s : ProcessTaskStatus.values()) {
+        for (ProcessTaskStepTaskUserStatus s : ProcessTaskStepTaskUserStatus.values()) {
             if (s.getValue().equals(_status)) {
                 return s.getValue();
             }
@@ -64,7 +60,7 @@ public enum ProcessTaskStatus implements IEnum {
     }
 
     public static String getText(String _status) {
-        for (ProcessTaskStatus s : ProcessTaskStatus.values()) {
+        for (ProcessTaskStepTaskUserStatus s : ProcessTaskStepTaskUserStatus.values()) {
             if (s.getValue().equals(_status)) {
                 return s.getText();
             }
@@ -73,7 +69,7 @@ public enum ProcessTaskStatus implements IEnum {
     }
 
     public static String getColor(String _status) {
-        for (ProcessTaskStatus s : ProcessTaskStatus.values()) {
+        for (ProcessTaskStepTaskUserStatus s : ProcessTaskStepTaskUserStatus.values()) {
             if (s.getValue().equals(_status)) {
                 return s.getColor();
             }
@@ -84,7 +80,7 @@ public enum ProcessTaskStatus implements IEnum {
     @Override
     public List getValueTextList() {
         JSONArray array = new JSONArray();
-        for (ProcessTaskStatus type : values()) {
+        for (ProcessTaskStepTaskUserStatus type : values()) {
             array.add(new JSONObject() {
                 {
                     this.put("value", type.getValue());
