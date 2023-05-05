@@ -224,6 +224,67 @@
 		  and name =#{name}
 	</select>
 
+	<select id="getCustomTemplateIdListByUserUuid" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT
+			a.`id`
+		FROM `process_comment_template` a
+		JOIN `process_comment_template_authority` b ON b.`comment_template_id` = a.`id`
+		WHERE a.`type` = 'custom' AND b.`type` = 'user' AND b.`uuid` = #{value}
+	</select>
+
+	<select id="searchCommentTemplateCount" parameterType="neatlogic.framework.common.dto.BasePageVo" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM `process_comment_template`
+		WHERE (`type` = 'system'
+		<if test="defaultValue != null and defaultValue.size() > 0">
+			OR (`type` = 'custom' AND `id` IN
+			<foreach collection="defaultValue" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>)
+		</if>)
+		<if test="keyword != null and keyword != ''">
+			AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
+		</if>
+	</select>
+
+	<select id="searchCommentTemplateList" parameterType="neatlogic.framework.common.dto.BasePageVo" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
+		SELECT
+			`id`,
+			`name`,
+			`content`,
+			`type`,
+			`fcd`,
+			`fcu`,
+			`lcd`,
+			`lcu`
+		FROM `process_comment_template`
+		WHERE (`type` = 'system'
+		<if test="defaultValue != null and defaultValue.size() > 0">
+			OR (`type` = 'custom' AND `id` IN
+			<foreach collection="defaultValue" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>)
+		</if>)
+		<if test="keyword != null and keyword != ''">
+			AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
+		</if>
+		ORDER BY `lcd` desc
+		LIMIT #{startNum}, #{pageSize}
+	</select>
+
+	<select id="getProcessCommentTemplateAuthListByCommentTemplateIdList" parameterType="java.util.List" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateAuthVo">
+		SELECT
+			`comment_template_id` AS commentTemplateId,
+			`type`,
+			`uuid`
+		FROM `process_comment_template_authority`
+		WHERE `comment_template_id` IN
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
 	<update id="updateTemplate" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
 		update
 		`process_comment_template`

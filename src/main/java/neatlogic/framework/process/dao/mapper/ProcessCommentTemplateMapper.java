@@ -1,5 +1,6 @@
 package neatlogic.framework.process.dao.mapper;
 
+import neatlogic.framework.common.dto.BasePageVo;
 import neatlogic.framework.common.dto.ValueTextVo;
 import neatlogic.framework.process.dto.ProcessCommentTemplateAuthVo;
 import neatlogic.framework.process.dto.ProcessCommentTemplateUseCountVo;
@@ -29,6 +30,14 @@ public interface ProcessCommentTemplateMapper {
     public ProcessCommentTemplateUseCountVo getTemplateUseCount(@Param("templateId") Long id, @Param("userUuid") String uuid);
 
     int checkTemplateNameIsRepeat(ProcessCommentTemplateVo vo);
+
+    List<Long> getCustomTemplateIdListByUserUuid(String userUuid);
+
+    int searchCommentTemplateCount(BasePageVo searchVo);
+
+    List<ProcessCommentTemplateVo> searchCommentTemplateList(BasePageVo searchVo);
+
+    List<ProcessCommentTemplateAuthVo> getProcessCommentTemplateAuthListByCommentTemplateIdList(List<Long> idList);
 
     public int updateTemplate(ProcessCommentTemplateVo vo);
 
