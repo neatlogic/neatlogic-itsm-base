@@ -232,8 +232,8 @@
 		WHERE a.`type` = 'custom' AND b.`type` = 'user' AND b.`uuid` = #{value}
 	</select>
 
-	<select id="searchCommentTemplateCount" parameterType="neatlogic.framework.common.dto.BasePageVo" resultType="int">
-		SELECT
+	<select id="searchCommentTemplateCount" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateSearchVo" resultType="int">
+		<!--SELECT
 			COUNT(1)
 		FROM `process_comment_template`
 		WHERE (`type` = 'system'
@@ -245,11 +245,30 @@
 		</if>)
 		<if test="keyword != null and keyword != ''">
 			AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
+		</if>-->
+		SELECT
+		COUNT(distinct a.`id`)
+		FROM `process_comment_template` a
+		JOIN `process_comment_template_authority` b ON b.`comment_template_id` = a.`id`
+		WHERE ((a.`type` = 'custom' AND b.`uuid` = #{userUuid})
+		OR (a.`type` = 'system'
+		<if test="isHasModifyAuthority == 0 and uuidList != null and uuidList.size() > 0">
+			AND b.`uuid` IN
+			<foreach collection="uuidList" item="uuid" open="(" separator="," close=")">
+				#{uuid}
+			</foreach>
+		</if>
+		))
+		<if test="keyword != null and keyword != ''">
+			AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
+		</if>
+		<if test="type != null and type != ''">
+			AND a.`type` = #{type}
 		</if>
 	</select>
 
 	<select id="searchCommentTemplateList" parameterType="neatlogic.framework.common.dto.BasePageVo" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
-		SELECT
+		<!--SELECT
 			`id`,
 			`name`,
 			`content`,
@@ -269,6 +288,39 @@
 		<if test="keyword != null and keyword != ''">
 			AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
 		</if>
+		ORDER BY `lcd` desc
+		LIMIT #{startNum}, #{pageSize}-->
+		SELECT
+		`id`,
+		`name`,
+		`content`,
+		`type`,
+		`fcd`,
+		`fcu`,
+		`lcd`,
+		`lcu`
+		FROM `process_comment_template`
+		WHERE `id` IN (
+			SELECT
+				distinct a.`id`
+			FROM `process_comment_template` a
+			JOIN `process_comment_template_authority` b ON b.`comment_template_id` = a.`id`
+			WHERE ((a.`type` = 'custom' AND b.`uuid` = #{userUuid})
+			OR (a.`type` = 'system'
+			<if test="isHasModifyAuthority == 0 and uuidList != null and uuidList.size() > 0">
+				AND b.`uuid` IN
+				<foreach collection="uuidList" item="uuid" open="(" separator="," close=")">
+					#{uuid}
+				</foreach>
+			</if>
+			))
+			<if test="keyword != null and keyword != ''">
+				AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
+			</if>
+			<if test="type != null and type != ''">
+				AND a.`type` = #{type}
+			</if>
+		)
 		ORDER BY `lcd` desc
 		LIMIT #{startNum}, #{pageSize}
 	</select>
