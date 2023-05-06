@@ -95,16 +95,13 @@
 		LIMIT #{startNum}, #{pageSize}
 	</select>
 
-	<select id="getProcessCommentTemplateAuthListByCommentTemplateIdList" parameterType="java.util.List" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateAuthVo">
+	<select id="getProcessCommentTemplateAuthListByCommentTemplateId" parameterType="java.lang.Long" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateAuthVo">
 		SELECT
 			`comment_template_id` AS commentTemplateId,
 			`type`,
 			`uuid`
 		FROM `process_comment_template_authority`
-		WHERE `comment_template_id` IN
-		<foreach collection="list" item="id" open="(" separator="," close=")">
-			#{id}
-		</foreach>
+		WHERE `comment_template_id` = #{value}
 	</select>
 
 	<update id="updateTemplate" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">

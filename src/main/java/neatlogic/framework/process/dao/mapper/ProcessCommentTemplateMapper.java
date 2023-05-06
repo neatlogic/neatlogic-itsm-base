@@ -22,7 +22,7 @@ public interface ProcessCommentTemplateMapper {
 
     List<ProcessCommentTemplateVo> searchCommentTemplateList(ProcessCommentTemplateSearchVo searchVo);
 
-    List<ProcessCommentTemplateAuthVo> getProcessCommentTemplateAuthListByCommentTemplateIdList(List<Long> idList);
+    List<ProcessCommentTemplateAuthVo> getProcessCommentTemplateAuthListByCommentTemplateId(Long id);
 
     public int updateTemplate(ProcessCommentTemplateVo vo);
 
