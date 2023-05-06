@@ -2,13 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="neatlogic.framework.process.dao.mapper.ProcessCommentTemplateMapper">
 
-	<select id="checkTemplateExistsById" parameterType="java.lang.Long" resultType="int">
-		select
-		count(1)
-		from `process_comment_template`
-		where `id` = #{value}
-	</select>
-
 	<select id="getTemplateById" parameterType="java.lang.Long" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
 		select
 		`id`,
@@ -195,6 +188,12 @@
 	<delete id="deleteTemplateAuthority" parameterType="java.lang.Long">
 		delete
 		from `process_comment_template_authority`
+		where `comment_template_id` = #{value}
+	</delete>
+
+	<delete id="deleteTemplateUsecount" parameterType="java.lang.Long">
+		delete
+		from `process_comment_template_usecount`
 		where `comment_template_id` = #{value}
 	</delete>
 </mapper>

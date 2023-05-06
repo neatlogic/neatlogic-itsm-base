@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface ProcessCommentTemplateMapper {
 
-    public int checkTemplateExistsById(Long id);
-
     public ProcessCommentTemplateVo getTemplateById(Long id);
 
     public ProcessCommentTemplateVo getTemplateByStepUuidAndAuth(@Param("stepUuid") String uuid,@Param("authList") List<String> authList);
@@ -39,4 +37,6 @@ public interface ProcessCommentTemplateMapper {
     public int deleteTemplate(Long id);
 
     public int deleteTemplateAuthority(Long id);
+
+    public int deleteTemplateUsecount(Long id);
 }
