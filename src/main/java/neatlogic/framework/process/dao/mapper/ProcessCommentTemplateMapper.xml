@@ -2,190 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="neatlogic.framework.process.dao.mapper.ProcessCommentTemplateMapper">
 
-	<select id="checkTemplateExistsById" parameterType="java.lang.Long" resultType="int">
+	<select id="getTemplateById" parameterType="java.lang.Long" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
 		select
-		count(1)
+		`id`,
+		`name`,
+		`content`,
+		`type`,
+		`fcu`,
+		`fcd`,
+		`lcu`,
+		`lcd`
 		from `process_comment_template`
 		where `id` = #{value}
-	</select>
-
-	<select id="searchTemplateCount" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo" resultType="int" useCache="false">
-		SELECT
-		COUNT(1)
-		FROM
-		`process_comment_template` a
-		join `process_comment_template_authority` b
-		on a.`id` = b.`comment_template_id`
-		<include refid="searchTemplateWhere"/>
-	</select>
-
-	<sql id="searchTemplateWhere">
-		<where>
-			<if test="keyword != null and keyword != ''">
-				and (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
-			</if>
-			<if test="type != null and type != ''">
-				and a.`type` = #{type}
-			</if>
-			<if test="authList != null and authList.size() > 0 ">
-				and ( b.`uuid` IN
-				<foreach collection="authList" item="item" open="(" separator="," close=")">
-					#{item}
-				</foreach>
-				<if test="isHasModifyAuthority != null and isHasModifyAuthority == 1 ">
-					or a.type = 'system'
-				</if>
-				)
-			</if>
-		</where>
-	</sql>
-
-	<resultMap id="templateMap" type="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
-		<id column="id" property="id" />
-		<result column="name" property="name" />
-		<result column="content" property="content" />
-		<result column="type" property="type" />
-		<result column="fcu" property="fcu" />
-		<result column="fcd" property="fcd" />
-		<result column="lcu" property="lcu" />
-		<result column="lcd" property="lcd" />
-		<collection property="authVoList" ofType="neatlogic.framework.process.dto.ProcessCommentTemplateAuthVo">
-			<result column="uuid" property="uuid" />
-			<result column="authType" property="type" />
-		</collection>
-	</resultMap>
-
-	<select id="searchTemplate" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo" resultMap="templateMap" useCache="false">
-		SELECT
-		a.`id`,
-		a.`name`,
-		a.`content`,
-		a.`type`,
-		a.`fcu`,
-		a.`fcd`,
-		a.`lcu`,
-		a.`lcd`,
-		b.`uuid`,
-		b.`type` as `authType`
-		FROM
-		(
-		SELECT distinct
-		a.`id`,
-		a.`name`,
-		a.`content`,
-		a.`type`,
-		a.`fcu`,
-		a.`fcd`,
-		a.`lcu`,
-		a.`lcd`
-		from `process_comment_template` a
-		join `process_comment_template_authority` b
-		on a.`id` = b.`comment_template_id`
-		<include refid="searchTemplateWhere"/>
-		ORDER BY a.`lcd` desc
-		<if test="needPage == true">
-			LIMIT #{startNum}, #{pageSize}
-		</if>
-		) a
-		left join `process_comment_template_authority` b
-		on a.`id` = b.`comment_template_id`
-		ORDER BY a.`lcd` desc
-	</select>
-
-	<select id="getTemplateById" parameterType="java.lang.Long" resultMap="templateMap">
-		select
-		a.`id`,
-		a.`name`,
-		a.`content`,
-		a.`type`,
-		a.`fcu`,
-		a.`fcd`,
-		a.`lcu`,
-		a.`lcd`,
-		b.`uuid`,
-		b.`type` as `authType`
-		from `process_comment_template` a
-		left join `process_comment_template_authority` b
-		on a.`id` = b.`comment_template_id`
-		where `id` = #{value}
-	</select>
-
-	<select id="searchTemplateCountForTask" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo" resultType="int" useCache="false">
-		select count(1)
-		from
-		(
-		SELECT
-		distinct(a.`id`)
-		FROM
-		`process_comment_template` a
-		join `process_comment_template_authority` b
-		on a.`id` = b.`comment_template_id`
-		<where>
-			<if test="keyword != null and keyword != ''">
-				and a.`name` LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<if test="type != null and type != ''">
-				and a.`type` = #{type}
-			</if>
-			<if test="authList != null and authList.size() > 0 ">
-				and b.`uuid` IN
-				<foreach collection="authList" item="item" open="(" separator="," close=")">
-					#{item}
-				</foreach>
-			</if>
-		</where>
-		) c
-	</select>
-
-	<select id="searchTemplateForTask" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo" resultMap="templateMap" useCache="false">
-		SELECT
-		distinct
-		a.`id`,
-		a.`name`,
-		a.`content`,
-		a.`type`,
-		a.`fcu`,
-		a.`fcd`,
-		a.`lcu`,
-		a.`lcd`,
-		c.`count`,
-		b.`uuid`,
-		b.`type` as `authType`
-		from `process_comment_template` a
-		join `process_comment_template_authority` b
-		on a.`id` = b.`comment_template_id`
-		left join `process_comment_template_usecount` c
-		on a.`id` = c.`comment_template_id`
-		<where>
-			<if test="keyword != null and keyword != ''">
-				and a.`name` LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<if test="type != null and type != ''">
-				and a.`type` = #{type}
-			</if>
-			<if test="authList != null and authList.size() > 0 ">
-				and b.`uuid` IN
-				<foreach collection="authList" item="item" open="(" separator="," close=")">
-					#{item}
-				</foreach>
-			</if>
-		</where>
-		ORDER BY c.`count` desc
-		<if test="needPage == true">
-			LIMIT #{startNum}, #{pageSize}
-		</if>
-	</select>
-
-	<select id="searchTemplateForSelect" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo" resultType="neatlogic.framework.common.dto.ValueTextVo" useCache="false">
-		SELECT
-		a.`id` as `value`,
-		a.`content` as `text`
-		FROM `process_comment_template` a
-		<include refid="searchTemplateWhere"/>
-		ORDER BY a.`lcd` desc
-		<if test="needPage == true">
-			LIMIT #{startNum}, #{pageSize}
-		</if>
 	</select>
 
 	<select id="getTemplateByStepUuidAndAuth" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateVo" useCache="false">
@@ -222,6 +50,58 @@
 		FROM `process_comment_template`
 		where id != #{id}
 		  and name =#{name}
+	</select>
+
+	<sql id="searchCommentTemplateWhere">
+		SELECT
+		distinct a.`id`
+		FROM `process_comment_template` a
+		JOIN `process_comment_template_authority` b ON b.`comment_template_id` = a.`id`
+		WHERE ((a.`type` = 'custom' AND b.`uuid` = #{userUuid})
+		OR (a.`type` = 'system'
+		<if test="isHasModifyAuthority == 0 and uuidList != null and uuidList.size() > 0">
+			AND b.`uuid` IN
+			<foreach collection="uuidList" item="uuid" open="(" separator="," close=")">
+				#{uuid}
+			</foreach>
+		</if>
+		))
+		<if test="keyword != null and keyword != ''">
+			AND (a.`name` LIKE concat('%', #{keyword}, '%') OR a.`content` LIKE concat('%', #{keyword}, '%'))
+		</if>
+		<if test="type != null and type != ''">
+			AND a.`type` = #{type}
+		</if>
+	</sql>
+	<select id="searchCommentTemplateCount" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateSearchVo" resultType="int">
+		SELECT
+		COUNT(1)
+		FROM (<include refid="searchCommentTemplateWhere"/>) c
+	</select>
+
+	<select id="searchCommentTemplateList" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateSearchVo" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
+		SELECT
+		`id`,
+		`name`,
+		`content`,
+		`type`,
+		`fcd`,
+		`fcu`,
+		`lcd`,
+		`lcu`
+		FROM `process_comment_template`
+		WHERE `id` IN (<include refid="searchCommentTemplateWhere"/>)
+		ORDER BY `lcd` desc
+		LIMIT #{startNum}, #{pageSize}
+	</select>
+
+	<select id="getProcessCommentTemplateAuthListByCommentTemplateId" parameterType="java.lang.Long" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateAuthVo">
+		SELECT
+			`comment_template_id` AS commentTemplateId,
+			`type`,
+			`uuid`
+		FROM `process_comment_template_authority`
+		WHERE `comment_template_id` = #{value}
 	</select>
 
 	<update id="updateTemplate" parameterType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
@@ -305,6 +185,12 @@
 	<delete id="deleteTemplateAuthority" parameterType="java.lang.Long">
 		delete
 		from `process_comment_template_authority`
+		where `comment_template_id` = #{value}
+	</delete>
+
+	<delete id="deleteTemplateUsecount" parameterType="java.lang.Long">
+		delete
+		from `process_comment_template_usecount`
 		where `comment_template_id` = #{value}
 	</delete>
 </mapper>

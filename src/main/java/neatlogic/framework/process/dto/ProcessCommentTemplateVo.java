@@ -1,16 +1,9 @@
 package neatlogic.framework.process.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import neatlogic.framework.auth.core.AuthActionChecker;
 import neatlogic.framework.common.constvalue.ApiParamType;
-import neatlogic.framework.common.constvalue.GroupSearch;
 import neatlogic.framework.common.dto.BaseEditorVo;
-import neatlogic.framework.process.auth.PROCESS_COMMENT_TEMPLATE_MODIFY;
 import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
-import org.apache.commons.collections4.CollectionUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessCommentTemplateVo extends BaseEditorVo {
@@ -54,13 +47,8 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
     private String type;
     @EntityField(name = "授权对象", type = ApiParamType.STRING)
     private List<String> authList;
-    @JSONField(serialize = false)
-    private List<ProcessCommentTemplateAuthVo> authVoList;
     @EntityField(name = "当前用户是否可编辑", type = ApiParamType.INTEGER)
     private Integer isEditable;
-
-    @JSONField(serialize = false)
-    private Integer isHasModifyAuthority = 0;
 
     public ProcessCommentTemplateVo() {
     }
@@ -101,28 +89,11 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
     }
 
     public List<String> getAuthList() {
-        if (CollectionUtils.isEmpty(authList) && CollectionUtils.isNotEmpty(authVoList)) {
-            authList = new ArrayList<>();
-            for (ProcessCommentTemplateAuthVo authorityVo : authVoList) {
-                GroupSearch groupSearch = GroupSearch.getGroupSearch(authorityVo.getType());
-                if (groupSearch != null) {
-                    authList.add(groupSearch.getValuePlugin() + authorityVo.getUuid());
-                }
-            }
-        }
         return authList;
     }
 
     public void setAuthList(List<String> authList) {
         this.authList = authList;
-    }
-
-    public List<ProcessCommentTemplateAuthVo> getAuthVoList() {
-        return authVoList;
-    }
-
-    public void setAuthVoList(List<ProcessCommentTemplateAuthVo> authVoList) {
-        this.authVoList = authVoList;
     }
 
     public Integer getIsEditable() {
@@ -131,16 +102,5 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
 
     public void setIsEditable(Integer isEditable) {
         this.isEditable = isEditable;
-    }
-
-    public Integer getIsHasModifyAuthority() {
-        if (isHasModifyAuthority == 0) {
-            isHasModifyAuthority = AuthActionChecker.check(PROCESS_COMMENT_TEMPLATE_MODIFY.class) ? 1 : 0;
-        }
-        return isHasModifyAuthority;
-    }
-
-    public void setIsHasModifyAuthority(Integer isHasModifyAuthority) {
-        this.isHasModifyAuthority = isHasModifyAuthority;
     }
 }
