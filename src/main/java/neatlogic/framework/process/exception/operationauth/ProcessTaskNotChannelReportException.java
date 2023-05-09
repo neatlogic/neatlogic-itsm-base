@@ -24,6 +24,6 @@ public class ProcessTaskNotChannelReportException extends ProcessTaskPermissionD
     private static final long serialVersionUID = 9216337410118158628L;
 
     public ProcessTaskNotChannelReportException(String channelName) {
-        super("exception.process.processtasknotchannelreportexception");
+        super("exception.process.processtasknotchannelreportexception", channelName);
     }
 }
