@@ -34,7 +34,7 @@ public class ProcessTaskStepAuditVo {
 	@EntityField(name = "步骤状态", type = ApiParamType.STRING)
 	private String stepStatus;
 	@EntityField(name = "步骤状态信息", type = ApiParamType.JSONOBJECT)
-	private ProcessTaskStatusVo stepStatusVo;
+	private ProcessTaskStepStatusVo stepStatusVo;
 	@EntityField(name = "描述", type = ApiParamType.STRING)
 	private String description;
 	@EntityField(name = "原始处理人Vo")
@@ -138,14 +138,14 @@ public class ProcessTaskStepAuditVo {
 		this.stepStatus = stepStatus;
 	}
 
-	public ProcessTaskStatusVo getStepStatusVo() {
+	public ProcessTaskStepStatusVo getStepStatusVo() {
 		if(stepStatusVo == null && StringUtils.isNotBlank(stepStatus)) {
-			stepStatusVo = new ProcessTaskStatusVo(stepStatus);
+			stepStatusVo = new ProcessTaskStepStatusVo(stepStatus);
 		}
 		return stepStatusVo;
 	}
 
-	public void setStepStatusVo(ProcessTaskStatusVo stepStatusVo) {
+	public void setStepStatusVo(ProcessTaskStepStatusVo stepStatusVo) {
 		this.stepStatusVo = stepStatusVo;
 	}
 

@@ -44,7 +44,7 @@ public class ProcessTaskStepVo extends BasePageVo {
     @EntityField(name = "状态", type = ApiParamType.STRING)
     private String status;
     @EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
-    private ProcessTaskStatusVo statusVo;
+    private ProcessTaskStepStatusVo statusVo;
     @EntityField(name = "步骤处理器", type = ApiParamType.STRING)
     private String handler;
     @EntityField(name = "步骤类型", type = ApiParamType.STRING)
@@ -267,19 +267,19 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.status = status;
     }
 
-    public ProcessTaskStatusVo getStatusVo() {
+    public ProcessTaskStepStatusVo getStatusVo() {
         if (statusVo == null && StringUtils.isNotBlank(status) && StringUtils.isNotBlank(configHash) && StringUtils.isNotBlank(handler)) {
             String statusText = ProcessStepInternalHandlerFactory.getHandler().getStatusTextByConfigHashAndHandler(configHash, handler, status);
             if (StringUtils.isNotBlank(statusText)) {
-                statusVo = new ProcessTaskStatusVo(status, statusText);
+                statusVo = new ProcessTaskStepStatusVo(status, statusText);
             } else {
-                statusVo = new ProcessTaskStatusVo(status);
+                statusVo = new ProcessTaskStepStatusVo(status);
             }
         }
         return statusVo;
     }
 
-    public void setStatusVo(ProcessTaskStatusVo statusVo) {
+    public void setStatusVo(ProcessTaskStepStatusVo statusVo) {
         this.statusVo = statusVo;
     }
 
