@@ -1080,7 +1080,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     if (StringUtils.isNotBlank(priorityUuid)) {
                         processTaskMapper.updateProcessTaskPriorityUuidById(currentProcessTaskStepVo.getProcessTaskId(), priorityUuid);
                     }
-                    IProcessStepHandlerUtil.assignWorkerValid(currentProcessTaskStepVo);
                     /* 保存表单属性值 **/
                     IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
 //                    }
