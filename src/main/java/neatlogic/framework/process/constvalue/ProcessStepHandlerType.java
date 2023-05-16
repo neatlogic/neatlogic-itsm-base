@@ -1,23 +1,24 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.stephandler.core.IProcessStepHandlerType;
+import neatlogic.framework.util.I18n;
 
 public enum ProcessStepHandlerType implements IProcessStepHandlerType {
-    START("start", "start", "enum.process.processstephandlertype.start"),
-    OMNIPOTENT("omnipotent", "process", "enum.process.processstephandlertype.omnipotent"),
-    END("end", "end", "enum.process.processstephandlertype.end"),
-    CONDITION("condition", "converge", "enum.process.processstephandlertype.condition"),
-    DISTRIBUTARY("distributary", "converge", "enum.process.processstephandlertype.distributary"),
-    OCTOPUS("octopus", "process", "enum.process.processstephandlertype.octopus"),
-    AUTOMATIC("automatic", "process", "enum.process.processstephandlertype.automatic"),
-    TIMER("timer", "process", "enum.process.processstephandlertype.timer")
+    START("start", "start", new I18n("enum.process.processstephandlertype.start")),
+    OMNIPOTENT("omnipotent", "process", new I18n("enum.process.processstephandlertype.omnipotent")),
+    END("end", "end", new I18n("enum.process.processstephandlertype.end")),
+    CONDITION("condition", "converge", new I18n("enum.process.processstephandlertype.condition")),
+    DISTRIBUTARY("distributary", "converge", new I18n("enum.process.processstephandlertype.distributary")),
+    OCTOPUS("octopus", "process", new I18n("enum.process.processstephandlertype.octopus")),
+    AUTOMATIC("automatic", "process", new I18n("enum.process.processstephandlertype.automatic")),
+    TIMER("timer", "process", new I18n("enum.process.processstephandlertype.timer"))
     ;
 
     private String handler;
-    private String name;
+    private I18n name;
     private String type;
 
-    private ProcessStepHandlerType(String _handler, String _type, String _name) {
+    private ProcessStepHandlerType(String _handler, String _type, I18n _name) {
         this.handler = _handler;
         this.type = _type;
         this.name = _name;
@@ -28,7 +29,7 @@ public enum ProcessStepHandlerType implements IProcessStepHandlerType {
     }
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
     public String getType() {
