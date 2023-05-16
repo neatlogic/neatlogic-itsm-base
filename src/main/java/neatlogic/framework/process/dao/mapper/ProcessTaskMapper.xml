@@ -3560,6 +3560,9 @@ limitations under the License.
         VALUES (#{processTaskId},
                 #{timeCost},
                 #{realTimeCost})
+        ON DUPLICATE KEY UPDATE
+        `time_cost` = #{timeCost},
+        `realtime_cost` = #{realTimeCost}
     </insert>
 
     <insert id="insertProcessTaskUrge" parameterType="java.util.Map">
