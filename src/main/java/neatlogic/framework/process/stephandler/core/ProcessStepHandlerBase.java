@@ -519,66 +519,71 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     protected int defaultAssign(ProcessTaskStepVo currentProcessTaskStepVo, Set<ProcessTaskStepWorkerVo> workerSet)
             throws ProcessTaskException {
-        /* 获取步骤配置信息 **/
-        ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
-        String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+        try {
+            /* 获取步骤配置信息 **/
+            ProcessTaskStepVo processTaskStepVo = processTaskMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+            String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
 
-        String executeMode = (String) JSONPath.read(stepConfig, "workerPolicyConfig.executeMode");
-        Integer autoStart = (Integer) JSONPath.read(stepConfig, "autoStart");
-        autoStart = autoStart != null ? autoStart : 1;
-        /* 分配处理人 **/
-        ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo = new ProcessTaskStepWorkerPolicyVo();
-        processTaskStepWorkerPolicyVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
-        List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = processTaskMapper.getProcessTaskStepWorkerPolicy(processTaskStepWorkerPolicyVo);
-        if (CollectionUtils.isEmpty(workerPolicyList)) {
-            return autoStart;
-        }
-        Set<ProcessTaskStepWorkerVo> newWorkerSet = new HashSet<>();
-        for (ProcessTaskStepWorkerPolicyVo workerPolicyVo : workerPolicyList) {
-            IWorkerPolicyHandler workerPolicyHandler = WorkerPolicyHandlerFactory.getHandler(workerPolicyVo.getPolicy());
-            if (workerPolicyHandler == null) {
-                continue;
+            String executeMode = (String) JSONPath.read(stepConfig, "workerPolicyConfig.executeMode");
+            Integer autoStart = (Integer) JSONPath.read(stepConfig, "autoStart");
+            autoStart = autoStart != null ? autoStart : 1;
+            /* 分配处理人 **/
+            ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo = new ProcessTaskStepWorkerPolicyVo();
+            processTaskStepWorkerPolicyVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+            List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = processTaskMapper.getProcessTaskStepWorkerPolicy(processTaskStepWorkerPolicyVo);
+            if (CollectionUtils.isEmpty(workerPolicyList)) {
+                return autoStart;
             }
-            /* 如果workerList.size()>0，说明已经存在过处理人，分配策略设置只分配一次，则继续使用旧处理人，否则启用分派 **/
-            if (Objects.equals(workerPolicyHandler.isOnlyOnceExecute(), 1) && CollectionUtils.isNotEmpty(workerSet)) {
-                continue;
-            }
-            workerSet.clear();
-            List<ProcessTaskStepWorkerVo> tmpWorkerList = workerPolicyHandler.execute(workerPolicyVo, currentProcessTaskStepVo);
-            if (CollectionUtils.isNotEmpty(tmpWorkerList)) {
-                /* 删除不存在的用户、组、角色 **/
-                Iterator<ProcessTaskStepWorkerVo> iterator = tmpWorkerList.iterator();
-                while (iterator.hasNext()) {
-                    ProcessTaskStepWorkerVo workerVo = iterator.next();
-                    if (workerVo.getType().equals(GroupSearch.USER.getValue())) {
-                        UserVo userVo = userMapper.getUserBaseInfoByUuid(workerVo.getUuid());
-                        if (userVo == null || userVo.getIsActive() == 0) {
-                            iterator.remove();
-                        }
-                    } else if (workerVo.getType().equals(GroupSearch.TEAM.getValue())) {
-                        if (teamMapper.checkTeamIsExists(workerVo.getUuid()) == 0) {
-                            iterator.remove();
-                        }
-                    } else if (workerVo.getType().equals(GroupSearch.ROLE.getValue())) {
-                        if (roleMapper.checkRoleIsExists(workerVo.getUuid()) == 0) {
-                            iterator.remove();
+            Set<ProcessTaskStepWorkerVo> newWorkerSet = new HashSet<>();
+            for (ProcessTaskStepWorkerPolicyVo workerPolicyVo : workerPolicyList) {
+                IWorkerPolicyHandler workerPolicyHandler = WorkerPolicyHandlerFactory.getHandler(workerPolicyVo.getPolicy());
+                if (workerPolicyHandler == null) {
+                    continue;
+                }
+                /* 如果workerList.size()>0，说明已经存在过处理人，分配策略设置只分配一次，则继续使用旧处理人，否则启用分派 **/
+                if (Objects.equals(workerPolicyHandler.isOnlyOnceExecute(), 1) && CollectionUtils.isNotEmpty(workerSet)) {
+                    continue;
+                }
+                workerSet.clear();
+                List<ProcessTaskStepWorkerVo> tmpWorkerList = workerPolicyHandler.execute(workerPolicyVo, currentProcessTaskStepVo);
+                if (CollectionUtils.isNotEmpty(tmpWorkerList)) {
+                    /* 删除不存在的用户、组、角色 **/
+                    Iterator<ProcessTaskStepWorkerVo> iterator = tmpWorkerList.iterator();
+                    while (iterator.hasNext()) {
+                        ProcessTaskStepWorkerVo workerVo = iterator.next();
+                        if (workerVo.getType().equals(GroupSearch.USER.getValue())) {
+                            UserVo userVo = userMapper.getUserBaseInfoByUuid(workerVo.getUuid());
+                            if (userVo == null || userVo.getIsActive() == 0) {
+                                iterator.remove();
+                            }
+                        } else if (workerVo.getType().equals(GroupSearch.TEAM.getValue())) {
+                            if (teamMapper.checkTeamIsExists(workerVo.getUuid()) == 0) {
+                                iterator.remove();
+                            }
+                        } else if (workerVo.getType().equals(GroupSearch.ROLE.getValue())) {
+                            if (roleMapper.checkRoleIsExists(workerVo.getUuid()) == 0) {
+                                iterator.remove();
+                            }
                         }
                     }
                 }
-            }
-            if (CollectionUtils.isNotEmpty(tmpWorkerList)) {
-                /* 顺序分配处理人 **/
-                if ("sort".equals(executeMode)) {
-                    // 找到处理人，则退出
-                    newWorkerSet.addAll(tmpWorkerList);
-                    break;
-                } else if ("batch".equals(executeMode)) {
-                    newWorkerSet.addAll(tmpWorkerList);
+                if (CollectionUtils.isNotEmpty(tmpWorkerList)) {
+                    /* 顺序分配处理人 **/
+                    if ("sort".equals(executeMode)) {
+                        // 找到处理人，则退出
+                        newWorkerSet.addAll(tmpWorkerList);
+                        break;
+                    } else if ("batch".equals(executeMode)) {
+                        newWorkerSet.addAll(tmpWorkerList);
+                    }
                 }
             }
+            workerSet.addAll(newWorkerSet);
+            return autoStart;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new ProcessTaskException(e.getMessage());
         }
-        workerSet.addAll(newWorkerSet);
-        return autoStart;
     }
 
     private void reapprovalRestoreBackup(ProcessTaskStepVo currentProcessTaskStepVo) {
