@@ -54,7 +54,9 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
     PROCESS_TASK_URGE_USER("processTaskUrgeUser", "enum.process.processtasknotifyparam.process_task_urge_user", ParamType.STRING),
     PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "enum.process.processtasknotifyparam.process_task_urge_count", ParamType.NUMBER),
     APPROVALCOMMENTLIST("approvalCommentList", "enum.process.processtasknotifyparam.approvalcommentlist", ParamType.ARRAY),
-    FORM_TABLE("formTable", "enum.process.processtasknotifyparam.form", ParamType.STRING, "${DATA.formTable()}"),
+    FORM_TABLE("formTable", "enum.process.processtasknotifyparam.form", ParamType.STRING, "<#if DATA.formTable??>\n" +
+            "\t${DATA.formTable()}\n" +
+            "</#if>"),
     ;
     private final String value;
     private final String text;
