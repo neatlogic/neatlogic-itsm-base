@@ -86,11 +86,6 @@ public class ProcessTaskStepDataVo {
     }
 
     public String getFcu() {
-        if (StringUtils.isBlank(fcu)) {
-            if (UserContext.get() != null) {
-                fcu = UserContext.get().getUserUuid();
-            }
-        }
         return fcu;
     }
 
