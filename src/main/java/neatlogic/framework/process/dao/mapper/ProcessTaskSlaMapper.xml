@@ -95,8 +95,13 @@ limitations under the License.
         SELECT `config` FROM `processtask_sla` WHERE `id` = #{value}
     </select>
 
-    <select id="getProcessTaskSlaLockById" parameterType="java.lang.Long" resultType="java.lang.Long">
-        SELECT `id` FROM `processtask_sla` WHERE `id` = #{value} FOR UPDATE
+    <select id="getProcessTaskSlaLockById" parameterType="java.lang.Long" resultType="neatlogic.framework.process.dto.ProcessTaskSlaVo">
+        SELECT `processtask_id` AS processTaskId,
+               `id`,
+               `name`,
+               `config`
+        FROM `processtask_sla`
+        WHERE `id` = #{value} FOR UPDATE
     </select>
 
     <resultMap type="neatlogic.framework.process.dto.ProcessTaskSlaTimeVo" id="processTaskSlaTimeMap">
@@ -186,6 +191,32 @@ limitations under the License.
 
     <select id="getProcessTaskStepIdListBySlaId" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT `processtask_step_id` FROM `processtask_step_sla` WHERE `sla_id` = #{value}
+    </select>
+
+    <select id="getDoingOrPauseSlaIdCountByWorktimeUuid" resultType="int">
+        SELECT
+            count(1)
+        FROM `processtask_sla` a
+        JOIN `processtask` b ON b.`id` = a.`processtask_id`
+        JOIN `processtask_sla_time` c on c.`sla_id` = a.`id`
+        WHERE b.`worktime_uuid` = #{worktimeUuid}
+          and b.`is_deleted` = 0
+          and b.`status` = 'running'
+          AND (c.`status` = 'doing' OR c.`status` = 'pause')
+    </select>
+
+    <select id="getDoingOrPauseSlaIdListByWorktimeUuid" resultType="java.lang.Long">
+        SELECT
+            a.`id`
+        FROM `processtask_sla` a
+        JOIN `processtask` b ON b.`id` = a.`processtask_id`
+        JOIN `processtask_sla_time` c on c.`sla_id` = a.`id`
+        WHERE b.`worktime_uuid` = #{worktimeUuid}
+          AND b.`is_deleted` = 0
+          AND b.`status` = 'running'
+          AND (c.`status` = 'doing' OR c.`status` = 'pause')
+        ORDER BY a.`id`
+        LIMIT #{startNum}, #{pageSize}
     </select>
 
     <insert id="insertProcessTaskSlaNotify" parameterType="neatlogic.framework.process.dto.ProcessTaskSlaNotifyVo">
