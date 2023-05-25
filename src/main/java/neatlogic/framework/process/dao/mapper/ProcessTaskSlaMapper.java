@@ -16,6 +16,7 @@ limitations under the License.
 
 package neatlogic.framework.process.dao.mapper;
 
+import neatlogic.framework.common.dto.BasePageVo;
 import neatlogic.framework.process.dto.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -45,7 +46,7 @@ public interface ProcessTaskSlaMapper {
 
     String getProcessTaskSlaConfigById(Long id);
 
-    Long getProcessTaskSlaLockById(Long id);
+    ProcessTaskSlaVo getProcessTaskSlaLockById(Long id);
 
     List<ProcessTaskSlaTimeVo> getProcessTaskSlaTimeByProcessTaskStepIdList(List<Long> processTaskStepIdList);
 
@@ -56,6 +57,10 @@ public interface ProcessTaskSlaMapper {
     List<Long> getSlaIdListByProcessTaskStepId(Long processTaskStepId);
 
     List<Long> getProcessTaskStepIdListBySlaId(Long slaId);
+
+    int getDoingOrPauseSlaIdCountByWorktimeUuid(String worktimeUuid);
+
+    List<Long> getDoingOrPauseSlaIdListByWorktimeUuid(@Param("worktimeUuid") String worktimeUuid, @Param("startNum") int startNum, @Param("pageSize") int pageSize);
 
     int insertProcessTaskSlaNotify(ProcessTaskSlaNotifyVo processTaskSlaNotifyVo);
 
