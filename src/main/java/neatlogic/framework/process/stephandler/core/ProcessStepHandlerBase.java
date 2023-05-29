@@ -1279,8 +1279,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         /* 处理历史记录 **/
         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
         processTaskStepVo.setProcessTaskId(currentProcessTaskVo.getId());
-        processTaskStepVo.getParamObj().put("source", currentProcessTaskVo.getParamObj().getString("source"));
-        processTaskStepVo.getParamObj().put("content", currentProcessTaskVo.getParamObj().getString("content"));
+        processTaskStepVo.getParamObj().putAll(currentProcessTaskVo.getParamObj());
         IProcessStepHandlerUtil.audit(processTaskStepVo, ProcessTaskAuditType.ABORTPROCESSTASK);
         /* 触发通知 **/
         IProcessStepHandlerUtil.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.ABORTPROCESSTASK);
