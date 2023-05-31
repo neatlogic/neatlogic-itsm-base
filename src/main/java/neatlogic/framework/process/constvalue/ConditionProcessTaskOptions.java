@@ -9,7 +9,7 @@ public enum ConditionProcessTaskOptions {
     CHANNELTYPE("channeltype", "enum.process.conditionprocesstaskoptions.channeltype"),
     CONTENT("content", "enum.process.conditionprocesstaskoptions.content"),
     STARTTIME("starttime", "enum.process.conditionprocesstaskoptions.starttime"),
-    OWNER("owner", "enum.process.conditionprocesstaskoptions.owner"),
+    OWNER("owner", "enum.process.conditionprocesstaskoptions.owner.a"),
     PRIORITY("priority", "enum.process.conditionprocesstaskoptions.priority"),
     OWNERCOMPANY("ownercompany", "enum.process.conditionprocesstaskoptions.ownercompany"),
     OWNERDEPARTMENT("ownerdepartment", "enum.process.conditionprocesstaskoptions.ownerdepartment"),

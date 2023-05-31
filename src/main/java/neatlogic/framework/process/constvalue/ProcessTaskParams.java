@@ -9,13 +9,13 @@ public enum ProcessTaskParams {
     CHANNELTYPE("channeltype", new I18n("enum.process.processtaskparams.channeltype")),
     CONTENT("content", new I18n("enum.process.processtaskparams.content")),
     STARTTIME("starttime", new I18n("enum.process.processtaskparams.starttime")),
-    OWNER("owner", new I18n("enum.process.processtaskparams.owner")),
+    OWNER("owner", new I18n("enum.process.processtaskparams.owner.a")),
     PRIORITY("priority", new I18n("enum.process.processtaskparams.priority")),
     OWNERCOMPANY("ownercompany", new I18n("enum.process.processtaskparams.ownercompany")),
     OWNERDEPARTMENT("ownerdepartment", new I18n("enum.process.processtaskparams.ownerdepartment")),
     OWNERROLE("ownerrole", new I18n("enum.process.processtaskparams.ownerrole")),
     OWNERLEVEL("ownerlevel", new I18n("enum.process.processtaskparams.ownerlevel")),
-    STEPTASK("steptask", new I18n("enum.process.processtaskparams.steptask")),
+    STEPTASK("steptask", new I18n("enum.process.processtaskparams.steptask.a")),
     ACTIONTRIGGERUSER("actiontriggeruser", new I18n("enum.process.processtaskparams.actiontriggeruser")),
     STEPTASKID("steptaskid", new I18n("enum.process.processtaskparams.steptaskid"));
 

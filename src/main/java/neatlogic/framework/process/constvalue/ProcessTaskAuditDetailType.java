@@ -7,11 +7,11 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 
     CHANNELTYPERELATION("channeltyperelation", "enum.process.processtaskauditdetailtype.channeltyperelation", "channelTypeRelationId", "oldChannelTypeRelationId", 1, false),
     PROCESSTASKLIST("processtasklist", "enum.process.processtaskauditdetailtype.processtasklist", "processTaskIdList", "oldProcessTaskIdList", 2, false),
-    PROCESSTASK("fromprocesstask", "enum.process.processtaskauditdetailtype.processtask", "fromProcessTaskId", "oldFromProcessTaskId", 3, false),
+    PROCESSTASK("fromprocesstask", "enum.process.processtaskauditdetailtype.processtask.a", "fromProcessTaskId", "oldFromProcessTaskId", 3, false),
 	CONTENT("content", "enum.process.processtaskauditdetailtype.content", "content", "oldContent", 4, true),
 	TITLE("title", "enum.process.processtaskauditdetailtype.title", "title", "oldTitle", 5, true),
 	PRIORITY("priority", "enum.process.processtaskauditdetailtype.priority", "priorityUuid", "oldPriorityUuid", 6, false),
-	FORM("form", "enum.process.processtaskauditdetailtype.form", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 7, false),
+	FORM("form", "enum.process.processtaskauditdetailtype.form.a", "processTaskFormAttributeDataList", "oldProcessTaskFormAttributeDataList", 7, false),
 	WORKERLIST("workerlist", "enum.process.processtaskauditdetailtype.workerlist", "workerList", "oldWorkerList", 8, false),
 	FILE("file", "enum.process.processtaskauditdetailtype.file", "fileIdList", "oldFileIdList", 10, false),
 	RESTFULACTION("restfulaction", "enum.process.processtaskauditdetailtype.restfulaction", "restfulAction", "oldRestfulAction", 12, false),

@@ -41,7 +41,7 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
     REPORTERNAME("reporterName", "enum.process.processtasknotifyparam.reportername", ParamType.STRING),
     OWNERCOMPANYLIST("ownerCompanyList", "enum.process.processtasknotifyparam.ownercompanylist", ParamType.ARRAY),
     STATUSTEXT("statusText", "enum.process.processtasknotifyparam.statustext", ParamType.STRING),
-    PROCESS_TASK_SCORE("processTaskScore", "enum.process.processtasknotifyparam.process_task_score", ParamType.ARRAY, "<#if DATA.processTaskScore?? && (DATA.processTaskScore?size > 0)>\n" +
+    PROCESS_TASK_SCORE("processTaskScore", "enum.process.processtasknotifyparam.process_task_score.a", ParamType.ARRAY, "<#if DATA.processTaskScore?? && (DATA.processTaskScore?size > 0)>\n" +
             "\t<#list DATA.processTaskScore as item>\n" +
             "\t\t${item_index}-${item.dimensionName}-${item.score}\n" +
             "\t\t<#if item_has_next>,</#if>\n" +

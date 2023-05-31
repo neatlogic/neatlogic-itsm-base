@@ -20,7 +20,7 @@ import neatlogic.framework.notify.core.INotifyTriggerType;
 import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepAutomaticNotifyTriggerType implements INotifyTriggerType {
-    ACTION_FAILED("actionFailed", new I18n("enum.process.processtaskstepautomaticnotifytriggertype.actionfailed"), new I18n("enum.process.processtaskstepautomaticnotifytriggertype.actionfailed.1"));
+    ACTION_FAILED("actionFailed", new I18n("enum.process.processtaskstepautomaticnotifytriggertype.actionfailed.a"), new I18n("enum.process.processtaskstepautomaticnotifytriggertype.actionfailed.b"));
 
     private String trigger;
     private I18n text;

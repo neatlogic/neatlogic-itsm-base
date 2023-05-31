@@ -4,11 +4,11 @@ import neatlogic.framework.notify.core.INotifyTriggerType;
 import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepTaskNotifyTriggerType implements INotifyTriggerType {
-    CREATETASK("createtask", new I18n("enum.process.processtasksteptasknotifytriggertype.createtask"), new I18n("enum.process.processtasksteptasknotifytriggertype.createtask.1")),
-    EDITTASK("edittask", new I18n("enum.process.processtasksteptasknotifytriggertype.edittask"), new I18n("enum.process.processtasksteptasknotifytriggertype.edittask.1")),
-    DELETETASK("deletetask", new I18n("enum.process.processtasksteptasknotifytriggertype.deletetask"), new I18n("enum.process.processtasksteptasknotifytriggertype.deletetask.1")),
-    COMPLETETASK("completetask", new I18n("enum.process.processtasksteptasknotifytriggertype.completetask"), new I18n("enum.process.processtasksteptasknotifytriggertype.completetask.1")),
-    COMPLETEALLTASK("completealltask", new I18n("enum.process.processtasksteptasknotifytriggertype.completealltask"), new I18n("enum.process.processtasksteptasknotifytriggertype.completealltask.1"));
+    CREATETASK("createtask", new I18n("enum.process.processtasksteptasknotifytriggertype.createtask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.createtask.b")),
+    EDITTASK("edittask", new I18n("enum.process.processtasksteptasknotifytriggertype.edittask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.edittask.b")),
+    DELETETASK("deletetask", new I18n("enum.process.processtasksteptasknotifytriggertype.deletetask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.deletetask.b")),
+    COMPLETETASK("completetask", new I18n("enum.process.processtasksteptasknotifytriggertype.completetask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.completetask.b")),
+    COMPLETEALLTASK("completealltask", new I18n("enum.process.processtasksteptasknotifytriggertype.completealltask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.completealltask.b"));
 
     private String trigger;
     private I18n text;

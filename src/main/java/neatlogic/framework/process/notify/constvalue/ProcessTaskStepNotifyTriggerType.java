@@ -5,18 +5,18 @@ import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
 
-    ACTIVE("active", new I18n("enum.process.processtaskstepnotifytriggertype.active"), new I18n("enum.process.processtaskstepnotifytriggertype.active.1")),
-    ASSIGNEXCEPTION("assignexception", new I18n("enum.process.processtaskstepnotifytriggertype.assignexception"), new I18n("enum.process.processtaskstepnotifytriggertype.assignexception.1")),
-    START("start", new I18n("enum.process.processtaskstepnotifytriggertype.start"), new I18n("enum.process.processtaskstepnotifytriggertype.start.1")),
-    TRANSFER("transfer", new I18n("enum.process.processtaskstepnotifytriggertype.transfer"), new I18n("enum.process.processtaskstepnotifytriggertype.transfer.1")),
-    SUCCEED("succeed", new I18n("enum.process.processtaskstepnotifytriggertype.succeed"), new I18n("enum.process.processtaskstepnotifytriggertype.succeed.1")),
-    BACK("back", new I18n("enum.process.processtaskstepnotifytriggertype.back"), new I18n("enum.process.processtaskstepnotifytriggertype.back.1")),
-    RETREAT("retreat", new I18n("enum.process.processtaskstepnotifytriggertype.retreat"), new I18n("enum.process.processtaskstepnotifytriggertype.retreat.1")),
-    PAUSE("pause", new I18n("enum.process.processtaskstepnotifytriggertype.pause"), new I18n("enum.process.processtaskstepnotifytriggertype.pause.1")),
-    RECOVER("recover", new I18n("enum.process.processtaskstepnotifytriggertype.recover"), new I18n("enum.process.processtaskstepnotifytriggertype.recover.1")),
-    FAILED("failed", new I18n("enum.process.processtaskstepnotifytriggertype.failed"), new I18n("enum.process.processtaskstepnotifytriggertype.failed.1")),
-    URGE("urge", new I18n("enum.process.processtaskstepnotifytriggertype.urge"), new I18n("enum.process.processtaskstepnotifytriggertype.urge.1")),
-	COMMENT("comment", new I18n("enum.process.processtaskstepnotifytriggertype.comment"),new I18n("enum.process.processtaskstepnotifytriggertype.comment.1")),
+    ACTIVE("active", new I18n("enum.process.processtaskstepnotifytriggertype.active.a"), new I18n("enum.process.processtaskstepnotifytriggertype.active.b")),
+    ASSIGNEXCEPTION("assignexception", new I18n("enum.process.processtaskstepnotifytriggertype.assignexception.a"), new I18n("enum.process.processtaskstepnotifytriggertype.assignexception.b")),
+    START("start", new I18n("enum.process.processtaskstepnotifytriggertype.start.a"), new I18n("enum.process.processtaskstepnotifytriggertype.start.b")),
+    TRANSFER("transfer", new I18n("enum.process.processtaskstepnotifytriggertype.transfer.a"), new I18n("enum.process.processtaskstepnotifytriggertype.transfer.b")),
+    SUCCEED("succeed", new I18n("enum.process.processtaskstepnotifytriggertype.succeed.a"), new I18n("enum.process.processtaskstepnotifytriggertype.succeed.b")),
+    BACK("back", new I18n("enum.process.processtaskstepnotifytriggertype.back.a"), new I18n("enum.process.processtaskstepnotifytriggertype.back.b")),
+    RETREAT("retreat", new I18n("enum.process.processtaskstepnotifytriggertype.retreat.a"), new I18n("enum.process.processtaskstepnotifytriggertype.retreat.b")),
+    PAUSE("pause", new I18n("enum.process.processtaskstepnotifytriggertype.pause.a"), new I18n("enum.process.processtaskstepnotifytriggertype.pause.b")),
+    RECOVER("recover", new I18n("enum.process.processtaskstepnotifytriggertype.recover.a"), new I18n("enum.process.processtaskstepnotifytriggertype.recover.b")),
+    FAILED("failed", new I18n("enum.process.processtaskstepnotifytriggertype.failed.a"), new I18n("enum.process.processtaskstepnotifytriggertype.failed.b")),
+    URGE("urge", new I18n("enum.process.processtaskstepnotifytriggertype.urge.a"), new I18n("enum.process.processtaskstepnotifytriggertype.urge.b")),
+	COMMENT("comment", new I18n("enum.process.processtaskstepnotifytriggertype.comment.a"),new I18n("enum.process.processtaskstepnotifytriggertype.comment.b")),
 	;
 
     private String trigger;

@@ -5,13 +5,13 @@ import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskNotifyTriggerType implements INotifyTriggerType {
 
-    STARTPROCESS("startprocess", new I18n("enum.process.processtasknotifytriggertype.startprocess"), new I18n("enum.process.processtasknotifytriggertype.startprocess.1")),
-    ABORTPROCESSTASK("abortprocesstask", new I18n("enum.process.processtasknotifytriggertype.abortprocesstask"), new I18n("enum.process.processtasknotifytriggertype.abortprocesstask")),
-    RECOVERPROCESSTASK("recoverprocesstask", new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask"), new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask.1")),
-    COMPLETEPROCESSTASK("completeprocesstask", new I18n("enum.process.processtasknotifytriggertype.completeprocesstask"), new I18n("enum.process.processtasknotifytriggertype.completeprocesstask.1")),
-    WAITINGSCOREPROCESSTASK("waitingscoreprocesstask", new I18n("enum.process.processtasknotifytriggertype.waitingscoreprocesstask"), new I18n("enum.process.processtasknotifytriggertype.waitingscoreprocesstask.1")),
-    SCOREPROCESSTASK("scoreprocesstask", new I18n("enum.process.processtasknotifytriggertype.scoreprocesstask"), new I18n("enum.process.processtasknotifytriggertype.scoreprocesstask")),
-    REOPENPROCESSTASK("reopenprocesstask", new I18n("enum.process.processtasknotifytriggertype.reopenprocesstask"), new I18n("enum.process.processtasknotifytriggertype.reopenprocesstask.1")),
+    STARTPROCESS("startprocess", new I18n("enum.process.processtasknotifytriggertype.startprocess.a"), new I18n("enum.process.processtasknotifytriggertype.startprocess.b")),
+    ABORTPROCESSTASK("abortprocesstask", new I18n("enum.process.processtasknotifytriggertype.abortprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.abortprocesstask.a")),
+    RECOVERPROCESSTASK("recoverprocesstask", new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask.b")),
+    COMPLETEPROCESSTASK("completeprocesstask", new I18n("enum.process.processtasknotifytriggertype.completeprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.completeprocesstask.b")),
+    WAITINGSCOREPROCESSTASK("waitingscoreprocesstask", new I18n("enum.process.processtasknotifytriggertype.waitingscoreprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.waitingscoreprocesstask.b")),
+    SCOREPROCESSTASK("scoreprocesstask", new I18n("enum.process.processtasknotifytriggertype.scoreprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.scoreprocesstask.a")),
+    REOPENPROCESSTASK("reopenprocesstask", new I18n("enum.process.processtasknotifytriggertype.reopenprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.reopenprocesstask.b")),
     MARKREPEATPROCESSTASK("markrepeatprocesstask", new I18n("enum.process.processtasknotifytriggertype.markrepeatprocesstask"), new I18n("enum.process.processtasknotifytriggertype.markrepeatprocesstask")),
     DELETEPROCESSTASK("deleteprocesstask", new I18n("enum.process.processtasknotifytriggertype.deleteprocesstask"), new I18n("enum.process.processtasknotifytriggertype.deleteprocesstask")),
     ;
