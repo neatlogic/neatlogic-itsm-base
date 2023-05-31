@@ -8,7 +8,7 @@ import neatlogic.framework.knowledge.source.ISyncSource;
 import neatlogic.framework.util.I18nUtils;
 
 public enum KnowledgeSyncSource implements ISyncSource{
-    PROCESSTASK("processtask", "enum.process.knowledgesyncsource.processtask");
+    PROCESSTASK("processtask", "common.itsm.processtask");
 
     private String value;
     private String name;

@@ -7,6 +7,6 @@ public class WorkcenterHandlerNotFoundException extends ProcessTaskRuntimeExcept
 	private static final long serialVersionUID = 8358695524151979636L;
 
 	public WorkcenterHandlerNotFoundException(String handler) {
-		super("exception.process.workcenterhandlernotfoundexception", handler);
+		super("exception.workcenterhandlernotfound", handler);
 	}
 }

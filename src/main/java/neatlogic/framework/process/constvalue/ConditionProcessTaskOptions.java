@@ -3,18 +3,18 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.I18nUtils;
 
 public enum ConditionProcessTaskOptions {
-    TASKID("id","enum.process.conditionprocesstaskoptions.taskid"),
-    STEPID("stepid","enum.process.conditionprocesstaskoptions.stepid"),
-    TITLE("title", "enum.process.conditionprocesstaskoptions.title"),
-    CHANNELTYPE("channeltype", "enum.process.conditionprocesstaskoptions.channeltype"),
-    CONTENT("content", "enum.process.conditionprocesstaskoptions.content"),
-    STARTTIME("starttime", "enum.process.conditionprocesstaskoptions.starttime"),
-    OWNER("owner", "enum.process.conditionprocesstaskoptions.owner.a"),
-    PRIORITY("priority", "enum.process.conditionprocesstaskoptions.priority"),
-    OWNERCOMPANY("ownercompany", "enum.process.conditionprocesstaskoptions.ownercompany"),
-    OWNERDEPARTMENT("ownerdepartment", "enum.process.conditionprocesstaskoptions.ownerdepartment"),
-    OWNERROLE("ownerrole", "enum.process.conditionprocesstaskoptions.ownerrole"),
-    OWNERLEVEL("ownerlevel", "enum.process.conditionprocesstaskoptions.ownerlevel")
+    TASKID("id","common.workorderid"),
+    STEPID("stepid","common.stepid"),
+    TITLE("title", "common.title"),
+    CHANNELTYPE("channeltype", "common.channeltype"),
+    CONTENT("content", "common.contend"),
+    STARTTIME("starttime", "common.starttime"),
+    OWNER("owner", "common.owner"),
+    PRIORITY("priority", "common.priority"),
+    OWNERCOMPANY("ownercompany", "common.ownercompany"),
+    OWNERDEPARTMENT("ownerdepartment", "common.reporterdepartment"),
+    OWNERROLE("ownerrole", "common.reporterrole"),
+    OWNERLEVEL("ownerlevel", "common.reporterlevel")
     ;
     private String value;
     private String text;

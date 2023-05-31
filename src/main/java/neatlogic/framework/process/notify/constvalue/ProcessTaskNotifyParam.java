@@ -25,22 +25,22 @@ import neatlogic.framework.util.I18nUtils;
  * @since 2021/10/15 17:12
  **/
 public enum ProcessTaskNotifyParam implements INotifyParam {
-    ID("id", "enum.process.processtasknotifyparam.id", ParamType.NUMBER),
-    SERIALNUMBER("serialNumber", "enum.process.processtasknotifyparam.serialnumber", ParamType.STRING),
-    TITLE("title", "enum.process.processtasknotifyparam.title", ParamType.STRING),
-    PRIORITYNAME("priorityName", "enum.process.processtasknotifyparam.priorityname", ParamType.STRING),
+    ID("id", "common.workorderid", ParamType.NUMBER),
+    SERIALNUMBER("serialNumber", "common.tasknumber", ParamType.STRING),
+    TITLE("title", "common.title", ParamType.STRING),
+    PRIORITYNAME("priorityName", "common.priority", ParamType.STRING),
     CHANNELNAME("channelName", "enum.process.processtasknotifyparam.channelname", ParamType.STRING),
     CHANNELPATH("channelPath", "enum.process.processtasknotifyparam.channelpath", ParamType.STRING),
-    CHANNELTYPENAME("channelTypeName", "enum.process.processtasknotifyparam.channeltypename", ParamType.STRING),
-    CONTENT("content", "enum.process.processtasknotifyparam.content", ParamType.STRING),
-    STARTTIME("startTime", "enum.process.processtasknotifyparam.starttime", ParamType.DATE),
+    CHANNELTYPENAME("channelTypeName", "common.channeltype", ParamType.STRING),
+    CONTENT("content", "common.contend", ParamType.STRING),
+    STARTTIME("startTime", "common.starttime", ParamType.DATE),
     STARTDATE("startDate", "enum.process.processtasknotifyparam.startdate", ParamType.DATE),
-    ENDTIME("endTime", "enum.process.processtasknotifyparam.endtime", ParamType.DATE),
-    OWNERNAME("ownerName", "enum.process.processtasknotifyparam.ownername", ParamType.STRING),
+    ENDTIME("endTime", "common.endtime", ParamType.DATE),
+    OWNERNAME("ownerName", "common.owner", ParamType.STRING),
     DEPARTMENTANDOWNERNAME("departmentAndOwnerName", "enum.process.processtasknotifyparam.departmentandownername", ParamType.STRING),
-    REPORTERNAME("reporterName", "enum.process.processtasknotifyparam.reportername", ParamType.STRING),
+    REPORTERNAME("reporterName", "common.reporter", ParamType.STRING),
     OWNERCOMPANYLIST("ownerCompanyList", "enum.process.processtasknotifyparam.ownercompanylist", ParamType.ARRAY),
-    STATUSTEXT("statusText", "enum.process.processtasknotifyparam.statustext", ParamType.STRING),
+    STATUSTEXT("statusText", "common.itsm.processtaskstatus", ParamType.STRING),
     PROCESS_TASK_SCORE("processTaskScore", "enum.process.processtasknotifyparam.process_task_score.a", ParamType.ARRAY, "<#if DATA.processTaskScore?? && (DATA.processTaskScore?size > 0)>\n" +
             "\t<#list DATA.processTaskScore as item>\n" +
             "\t\t${item_index}-${item.dimensionName}-${item.score}\n" +
@@ -54,7 +54,7 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
     PROCESS_TASK_URGE_USER("processTaskUrgeUser", "enum.process.processtasknotifyparam.process_task_urge_user", ParamType.STRING),
     PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "enum.process.processtasknotifyparam.process_task_urge_count", ParamType.NUMBER),
     APPROVALCOMMENTLIST("approvalCommentList", "enum.process.processtasknotifyparam.approvalcommentlist", ParamType.ARRAY),
-    FORM_TABLE("formTable", "enum.process.processtasknotifyparam.form", ParamType.STRING, "<#if DATA.formTable??>\n" +
+    FORM_TABLE("formTable", "common.form", ParamType.STRING, "<#if DATA.formTable??>\n" +
             "\t${DATA.formTable()}\n" +
             "</#if>"),
     ;

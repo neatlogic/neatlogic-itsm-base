@@ -4,7 +4,7 @@ import neatlogic.framework.util.I18nUtils;
 
 public enum ConditionConfigType {
   WORKCENTER("workcenter", "enum.process.conditionconfigtype.workcenter"),
-  DEFAULT("default","enum.process.conditionconfigtype.default");
+  DEFAULT("default","common.default");
 
   private final String value;
   private final String name;

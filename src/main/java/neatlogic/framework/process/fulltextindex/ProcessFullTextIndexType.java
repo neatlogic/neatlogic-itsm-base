@@ -24,7 +24,7 @@ import neatlogic.framework.util.I18nUtils;
  * @since 2021/03/23
  */
 public enum ProcessFullTextIndexType implements IFullTextIndexType {
-    PROCESSTASK("processtask", "enum.process.processfulltextindextype.processtask");
+    PROCESSTASK("processtask", "common.itsm.processtask");
 //    PROCESSTASK_FORM("processtask_form", "工单_表单");
 
     private final String type;

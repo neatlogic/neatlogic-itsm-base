@@ -19,9 +19,9 @@ public enum ProcessSqlTypeEnum {
     SUB_GROUP_COUNT("subGroupCount", "enum.process.processsqltypeenum.sub_group_count"),//目前暂用于dashboard
     GROUP_SUM("groupSum", "enum.process.processsqltypeenum.group_sum"),
     GROUP_AVG_COST_TIME("group_avg_cost_time","enum.process.processsqltypeenum.group_avg_cost_time"),
-    GROUP_AVG_RESPONSE_COST_TIME("group_avg_response_cost_time","enum.process.processsqltypeenum.group_avg_response_cost_time"),
-    GROUP_RESPONSE_PUNCTUALITY("group_response_punctuality","enum.process.processsqltypeenum.group_response_punctuality"),
-    GROUP_HANDLE_PUNCTUALITY("group_handle_punctuality","enum.process.processsqltypeenum.group_handle_punctuality")
+    GROUP_AVG_RESPONSE_COST_TIME("group_avg_response_cost_time","common.averageresponsetime"),
+    GROUP_RESPONSE_PUNCTUALITY("group_response_punctuality","common.responsepunctualityrate"),
+    GROUP_HANDLE_PUNCTUALITY("group_handle_punctuality","common.processingpunctualityrate")
     ;//目前暂用于dashboard
     private final String name;
     private final String text;

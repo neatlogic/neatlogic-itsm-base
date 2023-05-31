@@ -26,7 +26,7 @@ public enum ReplaceableText {
     CONTENT_DETAILS("replaceableContentDetails", new I18n("enum.process.replaceabletext.contentdetails")),
     STEP_LIST("replaceableSteplist", new I18n("enum.process.replaceabletext.steplist")),
     TIME_LINE("replaceableTimeLine", new I18n("enum.process.replaceabletext.timeline")),
-    RELATION_LIST("replaceableRelationlist", new I18n("enum.process.replaceabletext.relationlist"));
+    RELATION_LIST("replaceableRelationlist", new I18n("common.associatedworkorder"));
     private final String value;
     private final I18n text;
 

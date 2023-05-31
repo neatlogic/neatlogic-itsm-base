@@ -25,7 +25,7 @@ public class UserTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("enum.process.usertable.fieldenum.uuid")),
+        UUID("uuid", new I18n("common.useruuid")),
         USER_ID("user_id", new I18n("enum.process.fieldenum.user_id")),
         USER_NAME("user_name", new I18n("enum.process.fieldenum.user_name")),
         USER_INFO("user_info", new I18n("enum.process.fieldenum.user_info")),

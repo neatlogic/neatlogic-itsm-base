@@ -25,18 +25,18 @@ public class ProcessTaskSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        ID("id", new I18n("enum.process.fieldenum.id")),
-        SERIAL_NUMBER("serial_number", new I18n("enum.process.fieldenum.serial_number"), "serialNumber", "serialnumber"),
+        ID("id", new I18n("common.workorderid")),
+        SERIAL_NUMBER("serial_number", new I18n("common.tasknumber"), "serialNumber", "serialnumber"),
         START_TIME("start_time", new I18n("enum.process.fieldenum.start_time")),
-        END_TIME("end_time", new I18n("enum.process.fieldenum.end_time")),
-        OWNER("owner", new I18n("enum.process.fieldenum.owner")),
-        REPORTER("reporter", new I18n("enum.process.fieldenum.reporter")),
-        STATUS("status", new I18n("enum.process.fieldenum.status"), "processTaskStatus", "status"),
-        PRIORITY_UUID("priority_uuid", new I18n("enum.process.fieldenum.priority_uuid")),
-        CHANNEL_UUID("channel_uuid", new I18n("enum.process.fieldenum.channel_uuid")),
+        END_TIME("end_time", new I18n("common.endtime")),
+        OWNER("owner", new I18n("common.owner")),
+        REPORTER("reporter", new I18n("common.owner")),
+        STATUS("status", new I18n("common.itsm.processtaskstatus"), "processTaskStatus", "status"),
+        PRIORITY_UUID("priority_uuid", new I18n("common.itsm.processtaskstatus")),
+        CHANNEL_UUID("channel_uuid", new I18n("common.itsm.processtaskstatus")),
         IS_SHOW("is_show", new I18n("enum.process.fieldenum.is_show")),
         NEED_SCORE("need_score", new I18n("enum.process.fieldenum.need_score")),
-        TITLE("title", new I18n("enum.process.fieldenum.title"));
+        TITLE("title", new I18n("common.title"));
         private final String name;
         private final I18n text;
         private final String proName;

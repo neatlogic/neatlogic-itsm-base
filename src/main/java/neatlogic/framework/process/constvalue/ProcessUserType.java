@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ProcessUserType implements IUserType {
-    MAJOR("major", new I18n("enum.process.processusertype.major"), true),
+    MAJOR("major", new I18n("common.worker"), true),
     MINOR("minor", new I18n("enum.process.processusertype.minor"), true),
     //	AGENT("agent","代办人",true),
-    OWNER("owner", new I18n("enum.process.processusertype.owner"), true),
-    REPORTER("reporter", new I18n("enum.process.processusertype.reporter"), true),
+    OWNER("owner", new I18n("common.owner"), true),
+    REPORTER("reporter", new I18n("common.reporter"), true),
     WORKER("worker", new I18n("enum.process.processusertype.worker"), true),
     DEFAULT_WORKER("defaultworker", new I18n("enum.process.processusertype.default_worker"), false),
     FOCUS_USER("focususer", new I18n("enum.process.processusertype.focus_user"), false);

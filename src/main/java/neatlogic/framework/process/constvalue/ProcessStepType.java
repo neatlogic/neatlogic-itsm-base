@@ -19,9 +19,9 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessStepType {
-    START("start", "enum.process.processsteptype.start"),
+    START("start", "common.start"),
     PROCESS("process", "enum.process.processsteptype.process"),
-    END("end", "enum.process.processsteptype.end");
+    END("end", "common.end");
 
     private final String type;
     private final String name;

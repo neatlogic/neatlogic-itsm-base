@@ -19,8 +19,8 @@ public class ProcessDataCubeVo implements Serializable {
 	private static final long serialVersionUID = 6320662638466626455L;
 
 	public enum DataCubeType {
-		STATIC("static", "enum.process.datacubetype.static"),
-		SQL("sql", "enum.process.datacubetype.sql"),
+		STATIC("static", "common.static"),
+		SQL("sql", "common.database"),
 		REST("url", "enum.process.datacubetype.rest");
 		private String type;
 		private String name;

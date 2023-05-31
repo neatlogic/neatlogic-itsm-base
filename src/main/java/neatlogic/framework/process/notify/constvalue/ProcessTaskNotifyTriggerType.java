@@ -5,12 +5,12 @@ import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskNotifyTriggerType implements INotifyTriggerType {
 
-    STARTPROCESS("startprocess", new I18n("enum.process.processtasknotifytriggertype.startprocess.a"), new I18n("enum.process.processtasknotifytriggertype.startprocess.b")),
-    ABORTPROCESSTASK("abortprocesstask", new I18n("enum.process.processtasknotifytriggertype.abortprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.abortprocesstask.a")),
-    RECOVERPROCESSTASK("recoverprocesstask", new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask.b")),
+    STARTPROCESS("startprocess", new I18n("common.report"), new I18n("enum.process.processtasknotifytriggertype.startprocess.b")),
+    ABORTPROCESSTASK("abortprocesstask", new I18n("common.cancelworkorder"), new I18n("common.cancelworkorder")),
+    RECOVERPROCESSTASK("recoverprocesstask", new I18n("common.restoreworkorder"), new I18n("enum.process.processtasknotifytriggertype.recoverprocesstask.b")),
     COMPLETEPROCESSTASK("completeprocesstask", new I18n("enum.process.processtasknotifytriggertype.completeprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.completeprocesstask.b")),
     WAITINGSCOREPROCESSTASK("waitingscoreprocesstask", new I18n("enum.process.processtasknotifytriggertype.waitingscoreprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.waitingscoreprocesstask.b")),
-    SCOREPROCESSTASK("scoreprocesstask", new I18n("enum.process.processtasknotifytriggertype.scoreprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.scoreprocesstask.a")),
+    SCOREPROCESSTASK("scoreprocesstask", new I18n("common.score"), new I18n("common.score")),
     REOPENPROCESSTASK("reopenprocesstask", new I18n("enum.process.processtasknotifytriggertype.reopenprocesstask.a"), new I18n("enum.process.processtasknotifytriggertype.reopenprocesstask.b")),
     MARKREPEATPROCESSTASK("markrepeatprocesstask", new I18n("enum.process.processtasknotifytriggertype.markrepeatprocesstask"), new I18n("enum.process.processtasknotifytriggertype.markrepeatprocesstask")),
     DELETEPROCESSTASK("deleteprocesstask", new I18n("enum.process.processtasknotifytriggertype.deleteprocesstask"), new I18n("enum.process.processtasknotifytriggertype.deleteprocesstask")),

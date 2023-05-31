@@ -4,8 +4,8 @@ import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessFieldType {
     COMMON("common", "enum.process.processfieldtype.common"),
-    FORM("form", "enum.process.processfieldtype.form"),
-    CUSTOM("custom", "enum.process.processfieldtype.custom"),
+    FORM("form", "common.formproperty"),
+    CUSTOM("custom", "common.customprop"),
     CONSTANT("constant", "enum.process.processfieldtype.constant");
     private String value;
     private String name;

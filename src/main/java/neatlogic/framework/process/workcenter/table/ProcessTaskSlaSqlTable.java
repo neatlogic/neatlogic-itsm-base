@@ -25,7 +25,7 @@ public class ProcessTaskSlaSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", new I18n("enum.process.fieldenum.processtask_id")),
+        PROCESSTASK_ID("processtask_id", new I18n("common.workorderid")),
         ID("id", new I18n("enum.process.processtaskslatimesqltable.fieldenum.sla_id")),
         NAME("name", new I18n("enum.process.processtaskslasqltable.fieldenum.name")),
         CONFIG("config", new I18n("enum.process.fieldenum.config.a"));

@@ -27,7 +27,7 @@ import neatlogic.framework.util.I18n;
 public enum ProcessTaskStepNotifyParam implements INotifyParam {
 
     STEPID("stepId", new I18n("enum.process.processtaskstepnotifyparam.stepid"), ParamType.NUMBER),
-    STEPNAME("stepName", new I18n("enum.process.processtaskstepnotifyparam.stepname"), ParamType.STRING),
+    STEPNAME("stepName", new I18n("common.stepname"), ParamType.STRING),
     PROCESS_TASK_STEP_ACTIVE_TIME("processTaskStepActiveTime", new I18n("enum.process.processtaskstepnotifyparam.processtaskstepactivetime"), ParamType.STRING),
     PROCESS_TASK_STEP_START_TIME("processTaskStepStartTime", new I18n("enum.process.processtaskstepnotifyparam.processtaskstepstarttime"), ParamType.STRING),
     PROCESS_TASK_STEP_TRANSFER_TIME("processTaskStepTransferTime", new I18n("enum.process.processtaskstepnotifyparam.processtasksteptransfertime"), ParamType.STRING),
@@ -41,13 +41,13 @@ public enum ProcessTaskStepNotifyParam implements INotifyParam {
             "\t\t\t\t\t<#if item_has_next>,</#if>\n" +
             "\t\t\t\t</#list>\n" +
             "\t\t\t</#if>"),
-    STEPWORKER("stepWorker", new I18n("enum.process.processtaskstepnotifyparam.stepworker"), ParamType.STRING),
+    STEPWORKER("stepWorker", new I18n("common.stepuser"), ParamType.STRING),
     STEPSTAYTIME("stepStayTime", new I18n("enum.process.processtaskstepnotifyparam.stepstaytime"), ParamType.ARRAY),
-    REASON("reason", new I18n("enum.process.processtaskstepnotifyparam.reason"), ParamType.STRING),
+    REASON("reason", new I18n("common.reason"), ParamType.STRING),
     PROCESS_TASK_STEP_PAUSE_CONTENT("processTaskStepPauseContent", new I18n("enum.process.processtaskstepnotifyparam.processtasksteppausecontent"), ParamType.STRING),
     PROCESS_TASK_STEP_RECOVER_CONTENT("processTaskStepRecoverContent", new I18n("enum.process.processtaskstepnotifyparam.processtasksteprecovercontent"), ParamType.STRING),
     PROCESS_TASK_STEP_RETREAT_CONTENT("processTaskStepRetreatContent", new I18n("enum.process.processtaskstepnotifyparam.processtaskstepretreatcontent"), ParamType.STRING),
-    STEP_COMMENT("stepComment", new I18n("enum.process.processtaskstepnotifyparam.stepcomment.a"), ParamType.STRING),
+    STEP_COMMENT("stepComment", new I18n("common.stepreply"), ParamType.STRING),
     STEP_COMMENT_USER("stepCommentUser", new I18n("enum.process.processtaskstepnotifyparam.stepcommentuser"), ParamType.STRING),
     STEP_COMMENT_LIST("stepCommentList", new I18n("enum.process.processtaskstepnotifyparam.stepcommentlist"), ParamType.ARRAY),
     ;

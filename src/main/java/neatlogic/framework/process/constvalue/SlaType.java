@@ -26,7 +26,7 @@ import neatlogic.framework.util.I18n;
  **/
 public enum SlaType {
     RESPONSE("response", new I18n("enum.process.slatype.response")),
-    HANDLE("handle", new I18n("enum.process.slatype.handle"));
+    HANDLE("handle", new I18n("common.handle"));
     private final String value;
     private final I18n text;
 

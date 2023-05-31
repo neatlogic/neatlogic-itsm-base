@@ -27,9 +27,9 @@ public class PrioritySqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("enum.process.fieldenum.uuid"), "priorityUuid", true),
+        UUID("uuid", new I18n("common.cataloguuid"), "priorityUuid", true),
         NAME("name", new I18n("enum.process.fieldenum.name"), "priorityName"),
-        COLOR("color", new I18n("enum.process.fieldenum.color"), "priorityColor"),
+        COLOR("color", new I18n("common.color"), "priorityColor"),
         SORT("sort", new I18n("enum.process.fieldenum.sort"));
         private final String name;
         private final I18n text;

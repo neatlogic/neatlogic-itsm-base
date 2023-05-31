@@ -3,7 +3,7 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.I18n;
 
 public enum WorkerPolicy {
-    ASSIGN("assign", new I18n("enum.process.workerpolicy.assign")),
+    ASSIGN("assign", new I18n("common.custom")),
     //MANUAL("manual", "处理人抢单"),
     AUTOMATIC("automatic", new I18n("enum.process.workerpolicy.automatic")),
     //FROMER("fromer", "前置步骤指定"),

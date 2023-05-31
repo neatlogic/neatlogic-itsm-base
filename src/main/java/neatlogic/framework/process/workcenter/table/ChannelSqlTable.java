@@ -27,9 +27,9 @@ public class ChannelSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("enum.process.channelsqltable.fieldenum.uuid"), "channelUuid"),
-        CHANNEL_TYPE_UUID("channel_type_uuid", new I18n("enum.process.fieldenum.channel_type_uuid")),
-        PARENT_UUID("parent_uuid", new I18n("enum.process.fieldenum.parent_uuid")),
+        UUID("uuid", new I18n("common.channeltypeuuid"), "channelUuid"),
+        CHANNEL_TYPE_UUID("channel_type_uuid", new I18n("common.channeltypeuuid")),
+        PARENT_UUID("parent_uuid", new I18n("common.cataloguuid")),
         NAME("name", new I18n("enum.process.channelsqltable.fieldenum.name"), "channelName");
         private final String name;
         private final I18n text;

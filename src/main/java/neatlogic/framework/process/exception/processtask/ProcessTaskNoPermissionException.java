@@ -7,7 +7,7 @@ public class ProcessTaskNoPermissionException extends ProcessTaskRuntimeExceptio
 	private static final long serialVersionUID = -7145916738483615561L;
 
 	public ProcessTaskNoPermissionException(String action){
-		super("exception.process.processtasknopermissionexception", action);
+		super("common.youdonothavepe", action);
 	}
 	
 }

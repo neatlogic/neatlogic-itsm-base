@@ -10,13 +10,13 @@ public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
     START("start", new I18n("enum.process.processtaskstepnotifytriggertype.start.a"), new I18n("enum.process.processtaskstepnotifytriggertype.start.b")),
     TRANSFER("transfer", new I18n("enum.process.processtaskstepnotifytriggertype.transfer.a"), new I18n("enum.process.processtaskstepnotifytriggertype.transfer.b")),
     SUCCEED("succeed", new I18n("enum.process.processtaskstepnotifytriggertype.succeed.a"), new I18n("enum.process.processtaskstepnotifytriggertype.succeed.b")),
-    BACK("back", new I18n("enum.process.processtaskstepnotifytriggertype.back.a"), new I18n("enum.process.processtaskstepnotifytriggertype.back.b")),
+    BACK("back", new I18n("common.steprollback"), new I18n("enum.process.processtaskstepnotifytriggertype.back.b")),
     RETREAT("retreat", new I18n("enum.process.processtaskstepnotifytriggertype.retreat.a"), new I18n("enum.process.processtaskstepnotifytriggertype.retreat.b")),
     PAUSE("pause", new I18n("enum.process.processtaskstepnotifytriggertype.pause.a"), new I18n("enum.process.processtaskstepnotifytriggertype.pause.b")),
     RECOVER("recover", new I18n("enum.process.processtaskstepnotifytriggertype.recover.a"), new I18n("enum.process.processtaskstepnotifytriggertype.recover.b")),
     FAILED("failed", new I18n("enum.process.processtaskstepnotifytriggertype.failed.a"), new I18n("enum.process.processtaskstepnotifytriggertype.failed.b")),
-    URGE("urge", new I18n("enum.process.processtaskstepnotifytriggertype.urge.a"), new I18n("enum.process.processtaskstepnotifytriggertype.urge.b")),
-	COMMENT("comment", new I18n("enum.process.processtaskstepnotifytriggertype.comment.a"),new I18n("enum.process.processtaskstepnotifytriggertype.comment.b")),
+    URGE("urge", new I18n("enum.process.processtaskstepnotifytriggertype.urge.a"), new I18n("common.urgetrigger")),
+	COMMENT("comment", new I18n("common.stepreply"),new I18n("enum.process.processtaskstepnotifytriggertype.comment.b")),
 	;
 
     private String trigger;
