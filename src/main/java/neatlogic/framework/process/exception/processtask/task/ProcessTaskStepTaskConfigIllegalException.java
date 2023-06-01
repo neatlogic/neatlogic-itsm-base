@@ -27,6 +27,6 @@ public class ProcessTaskStepTaskConfigIllegalException extends ProcessTaskRuntim
     private static final long serialVersionUID = 7140754332656371637L;
 
     public ProcessTaskStepTaskConfigIllegalException(String name) {
-        super("exception.process.processtasksteptaskconfigillegalexception", name);
+        super("流程步骤任务策略: “{0}” 非法", name);
     }
 }

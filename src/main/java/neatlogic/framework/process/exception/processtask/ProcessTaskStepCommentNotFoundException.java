@@ -7,6 +7,6 @@ public class ProcessTaskStepCommentNotFoundException extends ProcessTaskRuntimeE
 	private static final long serialVersionUID = 186121675355812447L;
 
 	public ProcessTaskStepCommentNotFoundException(String id) {
-		super("exception.process.processtaskstepcommentnotfoundexception", id);
+		super("步骤回复：“{0}”不存在", id);
 	}
 }

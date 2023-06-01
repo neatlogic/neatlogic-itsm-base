@@ -24,6 +24,6 @@ public class ProcessTaskStepCannotRetreatException extends ProcessTaskPermission
     private static final long serialVersionUID = 9216337410118158657L;
 
     public ProcessTaskStepCannotRetreatException() {
-        super("exception.process.processtaskstepcannotretreatexception");
+        super("该步骤已经不能撤回");
     }
 }

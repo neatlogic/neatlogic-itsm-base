@@ -27,6 +27,6 @@ public class TaskUserIllegalException extends ProcessTaskRuntimeException {
     private static final long serialVersionUID = -7334568530564862545L;
 
     public TaskUserIllegalException(String illegalUserUuids) {
-        super("exception.process.taskuserillegalexception", illegalUserUuids);
+        super("用户uuid: “{0}” 不在配置范围内,请联系管理员", illegalUserUuids);
     }
 }

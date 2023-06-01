@@ -24,6 +24,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
 
 public class OperationProcessorIsExistsException extends ApiRuntimeException {
     public OperationProcessorIsExistsException(String handler) {
-        super("exception.process.operationprocessorisexistsexception", handler);
+        super("操作处理器：{0}已存在，请修改代码", handler);
     }
 }

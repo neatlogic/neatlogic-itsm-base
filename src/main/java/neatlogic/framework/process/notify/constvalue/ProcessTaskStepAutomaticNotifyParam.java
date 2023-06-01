@@ -21,7 +21,7 @@ import neatlogic.framework.notify.core.INotifyParam;
 import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepAutomaticNotifyParam implements INotifyParam {
-    ACTION_FAILED_CONTENT("actionFailedContent", new I18n("enum.process.processtaskstepautomaticnotifyparam.actionfailedcontent"), ParamType.STRING);
+    ACTION_FAILED_CONTENT("actionFailedContent", new I18n("动作执行失败原因"), ParamType.STRING);
 
     private final String value;
     private final I18n text;

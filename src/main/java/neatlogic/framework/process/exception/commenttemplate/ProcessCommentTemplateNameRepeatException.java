@@ -24,6 +24,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
 
 public class ProcessCommentTemplateNameRepeatException extends ApiRuntimeException {
     public ProcessCommentTemplateNameRepeatException(String name) {
-        super("exception.process.processcommenttemplatenamerepeatexception", name);
+        super("模版：{0}已存在", name);
     }
 }

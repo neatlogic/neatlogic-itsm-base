@@ -24,6 +24,6 @@ public class ProcessTaskRunningException extends ProcessTaskPermissionDeniedExce
     private static final long serialVersionUID = 9216337410118158632L;
 
     public ProcessTaskRunningException() {
-        super("exception.process.processtaskrunningexception");
+        super("工单处理中");
     }
 }

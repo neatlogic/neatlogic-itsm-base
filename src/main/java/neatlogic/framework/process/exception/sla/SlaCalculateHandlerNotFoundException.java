@@ -27,6 +27,6 @@ public class SlaCalculateHandlerNotFoundException extends ProcessTaskRuntimeExce
     private static final long serialVersionUID = -6956721990886391194L;
 
     public SlaCalculateHandlerNotFoundException(String handler) {
-        super("exception.process.slacalculatehandlernotfoundexception", handler);
+        super("sla计算规则处理器：“{0}”不存在", handler);
     }
 }

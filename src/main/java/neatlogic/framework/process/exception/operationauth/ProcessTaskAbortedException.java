@@ -24,6 +24,6 @@ public class ProcessTaskAbortedException extends ProcessTaskPermissionDeniedExce
     private static final long serialVersionUID = 9216337410118158634L;
 
     public ProcessTaskAbortedException() {
-        super("exception.process.processtaskabortedexception");
+        super("工单已取消");
     }
 }

@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum UserProfile implements IUserProfile {
-    PROCESSTASK_SUCCESS("processtasksuccess", new I18n("enum.process.userprofile.processtask_success"), Arrays.asList(UserProfileOperate.KEEP_ON_CREATE_TASK, UserProfileOperate.VIEW_PROCESSTASK_DETAIL, UserProfileOperate.BACK_CATALOG_LIST));
+    PROCESSTASK_SUCCESS("processtasksuccess", new I18n("服务上报成功"), Arrays.asList(UserProfileOperate.KEEP_ON_CREATE_TASK, UserProfileOperate.VIEW_PROCESSTASK_DETAIL, UserProfileOperate.BACK_CATALOG_LIST));
 
     private final String value;
     private final I18n text;

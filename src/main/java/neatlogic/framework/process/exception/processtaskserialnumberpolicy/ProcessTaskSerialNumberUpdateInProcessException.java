@@ -7,6 +7,6 @@ public class ProcessTaskSerialNumberUpdateInProcessException extends ApiRuntimeE
     private static final long serialVersionUID = 1592439340762977706L;
 
     public ProcessTaskSerialNumberUpdateInProcessException() {
-        super("exception.process.processtaskserialnumberupdateinprocessexception");
+        super("正在批量更新工单号，请稍后...");
     }
 }

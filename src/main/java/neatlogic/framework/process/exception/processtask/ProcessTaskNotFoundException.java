@@ -7,7 +7,7 @@ public class ProcessTaskNotFoundException extends ProcessTaskRuntimeException {
     private static final long serialVersionUID = 2861954159600811000L;
 
     public ProcessTaskNotFoundException(String processTask) {
-        super("exception.process.processtasknotfoundexception", processTask);
+        super("工单：“{0}”不存在", processTask);
     }
 
     public ProcessTaskNotFoundException() {

@@ -24,6 +24,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
 
 public class HandlerDispatchComponentTypeNotFoundException extends ApiRuntimeException {
     public HandlerDispatchComponentTypeNotFoundException(String name) {
-        super("exception.process.handlerdispatchcomponenttypenotfoundexception", name);
+        super("找不到类型为：{0}的处理人分派组件", name);
     }
 }

@@ -25,8 +25,8 @@ public class WorkTimeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("common.timewindowuuid")),
-        NAME("name", new I18n("enum.process.worktimesqltable.fieldenum.name"));
+        UUID("uuid", new I18n("时间窗口UUID")),
+        NAME("name", new I18n("时间窗口名"));
         private final String name;
         private final I18n text;
 

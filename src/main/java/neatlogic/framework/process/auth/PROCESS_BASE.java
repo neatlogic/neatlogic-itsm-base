@@ -22,12 +22,12 @@ public class PROCESS_BASE extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.processbase.name";
+		return "IT服务基础权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.processbase.introduction";
+		return "查看IT服务相关基础功能";
 	}
 
 	@Override

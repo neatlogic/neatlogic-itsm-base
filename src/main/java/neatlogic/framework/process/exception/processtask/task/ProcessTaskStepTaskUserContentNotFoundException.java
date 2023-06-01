@@ -27,6 +27,6 @@ public class ProcessTaskStepTaskUserContentNotFoundException extends ProcessTask
     private static final long serialVersionUID = -9049707373772959255L;
 
     public ProcessTaskStepTaskUserContentNotFoundException() {
-        super("exception.process.processtasksteptaskusercontentnotfoundexception");
+        super("用户回复不存在，请重试");
     }
 }

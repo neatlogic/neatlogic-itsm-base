@@ -3,18 +3,18 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.I18nUtils;
 
 public enum ConditionProcessTaskOptions {
-    TASKID("id","common.workorderid"),
-    STEPID("stepid","common.stepid"),
-    TITLE("title", "common.title"),
-    CHANNELTYPE("channeltype", "common.channeltype"),
-    CONTENT("content", "common.contend"),
-    STARTTIME("starttime", "common.starttime"),
-    OWNER("owner", "common.owner"),
-    PRIORITY("priority", "common.priority"),
-    OWNERCOMPANY("ownercompany", "common.ownercompany"),
-    OWNERDEPARTMENT("ownerdepartment", "common.reporterdepartment"),
-    OWNERROLE("ownerrole", "common.reporterrole"),
-    OWNERLEVEL("ownerlevel", "common.reporterlevel")
+    TASKID("id","工单ID"),
+    STEPID("stepid","步骤ID"),
+    TITLE("title", "标题"),
+    CHANNELTYPE("channeltype", "服务类型"),
+    CONTENT("content", "上报内容"),
+    STARTTIME("starttime", "开始时间"),
+    OWNER("owner", "上报人"),
+    PRIORITY("priority", "优先级"),
+    OWNERCOMPANY("ownercompany", "上报人公司"),
+    OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
+    OWNERROLE("ownerrole", "上报人角色"),
+    OWNERLEVEL("ownerlevel", "上报人级别")
     ;
     private String value;
     private String text;

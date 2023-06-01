@@ -25,18 +25,18 @@ public class ProcessTaskSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        ID("id", new I18n("common.workorderid")),
-        SERIAL_NUMBER("serial_number", new I18n("common.tasknumber"), "serialNumber", "serialnumber"),
-        START_TIME("start_time", new I18n("enum.process.fieldenum.start_time")),
-        END_TIME("end_time", new I18n("common.endtime")),
-        OWNER("owner", new I18n("common.owner")),
-        REPORTER("reporter", new I18n("common.owner")),
-        STATUS("status", new I18n("common.itsm.processtaskstatus"), "processTaskStatus", "status"),
-        PRIORITY_UUID("priority_uuid", new I18n("common.itsm.processtaskstatus")),
-        CHANNEL_UUID("channel_uuid", new I18n("common.itsm.processtaskstatus")),
-        IS_SHOW("is_show", new I18n("enum.process.fieldenum.is_show")),
-        NEED_SCORE("need_score", new I18n("enum.process.fieldenum.need_score")),
-        TITLE("title", new I18n("common.title"));
+        ID("id", new I18n("工单ID")),
+        SERIAL_NUMBER("serial_number", new I18n("工单号"), "serialNumber", "serialnumber"),
+        START_TIME("start_time", new I18n("创建时间")),
+        END_TIME("end_time", new I18n("结束时间")),
+        OWNER("owner", new I18n("上报人")),
+        REPORTER("reporter", new I18n("上报人")),
+        STATUS("status", new I18n("工单状态"), "processTaskStatus", "status"),
+        PRIORITY_UUID("priority_uuid", new I18n("工单状态")),
+        CHANNEL_UUID("channel_uuid", new I18n("工单状态")),
+        IS_SHOW("is_show", new I18n("工单是否隐藏")),
+        NEED_SCORE("need_score", new I18n("工单是否需要评分")),
+        TITLE("title", new I18n("标题"));
         private final String name;
         private final I18n text;
         private final String proName;

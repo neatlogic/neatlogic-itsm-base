@@ -4,14 +4,14 @@ import neatlogic.framework.process.stephandler.core.IProcessStepHandlerType;
 import neatlogic.framework.util.I18n;
 
 public enum ProcessStepHandlerType implements IProcessStepHandlerType {
-    START("start", "start", new I18n("common.start")),
-    OMNIPOTENT("omnipotent", "process", new I18n("enum.process.processstephandlertype.omnipotent")),
-    END("end", "end", new I18n("common.end")),
-    CONDITION("condition", "converge", new I18n("common.condition")),
-    DISTRIBUTARY("distributary", "converge", new I18n("enum.process.processstephandlertype.distributary")),
-    OCTOPUS("octopus", "process", new I18n("common.autoexec")),
-    AUTOMATIC("automatic", "process", new I18n("common.automaticprocessing")),
-    TIMER("timer", "process", new I18n("enum.process.processstephandlertype.timer"))
+    START("start", "start", new I18n("开始")),
+    OMNIPOTENT("omnipotent", "process", new I18n("通用节点")),
+    END("end", "end", new I18n("结束")),
+    CONDITION("condition", "converge", new I18n("条件")),
+    DISTRIBUTARY("distributary", "converge", new I18n("分流")),
+    OCTOPUS("octopus", "process", new I18n("自动化")),
+    AUTOMATIC("automatic", "process", new I18n("自动处理")),
+    TIMER("timer", "process", new I18n("定时节点"))
     ;
 
     private String handler;

@@ -7,6 +7,6 @@ public class ProcessTaskStepUnActivedException extends ProcessTaskRuntimeExcepti
 	private static final long serialVersionUID = -5334268232696017057L;
 
 	public ProcessTaskStepUnActivedException() {
-		super("exception.process.processtaskstepunactivedexception");
+		super("当前步骤未激活");
 	}
 }

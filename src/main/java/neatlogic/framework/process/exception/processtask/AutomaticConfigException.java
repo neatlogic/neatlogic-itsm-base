@@ -26,6 +26,6 @@ public class AutomaticConfigException extends ProcessTaskRuntimeException {
     private static final long serialVersionUID = -1795292676955541383L;
 
     public AutomaticConfigException(String jobName) {
-        super("exception.process.automaticconfigexception", jobName);
+        super("automaticConfig异常为null，jobName: {0}", jobName);
     }
 }

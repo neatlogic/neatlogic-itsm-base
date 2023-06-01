@@ -26,6 +26,6 @@ public class ProcessTaskTimerHandlerNotEnableOperateException extends ProcessTas
     private static final long serialVersionUID = 9216337410118158663L;
 
     public ProcessTaskTimerHandlerNotEnableOperateException(ProcessTaskOperationType operationType) {
-        super("exception.process.processtasktimerhandlernotenableoperateexception", operationType.getText());
+        super("定时节点不支持“{0}”操作", operationType.getText());
     }
 }

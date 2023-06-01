@@ -25,12 +25,12 @@ public class UserTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("common.useruuid")),
-        USER_ID("user_id", new I18n("enum.process.fieldenum.user_id")),
-        USER_NAME("user_name", new I18n("enum.process.fieldenum.user_name")),
-        USER_INFO("user_info", new I18n("enum.process.fieldenum.user_info")),
-        VIP_LEVEL("vip_level", new I18n("enum.process.fieldenum.vip_level")),
-        PINYIN("pinyin", new I18n("enum.process.fieldenum.pinyin"));
+        UUID("uuid", new I18n("用户UUID")),
+        USER_ID("user_id", new I18n("用户ID")),
+        USER_NAME("user_name", new I18n("用户名")),
+        USER_INFO("user_info", new I18n("用户信息")),
+        VIP_LEVEL("vip_level", new I18n("vip等级")),
+        PINYIN("pinyin", new I18n("拼音"));
         private final String name;
         private final I18n text;
         private final String proName;

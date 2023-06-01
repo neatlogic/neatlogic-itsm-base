@@ -27,6 +27,6 @@ public class ChannelParentUuidCannotBeZeroException extends ApiRuntimeException 
     private static final long serialVersionUID = 1747171456084633383L;
 
     public ChannelParentUuidCannotBeZeroException(){
-        super("exception.process.channelparentuuidcannotbezeroexception");
+        super("服务的parentUuid不能为零");
     }
 }

@@ -24,6 +24,6 @@ public class ProcessTaskStepBackNotEnabledException extends ProcessTaskPermissio
     private static final long serialVersionUID = 9216337410118158655L;
 
     public ProcessTaskStepBackNotEnabledException() {
-        super("exception.process.processtaskstepbacknotenabledexception");
+        super("该步骤未启用回退功能");
     }
 }

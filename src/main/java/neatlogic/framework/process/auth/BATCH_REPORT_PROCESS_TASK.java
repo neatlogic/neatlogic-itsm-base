@@ -22,12 +22,12 @@ public class BATCH_REPORT_PROCESS_TASK extends AuthBase {
 
     @Override
     public String getAuthDisplayName() {
-        return "auth.process.batchreportprocesstask.name";
+        return "批量上报权限";
     }
 
     @Override
     public String getAuthIntroduction() {
-        return "auth.process.batchreportprocesstask.introduction";
+        return "对有权限服务可以批量上报工单";
     }
 
     @Override

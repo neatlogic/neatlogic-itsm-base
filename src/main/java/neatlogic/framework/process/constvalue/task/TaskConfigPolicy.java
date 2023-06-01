@@ -28,7 +28,7 @@ import java.util.List;
  * @since 2021/9/1 16:20
  **/
 public enum TaskConfigPolicy implements IEnum {
-    ANY("any", new I18n("enum.process.taskconfigpolicy.any")), ALL("all", new I18n("enum.process.taskconfigpolicy.all"));
+    ANY("any", new I18n("任意一人完成")), ALL("all", new I18n("所有人完成"));
     private final String value;
     private final I18n name;
 

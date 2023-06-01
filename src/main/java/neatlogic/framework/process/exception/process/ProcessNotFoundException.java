@@ -7,6 +7,6 @@ public class ProcessNotFoundException extends ApiRuntimeException {
 	private static final long serialVersionUID = 2639465731103184228L;
 
 	public ProcessNotFoundException(String uuid) {
-		super("exception.process.processnotfoundexception", uuid);
+		super("流程：“{0}”不存在", uuid);
 	}
 }

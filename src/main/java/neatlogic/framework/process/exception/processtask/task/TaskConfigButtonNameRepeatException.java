@@ -23,6 +23,6 @@ public class TaskConfigButtonNameRepeatException extends ApiRuntimeException {
 	private static final long serialVersionUID = 4272882237404094409L;
 
 	public TaskConfigButtonNameRepeatException(String name) {
-		super("exception.process.taskconfigbuttonnamerepeatexception", name);
+		super("任务操作按钮名称：“{0}”已存在", name);
 	}
 }

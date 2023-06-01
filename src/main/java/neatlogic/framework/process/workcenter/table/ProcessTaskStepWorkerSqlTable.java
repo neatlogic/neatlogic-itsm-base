@@ -25,11 +25,11 @@ public class ProcessTaskStepWorkerSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", new I18n("common.workorderid")),
-        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("enum.process.fieldenum.processtask_step_id")),
-        TYPE("type", new I18n("enum.process.fieldenum.type")),
-        UUID("uuid", new I18n("enum.process.processtaskstepworkersqltable.fieldenum.uuid")),
-        USER_TYPE("user_type", new I18n("enum.process.fieldenum.user_type"));
+        PROCESSTASK_ID("processtask_id", new I18n("工单ID")),
+        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("工单步骤ID")),
+        TYPE("type", new I18n("用户/组/角色 类型")),
+        UUID("uuid", new I18n("用户/组/角色 uuid")),
+        USER_TYPE("user_type", new I18n("处理人类型"));
         private final String name;
         private final I18n text;
 

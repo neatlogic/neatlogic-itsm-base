@@ -24,6 +24,6 @@ public class ProcessTaskStepNotWorkerException extends ProcessTaskPermissionDeni
     private static final long serialVersionUID = 9216337410118158654L;
 
     public ProcessTaskStepNotWorkerException() {
-        super("exception.process.processtaskstepnotworkerexception");
+        super("您不是步骤待处理人");
     }
 }

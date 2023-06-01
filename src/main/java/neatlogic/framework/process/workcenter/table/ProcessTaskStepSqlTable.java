@@ -25,15 +25,15 @@ public class ProcessTaskStepSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        ID("id", new I18n("common.stepid"), "processTaskStepId"),
-        NAME("name", new I18n("enum.process.processtaskstepsqltable.fieldenum.name"), "processTaskStepName"),
-        PROCESSTASK_ID("processtask_id", new I18n("common.workorderid"), "processTaskId"),
-        TYPE("type", new I18n("enum.process.channeltypesqltable.fieldenum.type"), "processTaskStepType"),
-        HANDLER("handler", new I18n("enum.process.fieldenum.handler"), "processTaskStepHandler"),
-        STATUS("status", new I18n("common.stepstatus"), "processTaskStepStatus"),
-        CONFIG_HASH("config_hash", new I18n("enum.process.fieldenum.config_hash"), "processTaskStepConfigHash"),
-        IS_ACTIVE("is_active", new I18n("common.stepstatus"), "processTaskStepIsActive"),
-        ACTIVE_TIME("active_time", new I18n("common.activetime"), "processTaskStepActiveTime");
+        ID("id", new I18n("步骤ID"), "processTaskStepId"),
+        NAME("name", new I18n("步骤名称"), "processTaskStepName"),
+        PROCESSTASK_ID("processtask_id", new I18n("工单ID"), "processTaskId"),
+        TYPE("type", new I18n("节点类型"), "processTaskStepType"),
+        HANDLER("handler", new I18n("步骤处理器"), "processTaskStepHandler"),
+        STATUS("status", new I18n("步骤状态"), "processTaskStepStatus"),
+        CONFIG_HASH("config_hash", new I18n("配置hash"), "processTaskStepConfigHash"),
+        IS_ACTIVE("is_active", new I18n("步骤状态"), "processTaskStepIsActive"),
+        ACTIVE_TIME("active_time", new I18n("激活时间"), "processTaskStepActiveTime");
         private final String name;
         private final I18n text;
         private final String proName;

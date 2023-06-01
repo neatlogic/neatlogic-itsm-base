@@ -20,6 +20,6 @@ public class ProcessTaskNotFoundNextStepException extends ProcessTaskException {
     private static final long serialVersionUID = 4314481891500443154L;
 
     public ProcessTaskNotFoundNextStepException() {
-        super("exception.process.processtasknotfoundnextstepexception");
+        super("找不到可流转路径");
     }
 }

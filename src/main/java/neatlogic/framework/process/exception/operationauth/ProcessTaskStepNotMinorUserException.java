@@ -24,6 +24,6 @@ public class ProcessTaskStepNotMinorUserException extends ProcessTaskPermissionD
     private static final long serialVersionUID = 9216337410118158666L;
 
     public ProcessTaskStepNotMinorUserException() {
-        super("exception.process.processtaskstepnotminoruserexception");
+        super("您不是步骤协助处理人");
     }
 }

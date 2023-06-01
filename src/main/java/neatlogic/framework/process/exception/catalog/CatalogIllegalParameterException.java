@@ -7,6 +7,6 @@ public class CatalogIllegalParameterException extends ApiRuntimeException {
 	private static final long serialVersionUID = 183789473205326514L;
 
 	public CatalogIllegalParameterException(String name) {
-		super("exception.process.catalogillegalparameterexception", name);
+		super("服务目录：“{0}”还存在子服务", name);
 	}
 }

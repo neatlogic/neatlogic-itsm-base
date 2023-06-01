@@ -7,7 +7,7 @@ public class ProcessTaskStepFoundMultipleException extends ProcessTaskRuntimeExc
     private static final long serialVersionUID = 2271551252908108256L;
 
     public ProcessTaskStepFoundMultipleException(String processTaskStepName) {
-        super("exception.process.processtaskstepfoundmultipleexception", processTaskStepName);
+        super("存在多个名为：“{0}”的流程步骤", processTaskStepName);
     }
 
 }

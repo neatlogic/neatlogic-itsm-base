@@ -23,10 +23,10 @@ import neatlogic.framework.util.I18n;
  * @since 2021/9/6 11:55
  **/
 public enum ProcessWorkcenterInitType {
-    ALL_PROCESSTASK("allProcessTask", new I18n("enum.process.processworkcenterinittype.all_processtask")),
-    DRAFT_PROCESSTASK("draftProcessTask", new I18n("enum.process.processworkcenterinittype.draft_processtask")),
-    DONE_OF_MINE_PROCESSTASK("doneOfMineProcessTask", new I18n("enum.process.processworkcenterinittype.done_of_mine_processtask")),
-    PROCESSING_OF_MINE_PROCESSTASK("processingOfMineProcessTask", new I18n("enum.process.processworkcenterinittype.processing_of_mine_processtask"));
+    ALL_PROCESSTASK("allProcessTask", new I18n("所有工单")),
+    DRAFT_PROCESSTASK("draftProcessTask", new I18n("我的草稿")),
+    DONE_OF_MINE_PROCESSTASK("doneOfMineProcessTask", new I18n("我的已办")),
+    PROCESSING_OF_MINE_PROCESSTASK("processingOfMineProcessTask", new I18n("我的待办"));
     private final String value;
     private final I18n name;
 

@@ -7,7 +7,7 @@ public class ProcessTaskNextStepNameOrIdUnAssignException extends ProcessTaskRun
     private static final long serialVersionUID = -6064258442539939871L;
 
     public ProcessTaskNextStepNameOrIdUnAssignException() {
-        super("exception.process.processtasknextstepnameoridunassignexception");
+        super("缺少下一步骤的名称或id");
     }
 
 }

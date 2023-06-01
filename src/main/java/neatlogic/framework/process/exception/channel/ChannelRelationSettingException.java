@@ -7,6 +7,6 @@ public class ChannelRelationSettingException extends ApiRuntimeException {
     private static final long serialVersionUID = 291889722332376765L;
 
     public ChannelRelationSettingException() {
-        super("exception.process.channelrelationsettingexception");
+        super("服务允许转报后，转报设置必填");
     }
 }

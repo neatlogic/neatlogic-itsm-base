@@ -20,7 +20,7 @@ import neatlogic.framework.notify.core.INotifyPolicyHandlerGroup;
 import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessNotifyPolicyHandlerGroup implements INotifyPolicyHandlerGroup {
-    TASKSTEP("TaskStep", "enum.process.processnotifypolicyhandlergroup.taskstep");
+    TASKSTEP("TaskStep", "工单步骤");
     private final String value;
     private final String text;
 

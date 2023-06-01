@@ -25,8 +25,8 @@ public class ProcessTaskFocusSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", new I18n("common.workorderid")),
-        USER_UUID("user_uuid", new I18n("common.useruuid")),
+        PROCESSTASK_ID("processtask_id", new I18n("工单ID")),
+        USER_UUID("user_uuid", new I18n("用户UUID")),
         ;
         private final String name;
         private final I18n text;

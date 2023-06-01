@@ -24,6 +24,6 @@ public class ProcessTaskStepHangException extends ProcessTaskPermissionDeniedExc
     private static final long serialVersionUID = 9216337410118158653L;
 
     public ProcessTaskStepHangException() {
-        super("exception.process.processtaskstephangexception");
+        super("步骤已挂起");
     }
 }

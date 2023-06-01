@@ -24,6 +24,6 @@ public class ProcessTaskSucceededException extends ProcessTaskPermissionDeniedEx
     private static final long serialVersionUID = 9216337410118158633L;
 
     public ProcessTaskSucceededException() {
-        super("exception.process.processtasksucceededexception");
+        super("工单已完成");
     }
 }

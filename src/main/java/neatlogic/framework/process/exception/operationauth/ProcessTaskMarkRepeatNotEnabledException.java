@@ -24,6 +24,6 @@ public class ProcessTaskMarkRepeatNotEnabledException extends ProcessTaskPermiss
     private static final long serialVersionUID = 9216337410118158641L;
 
     public ProcessTaskMarkRepeatNotEnabledException() {
-        super("exception.process.processtaskmarkrepeatnotenabledexception");
+        super("工单未启用标记重复事件功能");
     }
 }

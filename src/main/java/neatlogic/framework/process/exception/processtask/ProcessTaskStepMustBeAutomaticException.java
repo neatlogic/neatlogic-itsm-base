@@ -7,6 +7,6 @@ public class ProcessTaskStepMustBeAutomaticException extends ProcessTaskRuntimeE
     private static final long serialVersionUID = -1161294616338600219L;
 
     public ProcessTaskStepMustBeAutomaticException() {
-		super("exception.process.processtaskstepmustbeautomaticexception");
+		super("工单步骤 必须为automatic节点类型");
 	}
 }

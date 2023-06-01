@@ -24,6 +24,6 @@ public class ProcessTaskScoredException extends ProcessTaskPermissionDeniedExcep
     private static final long serialVersionUID = 9216337410118158637L;
 
     public ProcessTaskScoredException() {
-        super("exception.process.processtaskscoredexception");
+        super("工单已评分");
     }
 }

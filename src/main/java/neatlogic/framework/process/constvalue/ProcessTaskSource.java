@@ -4,10 +4,10 @@ import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskSource implements IProcessTaskSource {
 
-    PC("pc", new I18n("enum.process.processtasksource.pc")),
-    MOBILE("mobile", new I18n("enum.process.processtasksource.mobile")),
-    IMPORT("import", new I18n("enum.process.processtasksource.import")),
-    SYSTEM("system", new I18n("common.system"));
+    PC("pc", new I18n("PC端")),
+    MOBILE("mobile", new I18n("移动端")),
+    IMPORT("import", new I18n("导入")),
+    SYSTEM("system", new I18n("系统"));
 
     private String value;
     private I18n text;

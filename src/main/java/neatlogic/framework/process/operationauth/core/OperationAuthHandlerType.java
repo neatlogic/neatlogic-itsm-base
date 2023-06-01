@@ -3,11 +3,11 @@ package neatlogic.framework.process.operationauth.core;
 import neatlogic.framework.util.I18nUtils;
 
 public enum OperationAuthHandlerType implements IOperationAuthHandlerType {
-	TASK("task", "common.itsm.processtask"),
-    STEP("step", "common.step"),
-    OMNIPOTENT("omnipotent", "enum.process.operationauthhandlertype.omnipotent"),
-    AUTOMATIC("automatic", "enum.process.operationauthhandlertype.automatic"),
-    TIMER("timer", "enum.process.operationauthhandlertype.timer");
+	TASK("task", "工单"),
+    STEP("step", "步骤"),
+    OMNIPOTENT("omnipotent", "普通组件"),
+    AUTOMATIC("automatic", "自动组件"),
+    TIMER("timer", "定时组件");
 
     private OperationAuthHandlerType(String value, String text) {
         this.value = value;

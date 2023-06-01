@@ -7,7 +7,7 @@ public class ProcessTaskNextStepOverOneException extends ProcessTaskRuntimeExcep
     private static final long serialVersionUID = -7909863133400893749L;
 
     public ProcessTaskNextStepOverOneException(Long processTaskId) {
-        super("exception.process.processtasknextstepoveroneexception", processTaskId);
+        super("工单：{0}的当前步骤的下一步骤存在多个", processTaskId);
     }
 
 }

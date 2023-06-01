@@ -27,6 +27,6 @@ public class ProcessTaskStepTaskUserCountIllegalException extends ProcessTaskRun
     private static final long serialVersionUID = 7140754332656371637L;
 
     public ProcessTaskStepTaskUserCountIllegalException(String name,Integer num) {
-        super("exception.process.processtasksteptaskusercountillegalexception", name, num);
+        super("当前 “{0}” 需选择{1}位处理人", name, num);
     }
 }

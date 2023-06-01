@@ -4,11 +4,11 @@ import neatlogic.framework.notify.core.INotifyTriggerType;
 import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepTaskNotifyTriggerType implements INotifyTriggerType {
-    CREATETASK("createtask", new I18n("enum.process.processtasksteptasknotifytriggertype.createtask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.createtask.b")),
-    EDITTASK("edittask", new I18n("enum.process.processtasksteptasknotifytriggertype.edittask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.edittask.b")),
-    DELETETASK("deletetask", new I18n("enum.process.processtasksteptasknotifytriggertype.deletetask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.deletetask.b")),
-    COMPLETETASK("completetask", new I18n("enum.process.processtasksteptasknotifytriggertype.completetask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.completetask.b")),
-    COMPLETEALLTASK("completealltask", new I18n("enum.process.processtasksteptasknotifytriggertype.completealltask.a"), new I18n("enum.process.processtasksteptasknotifytriggertype.completealltask.b"));
+    CREATETASK("createtask", new I18n("子任务创建"), new I18n("步骤处理人为当前步骤创建子任务时触发通知")),
+    EDITTASK("edittask", new I18n("子任务编辑"), new I18n("步骤处理人编辑子任务内容时触发通知")),
+    DELETETASK("deletetask", new I18n("子任务删除"), new I18n("步骤处理人删除子任务时触发通知")),
+    COMPLETETASK("completetask", new I18n("子任务完成"), new I18n("任务处理人完成子任务时触发通知")),
+    COMPLETEALLTASK("completealltask", new I18n("子任务满足步骤流转"), new I18n("所有子任务满足流转条件时触发通知"));
 
     private String trigger;
     private I18n text;

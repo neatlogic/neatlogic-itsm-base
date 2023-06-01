@@ -8,6 +8,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
  */
 public class WorkcenterCatalogIsUsedException extends ApiRuntimeException {
     public WorkcenterCatalogIsUsedException(Long id) {
-        super("exception.process.workcentercatalogisusedexception", id);
+        super("菜单id为“{0}”的菜单类型已被引用，无法删除", id);
     }
 }

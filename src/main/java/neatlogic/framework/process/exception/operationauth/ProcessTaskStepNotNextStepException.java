@@ -24,6 +24,6 @@ public class ProcessTaskStepNotNextStepException extends ProcessTaskPermissionDe
     private static final long serialVersionUID = 9216337410118158656L;
 
     public ProcessTaskStepNotNextStepException() {
-        super("exception.process.processtaskstepnotnextstepexception");
+        super("该步骤没有下一步骤");
     }
 }

@@ -4,13 +4,13 @@ import neatlogic.framework.util.I18nUtils;
 
 public enum ProcessTaskEvent {
 
-	ACTIVE("active", "common.active"),
-	SUCCEED("succeed", "common.success"),
-	FAILED("failed", "common.fail"),
-	REDO("redo", "common.redo"),
-	ABORT("abort", "enum.process.processtaskevent.abort"),
-	HANDLE("handle", "common.handle"),
-	TIMEOUT("timeout", "common.timeout");
+	ACTIVE("active", "激活"),
+	SUCCEED("succeed", "成功"),
+	FAILED("failed", "失败"),
+	REDO("redo", "重做"),
+	ABORT("abort", "终止"),
+	HANDLE("handle", "处理"),
+	TIMEOUT("timeout", "超时");
 	private String name;
 	private String text;
 

@@ -27,6 +27,6 @@ public class ChannelIsReferencedException extends ApiRuntimeException {
     private static final long serialVersionUID = 291889732332376765L;
 
     public ChannelIsReferencedException(String channelName){
-        super("exception.process.channelisreferencedexception", channelName);
+        super("服务：“{0}”已被引用", channelName);
     }
 }

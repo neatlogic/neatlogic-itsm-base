@@ -24,8 +24,8 @@ import neatlogic.framework.util.I18n;
 import java.util.List;
 
 public enum ProcessTaskStepTaskUserStatus implements IEnum {
-    SUCCEED("succeed", new I18n("common.completed"), "#25b865"),
-    PENDING("pending", new I18n("common.tobeprocessed"), "#8E949F")
+    SUCCEED("succeed", new I18n("已完成"), "#25b865"),
+    PENDING("pending", new I18n("待处理"), "#8E949F")
     ;
 
     private final String status;

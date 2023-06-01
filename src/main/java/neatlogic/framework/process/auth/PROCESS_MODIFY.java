@@ -9,12 +9,12 @@ public class PROCESS_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.processmodify.name";
+		return "流程管理权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.processmodify.introduction";
+		return "对流程进行添加、修改和删除";
 	}
 
 	@Override

@@ -24,6 +24,6 @@ public class ProcessTaskStepMajorUserException extends ProcessTaskPermissionDeni
     private static final long serialVersionUID = 9216337410118158658L;
 
     public ProcessTaskStepMajorUserException() {
-        super("exception.process.processtaskstepmajoruserexception");
+        super("您已经是步骤处理人");
     }
 }

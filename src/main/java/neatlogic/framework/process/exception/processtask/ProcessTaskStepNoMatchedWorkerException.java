@@ -20,6 +20,6 @@ public class ProcessTaskStepNoMatchedWorkerException extends ProcessTaskExceptio
     private static final long serialVersionUID = 4314481891500443153L;
 
     public ProcessTaskStepNoMatchedWorkerException() {
-        super("exception.process.ProcessTaskStepNoMatchedWorkerException");
+        super("没有匹配到处理人");
     }
 }

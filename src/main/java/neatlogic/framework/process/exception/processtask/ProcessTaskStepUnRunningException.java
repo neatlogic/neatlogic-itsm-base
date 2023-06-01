@@ -23,6 +23,6 @@ public class ProcessTaskStepUnRunningException extends ProcessTaskRuntimeExcepti
 	private static final long serialVersionUID = 1458252264390320510L;
 
 	public ProcessTaskStepUnRunningException() {
-		super("exception.process.processtaskstepunrunningexception");
+		super("当前步骤不是‘处理中’状态");
 	}
 }

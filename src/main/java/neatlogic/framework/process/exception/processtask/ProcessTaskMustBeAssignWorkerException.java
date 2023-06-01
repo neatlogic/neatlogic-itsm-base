@@ -23,6 +23,6 @@ public class ProcessTaskMustBeAssignWorkerException extends ProcessTaskRuntimeEx
     private static final long serialVersionUID = 1458252264390320599L;
 
     public ProcessTaskMustBeAssignWorkerException(String name) {
-        super("exception.process.processtaskmustbeassignworkerexception", name);
+        super("指派：{0}步骤处理人是必填", name);
     }
 }

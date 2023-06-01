@@ -26,10 +26,10 @@ import neatlogic.framework.util.I18n;
  **/
 public enum ProcessTaskStepTaskNotifyParam implements INotifyParam {
 
-    TASKCONFIGNAME("taskConfigName", new I18n("enum.process.processtasksteptasknotifyparam.taskconfigname"), ParamType.STRING),
-    TASKWORKER("taskWorker", new I18n("enum.process.processtasksteptasknotifyparam.taskworker"), ParamType.STRING),
-    TASKCONTENT("taskContent", new I18n("enum.process.processtasksteptasknotifyparam.taskcontent"), ParamType.STRING),
-    TASKUSERCONTENT("taskUserContent", new I18n("enum.process.processtasksteptasknotifyparam.taskusercontent"), ParamType.STRING),
+    TASKCONFIGNAME("taskConfigName", new I18n("任务名"), ParamType.STRING),
+    TASKWORKER("taskWorker", new I18n("任务处理人"), ParamType.STRING),
+    TASKCONTENT("taskContent", new I18n("任务内容"), ParamType.STRING),
+    TASKUSERCONTENT("taskUserContent", new I18n("任务用户内容"), ParamType.STRING),
     ;
 
     private final String value;

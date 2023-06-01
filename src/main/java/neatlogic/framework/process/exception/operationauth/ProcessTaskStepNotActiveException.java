@@ -24,6 +24,6 @@ public class ProcessTaskStepNotActiveException extends ProcessTaskPermissionDeni
     private static final long serialVersionUID = 9216337410118158647L;
 
     public ProcessTaskStepNotActiveException() {
-        super("exception.process.processtaskstepnotactiveexception");
+        super("步骤未激活");
     }
 }

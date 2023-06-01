@@ -24,6 +24,6 @@ public class ProcessTaskUnsubmittedException extends ProcessTaskPermissionDenied
     private static final long serialVersionUID = 9216337410118158626L;
 
     public ProcessTaskUnsubmittedException() {
-        super("exception.process.processtaskunsubmittedexception");
+        super("工单未提交");
     }
 }

@@ -23,6 +23,6 @@ public class ProcessTaskNotFoundSpecifiedStepException extends ProcessTaskRuntim
     private static final long serialVersionUID = 9216337410118158686L;
 
     public ProcessTaskNotFoundSpecifiedStepException(String title, String stepName) {
-        super("exception.process.processtasknotfoundspecifiedstepexception", title, stepName);
+        super("步骤：“{1}”不是工单：“{0}”的步骤", title, stepName);
     }
 }

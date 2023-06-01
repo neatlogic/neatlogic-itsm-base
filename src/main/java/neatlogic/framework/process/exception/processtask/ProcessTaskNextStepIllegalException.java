@@ -7,7 +7,7 @@ public class ProcessTaskNextStepIllegalException extends ProcessTaskRuntimeExcep
     private static final long serialVersionUID = -1358428490096490765L;
 
     public ProcessTaskNextStepIllegalException(String processTaskStepName, String processTaskNextStepName) {
-        super("exception.process.processtasknextstepillegalexception", processTaskStepName, processTaskNextStepName);
+        super("{1}不是步骤：{0}的下一步骤", processTaskStepName, processTaskNextStepName);
     }
 
     public ProcessTaskNextStepIllegalException(Long processTaskId) {

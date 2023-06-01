@@ -23,6 +23,6 @@ public class ChannelTypeRelationHasReferenceException extends ApiRuntimeExceptio
     private static final long serialVersionUID = 2411827472270844447L;
 
     public ChannelTypeRelationHasReferenceException(String name) {
-        super("exception.process.channeltyperelationhasreferenceexception", name);
+        super("服务类型关系“{0}”已被引用，不能修改", name);
     }
 }

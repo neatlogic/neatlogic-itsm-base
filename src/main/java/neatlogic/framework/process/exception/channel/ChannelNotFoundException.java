@@ -23,6 +23,6 @@ public class ChannelNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = -5334268232696017057L;
 
     public ChannelNotFoundException(String channelUuid) {
-        super("exception.process.channelnotfoundexception", channelUuid);
+        super("服务：“{0}”不存在", channelUuid);
     }
 }

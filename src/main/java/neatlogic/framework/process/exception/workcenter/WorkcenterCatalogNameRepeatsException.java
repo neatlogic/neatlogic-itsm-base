@@ -8,6 +8,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
  */
 public class WorkcenterCatalogNameRepeatsException extends ApiRuntimeException {
     public WorkcenterCatalogNameRepeatsException(String name) {
-        super("exception.process.workcentercatalognamerepeatsexception", name);
+        super("工单中心菜单类型名称“{0}”重复", name);
     }
 }

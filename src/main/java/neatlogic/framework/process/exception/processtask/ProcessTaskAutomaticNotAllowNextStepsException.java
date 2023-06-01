@@ -7,7 +7,7 @@ public class ProcessTaskAutomaticNotAllowNextStepsException extends ProcessTaskR
 	private static final long serialVersionUID = -7145916738483615561L;
 
 	public ProcessTaskAutomaticNotAllowNextStepsException(){
-		super("exception.process.processtaskautomaticnotallownextstepsexception");
+		super("自动化处理步骤只允许存在一个流转/回退步骤");
 	}
 	
 }

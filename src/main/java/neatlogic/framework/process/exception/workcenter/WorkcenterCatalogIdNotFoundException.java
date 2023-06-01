@@ -8,6 +8,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
  */
 public class WorkcenterCatalogIdNotFoundException extends ApiRuntimeException {
     public WorkcenterCatalogIdNotFoundException(Long id) {
-        super("exception.process.workcentercatalogidnotfoundexception", id);
+        super("工单中心菜单类型id“{0}”不存在", id);
     }
 }

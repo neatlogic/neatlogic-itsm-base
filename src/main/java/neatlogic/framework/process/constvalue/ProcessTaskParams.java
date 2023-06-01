@@ -3,21 +3,21 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskParams {
-    TASKID("id", new I18n("common.workorderid")),
-    STEPID("stepid", new I18n("common.stepid")),
-    TITLE("title", new I18n("common.title")),
-    CHANNELTYPE("channeltype", new I18n("common.channeltype")),
-    CONTENT("content", new I18n("common.contend")),
-    STARTTIME("starttime", new I18n("common.starttime")),
-    OWNER("owner", new I18n("common.owner")),
-    PRIORITY("priority", new I18n("common.priority")),
-    OWNERCOMPANY("ownercompany", new I18n("common.ownercompany")),
-    OWNERDEPARTMENT("ownerdepartment", new I18n("common.reporterdepartment")),
-    OWNERROLE("ownerrole", new I18n("common.reporterrole")),
-    OWNERLEVEL("ownerlevel", new I18n("common.reporterlevel")),
-    STEPTASK("steptask", new I18n("enum.process.processtaskparams.steptask.a")),
-    ACTIONTRIGGERUSER("actiontriggeruser", new I18n("enum.process.processtaskparams.actiontriggeruser")),
-    STEPTASKID("steptaskid", new I18n("enum.process.processtaskparams.steptaskid"));
+    TASKID("id", new I18n("工单ID")),
+    STEPID("stepid", new I18n("步骤ID")),
+    TITLE("title", new I18n("标题")),
+    CHANNELTYPE("channeltype", new I18n("服务类型")),
+    CONTENT("content", new I18n("上报内容")),
+    STARTTIME("starttime", new I18n("开始时间")),
+    OWNER("owner", new I18n("上报人")),
+    PRIORITY("priority", new I18n("优先级")),
+    OWNERCOMPANY("ownercompany", new I18n("上报人公司")),
+    OWNERDEPARTMENT("ownerdepartment", new I18n("上报人部门")),
+    OWNERROLE("ownerrole", new I18n("上报人角色")),
+    OWNERLEVEL("ownerlevel", new I18n("上报人级别")),
+    STEPTASK("steptask", new I18n("子任务")),
+    ACTIONTRIGGERUSER("actiontriggeruser", new I18n("动作触发人")),
+    STEPTASKID("steptaskid", new I18n("子任务ID"));
 
     private String value;
     private I18n text;

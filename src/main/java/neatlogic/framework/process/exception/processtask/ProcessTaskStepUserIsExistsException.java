@@ -6,6 +6,6 @@ public class ProcessTaskStepUserIsExistsException extends ProcessTaskRuntimeExce
 	private static final long serialVersionUID = 7077952789160608694L;
 
 	public ProcessTaskStepUserIsExistsException(String userName) {
-		super("exception.process.processtaskstepuserisexistsexception", userName);
+		super("处理人{0}已存在", userName);
 	}
 }

@@ -7,6 +7,6 @@ public class ScoreTemplateHasRefProcessException extends ProcessTaskRuntimeExcep
 	private static final long serialVersionUID = -6956721890886390194L;
 
 	public ScoreTemplateHasRefProcessException(String name) {
-		super("exception.process.scoretemplatehasrefprocessexception", name);
+		super("评分模版 :{0}已关联流程，不可删除或禁用", name);
 	}
 }

@@ -9,12 +9,12 @@ public class CHANNELTYPE_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.channeltypemodify.name";
+		return "服务类型管理权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.channeltypemodify.introduction";
+		return "对服务类型添加、修改和删除";
 	}
 
 	@Override

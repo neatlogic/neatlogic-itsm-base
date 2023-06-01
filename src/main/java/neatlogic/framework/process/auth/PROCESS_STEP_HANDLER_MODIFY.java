@@ -9,12 +9,12 @@ public class PROCESS_STEP_HANDLER_MODIFY extends AuthBase{
 
     @Override
     public String getAuthDisplayName() {
-        return "auth.process.processstephandlermodify.name";
+        return "节点管理权限";
     }
 
     @Override
     public String getAuthIntroduction() {
-        return "auth.process.processstephandlermodify.introduction";
+        return "对节点管理中的组件配置进行修改";
     }
 
     @Override

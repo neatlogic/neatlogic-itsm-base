@@ -9,12 +9,12 @@ public class SCORE_TEMPLATE_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.scoretemplatemodify.name";
+		return "评分模版管理权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.scoretemplatemodify.introduction";
+		return "对评分模版进行添加、修改和删除";
 	}
 
 	@Override

@@ -24,6 +24,6 @@ public class ProcessTaskStepNoNeedReapprovalStepException extends ProcessTaskPer
     private static final long serialVersionUID = 9216337410118158660L;
 
     public ProcessTaskStepNoNeedReapprovalStepException() {
-        super("exception.process.processtaskstepnoneedreapprovalstepexception");
+        super("没有需要重审的步骤");
     }
 }

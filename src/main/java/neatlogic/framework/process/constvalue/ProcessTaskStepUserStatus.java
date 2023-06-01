@@ -3,7 +3,7 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepUserStatus {
-    DOING("doing", new I18n("common.doing")), DONE("done", new I18n("enum.process.processtaskstepuserstatus.done"));
+    DOING("doing", new I18n("处理中")), DONE("done", new I18n("处理完毕"));
 
     private String status;
     private I18n text;

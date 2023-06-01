@@ -7,6 +7,6 @@ public class ProcessStepUtilHandlerNotFoundException extends ProcessTaskRuntimeE
 	private static final long serialVersionUID = -5334268232696017057L;
 
 	public ProcessStepUtilHandlerNotFoundException(String handler) {
-		super("exception.process.processsteputilhandlernotfoundexception", handler);
+		super("找不到类型为：{0}的流程工具组件", handler);
 	}
 }

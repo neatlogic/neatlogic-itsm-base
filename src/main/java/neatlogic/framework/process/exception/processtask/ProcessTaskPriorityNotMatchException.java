@@ -23,7 +23,7 @@ public class ProcessTaskPriorityNotMatchException extends ApiRuntimeException {
 	private static final long serialVersionUID = -5766752850987530449L;
 
 	public ProcessTaskPriorityNotMatchException() {
-		super("exception.process.processtaskprioritynotmatchexception");
+		super("工单优先级与当前服务优先级不匹配");
 	}
 
 }

@@ -25,13 +25,13 @@ public class ProcessTaskSlaTimeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        SLA_ID("sla_id",  new I18n("enum.process.processtaskslatimesqltable.fieldenum.sla_id")),
-        EXPIRE_TIME("expire_time", new I18n("enum.process.fieldenum.expire_time")),
-        REALEXPIRE_TIME("realexpire_time", new I18n("enum.process.fieldenum.realexpire_time")),
-        TIME_LEFT("time_left", new I18n("common.remainingtime")),
-        STATUS("status", new I18n("common.status")),
-        REALTIME_LEFT("realtime_left", new I18n("enum.process.fieldenum.realtime_left")),
-        CALCULATION_TIME("calculation_time", new I18n("enum.process.fieldenum.calculation_time"));
+        SLA_ID("sla_id",  new I18n("sla ID")),
+        EXPIRE_TIME("expire_time", new I18n("超时时间点")),
+        REALEXPIRE_TIME("realexpire_time", new I18n("自然超时时间点")),
+        TIME_LEFT("time_left", new I18n("剩余时间")),
+        STATUS("status", new I18n("状态")),
+        REALTIME_LEFT("realtime_left", new I18n("自然剩余时间")),
+        CALCULATION_TIME("calculation_time", new I18n("上次耗时计算时间点"));
         private final String name;
         private final I18n text;
 

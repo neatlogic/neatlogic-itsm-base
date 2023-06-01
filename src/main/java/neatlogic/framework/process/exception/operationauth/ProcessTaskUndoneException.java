@@ -24,6 +24,6 @@ public class ProcessTaskUndoneException extends ProcessTaskPermissionDeniedExcep
     private static final long serialVersionUID = 9216337410118158638L;
 
     public ProcessTaskUndoneException() {
-        super("exception.process.processtaskundoneexception");
+        super("工单未完成");
     }
 }

@@ -9,12 +9,12 @@ public class PROCESSTASK_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.processtaskmodify.name";
+		return "工单管理权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.processtaskmodify.introduction";
+		return "对工单隐藏/显示和删除";
 	}
 
 	@Override

@@ -24,12 +24,12 @@ import neatlogic.framework.util.I18n;
 import java.util.List;
 
 public enum ProcessTaskStepStatus implements IEnum {
-    RUNNING("running", new I18n("common.doing"), "#2d84fb"),
-    SUCCEED("succeed", new I18n("common.completed"), "#25b865"),
-    PENDING("pending", new I18n("common.tobeprocessed"), "#8E949F"),
-    FAILED("failed", new I18n("common.exception"), "#f71010"),
-    HANG("hang", new I18n("common.suspended"), "#ffba5a"),
-    DRAFT("draft", new I18n("common.draftdesc"), "#8E949F");
+    RUNNING("running", new I18n("处理中"), "#2d84fb"),
+    SUCCEED("succeed", new I18n("已完成"), "#25b865"),
+    PENDING("pending", new I18n("待处理"), "#8E949F"),
+    FAILED("failed", new I18n("异常"), "#f71010"),
+    HANG("hang", new I18n("已挂起"), "#ffba5a"),
+    DRAFT("draft", new I18n("未提交"), "#8E949F");
 
     private final String status;
     private final I18n text;

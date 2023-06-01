@@ -23,6 +23,6 @@ public class ChannelTypeRelationNotFoundException extends ApiRuntimeException {
     private static final long serialVersionUID = 2411927472270844447L;
 
     public ChannelTypeRelationNotFoundException(Long id) {
-        super("exception.process.channeltyperelationnotfoundexception", id);
+        super("服务类型关系“{0}”不存在", id);
     }
 }

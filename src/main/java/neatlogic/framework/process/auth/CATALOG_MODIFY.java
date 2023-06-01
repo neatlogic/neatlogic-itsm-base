@@ -9,12 +9,12 @@ public class CATALOG_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.catalogmodify.name";
+		return "服务目录管理权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.catalogmodify.introduction";
+		return "对服务目录添加、修改和删除";
 	}
 
 	@Override

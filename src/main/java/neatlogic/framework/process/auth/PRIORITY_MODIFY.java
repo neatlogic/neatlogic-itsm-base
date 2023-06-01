@@ -9,12 +9,12 @@ public class PRIORITY_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.prioritymodify.name";
+		return "优先级管理权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.prioritymodify.introduction";
+		return "对优先级添加、修改和删除";
 	}
 
 	@Override

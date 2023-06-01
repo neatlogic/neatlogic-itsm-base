@@ -24,6 +24,6 @@ public class ProcessTaskNoProcessableStepsException extends ProcessTaskPermissio
     private static final long serialVersionUID = 9216337410118158644L;
 
     public ProcessTaskNoProcessableStepsException() {
-        super("exception.process.processtasknoprocessablestepsexception");
+        super("工单里没有您可以处理的步骤");
     }
 }

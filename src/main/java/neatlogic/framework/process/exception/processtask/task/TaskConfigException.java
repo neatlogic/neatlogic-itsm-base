@@ -27,6 +27,6 @@ public class TaskConfigException extends ProcessTaskRuntimeException {
     private static final long serialVersionUID = -7334568530564862545L;
 
     public TaskConfigException(String processStepName) {
-        super("exception.process.taskconfigexception", processStepName);
+        super("流程步骤: “{0}” 任务Config异常,请联系管理员", processStepName);
     }
 }

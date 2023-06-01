@@ -24,6 +24,6 @@ public class ProcessTaskStepFailedException extends ProcessTaskPermissionDeniedE
     private static final long serialVersionUID = 9216337410118158650L;
 
     public ProcessTaskStepFailedException() {
-        super("exception.process.processtaskstepfailedexception");
+        super("步骤异常");
     }
 }

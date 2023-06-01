@@ -5,10 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.util.I18nUtils;
 
 public enum FailPolicy {
-    HANG("hang", "common.manualprocessing"),
-    KEEP_ON("keepon", "common.flowforward"),
-    BACK("back", "common.steprollback"),
-    CANCEL("cancel", "common.cancelworkorder"),
+    HANG("hang", "人工处理"),
+    KEEP_ON("keepon", "向后流转"),
+    BACK("back", "步骤回退"),
+    CANCEL("cancel", "取消工单"),
     ;
 
     private String value;

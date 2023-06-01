@@ -26,6 +26,6 @@ public class ProcessTaskScoreNotEnabledException extends ProcessTaskPermissionDe
     private static final long serialVersionUID = 9216337410118158640L;
 
     public ProcessTaskScoreNotEnabledException() {
-        super("exception.process.processtaskscorenotenabledexception");
+        super("工单未启用评分功能");
     }
 }

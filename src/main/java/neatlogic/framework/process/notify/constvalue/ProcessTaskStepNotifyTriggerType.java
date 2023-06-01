@@ -5,18 +5,18 @@ import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
 
-    ACTIVE("active", new I18n("enum.process.processtaskstepnotifytriggertype.active.a"), new I18n("enum.process.processtaskstepnotifytriggertype.active.b")),
-    ASSIGNEXCEPTION("assignexception", new I18n("enum.process.processtaskstepnotifytriggertype.assignexception.a"), new I18n("enum.process.processtaskstepnotifytriggertype.assignexception.b")),
-    START("start", new I18n("enum.process.processtaskstepnotifytriggertype.start.a"), new I18n("enum.process.processtaskstepnotifytriggertype.start.b")),
-    TRANSFER("transfer", new I18n("enum.process.processtaskstepnotifytriggertype.transfer.a"), new I18n("enum.process.processtaskstepnotifytriggertype.transfer.b")),
-    SUCCEED("succeed", new I18n("enum.process.processtaskstepnotifytriggertype.succeed.a"), new I18n("enum.process.processtaskstepnotifytriggertype.succeed.b")),
-    BACK("back", new I18n("common.steprollback"), new I18n("enum.process.processtaskstepnotifytriggertype.back.b")),
-    RETREAT("retreat", new I18n("enum.process.processtaskstepnotifytriggertype.retreat.a"), new I18n("enum.process.processtaskstepnotifytriggertype.retreat.b")),
-    PAUSE("pause", new I18n("enum.process.processtaskstepnotifytriggertype.pause.a"), new I18n("enum.process.processtaskstepnotifytriggertype.pause.b")),
-    RECOVER("recover", new I18n("enum.process.processtaskstepnotifytriggertype.recover.a"), new I18n("enum.process.processtaskstepnotifytriggertype.recover.b")),
-    FAILED("failed", new I18n("enum.process.processtaskstepnotifytriggertype.failed.a"), new I18n("enum.process.processtaskstepnotifytriggertype.failed.b")),
-    URGE("urge", new I18n("enum.process.processtaskstepnotifytriggertype.urge.a"), new I18n("common.urgetrigger")),
-	COMMENT("comment", new I18n("common.stepreply"),new I18n("enum.process.processtaskstepnotifytriggertype.comment.b")),
+    ACTIVE("active", new I18n("步骤激活"), new I18n("流转到某个步骤，该步骤被自动激活时触发通知")),
+    ASSIGNEXCEPTION("assignexception", new I18n("分配异常"), new I18n("步骤激活时分配处理人，处理人不存在或规则无法匹配到有效处理人时触发通知")),
+    START("start", new I18n("步骤开始"), new I18n("步骤自动开始或者处理人手动开始处理时触发通知")),
+    TRANSFER("transfer", new I18n("步骤转交"), new I18n("有步骤转交权限的用户将当前步骤处理权限转交给其他用户时触发通知")),
+    SUCCEED("succeed", new I18n("步骤成功"), new I18n("步骤完成时触发通知")),
+    BACK("back", new I18n("步骤回退"), new I18n("工单完成前，由处理人手动回退工单至前面的某个步骤时触发通知")),
+    RETREAT("retreat", new I18n("步骤撤回"), new I18n("工单完成前，由上一步骤有权限的用户手动撤回工单时触发通知，重新处理上一步骤")),
+    PAUSE("pause", new I18n("步骤暂停"), new I18n("有权限的用户暂停当前步骤时触发通知")),
+    RECOVER("recover", new I18n("步骤恢复"), new I18n("有权限的用户恢复当前步骤时触发通知")),
+    FAILED("failed", new I18n("步骤失败"), new I18n("当前步骤出现分配异常、流转异常、系统异常导致步骤失败时触发通知")),
+    URGE("urge", new I18n("步骤催办"), new I18n("工单完成前，用户对工单进行催办时触发通知")),
+	COMMENT("comment", new I18n("步骤回复"),new I18n("用户对步骤进行回复时触发通知")),
 	;
 
     private String trigger;

@@ -25,36 +25,36 @@ import neatlogic.framework.util.I18nUtils;
  * @since 2021/10/15 17:12
  **/
 public enum ProcessTaskNotifyParam implements INotifyParam {
-    ID("id", "common.workorderid", ParamType.NUMBER),
-    SERIALNUMBER("serialNumber", "common.tasknumber", ParamType.STRING),
-    TITLE("title", "common.title", ParamType.STRING),
-    PRIORITYNAME("priorityName", "common.priority", ParamType.STRING),
-    CHANNELNAME("channelName", "enum.process.processtasknotifyparam.channelname", ParamType.STRING),
-    CHANNELPATH("channelPath", "enum.process.processtasknotifyparam.channelpath", ParamType.STRING),
-    CHANNELTYPENAME("channelTypeName", "common.channeltype", ParamType.STRING),
-    CONTENT("content", "common.contend", ParamType.STRING),
-    STARTTIME("startTime", "common.starttime", ParamType.DATE),
-    STARTDATE("startDate", "enum.process.processtasknotifyparam.startdate", ParamType.DATE),
-    ENDTIME("endTime", "common.endtime", ParamType.DATE),
-    OWNERNAME("ownerName", "common.owner", ParamType.STRING),
-    DEPARTMENTANDOWNERNAME("departmentAndOwnerName", "enum.process.processtasknotifyparam.departmentandownername", ParamType.STRING),
-    REPORTERNAME("reporterName", "common.reporter", ParamType.STRING),
-    OWNERCOMPANYLIST("ownerCompanyList", "enum.process.processtasknotifyparam.ownercompanylist", ParamType.ARRAY),
-    STATUSTEXT("statusText", "common.itsm.processtaskstatus", ParamType.STRING),
-    PROCESS_TASK_SCORE("processTaskScore", "enum.process.processtasknotifyparam.process_task_score.a", ParamType.ARRAY, "<#if DATA.processTaskScore?? && (DATA.processTaskScore?size > 0)>\n" +
+    ID("id", "工单ID", ParamType.NUMBER),
+    SERIALNUMBER("serialNumber", "工单号", ParamType.STRING),
+    TITLE("title", "标题", ParamType.STRING),
+    PRIORITYNAME("priorityName", "优先级", ParamType.STRING),
+    CHANNELNAME("channelName", "服务名称", ParamType.STRING),
+    CHANNELPATH("channelPath", "服务路径", ParamType.STRING),
+    CHANNELTYPENAME("channelTypeName", "服务类型", ParamType.STRING),
+    CONTENT("content", "上报内容", ParamType.STRING),
+    STARTTIME("startTime", "开始时间", ParamType.DATE),
+    STARTDATE("startDate", "开始日期", ParamType.DATE),
+    ENDTIME("endTime", "结束时间", ParamType.DATE),
+    OWNERNAME("ownerName", "上报人", ParamType.STRING),
+    DEPARTMENTANDOWNERNAME("departmentAndOwnerName", "部门/上报人", ParamType.STRING),
+    REPORTERNAME("reporterName", "代报人", ParamType.STRING),
+    OWNERCOMPANYLIST("ownerCompanyList", "上报人公司列表", ParamType.ARRAY),
+    STATUSTEXT("statusText", "工单状态", ParamType.STRING),
+    PROCESS_TASK_SCORE("processTaskScore", "工单评分", ParamType.ARRAY, "<#if DATA.processTaskScore?? && (DATA.processTaskScore?size > 0)>\n" +
             "\t<#list DATA.processTaskScore as item>\n" +
             "\t\t${item_index}-${item.dimensionName}-${item.score}\n" +
             "\t\t<#if item_has_next>,</#if>\n" +
             "\t</#list>\n" +
             "</#if>"),
-    PROCESS_TASK_SCORE_CONTENT("processTaskScoreContent", "enum.process.processtasknotifyparam.process_task_score_content", ParamType.STRING),
-    PROCESS_TASK_ABORT_CONTENT("processTaskAbortContent", "enum.process.processtasknotifyparam.process_task_abort_content", ParamType.STRING),
-    PROCESS_TASK_RECOVER_CONTENT("processTaskRecoverContent", "enum.process.processtasknotifyparam.process_task_recover_content", ParamType.STRING),
-    PROCESS_TASK_REDO_CONTENT("processTaskRedoContent", "enum.process.processtasknotifyparam.process_task_redo_content", ParamType.STRING),
-    PROCESS_TASK_URGE_USER("processTaskUrgeUser", "enum.process.processtasknotifyparam.process_task_urge_user", ParamType.STRING),
-    PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "enum.process.processtasknotifyparam.process_task_urge_count", ParamType.NUMBER),
-    APPROVALCOMMENTLIST("approvalCommentList", "enum.process.processtasknotifyparam.approvalcommentlist", ParamType.ARRAY),
-    FORM_TABLE("formTable", "common.form", ParamType.STRING, "<#if DATA.formTable??>\n" +
+    PROCESS_TASK_SCORE_CONTENT("processTaskScoreContent", "工单评分内容", ParamType.STRING),
+    PROCESS_TASK_ABORT_CONTENT("processTaskAbortContent", "工单取消原因", ParamType.STRING),
+    PROCESS_TASK_RECOVER_CONTENT("processTaskRecoverContent", "工单恢复原因", ParamType.STRING),
+    PROCESS_TASK_REDO_CONTENT("processTaskRedoContent", "工单重新打开原因", ParamType.STRING),
+    PROCESS_TASK_URGE_USER("processTaskUrgeUser", "工单催办用户", ParamType.STRING),
+    PROCESS_TASK_URGE_COUNT("processTaskUrgeCount", "工单催办次数", ParamType.NUMBER),
+    APPROVALCOMMENTLIST("approvalCommentList", "审批意见", ParamType.ARRAY),
+    FORM_TABLE("formTable", "表单", ParamType.STRING, "<#if DATA.formTable??>\n" +
             "\t${DATA.formTable()}\n" +
             "</#if>"),
     ;

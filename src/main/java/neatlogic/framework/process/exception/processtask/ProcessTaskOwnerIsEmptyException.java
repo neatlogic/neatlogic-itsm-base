@@ -7,6 +7,6 @@ public class ProcessTaskOwnerIsEmptyException extends ProcessTaskRuntimeExceptio
 	private static final long serialVersionUID = 186122774455812447L;
 
 	public ProcessTaskOwnerIsEmptyException() {
-		super("exception.process.processtaskownerisemptyexception");
+		super("工单请求人不能为空");
 	}
 }

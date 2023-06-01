@@ -10,18 +10,18 @@ import neatlogic.framework.util.I18nUtils;
  * @Date: 2021/1/25 18:18
  **/
 public enum ProcessSqlTypeEnum {
-    DISTINCT_ID("distinctId", "enum.process.processsqltypeenum.distinct_id"),
-    FIELD("field", "enum.process.processsqltypeenum.field"),
-    TOTAL_COUNT("totalCount", "enum.process.processsqltypeenum.total_count"),
-    LIMIT_COUNT("limitCount", "enum.process.processsqltypeenum.limit_count"),
-    FULL_TEXT("fullText", "enum.process.processsqltypeenum.full_text"),
-    GROUP_COUNT("groupCount", "enum.process.processsqltypeenum.group_count"),//目前暂用于dashboard
-    SUB_GROUP_COUNT("subGroupCount", "enum.process.processsqltypeenum.sub_group_count"),//目前暂用于dashboard
-    GROUP_SUM("groupSum", "enum.process.processsqltypeenum.group_sum"),
-    GROUP_AVG_COST_TIME("group_avg_cost_time","enum.process.processsqltypeenum.group_avg_cost_time"),
-    GROUP_AVG_RESPONSE_COST_TIME("group_avg_response_cost_time","common.averageresponsetime"),
-    GROUP_RESPONSE_PUNCTUALITY("group_response_punctuality","common.responsepunctualityrate"),
-    GROUP_HANDLE_PUNCTUALITY("group_handle_punctuality","common.processingpunctualityrate")
+    DISTINCT_ID("distinctId", "去重工单ID"),
+    FIELD("field", "选择字段"),
+    TOTAL_COUNT("totalCount", "总个数"),
+    LIMIT_COUNT("limitCount", "部分个数"),
+    FULL_TEXT("fullText", "全文检索"),
+    GROUP_COUNT("groupCount", "分组计数"),//目前暂用于dashboard
+    SUB_GROUP_COUNT("subGroupCount", "二级分组计数"),//目前暂用于dashboard
+    GROUP_SUM("groupSum", "分组累积总数"),
+    GROUP_AVG_COST_TIME("group_avg_cost_time","平均处理耗时"),
+    GROUP_AVG_RESPONSE_COST_TIME("group_avg_response_cost_time","平均响应耗时"),
+    GROUP_RESPONSE_PUNCTUALITY("group_response_punctuality","响应准时率"),
+    GROUP_HANDLE_PUNCTUALITY("group_handle_punctuality","处理准时率")
     ;//目前暂用于dashboard
     private final String name;
     private final String text;

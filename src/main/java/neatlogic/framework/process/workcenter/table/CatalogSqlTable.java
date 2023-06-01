@@ -27,8 +27,8 @@ public class CatalogSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("common.cataloguuid"), "catalogUuid"),
-        NAME("name", new I18n("enum.process.fieldenum.name"), "catalogName");
+        UUID("uuid", new I18n("服务目录UUID"), "catalogUuid"),
+        NAME("name", new I18n("服务目录名"), "catalogName");
         private final String name;
         private final I18n text;
         private final String proName;

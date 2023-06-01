@@ -9,12 +9,12 @@ public class WORKCENTER_NEW_TYPE extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.workcenternewtype.name";
+		return "工单中心-另存为新分类权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.workcenternewtype.introduction";
+		return "工单中心开放另存为新分类。注意：通过该方式保存的新分类将不受固化条件限制，收回权限则通过该方式保存的分类都将隐藏";
 	}
 
 	@Override

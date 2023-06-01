@@ -7,6 +7,6 @@ public class ProcessTaskSerialNumberPolicyHandlerNotFoundException extends ApiRu
     private static final long serialVersionUID = -62442577594790614L;
 
     public ProcessTaskSerialNumberPolicyHandlerNotFoundException(String handler) {
-        super("exception.process.processtaskserialnumberpolicyhandlernotfoundexception", handler);
+        super("工单号生成策略：“{0}”不存在", handler);
     }
 }

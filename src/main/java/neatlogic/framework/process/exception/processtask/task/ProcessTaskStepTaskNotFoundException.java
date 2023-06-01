@@ -27,10 +27,10 @@ public class ProcessTaskStepTaskNotFoundException extends ProcessTaskRuntimeExce
     private static final long serialVersionUID = -7334568530564862545L;
 
     public ProcessTaskStepTaskNotFoundException(String name) {
-        super("exception.process.processtasksteptasknotfoundexception", name);
+        super("流程步骤任务: “{0}” 不存在", name);
     }
 
     public ProcessTaskStepTaskNotFoundException(Long id) {
-        super("exception.process.processtasksteptasknotfoundexception", id);
+        super("流程步骤任务: “{0}” 不存在", id);
     }
 }

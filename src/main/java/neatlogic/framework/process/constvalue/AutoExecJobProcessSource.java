@@ -20,7 +20,7 @@ import neatlogic.framework.autoexec.source.IAutoexecJobSource;
 import neatlogic.framework.util.I18nUtils;
 
 public enum AutoExecJobProcessSource implements IAutoexecJobSource {
-    ITSM("common.itservice", "itsm");
+    ITSM("IT服务", "itsm");
     private final String text;
     private final String value;
 

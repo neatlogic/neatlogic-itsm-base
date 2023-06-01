@@ -5,10 +5,10 @@ import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepRemindType implements IProcessTaskStepRemindType {
 
-    BACK("back", new I18n("common.backtips"), new I18n("enum.process.processtaskstepremindtype.back.b")),
-    REDO("redo", new I18n("common.backtips"), new I18n("enum.process.processtaskstepremindtype.redo.b")),
-    TRANSFER("transfer", new I18n("enum.process.processtaskstepremindtype.transfer.a"), new I18n("enum.process.processtaskstepremindtype.transfer.a")),
-    ERROR("error", new I18n("enum.process.processtaskstepremindtype.error.a"), new I18n("enum.process.processtaskstepremindtype.error.a"));
+    BACK("back", new I18n("回退提醒"), new I18n("回退了【processTaskStepName】，原因")),
+    REDO("redo", new I18n("回退提醒"), new I18n("回退了工单，原因")),
+    TRANSFER("transfer", new I18n("转交提醒"), new I18n("转交提醒")),
+    ERROR("error", new I18n("异常提醒"), new I18n("异常提醒"));
     private String value;
     private I18n text;
     private I18n title;

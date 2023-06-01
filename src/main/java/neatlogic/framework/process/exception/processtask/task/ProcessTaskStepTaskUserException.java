@@ -27,6 +27,6 @@ public class ProcessTaskStepTaskUserException extends ProcessTaskRuntimeExceptio
     private static final long serialVersionUID = -7858629768016359202L;
 
     public ProcessTaskStepTaskUserException(Long stepTaskUserId) {
-        super("exception.process.processtasksteptaskuserexception", stepTaskUserId);
+        super("回复的stepUserId: {0} 的用户得和 当前登录用户一致", stepTaskUserId);
     }
 }

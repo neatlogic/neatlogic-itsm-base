@@ -7,6 +7,6 @@ public class WorkcenterParamException extends ApiRuntimeException {
 	private static final long serialVersionUID = 834889107197646727L;
 
 	public WorkcenterParamException(String name) {
-		super("exception.paramexception", name);
+		super("过滤条件参数 “{0}”非法", name);
 	}
 }

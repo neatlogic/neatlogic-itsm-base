@@ -7,7 +7,7 @@ public class ProcessTaskStepUserUnAssignException extends ProcessTaskRuntimeExce
     private static final long serialVersionUID = 7869255738264215901L;
 
     public ProcessTaskStepUserUnAssignException() {
-        super("exception.process.processtaskstepuserunassignexception");
+        super("流程步骤缺少处理人，请指定处理人");
     }
 
 }

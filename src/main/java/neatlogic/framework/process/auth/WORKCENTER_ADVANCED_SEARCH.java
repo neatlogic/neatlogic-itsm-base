@@ -9,12 +9,12 @@ public class WORKCENTER_ADVANCED_SEARCH extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "auth.process.workcenteradvancedsearch.name";
+		return "工单中心-高级搜索权限";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "auth.process.workcenteradvancedsearch.introduction";
+		return "工单中心开放高级搜索";
 	}
 
 	@Override

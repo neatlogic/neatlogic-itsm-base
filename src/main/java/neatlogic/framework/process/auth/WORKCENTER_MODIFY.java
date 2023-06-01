@@ -9,12 +9,12 @@ public class WORKCENTER_MODIFY extends AuthBase {
 
     @Override
     public String getAuthDisplayName() {
-        return "auth.process.workcentermodify.name";
+        return "工单中心管理权限";
     }
 
     @Override
     public String getAuthIntroduction() {
-        return "auth.process.workcentermodify.introduction";
+        return "对工单中心系统类型添加、修改、授权和删除，对出厂类型授权";
     }
 
     @Override

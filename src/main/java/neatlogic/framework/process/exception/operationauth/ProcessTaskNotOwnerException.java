@@ -24,6 +24,6 @@ public class ProcessTaskNotOwnerException extends ProcessTaskPermissionDeniedExc
     private static final long serialVersionUID = 9216337410118158630L;
 
     public ProcessTaskNotOwnerException() {
-        super("exception.process.processtasknotownerexception");
+        super("您不是工单上报人或代报人");
     }
 }
