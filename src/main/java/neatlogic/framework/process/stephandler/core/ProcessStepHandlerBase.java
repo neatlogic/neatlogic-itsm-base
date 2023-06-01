@@ -890,6 +890,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
 
                 if (this.getMode().equals(ProcessStepMode.MT)) {
+                    myBeforeComplete(currentProcessTaskStepVo);
                     if (operationType == ProcessTaskOperationType.STEP_COMPLETE) {
                         String priorityUuid = paramObj.getString("priorityUuid");
                         if (StringUtils.isNotBlank(priorityUuid)) {
@@ -1015,6 +1016,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     }
 
     protected abstract int myComplete(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
+
+    protected int myBeforeComplete(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException {
+        return 0;
+    }
 
     protected abstract int myCompleteAudit(ProcessTaskStepVo currentProcessTaskStepVo);
 
