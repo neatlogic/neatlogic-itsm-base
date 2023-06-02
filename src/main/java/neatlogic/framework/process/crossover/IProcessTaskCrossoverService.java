@@ -18,6 +18,7 @@ package neatlogic.framework.process.crossover;
 
 import neatlogic.framework.crossover.ICrossoverService;
 import neatlogic.framework.dto.AuthenticationInfoVo;
+import neatlogic.framework.form.dto.FormAttributeVo;
 import neatlogic.framework.process.constvalue.ProcessTaskStatus;
 import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
 import neatlogic.framework.process.dto.AssignableWorkerStepVo;
@@ -118,5 +119,12 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @return
      */
     ProcessCommentTemplateVo getProcessStepCommentTemplate(String processStepUuid, AuthenticationInfoVo authenticationInfoVo);
+
+    /**
+     * 根据工单id获取工单绑定的表单信息
+     * @param processTaskId 工单ID
+     * @return 表单属性列表
+     */
+    List<FormAttributeVo> getFormAttributeListByProcessTaskId(Long processTaskId);
 }
 
