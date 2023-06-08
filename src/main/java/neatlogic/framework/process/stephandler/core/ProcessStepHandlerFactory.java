@@ -23,7 +23,7 @@ import neatlogic.framework.common.RootComponent;
 import neatlogic.framework.dto.module.ModuleVo;
 import neatlogic.framework.process.constvalue.ProcessStepType;
 import neatlogic.framework.process.dto.ProcessStepHandlerVo;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 import org.springframework.core.annotation.Order;
 
 import java.util.*;
@@ -57,7 +57,7 @@ public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
 		List<ProcessStepHandlerVo> returnProcessStepHandlerList = new ArrayList<>();
 		for (ProcessStepHandlerVo processStepHandler : processStepHandlerList) {
 			ProcessStepHandlerVo processStepHandlerVo = processStepHandler.clone();
-			processStepHandlerVo.setName(I18nUtils.getMessage(processStepHandler.getName()));
+			processStepHandlerVo.setName($.t(processStepHandler.getName()));
 			//开始组件不用返回给前端
 			if(processStepHandlerVo.getType().equals(ProcessStepType.START.getValue())) {
 				continue;

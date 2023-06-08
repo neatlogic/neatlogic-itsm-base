@@ -1,17 +1,15 @@
 package neatlogic.framework.process.dto;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import neatlogic.framework.util.I18nUtils;
+import com.alibaba.fastjson.JSONArray;
+import neatlogic.framework.process.datacube.DataCubeFactory;
+import neatlogic.framework.process.datacube.IDataCubeHandler;
+import neatlogic.framework.util.$;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONArray;
-
-import neatlogic.framework.process.datacube.DataCubeFactory;
-import neatlogic.framework.process.datacube.IDataCubeHandler;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProcessDataCubeVo implements Serializable {
 	static Logger logger = LoggerFactory.getLogger(ProcessDataCubeVo.class);
@@ -35,7 +33,7 @@ public class ProcessDataCubeVo implements Serializable {
 		}
 
 		public String getText() {
-			return I18nUtils.getMessage(name);
+			return $.t(name);
 		}
 
 		public String getText(String _type) {

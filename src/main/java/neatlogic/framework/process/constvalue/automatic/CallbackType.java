@@ -2,7 +2,7 @@ package neatlogic.framework.process.constvalue.automatic;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum CallbackType {
     NONE("none", "无需回调"),
@@ -23,7 +23,7 @@ public enum CallbackType {
     }
 
     public String getText() {
-        return I18nUtils.getMessage(name);
+        return $.t(name);
     }
 
     public static String getValue(String _value) {

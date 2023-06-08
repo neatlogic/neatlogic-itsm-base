@@ -18,7 +18,7 @@ package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.common.constvalue.ParamType;
 import neatlogic.framework.notify.core.INotifyParam;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 /**
  * @author linbq
@@ -80,7 +80,7 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
 
     @Override
     public String getText() {
-        return I18nUtils.getMessage(text);
+        return $.t(text);
     }
 
     @Override

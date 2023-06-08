@@ -1,6 +1,6 @@
 package neatlogic.framework.process.operationauth.core;
 
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum OperationAuthHandlerType implements IOperationAuthHandlerType {
 	TASK("task", "工单"),
@@ -17,7 +17,7 @@ public enum OperationAuthHandlerType implements IOperationAuthHandlerType {
     private String text;
     @Override
     public String getText() {
-        return I18nUtils.getMessage(text);
+        return $.t(text);
     }
     @Override
     public String getValue() {

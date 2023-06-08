@@ -1,6 +1,6 @@
 package neatlogic.framework.process.constvalue;
 
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum ConditionProcessTaskOptions {
     TASKID("id","工单ID"),
@@ -26,7 +26,7 @@ public enum ConditionProcessTaskOptions {
         return value;
     }
     public String getText() {
-        return I18nUtils.getMessage(text);
+        return $.t(text);
     }
 //    public static ConditionProcessTaskOptions getConditionProcessTaskOprion(String _value) {
 //        for(ConditionProcessTaskOptions e : values()) {

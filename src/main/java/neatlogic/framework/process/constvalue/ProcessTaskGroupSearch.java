@@ -16,7 +16,7 @@
 
 package neatlogic.framework.process.constvalue;
 
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum ProcessTaskGroupSearch {
 	PROCESSUSERTYPE("processUserType", "工单干系人类型");
@@ -38,6 +38,6 @@ public enum ProcessTaskGroupSearch {
 	}
 
 	public String getText() {
-		return I18nUtils.getMessage(text);
+		return $.t(text);
 	}
 }

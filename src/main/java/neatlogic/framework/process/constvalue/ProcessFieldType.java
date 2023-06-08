@@ -1,6 +1,6 @@
 package neatlogic.framework.process.constvalue;
 
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum ProcessFieldType {
     COMMON("common", "工单固有属性"),
@@ -20,7 +20,7 @@ public enum ProcessFieldType {
     }
 
     public String getName() {
-        return I18nUtils.getMessage(name);
+        return $.t(name);
     }
 
     public static String getValue(String _value) {

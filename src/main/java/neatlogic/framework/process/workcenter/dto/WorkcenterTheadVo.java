@@ -16,16 +16,15 @@
 
 package neatlogic.framework.process.workcenter.dto;
 
-import neatlogic.framework.process.column.core.ProcessTaskColumnFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
-
 import neatlogic.framework.asynchronization.threadlocal.UserContext;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.process.column.core.IProcessTaskColumn;
+import neatlogic.framework.process.column.core.ProcessTaskColumnFactory;
 import neatlogic.framework.process.constvalue.ProcessFieldType;
 import neatlogic.framework.restful.annotation.EntityField;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public class WorkcenterTheadVo {
 
@@ -74,7 +73,7 @@ public class WorkcenterTheadVo {
     public WorkcenterTheadVo(IProcessTaskColumn column) {
         this.name = column.getName();
         this.userUuid = UserContext.get().getUserUuid();
-        this.displayName = I18nUtils.getMessage(column.getDisplayName());
+        this.displayName = $.t(column.getDisplayName());
         this.type = ProcessFieldType.COMMON.getValue();
         this.className = column.getClassName();
         this.sort = column.getSort();

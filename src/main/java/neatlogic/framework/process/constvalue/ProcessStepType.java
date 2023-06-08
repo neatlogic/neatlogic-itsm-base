@@ -16,7 +16,7 @@
 
 package neatlogic.framework.process.constvalue;
 
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum ProcessStepType {
     START("start", "开始"),
@@ -36,7 +36,7 @@ public enum ProcessStepType {
     }
 
     public String getName() {
-        return I18nUtils.getMessage(name);
+        return $.t(name);
     }
 
     public static String getValue(String _type) {

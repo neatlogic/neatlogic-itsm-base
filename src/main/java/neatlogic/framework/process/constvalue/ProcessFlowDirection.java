@@ -1,6 +1,6 @@
 package neatlogic.framework.process.constvalue;
 
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum ProcessFlowDirection {
 	FORWARD("forward", "流转至："),
@@ -19,7 +19,7 @@ public enum ProcessFlowDirection {
 	}
 
 	public String getText() {
-		return I18nUtils.getMessage(text);
+		return $.t(text);
 	}
 
 }

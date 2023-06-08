@@ -1,7 +1,7 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.audithandler.core.IProcessTaskAuditType;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	COMMENT("comment", "回复", "回复【${DATA.processTaskStepName}】"),
@@ -63,12 +63,12 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 
 	@Override
 	public String getText() {
-		return I18nUtils.getMessage(text);
+		return $.t(text);
 	}
 
 	@Override
 	public String getDescription() {
-		return I18nUtils.getMessage(description);
+		return $.t(description);
 	}
 
 	public static ProcessTaskAuditType getProcessTaskAuditType(String _value) {

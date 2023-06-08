@@ -17,7 +17,7 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.autoexec.source.IAutoexecJobSource;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum AutoExecJobProcessSource implements IAutoexecJobSource {
     ITSM("IT服务", "itsm");
@@ -34,7 +34,7 @@ public enum AutoExecJobProcessSource implements IAutoexecJobSource {
     }
 
     public String getText() {
-        return I18nUtils.getMessage(text);
+        return $.t(text);
     }
 
     public static String getText(String _status) {

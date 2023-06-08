@@ -1,7 +1,7 @@
 package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.audithandler.core.IProcessTaskAuditDetailType;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 
@@ -45,7 +45,7 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	}
 
 	public String getText() {
-		return I18nUtils.getMessage(text);
+		return $.t(text);
 	}
 
 	public String getParamName() {

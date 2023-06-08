@@ -1,6 +1,6 @@
 package neatlogic.framework.process.workcenter.table.constvalue;
 
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 /**
  * @Title: FieldTypeEnum
@@ -36,7 +36,7 @@ public enum ProcessSqlTypeEnum {
     }
 
     public String getText() {
-        return I18nUtils.getMessage(text);
+        return $.t(text);
     }
 
     public static String getText(String value) {

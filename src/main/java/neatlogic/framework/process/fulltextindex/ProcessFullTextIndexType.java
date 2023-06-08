@@ -17,7 +17,7 @@
 package neatlogic.framework.process.fulltextindex;
 
 import neatlogic.framework.fulltextindex.core.IFullTextIndexType;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
 
 /**
  * @author lvzk
@@ -42,7 +42,7 @@ public enum ProcessFullTextIndexType implements IFullTextIndexType {
 
     @Override
     public String getTypeName() {
-        return I18nUtils.getMessage(typeName);
+        return $.t(typeName);
     }
 
     @Override

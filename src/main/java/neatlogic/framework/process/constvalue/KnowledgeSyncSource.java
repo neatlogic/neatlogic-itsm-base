@@ -1,11 +1,11 @@
 package neatlogic.framework.process.constvalue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import neatlogic.framework.knowledge.dto.SyncSourceVo;
 import neatlogic.framework.knowledge.source.ISyncSource;
-import neatlogic.framework.util.I18nUtils;
+import neatlogic.framework.util.$;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public enum KnowledgeSyncSource implements ISyncSource{
     PROCESSTASK("processtask", "工单");
@@ -23,7 +23,7 @@ public enum KnowledgeSyncSource implements ISyncSource{
     }
 
     public String getName() {
-        return I18nUtils.getMessage(name);
+        return $.t(name);
     }
 
     public static String getValue(String _value) {
