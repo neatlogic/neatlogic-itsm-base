@@ -19,175 +19,178 @@ import java.util.*;
 
 public class ProcessTaskVo extends BasePageVo {
     //    @ESKey(type = ESKeyType.PKEY, name = "processTaskId")
-    @EntityField(name = "工单id", type = ApiParamType.LONG)
+    @EntityField(name = "common.id", type = ApiParamType.LONG)
     private Long id;
-    @EntityField(name = "父工单id", type = ApiParamType.LONG)
+    @EntityField(name = "common.parentid", type = ApiParamType.LONG)
     private Long parentId;
-    @EntityField(name = "工单号", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.serialnumber", type = ApiParamType.STRING)
     private String serialNumber;
-    @EntityField(name = "标题", type = ApiParamType.STRING)
+    @EntityField(name = "common.title", type = ApiParamType.STRING)
     private String title;
-    @EntityField(name = "流程uuid", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.processuuid", type = ApiParamType.STRING)
     private String processUuid;
-    @EntityField(name = "服务所在目录名称", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.catalogname", type = ApiParamType.STRING)
     private String catalogName;
-    @EntityField(name = "服务")
+    @EntityField(name = "term.itsm.channelinfo")
     private ChannelVo channelVo;
-    @EntityField(name = "服务uuid", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.channeluuid", type = ApiParamType.STRING)
     private String channelUuid;
-    @EntityField(name = "服务路径", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.channelpath", type = ApiParamType.STRING)
     private String channelPath;
-    @EntityField(name = "优先级uuid", type = ApiParamType.STRING)
+    @EntityField(name = "common.priorityuuid", type = ApiParamType.STRING)
     private String priorityUuid;
     //    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
     @JSONField(serialize = false)
     private String config;
     //    private String configPath;
 //    private JSONObject configObj;
-    @EntityField(name = "状态", type = ApiParamType.STRING)
+    @EntityField(name = "common.status", type = ApiParamType.STRING)
     private String status;
-    @EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "common.statusinfo", type = ApiParamType.JSONOBJECT)
     private ProcessTaskStatusVo statusVo;
-    @EntityField(name = "上报人userUuid", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.owneruuid", type = ApiParamType.STRING)
     private String owner;
-    @EntityField(name = "上报人")
+    @EntityField(name = "term.itsm.ownerinfo")
     private UserVo ownerVo;
     //    @EntityField(name = "上报人", type = ApiParamType.STRING)
 //    private String ownerName;
 //    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
 //    private Integer ownerVipLevel;
-    @EntityField(name = "代报人userUuid", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.submitteruuid", type = ApiParamType.STRING)
     private String reporter;
-    @EntityField(name = "代报人")
+    @EntityField(name = "term.itsm.submitterinfo")
     private UserVo reporterVo;
     //    @EntityField(name = "代报人", type = ApiParamType.STRING)
 //    private String reporterName;
-    @EntityField(name = "开始时间", type = ApiParamType.LONG)
+    @EntityField(name = "common.starttime", type = ApiParamType.LONG)
     private Date startTime;
-    @EntityField(name = "结束时间", type = ApiParamType.LONG)
+    @EntityField(name = "common.endtime", type = ApiParamType.LONG)
     private Date endTime;
-    @EntityField(name = "耗时", type = ApiParamType.LONG)
+    @EntityField(name = "common.timecost", type = ApiParamType.LONG)
     private Long timeCost;
     private String timeCostStr;
-    @EntityField(name = "超时时间点", type = ApiParamType.LONG)
+    @EntityField(name = "common.timeoutpoint", type = ApiParamType.LONG)
     private Date expireTime;
     private String configHash;
 
     private List<ProcessTaskStepVo> stepList = new ArrayList<>();
-    @EntityField(name = "是否显示优先级", type = ApiParamType.INTEGER)
+    @EntityField(name = "common.isneedpriority", type = ApiParamType.INTEGER)
     private Integer isNeedPriority = 1;
-    @EntityField(name = "优先级信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "common.priority", type = ApiParamType.JSONOBJECT)
     private PriorityVo priority;
-    @EntityField(name = "工单表单信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "term.itsm.processtaskformconfig", type = ApiParamType.JSONOBJECT)
     private JSONObject formConfig;
-    @EntityField(name = "工单表单信息授权列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "term.itsm.formconfigauthoritylist", type = ApiParamType.JSONARRAY)
     private JSONArray formConfigAuthorityList;
-    @EntityField(name = "表单配置授权隐藏属性uuid列表")
+    @EntityField(name = "term.itsm.formattributehidelist")
     private List<String> formAttributeHideList;
-    @EntityField(name = "是否存在旧工单表单信息", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.ishasoldformprop", type = ApiParamType.STRING)
     private int isHasOldFormProp = 0;
-    @EntityField(name = "工单表单属性值", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "term.itsm.processtaskformattributedata", type = ApiParamType.JSONOBJECT)
     private Map<String, Object> formAttributeDataMap = new HashMap<>();
     private List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList;
-    @EntityField(name = "工作时间窗口uuid", type = ApiParamType.STRING)
+    @EntityField(name = "common.worktimeuuid", type = ApiParamType.STRING)
     private String worktimeUuid;
 
-    @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.channeltypeuuid", type = ApiParamType.STRING)
     private String channelTypeUuid;
-    @EntityField(name = "服务类型信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "term.itsm.channeltypeinfo", type = ApiParamType.JSONOBJECT)
     private ChannelTypeVo channelType;
 
-    @EntityField(name = "工单开始步骤信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "term.itsm.startprocesstaskstep", type = ApiParamType.JSONOBJECT)
     ProcessTaskStepVo startProcessTaskStep;
-    @EntityField(name = "工单当前步骤信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "term.itsm.currentprocesstaskstep", type = ApiParamType.JSONOBJECT)
     ProcessTaskStepVo currentProcessTaskStep;
 
-    @EntityField(name = "上报人公司列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "term.itsm.ownercompanylist", type = ApiParamType.JSONARRAY)
     @JSONField(serialize = false)
     private List<TeamVo> ownerCompanyList = new ArrayList<>();
 
-    @EntityField(name = "上报人部门列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "term.itsm.ownerdepartmentlist", type = ApiParamType.JSONARRAY)
     @JSONField(serialize = false)
     private List<TeamVo> ownerDepartmentList = new ArrayList<>();
 
-    @EntityField(name = "评分信息", type = ApiParamType.STRING)
+    @EntityField(name = "common.scoreinfo", type = ApiParamType.STRING)
     private String scoreInfo;
 
-    @EntityField(name = "转报工单信息列表", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "term.itsm.tranferreportprocesstasklist", type = ApiParamType.JSONOBJECT)
     private List<ProcessTaskVo> tranferReportProcessTaskList = new ArrayList<>();
-    @EntityField(name = "转报/关联方向", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.tranferreportdirection", type = ApiParamType.STRING)
     private String tranferReportDirection;
-    @EntityField(name = "转报/关联类型", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.channeltyperelationname", type = ApiParamType.STRING)
     private String channelTypeRelationName;
     @JSONField(serialize = false)
     private Boolean isAutoGenerateId = true;
-    @EntityField(name = "重做步骤列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "term.itsm.redosteplist", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> redoStepList = new ArrayList<>();
-    @EntityField(name = "评分模板", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "term.itsm.scoretemplate", type = ApiParamType.JSONARRAY)
     private ScoreTemplateVo scoreTemplateVo;
     @JSONField(serialize = false)
     private JSONObject paramObj;
-    @EntityField(name = "是否显示，1：显示，0：隐藏", type = ApiParamType.INTEGER)
+    @EntityField(name = "common.isshow", type = ApiParamType.INTEGER)
     private Integer isShow;
-    @EntityField(name = "是否已关注，1：是，0：否", type = ApiParamType.INTEGER)
+    @EntityField(name = "common.isfocus", type = ApiParamType.INTEGER)
     private Integer isFocus = 0;
-    @EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "term.itsm.commentlist", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
-    @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "common.taglist", type = ApiParamType.JSONARRAY)
     private List<ProcessTagVo> tagVoList;
-    @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "common.taglist", type = ApiParamType.JSONARRAY)
     private List<String> tagList;
-    @EntityField(name = "移动端表单交互类型，1：下探页面；0：当前页", type = ApiParamType.INTEGER)
+    @EntityField(name = "term.itsm.mobileformuitype", type = ApiParamType.INTEGER)
     private Integer mobileFormUIType;
     @JSONField(serialize = false)
     private List<ProcessTaskStepRelVo> stepRelList;
 
     @JSONField(serialize = false)
-    @EntityField(name = "上报人userName", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.ownername", type = ApiParamType.STRING)
     private String ownerName;
     @JSONField(serialize = false)
-    @EntityField(name = "代报人userName", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.submittername", type = ApiParamType.STRING)
     private String reporterName;
     @JSONField(serialize = false)
-    @EntityField(name = "优先级名称", type = ApiParamType.STRING)
+    @EntityField(name = "common.priorityname", type = ApiParamType.STRING)
     private String priorityName;
     @JSONField(serialize = false)
-    @EntityField(name = "工作时间窗口名称", type = ApiParamType.STRING)
+    @EntityField(name = "common.worktimename", type = ApiParamType.STRING)
     private String worktimeName;
     @JSONField(serialize = false)
-    @EntityField(name = "服务类型名称", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.channeltypename", type = ApiParamType.STRING)
     private String channelTypeName;
     @JSONField(serialize = false)
-    @EntityField(name = "服务名称", type = ApiParamType.STRING)
+    @EntityField(name = "term.itsm.channelname", type = ApiParamType.STRING)
     private String channelName;
 
-    @EntityField(name = "关注人列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "common.focususerlist", type = ApiParamType.JSONARRAY)
     private List<UserVo> focusUserList;
-    @EntityField(name = "关注人uuid列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "common.focususeruuidlist", type = ApiParamType.JSONARRAY)
     private List<String> focusUserUuidList;
 
-    @EntityField(name = "sla列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "term.itsm.processtaskslalist", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskSlaVo> processTaskSlaVoList;
 
-    @EntityField(name = "是否有权限修改工单关注人", type = ApiParamType.INTEGER)
+    @EntityField(name = "term.itsm.caneditfocususer", type = ApiParamType.INTEGER)
     private Integer canEditFocusUser;
 
-    @EntityField(name = "工单来源", type = ApiParamType.STRING)
+    @EntityField(name = "common.source", type = ApiParamType.STRING)
     private String source = ProcessTaskSource.PC.getValue();
-    @EntityField(name = "工单来源中文名", type = ApiParamType.STRING)
+    @EntityField(name = "common.sourcename", type = ApiParamType.STRING)
     private String sourceName;
 
-    @EntityField(name = "是否已删除，1：是，0：否", type = ApiParamType.INTEGER)
+    @EntityField(name = "common.isdeleted", type = ApiParamType.INTEGER)
     private Integer isDeleted = 0;
 
-    @EntityField(name = "是否默认展开基本信息", type = ApiParamType.INTEGER)
+    @EntityField(name = "term.itsm.isshowbaseinfo", type = ApiParamType.INTEGER)
     private Integer isShowBaseInfo = 0;
 
+    @EntityField(name = "term.itsm.isshowprocesstaskstepcommenteditortoolbar", type = ApiParamType.INTEGER)
+    private Integer isShowProcessTaskStepCommentEditorToolbar = 0;
+
     @JSONField(serialize = false)
-    @EntityField(name = "工单中心工单排序下标", type = ApiParamType.INTEGER)
+    @EntityField(name = "term.itsm.workcenterprocesstasksortindex", type = ApiParamType.INTEGER)
     private Integer index;
 
-    @EntityField(name = "是否需要评分，1：是，0：否", type = ApiParamType.INTEGER)
+    @EntityField(name = "common.needscore", type = ApiParamType.INTEGER)
     private Integer needScore;
 
     public ProcessTaskVo() {
@@ -809,6 +812,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setIsShowBaseInfo(Integer isShowBaseInfo) {
         this.isShowBaseInfo = isShowBaseInfo;
+    }
+
+    public Integer getIsShowProcessTaskStepCommentEditorToolbar() {
+        return isShowProcessTaskStepCommentEditorToolbar;
+    }
+
+    public void setIsShowProcessTaskStepCommentEditorToolbar(Integer isShowProcessTaskStepCommentEditorToolbar) {
+        this.isShowProcessTaskStepCommentEditorToolbar = isShowProcessTaskStepCommentEditorToolbar;
     }
 
     public Integer getNeedScore() {
