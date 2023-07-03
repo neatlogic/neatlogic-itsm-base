@@ -2083,6 +2083,8 @@ limitations under the License.
             <result property="userInfo" column="ownerInfo"/>
             <result property="vipLevel" column="ownerVipLevel"/>
             <result property="pinyin" column="ownerPinyin"/>
+            <result property="isActive" column="ownerIsActive"/>
+            <result property="isDelete" column="ownerIsDelete"/>
         </association>
         <association property="reporterVo" javaType="neatlogic.framework.dto.UserVo">
             <result property="uuid" column="reporterUuid"/>
@@ -2090,6 +2092,8 @@ limitations under the License.
             <result property="userInfo" column="reporterInfo"/>
             <result property="vipLevel" column="reporterVipLevel"/>
             <result property="pinyin" column="reporterPinyin"/>
+            <result property="isActive" column="reporterIsActive"/>
+            <result property="isDelete" column="reporterIsDelete"/>
         </association>
         <association property="priority" javaType="neatlogic.framework.process.dto.PriorityVo">
             <result property="uuid" column="priorityUuid"/>
@@ -2137,6 +2141,8 @@ limitations under the License.
             <result property="userInfo" column="focusInfo"/>
             <result property="vipLevel" column="focusVipLevel"/>
             <result property="pinyin" column="focusPinyin"/>
+            <result property="isActive" column="focusIsActive"/>
+            <result property="isDelete" column="rfocusIsDelete"/>
         </collection>
         <collection property="processTaskSlaVoList" ofType="neatlogic.framework.process.dto.ProcessTaskSlaVo">
             <result column="ProcessTaskSlaId" property="id"/>
