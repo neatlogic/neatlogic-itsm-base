@@ -1,7 +1,6 @@
 package neatlogic.framework.process.workcenter.table;
 
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
-import neatlogic.framework.util.I18n;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,25 +24,27 @@ public class UserTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("用户UUID")),
-        USER_ID("user_id", new I18n("用户ID")),
-        USER_NAME("user_name", new I18n("用户名")),
-        USER_INFO("user_info", new I18n("用户信息")),
-        VIP_LEVEL("vip_level", new I18n("vip等级")),
-        PINYIN("pinyin", new I18n("拼音"));
+        UUID("uuid", "用户UUID"),
+        USER_ID("user_id","用户ID"),
+        USER_NAME("user_name","用户名"),
+        USER_INFO("user_info", "用户信息"),
+        VIP_LEVEL("vip_level","vip等级"),
+        IS_ACTIVE("is_active", "是否激活"),
+        IS_DELETE("is_delete","是否删除"),
+        PINYIN("pinyin", "拼音");
         private final String name;
-        private final I18n text;
+        private final String text;
         private final String proName;
         private String handlerName;
 
-        private FieldEnum(String _value, I18n _text) {
+        private FieldEnum(String _value, String _text) {
             this.name = _value;
             this.text = _text;
             this.handlerName = _value;
             this.proName = _value;
         }
 
-        private FieldEnum(String _value, I18n _text, String _proName, String _handlerName) {
+        private FieldEnum(String _value, String _text, String _proName, String _handlerName) {
             this.name = _value;
             this.text = _text;
             this.proName = _proName;
@@ -55,7 +56,7 @@ public class UserTable implements ISqlTable {
         }
 
         public String getText() {
-            return text.toString();
+            return text;
         }
 
         public String getProValue() {
