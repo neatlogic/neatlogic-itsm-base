@@ -205,7 +205,7 @@ public abstract class ProcessTaskConditionBase implements IProcessTaskCondition 
         sqlSb.append(" ) and ( ");
         // step.user
         // 如果是待处理状态，则需额外匹配角色和组
-        AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(UserContext.get().getUserUuid());
+        AuthenticationInfoVo authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
         getProcessingTaskOfMineSqlWhere(sqlSb, Collections.singletonList(UserContext.get().getUserUuid()), authenticationInfoVo.getTeamUuidList(), authenticationInfoVo.getRoleUuidList());
         sqlSb.append(" ) ");
 

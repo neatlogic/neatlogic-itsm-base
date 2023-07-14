@@ -2515,7 +2515,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 );
                 flag = processTaskMapper.checkIsProcessTaskStepUser(searchVo);
             } else {
-                AuthenticationInfoVo authenticationInfoVo = authenticationInfoService.getAuthenticationInfo(currentUserUuid);
+                AuthenticationInfoVo authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();;
                 flag = processTaskMapper.checkIsWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue(), authenticationInfoVo);
             }
 
