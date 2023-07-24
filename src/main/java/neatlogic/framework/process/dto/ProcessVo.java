@@ -41,22 +41,22 @@ import java.util.*;
 
 public class ProcessVo extends BaseEditorVo {
 
-    @EntityField(name = "流程uuid", type = ApiParamType.STRING)
+    @EntityField(name = "common.uuid", type = ApiParamType.STRING)
     private String uuid;
 
-    @EntityField(name = "流程名称", type = ApiParamType.STRING)
+    @EntityField(name = "common.name", type = ApiParamType.STRING)
     private String name;
 
-    @EntityField(name = "流程类型名称", type = ApiParamType.STRING)
+    @EntityField(name = "common.typename", type = ApiParamType.STRING)
     private String typeName;
 
-    @EntityField(name = "是否激活", type = ApiParamType.INTEGER)
+    @EntityField(name = "common.isactive", type = ApiParamType.INTEGER)
     private Integer isActive;
 
-    @EntityField(name = "流程图配置", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "common.config", type = ApiParamType.JSONOBJECT)
     private JSONObject config;
 
-    @EntityField(name = "引用数量", type = ApiParamType.INTEGER)
+    @EntityField(name = "common.referencecount", type = ApiParamType.INTEGER)
     private int referenceCount;
     // @EntityField(name = "流程表单uuid", type = ApiParamType.STRING)
     private String formUuid;
@@ -75,8 +75,6 @@ public class ProcessVo extends BaseEditorVo {
 
     @JSONField(serialize = false)
     private String configStr;
-
-    private Integer isICreated;
 
     public synchronized String getUuid() {
         if (StringUtils.isBlank(uuid)) {
@@ -384,13 +382,5 @@ public class ProcessVo extends BaseEditorVo {
             return config.toJSONString();
         }
         return configStr;
-    }
-
-    public Integer getIsICreated() {
-        return isICreated;
-    }
-
-    public void setIsICreated(Integer isICreated) {
-        this.isICreated = isICreated;
     }
 }
