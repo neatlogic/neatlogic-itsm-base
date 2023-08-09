@@ -916,7 +916,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(currentProcessTaskStepVo.getId());
                 }
                 /* 保存描述内容 **/
-                IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
+                IProcessStepHandlerUtil.checkContentIsRequired(currentProcessTaskStepVo);
                 IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, operationType);
                 myComplete(currentProcessTaskStepVo);
 
@@ -1108,7 +1108,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
                 }
                 /* 保存描述内容 **/
-                IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
+                IProcessStepHandlerUtil.checkContentIsRequired(currentProcessTaskStepVo);
                 IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.STEP_REAPPROVAL);
                 myReapproval(currentProcessTaskStepVo);
 
@@ -1991,7 +1991,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 保存工单关注人 **/
             IProcessStepHandlerUtil.saveFocusUserList(currentProcessTaskStepVo);
 
-            IProcessStepHandlerUtil.chechContentIsRequired(currentProcessTaskStepVo);
+            IProcessStepHandlerUtil.checkContentIsRequired(currentProcessTaskStepVo);
             myStartProcess(currentProcessTaskStepVo);
 
             /* 保存描述内容和附件 **/
