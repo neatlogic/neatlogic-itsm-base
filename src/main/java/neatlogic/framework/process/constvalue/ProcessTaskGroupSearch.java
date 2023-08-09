@@ -19,7 +19,7 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.$;
 
 public enum ProcessTaskGroupSearch {
-	PROCESSUSERTYPE("processUserType", "工单干系人类型");
+	PROCESSUSERTYPE("processUserType", "工单干系人");
 
 	private final String value;
 	private final String text;
