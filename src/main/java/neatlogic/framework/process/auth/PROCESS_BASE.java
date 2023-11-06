@@ -17,6 +17,10 @@ limitations under the License.
 package neatlogic.framework.process.auth;
 
 import neatlogic.framework.auth.core.AuthBase;
+import neatlogic.framework.knowledge.auth.label.KNOWLEDGE;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class PROCESS_BASE extends AuthBase {
 
@@ -43,6 +47,11 @@ public class PROCESS_BASE extends AuthBase {
 	@Override
 	public boolean getIsDefault(){
 		return true;
+	}
+
+	@Override
+	public List<Class<? extends AuthBase>> getIncludeAuths() {
+		return Arrays.asList(KNOWLEDGE.class);
 	}
 
 }
