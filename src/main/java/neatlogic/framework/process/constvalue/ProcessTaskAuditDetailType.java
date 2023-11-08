@@ -21,7 +21,7 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	TAGLIST("taglist","标签","tagList","oldTagList",16, false),
 	FOCUSUSER("focususer","工单关注人","focusUser","oldFocusUser",17, false),
 	TASK("task", "任务", "task", "oldTask", 18, false),
-	AUTOMATICINFO("automaticinfo", "enum.process.processtaskauditdetailtype.automaticinfo", "automaticinfo", "oldAutomaticInfo", 19, false),
+	AUTOMATICINFO("automaticinfo", "自动处理", "automaticinfo", "oldAutomaticInfo", 19, false),
 	;
 	
 	private String value;

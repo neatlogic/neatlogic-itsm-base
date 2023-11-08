@@ -18,7 +18,7 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	SAVETASKFILE("savetaskfile", "上传子任务附件", "${DATA.replaceable_task}【${DATA.processTaskStepName}】 上传附件"),
 	DELETETASKFILE("deletetaskfile", "删除子任务附件", "${DATA.replaceable_task}【${DATA.processTaskStepName}】 删除附件"),
 
-
+	ACTIVE("active", "激活", "激活【${DATA.processTaskStepName}】"),
 	START("start", "开始", "开始【${DATA.processTaskStepName}】"),
 	RETREAT("retreat", "撤回", "撤回【${DATA.processTaskStepName}】"),
 	ABORTPROCESSTASK("abortprocesstask", "取消", "取消工单"),
@@ -31,7 +31,7 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
 	COMPLETE("complete", "流转", "完成【${DATA.processTaskStepName}】"),
 	REAPPROVAL("reapproval", "重审", "重审【${DATA.processTaskStepName}】"),
 	BACK("back", "回退", "回退【${DATA.processTaskStepName}】至【${DATA.nextStepName}】"),
-	CONDITION("condition", "条件", "enum.process.processtaskaudittype.condition.b"),
+	CONDITION("condition", "条件", "条件"),
 	SCORE("score", "评分", "评价工单"),
     TRANSFERREPORT("tranferreport", "转报", "转报并关联工单"),
     REPORTRELATION("reportrelation", "上报关联", "上报并关联工单"),
