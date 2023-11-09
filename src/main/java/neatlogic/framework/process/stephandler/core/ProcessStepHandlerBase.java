@@ -43,6 +43,7 @@ import neatlogic.framework.process.dto.*;
 import neatlogic.framework.process.dto.score.ProcessScoreTemplateVo;
 import neatlogic.framework.process.dto.score.ProcessTaskScoreVo;
 import neatlogic.framework.process.dto.score.ScoreTemplateDimensionVo;
+import neatlogic.framework.process.exception.channeltype.ChannelTypeNotFoundException;
 import neatlogic.framework.process.exception.operationauth.ProcessTaskStepRunningException;
 import neatlogic.framework.process.exception.processtask.*;
 import neatlogic.framework.process.exception.core.ProcessTaskRuntimeException;
@@ -90,6 +91,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static FormMapper formMapper;
     //    protected static IProcessCrossoverMapper processCrossoverMapper;
     protected static ChannelMapper channelMapper;
+    protected static ChannelTypeMapper channelTypeMapper;
     protected static NotifyMapper notifyMapper;
     protected static ProcessTaskSerialNumberMapper processTaskSerialNumberMapper;
     protected static SelectContentByHashMapper selectContentByHashMapper;
@@ -125,6 +127,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     @Resource
     public void setChannelMapper(ChannelMapper _channelMapper) {
         channelMapper = _channelMapper;
+    }
+
+    @Resource
+    public void setChannelTypeMapper(ChannelTypeMapper _channelTypeMapper) {
+        channelTypeMapper = _channelTypeMapper;
     }
 
     @Resource
@@ -1779,7 +1786,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 生成工单号 **/
             ProcessTaskSerialNumberPolicyVo processTaskSerialNumberPolicyVo = processTaskSerialNumberMapper.getProcessTaskSerialNumberPolicyByChannelTypeUuid(channelVo.getChannelTypeUuid());
             if (processTaskSerialNumberPolicyVo == null) {
-                throw new ProcessTaskSerialNumberPolicyNotFoundException(channelVo.getChannelTypeUuid());
+                ChannelTypeVo channelTypeVo = channelTypeMapper.getChannelTypeByUuid(channelVo.getChannelTypeUuid());
+                if (channelTypeVo == null) {
+                    throw new ChannelTypeNotFoundException(channelVo.getChannelTypeUuid());
+                }
+                throw new ProcessTaskSerialNumberPolicyNotFoundException(channelTypeVo.getName());
             }
             IProcessTaskSerialNumberPolicyHandler policyHandler = ProcessTaskSerialNumberPolicyHandlerFactory.getHandler(processTaskSerialNumberPolicyVo.getHandler());
             if (policyHandler == null) {
