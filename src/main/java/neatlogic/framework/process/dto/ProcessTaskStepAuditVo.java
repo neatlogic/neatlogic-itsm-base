@@ -1,18 +1,15 @@
 package neatlogic.framework.process.dto;
 
-import java.util.Date;
-import java.util.List;
-
-import neatlogic.framework.dto.UserVo;
-import neatlogic.framework.dto.WorkAssignmentUnitVo;
-import neatlogic.framework.process.constvalue.ProcessTaskSource;
-import neatlogic.framework.process.constvalue.ProcessTaskSourceFactory;
-import neatlogic.framework.util.SnowflakeUtil;
 import com.alibaba.fastjson.annotation.JSONField;
+import neatlogic.framework.common.constvalue.ApiParamType;
+import neatlogic.framework.dto.WorkAssignmentUnitVo;
+import neatlogic.framework.process.constvalue.ProcessTaskSourceFactory;
+import neatlogic.framework.restful.annotation.EntityField;
+import neatlogic.framework.util.SnowflakeUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import neatlogic.framework.common.constvalue.ApiParamType;
-import neatlogic.framework.restful.annotation.EntityField;
+import java.util.Date;
+import java.util.List;
 
 public class ProcessTaskStepAuditVo {
 	@EntityField(name = "活动id", type = ApiParamType.LONG)
@@ -47,6 +44,8 @@ public class ProcessTaskStepAuditVo {
 	private String source;
 	@EntityField(name = "来源中文名", type = ApiParamType.STRING)
 	private String sourceName;
+	@EntityField(name = "表单场景", type = ApiParamType.STRING)
+	private String formSceneUuid;
 
 	public ProcessTaskStepAuditVo() { 
 	}
@@ -195,5 +194,13 @@ public class ProcessTaskStepAuditVo {
 			sourceName = ProcessTaskSourceFactory.getSourceName(source);
 		}
 		return sourceName;
+	}
+
+	public String getFormSceneUuid() {
+		return formSceneUuid;
+	}
+
+	public void setFormSceneUuid(String formSceneUuid) {
+		this.formSceneUuid = formSceneUuid;
 	}
 }
