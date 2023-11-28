@@ -10,5 +10,9 @@ public class ProcessCommentTemplateNotFoundException extends ApiRuntimeException
 		super("回复模版：{0}不存在", id);
 	}
 
+	public ProcessCommentTemplateNotFoundException(String name) {
+		super("回复模版：{0}不存在", name);
+	}
+
 
 }

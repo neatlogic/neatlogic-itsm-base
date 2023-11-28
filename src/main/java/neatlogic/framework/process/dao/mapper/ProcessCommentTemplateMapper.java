@@ -12,6 +12,8 @@ public interface ProcessCommentTemplateMapper {
 
     public ProcessCommentTemplateVo getTemplateById(Long id);
 
+    ProcessCommentTemplateVo getTemplateByName(String name);
+
     public ProcessCommentTemplateVo getTemplateByStepUuidAndAuth(@Param("stepUuid") String uuid,@Param("authList") List<String> authList);
 
     public ProcessCommentTemplateUseCountVo getTemplateUseCount(@Param("templateId") Long id, @Param("userUuid") String uuid);

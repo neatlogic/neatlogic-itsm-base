@@ -9,4 +9,8 @@ public class ScoreTemplateNotFoundException extends ProcessTaskRuntimeException 
 	public ScoreTemplateNotFoundException(Long id) {
 		super("评分模版 :{0}不存在", id);
 	}
+
+	public ScoreTemplateNotFoundException(String name) {
+		super("评分模版 :{0}不存在", name);
+	}
 }

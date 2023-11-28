@@ -18,6 +18,8 @@ public interface ScoreTemplateMapper {
 
     public ScoreTemplateVo getScoreTemplateById(@Param("id") Long id);
 
+    ScoreTemplateVo getScoreTemplateByName(String name);
+
     public int checkScoreTemplateNameIsRepeat(ScoreTemplateVo scoreTemplateVo);
 
     public ScoreTemplateVo checkScoreTemplateExistsById(@Param("id") Long id);

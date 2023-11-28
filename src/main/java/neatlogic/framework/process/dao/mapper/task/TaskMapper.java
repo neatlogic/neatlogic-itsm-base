@@ -39,6 +39,8 @@ public interface TaskMapper {
 
     TaskConfigVo getTaskConfigById(Long taskId);
 
+    TaskConfigVo getTaskConfigByName(String name);
+
     List<TaskConfigVo> getTaskConfigByIdList(JSONArray stepTaskIdList);
 
     List<Map<String,Long>> getTaskConfigReferenceCountMap(List<Long> idList);

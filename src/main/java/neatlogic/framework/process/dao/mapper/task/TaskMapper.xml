@@ -83,6 +83,16 @@ limitations under the License.
         FROM `task_config`
         WHERE `id` = #{value}
     </select>
+
+    <select id="getTaskConfigByName" resultType="neatlogic.framework.process.dto.TaskConfigVo" useCache="false">
+        SELECT `id`,
+               `name`,
+               `num`,
+               `policy`,
+               `is_active` as isActive
+        FROM `task_config`
+        WHERE `name` = #{value}
+    </select>
     <select id="getTaskConfigByIdList" resultType="neatlogic.framework.process.dto.TaskConfigVo" useCache="false">
         SELECT
         `id`,

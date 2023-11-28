@@ -16,6 +16,20 @@
 		where `id` = #{value}
 	</select>
 
+	<select id="getTemplateByName" parameterType="java.lang.String" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateVo">
+		select
+			`id`,
+			`name`,
+			`content`,
+			`type`,
+			`fcu`,
+			`fcd`,
+			`lcu`,
+			`lcd`
+		from `process_comment_template`
+		where `name` = #{value}
+	</select>
+
 	<select id="getTemplateByStepUuidAndAuth" resultType="neatlogic.framework.process.dto.ProcessCommentTemplateVo" useCache="false">
 		SELECT
 		DISTINCT
