@@ -16,6 +16,10 @@
 
 package neatlogic.framework.process.stephandler.core;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 import neatlogic.framework.asynchronization.threadlocal.UserContext;
 import neatlogic.framework.asynchronization.threadpool.TransactionSynchronizationPool;
 import neatlogic.framework.common.constvalue.GroupSearch;
@@ -44,11 +48,11 @@ import neatlogic.framework.process.dto.score.ProcessScoreTemplateVo;
 import neatlogic.framework.process.dto.score.ProcessTaskScoreVo;
 import neatlogic.framework.process.dto.score.ScoreTemplateDimensionVo;
 import neatlogic.framework.process.exception.channeltype.ChannelTypeNotFoundException;
-import neatlogic.framework.process.exception.operationauth.ProcessTaskStepRunningException;
-import neatlogic.framework.process.exception.processtask.*;
 import neatlogic.framework.process.exception.core.ProcessTaskRuntimeException;
+import neatlogic.framework.process.exception.operationauth.ProcessTaskStepRunningException;
 import neatlogic.framework.process.exception.process.ProcessStepHandlerNotFoundException;
 import neatlogic.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
+import neatlogic.framework.process.exception.processtask.*;
 import neatlogic.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyHandlerNotFoundException;
 import neatlogic.framework.process.exception.processtaskserialnumberpolicy.ProcessTaskSerialNumberPolicyNotFoundException;
 import neatlogic.framework.process.fulltextindex.ProcessFullTextIndexType;
@@ -62,10 +66,6 @@ import neatlogic.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import neatlogic.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import neatlogic.framework.service.AuthenticationInfoService;
 import neatlogic.framework.worktime.dao.mapper.WorktimeMapper;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -73,6 +73,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -169,7 +170,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskSerialNumberMapper = _processTaskSerialNumberMapper;
     }
 
-    @Resource
+    @Autowired(required = false)
     public void setIProcessStepHandlerUtil(IProcessStepHandlerUtil _processStepHandlerUtil) {
         IProcessStepHandlerUtil = _processStepHandlerUtil;
     }
