@@ -114,7 +114,7 @@
 		st.`id` = #{id}
 	</select>
 
-	<select id="getScoreTemplateByName" parameterType="java.lang.String" resultMap="scoreTemplateMap">
+	<select id="getScoreTemplateByName" parameterType="java.lang.String" resultType="neatlogic.framework.process.dto.score.ScoreTemplateVo">
 		SELECT
 			`id`,
 			`name`,
