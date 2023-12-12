@@ -114,6 +114,15 @@
 		st.`id` = #{id}
 	</select>
 
+	<select id="getScoreTemplateByName" parameterType="java.lang.String" resultType="neatlogic.framework.process.dto.score.ScoreTemplateVo">
+		SELECT
+			`id`,
+			`name`,
+			`is_active` as isActive
+		FROM `score_template`
+		WHERE `name` = #{value}
+	</select>
+
 	<select id="checkScoreTemplateNameIsRepeat" parameterType="neatlogic.framework.process.dto.score.ScoreTemplateVo" resultType="int">
 		SELECT COUNT(1) FROM `score_template` WHERE `name` = #{name} AND `id` != #{id}
 	</select>
