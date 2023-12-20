@@ -18,7 +18,7 @@ package neatlogic.framework.process.notify.constvalue;
 
 import neatlogic.framework.notify.core.INotifyPolicyHandlerGroup;
 import neatlogic.framework.util.$;
-
+@Deprecated
 public enum ProcessNotifyPolicyHandlerGroup implements INotifyPolicyHandlerGroup {
     TASKSTEP("TaskStep", "工单步骤");
     private final String value;
