@@ -73,7 +73,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -170,7 +169,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskSerialNumberMapper = _processTaskSerialNumberMapper;
     }
 
-    @Autowired(required = false)
+//    @Autowired(required = false)
+    @Resource
     public void setIProcessStepHandlerUtil(IProcessStepHandlerUtil _processStepHandlerUtil) {
         IProcessStepHandlerUtil = _processStepHandlerUtil;
     }
