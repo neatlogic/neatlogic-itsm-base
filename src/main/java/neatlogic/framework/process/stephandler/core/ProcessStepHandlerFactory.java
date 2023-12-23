@@ -74,9 +74,12 @@ public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
 
 	@Override
 	public void onInitialized(NeatLogicWebApplicationContext context) {
+//		ItsmInstantiationAwareBeanPostProcessor bean = context.getBean(ItsmInstantiationAwareBeanPostProcessor.class);
+//		System.out.println("bean = " + bean);
 		Map<String, IProcessStepHandler> myMap = context.getBeansOfType(IProcessStepHandler.class);
 		for (Map.Entry<String, IProcessStepHandler> entry : myMap.entrySet()) {
 			IProcessStepHandler component = entry.getValue();
+			System.out.println("component = " + component);
 			if (component.getHandler() != null) {
 				componentMap.put(component.getHandler(), component);
 				ProcessStepHandlerVo processStepHandlerVo = new ProcessStepHandlerVo();
