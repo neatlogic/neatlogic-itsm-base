@@ -26,12 +26,12 @@ public class PROCESS_BASE extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "IT服务基础权限";
+		return "nfpa.process_base.getauthdisplayname";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "查看IT服务相关基础功能";
+		return "nfpa.process_base.getauthintroduction";
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class PROCESS_BASE extends AuthBase {
 
 	@Override
 	public List<Class<? extends AuthBase>> getIncludeAuths() {
-		return Arrays.asList(KNOWLEDGE.class);
+		return Arrays.asList(PROCESS.class, KNOWLEDGE.class);
 	}
 
 }
