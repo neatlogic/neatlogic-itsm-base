@@ -25,6 +25,7 @@ import neatlogic.framework.common.RootComponent;
 import neatlogic.framework.dto.module.ModuleVo;
 import neatlogic.framework.process.dto.WorkerDispatcherVo;
 import neatlogic.framework.process.exception.workcenter.HandlerDispatchComponentTypeNotFoundException;
+import neatlogic.framework.util.$;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -33,7 +34,7 @@ import java.util.*;
 public class WorkerDispatcherFactory extends ModuleInitializedListenerBase {
 
 	private static final Map<String, IWorkerDispatcher> componentMap = new HashMap<String, IWorkerDispatcher>();
-	private static final List<WorkerDispatcherVo> workerDispatcherList = new ArrayList<>();
+	private static final Map<String, String> className2ModuleIdMap = new HashMap<>();
 
 	public static IWorkerDispatcher getDispatcher(String name) {
 		if (!componentMap.containsKey(name) || componentMap.get(name) == null) {
@@ -46,9 +47,26 @@ public class WorkerDispatcherFactory extends ModuleInitializedListenerBase {
 		TenantContext tenantContext = TenantContext.get();
 		List<ModuleVo> moduleList = tenantContext.getActiveModuleList();
 		List<WorkerDispatcherVo> returnWorkerDispatcherList = new ArrayList<>();
-		for (WorkerDispatcherVo workerDispatcherVo : workerDispatcherList) {
+		for (Map.Entry<String, IWorkerDispatcher> entry : componentMap.entrySet()) {
+			String moduleId = className2ModuleIdMap.get(entry.getKey());
 			for (ModuleVo moduleVo : moduleList) {
-				if (moduleVo.getId().equalsIgnoreCase(workerDispatcherVo.getModuleId())) {
+				if (moduleVo.getId().equalsIgnoreCase(moduleId)) {
+					IWorkerDispatcher component = entry.getValue();
+					WorkerDispatcherVo workerDispatcherVo = new WorkerDispatcherVo();
+					workerDispatcherVo.setHandler(component.getClassName());
+					workerDispatcherVo.setName($.t(component.getName()));
+					workerDispatcherVo.setIsActive(1);
+					workerDispatcherVo.setHelp(component.getHelp());
+					JSONArray configArray = component.getConfig();
+					workerDispatcherVo.setConfig(configArray);
+					//判断是否有form组件，提高前端性能
+					for(int i=0;i< configArray.size();i++){
+						JSONObject config = configArray.getJSONObject(i);
+						if(Objects.equals(config.getString("type"),WorkerDispatcherForm.FORM_SELECT.getValue())){
+							workerDispatcherVo.setIsHasForm(1);
+						}
+					}
+					workerDispatcherVo.setModuleId(moduleId);
 					returnWorkerDispatcherList.add(workerDispatcherVo);
 					break;
 				}
@@ -64,22 +82,7 @@ public class WorkerDispatcherFactory extends ModuleInitializedListenerBase {
 			IWorkerDispatcher component = entry.getValue();
 			if (StringUtils.isNotBlank(component.getClassName())) {
 				componentMap.put(component.getClassName(), component);
-				WorkerDispatcherVo workerDispatcherVo = new WorkerDispatcherVo();
-				workerDispatcherVo.setHandler(component.getClassName());
-				workerDispatcherVo.setName(component.getName());
-				workerDispatcherVo.setIsActive(1);
-				workerDispatcherVo.setHelp(component.getHelp());
-				JSONArray configArray = component.getConfig();
-				workerDispatcherVo.setConfig(configArray);
-				//判断是否有form组件，提高前端性能
-				for(int i=0;i< configArray.size();i++){
-					JSONObject config = configArray.getJSONObject(i);
-					if(Objects.equals(config.getString("type"),WorkerDispatcherForm.FORM_SELECT.getValue())){
-						workerDispatcherVo.setIsHasForm(1);
-					}
-				}
-				workerDispatcherVo.setModuleId(context.getId());
-				workerDispatcherList.add(workerDispatcherVo);
+				className2ModuleIdMap.put(component.getClassName(), context.getId());
 			}
 		}
 	}

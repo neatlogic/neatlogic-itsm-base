@@ -1,12 +1,12 @@
 package neatlogic.framework.process.workerpolicy.core;
 
-import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
 import neatlogic.framework.process.dto.ProcessTaskStepWorkerPolicyVo;
 import neatlogic.framework.process.dto.ProcessTaskStepWorkerVo;
+import neatlogic.framework.process.exception.processtask.ProcessTaskException;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public interface IWorkerPolicyHandler {
     String getType();
@@ -30,5 +30,5 @@ public interface IWorkerPolicyHandler {
      * @Description: TODO
      */
     @Transactional
-    List<ProcessTaskStepWorkerVo> execute(ProcessTaskStepWorkerPolicyVo workerPolicyVo, ProcessTaskStepVo currentProcessTaskStepVo);
+    List<ProcessTaskStepWorkerVo> execute(ProcessTaskStepWorkerPolicyVo workerPolicyVo, ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
 }

@@ -590,8 +590,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             return autoStart;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new ProcessTaskException(e.getMessage());
+            IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), e.getMessage(), ProcessTaskStepRemindType.ERROR);
         }
+        return 0;
     }
 
     private void reapprovalRestoreBackup(ProcessTaskStepVo currentProcessTaskStepVo) {

@@ -17,6 +17,7 @@ limitations under the License.
 package neatlogic.framework.process.exception.processtask;
 
 import neatlogic.framework.exception.core.ApiException;
+import neatlogic.framework.util.$;
 
 public class ProcessTaskException extends ApiException {
 
@@ -28,5 +29,9 @@ public class ProcessTaskException extends ApiException {
 
 	public ProcessTaskException(String msg) {
 		super(msg);
+	}
+
+	public ProcessTaskException(String key, Object... values) {
+		super($.t(key, values));
 	}
 }

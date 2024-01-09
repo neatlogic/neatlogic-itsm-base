@@ -1,13 +1,13 @@
 package neatlogic.framework.process.workerdispatcher.core;
 
-import java.util.List;
-
-import org.springframework.util.ClassUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
+import neatlogic.framework.process.dto.ProcessTaskStepWorkerVo;
+import neatlogic.framework.process.exception.processtask.ProcessTaskException;
+import org.springframework.util.ClassUtils;
+
+import java.util.List;
 
 public interface IWorkerDispatcher {
 
@@ -46,7 +46,7 @@ public interface IWorkerDispatcher {
 	 * @param @return
 	 * @return String
 	 */
-	public List<String> getWorker(ProcessTaskStepVo processTaskStepVo, JSONObject configObj);
+	public List<ProcessTaskStepWorkerVo> getWorker(ProcessTaskStepVo processTaskStepVo, JSONObject configObj) throws ProcessTaskException;
 	
 	/**
 	 * @Author: 
