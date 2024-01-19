@@ -282,6 +282,15 @@ public interface IProcessStepHandler {
     int scoreProcessTask(ProcessTaskVo currentProcessTaskVo);
 
     /**
+     * 失败
+     *
+     * @param currentProcessTaskStepVo 步骤信息
+     * @return 1代表成功
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    int fail(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    /**
      * 获取对应步骤的minor worker
      *
      * @param taskStepVo 工单步骤
@@ -308,7 +317,7 @@ public interface IProcessStepHandler {
      * -1代表不限制
      * @return
      */
-    default int getForwardOutnputQuantity() {
+    default int getForwardOutputQuantity() {
         return -1;
     }
     /**
