@@ -909,12 +909,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         /* 保存表单属性值 **/
                         IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
                     }
-
+                    String majorUserUuid = null;
+                    List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+                    if (CollectionUtils.isNotEmpty(processTaskStepUserList)) {
+                        majorUserUuid = processTaskStepUserList.get(0).getUserUuid();
+                    }
                     /* 更新处理人状态 **/
                     ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(
                             currentProcessTaskStepVo.getProcessTaskId(),
                             currentProcessTaskStepVo.getId(),
-                            UserContext.get().getUserUuid()
+                            majorUserUuid
                     );
                     // 兼容automatic作业无用户
                     processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
@@ -1103,11 +1107,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     IProcessStepHandlerUtil.saveForm(currentProcessTaskStepVo);
 //                    }
 
+                    String majorUserUuid = null;
+                    List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+                    if (CollectionUtils.isNotEmpty(processTaskStepUserList)) {
+                        majorUserUuid = processTaskStepUserList.get(0).getUserUuid();
+                    }
                     /* 更新处理人状态 **/
                     ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(
                             currentProcessTaskStepVo.getProcessTaskId(),
                             currentProcessTaskStepVo.getId(),
-                            UserContext.get().getUserUuid()
+                            majorUserUuid
                     );
                     // 兼容automatic作业无用户
                     processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
@@ -2653,6 +2662,44 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 processTaskMapper.updateProcessTaskStepUserUserUuid(processTaskStepUserVo);
             }
         }
+    }
+
+    @Override
+    public final int fail(ProcessTaskStepVo currentProcessTaskStepVo) {
+        String majorUserUuid = null;
+        List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
+        if (CollectionUtils.isNotEmpty(processTaskStepUserList)) {
+            majorUserUuid = processTaskStepUserList.get(0).getUserUuid();
+        }
+        /* 更新处理人状态 **/
+        ProcessTaskStepUserVo processTaskMajorUser = new ProcessTaskStepUserVo(
+                currentProcessTaskStepVo.getProcessTaskId(),
+                currentProcessTaskStepVo.getId(),
+                majorUserUuid
+        );
+        // 兼容automatic作业无用户
+        processTaskMajorUser.setStatus(ProcessTaskStepUserStatus.DONE.getValue());
+        processTaskMajorUser.setUserType(ProcessUserType.MAJOR.getValue());
+        processTaskMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
+        /* 清空worker表 **/
+        processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
+        processTaskMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(currentProcessTaskStepVo.getId());
+
+        String error = currentProcessTaskStepVo.getParamObj().getString("error");
+
+        /* 更新步骤状态 **/
+        currentProcessTaskStepVo.setIsActive(0);
+        currentProcessTaskStepVo.setUpdateEndTime(1);
+        currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.FAILED.getValue());
+        currentProcessTaskStepVo.setError(error);
+        updateProcessTaskStepStatus(currentProcessTaskStepVo);
+        /* 异常提醒 **/
+        IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getStartProcessTaskStepId(), error, ProcessTaskStepRemindType.ERROR);
+        /* 触发通知 **/
+        IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
+        /* 执行动作 **/
+        IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.FAILED);
+        return 1;
     }
 
     @Override

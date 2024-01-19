@@ -58,6 +58,7 @@ public enum ProcessTaskOperationType implements IOperationType {
     STEP_BACK("back", new I18n("回退")),//下一步骤列表中有已激活的步骤时，有回退权限
     STEP_SAVE("save", new I18n("暂存")),
     STEP_REAPPROVAL("reapproval", new I18n("重审")),
+    STEP_FAIL("fail", new I18n("失败")),
     /**
      * 修改上报内容
      * 被授权的对象可在该步骤处于‘待处理’或‘进行中’时修改上报内容，如果同时有多个“待处理”或‘进行中’的步骤，则将每个步骤中配置的授权对象取并集；

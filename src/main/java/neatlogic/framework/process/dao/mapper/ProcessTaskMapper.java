@@ -379,6 +379,8 @@ public interface ProcessTaskMapper {
 
     int insertProcessTaskStepUser(ProcessTaskStepUserVo processTaskStepUserVo);
 
+    int insertProcessTaskStepMinorUser(ProcessTaskStepUserVo processTaskStepUserVo);
+
     int insertProcessTaskStepWorkerPolicy(ProcessTaskStepWorkerPolicyVo processTaskStepWorkerPolicyVo);
 
     int insertProcessTaskStepRel(ProcessTaskStepRelVo processTaskStepRelVo);

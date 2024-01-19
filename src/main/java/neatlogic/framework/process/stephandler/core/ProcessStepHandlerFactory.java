@@ -89,7 +89,7 @@ public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
 				processStepHandlerVo.setIsActive(1);
 				processStepHandlerVo.setIsAllowStart((component.isAllowStart()!=null&&component.isAllowStart())?1:0);
 				processStepHandlerVo.setForwardInputQuantity(component.getForwardInputQuantity());
-				processStepHandlerVo.setForwardOutputQuantity(component.getForwardOutnputQuantity());
+				processStepHandlerVo.setForwardOutputQuantity(component.getForwardOutputQuantity());
 				processStepHandlerVo.setBackwardInputQuantity(component.getBackwardInputQuantity());
 				processStepHandlerVo.setBackwardOutputQuantity(component.getBackwardOutputQuantity());
 				processStepHandlerList.add(processStepHandlerVo);
