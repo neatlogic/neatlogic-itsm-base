@@ -39,6 +39,8 @@ public class ProcessStepVo implements Serializable {
 	private InvokeNotifyPolicyConfigVo notifyPolicyConfig;
 	@JSONField(serialize=false)
 	private List<String> integrationUuidList;
+	@JSONField(serialize=false)
+	private List<Long> eoaTemplateIdList;
 
 	@Override
 	public boolean equals(Object other) {
@@ -251,5 +253,13 @@ public class ProcessStepVo implements Serializable {
 
 	public void setTaskConfigVo(ProcessStepTaskConfigVo taskConfigVo) {
 		this.taskConfigVo = taskConfigVo;
+	}
+
+	public List<Long> getEoaTemplateIdList() {
+		return eoaTemplateIdList;
+	}
+
+	public void setEoaTemplateIdList(List<Long> eoaTemplateIdList) {
+		this.eoaTemplateIdList = eoaTemplateIdList;
 	}
 }
