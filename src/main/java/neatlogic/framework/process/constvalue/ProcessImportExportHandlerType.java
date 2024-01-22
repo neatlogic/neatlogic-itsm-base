@@ -7,6 +7,7 @@ public enum ProcessImportExportHandlerType implements ImportExportHandlerType {
     SCORE_TEMPLATE("scoreTemplate", "评分模板"),
     COMMENT_TEMPLATE("commentTemplate", "回复模板"),
     SUBTASK_POLICY("subtaskPolicy", "子任务策略"),
+    EOA_TEMPLATE("eoaTemplate", "EOA模板"),
     ;
     private String value;
     private String text;
