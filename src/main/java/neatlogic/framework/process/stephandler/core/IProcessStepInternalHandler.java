@@ -1,12 +1,14 @@
 package neatlogic.framework.process.stephandler.core;
 
+import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.process.dto.ProcessStepVo;
 import neatlogic.framework.process.dto.ProcessTaskStepInOperationVo;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -162,4 +164,13 @@ public interface IProcessStepInternalHandler {
 
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     int insertProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
+
+    /**
+     * 获取组件步骤中的附件id列表
+     * @param currentProcessTaskStepVo
+     * @return
+     */
+    default List<Long> getFileIdList(ProcessTaskStepVo currentProcessTaskStepVo) {
+        return new ArrayList<>();
+    }
 }
