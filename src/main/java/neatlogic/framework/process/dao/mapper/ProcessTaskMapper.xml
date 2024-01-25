@@ -2324,6 +2324,7 @@ limitations under the License.
         <foreach collection="keywordList" item="keyword" separator="," open="(" close=")">
             #{keyword}
         </foreach>
+        where pt.`is_deleted` = 0
         GROUP BY pt.id,pt.`${targetType}`
         ORDER BY count(ff.counter) DESC
         limit 0,#{limit}
