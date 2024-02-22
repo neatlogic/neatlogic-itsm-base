@@ -20,7 +20,7 @@ import neatlogic.framework.form.dto.AttributeDataVo;
 
 public class ProcessTaskAuditFormAttributeDataVo extends AttributeDataVo {
     private String type;
-    private Integer sort;
+//    private Integer sort;
     private Integer modified;
 
     public String getType() {
@@ -31,13 +31,13 @@ public class ProcessTaskAuditFormAttributeDataVo extends AttributeDataVo {
         this.type = type;
     }
 
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
-    }
+//    public Integer getSort() {
+//        return sort;
+//    }
+//
+//    public void setSort(Integer sort) {
+//        this.sort = sort;
+//    }
 
     public Integer getModified() {
         return modified;

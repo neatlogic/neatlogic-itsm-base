@@ -21,10 +21,7 @@ import neatlogic.framework.dto.AuthenticationInfoVo;
 import neatlogic.framework.form.dto.FormAttributeVo;
 import neatlogic.framework.process.constvalue.ProcessTaskStatus;
 import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
-import neatlogic.framework.process.dto.AssignableWorkerStepVo;
-import neatlogic.framework.process.dto.ProcessCommentTemplateVo;
-import neatlogic.framework.process.dto.ProcessTaskStepVo;
-import neatlogic.framework.process.dto.ProcessTaskVo;
+import neatlogic.framework.process.dto.*;
 import neatlogic.framework.process.exception.operationauth.ProcessTaskPermissionDeniedException;
 import com.alibaba.fastjson.JSONObject;
 
@@ -126,5 +123,12 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @return 表单属性列表
      */
     List<FormAttributeVo> getFormAttributeListByProcessTaskId(Long processTaskId);
+
+    /**
+     * 根据工单id获取表单属性数据列表
+     * @param processTaskId 工单id
+     * @return
+     */
+    List<ProcessTaskFormAttributeDataVo> getProcessTaskFormAttributeDataListByProcessTaskId(Long processTaskId);
 }
 
