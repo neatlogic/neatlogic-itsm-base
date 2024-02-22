@@ -15,7 +15,7 @@ public class ProcessTaskFormAttributeDataVo extends AttributeDataVo {
         this.setFormUuid(attributeDataVo.getFormUuid());
         this.setAttributeUuid(attributeDataVo.getAttributeUuid());
         this.setAttributeLabel(attributeDataVo.getAttributeLabel());
-        this.setType(attributeDataVo.getType());
+        this.setHandler(attributeDataVo.getHandler());
         this.setData(attributeDataVo.getData());
     }
 

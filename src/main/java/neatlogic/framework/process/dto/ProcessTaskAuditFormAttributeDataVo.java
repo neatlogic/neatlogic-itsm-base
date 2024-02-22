@@ -19,17 +19,17 @@ package neatlogic.framework.process.dto;
 import neatlogic.framework.form.dto.AttributeDataVo;
 
 public class ProcessTaskAuditFormAttributeDataVo extends AttributeDataVo {
-    private String type;
+//    private String type;
 //    private Integer sort;
     private Integer modified;
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
+//    public String getHandler() {
+//        return type;
+//    }
+//
+//    public void setHandler(String type) {
+//        this.type = type;
+//    }
 
 //    public Integer getSort() {
 //        return sort;
