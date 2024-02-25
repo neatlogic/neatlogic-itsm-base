@@ -72,13 +72,7 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskFormVo> getProcessTaskFormListByProcessTaskIdList(List<Long> existsProcessTaskIdList);
 
-    List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskId(Long processTaskId);
-
-    List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataListByType(String type);
-
-    List<ProcessTaskFormAttributeDataVo> getProcessTaskFormAttributeDataListByProcessTaskIdAndFormType(@Param("processTaskId") Long processTaskId, @Param("type") String type);
-
-    List<ProcessTaskFormAttributeDataVo> getProcessTaskStepFormAttributeDataByProcessTaskIdList(List<Long> existsFormProcessTaskIdList);
+    List<Long> getProcessTaskFormAttributeDataIdListByProcessTaskId(Long processTaskId);
 
     List<ProcessTaskStepContentVo> getProcessTaskStepContentByProcessTaskStepId(Long processTaskStepId);
 
@@ -168,9 +162,6 @@ public interface ProcessTaskMapper {
     );
 
     Set<Long> getProcessTaskIdSetByChannelUuidListAndAuthenticationInfo(@Param("channelUuidList") List<String> channelUuidList, @Param("authenticationInfoVo") AuthenticationInfoVo authenticationInfoVo);
-
-    ProcessTaskFormAttributeDataVo getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(
-            ProcessTaskFormAttributeDataVo processTaskFormAttributeDataVo);
 
     int checkIsWorker(@Param("processTaskId") Long processTaskId,
                       @Param("processTaskStepId") Long processTaskStepId, @Param("userType") String userType,
@@ -408,8 +399,7 @@ public interface ProcessTaskMapper {
 //    int insertProcessTaskStepFormAttribute(
 //            ProcessTaskStepFormAttributeVo processTaskStepFormAttributeVo);
 
-    int insertProcessTaskFormAttributeData(
-            ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo);
+    int insertProcessTaskFormAttribute(ProcessTaskFormAttributeDataVo processTaskFromAttributeDataVo);
 
     int insertProcessTaskStepFile(ProcessTaskStepFileVo processTaskStepFileVo);
 
@@ -498,7 +488,7 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskIsDeletedById(@Param("id") Long id, @Param("isDeleted") Integer isDeleted);
 
-    int deleteProcessTaskFormAttributeDataByProcessTaskId(Long processTaskId);
+    int deleteProcessTaskFormAttributeByProcessTaskId(Long processTaskId);
 
     int deleteProcessTaskStepWorker(ProcessTaskStepWorkerVo processTaskStepWorkerVo);
 

@@ -314,56 +314,8 @@ limitations under the License.
         </foreach>
     </select>
 
-    <select id="getProcessTaskStepFormAttributeDataByProcessTaskId" parameterType="java.lang.Long"
-            resultType="neatlogic.framework.process.dto.ProcessTaskFormAttributeDataVo">
-        SELECT `processtask_id`  AS processTaskId,
-               `attribute_uuid`  AS attributeUuid,
-               `attribute_label` AS attributeLabel,
-               `type`            AS type,
-               `data`,
-               `sort`
-        FROM `processtask_formattribute_data`
-        WHERE `processtask_id` = #{value}
-    </select>
-
-    <select id="getProcessTaskStepFormAttributeDataListByType" parameterType="java.lang.String"
-            resultType="neatlogic.framework.process.dto.ProcessTaskFormAttributeDataVo">
-        SELECT `processtask_id`  AS processTaskId,
-               `attribute_uuid`  AS attributeUuid,
-               `attribute_label` AS attributeLabel,
-               `type`            AS type,
-               `data`,
-               `sort`
-        FROM `processtask_formattribute_data`
-        WHERE `type` = #{value}
-        ORDER BY `processtask_id`
-    </select>
-
-    <select id="getProcessTaskFormAttributeDataListByProcessTaskIdAndFormType"
-            resultType="neatlogic.framework.process.dto.ProcessTaskFormAttributeDataVo">
-        SELECT `processtask_id`  AS processTaskId,
-               `attribute_uuid`  AS attributeUuid,
-               `attribute_label` AS attributeLabel,
-               `type`            AS type,
-               `data`,
-               `sort`
-        FROM `processtask_formattribute_data`
-        WHERE `processtask_id` = #{processTaskId} AND `type` = #{type}
-    </select>
-
-    <select id="getProcessTaskStepFormAttributeDataByProcessTaskIdList" parameterType="java.util.List"
-            resultType="neatlogic.framework.process.dto.ProcessTaskFormAttributeDataVo">
-        SELECT `processtask_id` AS processTaskId,
-        `attribute_uuid` AS attributeUuid,
-        `attribute_label` AS attributeLabel,
-        `type` AS type,
-        `data`,
-        `sort`
-        FROM `processtask_formattribute_data`
-        WHERE `processtask_id` IN
-        <foreach collection="list" item="processTaskId" open="(" separator="," close=")">
-            #{processTaskId}
-        </foreach>
+    <select id="getProcessTaskFormAttributeDataIdListByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT `form_attribute_data_id` FROM `processtask_formattribute` WHERE `processtask_id` = #{value}
     </select>
 
     <select id="getProcessTaskStepContentByProcessTaskStepId" parameterType="java.lang.Long"
@@ -1120,20 +1072,6 @@ limitations under the License.
                 #{channelUuid}
             </foreach>
         </if>
-    </select>
-
-    <select id="getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid"
-            parameterType="neatlogic.framework.process.dto.ProcessTaskFormAttributeDataVo"
-            resultType="neatlogic.framework.process.dto.ProcessTaskFormAttributeDataVo">
-        SELECT `processtask_id`  AS
-                                    processTaskId,
-               `type`,
-               `attribute_uuid`  AS attributeUuid,
-               `attribute_label` AS attributeLabel,
-               `data`
-        FROM `processtask_formattribute_data`
-        WHERE `processtask_id` = #{processTaskId}
-          AND `attribute_uuid` = #{attributeUuid}
     </select>
 
     <select id="checkIsWorker" resultType="int">
@@ -2993,22 +2931,10 @@ limitations under the License.
                 #{config})
     </insert>
 
-    <insert id="insertProcessTaskFormAttributeData"
+    <insert id="insertProcessTaskFormAttribute"
             parameterType="neatlogic.framework.process.dto.ProcessTaskFormAttributeDataVo">
-        INSERT INTO `processtask_formattribute_data` (`processtask_id`,
-                                                       `attribute_uuid`,
-                                                       `attribute_label`,
-                                                       `data`,
-                                                       `type`,
-                                                       `sort`)
-        VALUES (#{processTaskId},
-                #{attributeUuid},
-                #{attributeLabel},
-                #{data,typeHandler=CompressHandler},
-                #{type},
-                #{sort})
-        ON DUPLICATE KEY
-        UPDATE `data` = #{data,typeHandler=CompressHandler}
+        INSERT ignore INTO `processtask_formattribute` (`processtask_id`, `form_attribute_data_id`)
+        VALUES (#{processTaskId}, #{id})
     </insert>
 
     <insert id="insertIgnoreProcessTaskConverge" parameterType="neatlogic.framework.process.dto.ProcessTaskConvergeVo">
@@ -3764,9 +3690,9 @@ limitations under the License.
         WHERE `processtask_id` = #{value}
     </delete>
 
-    <delete id="deleteProcessTaskFormAttributeDataByProcessTaskId" parameterType="java.lang.Long">
+    <delete id="deleteProcessTaskFormAttributeByProcessTaskId" parameterType="java.lang.Long">
         DELETE
-        FROM `processtask_formattribute_data`
+        FROM `processtask_formattribute`
         WHERE `processtask_id` = #{value}
     </delete>
 

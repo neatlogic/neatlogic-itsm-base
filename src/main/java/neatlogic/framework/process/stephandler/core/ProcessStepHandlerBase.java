@@ -40,6 +40,7 @@ import neatlogic.framework.notify.dao.mapper.NotifyMapper;
 import neatlogic.framework.notify.dto.NotifyPolicyVo;
 import neatlogic.framework.process.constvalue.*;
 import neatlogic.framework.process.crossover.IProcessCrossoverMapper;
+import neatlogic.framework.process.crossover.IProcessTaskCrossoverService;
 import neatlogic.framework.process.dao.mapper.*;
 import neatlogic.framework.process.dao.mapper.score.ProcessTaskScoreMapper;
 import neatlogic.framework.process.dao.mapper.score.ScoreTemplateMapper;
@@ -2019,7 +2020,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 保存描述内容和附件 **/
             IProcessStepHandlerUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_START);
             // 获取表单数据
-            List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskMapper.getProcessTaskStepFormAttributeDataByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+            IProcessTaskCrossoverService processTaskCrossoverService = CrossoverServiceFactory.getApi(IProcessTaskCrossoverService.class);
+            List<ProcessTaskFormAttributeDataVo> processTaskFormAttributeDataList = processTaskCrossoverService.getProcessTaskFormAttributeDataListByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             if (CollectionUtils.isNotEmpty(processTaskFormAttributeDataList)) {
                 processTaskFormAttributeDataList.sort(ProcessTaskFormAttributeDataVo::compareTo);
                 JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
