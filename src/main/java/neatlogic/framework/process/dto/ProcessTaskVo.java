@@ -1,18 +1,19 @@
 package neatlogic.framework.process.dto;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.dto.BasePageVo;
 import neatlogic.framework.dto.TeamVo;
 import neatlogic.framework.dto.UserVo;
-import neatlogic.framework.process.constvalue.ProcessTaskSourceFactory;
+import neatlogic.framework.process.approve.dto.ApproveEntityVo;
 import neatlogic.framework.process.constvalue.ProcessTaskSource;
+import neatlogic.framework.process.constvalue.ProcessTaskSourceFactory;
 import neatlogic.framework.process.constvalue.ProcessTaskStatus;
 import neatlogic.framework.process.dto.score.ScoreTemplateVo;
 import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -192,6 +193,12 @@ public class ProcessTaskVo extends BasePageVo {
 
     @EntityField(name = "common.needscore", type = ApiParamType.INTEGER)
     private Integer needScore;
+
+    @EntityField(name = "审批实体", type = ApiParamType.JSONOBJECT)
+    private ApproveEntityVo approveEntity;
+
+    @EntityField(name = "审批状态", type = ApiParamType.STRING)
+    private String approveStatus;
 
     public ProcessTaskVo() {
 
@@ -828,5 +835,21 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setNeedScore(Integer needScore) {
         this.needScore = needScore;
+    }
+
+    public ApproveEntityVo getApproveEntity() {
+        return approveEntity;
+    }
+
+    public void setApproveEntity(ApproveEntityVo approveEntity) {
+        this.approveEntity = approveEntity;
+    }
+
+    public String getApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(String approveStatus) {
+        this.approveStatus = approveStatus;
     }
 }

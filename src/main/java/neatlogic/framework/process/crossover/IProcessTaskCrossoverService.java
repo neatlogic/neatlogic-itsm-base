@@ -130,5 +130,20 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @return
      */
     List<ProcessTaskFormAttributeDataVo> getProcessTaskFormAttributeDataListByProcessTaskId(Long processTaskId);
+
+    /**
+     * 暂存工单草稿
+     *
+     * @param jsonObj
+     * @return
+     */
+    JSONObject saveProcessTaskDraft(JSONObject jsonObj) throws Exception;
+
+    /**
+     * 提交上报工单
+     *
+     * @param jsonObj
+     */
+    void startProcessProcessTask(JSONObject jsonObj) throws Exception;
 }
 

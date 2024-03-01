@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import neatlogic.framework.asynchronization.threadlocal.ConditionParamContext;
 import neatlogic.framework.asynchronization.threadlocal.UserContext;
 import neatlogic.framework.asynchronization.threadpool.TransactionSynchronizationPool;
 import neatlogic.framework.common.constvalue.GroupSearch;
@@ -32,19 +33,26 @@ import neatlogic.framework.dto.AuthenticationInfoVo;
 import neatlogic.framework.dto.RoleTeamVo;
 import neatlogic.framework.dto.TeamVo;
 import neatlogic.framework.dto.UserVo;
+import neatlogic.framework.dto.condition.ConditionConfigVo;
 import neatlogic.framework.form.dao.mapper.FormMapper;
 import neatlogic.framework.form.dto.FormVersionVo;
 import neatlogic.framework.fulltextindex.core.FullTextIndexHandlerFactory;
 import neatlogic.framework.fulltextindex.core.IFullTextIndexHandler;
 import neatlogic.framework.notify.dao.mapper.NotifyMapper;
 import neatlogic.framework.notify.dto.NotifyPolicyVo;
+import neatlogic.framework.process.approve.constvalue.ApproveReply;
+import neatlogic.framework.process.approve.dto.ApproveEntityVo;
+import neatlogic.framework.process.condition.core.ProcessTaskConditionFactory;
 import neatlogic.framework.process.constvalue.*;
 import neatlogic.framework.process.crossover.IProcessCrossoverMapper;
+import neatlogic.framework.process.crossover.IProcessTaskApproveCrossoverMapper;
 import neatlogic.framework.process.crossover.IProcessTaskCrossoverService;
 import neatlogic.framework.process.dao.mapper.*;
 import neatlogic.framework.process.dao.mapper.score.ProcessTaskScoreMapper;
 import neatlogic.framework.process.dao.mapper.score.ScoreTemplateMapper;
 import neatlogic.framework.process.dto.*;
+import neatlogic.framework.process.dto.approve.ProcessTaskApproveEntityConfigVo;
+import neatlogic.framework.process.dto.approve.ProcessTaskApproveEntityVo;
 import neatlogic.framework.process.dto.score.ProcessScoreTemplateVo;
 import neatlogic.framework.process.dto.score.ProcessTaskScoreVo;
 import neatlogic.framework.process.dto.score.ScoreTemplateDimensionVo;
@@ -66,6 +74,7 @@ import neatlogic.framework.process.service.ProcessTaskAgentService;
 import neatlogic.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import neatlogic.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import neatlogic.framework.service.AuthenticationInfoService;
+import neatlogic.framework.util.RunScriptUtil;
 import neatlogic.framework.worktime.dao.mapper.WorktimeMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
@@ -928,6 +937,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     /* 清空worker表 **/
                     processTaskMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
                     processTaskMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(currentProcessTaskStepVo.getId());
+                    /* 更新工单审批状态 */
+                    updateApproveStatus(currentProcessTaskStepVo);
                 }
                 /* 保存描述内容 **/
                 IProcessStepHandlerUtil.checkContentIsRequired(currentProcessTaskStepVo);
@@ -1027,6 +1038,55 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         }
 
         return 1;
+    }
+
+    /**
+     * 更新审批状态
+     * @param currentProcessTaskStepVo
+     */
+    public void updateApproveStatus(ProcessTaskStepVo currentProcessTaskStepVo) {
+        IProcessTaskApproveCrossoverMapper processTaskApproveCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskApproveCrossoverMapper.class);
+        String approveStatus = processTaskApproveCrossoverMapper.getApproveStatusByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+        if (approveStatus == null || Objects.equals(approveStatus, ApproveReply.NEUTRAL.getValue())) {
+            String stepConfig = selectContentByHashMapper.getProcessTaskStepConfigByHash(currentProcessTaskStepVo.getConfigHash());
+            if (StringUtils.isNotBlank(stepConfig)) {
+                JSONObject approveStatusConfig = (JSONObject) JSONPath.read(stepConfig, "approveStatusConfig");
+                if (MapUtils.isNotEmpty(approveStatusConfig)) {
+                    String newApproveStatus = null;
+                    String type = approveStatusConfig.getString("type");
+                    if (Objects.equals(type, ApproveReply.ACCEPT.getValue())
+                            || Objects.equals(type, ApproveReply.NEUTRAL.getValue())
+                            || Objects.equals(type, ApproveReply.DENY.getValue())) {
+                        newApproveStatus = type;
+                    } else {
+                        JSONArray conditionGroupList = approveStatusConfig.getJSONArray("conditionGroupList");
+                        if (CollectionUtils.isNotEmpty(conditionGroupList)) {
+                            List<String> conditionProcessTaskOptions = Arrays.stream(ConditionProcessTaskOptions.values()).map(ConditionProcessTaskOptions::getValue).collect(Collectors.toList());
+                            JSONObject conditionParamData = ProcessTaskConditionFactory.getConditionParamData(conditionProcessTaskOptions, currentProcessTaskStepVo);
+                            ConditionConfigVo conditionConfigVo = null;
+                            try {
+                                ConditionParamContext.init(conditionParamData).setTranslate(true);
+                                conditionConfigVo = new ConditionConfigVo(approveStatusConfig);
+                                String script = conditionConfigVo.buildScript();
+                                // ((false || true) || (true && false) || (true || false))
+                                if (RunScriptUtil.runScript(script)) {
+                                    newApproveStatus = approveStatusConfig.getString("onMatch");
+                                } else {
+                                    newApproveStatus = approveStatusConfig.getString("onMismatch");
+                                }
+                            } catch (Exception e) {
+                                logger.error(e.getMessage(), e);
+                            } finally {
+                                ConditionParamContext.get().release();
+                            }
+                        }
+                    }
+                    if (Objects.equals(approveStatus, newApproveStatus)) {
+                        processTaskApproveCrossoverMapper.insertProcessTaskApproveStatus(currentProcessTaskStepVo.getProcessTaskId(), newApproveStatus);
+                    }
+                }
+            }
+        }
     }
 
     protected abstract int myComplete(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
@@ -1813,6 +1873,18 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskSerialNumberMapper.insertProcessTaskSerialNumber(processTaskVo.getId(), serialNumber);
             /* 创建工单 **/
             processTaskMapper.insertProcessTask(processTaskVo);
+
+            ApproveEntityVo approveEntity = paramObj.getObject("approveEntity", ApproveEntityVo.class);
+            if (approveEntity != null) {
+                IProcessTaskApproveCrossoverMapper processTaskApproveCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskApproveCrossoverMapper.class);
+                ProcessTaskApproveEntityConfigVo processTaskApproveEntityConfigVo = new ProcessTaskApproveEntityConfigVo(JSONObject.toJSONString(approveEntity));
+                processTaskApproveCrossoverMapper.insertProcessTaskApproveConfig(processTaskApproveEntityConfigVo);
+                ProcessTaskApproveEntityVo processTaskApproveEntityVo = new ProcessTaskApproveEntityVo();
+                processTaskApproveEntityVo.setProcessTaskId(processTaskVo.getId());
+                processTaskApproveEntityVo.setType(approveEntity.getType());
+                processTaskApproveEntityVo.setConfigHash(processTaskApproveEntityConfigVo.getHash());
+                processTaskApproveCrossoverMapper.insertProcessTaskApproveEntity(processTaskApproveEntityVo);
+            }
             currentProcessTaskStepVo.setProcessTaskId(processTaskVo.getId());
 
             /* 写入表单信息 **/
