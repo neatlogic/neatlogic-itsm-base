@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import neatlogic.framework.asynchronization.threadlocal.ConditionParamContext;
 import neatlogic.framework.asynchronization.threadlocal.UserContext;
 import neatlogic.framework.asynchronization.threadpool.TransactionSynchronizationPool;
 import neatlogic.framework.common.constvalue.GroupSearch;
@@ -32,13 +33,18 @@ import neatlogic.framework.dto.AuthenticationInfoVo;
 import neatlogic.framework.dto.RoleTeamVo;
 import neatlogic.framework.dto.TeamVo;
 import neatlogic.framework.dto.UserVo;
+import neatlogic.framework.dto.condition.ConditionConfigVo;
 import neatlogic.framework.form.dao.mapper.FormMapper;
 import neatlogic.framework.form.dto.FormVersionVo;
 import neatlogic.framework.fulltextindex.core.FullTextIndexHandlerFactory;
 import neatlogic.framework.fulltextindex.core.IFullTextIndexHandler;
 import neatlogic.framework.notify.dao.mapper.NotifyMapper;
 import neatlogic.framework.notify.dto.NotifyPolicyVo;
+import neatlogic.framework.process.approve.ApproveHandlerNotFoundException;
+import neatlogic.framework.process.approve.core.ApproveHandlerFactory;
+import neatlogic.framework.process.approve.core.IApproveHandler;
 import neatlogic.framework.process.approve.dto.ApproveEntityVo;
+import neatlogic.framework.process.condition.core.ProcessTaskConditionFactory;
 import neatlogic.framework.process.constvalue.*;
 import neatlogic.framework.process.crossover.IProcessCrossoverMapper;
 import neatlogic.framework.process.crossover.IProcessTaskApproveCrossoverMapper;
@@ -70,6 +76,7 @@ import neatlogic.framework.process.service.ProcessTaskAgentService;
 import neatlogic.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import neatlogic.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import neatlogic.framework.service.AuthenticationInfoService;
+import neatlogic.framework.util.RunScriptUtil;
 import neatlogic.framework.worktime.dao.mapper.WorktimeMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
@@ -2742,5 +2749,59 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     protected String myMinorName() {
         return null;
+    }
+
+    /**
+     * 更新最终状态
+     * @param currentProcessTaskStepVo
+     */
+    public void updateProcessTaskFinalStatus(ProcessTaskStepVo currentProcessTaskStepVo) {
+        String finalStatus = null;
+        ProcessTaskVo processTask = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
+        String processTaskConfig = selectContentByHashMapper.getProcessTaskConfigStringByHash(processTask.getConfigHash());
+        JSONObject finalStatusConfig = (JSONObject) JSONPath.read(processTaskConfig, "process.processConfig.finalStatusConfig");
+        if (MapUtils.isNotEmpty(finalStatusConfig)) {
+            JSONArray conditionGroupList = finalStatusConfig.getJSONArray("conditionGroupList");
+            if (CollectionUtils.isNotEmpty(conditionGroupList)) {
+                List<String> conditionProcessTaskOptions = Arrays.stream(ConditionProcessTaskOptions.values()).map(ConditionProcessTaskOptions::getValue).collect(Collectors.toList());
+                JSONObject conditionParamData = ProcessTaskConditionFactory.getConditionParamData(conditionProcessTaskOptions, currentProcessTaskStepVo);
+                ConditionConfigVo conditionConfigVo = null;
+                try {
+                    ConditionParamContext.init(conditionParamData).setTranslate(true);
+                    conditionConfigVo = new ConditionConfigVo(finalStatusConfig);
+                    String script = conditionConfigVo.buildScript();
+                    // ((false || true) || (true && false) || (true || false))
+                    if (RunScriptUtil.runScript(script)) {
+                        finalStatus = ProcessTaskFinalStatus.SUCCEED.getValue();
+                    } else {
+                        finalStatus = ProcessTaskFinalStatus.FAILED.getValue();
+                    }
+                    if (finalStatus != null) {
+                        processTaskMapper.insertProcessTaskFinalStatus(currentProcessTaskStepVo.getProcessTaskId(), finalStatus);
+                    }
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                } finally {
+                    ConditionParamContext.get().release();
+                }
+            }
+        }
+
+        IProcessTaskApproveCrossoverMapper processTaskApproveCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskApproveCrossoverMapper.class);
+        String configStr = processTaskApproveCrossoverMapper.getProcessTaskApproveEntityConfigByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+        if (StringUtils.isNotBlank(configStr)) {
+            ApproveEntityVo approveEntity = JSONObject.parseObject(configStr, ApproveEntityVo.class);
+            IApproveHandler handler = ApproveHandlerFactory.getHandler(approveEntity.getType());
+            if (handler == null) {
+                throw new ApproveHandlerNotFoundException(approveEntity.getType());
+            }
+            ProcessTaskFinalStatus processTaskFinalStatus = null;
+            if (Objects.equals(finalStatus, ProcessTaskFinalStatus.SUCCEED.getValue())) {
+                processTaskFinalStatus = ProcessTaskFinalStatus.SUCCEED;
+            } else if (Objects.equals(finalStatus, ProcessTaskFinalStatus.FAILED.getValue())) {
+                processTaskFinalStatus = ProcessTaskFinalStatus.FAILED;
+            }
+            handler.callback(currentProcessTaskStepVo.getProcessTaskId(), processTaskFinalStatus, approveEntity.getId(), null);
+        }
     }
 }

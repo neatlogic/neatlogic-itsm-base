@@ -2756,6 +2756,13 @@ limitations under the License.
             LIMIT #{startNum}, #{pageSize}
     </select>
 
+    <select id="getFinalStatusByProcessTaskId" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT
+            `status`
+        FROM `processtask_final_status`
+        WHERE `processtask_id` = #{value}
+    </select>
+
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
@@ -3518,6 +3525,18 @@ limitations under the License.
     <insert id="insertProcessTaskUrge" parameterType="java.util.Map">
         INSERT INTO `processtask_urge` (`processtask_id`, `lcu`, `lcd`)
         VALUES (#{processTaskId}, #{lcu}, NOW(3))
+    </insert>
+
+    <insert id="insertProcessTaskFinalStatus" parameterType="java.util.HashMap">
+        INSERT INTO `processtask_final_status` (
+            `processtask_id`,
+            `status`
+        )
+        VALUES
+            (
+                #{processTaskId},
+                #{status}
+            )
     </insert>
 
     <update id="updateProcessTaskStepUserStatus" parameterType="neatlogic.framework.process.dto.ProcessTaskStepUserVo">

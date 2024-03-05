@@ -347,6 +347,8 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskVo> searchProcessTaskListByOwnerAndExcludeId(ProcessTaskSearchVo searchVo);
 
+    String getFinalStatusByProcessTaskId(Long processTaskId);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -445,6 +447,8 @@ public interface ProcessTaskMapper {
     void insertProcessTaskTimeCost(ProcessTaskTimeCostVo processTaskTimeCostVo);
 
     void insertProcessTaskUrge(@Param("processTaskId") Long processTaskId, @Param("lcu") String lcu);
+
+    int insertProcessTaskFinalStatus(@Param("processTaskId") Long processTaskId, @Param("status") String status);
 
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
