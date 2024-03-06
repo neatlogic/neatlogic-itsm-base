@@ -548,6 +548,21 @@ limitations under the License.
         </foreach>
     </select>
 
+    <select id="getChannelListByChannelUuidList" parameterType="java.lang.String" resultMap="simpleChannelMap"
+            useCache="false">
+        SELECT
+        `uuid`,
+        `name`,
+        `parent_uuid`,
+        `sort`,
+        `is_active`
+        FROM `channel`
+        WHERE `uuid` IN
+        <foreach collection="list" item="channelUuid" open="(" separator="," close=")">
+            #{channelUuid}
+        </foreach>
+    </select>
+
     <select id="getChannelRelationListBySource" parameterType="java.lang.String"
             resultType="neatlogic.framework.process.dto.ChannelRelationVo" useCache="false">
         SELECT `source`,

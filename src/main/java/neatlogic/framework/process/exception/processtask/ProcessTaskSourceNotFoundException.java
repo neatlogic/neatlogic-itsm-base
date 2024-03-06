@@ -11,24 +11,17 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
+limitations under the License. 
  */
 
-package neatlogic.framework.process.constvalue;
+package neatlogic.framework.process.exception.processtask;
 
-/**
- * 工单上报来源或办理渠道
- *
- * @author laiwt
- * @since 2022/7/6 14:17
- **/
-public interface IProcessTaskSource {
+import neatlogic.framework.exception.core.ApiRuntimeException;
 
-    String getValue();
+public class ProcessTaskSourceNotFoundException extends ApiRuntimeException {
 
-    String getText();
-
-    default String getType(){
-        return ProcessTaskSourceType.ITSM.getValue();
+    public ProcessTaskSourceNotFoundException(String msg) {
+        super("工单来源{0}不存在", msg);
     }
+
 }

@@ -1992,6 +1992,7 @@ limitations under the License.
         <result column="priority_uuid" property="priorityUuid"/>
         <result column="processTaskStatus" property="status"/>
         <result column="start_time" property="startTime"/>
+        <result column="status" property="status"/>
         <result column="end_time" property="endTime"/>
         <result column="ownerUuid" property="owner"/>
         <result column="reporterUuid" property="reporter"/>
@@ -2754,6 +2755,45 @@ limitations under the License.
           AND `is_deleted` = 0
         ORDER BY `id` DESC
             LIMIT #{startNum}, #{pageSize}
+    </select>
+    <select id="getSubProcessTaskCountByStepId" resultType="java.lang.Integer">
+        SELECT
+           count(1)
+        FROM `processtask` pt
+        join `processtask_invoke` as pi on pt.id = pi.processtask_id and pi.invoke_id = #{value}
+        WHERE  pt.`is_deleted` = 0
+    </select>
+
+    <select id="SearchSubProcessTaskListByStepId" resultMap="workcenterProcessTaskMap">
+        SELECT
+            pt.`id`,
+            pt.`title`,
+            pt.`process_uuid` AS processUuid,
+            pt.`channel_uuid` AS channelUuid,
+            pt.`config_hash` AS configHash,
+            pt.`priority_uuid` AS priorityUuid,
+            pt.`status`,
+            pt.`start_time`,
+            pt.`end_time`,
+            pt.`owner`,
+            pt.`reporter`,
+            pt.`expire_time` AS expireTime,
+            pt.`worktime_uuid` AS worktimeUuid,
+            pt.`error`,
+            pt.`is_show` AS isShow,
+            pt.`serial_number` AS serialNumber,
+            pt.`source`,
+            pt.`is_deleted` AS isDeleted,
+            pt.`need_score` AS needScore,
+            pri.`name` as priorityName,
+            pri.`color` as priorityColor,
+            c.`name` as channelName
+        FROM `processtask` pt
+                 join `processtask_invoke` as pi on pt.id = pi.processtask_id and pi.invoke_id = #{value}
+                 left join `priority` pri on pt.`priority_uuid` = pri.`uuid`
+                 left join `channel` c on pt.`channel_uuid` = c.`uuid`
+        WHERE  pt.`is_deleted` = 0
+        ORDER BY pt.`id` DESC
     </select>
 
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
@@ -3518,6 +3558,10 @@ limitations under the License.
     <insert id="insertProcessTaskUrge" parameterType="java.util.Map">
         INSERT INTO `processtask_urge` (`processtask_id`, `lcu`, `lcd`)
         VALUES (#{processTaskId}, #{lcu}, NOW(3))
+    </insert>
+    <insert id="insertProcessTaskInvoke">
+        INSERT INTO `processtask_invoke` (`processtask_id`, `source`, `type`, `invoke_id`)
+        VALUES (#{processTaskId}, #{source}, #{sourceType}, #{invokeId});
     </insert>
 
     <update id="updateProcessTaskStepUserStatus" parameterType="neatlogic.framework.process.dto.ProcessTaskStepUserVo">

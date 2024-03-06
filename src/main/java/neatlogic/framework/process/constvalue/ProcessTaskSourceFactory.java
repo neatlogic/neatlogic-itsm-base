@@ -25,6 +25,7 @@ import java.util.Set;
 public class ProcessTaskSourceFactory {
 
     private static final Map<String, String> sourcelValueTextMap = new HashMap<>();
+    private static final Map<String, IProcessTaskSource> sourcelMap = new HashMap<>();
 
     static {
         Reflections reflections = new Reflections("neatlogic");
@@ -34,6 +35,7 @@ public class ProcessTaskSourceFactory {
                 Object[] objects = c.getEnumConstants();
                 for (Object o : objects) {
                     sourcelValueTextMap.put(((IProcessTaskSource) o).getValue(), ((IProcessTaskSource) o).getText());
+                    sourcelMap.put(((IProcessTaskSource) o).getValue(),(IProcessTaskSource)o);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -43,6 +45,10 @@ public class ProcessTaskSourceFactory {
 
     public static String getSourceName(String value) {
         return sourcelValueTextMap.get(value);
+    }
+
+    public static IProcessTaskSource getSource(String value) {
+        return sourcelMap.get(value);
     }
 
 }

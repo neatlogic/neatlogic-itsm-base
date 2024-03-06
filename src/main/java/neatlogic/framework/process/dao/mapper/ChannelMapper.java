@@ -81,6 +81,8 @@ public interface ChannelMapper {
 
     List<ChannelVo> getChannelListByChannelTypeUuidList(List<String> channelTypeUuidList);
 
+    List<ChannelVo> getChannelListByChannelUuidList(List<String> channelUuidList);
+
     List<ChannelRelationVo> getChannelRelationListBySource(String channelUuid);
 
     List<ChannelRelationVo> getChannelRelationAuthorityListBySource(String channelUuid);
