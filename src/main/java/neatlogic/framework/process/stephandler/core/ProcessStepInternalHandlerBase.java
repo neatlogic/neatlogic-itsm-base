@@ -4,6 +4,7 @@ import neatlogic.framework.common.constvalue.GroupSearch;
 import neatlogic.framework.dao.mapper.TeamMapper;
 import neatlogic.framework.dao.mapper.UserMapper;
 import neatlogic.framework.file.dao.mapper.FileMapper;
+import neatlogic.framework.process.constvalue.ProcessFlowDirection;
 import neatlogic.framework.process.constvalue.ProcessTaskStepTaskUserStatus;
 import neatlogic.framework.process.constvalue.ProcessTaskStepUserStatus;
 import neatlogic.framework.process.constvalue.ProcessUserType;
@@ -276,5 +277,14 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
                 processTaskMapper.insertIgnoreProcessTaskStepUser(processTaskStepUserVo);
             }
         }
+    }
+
+    @Override
+    public List<ProcessTaskStepVo> getNextStepList(ProcessTaskStepVo processTaskStepVo, ProcessFlowDirection processFlowDirection) {
+        String type = null;
+        if (processFlowDirection != null) {
+            type = processFlowDirection.getValue();
+        }
+        return processTaskMapper.getToProcessTaskStepByFromIdAndType(processTaskStepVo.getId(), type);
     }
 }
