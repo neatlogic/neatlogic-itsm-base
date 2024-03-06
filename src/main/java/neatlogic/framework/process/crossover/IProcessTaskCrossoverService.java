@@ -86,9 +86,9 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      */
     void setNextStepList(ProcessTaskStepVo processTaskStepVo);
 
-    List<ProcessTaskStepVo> getForwardNextStepListByProcessTaskStepId(Long processTaskStepId);
+    List<ProcessTaskStepVo> getForwardNextStepListByProcessTaskStepId(ProcessTaskStepVo processTaskStepVo);
 
-    List<ProcessTaskStepVo> getBackwardNextStepListByProcessTaskStepId(Long processTaskStepId);
+    List<ProcessTaskStepVo> getBackwardNextStepListByProcessTaskStepId(ProcessTaskStepVo processTaskStepVo);
 
     /**
      * 检查工单状态，如果processTaskStatus属于status其中一员，则返回对应的异常对象，否则返回null

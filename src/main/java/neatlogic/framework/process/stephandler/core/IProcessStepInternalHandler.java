@@ -1,6 +1,7 @@
 package neatlogic.framework.process.stephandler.core;
 
 import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.process.constvalue.ProcessFlowDirection;
 import neatlogic.framework.process.dto.ProcessStepVo;
 import neatlogic.framework.process.dto.ProcessTaskStepInOperationVo;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
@@ -173,4 +174,11 @@ public interface IProcessStepInternalHandler {
     default List<Long> getFileIdList(ProcessTaskStepVo currentProcessTaskStepVo) {
         return new ArrayList<>();
     }
+
+    /**
+     * 获取可流转步骤列表
+     * @param currentProcessTaskStepVo
+     * @return
+     */
+    List<ProcessTaskStepVo> getNextStepList(ProcessTaskStepVo currentProcessTaskStepVo, ProcessFlowDirection processFlowDirection);
 }
