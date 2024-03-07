@@ -16,6 +16,9 @@ limitations under the License.
 
 package neatlogic.framework.process.constvalue;
 
+import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.process.dto.ProcessTaskVo;
+
 /**
  * 工单上报来源或办理渠道
  *
@@ -30,5 +33,14 @@ public interface IProcessTaskSource {
 
     default String getType(){
         return ProcessTaskSourceType.ITSM.getValue();
+    }
+
+    /**
+     * 保存工单会执行的操作
+     *
+     * @param paramObj 上报暂存入参
+     * @param processTaskVo 工单对象
+     */
+    default void saveDraft(JSONObject paramObj, ProcessTaskVo processTaskVo){
     }
 }

@@ -1958,15 +1958,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 processTaskMapper.insertProcessTaskTransferReport(new ProcessTaskTransferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
             }
 
-            //保存父子工单关系
+            //父子工单
             String invoke = paramObj.getString("invoke");
             if (StringUtils.isNotBlank(invoke)) {
-                IProcessTaskSource processTaskSource = ProcessTaskSourceFactory.getSource(invoke);
+                IProcessTaskSource processTaskSource = ProcessTaskSourceFactory.getHandler(invoke);
                 if (processTaskSource == null) {
                     throw new ProcessTaskSourceNotFoundException(invoke);
                 }
-                Long invokeId = paramObj.getLong("parentProcessTaskStepId");
-                processTaskMapper.insertProcessTaskInvoke(currentProcessTaskStepVo.getProcessTaskId(), processTaskSource.getValue(), processTaskSource.getType(), invokeId);
+                processTaskSource.saveDraft(paramObj, processTaskVo);
             }
         } else {
             /* 锁定当前流程 **/

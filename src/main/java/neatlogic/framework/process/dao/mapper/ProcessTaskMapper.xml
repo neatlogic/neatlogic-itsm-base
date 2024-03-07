@@ -2796,6 +2796,18 @@ limitations under the License.
         ORDER BY pt.`id` DESC
     </select>
 
+    <select id="getSubProcessTaskCountByStepIdAndWithoutEndStatusList" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM `processtask` pt
+        join `processtask_invoke` as pi on pt.id = pi.processtask_id and pi.invoke_id = #{processTaskStepId}
+        WHERE  pt.`is_deleted` = 0
+        and pt.status not in
+        <foreach collection="statusList" item="status" close=")" open="(" separator="," >
+            #{status}
+        </foreach>
+    </select>
+
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`
         SET is_check = #{isCheck}
