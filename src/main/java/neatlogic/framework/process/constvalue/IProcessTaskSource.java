@@ -17,6 +17,7 @@ limitations under the License.
 package neatlogic.framework.process.constvalue;
 
 import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.process.dto.ProcessTaskStepVo;
 import neatlogic.framework.process.dto.ProcessTaskVo;
 
 /**
@@ -42,5 +43,14 @@ public interface IProcessTaskSource {
      * @param processTaskVo 工单对象
      */
     default void saveDraft(JSONObject paramObj, ProcessTaskVo processTaskVo){
+    }
+
+    /**
+     * 保存工单会执行的操作
+     *
+     * @param processTaskStepVo 工单步骤对象
+     */
+    default void complete (ProcessTaskStepVo processTaskStepVo){
+
     }
 }

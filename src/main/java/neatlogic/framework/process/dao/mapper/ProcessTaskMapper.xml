@@ -2807,6 +2807,16 @@ limitations under the License.
             #{status}
         </foreach>
     </select>
+    <select id="getInvokeByProcessTaskId" resultType="neatlogic.framework.process.dto.ProcessTaskInvokeVo">
+        select
+            `processtask_id` as processTaskId,
+            `source`,
+            `type`,
+            `invoke_id` as invokeId
+        from `processtask_invoke`
+        where `processtask_id` = #{value}
+
+    </select>
 
     <!--<update id="updateProcessTaskStepConvergeIsCheck">
         UPDATE `processtask_converge`

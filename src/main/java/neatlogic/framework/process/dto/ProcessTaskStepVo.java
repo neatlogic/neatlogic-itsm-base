@@ -158,6 +158,9 @@ public class ProcessTaskStepVo extends BasePageVo {
     @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
     private List<ProcessTagVo> processTagList;
 
+    @JSONField(serialize = false)
+    private Long parentProcessTaskStepId; //父工单步骤id
+
     public ProcessTaskStepVo() {
 
     }
@@ -823,5 +826,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setTaskConfigHash(String taskConfigHash) {
         this.taskConfigHash = taskConfigHash;
+    }
+
+    public Long getParentProcessTaskStepId() {
+        return parentProcessTaskStepId;
+    }
+
+    public void setParentProcessTaskStepId(Long parentProcessTaskStepId) {
+        this.parentProcessTaskStepId = parentProcessTaskStepId;
     }
 }

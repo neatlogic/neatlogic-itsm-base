@@ -888,6 +888,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
                     IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.COMPLETEPROCESSTASK);
                     IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.COMPLETEPROCESSTASK);
+                    //根据工单来源执行额外操作
+                    ProcessTaskInvokeVo invokeVo = processTaskMapper.getInvokeByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+                    if (invokeVo != null) {
+                        IProcessTaskSource processTaskSource = ProcessTaskSourceFactory.getHandler(invokeVo.getSource());
+                        if (processTaskSource != null) {
+                            processTaskSource.complete(currentProcessTaskStepVo);
+                        }
+                    }
                     ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
                     if (Objects.equals(processTaskVo.getNeedScore(), 1)) {
                         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
