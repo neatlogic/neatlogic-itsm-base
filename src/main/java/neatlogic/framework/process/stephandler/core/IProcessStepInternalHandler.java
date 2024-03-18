@@ -40,14 +40,14 @@ public interface IProcessStepInternalHandler {
      * @param @return
      * @return Object
      * @Time: 2020年7月27日
-     * @Description: 处理器特有的步骤信息
+     * @Description: 处理器特有的步骤信息（作为开始节点获取开始节点信息）
      */
     public Object getHandlerStepInfo(ProcessTaskStepVo currentProcessTaskStepVo);
 
     /**
      *
      * @Time: 2020年8月12日
-     * @Description: 处理器特有的步骤初始化信息
+     * @Description: 处理器特有的步骤初始化信息 （作为当前处理节点获取开始节点信息）
      * @param @return
      * @return Object
      */

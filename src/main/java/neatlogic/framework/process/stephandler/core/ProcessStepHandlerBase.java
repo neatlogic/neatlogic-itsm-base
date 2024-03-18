@@ -170,7 +170,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         processTaskSerialNumberMapper = _processTaskSerialNumberMapper;
     }
 
-//    @Autowired(required = false)
+    //    @Autowired(required = false)
     @Resource
     public void setIProcessStepHandlerUtil(IProcessStepHandlerUtil _processStepHandlerUtil) {
         IProcessStepHandlerUtil = _processStepHandlerUtil;
@@ -190,6 +190,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     public void setScoreTemplateMapper(ScoreTemplateMapper _scoreTemplateMapper) {
         scoreTemplateMapper = _scoreTemplateMapper;
     }
+
     private int updateProcessTaskStatus(Long processTaskId) {
         List<ProcessTaskStepVo> processTaskStepList = processTaskMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
 
@@ -887,6 +888,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
                     IProcessStepHandlerUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.COMPLETEPROCESSTASK);
                     IProcessStepHandlerUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.COMPLETEPROCESSTASK);
+                    //根据工单来源执行额外操作
+                    ProcessTaskInvokeVo invokeVo = processTaskMapper.getInvokeByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+                    if (invokeVo != null) {
+                        IProcessTaskSource processTaskSource = ProcessTaskSourceFactory.getHandler(invokeVo.getSource());
+                        if (processTaskSource != null) {
+                            processTaskSource.complete(currentProcessTaskStepVo);
+                        }
+                    }
                     ProcessTaskVo processTaskVo = processTaskMapper.getProcessTaskById(currentProcessTaskStepVo.getProcessTaskId());
                     if (Objects.equals(processTaskVo.getNeedScore(), 1)) {
                         ProcessTaskStepVo processTaskStepVo = new ProcessTaskStepVo();
@@ -1956,6 +1965,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             if (fromProcessTaskId != null && channelTypeRelationId != null) {
                 processTaskMapper.insertProcessTaskTransferReport(new ProcessTaskTransferReportVo(channelTypeRelationId, fromProcessTaskId, processTaskVo.getId()));
             }
+
+            //父子工单
+            String invoke = paramObj.getString("invoke");
+            if (StringUtils.isNotBlank(invoke)) {
+                IProcessTaskSource processTaskSource = ProcessTaskSourceFactory.getHandler(invoke);
+                if (processTaskSource == null) {
+                    throw new ProcessTaskSourceNotFoundException(invoke);
+                }
+                processTaskSource.saveDraft(paramObj, processTaskVo);
+            }
         } else {
             /* 锁定当前流程 **/
             processTaskMapper.getProcessTaskLockById(processTaskId);
@@ -2539,7 +2558,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 );
                 flag = processTaskMapper.checkIsProcessTaskStepUser(searchVo);
             } else {
-                AuthenticationInfoVo authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();;
+                AuthenticationInfoVo authenticationInfoVo = UserContext.get().getAuthenticationInfoVo();
+                ;
                 flag = processTaskMapper.checkIsWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue(), authenticationInfoVo);
             }
 
@@ -2611,10 +2631,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     /**
      * 更新processtask_step_worker表的uuid字段值
-     * @param processTaskId 工单ID
+     *
+     * @param processTaskId     工单ID
      * @param processTaskStepId 步骤ID
-     * @param oldUuid 旧值
-     * @param newUuid 新值
+     * @param oldUuid           旧值
+     * @param newUuid           新值
      */
     private void updateProcessTaskStepWorkerUuid(Long processTaskId, Long processTaskStepId, String oldUuid, String newUuid) {
         ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo(
@@ -2639,10 +2660,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     /**
      * 更新processtask_step_user表的user_uuid字段值
-     * @param processTaskId 工单ID
+     *
+     * @param processTaskId     工单ID
      * @param processTaskStepId 步骤ID
-     * @param oldUserUuid 旧值
-     * @param newUserUuid 新值
+     * @param oldUserUuid       旧值
+     * @param newUserUuid       新值
      */
     private void updateProcessTaskStepUserUserUuid(Long processTaskId, Long processTaskStepId, String oldUserUuid, String newUserUuid) {
         ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo(

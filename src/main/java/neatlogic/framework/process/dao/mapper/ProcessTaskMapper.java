@@ -347,6 +347,14 @@ public interface ProcessTaskMapper {
 
     List<ProcessTaskVo> searchProcessTaskListByOwnerAndExcludeId(ProcessTaskSearchVo searchVo);
 
+    int getSubProcessTaskCountByStepId(Long processTaskStepId);
+
+    List<ProcessTaskVo> SearchSubProcessTaskListByStepId(Long processTaskStepId);
+
+    ProcessTaskInvokeVo getInvokeByProcessTaskId(Long processTaskId);
+
+    int getSubProcessTaskCountByStepIdAndWithoutEndStatusList(@Param("processTaskStepId") Long processTaskStepId,@Param("statusList") List<String> statusList);
+
     int insertIgnoreProcessTaskConfig(ProcessTaskConfigVo processTaskConfigVo);
 
     int replaceProcessTaskOldFormProp(@Param("processTaskId") Long processTaskId, @Param("form") String form,
@@ -446,6 +454,8 @@ public interface ProcessTaskMapper {
 
     void insertProcessTaskUrge(@Param("processTaskId") Long processTaskId, @Param("lcu") String lcu);
 
+    int insertProcessTaskInvoke(@Param("processTaskId") Long processTaskId, @Param("source") String invoke, @Param("sourceType") String invokeType, @Param("invokeId") Long invokeId);
+
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
@@ -460,7 +470,7 @@ public interface ProcessTaskMapper {
 
     int updateProcessTaskIsShow(ProcessTaskVo processTaskVo);
 
-    int updateProcessTaskNeedScoreByIdList(@Param("idList")List<Long> idList, @Param("needScore")Integer needScore);
+    int updateProcessTaskNeedScoreByIdList(@Param("idList") List<Long> idList, @Param("needScore") Integer needScore);
 
     int updateProcessTaskTitleOwnerPriorityUuid(ProcessTaskVo processTaskVo);
 
@@ -552,4 +562,5 @@ public interface ProcessTaskMapper {
     int deleteProcessTaskTimeCostByProcessTaskId(Long processTaskId);
 
     int deleteProcessTaskFormContentByHash(String hash);
+
 }
