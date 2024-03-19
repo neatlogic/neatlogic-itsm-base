@@ -2097,6 +2097,16 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             if (indexHandler != null) {
                 indexHandler.createIndex(currentProcessTaskStepVo.getProcessTaskId());
             }
+
+            //父子工单
+            ProcessTaskInvokeVo processTaskInvokeVo = processTaskMapper.getInvokeByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+            if (processTaskInvokeVo != null) {
+                IProcessTaskSource processTaskSource = ProcessTaskSourceFactory.getHandler(processTaskInvokeVo.getSource());
+                if (processTaskSource == null) {
+                    throw new ProcessTaskSourceNotFoundException(processTaskInvokeVo.getSource());
+                }
+                processTaskSource.startProcess(currentProcessTaskStepVo);
+            }
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setIsActive(1);

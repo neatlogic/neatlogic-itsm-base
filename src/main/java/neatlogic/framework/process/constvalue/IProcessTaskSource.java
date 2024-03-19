@@ -45,6 +45,14 @@ public interface IProcessTaskSource {
     }
 
     /**
+     * 上报工单会执行的操作
+     *
+     * @param processTaskStepVo 工单当前步骤对象
+     */
+    default void startProcess(ProcessTaskStepVo processTaskStepVo){
+    }
+
+    /**
      * 保存工单会执行的操作
      *
      * @param processTaskStepVo 工单步骤对象

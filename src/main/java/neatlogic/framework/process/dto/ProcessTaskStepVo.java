@@ -159,7 +159,7 @@ public class ProcessTaskStepVo extends BasePageVo {
     private List<ProcessTagVo> processTagList;
 
     @JSONField(serialize = false)
-    private Long parentProcessTaskStepId; //父工单步骤id
+    private Long subProcessTaskId; //子工单id
 
     public ProcessTaskStepVo() {
 
@@ -828,11 +828,11 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.taskConfigHash = taskConfigHash;
     }
 
-    public Long getParentProcessTaskStepId() {
-        return parentProcessTaskStepId;
+    public Long getSubProcessTaskId() {
+        return subProcessTaskId;
     }
 
-    public void setParentProcessTaskStepId(Long parentProcessTaskStepId) {
-        this.parentProcessTaskStepId = parentProcessTaskStepId;
+    public void setSubProcessTaskId(Long subProcessTaskId) {
+        this.subProcessTaskId = subProcessTaskId;
     }
 }
