@@ -43,6 +43,8 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Se
 	private int backwardInputQuantity;
 	@EntityField(name = "回退输出数量", type = ApiParamType.INTEGER)
 	private int backwardOutputQuantity;
+	@EntityField(name = "是否隐藏", type = ApiParamType.BOOLEAN)
+	private Boolean isHidden;
 
 	public ProcessStepHandlerVo() {
 	}
@@ -186,5 +188,13 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Se
 	@Override
 	public ProcessStepHandlerVo clone() throws CloneNotSupportedException {
 		return (ProcessStepHandlerVo) super.clone();
+	}
+
+	public Boolean getHidden() {
+		return isHidden;
+	}
+
+	public void setHidden(Boolean hidden) {
+		isHidden = hidden;
 	}
 }

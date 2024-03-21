@@ -335,4 +335,12 @@ public interface IProcessStepHandler {
     default int getBackwardOutputQuantity() {
         return -1;
     }
+
+    /**
+     * 是否隐藏
+     * @return
+     */
+    default boolean isHidden() {
+        return false;
+    }
 }
