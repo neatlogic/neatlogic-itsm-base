@@ -61,6 +61,9 @@ public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
 			if(processStepHandlerVo.getType().equals(ProcessStepType.START.getValue())) {
 				continue;
 			}
+			if (processStepHandlerVo.getHidden()) {
+				continue;
+			}
 			for (ModuleVo moduleVo : moduleList) {
 				if (moduleVo.getId().equalsIgnoreCase(processStepHandlerVo.getModuleId())) {
 					returnProcessStepHandlerList.add(processStepHandlerVo);
@@ -91,6 +94,7 @@ public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
 				processStepHandlerVo.setForwardOutputQuantity(component.getForwardOutputQuantity());
 				processStepHandlerVo.setBackwardInputQuantity(component.getBackwardInputQuantity());
 				processStepHandlerVo.setBackwardOutputQuantity(component.getBackwardOutputQuantity());
+				processStepHandlerVo.setHidden(component.isHidden());
 				processStepHandlerList.add(processStepHandlerVo);
 			}
 		}
