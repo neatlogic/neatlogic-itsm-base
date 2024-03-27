@@ -95,6 +95,7 @@ public class ProcessStepHandlerFactory extends ModuleInitializedListenerBase {
 				processStepHandlerVo.setBackwardInputQuantity(component.getBackwardInputQuantity());
 				processStepHandlerVo.setBackwardOutputQuantity(component.getBackwardOutputQuantity());
 				processStepHandlerVo.setHidden(component.isHidden());
+				processStepHandlerVo.setFitMobile(component.isFitMobile());
 				processStepHandlerList.add(processStepHandlerVo);
 			}
 		}

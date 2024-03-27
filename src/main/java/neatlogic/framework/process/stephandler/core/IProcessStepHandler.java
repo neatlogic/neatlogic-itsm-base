@@ -343,4 +343,11 @@ public interface IProcessStepHandler {
     default boolean isHidden() {
         return false;
     }
+
+    /**
+     * 是否移动端支持处理
+     */
+    default boolean isFitMobile() {
+        return true;
+    }
 }

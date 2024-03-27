@@ -45,6 +45,8 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Se
 	private int backwardOutputQuantity;
 	@EntityField(name = "是否隐藏", type = ApiParamType.BOOLEAN)
 	private Boolean isHidden;
+	@EntityField(name = "是否移动端支持处理", type = ApiParamType.BOOLEAN)
+	private Boolean isFitMobile;
 
 	public ProcessStepHandlerVo() {
 	}
@@ -196,5 +198,13 @@ public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Se
 
 	public void setHidden(Boolean hidden) {
 		isHidden = hidden;
+	}
+
+	public Boolean getFitMobile() {
+		return isFitMobile;
+	}
+
+	public void setFitMobile(Boolean fitMobile) {
+		isFitMobile = fitMobile;
 	}
 }
