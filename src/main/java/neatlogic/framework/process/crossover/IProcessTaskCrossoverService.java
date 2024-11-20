@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface IProcessTaskCrossoverService extends ICrossoverService {
 
@@ -187,5 +188,13 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @return
      */
     ProcessTaskFormAttributeDataVo getProcessTaskFormAttributeDataByProcessTaskIdAndAttributeUuid(Long processTaskId, String attributeUuid);
+
+    /**
+     * @param processTaskVo
+     * @return Set<ProcessTaskStepVo>
+     * @Time:2020年11月26日
+     * @Description: 获取当前用户有转交权限的步骤列表
+     */
+    public Set<ProcessTaskStepVo> getTransferableStepListByProcessTask(ProcessTaskVo processTaskVo, String userUuid);
 }
 
