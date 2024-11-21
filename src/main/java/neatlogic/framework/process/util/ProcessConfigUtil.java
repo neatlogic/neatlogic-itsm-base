@@ -24,6 +24,7 @@ import neatlogic.framework.form.constvalue.FormAttributeAuthType;
 import neatlogic.framework.process.constvalue.*;
 import neatlogic.framework.process.exception.process.ProcessConfigException;
 import neatlogic.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 import neatlogic.framework.process.stephandler.core.IProcessStepInternalHandler;
 import neatlogic.framework.process.stephandler.core.ProcessMessageManager;
 import neatlogic.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
@@ -146,10 +147,10 @@ public class ProcessConfigUtil {
      * @param stepActions   权限集合
      * @return
      */
-    public static JSONArray regulateAuthorityList(JSONArray authorityList, ProcessTaskOperationType[] stepActions) {
+    public static JSONArray regulateAuthorityList(JSONArray authorityList, IOperationType[] stepActions) {
         JSONArray authorityArray = new JSONArray();
         if (stepActions != null) {
-            for (ProcessTaskOperationType stepAction : stepActions) {
+            for (IOperationType stepAction : stepActions) {
                 authorityArray.add(new JSONObject() {{
                     this.put("action", stepAction.getValue());
                     this.put("text", stepAction.getText());

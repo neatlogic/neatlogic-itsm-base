@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 package neatlogic.framework.process.exception.operationauth;
 
-import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 
 /**
  * @author linbq
@@ -24,7 +24,7 @@ import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
 public class ProcessTaskOperationUnauthorizedException extends ProcessTaskPermissionDeniedException {
     private static final long serialVersionUID = 9216337410118158639L;
 
-    public ProcessTaskOperationUnauthorizedException(ProcessTaskOperationType operationType) {
+    public ProcessTaskOperationUnauthorizedException(IOperationType operationType) {
         super("您的“{0}”操作未获得授权", operationType.getText());
     }
 }

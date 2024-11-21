@@ -35,15 +35,15 @@ public class ProcessAuthManager {
     /** 工单id与步骤idList的键值对 **/
     private Map<Long, Set<Long>> processTaskStepIdSetMap;
     /** 需要校验的权限列表 **/
-    private Set<ProcessTaskOperationType> operationTypeSet;
+    private Set<IOperationType> operationTypeSet;
     /** 需要校验的某个工单或步骤的某个权限 **/
-    private Map<Long, ProcessTaskOperationType> checkOperationTypeMap;
+    private Map<Long, IOperationType> checkOperationTypeMap;
     /** 缓存作用，保存授权给当前用户处理服务工单的用户列表 **/
     private Map<String, List<String>> channelUuidFromUserUuidListMap = new HashMap<>();
     /** 缓存作用，保存当前用户授权列表 **/
     private Map<String, List<ProcessTaskAgentVo>> processTaskAgentListMap = new HashMap<>();
     /** 保存某个工单或步骤的某个权限检验时，导致失败的原因 **/
-    private Map<Long, Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap = new HashMap<>();
+    private Map<Long, Map<IOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap = new HashMap<>();
     /** 保存额外参数 **/
     private Map<Long, JSONObject> extraParamMap = new HashMap<>();
     /** 需要校验的用户，如果不传，默认为当前用户 **/
@@ -51,7 +51,7 @@ public class ProcessAuthManager {
     public static class Builder {
         private Set<Long> processTaskIdSet = new HashSet<>();
         private Set<Long> processTaskStepIdSet = new HashSet<>();
-        private Set<ProcessTaskOperationType> operationTypeSet = new HashSet<>();
+        private Set<IOperationType> operationTypeSet = new HashSet<>();
         private String userUuid;
         public Builder() {}
 
@@ -81,7 +81,7 @@ public class ProcessAuthManager {
             return this;
         }
 
-        public Builder addOperationType(ProcessTaskOperationType operationType) {
+        public Builder addOperationType(IOperationType operationType) {
             operationTypeSet.add(operationType);
             return this;
         }
@@ -104,11 +104,11 @@ public class ProcessAuthManager {
      */
     public static class TaskOperationChecker {
         private Long processTaskId;
-        private ProcessTaskOperationType operationType;
+        private IOperationType operationType;
         private JSONObject extraParam;
         private String userUuid;
 
-        public TaskOperationChecker(Long processTaskId, ProcessTaskOperationType operationType) {
+        public TaskOperationChecker(Long processTaskId, IOperationType operationType) {
             this.processTaskId = processTaskId;
             this.operationType = operationType;
         }
@@ -138,11 +138,11 @@ public class ProcessAuthManager {
      */
     public static class StepOperationChecker {
         private Long processTaskStepId;
-        private ProcessTaskOperationType operationType;
+        private IOperationType operationType;
         private JSONObject extraParam;
         private String userUuid;
 
-        public StepOperationChecker(Long processTaskStepId, ProcessTaskOperationType operationType) {
+        public StepOperationChecker(Long processTaskStepId, IOperationType operationType) {
             this.processTaskStepId = processTaskStepId;
             this.operationType = operationType;
         }
@@ -196,11 +196,11 @@ public class ProcessAuthManager {
      *
      * @Time:2020年12月21日
      * @Description: 返回多个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表
-     * @return Map<Long,Set<ProcessTaskOperationType>>
+     * @return Map<Long,Set<IOperationType>>
      */
-    public Map<Long, Set<ProcessTaskOperationType>> getOperateMap() {
+    public Map<Long, Set<IOperationType>> getOperateMap() {
 //        long startTime = System.currentTimeMillis();
-        Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
+        Map<Long, Set<IOperationType>> resultMap = new HashMap<>();
         if (CollectionUtils.isEmpty(processTaskIdSet) && CollectionUtils.isEmpty(processTaskStepIdSet)) {
             return resultMap;
         }
@@ -290,18 +290,18 @@ public class ProcessAuthManager {
      *
      * @Time:2020年12月21日
      * @Description: 返回一个工单及其步骤权限列表，返回值map中的key可能是工单id或步骤id，value就是其拥有的权限列表
-     * @return Map<Long,Set<ProcessTaskOperationType>>
+     * @return Map<Long,Set<IOperationType>>
      */
-    private Map<Long, Set<ProcessTaskOperationType>> getOperateMap(ProcessTaskVo processTaskVo, String userUuid) {
-        Set<ProcessTaskOperationType> taskOperationTypeSet = new HashSet<>();
-        Set<ProcessTaskOperationType> stepOperationTypeSet = new HashSet<>();
-        List<ProcessTaskOperationType> taskOperationTypeList = OperationAuthHandlerType.TASK.getOperationTypeList();
-        List<ProcessTaskOperationType> stepOperationTypeList = OperationAuthHandlerType.STEP.getOperationTypeList();
+    private Map<Long, Set<IOperationType>> getOperateMap(ProcessTaskVo processTaskVo, String userUuid) {
+        Set<IOperationType> taskOperationTypeSet = new HashSet<>();
+        Set<IOperationType> stepOperationTypeSet = new HashSet<>();
+        List<IOperationType> taskOperationTypeList = OperationAuthHandlerType.TASK.getOperationTypeList();
+        List<IOperationType> stepOperationTypeList = OperationAuthHandlerType.STEP.getOperationTypeList();
         if (CollectionUtils.isEmpty(operationTypeSet)) {
             taskOperationTypeSet.addAll(taskOperationTypeList);
             stepOperationTypeSet.addAll(stepOperationTypeList);
         } else {
-            for (ProcessTaskOperationType operationType : operationTypeSet) {
+            for (IOperationType operationType : operationTypeSet) {
                 if (taskOperationTypeList.contains(operationType)) {
                     taskOperationTypeSet.add(operationType);
                 } else if (stepOperationTypeList.contains(operationType)) {
@@ -309,13 +309,13 @@ public class ProcessAuthManager {
                 }
             }
         }
-        Map<Long, Set<ProcessTaskOperationType>> resultMap = new HashMap<>();
+        Map<Long, Set<IOperationType>> resultMap = new HashMap<>();
 //        String userUuid = UserContext.get().getUserUuid(true);
         JSONObject extraParam = extraParamMap.computeIfAbsent(processTaskVo.getId(), key -> new JSONObject());
         if (CollectionUtils.isNotEmpty(taskOperationTypeSet)) {
             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
-            Set<ProcessTaskOperationType> resultSet = new HashSet<>();
-            for (ProcessTaskOperationType operationType : taskOperationTypeSet) {
+            Set<IOperationType> resultSet = new HashSet<>();
+            for (IOperationType operationType : taskOperationTypeSet) {
                 boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                 if (result) {
                     resultSet.add(operationType);
@@ -352,8 +352,8 @@ public class ProcessAuthManager {
                 for (ProcessTaskStepVo processTaskStepVo : processTaskVo.getStepList()) {
                     if (processTaskStepIdList.contains(processTaskStepVo.getId())) {
                         extraParam = extraParamMap.computeIfAbsent(processTaskStepVo.getId(), key -> new JSONObject());
-                        Set<ProcessTaskOperationType> resultSet = new HashSet<>();
-                        for (ProcessTaskOperationType operationType : stepOperationTypeSet) {
+                        Set<IOperationType> resultSet = new HashSet<>();
+                        for (IOperationType operationType : stepOperationTypeSet) {
                             Boolean result = null;
                             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
                             if (handler != null) {
@@ -458,8 +458,8 @@ public class ProcessAuthManager {
      */
     public boolean check() {
         if (MapUtils.isNotEmpty(checkOperationTypeMap)) {
-            Map<Long, Set<ProcessTaskOperationType>> resultMap = getOperateMap();
-            for (Map.Entry<Long, ProcessTaskOperationType> entry : checkOperationTypeMap.entrySet()) {
+            Map<Long, Set<IOperationType>> resultMap = getOperateMap();
+            for (Map.Entry<Long, IOperationType> entry : checkOperationTypeMap.entrySet()) {
                 return resultMap.computeIfAbsent(entry.getKey(), k -> new HashSet<>()).contains(entry.getValue());
             }
         }
@@ -473,8 +473,8 @@ public class ProcessAuthManager {
      */
     public boolean checkAndNoPermissionThrowException() {
         if (!check()) {
-            for (Map.Entry<Long, ProcessTaskOperationType> entry : checkOperationTypeMap.entrySet()) {
-                Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException> map = operationTypePermissionDeniedExceptionMap.get(entry.getKey());
+            for (Map.Entry<Long, IOperationType> entry : checkOperationTypeMap.entrySet()) {
+                Map<IOperationType, ProcessTaskPermissionDeniedException> map = operationTypePermissionDeniedExceptionMap.get(entry.getKey());
                 if (MapUtils.isNotEmpty(map)) {
                     ProcessTaskPermissionDeniedException exception = map.get(entry.getValue());
                     if (exception != null) {
@@ -493,8 +493,8 @@ public class ProcessAuthManager {
      * @param operationType 操作权限类型
      * @return
      */
-    public ProcessTaskPermissionDeniedException getProcessTaskPermissionDeniedException(Long id, ProcessTaskOperationType operationType) {
-        Map<ProcessTaskOperationType, ProcessTaskPermissionDeniedException> map = operationTypePermissionDeniedExceptionMap.get(id);
+    public ProcessTaskPermissionDeniedException getProcessTaskPermissionDeniedException(Long id, IOperationType operationType) {
+        Map<IOperationType, ProcessTaskPermissionDeniedException> map = operationTypePermissionDeniedExceptionMap.get(id);
         if (MapUtils.isNotEmpty(map)) {
             return map.get(operationType);
         }

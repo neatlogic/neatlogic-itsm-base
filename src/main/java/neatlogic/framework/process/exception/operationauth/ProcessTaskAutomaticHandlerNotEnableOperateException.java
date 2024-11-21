@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 package neatlogic.framework.process.exception.operationauth;
 
-import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 
 /**
  * @author linbq
@@ -24,7 +24,7 @@ import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
 public class ProcessTaskAutomaticHandlerNotEnableOperateException extends ProcessTaskPermissionDeniedException {
     private static final long serialVersionUID = 9216337410118158664L;
 
-    public ProcessTaskAutomaticHandlerNotEnableOperateException(ProcessTaskOperationType operationType) {
+    public ProcessTaskAutomaticHandlerNotEnableOperateException(IOperationType operationType) {
         super("外部调用节点不支持“{0}”操作", operationType.getText());
     }
 }

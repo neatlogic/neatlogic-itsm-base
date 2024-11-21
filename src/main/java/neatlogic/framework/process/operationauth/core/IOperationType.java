@@ -15,22 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package neatlogic.framework.process.stephandler.core;
+package neatlogic.framework.process.operationauth.core;
 
-import neatlogic.framework.process.operationauth.core.IOperationType;
-import neatlogic.framework.process.dto.ProcessTaskStepVo;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 工单步骤操作后处理器接口
- */
-public interface IProcessTaskOperatePostProcessor {
+ * @author linbq
+ * @since 2021/5/17 14:17
+ **/
+public interface IOperationType {
+    String getValue();
 
-    /**
-     * 该方法在步骤操作完成后执行
-     * @param currentProcessTaskStepVo 步骤信息
-     * @param operationType 操作类型
-     */
-    default void postProcessAfterProcessTaskStepOperate(ProcessTaskStepVo currentProcessTaskStepVo, IOperationType operationType) {
+    String getText();
 
+    default List<String> getDefaultValue() {
+        return new ArrayList<>();
+    }
+
+    default List<String> getGroupList() {
+        return new ArrayList<>();
+    }
+
+    default OperationAuthHandlerType getOperationAuthHandlerType() {
+        return null;
     }
 }

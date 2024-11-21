@@ -20,7 +20,7 @@ package neatlogic.framework.process.crossover;
 import neatlogic.framework.crossover.ICrossoverService;
 import neatlogic.framework.notify.core.INotifyTriggerType;
 import neatlogic.framework.process.audithandler.core.IProcessTaskAuditType;
-import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
 import neatlogic.framework.process.dto.ProcessTaskVo;
 import neatlogic.framework.process.stepremind.core.IProcessTaskStepRemindType;
@@ -69,7 +69,7 @@ public interface IProcessStepHandlerCrossoverUtil extends ICrossoverService {
      * @Params:[currentProcessTaskStepVo, action]
      * @Returns:void
      **/
-    void timeAudit(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskOperationType action);
+    void timeAudit(ProcessTaskStepVo currentProcessTaskStepVo, IOperationType action);
 
     /**
      * @Description: 记录操作活动
@@ -114,14 +114,14 @@ public interface IProcessStepHandlerCrossoverUtil extends ICrossoverService {
      * @Params:[currentProcessTaskStepVo, action]
      * @Returns:void
      **/
-    void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, ProcessTaskOperationType action);
+    void saveContentAndFile(ProcessTaskStepVo currentProcessTaskStepVo, IOperationType action);
 
     /**
      * 保存工单级别的操作描述内容
      * @param currentProcessTaskVo
      * @param action
      */
-    void saveProcessTaskOperationContent(ProcessTaskVo currentProcessTaskVo, ProcessTaskOperationType action);
+    void saveProcessTaskOperationContent(ProcessTaskVo currentProcessTaskVo, IOperationType action);
 
     /**
      * 流转操作时检查回复信息是否必填

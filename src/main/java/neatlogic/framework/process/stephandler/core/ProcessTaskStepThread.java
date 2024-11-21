@@ -19,8 +19,8 @@ package neatlogic.framework.process.stephandler.core;
 
 import neatlogic.framework.asynchronization.thread.NeatLogicThread;
 import neatlogic.framework.crossover.CrossoverServiceFactory;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 import neatlogic.framework.process.constvalue.ProcessStepMode;
-import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
 import neatlogic.framework.process.crossover.IProcessTaskCrossoverMapper;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
 
@@ -34,11 +34,11 @@ public abstract class ProcessTaskStepThread extends NeatLogicThread {
 
     private final ProcessStepMode mode;
 
-    private final ProcessTaskOperationType operationType;
+    private final IOperationType operationType;
 
     private Long inOperationId;
 
-    public ProcessTaskStepThread(ProcessTaskOperationType operationType, ProcessTaskStepVo processTaskStepVo, ProcessStepMode mode) {
+    public ProcessTaskStepThread(IOperationType operationType, ProcessTaskStepVo processTaskStepVo, ProcessStepMode mode) {
         super("PROCESSTASK-STEP-" + (operationType != null ? operationType.getValue() : "空") + (processTaskStepVo != null ? "-" + processTaskStepVo.getName() + "_" +processTaskStepVo.getId() : ""));
         this.processTaskStepVo = processTaskStepVo;
         this.processTaskId = processTaskStepVo.getProcessTaskId();
@@ -80,7 +80,7 @@ public abstract class ProcessTaskStepThread extends NeatLogicThread {
         return mode;
     }
 
-    public ProcessTaskOperationType getOperationType() {
+    public IOperationType getOperationType() {
         return operationType;
     }
 }

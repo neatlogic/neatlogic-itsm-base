@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 package neatlogic.framework.process.exception.operationauth;
 
-import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 
 /**
  * @author linbq
@@ -24,7 +24,7 @@ import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
 public class ProcessTaskTimerHandlerNotEnableOperateException extends ProcessTaskPermissionDeniedException {
     private static final long serialVersionUID = 9216337410118158663L;
 
-    public ProcessTaskTimerHandlerNotEnableOperateException(ProcessTaskOperationType operationType) {
+    public ProcessTaskTimerHandlerNotEnableOperateException(IOperationType operationType) {
         super("定时节点不支持“{0}”操作", operationType.getText());
     }
 }

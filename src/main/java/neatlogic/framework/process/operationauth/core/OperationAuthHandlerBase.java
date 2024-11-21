@@ -224,7 +224,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     * @return boolean
      */
     protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
-        ProcessTaskOperationType operationType, String userUuid) {
+                                                     IOperationType operationType, String userUuid) {
         JSONArray authorityList = null;
         ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
         String stepConfig = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
@@ -262,8 +262,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     * @param userUuid 用户
     * @return boolean
      */
-    protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo,
-        ProcessTaskOperationType operationType, String userUuid) {
+    protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, IOperationType operationType, String userUuid) {
         JSONArray authorityList =
             (JSONArray)JSONPath.read(processTaskVo.getConfig(), "process.processConfig.authorityList");
         if (CollectionUtils.isNotEmpty(authorityList)) {
@@ -272,8 +271,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
         return false;
     }
 
-    private boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
-        ProcessTaskOperationType operationType, JSONArray authorityList, String userUuid) {
+    private boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo, IOperationType operationType, JSONArray authorityList, String userUuid) {
         for (int i = 0; i < authorityList.size(); i++) {
             JSONObject authorityObj = authorityList.getJSONObject(i);
             String action = authorityObj.getString("action");
@@ -409,7 +407,7 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                 if (handler != null) {
                     if (ProcessStepMode.MT == handler.getMode()) {// 手动处理节点
                         if (checkOperationAuthIsConfigured(processTaskVo, processTaskStepVo,
-                            ProcessTaskOperationType.STEP_RETREAT, userUuid)) {
+                                ProcessTaskStepOperationType.STEP_RETREAT, userUuid)) {
                             return true;
                         }
                     } else {// 自动处理节点，继续找前置节点

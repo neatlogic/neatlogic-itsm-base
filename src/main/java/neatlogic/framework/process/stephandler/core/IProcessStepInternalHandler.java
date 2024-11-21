@@ -2,8 +2,8 @@ package neatlogic.framework.process.stephandler.core;
 
 import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.notify.core.INotifyPolicyHandler;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 import neatlogic.framework.process.constvalue.ProcessFlowDirection;
-import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
 import neatlogic.framework.process.dto.ProcessStepVo;
 import neatlogic.framework.process.dto.ProcessTaskStepDataVo;
 import neatlogic.framework.process.dto.ProcessTaskStepInOperationVo;
@@ -90,7 +90,7 @@ public interface IProcessStepInternalHandler {
     /**
      * 返回步骤动作，校验时用
      */
-    default ProcessTaskOperationType[] getStepActions() {
+    default IOperationType[] getStepActions() {
         //TODO 加default只是为了不报错，重构完所有代码后删掉这个default函数
         return null;
     }
@@ -98,7 +98,7 @@ public interface IProcessStepInternalHandler {
     /**
      * 返回步骤按钮列表
      */
-    default ProcessTaskOperationType[] getStepButtons() {
+    default IOperationType[] getStepButtons() {
         //TODO 加default只是为了不报错，重构完所有代码后删掉这个default函数
         return null;
     }

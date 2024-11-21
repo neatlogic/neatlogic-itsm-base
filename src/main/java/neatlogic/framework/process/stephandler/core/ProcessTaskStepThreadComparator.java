@@ -19,7 +19,7 @@ package neatlogic.framework.process.stephandler.core;
 
 import neatlogic.framework.process.constvalue.ProcessFlowDirection;
 import neatlogic.framework.process.constvalue.ProcessStepMode;
-import neatlogic.framework.process.constvalue.ProcessTaskOperationType;
+import neatlogic.framework.process.constvalue.ProcessTaskStepOperationType;
 import neatlogic.framework.process.dto.ProcessTaskStepRelVo;
 
 import java.util.*;
@@ -44,10 +44,10 @@ public class ProcessTaskStepThreadComparator implements Comparator<ProcessTaskSt
     @Override
     public int compare(ProcessTaskStepThread e1, ProcessTaskStepThread e2) {
         if (e1.getOperationType() != e2.getOperationType()) {
-            if (e1.getOperationType() != ProcessTaskOperationType.STEP_ACTIVE) {
+            if (e1.getOperationType() != ProcessTaskStepOperationType.STEP_ACTIVE) {
                 return 1;
             }
-            if (e2.getOperationType() != ProcessTaskOperationType.STEP_ACTIVE) {
+            if (e2.getOperationType() != ProcessTaskStepOperationType.STEP_ACTIVE) {
                 return -1;
             }
         }
