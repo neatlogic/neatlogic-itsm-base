@@ -26,5 +26,5 @@ import java.util.List;
 
 public interface ICollectionCrossoverService extends ICrossoverService {
     @Transactional
-    Long applyCollectionDefinition(String title, String content, String userId, JSONArray formData, JSONArray processFormData, List<TagVo> tagList, Boolean needLaunch) throws Exception;
+    Long applyCollectionDefinition(String title, String content, String userId, JSONArray formData, /*JSONArray processFormData,*/ List<TagVo> tagList, Boolean needLaunch) throws Exception;
 }
