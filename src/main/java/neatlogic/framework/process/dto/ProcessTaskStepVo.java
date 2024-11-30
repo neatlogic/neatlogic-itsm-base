@@ -170,6 +170,8 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     @EntityField(name = "是否在当前步骤标签中", type = ApiParamType.INTEGER)
     private Integer isInTheCurrentStepTab;
+    @EntityField(name = "配置信息", type = ApiParamType.JSONOBJECT)
+    private JSONObject config;
 
     public ProcessTaskStepVo() {
 
@@ -876,5 +878,13 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setIsInTheCurrentStepTab(Integer isInTheCurrentStepTab) {
         this.isInTheCurrentStepTab = isInTheCurrentStepTab;
+    }
+
+    public JSONObject getConfig() {
+        return config;
+    }
+
+    public void setConfig(JSONObject config) {
+        this.config = config;
     }
 }
