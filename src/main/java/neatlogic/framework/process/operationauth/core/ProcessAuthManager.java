@@ -316,8 +316,8 @@ public class ProcessAuthManager {
             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(OperationAuthHandlerType.TASK.getValue());
             Set<IOperationType> resultSet = new HashSet<>();
             for (IOperationType operationType : taskOperationTypeSet) {
-                boolean result = handler.getOperateMap(processTaskVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
-                if (result) {
+                PredicateResult result = handler.getOperateMap(processTaskVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
+                if (result == PredicateResult.ACCEPT) {
                     resultSet.add(operationType);
                 } else {
                     /** 因为上报权限不能授权，所以转报和复制上报权限不能授权 **/
@@ -335,7 +335,7 @@ public class ProcessAuthManager {
                     if (CollectionUtils.isNotEmpty(fromUuidList)) {
                         for (String fromUuid : fromUuidList) {
                             result = handler.getOperateMap(processTaskVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
-                            if (result) {
+                            if (result == PredicateResult.ACCEPT) {
                                 resultSet.add(operationType);
                                 break;
                             }
@@ -354,18 +354,18 @@ public class ProcessAuthManager {
                         extraParam = extraParamMap.computeIfAbsent(processTaskStepVo.getId(), key -> new JSONObject());
                         Set<IOperationType> resultSet = new HashSet<>();
                         for (IOperationType operationType : stepOperationTypeSet) {
-                            Boolean result = null;
+                            PredicateResult result = null;
                             IOperationAuthHandler handler = OperationAuthHandlerFactory.getHandler(processTaskStepVo.getHandler());
                             if (handler != null) {
                                 result = handler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                             }
-                            if(result == null || result) {
+                            if(result == null || result == PredicateResult.ACCEPT) {
                                 result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, userUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                 if (result == null) {
-                                    result = false;
+                                    result = PredicateResult.DENY;
                                 }
                             }
-                            if (result) {
+                            if (result == PredicateResult.ACCEPT) {
                                 resultSet.add(operationType);
                             } else {
                                 /** 如果当前用户接受了其他用户的授权，查出其他用户拥有的权限，叠加当前用户权限里 **/
@@ -376,13 +376,13 @@ public class ProcessAuthManager {
                                         if (handler != null) {
                                             result = handler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                         }
-                                        if(result == null || result) {
+                                        if(result == null || result == PredicateResult.ACCEPT) {
                                             result = stepHandler.getOperateMap(processTaskVo, processTaskStepVo, fromUuid, operationType, operationTypePermissionDeniedExceptionMap, extraParam);
                                             if (result == null) {
-                                                result = false;
+                                                result = PredicateResult.DENY;
                                             }
                                         }
-                                        if (result) {
+                                        if (result == PredicateResult.ACCEPT) {
                                             resultSet.add(operationType);
                                             break;
                                         }
