@@ -11,6 +11,6 @@ package neatlogic.framework.process.operationauth.core;
  */
 @FunctionalInterface
 public interface TernaryPredicate<T, U, V, W, X> {
-    
-    boolean test(T t, U u, V v, W w, X x);
+
+    PredicateResult test(T t, U u, V v, W w, X x);
 }

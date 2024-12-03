@@ -21,7 +21,7 @@ public interface IOperationAuthHandler {
 
     String getHandler();
 
-    default Boolean getOperateMap(ProcessTaskVo processTaskVo, String userUuid,
+    default PredicateResult getOperateMap(ProcessTaskVo processTaskVo, String userUuid,
                                   IOperationType operationType,
                                   Map<Long, Map<IOperationType, ProcessTaskPermissionDeniedException>> operationTypePermissionDeniedExceptionMap,
                                   JSONObject extraParam
@@ -37,7 +37,7 @@ public interface IOperationAuthHandler {
      * @param operationType 需要判断的权限类型
      * @return
      */
-    default Boolean getOperateMap(ProcessTaskVo processTaskVo,
+    default PredicateResult getOperateMap(ProcessTaskVo processTaskVo,
                                   ProcessTaskStepVo processTaskStepVo,
                                   String userUuid,
                                   IOperationType operationType,

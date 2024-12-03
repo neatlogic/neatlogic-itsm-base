@@ -17,39 +17,17 @@
 
 package neatlogic.framework.process.operationauth.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * @author linbq
- * @since 2021/5/17 14:17
- **/
-public interface IOperationType {
-    String getValue();
-
-    String getText();
-
-    default List<String> getDefaultValue() {
-        return new ArrayList<>();
-    }
-
-    default List<String> getGroupList() {
-        return new ArrayList<>();
-    }
-
+public enum PredicateResult {
     /**
-     * 该操作权限级别，工单级别或步骤级别
-     * @return
+     * 否认
      */
-    default OperationAuthHandlerType getOperationAuthHandlerType() {
-        return null;
-    }
-
+    DENY,
     /**
-     * 该操作权限是否可以授予给别人
-     * @return
+     * 中立
      */
-    default boolean getCanProxyPermission() {
-        return true;
-    }
+    NEUTRAL,
+    /**
+     * 接受
+     */
+    ACCEPT;
 }
