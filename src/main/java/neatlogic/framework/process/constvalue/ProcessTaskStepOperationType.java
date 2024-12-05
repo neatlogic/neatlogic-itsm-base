@@ -51,6 +51,7 @@ public enum ProcessTaskStepOperationType implements IOperationType {
     TASK_DELETE("deletetask", "删除任务"),
     TASK_COMPLETE("completetask", "完成任务"),
     TRANSFER_EOA_STEP("transfereoastep", "转交审批步骤"),
+    STEP_REACTIVATE("reactivatestep", "重新激活步骤"),
     ;
     private String status;
     private String text;
