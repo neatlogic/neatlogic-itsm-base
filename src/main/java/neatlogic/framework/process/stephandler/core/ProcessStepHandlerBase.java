@@ -283,13 +283,19 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     /* 计算SLA并触发超时警告 **/
                     processStepHandlerCrossoverUtil.calculateSla(currentProcessTaskStepVo);
 
-                    /* 触发通知 **/
-                    processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ACTIVE);
-
-
-
-                    /* 执行动作 **/
-                    processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ACTIVE);
+                    IProcessTaskStepTimeAuditCrossoverMapper processTaskStepTimeAuditCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskStepTimeAuditCrossoverMapper.class);
+                    int count = processTaskStepTimeAuditCrossoverMapper.getProcessTaskStepCostCountByProcessTaskStepIdAndStartOperateList(currentProcessTaskStepVo.getId(), Arrays.asList(ProcessTaskStepOperationType.STEP_COMPLETE.getValue(), ProcessTaskStepOperationType.STEP_BACK.getValue()));
+                    if (count == 0) {
+                        /* 触发通知 **/
+                        processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ACTIVE);
+                        /* 执行动作 **/
+                        processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ACTIVE);
+                    } else {
+                        /* 触发通知 **/
+                        processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.REACTIVATE);
+                        /* 执行动作 **/
+                        processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.REACTIVATE);
+                    }
                 } else if (this.getMode().equals(ProcessStepMode.AT)) {
                     myActive(currentProcessTaskStepVo);
                     currentProcessTaskStepVo.setIsActive(1);

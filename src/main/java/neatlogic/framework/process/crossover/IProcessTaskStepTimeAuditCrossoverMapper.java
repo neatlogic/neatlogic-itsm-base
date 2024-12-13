@@ -19,10 +19,13 @@ package neatlogic.framework.process.crossover;
 
 import neatlogic.framework.crossover.ICrossoverService;
 import neatlogic.framework.process.dto.ProcessTaskStepTimeAuditVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface IProcessTaskStepTimeAuditCrossoverMapper extends ICrossoverService {
 
     List<ProcessTaskStepTimeAuditVo> getProcessTaskStepTimeAuditBySlaId(Long slaId);
+
+    int getProcessTaskStepCostCountByProcessTaskStepIdAndStartOperateList(@Param("processTaskStepId") Long processTaskStepId, @Param("startOperateList") List<String> startOperateList);
 }
