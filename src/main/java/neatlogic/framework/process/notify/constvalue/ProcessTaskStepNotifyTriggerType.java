@@ -14,6 +14,10 @@ public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
     ACTIVE("active", "nfpnc.processtaskstepnotifytriggertype.text.active", "nfpnc.processtaskstepnotifytriggertype.description.active",
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MAJOR.getValue(),
                     ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MINOR.getValue())),
+
+    REACTIVATE("reactivate", "nfpnc.processtaskstepnotifytriggertype.text.reactivate", "nfpnc.processtaskstepnotifytriggertype.description.reactivate",
+            Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MAJOR.getValue(),
+                    ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MINOR.getValue())),
     ASSIGNEXCEPTION("assignexception", "nfpnc.processtaskstepnotifytriggertype.text.assignexception", "nfpnc.processtaskstepnotifytriggertype.description.assignexception",
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MAJOR.getValue(),
                     ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MINOR.getValue(),
