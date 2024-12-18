@@ -19,7 +19,10 @@ import neatlogic.framework.applicationlistener.core.ModuleInitializedListenerBas
 import neatlogic.framework.bootstrap.NeatLogicWebApplicationContext;
 import neatlogic.framework.common.RootComponent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author linbq
@@ -28,7 +31,7 @@ import java.util.*;
 @RootComponent
 public class AutoCompleteRuleHandlerFactory extends ModuleInitializedListenerBase {
 
-    private static List<IAutoCompleteRuleHandler> list = new ArrayList<>();
+    private static final List<IAutoCompleteRuleHandler> list = new ArrayList<>();
 
     public static int getHandlerSize(){
         return list.size();
