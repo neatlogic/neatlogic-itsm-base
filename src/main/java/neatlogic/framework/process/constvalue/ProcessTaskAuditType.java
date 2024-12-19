@@ -43,8 +43,11 @@ public enum ProcessTaskAuditType implements IProcessTaskAuditType {
     UPDATEFOCUSUSER("updatefocususer", "修改工单关注人", "修改工单关注人"),
     FOCUSTASK("focustask", "关注工单", "关注工单"),
     UNDOFOCUSTASK("undofocustask", "取消关注工单", "取消关注工单"),
-	BINDREPEAT("bindrepeat", "绑定重复工单", "绑定重复工单"),
-	UNBINDREPEAT("unbindrepeat", "解绑重复工单", "解绑重复工单")
+	BINDREPEAT("bindrepeat", "绑定重复工单", "将【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单标记为重复工单"),
+	UNBINDREPEAT("unbindrepeat", "解绑重复工单", "将【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单移除重复工单"),
+	BOUNDREPEAT("boundrepeat", "被绑定重复工单", "被【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单标记为重复事件"),
+	UNBOUNDREPEAT("unboundrepeat", "被解绑重复工单", "已从【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单移除重复事件"),
+	AUTOCANCELREPEAT("autocancelrepeat", "自动取消重复工单", "【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单已完成，当前工单标记为重复事件，工单将自动取消"),
 	;
 	private final String value;
 	private final String text;

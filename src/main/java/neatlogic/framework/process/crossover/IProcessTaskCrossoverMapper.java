@@ -103,6 +103,10 @@ public interface IProcessTaskCrossoverMapper extends ICrossoverService {
 
     List<ProcessTaskStepAgentVo> getProcessTaskStepAgentListByProcessTaskIdList(List<Long> processTaskIdList);
 
+    Long getRepeatGroupIdByProcessTaskId(Long processTaskId);
+
+    List<Long> getProcessTaskIdListByRepeatGroupId(Long repeatGroupId);
+
     Integer getProcessTaskStepReapprovalRestoreBackupMaxSortByBackupStepId(Long processTaskStepId);
 
     List<ProcessTaskStepReapprovalRestoreBackupVo> getProcessTaskStepReapprovalRestoreBackupListByBackupStepId(Long processTaskStepId);
