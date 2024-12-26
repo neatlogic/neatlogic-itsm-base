@@ -20,7 +20,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.dto.BaseEditorVo;
-import neatlogic.framework.process.dto.score.ProcessScoreTemplateVo;
 import neatlogic.framework.restful.annotation.EntityField;
 
 import java.util.List;
@@ -48,12 +47,12 @@ public class ProcessVo extends BaseEditorVo {
     private String formUuid;
     @JSONField(serialize = false)
     private List<ProcessStepVo> stepList;
-    @JSONField(serialize = false)
-    private List<ProcessStepRelVo> stepRelList;
-    @JSONField(serialize = false)
-    private List<ProcessSlaVo> slaList;
-    @JSONField(serialize = false)
-    private ProcessScoreTemplateVo processScoreTemplateVo;
+//    @JSONField(serialize = false)
+//    private List<ProcessStepRelVo> stepRelList;
+//    @JSONField(serialize = false)
+//    private List<ProcessSlaVo> slaList;
+//    @JSONField(serialize = false)
+//    private ProcessScoreTemplateVo processScoreTemplateVo;
 //    @JSONField(serialize = false)
 //    private InvokeNotifyPolicyConfigVo notifyPolicyConfig;
 //    @JSONField(serialize = false)
@@ -116,13 +115,13 @@ public class ProcessVo extends BaseEditorVo {
         this.stepList = stepList;
     }
 
-    public List<ProcessStepRelVo> getStepRelList() {
-        return stepRelList;
-    }
-
-    public void setStepRelList(List<ProcessStepRelVo> stepRelList) {
-        this.stepRelList = stepRelList;
-    }
+//    public List<ProcessStepRelVo> getStepRelList() {
+//        return stepRelList;
+//    }
+//
+//    public void setStepRelList(List<ProcessStepRelVo> stepRelList) {
+//        this.stepRelList = stepRelList;
+//    }
 
     public String getFormUuid() {
         return formUuid;
@@ -141,21 +140,21 @@ public class ProcessVo extends BaseEditorVo {
         this.referenceCount = referenceCount;
     }
 
-    public List<ProcessSlaVo> getSlaList() {
-        return slaList;
-    }
+//    public List<ProcessSlaVo> getSlaList() {
+//        return slaList;
+//    }
+//
+//    public void setSlaList(List<ProcessSlaVo> slaList) {
+//        this.slaList = slaList;
+//    }
 
-    public void setSlaList(List<ProcessSlaVo> slaList) {
-        this.slaList = slaList;
-    }
-
-    public ProcessScoreTemplateVo getProcessScoreTemplateVo() {
-        return processScoreTemplateVo;
-    }
-
-    public void setProcessScoreTemplateVo(ProcessScoreTemplateVo processScoreTemplateVo) {
-        this.processScoreTemplateVo = processScoreTemplateVo;
-    }
+//    public ProcessScoreTemplateVo getProcessScoreTemplateVo() {
+//        return processScoreTemplateVo;
+//    }
+//
+//    public void setProcessScoreTemplateVo(ProcessScoreTemplateVo processScoreTemplateVo) {
+//        this.processScoreTemplateVo = processScoreTemplateVo;
+//    }
 
 //    public InvokeNotifyPolicyConfigVo getNotifyPolicyConfig() {
 //        return notifyPolicyConfig;

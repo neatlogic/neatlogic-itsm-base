@@ -28,9 +28,9 @@ public class ProcessStepVo implements Serializable {
 //	private List<ProcessStepTimeoutPolicyVo> timeoutPolicyList;
 //	private List<ProcessStepFormAttributeVo> formAttributeList;
 //	private String formSceneUuid;
-	private Long commentTemplateId;//回复模版ID
-	private List<String> tagList;
-	private ProcessStepTaskConfigVo taskConfigVo;
+//	private Long commentTemplateId;//回复模版ID
+//	private List<String> tagList;
+//	private ProcessStepTaskConfigVo taskConfigVo;
 //	@JSONField(serialize=false)
 //	private InvokeNotifyPolicyConfigVo notifyPolicyConfig;
 //	@JSONField(serialize=false)
@@ -227,29 +227,29 @@ public class ProcessStepVo implements Serializable {
 //		this.integrationUuidList = integrationUuidList;
 //	}
 
-	public Long getCommentTemplateId() {
-		return commentTemplateId;
-	}
+//	public Long getCommentTemplateId() {
+//		return commentTemplateId;
+//	}
+//
+//	public void setCommentTemplateId(Long commentTemplateId) {
+//		this.commentTemplateId = commentTemplateId;
+//	}
 
-	public void setCommentTemplateId(Long commentTemplateId) {
-		this.commentTemplateId = commentTemplateId;
-	}
+//	public List<String> getTagList() {
+//		return tagList;
+//	}
+//
+//	public void setTagList(List<String> tagList) {
+//		this.tagList = tagList;
+//	}
 
-	public List<String> getTagList() {
-		return tagList;
-	}
-
-	public void setTagList(List<String> tagList) {
-		this.tagList = tagList;
-	}
-
-	public ProcessStepTaskConfigVo getTaskConfigVo() {
-		return taskConfigVo;
-	}
-
-	public void setTaskConfigVo(ProcessStepTaskConfigVo taskConfigVo) {
-		this.taskConfigVo = taskConfigVo;
-	}
+//	public ProcessStepTaskConfigVo getTaskConfigVo() {
+//		return taskConfigVo;
+//	}
+//
+//	public void setTaskConfigVo(ProcessStepTaskConfigVo taskConfigVo) {
+//		this.taskConfigVo = taskConfigVo;
+//	}
 
 //	public List<Long> getEoaTemplateIdList() {
 //		return eoaTemplateIdList;
