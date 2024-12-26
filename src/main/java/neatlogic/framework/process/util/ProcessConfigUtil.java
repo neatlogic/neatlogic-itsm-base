@@ -21,7 +21,10 @@ import com.alibaba.fastjson.JSONPath;
 import neatlogic.framework.form.constvalue.FormAttributeAction;
 import neatlogic.framework.form.constvalue.FormAttributeAuthRange;
 import neatlogic.framework.form.constvalue.FormAttributeAuthType;
-import neatlogic.framework.process.constvalue.*;
+import neatlogic.framework.process.constvalue.ProcessStepHandlerType;
+import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
+import neatlogic.framework.process.constvalue.ReplaceableText;
+import neatlogic.framework.process.constvalue.WorkerPolicy;
 import neatlogic.framework.process.exception.process.ProcessConfigException;
 import neatlogic.framework.process.exception.process.ProcessStepUtilHandlerNotFoundException;
 import neatlogic.framework.process.operationauth.core.IOperationType;
@@ -33,11 +36,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component
+//@Component
 public class ProcessConfigUtil {
     /**
      * 获取第一个步骤的UUID
@@ -538,12 +540,12 @@ public class ProcessConfigUtil {
      * @param configObj 流程图配置数据
      * @return
      */
-    public static String regulateProcessConfig(JSONObject configObj) {
+    public static JSONObject regulateProcessConfig(JSONObject configObj) {
         if (configObj == null) {
             return null;
         }
         if (configObj.isEmpty()) {
-            return "{}";
+            return configObj;
         }
         JSONObject process = configObj.getJSONObject("process");
         if (MapUtils.isNotEmpty(process)) {
@@ -585,6 +587,6 @@ public class ProcessConfigUtil {
                 ProcessMessageManager.release();
             }
         }
-        return configObj.toJSONString();
+        return configObj;
     }
 }
