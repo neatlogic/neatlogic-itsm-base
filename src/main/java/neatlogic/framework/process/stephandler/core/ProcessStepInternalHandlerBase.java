@@ -312,15 +312,4 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
         IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
         return processTaskCrossoverMapper.getToProcessTaskStepByFromIdAndType(processTaskStepVo.getId(), type);
     }
-
-    @Override
-    public void saveOrDeleteProcessStepDependency(ProcessStepVo processStepVo, String action) {
-        IProcessCrossoverService processCrossoverService = CrossoverServiceFactory.getApi(IProcessCrossoverService.class);
-        processCrossoverService.saveOrDeleteProcessStepDependency(processStepVo, action);
-        mySaveOrDeleteDependency(processStepVo, action);
-    }
-
-    protected void mySaveOrDeleteDependency(ProcessStepVo processStepVo, String action) {
-
-    }
 }

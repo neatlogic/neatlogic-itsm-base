@@ -55,23 +55,16 @@ public interface IProcessStepInternalHandler {
      * @return void
      * @Description: 组装步骤节点信息，将步骤stepConfig配置信息中的字段值写入到ProcessStepVo对象对应属性中
      */
-    default void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj) {
+    default void makeupProcessStep(ProcessStepVo processStepVo, JSONObject stepConfigObj, String action) {
         if (MapUtils.isNotEmpty(stepConfigObj)) {
             for (Map.Entry<String, Object> entry : stepConfigObj.entrySet()) {
                 IProcessStepMakeupHandler handler = ProcessStepMakeupHandlerFactory.getHandlers(entry.getKey());
                 if (handler != null) {
-                    handler.makeup(this, processStepVo, stepConfigObj);
+                    handler.makeup(this, processStepVo, stepConfigObj, action);
                 }
             }
         }
     }
-
-    /**
-     * 保存或删除流程步骤的依赖关系数据
-     * @param processStepVo 流程步骤信息
-     * @param action 保存或删除
-     */
-    void saveOrDeleteProcessStepDependency(ProcessStepVo processStepVo, String action);
 
     /**
      * @return void

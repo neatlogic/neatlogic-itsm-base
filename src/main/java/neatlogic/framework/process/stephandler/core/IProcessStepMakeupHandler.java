@@ -26,5 +26,5 @@ import neatlogic.framework.process.dto.ProcessStepVo;
 public interface IProcessStepMakeupHandler {
     String getName();
 
-    void makeup(IProcessStepInternalHandler processStepInternalHandler, ProcessStepVo processStepVo, JSONObject stepConfigObj);
+    void makeup(IProcessStepInternalHandler processStepInternalHandler, ProcessStepVo processStepVo, JSONObject stepConfigObj, String action);
 }
