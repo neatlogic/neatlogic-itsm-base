@@ -18,6 +18,7 @@
 package neatlogic.framework.process.crossover;
 
 import neatlogic.framework.crossover.ICrossoverService;
+import neatlogic.framework.process.dto.ProcessStepVo;
 import neatlogic.framework.process.dto.ProcessVo;
 import neatlogic.framework.process.exception.process.ProcessNameRepeatException;
 
@@ -29,4 +30,11 @@ public interface IProcessCrossoverService extends ICrossoverService {
      * @throws ProcessNameRepeatException
      */
     int saveProcess(ProcessVo processVo) throws ProcessNameRepeatException;
+
+    /**
+     * 保存或删除流程步骤的依赖关系数据
+     * @param processStepVo 流程步骤信息
+     * @param action 保存或删除
+     */
+    void saveOrDeleteProcessStepDependency(ProcessStepVo processStepVo, String action);
 }

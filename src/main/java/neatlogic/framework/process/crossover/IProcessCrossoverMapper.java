@@ -42,7 +42,7 @@ public interface IProcessCrossoverMapper extends ICrossoverService {
 
     ProcessVo getProcessByName(String processName);
 
-//    ProcessVo getProcessBaseInfoByUuid(String processUuid);
+    ProcessVo getProcessBaseInfoByUuid(String processUuid);
 
 //    List<ProcessStepVo> searchProcessStep(ProcessStepVo processStepVo);
 

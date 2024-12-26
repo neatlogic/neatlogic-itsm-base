@@ -49,7 +49,7 @@ public class ProcessTaskStepVo extends BasePageVo {
     private String handler;
     @EntityField(name = "步骤类型", type = ApiParamType.STRING)
     private String type;
-    private String formUuid;
+//    private String formUuid;
     private Integer isActive = 0;
     @EntityField(name = "激活时间", type = ApiParamType.LONG)
     private Date activeTime;
@@ -184,7 +184,7 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.setName(processStepVo.getName());
         this.setHandler(processStepVo.getHandler());
         this.setType(processStepVo.getType());
-        this.setFormUuid(processStepVo.getFormUuid());
+//        this.setFormUuid(processStepVo.getFormUuid());
 
 //        if (processStepVo.getFormAttributeList() != null && processStepVo.getFormAttributeList().size() > 0) {
 //            List<ProcessTaskStepFormAttributeVo> attributeList = new ArrayList<>();
@@ -565,13 +565,13 @@ public class ProcessTaskStepVo extends BasePageVo {
         this.expireTimeLong = expireTimeLong;
     }
 
-    public String getFormUuid() {
-        return formUuid;
-    }
-
-    public void setFormUuid(String formUuid) {
-        this.formUuid = formUuid;
-    }
+//    public String getFormUuid() {
+//        return formUuid;
+//    }
+//
+//    public void setFormUuid(String formUuid) {
+//        this.formUuid = formUuid;
+//    }
 
 //    public List<ProcessTaskStepFormAttributeVo> getFormAttributeList() {
 //        return formAttributeList;

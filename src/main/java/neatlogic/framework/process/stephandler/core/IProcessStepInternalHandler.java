@@ -67,6 +67,13 @@ public interface IProcessStepInternalHandler {
     }
 
     /**
+     * 保存或删除流程步骤的依赖关系数据
+     * @param processStepVo 流程步骤信息
+     * @param action 保存或删除
+     */
+    void saveOrDeleteProcessStepDependency(ProcessStepVo processStepVo, String action);
+
+    /**
      * @return void
      * @Description: 子任务状态发生变化后，对子任务处理人的在 processtask_step_worker表和processtask_step_user表的数据做对应的变化
      */

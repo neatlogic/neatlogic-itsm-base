@@ -1,11 +1,10 @@
 package neatlogic.framework.process.dto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import neatlogic.framework.notify.dto.InvokeNotifyPolicyConfigVo;
-import org.apache.commons.lang3.StringUtils;
 
 public class ProcessSlaVo implements Serializable {
     private static final long serialVersionUID = 2183891795903221664L;
@@ -15,7 +14,7 @@ public class ProcessSlaVo implements Serializable {
     private String calculateHandler;
     private String config;
     private List<String> processStepUuidList;
-    private List<InvokeNotifyPolicyConfigVo> notifyPolicyConfigList = new ArrayList<>();
+//    private List<InvokeNotifyPolicyConfigVo> notifyPolicyConfigList = new ArrayList<>();
 
     public String getUuid() {
         return uuid;
@@ -74,11 +73,11 @@ public class ProcessSlaVo implements Serializable {
         }
     }
 
-    public List<InvokeNotifyPolicyConfigVo> getNotifyPolicyConfigList() {
-        return notifyPolicyConfigList;
-    }
-
-    public void setNotifyPolicyConfigList(List<InvokeNotifyPolicyConfigVo> notifyPolicyConfigList) {
-        this.notifyPolicyConfigList = notifyPolicyConfigList;
-    }
+//    public List<InvokeNotifyPolicyConfigVo> getNotifyPolicyConfigList() {
+//        return notifyPolicyConfigList;
+//    }
+//
+//    public void setNotifyPolicyConfigList(List<InvokeNotifyPolicyConfigVo> notifyPolicyConfigList) {
+//        this.notifyPolicyConfigList = notifyPolicyConfigList;
+//    }
 }
