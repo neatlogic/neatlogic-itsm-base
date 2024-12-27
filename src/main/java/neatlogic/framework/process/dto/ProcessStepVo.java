@@ -1,46 +1,42 @@
 package neatlogic.framework.process.dto;
 
-import neatlogic.framework.notify.dto.InvokeNotifyPolicyConfigVo;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 public class ProcessStepVo implements Serializable {
 	private static final long serialVersionUID = -1211661404097123528L;
 
 	private String processUuid;
 	private String uuid;
-	private String chartUid;
+//	private String chartUid;
 	private String name;
 	private String type;
-	private String typeName;
+//	private String typeName;
 	private String handler;
 	private String config;
-	private String formUuid;
+//	private String formUuid;
 	private String description;
 	private JSONObject configObj;
 	private Boolean isWorkerPolicyListSorted = false;
-	private Boolean isTimeoutPolicyListSorted = false;
-	private List<ProcessStepRelVo> relList;
-	private List<ProcessStepTeamVo> teamList;
+//	private Boolean isTimeoutPolicyListSorted = false;
+//	private List<ProcessStepRelVo> relList;
+//	private List<ProcessStepTeamVo> teamList;
 	private List<ProcessStepWorkerPolicyVo> workerPolicyList;
-	private List<ProcessStepTimeoutPolicyVo> timeoutPolicyList;
+//	private List<ProcessStepTimeoutPolicyVo> timeoutPolicyList;
 //	private List<ProcessStepFormAttributeVo> formAttributeList;
-	private String formSceneUuid;
-	private Long commentTemplateId;//回复模版ID
-	private List<String> tagList;
-	private ProcessStepTaskConfigVo taskConfigVo;
-	@JSONField(serialize=false)
-	private InvokeNotifyPolicyConfigVo notifyPolicyConfig;
-	@JSONField(serialize=false)
-	private List<String> integrationUuidList;
-	@JSONField(serialize=false)
-	private List<Long> eoaTemplateIdList;
+//	private String formSceneUuid;
+//	private Long commentTemplateId;//回复模版ID
+//	private List<String> tagList;
+//	private ProcessStepTaskConfigVo taskConfigVo;
+//	@JSONField(serialize=false)
+//	private InvokeNotifyPolicyConfigVo notifyPolicyConfig;
+//	@JSONField(serialize=false)
+//	private List<String> integrationUuidList;
+//	@JSONField(serialize=false)
+//	private List<Long> eoaTemplateIdList;
 
 	@Override
 	public boolean equals(Object other) {
@@ -69,9 +65,9 @@ public class ProcessStepVo implements Serializable {
 	}
 
 	public synchronized String getUuid() {
-		if (StringUtils.isBlank(uuid)) {
-			uuid = UUID.randomUUID().toString().replace("-", "");
-		}
+//		if (StringUtils.isBlank(uuid)) {
+//			uuid = UUID.randomUUID().toString().replace("-", "");
+//		}
 		return uuid;
 	}
 
@@ -103,13 +99,13 @@ public class ProcessStepVo implements Serializable {
 		this.type = type;
 	}
 
-	public String getTypeName() {
-		return typeName;
-	}
-
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
+//	public String getTypeName() {
+//		return typeName;
+//	}
+//
+//	public void setTypeName(String typeName) {
+//		this.typeName = typeName;
+//	}
 
 	public String getHandler() {
 		return handler;
@@ -135,21 +131,21 @@ public class ProcessStepVo implements Serializable {
 		this.configObj = configObj;
 	}
 
-	public List<ProcessStepRelVo> getRelList() {
-		return relList;
-	}
+//	public List<ProcessStepRelVo> getRelList() {
+//		return relList;
+//	}
+//
+//	public void setRelList(List<ProcessStepRelVo> relList) {
+//		this.relList = relList;
+//	}
 
-	public void setRelList(List<ProcessStepRelVo> relList) {
-		this.relList = relList;
-	}
-
-	public List<ProcessStepTeamVo> getTeamList() {
-		return teamList;
-	}
-
-	public void setTeamList(List<ProcessStepTeamVo> teamList) {
-		this.teamList = teamList;
-	}
+//	public List<ProcessStepTeamVo> getTeamList() {
+//		return teamList;
+//	}
+//
+//	public void setTeamList(List<ProcessStepTeamVo> teamList) {
+//		this.teamList = teamList;
+//	}
 
 	public List<ProcessStepWorkerPolicyVo> getWorkerPolicyList() {
 		if (!isWorkerPolicyListSorted && workerPolicyList != null && workerPolicyList.size() > 0) {
@@ -163,13 +159,13 @@ public class ProcessStepVo implements Serializable {
 		this.workerPolicyList = workerPolicyList;
 	}
 
-	public String getChartUid() {
-		return chartUid;
-	}
-
-	public void setChartUid(String chartUid) {
-		this.chartUid = chartUid;
-	}
+//	public String getChartUid() {
+//		return chartUid;
+//	}
+//
+//	public void setChartUid(String chartUid) {
+//		this.chartUid = chartUid;
+//	}
 
 	public String getDescription() {
 		return description;
@@ -179,17 +175,17 @@ public class ProcessStepVo implements Serializable {
 		this.description = description;
 	}
 
-	public List<ProcessStepTimeoutPolicyVo> getTimeoutPolicyList() {
-		if (!isTimeoutPolicyListSorted && timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
-			Collections.sort(timeoutPolicyList);
-			isTimeoutPolicyListSorted = true;
-		}
-		return timeoutPolicyList;
-	}
-
-	public void setTimeoutPolicyList(List<ProcessStepTimeoutPolicyVo> timeoutPolicyList) {
-		this.timeoutPolicyList = timeoutPolicyList;
-	}
+//	public List<ProcessStepTimeoutPolicyVo> getTimeoutPolicyList() {
+//		if (!isTimeoutPolicyListSorted && timeoutPolicyList != null && timeoutPolicyList.size() > 0) {
+//			Collections.sort(timeoutPolicyList);
+//			isTimeoutPolicyListSorted = true;
+//		}
+//		return timeoutPolicyList;
+//	}
+//
+//	public void setTimeoutPolicyList(List<ProcessStepTimeoutPolicyVo> timeoutPolicyList) {
+//		this.timeoutPolicyList = timeoutPolicyList;
+//	}
 
 //	public List<ProcessStepFormAttributeVo> getFormAttributeList() {
 //		return formAttributeList;
@@ -199,67 +195,67 @@ public class ProcessStepVo implements Serializable {
 //		this.formAttributeList = formAttributeList;
 //	}
 
-	public String getFormSceneUuid() {
-		return formSceneUuid;
-	}
+//	public String getFormSceneUuid() {
+//		return formSceneUuid;
+//	}
+//
+//	public void setFormSceneUuid(String formSceneUuid) {
+//		this.formSceneUuid = formSceneUuid;
+//	}
 
-	public void setFormSceneUuid(String formSceneUuid) {
-		this.formSceneUuid = formSceneUuid;
-	}
+//	public String getFormUuid() {
+//		return formUuid;
+//	}
+//
+//	public void setFormUuid(String formUuid) {
+//		this.formUuid = formUuid;
+//	}
 
-	public String getFormUuid() {
-		return formUuid;
-	}
+//	public InvokeNotifyPolicyConfigVo getNotifyPolicyConfig() {
+//		return notifyPolicyConfig;
+//	}
+//
+//	public void setNotifyPolicyConfig(InvokeNotifyPolicyConfigVo notifyPolicyConfig) {
+//		this.notifyPolicyConfig = notifyPolicyConfig;
+//	}
 
-	public void setFormUuid(String formUuid) {
-		this.formUuid = formUuid;
-	}
+//	public List<String> getIntegrationUuidList() {
+//		return integrationUuidList;
+//	}
+//
+//	public void setIntegrationUuidList(List<String> integrationUuidList) {
+//		this.integrationUuidList = integrationUuidList;
+//	}
 
-	public InvokeNotifyPolicyConfigVo getNotifyPolicyConfig() {
-		return notifyPolicyConfig;
-	}
+//	public Long getCommentTemplateId() {
+//		return commentTemplateId;
+//	}
+//
+//	public void setCommentTemplateId(Long commentTemplateId) {
+//		this.commentTemplateId = commentTemplateId;
+//	}
 
-	public void setNotifyPolicyConfig(InvokeNotifyPolicyConfigVo notifyPolicyConfig) {
-		this.notifyPolicyConfig = notifyPolicyConfig;
-	}
+//	public List<String> getTagList() {
+//		return tagList;
+//	}
+//
+//	public void setTagList(List<String> tagList) {
+//		this.tagList = tagList;
+//	}
 
-	public List<String> getIntegrationUuidList() {
-		return integrationUuidList;
-	}
+//	public ProcessStepTaskConfigVo getTaskConfigVo() {
+//		return taskConfigVo;
+//	}
+//
+//	public void setTaskConfigVo(ProcessStepTaskConfigVo taskConfigVo) {
+//		this.taskConfigVo = taskConfigVo;
+//	}
 
-	public void setIntegrationUuidList(List<String> integrationUuidList) {
-		this.integrationUuidList = integrationUuidList;
-	}
-
-	public Long getCommentTemplateId() {
-		return commentTemplateId;
-	}
-
-	public void setCommentTemplateId(Long commentTemplateId) {
-		this.commentTemplateId = commentTemplateId;
-	}
-
-	public List<String> getTagList() {
-		return tagList;
-	}
-
-	public void setTagList(List<String> tagList) {
-		this.tagList = tagList;
-	}
-
-	public ProcessStepTaskConfigVo getTaskConfigVo() {
-		return taskConfigVo;
-	}
-
-	public void setTaskConfigVo(ProcessStepTaskConfigVo taskConfigVo) {
-		this.taskConfigVo = taskConfigVo;
-	}
-
-	public List<Long> getEoaTemplateIdList() {
-		return eoaTemplateIdList;
-	}
-
-	public void setEoaTemplateIdList(List<Long> eoaTemplateIdList) {
-		this.eoaTemplateIdList = eoaTemplateIdList;
-	}
+//	public List<Long> getEoaTemplateIdList() {
+//		return eoaTemplateIdList;
+//	}
+//
+//	public void setEoaTemplateIdList(List<Long> eoaTemplateIdList) {
+//		this.eoaTemplateIdList = eoaTemplateIdList;
+//	}
 }
