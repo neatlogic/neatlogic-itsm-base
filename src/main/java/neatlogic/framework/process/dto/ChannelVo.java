@@ -23,6 +23,9 @@ public class ChannelVo extends BasePageVo {
     @EntityField(name = "common.name", type = ApiParamType.STRING)
     private String name;
 
+    @JSONField(serialize = false)//表单uuid
+    private String formUuid;
+
     @EntityField(name = "common.isactive", type = ApiParamType.INTEGER)
     private Integer isActive;
 
@@ -150,6 +153,14 @@ public class ChannelVo extends BasePageVo {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getFormUuid() {
+        return formUuid;
+    }
+
+    public void setFormUuid(String formUuid) {
+        this.formUuid = formUuid;
     }
 
     public String getName() {
@@ -350,10 +361,9 @@ public class ChannelVo extends BasePageVo {
     }
 
     /**
-     * 
+     * @return boolean
      * @Time:2020年7月7日
      * @Description: 判断服务是否最终授权，服务状态为激活，拥有服务权限及所有上级目录权限才是最终授权
-     * @return boolean
      */
     public boolean isAuthority() {
         if (Objects.equal(isActive, 1) && isAuthority) {
@@ -385,7 +395,7 @@ public class ChannelVo extends BasePageVo {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ChannelVo other = (ChannelVo)obj;
+        ChannelVo other = (ChannelVo) obj;
         if (uuid == null) {
             if (other.uuid != null)
                 return false;
