@@ -2155,10 +2155,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     }
                 }
                 if (CollectionUtils.isNotEmpty(tagIdList)) {
-                    ProcessTaskStepTagVo processTaskStepTagVo = new ProcessTaskStepTagVo();
-                    processTaskStepTagVo.setProcessTaskId(processTaskVo.getId());
-                    processTaskStepTagVo.setProcessTaskStepId(ptStepVo.getId());
                     for (Long tagId : tagIdList) {
+                        ProcessTaskStepTagVo processTaskStepTagVo = new ProcessTaskStepTagVo();
+                        processTaskStepTagVo.setProcessTaskId(processTaskVo.getId());
+                        processTaskStepTagVo.setProcessTaskStepId(ptStepVo.getId());
                         processTaskStepTagVo.setTagId(tagId);
 //                        processTaskCrossoverMapper.insertProcessTaskStepTag(processTaskStepTagVo);
                         processTaskStepTagList.add(processTaskStepTagVo);
