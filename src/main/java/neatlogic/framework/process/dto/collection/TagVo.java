@@ -18,6 +18,8 @@
 package neatlogic.framework.process.dto.collection;
 
 import com.alibaba.fastjson.JSONArray;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -40,6 +42,21 @@ public class TagVo {
             }
         }
         return valueList;
+    }
+
+    public String getValueString() {
+        JSONArray jsonArray = getValueList();
+        String returnValue = "";
+        if (CollectionUtils.isNotEmpty(jsonArray)) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                String v = jsonArray.getString(i);
+                if (StringUtils.isNotBlank(returnValue) && StringUtils.isNotBlank(v)) {
+                    returnValue += ",";
+                }
+                returnValue += v;
+            }
+        }
+        return returnValue;
     }
 
     public String getLabel() {
