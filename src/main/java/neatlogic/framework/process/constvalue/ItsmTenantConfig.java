@@ -20,6 +20,7 @@ import neatlogic.framework.util.$;
 
 public enum ItsmTenantConfig implements ITenantConfig {
     PROCESS_TASK_BASE_INFO_IS_SHOW("processtaskBaseInfoIsShow", null, "term.itsm.isshowbaseinfo"),
+    PROCESS_TASK_STEP_LIST_IS_SHOW("processtask.step.list.show", null, "nfpc.itsmtenantconfig.steplist.show"),
     PROCESS_TASK_STEP_ENABLE_COMMENT("processTaskStepEnableComment", null, "nfpc.itsmtenantconfig.processtaskstepenablecomment"),
 //    DISPLAY_MODE_AFTER_TIMEOUT("displayModeAfterTimeout", "naturalTime", "nfpc.itsmtenantconfig.displaymodeaftertimeout"),
     SLA_TIME_DISPLAY_MODE("sla.time.display.mode", "naturalTime", "nfpc.itsmtenantconfig.slatimedisplaymode"),

@@ -191,6 +191,9 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "term.itsm.isshowbaseinfo", type = ApiParamType.INTEGER)
     private Integer isShowBaseInfo = 0;
 
+    @EntityField(name = "nfpc.itsmtenantconfig.steplist.show", type = ApiParamType.INTEGER)
+    private Integer isShowStepList = 1;
+
     @EntityField(name = "term.itsm.isshowprocesstaskstepcommenteditortoolbar", type = ApiParamType.INTEGER)
     private Integer isShowProcessTaskStepCommentEditorToolbar = 0;
 
@@ -845,6 +848,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setIsShowBaseInfo(Integer isShowBaseInfo) {
         this.isShowBaseInfo = isShowBaseInfo;
+    }
+
+    public Integer getIsShowStepList() {
+        return isShowStepList;
+    }
+
+    public void setIsShowStepList(Integer isShowStepList) {
+        this.isShowStepList = isShowStepList;
     }
 
     public Integer getIsShowProcessTaskStepCommentEditorToolbar() {
