@@ -1,19 +1,18 @@
 package neatlogic.framework.process.dto;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.dto.BasePageVo;
 import neatlogic.framework.dto.TeamVo;
 import neatlogic.framework.dto.UserVo;
 import neatlogic.framework.dto.region.RegionVo;
-import neatlogic.framework.process.constvalue.ProcessTaskSourceFactory;
 import neatlogic.framework.process.constvalue.ProcessTaskSource;
+import neatlogic.framework.process.constvalue.ProcessTaskSourceFactory;
 import neatlogic.framework.process.constvalue.ProcessTaskStatus;
 import neatlogic.framework.process.dto.score.ScoreTemplateVo;
 import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -88,8 +87,6 @@ public class ProcessTaskVo extends BasePageVo {
     private PriorityVo priority;
     @EntityField(name = "term.itsm.processtaskformconfig", type = ApiParamType.JSONOBJECT)
     private JSONObject formConfig;
-    @EntityField(name = "term.itsm.formconfigauthoritylist", type = ApiParamType.JSONARRAY)
-    private JSONArray formConfigAuthorityList;
     @EntityField(name = "term.itsm.formattributehidelist")
     private List<String> formAttributeHideList;
     @EntityField(name = "term.itsm.ishasoldformprop", type = ApiParamType.STRING)
@@ -454,14 +451,6 @@ public class ProcessTaskVo extends BasePageVo {
 
     public void setFormConfig(JSONObject formConfig) {
         this.formConfig = formConfig;
-    }
-
-    public JSONArray getFormConfigAuthorityList() {
-        return formConfigAuthorityList;
-    }
-
-    public void setFormConfigAuthorityList(JSONArray formConfigAuthorityList) {
-        this.formConfigAuthorityList = formConfigAuthorityList;
     }
 
     public List<String> getFormAttributeHideList() {
