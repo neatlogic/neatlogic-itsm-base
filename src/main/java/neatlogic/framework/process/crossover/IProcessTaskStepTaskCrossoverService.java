@@ -20,6 +20,10 @@ package neatlogic.framework.process.crossover;
 import com.alibaba.fastjson.JSONArray;
 import neatlogic.framework.crossover.ICrossoverService;
 import neatlogic.framework.process.dto.ProcessTaskStepTaskVo;
+import neatlogic.framework.process.dto.ProcessTaskStepVo;
+import neatlogic.framework.process.dto.TaskConfigVo;
+
+import java.util.List;
 
 public interface IProcessTaskStepTaskCrossoverService extends ICrossoverService {
     /**
@@ -41,4 +45,11 @@ public interface IProcessTaskStepTaskCrossoverService extends ICrossoverService 
      * @param source 来源
      */
     Long completeTask(Long id, String content, String button, String source) throws Exception;
+
+    /**
+     * 获取步骤的任务策略列表及其任务列表
+     * @param processTaskStepVo 步骤信息
+     * @return
+     */
+    List<TaskConfigVo> getTaskConfigList(ProcessTaskStepVo processTaskStepVo);
 }
