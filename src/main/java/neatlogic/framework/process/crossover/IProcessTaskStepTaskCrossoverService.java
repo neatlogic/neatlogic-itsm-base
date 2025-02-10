@@ -17,9 +17,20 @@
 
 package neatlogic.framework.process.crossover;
 
+import com.alibaba.fastjson.JSONArray;
 import neatlogic.framework.crossover.ICrossoverService;
+import neatlogic.framework.process.dto.ProcessTaskStepTaskVo;
 
 public interface IProcessTaskStepTaskCrossoverService extends ICrossoverService {
+    /**
+     * 创建任务
+     *
+     * @param id
+     * @param processTaskStepTaskVo
+     * @param stepTaskUserVoList
+     * @param source
+     */
+    Long saveTask(Long id, ProcessTaskStepTaskVo processTaskStepTaskVo, JSONArray stepTaskUserVoList, String source);
 
     /**
      * 完成任务
