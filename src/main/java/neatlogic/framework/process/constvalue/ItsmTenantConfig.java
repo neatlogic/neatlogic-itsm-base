@@ -29,6 +29,8 @@ public enum ItsmTenantConfig implements ITenantConfig {
     WORKCENTER_CUSTOM_LIMIT("workcenter.custom.limit", "5", "nfpc.itsmtenantconfig.workcentercustomlimit"),
     WORKCENTER_PROCESSTASK_NEWPAGE("workcenter.processtask.newpage", "0", "nfpc.itsmtenantconfig.workcenterprocesstasknewpage"),
     PROCESSTASK_TAB_LAYOUT("processtask.tab.layout", "{}", "nfpc.itsmtenantconfig.processtasktablayout"),
+
+    PROCESSTASK_WORKERPOLICY_ISONLYONCEEXECUTE("processtask.workerpolicy.isonlyonceexecute", "0", "nfpc.itsmtenantconfig.processtaskworkerpolicyisonlyonceexecute"),
     ;
 
     String key;
