@@ -39,8 +39,7 @@ public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.WORKER.getValue())),
     FAILED("failed", "nfpnc.processtaskstepnotifytriggertype.text.failed", "nfpnc.processtaskstepnotifytriggertype.description.failed",
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.WORKER.getValue())),
-    URGE("urge", "nfpnc.processtaskstepnotifytriggertype.text.urge", "nfpnc.processtaskstepnotifytriggertype.description.urge",
-            Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.WORKER.getValue())),
+    URGE("urge", "nfpnc.processtaskstepnotifytriggertype.text.urge", "nfpnc.processtaskstepnotifytriggertype.description.urge"),
 	COMMENT("comment", "nfpnc.processtaskstepnotifytriggertype.text.comment","nfpnc.processtaskstepnotifytriggertype.description.comment",
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.WORKER.getValue())),
 	;
