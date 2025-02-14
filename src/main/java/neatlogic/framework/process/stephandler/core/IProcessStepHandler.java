@@ -21,6 +21,7 @@ import neatlogic.framework.process.dto.ProcessTaskStepWorkerVo;
 import neatlogic.framework.process.dto.ProcessTaskVo;
 import neatlogic.framework.process.exception.processtask.ProcessTaskException;
 import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,7 +108,7 @@ public interface IProcessStepHandler {
      * @return 1代表成功
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-    int hang(ProcessTaskStepVo currentProcessTaskStepVo);
+    int hang(ProcessTaskStepVo currentProcessTaskStepVo, IOperationType operationType);
 
     /**
      * 开始流程步骤

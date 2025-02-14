@@ -247,7 +247,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 /* 遍历后续节点所有步骤，写入汇聚步骤数据 **/
                 resetConvergeInfo(currentProcessTaskStepVo);
                 /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
-                hangPostStep(currentProcessTaskStepVo);
+                hangPostStep(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_ACTIVE);
                 resetPostStepRelIsHit(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
                 if (this.getMode().equals(ProcessStepMode.MT)) {
                     if (!this.disableAssign()) {
@@ -621,7 +621,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
      * hang操作原则上不允许出现任何异常，所有异常都必须解决以便流程可以顺利挂起，否则流程可能会卡死在某个节点不能前进或后退
      */
     @Override
-    public final int hang(ProcessTaskStepVo currentProcessTaskStepVo) {
+    public final int hang(ProcessTaskStepVo currentProcessTaskStepVo, IOperationType operationType) {
         try {
             IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
             // 锁定当前流程
@@ -638,7 +638,17 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskCrossoverMapper.deleteProcessTaskConvergeByStepId(currentProcessTaskStepVo.getId());
 
             // 获取流转过的路径
-            hangPostStep(currentProcessTaskStepVo);
+            hangPostStep(currentProcessTaskStepVo, operationType);
+
+            if (operationType == ProcessTaskStepOperationType.STEP_RETREAT) {
+                List<ProcessTaskStepWorkerVo> workerList = processTaskCrossoverMapper.getProcessTaskStepWorkerByProcessTaskIdAndProcessTaskStepId(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+                currentProcessTaskStepVo.setWorkerList(workerList);
+                IProcessStepHandlerCrossoverUtil processStepHandlerCrossoverUtil = CrossoverServiceFactory.getApi(IProcessStepHandlerCrossoverUtil.class);
+                /* 触发通知 **/
+                processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.REVOKE);
+                /* 执行动作 **/
+                processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.REVOKE);
+            }
             ProcessTaskStepWorkerVo processTaskStepWorkerVo = new ProcessTaskStepWorkerVo();
             processTaskStepWorkerVo.setProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             processTaskStepWorkerVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
@@ -654,11 +664,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setIsActive(0);
             currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.HANG.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
-            /* 触发通知 **/
-//            processStepHandlerUtilService.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.HANG);
-
-            /* 执行动作 **/
-//            processStepHandlerUtilService.action(currentProcessTaskStepVo, TaskStepNotifyTriggerType.HANG);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
 //            currentProcessTaskStepVo.setIsActive(2);
@@ -1376,7 +1381,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             resetConvergeInfo(currentProcessTaskStepVo);
 
             /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
-            hangPostStep(currentProcessTaskStepVo);
+            hangPostStep(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_RETREAT);
             resetPostStepRelIsHit(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
             /* 获取当前步骤状态 **/
 
@@ -2665,8 +2670,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
      * 将当前步骤的所有后续步骤中流转过的步骤都进行挂起操作
      *
      * @param currentProcessTaskStepVo 步骤信息
+     * @param operationType 导致步骤挂起的操作
      */
-    private void hangPostStep(ProcessTaskStepVo currentProcessTaskStepVo) {
+    private void hangPostStep(ProcessTaskStepVo currentProcessTaskStepVo, IOperationType operationType) {
 ////        if (!currentProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
 //            List<ProcessTaskStepRelVo> nextTaskStepRelList = processTaskMapper.getProcessTaskStepRelByFromId(currentProcessTaskStepVo.getId());
 //            for (ProcessTaskStepRelVo nextTaskStepRelVo : nextTaskStepRelList) {
@@ -2713,7 +2719,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                             protected void myExecute(ProcessTaskStepVo processTaskStepVo) {
                                 IProcessStepHandler processStepHandler = ProcessStepHandlerFactory.getHandler(processTaskStepVo.getHandler());
                                 if (processStepHandler != null) {
-                                    processStepHandler.hang(processTaskStepVo);
+                                    processStepHandler.hang(processTaskStepVo, operationType);
                                 }
                             }
                         };
@@ -2984,7 +2990,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             resetConvergeInfo(currentProcessTaskStepVo);
 
             /* 如果当前步骤是二次进入(后续路径已经走过)，则需要对所有后续流转过的步骤都进行挂起操作 **/
-            hangPostStep(currentProcessTaskStepVo);
+            hangPostStep(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REDO);
             resetPostStepRelIsHit(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
             /* 获取当前步骤状态 **/
 
