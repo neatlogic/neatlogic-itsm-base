@@ -18,6 +18,7 @@ public interface IWorkerPolicyHandler {
      *
      * @return
      */
+    @Deprecated
     int isOnlyOnceExecute();
 
     /**

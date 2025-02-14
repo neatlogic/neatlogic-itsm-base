@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSONPath;
 import neatlogic.framework.asynchronization.threadlocal.UserContext;
 import neatlogic.framework.common.constvalue.GroupSearch;
 import neatlogic.framework.common.constvalue.systemuser.SystemUser;
+import neatlogic.framework.config.ConfigManager;
 import neatlogic.framework.crossover.CrossoverServiceFactory;
 import neatlogic.framework.dao.mapper.RoleMapper;
 import neatlogic.framework.dao.mapper.TeamMapper;
@@ -529,7 +530,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     continue;
                 }
                 /* 如果workerList.size()>0，说明已经存在过处理人，分配策略设置只分配一次，则继续使用旧处理人，否则启用分派 **/
-                if (Objects.equals(workerPolicyHandler.isOnlyOnceExecute(), 1) && CollectionUtils.isNotEmpty(workerSet)) {
+                int isOnlyOnceExecute = Integer.parseInt(ConfigManager.getConfig(ItsmTenantConfig.PROCESSTASK_WORKERPOLICY_ISONLYONCEEXECUTE));
+                if (Objects.equals(isOnlyOnceExecute, 1) && CollectionUtils.isNotEmpty(workerSet)) {
                     continue;
                 }
                 workerSet.clear();
