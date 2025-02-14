@@ -33,6 +33,8 @@ public enum ProcessTaskStepNotifyTriggerType implements INotifyTriggerType {
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.WORKER.getValue())),
     RETREAT("retreat", "nfpnc.processtaskstepnotifytriggertype.text.retreat", "nfpnc.processtaskstepnotifytriggertype.description.retreat",
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MAJOR.getValue())),
+    REVOKE("revoke", "nfpnc.processtaskstepnotifytriggertype.text.revoke", "nfpnc.processtaskstepnotifytriggertype.description.revoke",
+            Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MAJOR.getValue())),
     PAUSE("pause", "nfpnc.processtaskstepnotifytriggertype.text.pause", "nfpnc.processtaskstepnotifytriggertype.description.pause",
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.WORKER.getValue())),
     RECOVER("recover", "nfpnc.processtaskstepnotifytriggertype.text.recover", "nfpnc.processtaskstepnotifytriggertype.description.recover",
