@@ -2329,12 +2329,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskCrossoverMapper.updateProcessTaskStepUserStatus(processTaskMajorUser);
             /* 清空worker表 **/
             processTaskCrossoverMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
+            /* 更新步骤状态 */
             currentProcessTaskStepVo.setIsActive(2);
             currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.SUCCEED.getValue());
             currentProcessTaskStepVo.setUpdateEndTime(1);
             processTaskCrossoverMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
+            /* 更新工单状态 */
             ProcessTaskVo processTaskVo = new ProcessTaskVo();
-            processTaskVo.setId(currentProcessTaskStepVo.getId());
+            processTaskVo.setId(currentProcessTaskStepVo.getProcessTaskId());
             processTaskVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
             processTaskCrossoverMapper.updateProcessTaskStatus(processTaskVo);
             /* 流转到下一步 **/
@@ -2676,7 +2678,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
      * 将当前步骤的所有后续步骤中流转过的步骤都进行挂起操作
      *
      * @param currentProcessTaskStepVo 步骤信息
-     * @param operationType 导致步骤挂起的操作
+     * @param operationType            导致步骤挂起的操作
      */
     private void hangPostStep(ProcessTaskStepVo currentProcessTaskStepVo, IOperationType operationType) {
 ////        if (!currentProcessTaskStepVo.getId().equals(currentProcessTaskStepVo.getStartProcessTaskStepId())) {
