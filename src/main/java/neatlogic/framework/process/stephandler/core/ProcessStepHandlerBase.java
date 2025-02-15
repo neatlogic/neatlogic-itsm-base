@@ -2332,7 +2332,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setIsActive(2);
             currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.SUCCEED.getValue());
             currentProcessTaskStepVo.setUpdateEndTime(1);
-            updateProcessTaskStepStatus(currentProcessTaskStepVo);
+            processTaskCrossoverMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
             ProcessTaskVo processTaskVo = new ProcessTaskVo();
             processTaskVo.setId(currentProcessTaskStepVo.getId());
             processTaskVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
