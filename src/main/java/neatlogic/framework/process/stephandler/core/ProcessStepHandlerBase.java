@@ -122,7 +122,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
         List<ProcessTaskStepVo> processTaskStepList = processTaskCrossoverMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
         // 分组统计不同步骤状态的数量
-        int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0, hangCount = 0, endSucceedCount = 0, startSucceedCount = 0;
+        int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0, hangCount = 0, endSucceedCount = 0;
         for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
             if (ProcessTaskStepStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus())
                     && processTaskStepVo.getIsActive().equals(1)) {
