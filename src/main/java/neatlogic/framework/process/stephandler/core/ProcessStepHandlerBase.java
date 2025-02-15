@@ -121,6 +121,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     private int updateProcessTaskStatus(Long processTaskId) {
         IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
         List<ProcessTaskStepVo> processTaskStepList = processTaskCrossoverMapper.getProcessTaskStepBaseInfoByProcessTaskId(processTaskId);
+        // 分组统计不同步骤状态的数量
         int runningCount = 0, succeedCount = 0, failedCount = 0, abortedCount = 0, draftCount = 0, hangCount = 0, endSucceedCount = 0;
         for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
             if (ProcessTaskStepStatus.DRAFT.getValue().equals(processTaskStepVo.getStatus())
@@ -145,7 +146,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             }
         }
-
+        // 根据步骤状态计算出工单状态
         boolean needCalculateTimeCost = false;
         ProcessTaskVo processTaskVo = new ProcessTaskVo();
         processTaskVo.setId(processTaskId);
@@ -2331,8 +2332,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setIsActive(2);
             currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.SUCCEED.getValue());
             currentProcessTaskStepVo.setUpdateEndTime(1);
-            updateProcessTaskStepStatus(currentProcessTaskStepVo);
-
+            processTaskCrossoverMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
+            ProcessTaskVo processTaskVo = new ProcessTaskVo();
+            processTaskVo.setId(currentProcessTaskStepVo.getId());
+            processTaskVo.setStatus(ProcessTaskStatus.RUNNING.getValue());
+            processTaskCrossoverMapper.updateProcessTaskStatus(processTaskVo);
             /* 流转到下一步 **/
             List<ProcessTaskStepThread> processTaskStepThreadList = new ArrayList<>();
             Set<Long> nextStepIdSet = getNext(currentProcessTaskStepVo);
