@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 package neatlogic.framework.process.notify.core;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import neatlogic.framework.dao.mapper.NotifyConfigMapper;
 import neatlogic.framework.dto.MailServerVo;
 import neatlogic.framework.dto.UrlInfoVo;
@@ -63,7 +63,7 @@ public abstract class ProcessTaskNotifyParamHandlerBase implements INotifyParamH
             String homeUrl = "";
             String config = notifyConfigMapper.getConfigByType(NotifyHandlerType.EMAIL.getValue());
             if (StringUtils.isNotBlank(config)) {
-                MailServerVo mailServerVo = JSONObject.parseObject(config, MailServerVo.class);
+                MailServerVo mailServerVo = JSON.parseObject(config, MailServerVo.class);
                 if (mailServerVo != null) {
                     homeUrl = mailServerVo.getHomeUrl();
                     if (StringUtils.isBlank(homeUrl)) {
