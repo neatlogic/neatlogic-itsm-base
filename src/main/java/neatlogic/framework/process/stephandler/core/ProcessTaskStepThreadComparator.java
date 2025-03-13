@@ -17,10 +17,10 @@
 
 package neatlogic.framework.process.stephandler.core;
 
-import neatlogic.framework.process.constvalue.ProcessFlowDirection;
 import neatlogic.framework.process.constvalue.ProcessStepMode;
 import neatlogic.framework.process.constvalue.ProcessTaskStepOperationType;
 import neatlogic.framework.process.dto.ProcessTaskStepRelVo;
+import neatlogic.framework.process.util.ProcessTaskUtil;
 
 import java.util.*;
 
@@ -80,60 +80,8 @@ public class ProcessTaskStepThreadComparator implements Comparator<ProcessTaskSt
      * @return
      */
     private boolean checkIsSubsequentStep(Long currentProcessTaskStepId, Long targetProcessTaskStepId) {
-        List<List<Long>> routeList = new ArrayList<>();
-        List<Long> routeStepList = new ArrayList<>();
-        routeList.add(routeStepList);
-        getAllRouteList(currentProcessTaskStepId, routeList, routeStepList, endProcessTaskStepId, processTaskStepRelList);
-        // 如果最后一个步骤不是结束节点的路由全部删掉，因为这是回环路由
-        Iterator<List<Long>> routeStepIt = routeList.iterator();
-        List<Long> subsequentStepIdList = new ArrayList<>();
-        while (routeStepIt.hasNext()) {
-            List<Long> rsList = routeStepIt.next();
-            if (!rsList.get(rsList.size() - 1).equals(endProcessTaskStepId)) {
-                routeStepIt.remove();
-            } else {
-                for (Long id : rsList) {
-                    if (!subsequentStepIdList.contains(id)) {
-                        subsequentStepIdList.add(id);
-                    }
-                }
-            }
-        }
-//        System.out.println(currentProcessTaskStep.getName() + " subsequentStepIdList = " + JSON.toJSONString(subsequentStepIdList));
+        List<Long> subsequentStepIdList = ProcessTaskUtil.getEffectivePostStepIdList(currentProcessTaskStepId, endProcessTaskStepId, processTaskStepRelList);
         return subsequentStepIdList.contains(targetProcessTaskStepId);
-    }
-
-    /**
-     *
-     * @param processTaskStepId 当前步骤ID
-     * @param routeList 收集所有后置路经列表
-     * @param routeStepList 遍历过的步骤列表
-     * @param endProcessTaskStepId 结束步骤ID
-     * @param allProcessTaskStepRelList 所有连线列表
-     */
-    private void getAllRouteList(Long processTaskStepId, List<List<Long>> routeList, List<Long> routeStepList, Long endProcessTaskStepId, List<ProcessTaskStepRelVo> allProcessTaskStepRelList) {
-        if (!routeStepList.contains(processTaskStepId)) {
-            routeStepList.add(processTaskStepId);
-            if (!processTaskStepId.equals(endProcessTaskStepId)) {
-                List<Long> toProcessTaskStepIdList = new ArrayList<>();
-                for (ProcessTaskStepRelVo processTaskStepRelVo : allProcessTaskStepRelList) {
-                    if (Objects.equals(processTaskStepRelVo.getFromProcessTaskStepId(), processTaskStepId) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.FORWARD.getValue())) {
-                        toProcessTaskStepIdList.add(processTaskStepRelVo.getToProcessTaskStepId());
-                    }
-                }
-                List<Long> tmpRouteStepList = new ArrayList<>(routeStepList);
-                for (int i = 0; i < toProcessTaskStepIdList.size(); i++) {
-                    Long toProcessTaskStepId = toProcessTaskStepIdList.get(i);
-                    if (i == 0) {
-                        getAllRouteList(toProcessTaskStepId, routeList, routeStepList, endProcessTaskStepId, allProcessTaskStepRelList);
-                    } else {
-                        List<Long> newRouteStepList = new ArrayList<>(tmpRouteStepList);
-                        routeList.add(newRouteStepList);
-                        getAllRouteList(toProcessTaskStepId, routeList, newRouteStepList, endProcessTaskStepId, allProcessTaskStepRelList);
-                    }
-                }
-            }
-        }
     }
 
 }
