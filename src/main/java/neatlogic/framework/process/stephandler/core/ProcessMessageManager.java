@@ -19,9 +19,9 @@ package neatlogic.framework.process.stephandler.core;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import neatlogic.framework.process.constvalue.ProcessFlowDirection;
 import neatlogic.framework.process.constvalue.ProcessStepHandlerType;
 import neatlogic.framework.process.dto.ProcessStepRelVo;
+import neatlogic.framework.process.util.ProcessTaskUtil;
 import neatlogic.framework.restful.constvalue.OperationTypeEnum;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -89,19 +89,7 @@ public class ProcessMessageManager {
                     endStepUuid = step.getString("uuid");
                 }
             }
-            List<List<String>> routeList = new ArrayList<>();
-            List<String> routeStepList = new ArrayList<>();
-            routeList.add(routeStepList);
-            getAllRouteList(startStepUuid, routeList, routeStepList, endStepUuid, allProcessStepRelList);
-            // 有效的步骤UUID列表
-            effectiveStepUuidList = new ArrayList<>();
-            for (List<String> routeStepUuidList : routeList) {
-                for (String routeStepUuid : routeStepUuidList) {
-                    if (!effectiveStepUuidList.contains(routeStepUuid)) {
-                        effectiveStepUuidList.add(routeStepUuid);
-                    }
-                }
-            }
+            effectiveStepUuidList = ProcessTaskUtil.getEffectivePostStepUuidList(startStepUuid, endStepUuid, allProcessStepRelList);
             List<ProcessStepRelVo> connectionList = new ArrayList<>();
             for (ProcessStepRelVo processStepRelVo : allProcessStepRelList) {
                 if (effectiveStepUuidList.contains(processStepRelVo.getFromStepUuid()) && effectiveStepUuidList.contains(processStepRelVo.getToStepUuid())) {
@@ -150,36 +138,4 @@ public class ProcessMessageManager {
         return processStepRelList;
     }
 
-    /**
-     *
-     * @param stepUuid 当前步骤uuid
-     * @param routeList 收集所有后置路经列表
-     * @param routeStepList 遍历过的步骤列表
-     * @param endStepUuid 结束步骤uuid
-     * @param allProcessStepRelList 所有连线列表
-     */
-    private static void getAllRouteList(String stepUuid, List<List<String>> routeList, List<String> routeStepList, String endStepUuid, List<ProcessStepRelVo> allProcessStepRelList) {
-        if (!routeStepList.contains(stepUuid)) {
-            routeStepList.add(stepUuid);
-            if (!stepUuid.equals(endStepUuid)) {
-                List<String> toStepUuidList = new ArrayList<>();
-                for (ProcessStepRelVo processStepRelVo : allProcessStepRelList) {
-                    if (Objects.equals(processStepRelVo.getFromStepUuid(), stepUuid) && Objects.equals(processStepRelVo.getType(), ProcessFlowDirection.FORWARD.getValue())) {
-                        toStepUuidList.add(processStepRelVo.getToStepUuid());
-                    }
-                }
-                List<String> tmpRouteStepList = new ArrayList<>(routeStepList);
-                for (int i = 0; i < toStepUuidList.size(); i++) {
-                    String toStepUuid = toStepUuidList.get(i);
-                    if (i == 0) {
-                        getAllRouteList(toStepUuid, routeList, routeStepList, endStepUuid, allProcessStepRelList);
-                    } else {
-                        List<String> newRouteStepList = new ArrayList<>(tmpRouteStepList);
-                        routeList.add(newRouteStepList);
-                        getAllRouteList(toStepUuid, routeList, newRouteStepList, endStepUuid, allProcessStepRelList);
-                    }
-                }
-            }
-        }
-    }
 }
