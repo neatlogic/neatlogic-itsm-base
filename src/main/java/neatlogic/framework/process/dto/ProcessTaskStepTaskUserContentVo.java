@@ -48,6 +48,8 @@ public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
     private String contentHash;
     @EntityField(name = "内容", type = ApiParamType.STRING)
     private String content;
+    @EntityField(name = "完成时点击的操作按钮", type = ApiParamType.STRING)
+    private String button;
 
     public ProcessTaskStepTaskUserContentVo() {
     }
@@ -138,5 +140,13 @@ public class ProcessTaskStepTaskUserContentVo extends BaseEditorVo {
 
     public void setUserVo(UserVo userVo) {
         this.userVo = userVo;
+    }
+
+    public String getButton() {
+        return button;
+    }
+
+    public void setButton(String button) {
+        this.button = button;
     }
 }

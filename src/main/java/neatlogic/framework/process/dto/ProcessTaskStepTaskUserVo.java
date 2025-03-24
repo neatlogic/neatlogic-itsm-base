@@ -64,6 +64,9 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
     private List<Long> fileIdList;
     @EntityField(name = "附件信息列表", type = ApiParamType.JSONARRAY)
     private List<FileVo> fileList;
+    @EntityField(name = "完成时点击的操作按钮", type = ApiParamType.STRING)
+    private String button;
+
     public ProcessTaskStepTaskUserVo() {
     }
 
@@ -202,5 +205,13 @@ public class ProcessTaskStepTaskUserVo implements Serializable {
 
     public void setFileList(List<FileVo> fileList) {
         this.fileList = fileList;
+    }
+
+    public String getButton() {
+        return button;
+    }
+
+    public void setButton(String button) {
+        this.button = button;
     }
 }

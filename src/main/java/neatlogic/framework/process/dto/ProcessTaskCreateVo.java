@@ -37,6 +37,7 @@ public class ProcessTaskCreateVo {
     private String source;
     private String region;
     private Long newProcessTaskId;
+    private JSONArray assignWorkerList;
 
     public String getChannel() {
         return channel;
@@ -164,5 +165,13 @@ public class ProcessTaskCreateVo {
 
     public void setNewProcessTaskId(Long newProcessTaskId) {
         this.newProcessTaskId = newProcessTaskId;
+    }
+
+    public JSONArray getAssignWorkerList() {
+        return assignWorkerList;
+    }
+
+    public void setAssignWorkerList(JSONArray assignWorkerList) {
+        this.assignWorkerList = assignWorkerList;
     }
 }

@@ -68,13 +68,13 @@ public interface IProcessCrossoverMapper extends ICrossoverService {
 
 //    String getEarliestProcessDraft(ProcessDraftVo processDraftVo);
 
-//    List<ProcessStepWorkerPolicyVo> getProcessStepWorkerPolicyListByProcessUuid(String processUuid);
+    List<ProcessStepWorkerPolicyVo> getProcessStepWorkerPolicyListByProcessUuid(String processUuid);
 
 //    ProcessStepVo getProcessStepByUuid(String processStepUuid);
 
     ProcessScoreTemplateVo getProcessScoreTemplateByProcessUuid(String processUuid);
 
-//    ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
+    ProcessStepVo getStartProcessStepByProcessUuid(String processUuid);
 
 //    ProcessSlaVo getProcessSlaByUuid(String caller);
 
