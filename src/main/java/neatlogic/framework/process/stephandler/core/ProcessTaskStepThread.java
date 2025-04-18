@@ -19,12 +19,16 @@ package neatlogic.framework.process.stephandler.core;
 
 import neatlogic.framework.asynchronization.thread.NeatLogicThread;
 import neatlogic.framework.crossover.CrossoverServiceFactory;
-import neatlogic.framework.process.operationauth.core.IOperationType;
 import neatlogic.framework.process.constvalue.ProcessStepMode;
 import neatlogic.framework.process.crossover.IProcessTaskCrossoverMapper;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
+import neatlogic.framework.process.operationauth.core.IOperationType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class ProcessTaskStepThread extends NeatLogicThread {
+
+    private final static Logger logger = LoggerFactory.getLogger(ProcessTaskStepThread.class);
 
     private final ProcessTaskStepVo processTaskStepVo;
 
@@ -50,9 +54,12 @@ public abstract class ProcessTaskStepThread extends NeatLogicThread {
     protected void execute() {
         try {
             myExecute(processTaskStepVo);
+        } catch(Exception e) {
+            logger.error(e.getMessage(), e);
         } finally {
+            IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
+            processTaskCrossoverMapper.deleteProcessTaskStepInOperationByProcessTaskIdAndProcessTaskStepIdAndOperationType(processTaskId, processTaskStepId, operationType.getValue());
             if (inOperationId != null) {
-                IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
                 processTaskCrossoverMapper.deleteProcessTaskStepInOperationById(inOperationId);
             }
         }
