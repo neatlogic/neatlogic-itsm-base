@@ -954,7 +954,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskCrossoverMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(currentProcessTaskStepVo.getId());
                 }
                 /* 保存描述内容 **/
-                processStepHandlerCrossoverUtil.checkContentIsRequired(currentProcessTaskStepVo);
+                processStepHandlerCrossoverUtil.checkContentIsRequired(currentProcessTaskStepVo, operationType);
                 processStepHandlerCrossoverUtil.saveContentAndFile(currentProcessTaskStepVo, operationType);
                 myComplete(currentProcessTaskStepVo);
 
@@ -1271,7 +1271,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskCrossoverMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
                 }
                 /* 保存描述内容 **/
-                processStepHandlerCrossoverUtil.checkContentIsRequired(currentProcessTaskStepVo);
+                processStepHandlerCrossoverUtil.checkContentIsRequired(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REAPPROVAL);
                 processStepHandlerCrossoverUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REAPPROVAL);
                 myReapproval(currentProcessTaskStepVo);
 
@@ -2310,7 +2310,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 保存工单关注人 **/
             processStepHandlerCrossoverUtil.saveFocusUserList(currentProcessTaskStepVo);
 
-            processStepHandlerCrossoverUtil.checkContentIsRequired(currentProcessTaskStepVo);
+            processStepHandlerCrossoverUtil.checkContentIsRequired(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_START);
             myStartProcess(currentProcessTaskStepVo);
 
             /* 保存描述内容和附件 **/
@@ -2789,6 +2789,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
     protected synchronized static void doNext(List<ProcessTaskStepThread> processTaskStepThreadList) {
         if (processTaskStepThreadList.size() > 1) {
+            Set<Long> processTaskStepIdSet = new HashSet<>();
+            for (int i = processTaskStepThreadList.size() - 1; i >= 0; i--) {
+                ProcessTaskStepThread thread = processTaskStepThreadList.get(i);
+                if (processTaskStepIdSet.contains(thread.getProcessTaskStepId())) {
+                    processTaskStepThreadList.remove(i);
+                }
+                processTaskStepIdSet.add(thread.getProcessTaskStepId());
+            }
             IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
             List<ProcessTaskStepRelVo> processTaskStepRelList = processTaskCrossoverMapper.getProcessTaskStepRelByProcessTaskId(processTaskStepThreadList.get(0).getProcessTaskId());
             List<ProcessTaskStepVo> stepList = processTaskCrossoverMapper.getProcessTaskStepByProcessTaskIdAndType(processTaskStepThreadList.get(0).getProcessTaskId(), ProcessStepType.END.getValue());

@@ -248,6 +248,12 @@ public interface IProcessTaskCrossoverMapper extends ICrossoverService {
 
     int deleteProcessTaskStepInOperationById(Long id);
 
+    int deleteProcessTaskStepInOperationByProcessTaskIdAndProcessTaskStepIdAndOperationType(
+            @Param("processTaskId") Long processTaskId,
+            @Param("processTaskStepId") Long processTaskStepId,
+            @Param("operationType") String operationType
+    );
+
     int deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(Long processTaskStepId);
 
     int deleteProcessTaskTimeCostByProcessTaskId(Long processTaskId);
