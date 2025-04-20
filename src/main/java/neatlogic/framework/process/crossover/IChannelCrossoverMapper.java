@@ -37,6 +37,8 @@ public interface IChannelCrossoverMapper extends ICrossoverService {
 
     List<ChannelRelationVo> getChannelRelationTargetList(ChannelRelationVo channelRelationVo);
 
+    List<ChannelRelationVo> getChannelRelationListBySource(String channelUuid);
+
     int searchChannelCount(ChannelVo channelVo);
 
     List<ChannelVo> searchChannelList(ChannelVo channelVo);

@@ -207,6 +207,13 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @Time:2020年11月26日
      * @Description: 获取当前用户有转交权限的步骤列表
      */
-    public Set<ProcessTaskStepVo> getTransferableStepListByProcessTask(ProcessTaskVo processTaskVo, String userUuid);
+    Set<ProcessTaskStepVo> getTransferableStepListByProcessTask(ProcessTaskVo processTaskVo, String userUuid);
+
+    void saveProcessTaskRelation(
+            Long processTaskId,
+            Long channelTypeRelationId,
+            List<Long> relationProcessTaskIdList,
+            String source
+    );
 }
 
