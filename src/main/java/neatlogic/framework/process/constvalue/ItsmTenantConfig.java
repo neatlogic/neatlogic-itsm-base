@@ -15,33 +15,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.config.ITenantConfig;
 import neatlogic.framework.util.$;
 
 public enum ItsmTenantConfig implements ITenantConfig {
-    PROCESS_TASK_BASE_INFO_IS_SHOW("processtaskBaseInfoIsShow", null, "term.itsm.isshowbaseinfo"),
-    PROCESS_TASK_STEP_LIST_IS_SHOW("processtask.step.list.show", "1", "nfpc.itsmtenantconfig.steplist.show"),
-    PROCESS_TASK_STEP_ENABLE_COMMENT("processTaskStepEnableComment", null, "nfpc.itsmtenantconfig.processtaskstepenablecomment"),
+    PROCESS_TASK_BASE_INFO_IS_SHOW("processtaskBaseInfoIsShow", null, "term.itsm.isshowbaseinfo", ApiParamType.INTEGER),
+    PROCESS_TASK_STEP_LIST_IS_SHOW("processtask.step.list.show", "1", "nfpc.itsmtenantconfig.steplist.show", ApiParamType.INTEGER),
+    PROCESS_TASK_STEP_ENABLE_COMMENT("processTaskStepEnableComment", null, "nfpc.itsmtenantconfig.processtaskstepenablecomment", ApiParamType.INTEGER),
 //    DISPLAY_MODE_AFTER_TIMEOUT("displayModeAfterTimeout", "naturalTime", "nfpc.itsmtenantconfig.displaymodeaftertimeout"),
-    SLA_TIME_DISPLAY_MODE("sla.time.display.mode", "naturalTime", "nfpc.itsmtenantconfig.slatimedisplaymode"),
-    PROCESS_TASK_STEP_COMMENT_EDITOR_TOOLBAR_IS_SHOW("processTaskStepCommentEditorToolbarIsShow", "1", "term.itsm.isshowprocesstaskstepcommenteditortoolbar"),
-    WORKCENTER_AUTO_REFRESH("workcenter.auto.refresh", "1", "nfpc.itsmtenantconfig.workcenterrefresh"),
-    WORKCENTER_CUSTOM_LIMIT("workcenter.custom.limit", "5", "nfpc.itsmtenantconfig.workcentercustomlimit"),
-    WORKCENTER_PROCESSTASK_NEWPAGE("workcenter.processtask.newpage", "0", "nfpc.itsmtenantconfig.workcenterprocesstasknewpage"),
-    PROCESSTASK_TAB_LAYOUT("processtask.tab.layout", "{}", "nfpc.itsmtenantconfig.processtasktablayout"),
+    SLA_TIME_DISPLAY_MODE("sla.time.display.mode", "naturalTime", "nfpc.itsmtenantconfig.slatimedisplaymode", ApiParamType.STRING),
+    PROCESS_TASK_STEP_COMMENT_EDITOR_TOOLBAR_IS_SHOW("processTaskStepCommentEditorToolbarIsShow", "1", "term.itsm.isshowprocesstaskstepcommenteditortoolbar", ApiParamType.INTEGER),
+    WORKCENTER_AUTO_REFRESH("workcenter.auto.refresh", "1", "nfpc.itsmtenantconfig.workcenterrefresh", ApiParamType.INTEGER),
+    WORKCENTER_CUSTOM_LIMIT("workcenter.custom.limit", "5", "nfpc.itsmtenantconfig.workcentercustomlimit", ApiParamType.INTEGER),
+    WORKCENTER_PROCESSTASK_NEWPAGE("workcenter.processtask.newpage", "0", "nfpc.itsmtenantconfig.workcenterprocesstasknewpage", ApiParamType.INTEGER),
+    PROCESSTASK_TAB_LAYOUT("processtask.tab.layout", "{}", "nfpc.itsmtenantconfig.processtasktablayout", ApiParamType.JSONOBJECT),
 
-    PROCESSTASK_WORKERPOLICY_ISONLYONCEEXECUTE("processtask.workerpolicy.isonlyonceexecute", "0", "nfpc.itsmtenantconfig.processtaskworkerpolicyisonlyonceexecute"),
-    PROCESSTASK_STEP_AUTOAPPROVAL_SHOW("processtask.step.autoapproval.show", "0", "nfpc.itsmtenantconfig.processtaskstepautoapprovalshow"),
+    PROCESSTASK_WORKERPOLICY_ISONLYONCEEXECUTE("processtask.workerpolicy.isonlyonceexecute", "0", "nfpc.itsmtenantconfig.processtaskworkerpolicyisonlyonceexecute", ApiParamType.INTEGER),
+    PROCESSTASK_STEP_AUTOAPPROVAL_SHOW("processtask.step.autoapproval.show", "0", "nfpc.itsmtenantconfig.processtaskstepautoapprovalshow", ApiParamType.INTEGER),
     ;
 
     String key;
     String value;
     String description;
+    ApiParamType type;
 
-    ItsmTenantConfig(String key, String value, String description) {
+    ItsmTenantConfig(String key, String value, String description, ApiParamType type) {
         this.key = key;
         this.value = value;
         this.description = description;
+        this.type = type;
     }
 
     @Override
@@ -57,5 +60,10 @@ public enum ItsmTenantConfig implements ITenantConfig {
     @Override
     public String getDescription() {
         return $.t(description);
+    }
+
+    @Override
+    public ApiParamType getType() {
+        return type;
     }
 }
