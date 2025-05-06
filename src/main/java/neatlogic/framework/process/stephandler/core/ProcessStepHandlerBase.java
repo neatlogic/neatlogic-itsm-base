@@ -382,15 +382,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             workerSet.add(processTaskStepWorkerVo);
             isAssignException = true;
         }
-
-        processTaskCrossoverMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
-        if (CollectionUtils.isNotEmpty(workerSet)) {
-            for (ProcessTaskStepWorkerVo workerVo : workerSet) {
-                processTaskCrossoverMapper.insertIgnoreProcessTaskStepWorker(workerVo);
-            }
-        } else {
+        if (CollectionUtils.isEmpty(workerSet)) {
             throw new ProcessTaskStepNoMatchedWorkerException();
         }
+        processTaskCrossoverMapper.deleteProcessTaskStepWorker(new ProcessTaskStepWorkerVo(currentProcessTaskStepVo.getId()));
 
         if (!oldUserList.isEmpty()) {
             boolean changeMajorUser = true;
@@ -474,14 +469,27 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                                 ProcessUserType.MAJOR.getValue()
                         );
                         processTaskCrossoverMapper.insertProcessTaskStepUser(processTaskStepUser);
+                        ProcessTaskStepWorkerVo worker = new ProcessTaskStepWorkerVo(
+                                currentProcessTaskStepVo.getProcessTaskId(),
+                                currentProcessTaskStepVo.getId(),
+                                GroupSearch.USER.getValue(),
+                                userVo.getUuid(),
+                                ProcessUserType.MAJOR.getValue()
+                        );
+                        processTaskCrossoverMapper.insertIgnoreProcessTaskStepWorker(worker);
                         /* 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
                         currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.RUNNING.getValue());
                         currentProcessTaskStepVo.setUpdateStartTime(1);
                     }
+                } else {
+                    processTaskCrossoverMapper.insertIgnoreProcessTaskStepWorker(workerVo);
                 }
             }
         } else {
             currentProcessTaskStepVo.setUpdateStartTime(-1);
+            for (ProcessTaskStepWorkerVo workerVo : workerSet) {
+                processTaskCrossoverMapper.insertIgnoreProcessTaskStepWorker(workerVo);
+            }
         }
         /* 触发通知 **/
 //        processStepHandlerUtilService.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
