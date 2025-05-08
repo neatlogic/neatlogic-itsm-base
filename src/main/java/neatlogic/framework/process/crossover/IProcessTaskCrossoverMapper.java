@@ -217,6 +217,8 @@ public interface IProcessTaskCrossoverMapper extends ICrossoverService {
 
     int updateProcessTaskStepStatus(ProcessTaskStepVo processTaskStepVo);
 
+    int updateProcessTaskStepIsActive(ProcessTaskStepVo processTaskStepVo);
+
     int updateProcessTaskStatus(ProcessTaskVo processTaskVo);
 
     int updateProcessTaskStepRelIsHit(ProcessTaskStepRelVo processTaskStepRelVo);

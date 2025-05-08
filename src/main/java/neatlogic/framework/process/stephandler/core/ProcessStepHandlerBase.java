@@ -480,6 +480,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         /* 当步骤设置了自动开始时，设置当前步骤状态为处理中 **/
                         currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.RUNNING.getValue());
                         currentProcessTaskStepVo.setUpdateStartTime(1);
+                        currentProcessTaskStepVo.setUpdateEndTime(-1);
                     }
                 } else {
                     processTaskCrossoverMapper.insertIgnoreProcessTaskStepWorker(workerVo);
@@ -906,6 +907,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     /* 更新步骤状态 **/
                     currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.SUCCEED.getValue());
                     currentProcessTaskStepVo.setIsActive(2);
+                    currentProcessTaskStepVo.setUpdateStartTime(1);
                     currentProcessTaskStepVo.setUpdateEndTime(1);
                     currentProcessTaskStepVo.setError(null);
                     updateProcessTaskStepStatus(currentProcessTaskStepVo);
@@ -1485,7 +1487,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 
         /* 修改步骤状态 **/
         currentProcessTaskStepVo.setIsActive(-1);
-        processTaskCrossoverMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
+        processTaskCrossoverMapper.updateProcessTaskStepIsActive(currentProcessTaskStepVo);
 
         /* 写入时间审计 **/
         processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_ABORT);
@@ -1591,7 +1593,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             /* 修改步骤状态 **/
-            processTaskCrossoverMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
+            processTaskCrossoverMapper.updateProcessTaskStepIsActive(currentProcessTaskStepVo);
         } else if (currentProcessTaskStepVo.getIsActive().equals(1) && ProcessTaskStepStatus.HANG.getValue().equals(currentProcessTaskStepVo.getStatus())) {
             IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
             if (processStepUtilHandler == null) {
@@ -1866,6 +1868,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processTaskCrossoverMapper.insertProcessTaskStepUser(processTaskStepUserVo);
                     processTaskStepWorkerVo.setUserType(ProcessUserType.MAJOR.getValue());
                     processTaskStepVo.setStatus(ProcessTaskStepStatus.RUNNING.getValue());
+                    processTaskStepVo.setUpdateStartTime(1);
+                    processTaskStepVo.setUpdateEndTime(-1);
                 }
             }
             JSONArray oldWorkerList = new JSONArray();
