@@ -1,6 +1,7 @@
 package neatlogic.framework.process.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import neatlogic.framework.asynchronization.threadlocal.InputFromContext;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.dto.WorkAssignmentUnitVo;
 import neatlogic.framework.process.constvalue.ProcessTaskSourceFactory;
@@ -182,6 +183,12 @@ public class ProcessTaskStepAuditVo {
 	}
 
 	public String getSource() {
+		if (source == null) {
+			InputFromContext inputFromContext = InputFromContext.get();
+			if (inputFromContext != null) {
+				source = inputFromContext.getInputFrom();
+			}
+		}
 		return source;
 	}
 
