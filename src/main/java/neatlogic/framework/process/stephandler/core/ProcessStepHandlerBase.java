@@ -27,10 +27,7 @@ import neatlogic.framework.crossover.CrossoverServiceFactory;
 import neatlogic.framework.dao.mapper.RoleMapper;
 import neatlogic.framework.dao.mapper.TeamMapper;
 import neatlogic.framework.dao.mapper.UserMapper;
-import neatlogic.framework.dto.AuthenticationInfoVo;
-import neatlogic.framework.dto.RoleTeamVo;
-import neatlogic.framework.dto.TeamVo;
-import neatlogic.framework.dto.UserVo;
+import neatlogic.framework.dto.*;
 import neatlogic.framework.form.dao.mapper.FormMapper;
 import neatlogic.framework.form.dto.FormVersionVo;
 import neatlogic.framework.fulltextindex.core.FullTextIndexHandlerFactory;
@@ -365,6 +362,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.PENDING.getValue());
         int autoStart = myAssign(currentProcessTaskStepVo, workerSet);
         boolean isAssignException = false;
+        String defaultWorkerName = StringUtils.EMPTY;
         if (CollectionUtils.isEmpty(workerSet)) {
             /* 获取步骤配置信息 **/
             ProcessTaskStepVo processTaskStepVo = processTaskCrossoverMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
@@ -381,6 +379,22 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             );
             workerSet.add(processTaskStepWorkerVo);
             isAssignException = true;
+            if (Objects.equals(split[0], GroupSearch.USER.getValue())) {
+                UserVo userVo = userMapper.getUserBaseInfoByUuid(split[1]);
+                if (userVo != null) {
+                    defaultWorkerName = userVo.getUserName();
+                }
+            } else if (Objects.equals(split[0], GroupSearch.TEAM.getValue())) {
+                TeamVo teamVo = teamMapper.getTeamByUuid(split[1]);
+                if (teamVo != null) {
+                    defaultWorkerName = teamVo.getName();
+                }
+            } else if (Objects.equals(split[0], GroupSearch.ROLE.getValue())) {
+                RoleVo roleVo = roleMapper.getRoleByUuid(split[1]);
+                if (roleVo != null) {
+                    defaultWorkerName = roleVo.getName();
+                }
+            }
         }
         if (CollectionUtils.isEmpty(workerSet)) {
             throw new ProcessTaskStepNoMatchedWorkerException();
@@ -495,6 +509,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         /* 触发通知 **/
 //        processStepHandlerUtilService.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
         if (isAssignException) {
+            String reason = "当前步骤分派异常，已分派给异常处理人：" + defaultWorkerName;
+            processStepHandlerCrossoverUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), reason, ProcessTaskStepRemindType.ERROR);
             processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ASSIGNEXCEPTION);
             processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ASSIGNEXCEPTION);
         }
@@ -978,7 +994,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 /* 流转到下一步 **/
                 Set<Long> nextStepIdSet = getNext(currentProcessTaskStepVo);
                 if (CollectionUtils.isEmpty(nextStepIdSet)) {
-                    throw new ProcessTaskNotFoundNextStepException();
+                    Long nextStepId = paramObj.getLong("nextStepId");
+                    throw new ProcessTaskNotFoundNextStepException(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getName(), nextStepId);
                 }
                 // 完成步骤时将所有后退路线重置为0
                 List<ProcessTaskStepRelVo> relList = processTaskCrossoverMapper.getProcessTaskStepRelByToId(currentProcessTaskStepVo.getId());
