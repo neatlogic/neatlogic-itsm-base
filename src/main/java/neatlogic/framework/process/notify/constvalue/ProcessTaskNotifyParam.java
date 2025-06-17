@@ -56,6 +56,12 @@ public enum ProcessTaskNotifyParam implements INotifyParam {
     FORM_TABLE("formTable", "表单", ParamType.STRING, "<#if DATA.formTable??>\n" +
             "\t${DATA.formTable()}\n" +
             "</#if>"),
+    FORM_JSON("formJson", "表单数据", ParamType.ARRAY, "<#if DATA.formJson?? && (DATA.formJson?size > 0)>\n" +
+            "<#list DATA.formJson as item>\n" +
+            "这里根据需要进行自定义处理显示信息item数据结构为{'attributeKey':'a','attributeLabel':'A','extendedData':'有些表单组件值是数组需要进行处理'}\n" +
+            "<#if item_has_next><br></#if>\n" +
+            "</#list>\n" +
+            "</#if>\n"),
     ;
     private final String value;
     private final String text;
