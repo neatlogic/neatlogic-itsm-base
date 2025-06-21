@@ -20,9 +20,11 @@ package neatlogic.framework.process.crossover;
 import neatlogic.framework.crossover.ICrossoverService;
 import neatlogic.framework.notify.core.INotifyTriggerType;
 import neatlogic.framework.process.audithandler.core.IProcessTaskAuditType;
-import neatlogic.framework.process.operationauth.core.IOperationType;
+import neatlogic.framework.process.dto.ProcessTaskStepAssignVo;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
 import neatlogic.framework.process.dto.ProcessTaskVo;
+import neatlogic.framework.process.exception.processtask.ProcessTaskException;
+import neatlogic.framework.process.operationauth.core.IOperationType;
 import neatlogic.framework.process.stepremind.core.IProcessTaskStepRemindType;
 
 public interface IProcessStepHandlerCrossoverUtil extends ICrossoverService {
@@ -152,4 +154,12 @@ public interface IProcessStepHandlerCrossoverUtil extends ICrossoverService {
      * @param currentProcessTaskStepVo 当前步骤信息
      */
     void saveForm(ProcessTaskStepVo currentProcessTaskStepVo);
+
+    /**
+     * 解析分配步骤处理人配置
+     * @param currentProcessTaskStepVo
+     * @return
+     * @throws ProcessTaskException
+     */
+    ProcessTaskStepAssignVo analysisAssignConfig(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
 }
