@@ -27,6 +27,10 @@ public interface IProcessTaskStepDataCrossoverMapper extends ICrossoverService {
 
     ProcessTaskStepDataVo getProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
 
+    Long getProcessTaskStepDataId(ProcessTaskStepDataVo processTaskStepDataVo);
+
+    int checkProcessTaskStepDataIdIsExists(Long id);
+
     int replaceProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
 
     int deleteProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);

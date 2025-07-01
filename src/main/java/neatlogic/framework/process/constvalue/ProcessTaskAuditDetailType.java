@@ -24,6 +24,7 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	AUTOMATICINFO("automaticinfo", "外部调用", "automaticinfo", "oldAutomaticInfo", 19, false),
 	DESCRIPTION("description", "描述", "description", "oldDescription", 21, true),
 	OPINION("opinion", "意见", "opinion", "oldOpinion", 22, true),
+	ASSIGNWORKERLIST("assignworkerlist", "指定处理人", "assignWorkerList", "oldAssignWorkerList", 23, false),
 	;
 	
 	private String value;
