@@ -3,7 +3,10 @@ package neatlogic.framework.process.dto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
-public class ProcessTaskFormVo {
+import java.io.Serializable;
+
+public class ProcessTaskFormVo implements Serializable {
+	private static final long serialVersionUID = 1097967001105204846L;
 //    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
 	private Long processTaskId;
 	private String formUuid;
