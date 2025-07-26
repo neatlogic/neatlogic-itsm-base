@@ -19,13 +19,16 @@ package neatlogic.framework.process.crossover;
 
 import neatlogic.framework.crossover.ICrossoverService;
 import neatlogic.framework.process.dto.ProcessTaskStepDataVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface IProcessTaskStepDataCrossoverMapper extends ICrossoverService {
-    List<ProcessTaskStepDataVo> getProcessTaskStepDataByProcessTaskIdAndStepId(Long processTaskId, Long stepId);
+    List<ProcessTaskStepDataVo> getProcessTaskStepDataByProcessTaskIdAndStepId(@Param("processTaskId") Long processTaskId, @Param("processTaskStepId") Long stepId);
 
     ProcessTaskStepDataVo getProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
+
+    List<ProcessTaskStepDataVo> searchProcessTaskStepData(ProcessTaskStepDataVo processTaskStepDataVo);
 
     Long getProcessTaskStepDataId(ProcessTaskStepDataVo processTaskStepDataVo);
 
