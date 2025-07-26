@@ -267,6 +267,8 @@ public class ProcessAuthManager {
                 String stepConfig = hash2ConfigMap.get(processTaskStepVo.getConfigHash());
                 if (StringUtils.isNotBlank(stepConfig)) {
                     processTaskStepVo.setConfig(JSON.parseObject(stepConfig));
+                } else {
+                    processTaskStepVo.setConfig(new JSONObject());
                 }
             }
             List<ProcessTaskStepRelVo> processTaskStepRelList =
