@@ -1,5 +1,6 @@
 package neatlogic.framework.process.operationauth.core;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -226,11 +227,16 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
     protected boolean checkOperationAuthIsConfigured(ProcessTaskVo processTaskVo, ProcessTaskStepVo processTaskStepVo,
                                                      IOperationType operationType, String userUuid) {
         JSONArray authorityList = null;
-        ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
-        String stepConfig = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
-        Integer enableAuthority = (Integer) JSONPath.read(stepConfig, "enableAuthority");
+        JSONObject stepConfigObj = processTaskStepVo.getConfig();
+        if (stepConfigObj == null) {
+            ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
+            String stepConfig = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(processTaskStepVo.getConfigHash());
+            stepConfigObj = JSON.parseObject(stepConfig);
+            processTaskStepVo.setConfig(stepConfigObj);
+        }
+        Integer enableAuthority = stepConfigObj.getInteger("enableAuthority");
         if (Objects.equals(enableAuthority, 1)) {
-            authorityList = (JSONArray) JSONPath.read(stepConfig, "authorityList");
+            authorityList = stepConfigObj.getJSONArray("authorityList");
         } else {
             String handler = processTaskStepVo.getHandler();
             IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(handler);

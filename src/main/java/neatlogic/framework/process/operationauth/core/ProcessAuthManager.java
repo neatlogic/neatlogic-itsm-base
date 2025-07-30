@@ -1,5 +1,6 @@
 package neatlogic.framework.process.operationauth.core;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.asynchronization.threadlocal.UserContext;
 import neatlogic.framework.crossover.CrossoverServiceFactory;
@@ -242,6 +243,15 @@ public class ProcessAuthManager {
             Map<Long, ProcessTaskStepAgentVo> processTaskStepAgentMap = processTaskStepAgentList.stream().collect(Collectors.toMap(e -> e.getProcessTaskStepId(), e -> e));
             List<ProcessTaskStepVo> processTaskStepList =
                     processTaskCrossoverMapper.getProcessTaskStepListByProcessTaskIdList(processTaskIdList);
+            ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
+            Map<String, String> hash2ConfigMap = new HashMap<>();
+            Set<String> configHashSet = processTaskStepList.stream().map(ProcessTaskStepVo::getConfigHash).filter(Objects::nonNull).collect(Collectors.toSet());
+            if (CollectionUtils.isNotEmpty(configHashSet)) {
+                List<ProcessTaskStepConfigVo> configList = selectContentByHashCrossoverMapper.getProcessTaskStepConfigListByHashList(new ArrayList<>(configHashSet));
+                for (ProcessTaskStepConfigVo processTaskStepConfigVo : configList) {
+                    hash2ConfigMap.put(processTaskStepConfigVo.getHash(), processTaskStepConfigVo.getConfig());
+                }
+            }
             Map<Long, List<ProcessTaskStepVo>> processTaskStepListMap = new HashMap<>();
             for (ProcessTaskStepVo processTaskStepVo : processTaskStepList) {
                 processTaskStepVo.setWorkerList(
@@ -254,6 +264,12 @@ public class ProcessAuthManager {
                 }
                 processTaskStepListMap.computeIfAbsent(processTaskStepVo.getProcessTaskId(), k -> new ArrayList<>())
                         .add(processTaskStepVo);
+                String stepConfig = hash2ConfigMap.get(processTaskStepVo.getConfigHash());
+                if (StringUtils.isNotBlank(stepConfig)) {
+                    processTaskStepVo.setConfig(JSON.parseObject(stepConfig));
+                } else {
+                    processTaskStepVo.setConfig(new JSONObject());
+                }
             }
             List<ProcessTaskStepRelVo> processTaskStepRelList =
                     processTaskCrossoverMapper.getProcessTaskStepRelListByProcessTaskIdList(processTaskIdList);
@@ -267,7 +283,6 @@ public class ProcessAuthManager {
             List<ProcessTaskVo> processTaskList = processTaskCrossoverMapper.getProcessTaskListByIdList(processTaskIdList);
             Set<String> hashSet = processTaskList.stream().map(ProcessTaskVo::getConfigHash).collect(Collectors.toSet());
 //            long startTime3 = System.currentTimeMillis();
-            ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
             List<ProcessTaskConfigVo> processTaskConfigList = selectContentByHashCrossoverMapper.getProcessTaskConfigListByHashList(new ArrayList<>(hashSet));
 //            logger.error("D:" + (System.currentTimeMillis() - startTime3));
             Map<String, String> processTaskConfigMap = processTaskConfigList.stream().collect(Collectors.toMap(e->e.getHash(), e -> e.getConfig()));

@@ -1,7 +1,6 @@
 package neatlogic.framework.process.dto;
 
 import neatlogic.framework.dto.UserVo;
-import neatlogic.framework.process.constvalue.ProcessTaskStatus;
 import neatlogic.framework.process.constvalue.ProcessTaskStepUserStatus;
 import org.apache.commons.lang3.StringUtils;
 
@@ -96,7 +95,7 @@ public class ProcessTaskStepUserVo {
     @Deprecated
     public UserVo getUserVo() {
         if (userVo == null && StringUtils.isNotBlank(userUuid)) {
-            userVo = new UserVo(userUuid);
+            userVo = new UserVo(userUuid, false);
             userVo.setUserName(userName);
         }
         return userVo;

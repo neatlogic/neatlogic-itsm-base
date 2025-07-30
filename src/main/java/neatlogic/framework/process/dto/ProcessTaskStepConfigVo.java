@@ -1,6 +1,9 @@
 package neatlogic.framework.process.dto;
 
-public class ProcessTaskStepConfigVo {
+import java.io.Serializable;
+
+public class ProcessTaskStepConfigVo implements Serializable {
+	private static final long serialVersionUID = 1097967001105204845L;
 
 	private String hash;
 	private String config;

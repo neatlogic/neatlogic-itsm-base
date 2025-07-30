@@ -101,8 +101,8 @@ public class ProcessTaskStepContext {
      * @return FormAttributeVo
      */
     public FormAttributeVo getFormAttribute(String attributeUuid) {
-        IFormCrossoverService formCrossoverMapper = CrossoverServiceFactory.getApi(IFormCrossoverService.class);
-        return formCrossoverMapper.getFormAttributeByUuid(attributeUuid);
+        IFormCrossoverService formCrossoverService = CrossoverServiceFactory.getApi(IFormCrossoverService.class);
+        return formCrossoverService.getFormAttributeByUuid(attributeUuid);
     }
 
     /**
