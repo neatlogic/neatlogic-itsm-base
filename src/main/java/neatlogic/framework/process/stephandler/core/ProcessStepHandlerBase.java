@@ -530,6 +530,18 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
      */
     protected abstract int myAssign(ProcessTaskStepVo currentProcessTaskStepVo, Set<ProcessTaskStepWorkerVo> workerSet) throws ProcessTaskException;
 
+    @Override
+    public final int assignAndUpdateStatus(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException {
+        IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
+        ProcessTaskStepVo processTaskStepRealTimeStatus = processTaskCrossoverMapper.getProcessTaskStepBaseInfoById(currentProcessTaskStepVo.getId());
+        assign(currentProcessTaskStepVo);
+        if (!Objects.equals(currentProcessTaskStepVo.getStatus(), processTaskStepRealTimeStatus.getStatus())) {
+            processTaskStepRealTimeStatus.setStatus(currentProcessTaskStepVo.getStatus());
+            updateProcessTaskStepStatus(processTaskStepRealTimeStatus);
+        }
+        return 1;
+    }
+
     protected int defaultAssign(ProcessTaskStepVo currentProcessTaskStepVo, Set<ProcessTaskStepWorkerVo> workerSet)
             throws ProcessTaskException {
         IProcessStepHandlerCrossoverUtil processStepHandlerCrossoverUtil = CrossoverServiceFactory.getApi(IProcessStepHandlerCrossoverUtil.class);

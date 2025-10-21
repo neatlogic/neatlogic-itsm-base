@@ -102,6 +102,16 @@ public interface IProcessStepHandler {
     int assign(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
 
     /**
+     * 分配处理人且更新步骤状态
+     *
+     * @param currentProcessTaskStepVo 步骤信息
+     * @return 1代表成功
+     * @throws ProcessTaskException 异常
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    int assignAndUpdateStatus(ProcessTaskStepVo currentProcessTaskStepVo) throws ProcessTaskException;
+
+    /**
      * 挂起流程步骤
      *
      * @param currentProcessTaskStepVo 步骤信息
