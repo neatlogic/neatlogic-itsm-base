@@ -59,6 +59,7 @@ import neatlogic.framework.process.workerpolicy.core.IWorkerPolicyHandler;
 import neatlogic.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import neatlogic.framework.service.AuthenticationInfoService;
 import neatlogic.framework.transaction.core.AfterTransactionJob;
+import neatlogic.framework.util.SnowflakeUtil;
 import neatlogic.framework.worktime.dao.mapper.WorktimeMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -2253,6 +2254,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 List<String> slaStepUuidList = processCrossoverMapper.getProcessStepUuidBySlaUuid(slaVo.getUuid());
                 if (CollectionUtils.isNotEmpty(slaStepUuidList)) {
                     ProcessTaskSlaVo processTaskSlaVo = new ProcessTaskSlaVo(slaVo);
+                    processTaskSlaVo.setId(SnowflakeUtil.uniqueLong());
                     processTaskSlaVo.setProcessTaskId(processTaskVo.getId());
                     processTaskSlaVo.setIsActive(1);
                     processTaskSlaCrossoverMapper.insertProcessTaskSla(processTaskSlaVo);
