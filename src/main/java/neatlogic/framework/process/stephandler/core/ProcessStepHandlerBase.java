@@ -2132,11 +2132,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     List<ScoreTemplateDimensionVo> scoreTemplateDimensionList = scoreTemplateCrossoverMapper.getScoreTemplateDimensionListByScoreTemplateId(processTaskScoreTemplateVo.getScoreTemplateId());
                     processTaskScoreTemplateConfig.put("scoreTemplateDimensionList", scoreTemplateDimensionList);
                     ProcessTaskScoreTemplateConfigVo processTaskScoreTemplateConfigVo = new ProcessTaskScoreTemplateConfigVo(processTaskScoreTemplateConfig.toJSONString());
-                    ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
-                    if (StringUtils.isNotBlank(processTaskScoreTemplateConfigVo.getHash())
-                            && selectContentByHashCrossoverMapper.checkProcessTaskScoreTempleteConfigIsExists(processTaskScoreTemplateConfigVo.getHash()) == 0) {
-                        processTaskCrossoverMapper.insertProcessTaskScoreTemplateConfig(processTaskScoreTemplateConfigVo);
-                    }
+                    processTaskCrossoverMapper.insertProcessTaskScoreTemplateConfig(processTaskScoreTemplateConfigVo);
                     processTaskScoreTemplateVo.setConfigHash(processTaskScoreTemplateConfigVo.getHash());
                 }
                 processTaskScoreTemplateVo.setProcessTaskId(processTaskVo.getId());
