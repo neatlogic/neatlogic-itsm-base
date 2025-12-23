@@ -312,4 +312,19 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
         IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
         return processTaskCrossoverMapper.getToProcessTaskStepByFromIdAndType(processTaskStepVo.getId(), type);
     }
+
+    /**
+     * 上报前检查工单依赖各个功能是否正常，例如服务时间排班设置，表单，组合工具等
+     *
+     * @param configObj
+     * @return
+     */
+    @Override
+    public final void checkDependenciesBeforeReport(JSONObject configObj) {
+        myCheckDependenciesBeforeReport(configObj);
+    }
+
+    protected void myCheckDependenciesBeforeReport(JSONObject configObj) {
+        // ignore
+    }
 }
