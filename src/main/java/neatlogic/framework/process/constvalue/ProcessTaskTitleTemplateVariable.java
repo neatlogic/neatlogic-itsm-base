@@ -17,6 +17,8 @@ import neatlogic.framework.common.constvalue.IEnum;
 public enum ProcessTaskTitleTemplateVariable implements IEnum {
     USER_ID("userId", "${DATA.userId}", "当前用户ID"),
     USER_NAME("userName", "${DATA.userName}", "当前用户名称"),
+    REGION_NAME("regionName", "${DATA.regionName}", "地域"),
+    YYYYMMDD("yyyyMMdd", "${DATA.yyyyMMdd}", "当前日期"),
     ;
     private final String value;
     private final String expression;
