@@ -15,6 +15,8 @@ package neatlogic.framework.process.stephandler.core;
 import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.process.dto.ProcessStepRelVo;
 import neatlogic.framework.restful.constvalue.OperationTypeEnum;
+import neatlogic.framework.worktime.dto.WorktimeRangeVo;
+import neatlogic.framework.worktime.dto.WorktimeVo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -30,6 +32,10 @@ public class ProcessMessageContext {
     private List<String> effectiveStepUuidList;
 
     private List<ProcessStepRelVo> connectionList;
+
+    private WorktimeVo worktime;
+
+    private WorktimeRangeVo lastWorktimeRange;
 
 //    public ProcessMessageContext(JSONObject config) {
 //        this.config = config;
@@ -73,5 +79,21 @@ public class ProcessMessageContext {
 
     public void setOperationType(OperationTypeEnum operationType) {
         this.operationType = operationType;
+    }
+
+    public WorktimeVo getWorktime() {
+        return worktime;
+    }
+
+    public void setWorktime(WorktimeVo worktime) {
+        this.worktime = worktime;
+    }
+
+    public WorktimeRangeVo getLastWorktimeRange() {
+        return lastWorktimeRange;
+    }
+
+    public void setLastWorktimeRange(WorktimeRangeVo lastWorktimeRange) {
+        this.lastWorktimeRange = lastWorktimeRange;
     }
 }

@@ -18,6 +18,8 @@ import neatlogic.framework.process.constvalue.ProcessStepHandlerType;
 import neatlogic.framework.process.dto.ProcessStepRelVo;
 import neatlogic.framework.process.util.ProcessTaskUtil;
 import neatlogic.framework.restful.constvalue.OperationTypeEnum;
+import neatlogic.framework.worktime.dto.WorktimeRangeVo;
+import neatlogic.framework.worktime.dto.WorktimeVo;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,6 +56,20 @@ public class ProcessMessageManager {
 
     public static void setOperationType(OperationTypeEnum operationType) {
         getProcessMessageContext().setOperationType(operationType);
+    }
+    public static WorktimeVo getWorktime() {
+        return getProcessMessageContext().getWorktime();
+    }
+    public static void setWorktime(WorktimeVo worktime) {
+        getProcessMessageContext().setWorktime(worktime);
+    }
+
+    public static WorktimeRangeVo getLastWorktimeRange() {
+        return getProcessMessageContext().getLastWorktimeRange();
+    }
+
+    public static void setLastWorktimeRange(WorktimeRangeVo lastWorktimeRange) {
+        getProcessMessageContext().setLastWorktimeRange(lastWorktimeRange);
     }
 
     public static void release() {

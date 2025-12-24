@@ -2,12 +2,9 @@ package neatlogic.framework.process.stephandler.core;
 
 import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.notify.core.INotifyPolicyHandler;
+import neatlogic.framework.process.dto.*;
 import neatlogic.framework.process.operationauth.core.IOperationType;
 import neatlogic.framework.process.constvalue.ProcessFlowDirection;
-import neatlogic.framework.process.dto.ProcessStepVo;
-import neatlogic.framework.process.dto.ProcessTaskStepDataVo;
-import neatlogic.framework.process.dto.ProcessTaskStepInOperationVo;
-import neatlogic.framework.process.dto.ProcessTaskStepVo;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -238,4 +235,12 @@ public interface IProcessStepInternalHandler {
      * @return
      */
     List<ProcessTaskStepVo> getNextStepList(ProcessTaskStepVo currentProcessTaskStepVo, ProcessFlowDirection processFlowDirection);
+
+    /**
+     * 上报前检查工单依赖各个功能是否正常，例如服务时间排班设置，表单，组合工具等
+     * @param configObj
+     * @return
+     */
+    void checkDependenciesBeforeReport(JSONObject configObj);
+
 }
