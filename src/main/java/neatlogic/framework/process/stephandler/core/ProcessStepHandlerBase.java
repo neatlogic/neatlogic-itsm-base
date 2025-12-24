@@ -2927,7 +2927,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.PENDING.getValue());
             /* 保存打回原因 **/
             processStepHandlerCrossoverUtil.saveContentAndFile(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_REDO);
-            myRedo(currentProcessTaskStepVo);
 
             /* 遍历后续节点所有步骤，写入汇聚步骤数据 **/
             resetConvergeInfo(currentProcessTaskStepVo);
@@ -2936,33 +2935,59 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             hangPostStep(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REDO);
             resetPostStepRelIsHit(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
             /* 获取当前步骤状态 **/
+            if (this.getMode().equals(ProcessStepMode.MT)) {
+                if (!this.disableAssign()) {
+                    /* 分配处理人 **/
+                    assign(currentProcessTaskStepVo);
+                } else {
+                    /* 清空主处理人 **/
+                    ProcessTaskStepUserVo processTaskStepUserVo = new ProcessTaskStepUserVo();
+                    processTaskStepUserVo.setProcessTaskStepId(currentProcessTaskStepVo.getId());
+                    processTaskStepUserVo.setUserType(ProcessUserType.MAJOR.getValue());// 只删除主处理人
+                    processTaskCrossoverMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
+                }
+                myRedo(currentProcessTaskStepVo);
+                currentProcessTaskStepVo.setIsActive(1);
+                updateProcessTaskStepStatus(currentProcessTaskStepVo);
+                IProcessStepInternalHandler processStepUtilHandler = ProcessStepInternalHandlerFactory.getHandler(this.getHandler());
+                if (processStepUtilHandler != null) {
+                    processStepUtilHandler.updateProcessTaskStepUserAndWorker(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId());
+                }
+                currentProcessTaskStepVo.getParamObj().put("operateTime", new Date());
+                ProcessTaskOperatePostProcessorFactory.invokePostProcessorsAfterProcessTaskStepOperate(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REDO);
+                /* 写入时间审计 **/
+                processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_REDO);
+                if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStepStatus.RUNNING.getValue())) {
+                    processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
+                }
 
-            /* 分配处理人 **/
-            assign(currentProcessTaskStepVo);
-            currentProcessTaskStepVo.setIsActive(1);
-            updateProcessTaskStepStatus(currentProcessTaskStepVo);
-            IProcessTaskScoreCrossoverMapper processTaskScoreCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskScoreCrossoverMapper.class);
-            processTaskScoreCrossoverMapper.deleteProcessTaskAutoScoreByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
+                // 删除时效延时数据
+                IProcessTaskSlaCrossoverMapper processTaskSlaCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskSlaCrossoverMapper.class);
+                processTaskSlaCrossoverMapper.deleteProcessTaskStepSlaDelayByTargetProcessTaskStepId(currentProcessTaskStepVo.getId());
+                /* 计算SLA并触发超时警告 **/
+                processStepHandlerCrossoverUtil.calculateSla(currentProcessTaskStepVo);
 
-            currentProcessTaskStepVo.getParamObj().put("operateTime", new Date());
-            ProcessTaskOperatePostProcessorFactory.invokePostProcessorsAfterProcessTaskStepOperate(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REDO);
-            /* 写入时间审计 **/
-            processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_REDO);
-            if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStepStatus.RUNNING.getValue())) {
-                processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
+                /* 触发通知 **/
+                processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.REOPENPROCESSTASK);
+
+                /* 执行动作 **/
+                processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.REOPENPROCESSTASK);
+
+                /* 回退提醒 **/
+                processStepHandlerCrossoverUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), currentProcessTaskStepVo.getParamObj().getString("content"), ProcessTaskStepRemindType.REDO);
+            } else if (this.getMode().equals(ProcessStepMode.AT)) {
+                myRedo(currentProcessTaskStepVo);
+                currentProcessTaskStepVo.setIsActive(1);
+                updateProcessTaskStepStatus(currentProcessTaskStepVo);
+                /* 自动处理 **/
+                IProcessStepHandler handler = ProcessStepHandlerFactory.getHandler(this.getHandler());
+                doNext(ProcessTaskStepOperationType.STEP_HANDLE, new ProcessStepThread(currentProcessTaskStepVo) {
+                    @Override
+                    public void myExecute() {
+                        handler.handle(currentProcessTaskStepVo);
+                    }
+                });
             }
-
-            /* 计算SLA并触发超时警告 **/
-            processStepHandlerCrossoverUtil.calculateSla(currentProcessTaskStepVo);
-
-            /* 触发通知 **/
-            processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.REOPENPROCESSTASK);
-
-            /* 执行动作 **/
-            processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.REOPENPROCESSTASK);
-
-            /* 回退提醒 **/
-            processStepHandlerCrossoverUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), currentProcessTaskStepVo.getParamObj().getString("content"), ProcessTaskStepRemindType.REDO);
         } catch (ProcessTaskException ex) {
             logger.error(ex.getMessage(), ex);
             currentProcessTaskStepVo.setError(ex.getMessage());
@@ -2970,6 +2995,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.FAILED.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
         } finally {
+            IProcessTaskScoreCrossoverMapper processTaskScoreCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskScoreCrossoverMapper.class);
+            processTaskScoreCrossoverMapper.deleteProcessTaskAutoScoreByProcessTaskId(currentProcessTaskStepVo.getProcessTaskId());
             /* 处理历史记录 **/
             processStepHandlerCrossoverUtil.audit(currentProcessTaskStepVo, ProcessTaskAuditType.REDO);
         }
