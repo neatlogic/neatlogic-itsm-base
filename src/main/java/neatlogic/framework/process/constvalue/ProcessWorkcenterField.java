@@ -37,7 +37,9 @@ public enum ProcessWorkcenterField implements IDashboardGroupField {
     IS_SHOW("isshow", new I18n("是否显示，0隐藏，1显示")),
     FOCUS_USERS("focususers", new I18n("关注此工单的用户")),
     REGION("region", new I18n("common.region")),
-    INVOKE("invoke", new I18n("common.source"));
+    INVOKE("invoke", new I18n("common.source")),
+    TAG("tag", new I18n("common.tag")),
+    ;
     private final String value;
     private final String valuePro;
     private final I18n text;
