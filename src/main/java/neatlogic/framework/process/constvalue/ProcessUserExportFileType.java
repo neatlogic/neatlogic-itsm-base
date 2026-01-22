@@ -14,7 +14,6 @@ import neatlogic.framework.userexportfile.core.IUserExportFileType;
 import neatlogic.framework.util.$;
 
 public enum ProcessUserExportFileType implements IUserExportFileType {
-    PROCESS("process", "nfpc.processuserexportfiletype.process"),
     WORKCENTER_DATA("workCenterData", "nfpc.processuserexportfiletype.workcenterdata"),
     ;
 
