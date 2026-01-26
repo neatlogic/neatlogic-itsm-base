@@ -4,6 +4,8 @@ public enum ProcessTaskParams {
     TASKID("id", "工单ID"),
     STEPID("stepid", "步骤ID"),
     STEPNAME("stepname", "步骤名称"),
+    STEPUSER("stepuser", "步骤处理人"),
+    STEPUSERID("stepuserid", "步骤处理人用户ID"),
     TITLE("title", "标题"),
     CHANNELTYPE("channeltype", "服务类型"),
     CONTENT("content", "上报内容"),
