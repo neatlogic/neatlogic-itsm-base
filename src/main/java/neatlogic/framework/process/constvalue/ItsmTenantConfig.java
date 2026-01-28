@@ -41,6 +41,7 @@ public enum ItsmTenantConfig implements ITenantConfig {
 
     PROCESSTASK_WORKERPOLICY_ISONLYONCEEXECUTE("processtask.workerpolicy.isonlyonceexecute", "0", "nfpc.itsmtenantconfig.processtaskworkerpolicyisonlyonceexecute", ApiParamType.INTEGER),
     PROCESSTASK_STEP_AUTOAPPROVAL_SHOW("processtask.step.autoapproval.show", "0", "nfpc.itsmtenantconfig.processtaskstepautoapprovalshow", ApiParamType.INTEGER),
+    PROCESSTASK_STEP_IN_OPERATION_AUDIT_ENABLED("processTask_Step_In_Operation_Audit_enabled", "1", "是否启用processtask_step_in_operation日志", ApiParamType.INTEGER),
     ;
 
     String key;

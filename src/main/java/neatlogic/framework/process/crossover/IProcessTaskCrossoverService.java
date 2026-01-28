@@ -218,5 +218,9 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
      * @param processTaskStepVo
      */
     void getProcessTaskStepDetail(ProcessTaskStepVo processTaskStepVo);
+
+    void saveProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
+
+    int deleteProcessTaskStepInOperationById(Long id);
 }
 
