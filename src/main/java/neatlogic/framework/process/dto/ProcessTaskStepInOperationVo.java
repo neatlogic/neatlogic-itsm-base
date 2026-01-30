@@ -11,6 +11,7 @@ public class ProcessTaskStepInOperationVo {
     private Long processTaskId;
     private Long processTaskStepId;
     private String operationType;
+    private Date operationTime;
     private Date expireTime;
     private Integer serverId;
     public ProcessTaskStepInOperationVo() {
@@ -59,6 +60,14 @@ public class ProcessTaskStepInOperationVo {
     }
     public void setOperationType(String operationType) {
         this.operationType = operationType;
+    }
+
+    public Date getOperationTime() {
+        return operationTime;
+    }
+
+    public void setOperationTime(Date operationTime) {
+        this.operationTime = operationTime;
     }
 
     public Date getExpireTime() {

@@ -165,9 +165,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             return 1;
         }
         processTaskCrossoverMapper.updateProcessTaskStatus(processTaskVo);
-        if (Objects.equals(processTaskVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
-            processTaskCrossoverMapper.deleteProcessTaskStepInOperationByProcessTaskId(processTaskVo.getId());
-        }
+//        if (Objects.equals(processTaskVo.getStatus(), ProcessTaskStatus.SUCCEED.getValue())) {
+//            processTaskCrossoverMapper.deleteProcessTaskStepInOperationByProcessTaskId(processTaskVo.getId());
+//        }
         //如果工单状态为“已完成”、“已取消”、“异常”时，计算工单耗时
         if (needCalculateTimeCost) {
             ProcessTaskVo processTask = processTaskCrossoverMapper.getProcessTaskById(processTaskId);
@@ -898,9 +898,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 //        }
         IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
         processTaskCrossoverMapper.updateProcessTaskStepStatus(currentProcessTaskStepVo);
-        if (Objects.equals(currentProcessTaskStepVo.getStatus(), ProcessTaskStepStatus.SUCCEED.getValue())) {
-            processTaskCrossoverMapper.deleteProcessTaskStepInOperationByProcessTaskIdAndProcessTaskStepIdAndOperationType(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), null);
-        }
+//        if (Objects.equals(currentProcessTaskStepVo.getStatus(), ProcessTaskStepStatus.SUCCEED.getValue())) {
+//            processTaskCrossoverMapper.deleteProcessTaskStepInOperationByProcessTaskIdAndProcessTaskStepIdAndOperationType(currentProcessTaskStepVo.getProcessTaskId(), currentProcessTaskStepVo.getId(), null);
+//        }
         updateProcessTaskStatus(currentProcessTaskStepVo.getProcessTaskId());
         return 1;
     }
@@ -2857,8 +2857,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     operationTypeValue
             );
             /* 后台异步操作步骤前，在`processtask_step_in_operation`表中插入一条数据，标识该步骤正在后台处理中，异步处理完删除 **/
-            IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
-            processTaskCrossoverMapper.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
+            IProcessTaskCrossoverService processTaskCrossoverService = CrossoverServiceFactory.getApi(IProcessTaskCrossoverService.class);
+            processTaskCrossoverService.saveProcessTaskStepInOperation(processTaskStepInOperationVo);
             processTaskStepThread.setInOperationId(processTaskStepInOperationVo.getId());
             afterTransactionJob.executeInOrder(processTaskStepThread);
         }
@@ -2875,17 +2875,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 processTaskStepVo.getId(),
                 operationTypeValue
         );
-        IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(processTaskStepVo.getHandler());
-        if (processStepInternalHandler == null) {
-            throw new ProcessStepUtilHandlerNotFoundException(processTaskStepVo.getHandler());
-        }
         /* 后台异步操作步骤前，在`processtask_step_in_operation`表中插入一条数据，标识该步骤正在后台处理中，异步处理完删除 **/
-        processStepInternalHandler.insertProcessTaskStepInOperation(processTaskStepInOperationVo);
-        thread.setSupplier(() -> {
-            IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
-            processTaskCrossoverMapper.deleteProcessTaskStepInOperationById(processTaskStepInOperationVo.getId());
-            return 1;
-        });
+        IProcessTaskCrossoverService processTaskCrossoverService = CrossoverServiceFactory.getApi(IProcessTaskCrossoverService.class);
+        processTaskCrossoverService.saveProcessTaskStepInOperation(processTaskStepInOperationVo);
+        thread.setSupplier(() -> processTaskCrossoverService.deleteProcessTaskStepInOperationById(processTaskStepInOperationVo.getId()));
 //        TransactionSynchronizationPool.execute(thread);
         AfterTransactionJob<ProcessStepThread> afterTransactionJob = new AfterTransactionJob<>("PROCESSTASK-STEP-HANDLER");
         afterTransactionJob.execute(thread);
