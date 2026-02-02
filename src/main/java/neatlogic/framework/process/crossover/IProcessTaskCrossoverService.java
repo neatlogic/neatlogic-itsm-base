@@ -222,5 +222,7 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
     void saveProcessTaskStepInOperation(ProcessTaskStepInOperationVo processTaskStepInOperationVo);
 
     int deleteProcessTaskStepInOperationById(Long id);
+
+    Long saveProcessTask(ProcessTaskVo processTaskVo, String processUuid);
 }
 
