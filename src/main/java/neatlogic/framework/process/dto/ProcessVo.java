@@ -15,6 +15,7 @@ package neatlogic.framework.process.dto;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.dto.BaseEditorVo;
 import neatlogic.framework.restful.annotation.EntityField;
@@ -171,7 +172,7 @@ public class ProcessVo extends BaseEditorVo {
 
     public String getConfigStr() {
         if (config != null) {
-            return config.toJSONString();
+            return JSON.toJSONString(config, SerializerFeature.MapSortField);
         }
         return configStr;
     }

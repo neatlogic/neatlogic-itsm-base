@@ -546,7 +546,7 @@ public class ProcessConfigUtil {
         }
         JSONObject process = configObj.getJSONObject("process");
         if (MapUtils.isNotEmpty(process)) {
-            try {
+//            try {
                 ProcessMessageManager.setConfig(process);
                 IProcessStepInternalHandler processStepInternalHandler = ProcessStepInternalHandlerFactory.getHandler(ProcessStepHandlerType.END.getHandler());
                 if (processStepInternalHandler == null) {
@@ -580,9 +580,9 @@ public class ProcessConfigUtil {
                 processObj.put("stepList", stepList);
                 processObj.put("connectionList", ProcessMessageManager.getProcessStepRelList());
                 configObj.put("process", processObj);
-            } finally {
-                ProcessMessageManager.release();
-            }
+//            } finally {
+//                ProcessMessageManager.release();
+//            }
         }
         return configObj;
     }
