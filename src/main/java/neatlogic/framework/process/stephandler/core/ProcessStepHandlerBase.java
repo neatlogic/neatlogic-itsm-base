@@ -2110,7 +2110,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processTaskVo.setSerialNumber(serialNumber);
             processTaskSerialNumberCrossoverMapper.insertProcessTaskSerialNumber(processTaskVo.getId(), serialNumber);
             /* 创建工单 **/
-//            processTaskCrossoverMapper.insertProcessTask(processTaskVo);
+            processTaskCrossoverMapper.insertProcessTask(processTaskVo);
             currentProcessTaskStepVo.setProcessTaskId(processTaskVo.getId());
 
             /* 写入表单信息 **/
