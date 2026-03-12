@@ -2426,9 +2426,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processStepHandlerCrossoverUtil.calculateSla(currentProcessTaskStepVo);
 
             /* 触发通知 **/
+            processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.SUCCEED);
             processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.STARTPROCESS);
 
             /* 执行动作 **/
+            processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.SUCCEED);
             processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskNotifyTriggerType.STARTPROCESS);
 
             //创建全文检索索引
