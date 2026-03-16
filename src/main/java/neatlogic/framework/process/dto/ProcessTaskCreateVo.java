@@ -33,7 +33,7 @@ public class ProcessTaskCreateVo {
     private String region;
     private Long newProcessTaskId;
     private JSONArray assignWorkerList;
-    private JSONArray focusUserUuidList;
+    private JSONArray focusUserIdList;
 
     public String getChannel() {
         return channel;
@@ -171,11 +171,11 @@ public class ProcessTaskCreateVo {
         this.assignWorkerList = assignWorkerList;
     }
 
-    public JSONArray getFocusUserUuidList() {
-        return focusUserUuidList;
+    public JSONArray getFocusUserIdList() {
+        return focusUserIdList;
     }
 
-    public void setFocusUserUuidList(JSONArray focusUserUuidList) {
-        this.focusUserUuidList = focusUserUuidList;
+    public void setFocusUserIdList(JSONArray focusUserIdList) {
+        this.focusUserIdList = focusUserIdList;
     }
 }
