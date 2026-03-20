@@ -2831,7 +2831,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         return nextStepIdSet;
     }
 
-    protected synchronized static void doNext(List<ProcessTaskStepThread> processTaskStepThreadList) {
+    protected static synchronized void doNext(List<ProcessTaskStepThread> processTaskStepThreadList) {
         if (processTaskStepThreadList.size() > 1) {
             Set<Long> processTaskStepIdSet = new HashSet<>();
             for (int i = processTaskStepThreadList.size() - 1; i >= 0; i--) {
