@@ -88,4 +88,9 @@ public enum ItsmTenantConfig implements ITenantConfig {
     public ApiParamType getType() {
         return type;
     }
+
+    @Override
+    public String getModuleGroup() {
+        return "process";
+    }
 }
