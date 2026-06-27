@@ -2532,7 +2532,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         IProcessTaskCrossoverMapper processTaskCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskCrossoverMapper.class);
         List<ProcessTaskStepRelVo> allProcessTaskStepRelList = processTaskCrossoverMapper.getProcessTaskStepRelByProcessTaskId(processTaskId);
         List<ProcessTaskStepRelVo> needProcessTaskStepRelList = new ArrayList<>();
-        doIdentifyPostInvalidStepRelIsHit(currentProcessTaskStepId, activeStepIdSet, allProcessTaskStepRelList, needProcessTaskStepRelList);
+        doIdentifyPostInvalidStepRelIsHit(currentProcessTaskStepId, activeStepIdSet, new ArrayList<>(), allProcessTaskStepRelList, needProcessTaskStepRelList);
         if (CollectionUtils.isNotEmpty(needProcessTaskStepRelList)) {
             for (ProcessTaskStepRelVo processTaskStepRelVo : needProcessTaskStepRelList) {
                 processTaskCrossoverMapper.updateProcessTaskStepRelIsHit(processTaskStepRelVo);
@@ -2548,7 +2548,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
      * @param allProcessTaskStepRelList  工单的所有连线列表
      * @param needProcessTaskStepRelList 需要更新isHit值为-1的连线列表
      */
-    private void doIdentifyPostInvalidStepRelIsHit(Long currentProcessTaskStepId, Set<Long> activeStepIdSet, List<ProcessTaskStepRelVo> allProcessTaskStepRelList, List<ProcessTaskStepRelVo> needProcessTaskStepRelList) {
+    private void doIdentifyPostInvalidStepRelIsHit(Long currentProcessTaskStepId, Set<Long> activeStepIdSet, List<Long> avoidCyclingStepIdList, List<ProcessTaskStepRelVo> allProcessTaskStepRelList, List<ProcessTaskStepRelVo> needProcessTaskStepRelList) {
         List<Long> unactiveStepIdList = new ArrayList<>();
         for (ProcessTaskStepRelVo processTaskStepRelVo : allProcessTaskStepRelList) {
             if (Objects.equals(processTaskStepRelVo.getFromProcessTaskStepId(), currentProcessTaskStepId) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.FORWARD.getValue())) {
@@ -2561,6 +2561,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
             }
         }
+        avoidCyclingStepIdList.add(currentProcessTaskStepId);
         if (CollectionUtils.isNotEmpty(unactiveStepIdList)) {
             Map<Long, List<ProcessTaskStepRelVo>> toStepIdMap = new HashMap<>();
 
@@ -2572,6 +2573,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             for (Long unactiveStepId : unactiveStepIdList) {
+                if (avoidCyclingStepIdList.contains(unactiveStepId)) {
+                    continue;
+                }
                 boolean invalid = true;
                 List<ProcessTaskStepRelVo> fromStepRelList = toStepIdMap.computeIfAbsent(unactiveStepId, k -> new ArrayList<>());
                 for (ProcessTaskStepRelVo processTaskStepRelVo : fromStepRelList) {
@@ -2587,7 +2591,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 }
                 if (invalid) {
                     //节点失效, 更新节点状态，继续判断后续节点是否也是失效的
-                    doIdentifyPostInvalidStepRelIsHit(unactiveStepId, new HashSet<>(), allProcessTaskStepRelList, needProcessTaskStepRelList);
+                    doIdentifyPostInvalidStepRelIsHit(unactiveStepId, new HashSet<>(), avoidCyclingStepIdList, allProcessTaskStepRelList, needProcessTaskStepRelList);
                 }
             }
         }
@@ -2687,7 +2691,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         avoidCyclingStepIdList.add(currentProcessTaskStepId);
         if (CollectionUtils.isNotEmpty(toStepIdList)) {
             for (Long toStepId : toStepIdList) {
-                if (!avoidCyclingStepIdList.contains(currentProcessTaskStepId)) {
+                if (!avoidCyclingStepIdList.contains(toStepId)) {
                     doResetPostStepRelIsHit(toStepId, avoidCyclingStepIdList, allProcessTaskStepRelList, needProcessTaskStepRelList);
                 }
             }

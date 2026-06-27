@@ -453,7 +453,11 @@ public abstract class OperationAuthHandlerBase implements IOperationAuthHandler 
                             return true;
                         }
                     } else {// 自动处理节点，继续找前置节点
-                        return checkCurrentStepIsRetractableByProcessTaskStepId(processTaskVo, processTaskStepVo.getId());
+                        if (Objects.equals(processTaskStepVo.getIsActive(), 2)) {
+                            return checkCurrentStepIsRetractableByProcessTaskStepId(processTaskVo, processTaskStepVo.getId());
+                        } else {
+                            return true;
+                        }
                     }
                 }
             }
