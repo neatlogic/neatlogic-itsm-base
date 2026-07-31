@@ -97,6 +97,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private String contentHelp;
     @EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
     private Integer isRequired;
+    @EntityField(name = "是否允许在移动端处理", type = ApiParamType.INTEGER)
+    private Integer isAllowProcessOnMobile;
     @EntityField(name = "启用重审", type = ApiParamType.INTEGER)
     private Integer enableReapproval;
     @EntityField(name = "表单场景", type = ApiParamType.STRING)
@@ -350,6 +352,17 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setIsRequired(Integer isRequired) {
         this.isRequired = isRequired;
+    }
+
+    public Integer getIsAllowProcessOnMobile() {
+        if (isAllowProcessOnMobile == null && StringUtils.isNotBlank(configHash)) {
+            isAllowProcessOnMobile = ProcessStepInternalHandlerFactory.getHandler().getIsAllowProcessOnMobileByConfigHash(configHash);
+        }
+        return isAllowProcessOnMobile;
+    }
+
+    public void setIsAllowProcessOnMobile(Integer isAllowProcessOnMobile) {
+        this.isAllowProcessOnMobile = isAllowProcessOnMobile;
     }
 
     public Integer getIsNeedUploadFile() {
