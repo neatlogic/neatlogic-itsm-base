@@ -192,6 +192,13 @@ public abstract class ProcessStepInternalHandlerBase implements IProcessStepInte
     }
 
     @Override
+    public Integer getIsAllowProcessOnMobileByConfigHash(String configHash) {
+        ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
+        String stepConfig = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(configHash);
+        return (Integer) JSONPath.read(stepConfig, "isAllowProcessOnMobile");
+    }
+
+    @Override
     public Integer getIsNeedContentByConfigHash(String configHash) {
         ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
         String stepConfig = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(configHash);

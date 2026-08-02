@@ -181,6 +181,12 @@ public interface IProcessStepInternalHandler {
 
     /**
      * @return Integer
+     * @Description: 获取步骤配置信息中isAllowProcessOnMobile(是否允许在移动端处理)字段值
+     */
+    Integer getIsAllowProcessOnMobileByConfigHash(String configHash);
+
+    /**
+     * @return Integer
      * @Description: 获取步骤配置信息中isNeedContent(回复是否启用)字段值
      */
     Integer getIsNeedContentByConfigHash(String configHash);
