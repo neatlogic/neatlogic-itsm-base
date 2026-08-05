@@ -16,7 +16,7 @@ import neatlogic.framework.autoexec.source.IAutoexecJobSource;
 import neatlogic.framework.util.$;
 
 public enum AutoExecJobProcessSource implements IAutoexecJobSource {
-    ITSM("IT服务", "itsm");
+    ITSM("nfpc.autoexecjobprocesssource.text.itsm", "itsm");
     private final String text;
     private final String value;
 

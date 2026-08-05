@@ -31,23 +31,23 @@ import java.util.List;
  **/
 public class TaskConfigVo extends BaseEditorVo {
     private static final long serialVersionUID = -6035457128604271114L;
-    @EntityField(name = "id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.id.name", type = ApiParamType.LONG)
     private Long id;
-    @EntityField(name = "任务名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "参与人数。-1：不做限制", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.num.name", type = ApiParamType.STRING)
     private Integer num;
-    @EntityField(name = "其中一个人完成即可：any,所有人完成：all", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.policy.name", type = ApiParamType.STRING)
     private String policy;
-    @EntityField(name = "是否激活", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.isactive.name", type = ApiParamType.INTEGER)
     private Integer isActive;
-    @EntityField(name = "依赖数", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.referencecount.name", type = ApiParamType.INTEGER)
     private Integer referenceCount;
-    @EntityField(name = "任务列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.processtasksteptasklist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepTaskVo> processTaskStepTaskList;
-    @EntityField(name = "处理人过滤范围", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.rangelist.name", type = ApiParamType.JSONARRAY)
     private List<String> rangeList;
-    @EntityField(name = "配置信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.taskconfigvo.entityfield.config.name", type = ApiParamType.JSONOBJECT)
     private JSONObject config;
     @JSONField(serialize = false)
     private String configStr;

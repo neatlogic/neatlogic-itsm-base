@@ -6,10 +6,11 @@ import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
 import java.util.List;
 
+import neatlogic.framework.util.$;
 public class ProcessCommentTemplateVo extends BaseEditorVo {
 
     public enum TempalteType {
-        SYSTEM("system", "系统模版"), CUSTOM("custom", "自定义模版");
+        SYSTEM("system", "nfpd.processcommenttemplatevo.text.system"), CUSTOM("custom", "nfpd.processcommenttemplatevo.text.custom");
 
         private String name;
         private String text;
@@ -24,7 +25,7 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
         }
 
         public String getText() {
-            return text;
+            return $.t(text);
         }
 
         public static String getText(String name) {
@@ -37,17 +38,17 @@ public class ProcessCommentTemplateVo extends BaseEditorVo {
         }
     }
 
-    @EntityField(name = "主键ID", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processcommenttemplatevo.entityfield.id.name", type = ApiParamType.LONG)
     private Long id;
-    @EntityField(name = "名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processcommenttemplatevo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "内容", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processcommenttemplatevo.entityfield.content.name", type = ApiParamType.STRING)
     private String content;
-    @EntityField(name = "类型(system:系统模版;custom:自定义模版)", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processcommenttemplatevo.entityfield.type.name", type = ApiParamType.STRING)
     private String type;
-    @EntityField(name = "授权对象", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processcommenttemplatevo.entityfield.authlist.name", type = ApiParamType.STRING)
     private List<String> authList;
-    @EntityField(name = "当前用户是否可编辑", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processcommenttemplatevo.entityfield.iseditable.name", type = ApiParamType.INTEGER)
     private Integer isEditable;
 
     public ProcessCommentTemplateVo() {

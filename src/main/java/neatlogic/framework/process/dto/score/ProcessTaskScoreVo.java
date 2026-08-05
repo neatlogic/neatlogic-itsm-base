@@ -6,17 +6,17 @@ import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessTaskScoreVo extends BaseEditorVo {
 
-	@EntityField(name = "工单ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpds.processtaskscorevo.entityfield.processtaskid.name", type = ApiParamType.LONG)
 	private Long processTaskId;
-	@EntityField(name = "评分模版ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpds.processtaskscorevo.entityfield.scoretemplateid.name", type = ApiParamType.LONG)
 	private Long scoreTemplateId;
-	@EntityField(name = "评分模版维度ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpds.processtaskscorevo.entityfield.scoredimensionid.name", type = ApiParamType.LONG)
 	private Long scoreDimensionId;
-	@EntityField(name = "分数", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpds.processtaskscorevo.entityfield.score.name", type = ApiParamType.INTEGER)
 	private Integer score;
-	@EntityField(name = "是否自动评分（0：否，1：是）", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpds.processtaskscorevo.entityfield.isauto.name", type = ApiParamType.INTEGER)
 	private Integer isAuto;
-	@EntityField(name = "评价内容hash", type = ApiParamType.STRING)
+	@EntityField(name = "nfpds.processtaskscorevo.entityfield.contenthash.name", type = ApiParamType.STRING)
 	private String contentHash;
 
 	public ProcessTaskScoreVo() {}

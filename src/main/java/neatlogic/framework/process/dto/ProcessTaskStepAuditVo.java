@@ -13,39 +13,39 @@ import java.util.Date;
 import java.util.List;
 
 public class ProcessTaskStepAuditVo {
-	@EntityField(name = "活动id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.id.name", type = ApiParamType.LONG)
 	private Long id;
-	@EntityField(name = "工单id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.processtaskid.name", type = ApiParamType.LONG)
 	private Long processTaskId;
-	@EntityField(name = "步骤id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.processtaskstepid.name", type = ApiParamType.LONG)
 	private Long processTaskStepId;
-	@EntityField(name = "用户")
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.uservo.name")
 	private WorkAssignmentUnitVo userVo;
-	@EntityField(name = "用户userUuid", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.useruuid.name", type = ApiParamType.STRING)
 	private String userUuid;
-	@EntityField(name = "创建时间", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.actiontime.name", type = ApiParamType.LONG)
 	private Date actionTime;
-	@EntityField(name = "活动类型", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.action.name", type = ApiParamType.STRING)
 	private String action;
-	//@EntityField(name = "活动详情列表", type = ApiParamType.JSONARRAY)
+	//@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.auditdetaillist.name", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepAuditDetailVo> auditDetailList;
-	@EntityField(name = "步骤状态", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.stepstatus.name", type = ApiParamType.STRING)
 	private String stepStatus;
-	@EntityField(name = "步骤状态信息", type = ApiParamType.JSONOBJECT)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.stepstatusvo.name", type = ApiParamType.JSONOBJECT)
 	private ProcessTaskStepStatusVo stepStatusVo;
-	@EntityField(name = "描述", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.description.name", type = ApiParamType.STRING)
 	private String description;
-	@EntityField(name = "原始处理人Vo")
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.originaluservo.name")
 	private WorkAssignmentUnitVo originalUserVo;
-    @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepauditvo.entityfield.originaluser.name", type = ApiParamType.STRING)
     private String originalUser;
 	@JSONField(serialize = false)
 	private String descriptionHash;
-	@EntityField(name = "来源", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.source.name", type = ApiParamType.STRING)
 	private String source;
-	@EntityField(name = "来源中文名", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.sourcename.name", type = ApiParamType.STRING)
 	private String sourceName;
-	@EntityField(name = "表单场景", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditvo.entityfield.formsceneuuid.name", type = ApiParamType.STRING)
 	private String formSceneUuid;
 
 	public ProcessTaskStepAuditVo() { 

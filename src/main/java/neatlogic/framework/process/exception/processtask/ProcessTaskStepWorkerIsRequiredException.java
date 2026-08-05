@@ -19,6 +19,6 @@ public class ProcessTaskStepWorkerIsRequiredException extends ProcessTaskRuntime
     private static final long serialVersionUID = 9216337410118158676L;
 
     public ProcessTaskStepWorkerIsRequiredException() {
-        super("请选择需要转交的处理人、处理组或角色");
+        super("nfpep.processtaskstepworkerisrequiredexception.processtaskstepworkerisrequiredexception");
     }
 }

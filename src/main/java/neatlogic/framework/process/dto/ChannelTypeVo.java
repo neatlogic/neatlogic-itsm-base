@@ -25,25 +25,25 @@ import java.util.UUID;
 public class ChannelTypeVo extends BasePageVo implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -3747925860575582286L;
-    @EntityField(name = "服务类型uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.uuid.name", type = ApiParamType.STRING)
     private String uuid;
-    @EntityField(name = "名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "状态", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.isactive.name", type = ApiParamType.INTEGER)
     private Integer isActive;
-    @EntityField(name = "图标", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.icon.name", type = ApiParamType.STRING)
     private String icon;
-    @EntityField(name = "颜色", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.color.name", type = ApiParamType.STRING)
     private String color;
-    @EntityField(name = "描述", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.description.name", type = ApiParamType.STRING)
     private String description;
-    @EntityField(name = "排序", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.sort.name", type = ApiParamType.INTEGER)
     private Integer sort;
-    @EntityField(name = "工单号前缀", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.prefix.name", type = ApiParamType.STRING)
     private String prefix;
-    @EntityField(name = "工单号策略", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.handler.name", type = ApiParamType.STRING)
     private String handler;
-    @EntityField(name = "工单号策略名", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.channeltypevo.entityfield.handlername.name", type = ApiParamType.STRING)
     private String handlerName;
 
     public ChannelTypeVo() {

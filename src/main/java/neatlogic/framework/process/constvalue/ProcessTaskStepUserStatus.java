@@ -1,10 +1,12 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.$;
+
 public enum ProcessTaskStepUserStatus {
-    DOING("doing", "处理中"),
-    DONE("done", "处理完毕"),
-    TRANSFERRED("transferred", "已转交"),
-    SOMEONE_TRANSFERRED("someonetransferred", "被转交")
+    DOING("doing", "nfpc.processtaskstepuserstatus.text.doing"),
+    DONE("done", "nfpc.processtaskstepuserstatus.text.done"),
+    TRANSFERRED("transferred", "nfpc.processtaskstepuserstatus.text.transferred"),
+    SOMEONE_TRANSFERRED("someonetransferred", "nfpc.processtaskstepuserstatus.text.someone_transferred")
     ;
 
     private String status;
@@ -20,7 +22,7 @@ public enum ProcessTaskStepUserStatus {
     }
 
     public String getText() {
-        return text;
+        return $.t(text);
     }
 
     public static String getValue(String _status) {

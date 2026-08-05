@@ -20,6 +20,6 @@ public class ProcessTaskStepUnsubmittedException extends ProcessTaskPermissionDe
     private static final long serialVersionUID = 9216337410118158648L;
 
     public ProcessTaskStepUnsubmittedException() {
-        super("步骤未提交");
+        super("nfpeo.processtaskstepunsubmittedexception.processtaskstepunsubmittedexception");
     }
 }

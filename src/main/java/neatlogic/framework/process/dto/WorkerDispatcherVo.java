@@ -5,25 +5,25 @@ import neatlogic.framework.restful.annotation.EntityField;
 import com.alibaba.fastjson.JSONArray;
 
 public class WorkerDispatcherVo {
-	@EntityField(name = "分派器名称",
+	@EntityField(name = "nfpd.workerdispatchervo.entityfield.name.name",
 			type = ApiParamType.STRING)
 	private String name;
-	@EntityField(name = "分派器处理类",
+	@EntityField(name = "nfpd.workerdispatchervo.entityfield.handler.name",
 			type = ApiParamType.STRING)
 	private String handler;
-	@EntityField(name = "是否激活",
+	@EntityField(name = "nfpd.workerdispatchervo.entityfield.isactive.name",
 			type = ApiParamType.INTEGER)
 	private Integer isActive;
-	@EntityField(name = "输入帮助",
+	@EntityField(name = "nfpd.workerdispatchervo.entityfield.help.name",
 			type = ApiParamType.STRING)
 	private String help;
-	@EntityField(name = "分派器扩展配置",
+	@EntityField(name = "nfpd.workerdispatchervo.entityfield.config.name",
 			type = ApiParamType.STRING)
 	private JSONArray config;
-	@EntityField(name = "分派器所属模块",
+	@EntityField(name = "nfpd.workerdispatchervo.entityfield.moduleid.name",
 			type = ApiParamType.STRING)
 	private String moduleId;
-	@EntityField(name = "是否包含选表单组件",
+	@EntityField(name = "nfpd.workerdispatchervo.entityfield.ishasform.name",
 			type = ApiParamType.INTEGER)
 	private int isHasForm = 0;
 

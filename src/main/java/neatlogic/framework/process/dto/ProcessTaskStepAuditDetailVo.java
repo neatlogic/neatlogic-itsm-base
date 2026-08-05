@@ -7,15 +7,15 @@ import neatlogic.framework.process.audithandler.core.ProcessTaskAuditDetailTypeF
 import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessTaskStepAuditDetailVo implements Comparable<ProcessTaskStepAuditDetailVo>{
-	@EntityField(name = "活动id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskstepauditdetailvo.entityfield.auditid.name", type = ApiParamType.LONG)
 	private Long auditId;
-	@EntityField(name = "详情类型，title(标题)、priority(优先级)、content(内容)、worker(处理人)、file(上传文件)", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditdetailvo.entityfield.type.name", type = ApiParamType.STRING)
 	private String type;
-	@EntityField(name = "详情类型名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditdetailvo.entityfield.typename.name", type = ApiParamType.STRING)
 	private String typeName;
-	@EntityField(name = "旧内容", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditdetailvo.entityfield.oldcontent.name", type = ApiParamType.STRING)
 	private String oldContent;
-	@EntityField(name = "新内容", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepauditdetailvo.entityfield.newcontent.name", type = ApiParamType.STRING)
 	private String newContent;
 
 	public ProcessTaskStepAuditDetailVo() {

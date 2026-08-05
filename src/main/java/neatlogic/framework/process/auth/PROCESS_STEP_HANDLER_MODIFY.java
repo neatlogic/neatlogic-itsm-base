@@ -9,12 +9,12 @@ public class PROCESS_STEP_HANDLER_MODIFY extends AuthBase{
 
     @Override
     public String getAuthDisplayName() {
-        return "节点管理权限";
+        return "nfpa.process_step_handler_modify.getauthdisplayname";
     }
 
     @Override
     public String getAuthIntroduction() {
-        return "对节点管理中的组件配置进行修改";
+        return "nfpa.process_step_handler_modify.getauthintroduction";
     }
 
     @Override

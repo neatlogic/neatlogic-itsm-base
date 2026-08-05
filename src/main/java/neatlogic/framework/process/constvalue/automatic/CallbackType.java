@@ -5,9 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.util.$;
 
 public enum CallbackType {
-    NONE("none", "无需回调"),
-    INTERVAL("interval", "轮询"),
-    WAIT("wait", "等待回调")
+    NONE("none", "nfpca.callbacktype.text.none"),
+    INTERVAL("interval", "nfpca.callbacktype.text.interval"),
+    WAIT("wait", "nfpca.callbacktype.text.wait")
     ;
 
     private String value;

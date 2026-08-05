@@ -18,12 +18,12 @@ public class BATCH_REPORT_PROCESS_TASK extends AuthBase {
 
     @Override
     public String getAuthDisplayName() {
-        return "批量上报权限";
+        return "nfpa.batch_report_process_task.getauthdisplayname";
     }
 
     @Override
     public String getAuthIntroduction() {
-        return "对有权限服务可以批量上报工单";
+        return "nfpa.batch_report_process_task.getauthintroduction";
     }
 
     @Override

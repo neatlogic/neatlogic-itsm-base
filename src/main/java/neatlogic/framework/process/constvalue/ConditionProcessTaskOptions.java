@@ -3,23 +3,23 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.$;
 
 public enum ConditionProcessTaskOptions {
-    TASKID("id", "工单ID"),
-    STEPID("stepid", "步骤ID"),
-    TITLE("title", "标题"),
-    CHANNELTYPE("channeltype", "服务类型"),
-    CONTENT("content", "上报内容"),
-    STARTTIME("starttime", "开始时间"),
-    OWNER("owner", "上报人"),
-    OWNERUSERID("owneruserid", "上报人用户ID"),
-    PRIORITY("priority", "优先级"),
-    OWNERGROUP("ownergroup", "上报人集团"),
-    OWNERCOMPANY("ownercompany", "上报人公司"),
-    OWNERCENTER("ownercenter", "上报人中心"),
-    OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
-    OWNERTEAM("ownerteam", "上报人组"),
-    OWNERROLE("ownerrole", "上报人角色"),
-    OWNERLEVEL("ownerlevel", "上报人级别"),
-    REGION("region", "地域");
+    TASKID("id", "nfpc.conditionprocesstaskoptions.text.taskid"),
+    STEPID("stepid", "nfpc.conditionprocesstaskoptions.text.stepid"),
+    TITLE("title", "nfpc.conditionprocesstaskoptions.text.title"),
+    CHANNELTYPE("channeltype", "nfpc.conditionprocesstaskoptions.text.channeltype"),
+    CONTENT("content", "nfpc.conditionprocesstaskoptions.text.content"),
+    STARTTIME("starttime", "nfpc.conditionprocesstaskoptions.text.starttime"),
+    OWNER("owner", "nfpc.conditionprocesstaskoptions.text.owner"),
+    OWNERUSERID("owneruserid", "nfpc.conditionprocesstaskoptions.text.owneruserid"),
+    PRIORITY("priority", "nfpc.conditionprocesstaskoptions.text.priority"),
+    OWNERGROUP("ownergroup", "nfpc.conditionprocesstaskoptions.text.ownergroup"),
+    OWNERCOMPANY("ownercompany", "nfpc.conditionprocesstaskoptions.text.ownercompany"),
+    OWNERCENTER("ownercenter", "nfpc.conditionprocesstaskoptions.text.ownercenter"),
+    OWNERDEPARTMENT("ownerdepartment", "nfpc.conditionprocesstaskoptions.text.ownerdepartment"),
+    OWNERTEAM("ownerteam", "nfpc.conditionprocesstaskoptions.text.ownerteam"),
+    OWNERROLE("ownerrole", "nfpc.conditionprocesstaskoptions.text.ownerrole"),
+    OWNERLEVEL("ownerlevel", "nfpc.conditionprocesstaskoptions.text.ownerlevel"),
+    REGION("region", "nfpc.conditionprocesstaskoptions.text.region");
 
     private final String value;
     private final String text;

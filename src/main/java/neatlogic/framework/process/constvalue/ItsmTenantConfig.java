@@ -33,15 +33,15 @@ public enum ItsmTenantConfig implements ITenantConfig {
             "\t\t{\n" +
             "\t\t\t\"key\": \"report\",\n" +
             "\t\t\t\"top\": false,\n" +
-            "\t\t\t\"description\": \"上报内容\"\n" +
+            "nfpc.itsmtenantconfig.text.processtask_tab_layout" +
             "\t\t}\n" +
             "\t],\n" +
-            "\t\"description\": \"position字段用于设置固定位置，值为above时固定到上方，值为below时固定到下方；layoutList集合中元素的key和top是必填字段，description是选填字段；key是tab的唯一标识，top字段用于设置是否默认固定，值为true时默认固定；layoutList集合中元素的顺序就是固定位置顺序，从上到下，从左到右，在layoutList集合显式设置的tab会排在前面；key字段的取值：report(上报内容),collection(工单集合),dataconversion(数据转换),eoa(电子签批),subProcess(子流程),autoexec(自动化),automatic(自动处理),changecreate(变更详情),changehandle(变更详情),cmdbsync(配置项同步),createjob(创建作业),diagram(架构设计),taskConfigList(子任务策略),preNode(前置步骤节点信息(eoa)),step(步骤日志),activity(时间线),relevance(关联工单),markrepeat(重复事件),file(附件清单),reportingHistory(上报历史)\"\n" +
+            "nfpc.itsmtenantconfig.description.processtask_tab_layout" +
             "}"),
 
     PROCESSTASK_WORKERPOLICY_ISONLYONCEEXECUTE("processtask.workerpolicy.isonlyonceexecute", "0", "nfpc.itsmtenantconfig.processtaskworkerpolicyisonlyonceexecute", ApiParamType.INTEGER),
     PROCESSTASK_STEP_AUTOAPPROVAL_SHOW("processtask.step.autoapproval.show", "0", "nfpc.itsmtenantconfig.processtaskstepautoapprovalshow", ApiParamType.INTEGER),
-    PROCESSTASK_STEP_IN_OPERATION_AUDIT_ENABLED("processTask_Step_In_Operation_Audit_enabled", "1", "是否启用processtask_step_in_operation日志", ApiParamType.INTEGER),
+    PROCESSTASK_STEP_IN_OPERATION_AUDIT_ENABLED("processTask_Step_In_Operation_Audit_enabled", "1", "nfpc.itsmtenantconfig.text.processtask_step_in_operation_audit_enabled", ApiParamType.INTEGER),
     ;
 
     String key;

@@ -29,10 +29,10 @@ public class ProcessTaskStepCostSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", new I18n("工单ID")),
-        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("工单步骤ID")),
-        START_USER_UUID("start_user_uuid", new I18n("开始操作用户UUID")),
-        START_OPERATE("start_operate", new I18n("开始操作类型"));
+        PROCESSTASK_ID("processtask_id", new I18n("nfpwt.processtaskstepcostsqltable.text.processtask_id")),
+        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("nfpwt.processtaskstepcostsqltable.text.processtask_step_id")),
+        START_USER_UUID("start_user_uuid", new I18n("nfpwt.processtaskstepcostsqltable.text.start_user_uuid")),
+        START_OPERATE("start_operate", new I18n("nfpwt.processtaskstepcostsqltable.text.start_operate"));
 
         private final String name;
         private final I18n text;

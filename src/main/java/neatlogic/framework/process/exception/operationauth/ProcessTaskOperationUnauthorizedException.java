@@ -22,6 +22,6 @@ public class ProcessTaskOperationUnauthorizedException extends ProcessTaskPermis
     private static final long serialVersionUID = 9216337410118158639L;
 
     public ProcessTaskOperationUnauthorizedException(IOperationType operationType) {
-        super("您的“{0}”操作未获得授权", operationType.getText());
+        super("nfpeo.processtaskoperationunauthorizedexception.processtaskoperationunauthorizedexception", operationType.getText());
     }
 }

@@ -20,6 +20,6 @@ public class ProcessTaskChannelTransferReportNotEnabledException extends Process
     private static final long serialVersionUID = 9216337410118158641L;
 
     public ProcessTaskChannelTransferReportNotEnabledException(String channelName) {
-        super("工单对应的服务【{0}】未启用转报功能", channelName);
+        super("nfpeo.processtaskchanneltransferreportnotenabledexception.processtaskchanneltransferreportnotenabledexception", channelName);
     }
 }

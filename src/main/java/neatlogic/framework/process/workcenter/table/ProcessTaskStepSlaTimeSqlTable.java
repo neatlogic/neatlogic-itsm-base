@@ -25,11 +25,11 @@ public class ProcessTaskStepSlaTimeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("步骤ID")),
-        TYPE("type", new I18n("类型")),
-        PROCESSTASK_ID("processtask_id", new I18n("工单ID")),
-        TIME_COST("time_cost", new I18n("耗时")),
-        IS_TIMEOUT("is_timeout", new I18n("耗时"));
+        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("nfpwt.processtaskstepslatimesqltable.text.processtask_step_id")),
+        TYPE("type", new I18n("nfpwt.processtaskstepslatimesqltable.text.type")),
+        PROCESSTASK_ID("processtask_id", new I18n("nfpwt.processtaskstepslatimesqltable.text.processtask_id")),
+        TIME_COST("time_cost", new I18n("nfpwt.processtaskstepslatimesqltable.text.time_cost")),
+        IS_TIMEOUT("is_timeout", new I18n("nfpwt.processtaskstepslatimesqltable.text.is_timeout"));
         private final String name;
         private final I18n text;
 

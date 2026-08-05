@@ -7,10 +7,10 @@ public class ProcessImportException extends ApiRuntimeException {
 	private static final long serialVersionUID = -4508274752209783532L;
 
 	public ProcessImportException() {
-		super("没有导入文件");
+		super("nfpep.processimportexception.processimportexception");
 	}
 
 	public ProcessImportException(String fileName) {
-		super("没有导入文件", fileName);
+		super("nfpep.processimportexception.processimportexception_a", fileName);
 	}
 }

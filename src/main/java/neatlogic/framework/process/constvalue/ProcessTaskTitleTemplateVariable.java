@@ -14,11 +14,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import neatlogic.framework.common.constvalue.IEnum;
 
+import neatlogic.framework.util.$;
 public enum ProcessTaskTitleTemplateVariable implements IEnum {
-    USER_ID("userId", "${userId}", "当前用户ID"),
-    USER_NAME("userName", "${userName}", "当前用户名称"),
-    REGION_NAME("regionName", "${regionName}", "地域"),
-    YYYYMMDD("yyyyMMdd", "${yyyyMMdd}", "当前日期"),
+    USER_ID("userId", "${userId}", "nfpc.processtasktitletemplatevariable.text.user_id"),
+    USER_NAME("userName", "${userName}", "nfpc.processtasktitletemplatevariable.text.user_name"),
+    REGION_NAME("regionName", "${regionName}", "nfpc.processtasktitletemplatevariable.text.region_name"),
+    YYYYMMDD("yyyyMMdd", "${yyyyMMdd}", "nfpc.processtasktitletemplatevariable.text.yyyymmdd"),
     ;
     private final String value;
     private final String expression;
@@ -48,6 +49,6 @@ public enum ProcessTaskTitleTemplateVariable implements IEnum {
     }
 
     public String getText() {
-        return text;
+        return $.t(text);
     }
 }

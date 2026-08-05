@@ -17,9 +17,9 @@ public class ProcessDataCubeVo implements Serializable {
 	private static final long serialVersionUID = 6320662638466626455L;
 
 	public enum DataCubeType {
-		STATIC("static", "静态"),
-		SQL("sql", "数据库"),
-		REST("url", "RESTFul接口");
+		STATIC("static", "nfpd.processdatacubevo.text.static"),
+		SQL("sql", "nfpd.processdatacubevo.text.sql"),
+		REST("url", "nfpd.processdatacubevo.text.rest");
 		private String type;
 		private String name;
 

@@ -28,11 +28,11 @@ public class WorkcenterAuthorityVo implements Serializable {
 
     private static final long serialVersionUID = 1152066708547908924L;
 
-    @EntityField(name = "工单中心分类uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcenterauthorityvo.entityfield.workcenteruuid.name", type = ApiParamType.STRING)
     private String workcenterUuid;
-    @EntityField(name = "类型", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcenterauthorityvo.entityfield.type.name", type = ApiParamType.STRING)
     private String type;
-    @EntityField(name = "uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcenterauthorityvo.entityfield.uuid.name", type = ApiParamType.STRING)
     private String uuid;
 
     public WorkcenterAuthorityVo(String authString) {

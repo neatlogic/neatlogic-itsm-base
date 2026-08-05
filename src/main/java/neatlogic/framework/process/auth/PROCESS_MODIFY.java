@@ -9,12 +9,12 @@ public class PROCESS_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "流程管理权限";
+		return "nfpa.process_modify.getauthdisplayname";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "对流程进行添加、修改和删除";
+		return "nfpa.process_modify.getauthintroduction";
 	}
 
 	@Override

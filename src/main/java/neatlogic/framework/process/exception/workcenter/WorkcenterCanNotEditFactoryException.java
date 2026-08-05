@@ -7,6 +7,6 @@ public class WorkcenterCanNotEditFactoryException extends ApiRuntimeException {
 	private static final long serialVersionUID = -7680398403672039709L;
 
 	public WorkcenterCanNotEditFactoryException() {
-		super("出厂工单类型，无法删除或修改");
+		super("nfpew.workcentercannoteditfactoryexception.workcentercannoteditfactoryexception");
 	}
 }

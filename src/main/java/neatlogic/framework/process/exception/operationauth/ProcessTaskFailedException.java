@@ -20,6 +20,6 @@ public class ProcessTaskFailedException extends ProcessTaskPermissionDeniedExcep
     private static final long serialVersionUID = 9216337410118158635L;
 
     public ProcessTaskFailedException() {
-        super("工单异常");
+        super("nfpeo.processtaskfailedexception.processtaskfailedexception");
     }
 }

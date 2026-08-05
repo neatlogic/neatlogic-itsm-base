@@ -8,36 +8,36 @@ import java.util.List;
 
 public class ProcessTaskSlaTimeVo {
 //    @ESKey(type = ESKeyType.PKEY, name ="processTaskId")
-	@EntityField(name = "工单id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.processtaskid.name", type = ApiParamType.LONG)
 	private Long processTaskId;
-	@EntityField(name = "步骤id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.processtaskstepid.name", type = ApiParamType.LONG)
 	private Long processTaskStepId;
 	@EntityField(name = "slaId", type = ApiParamType.LONG)
 	private Long slaId;
-	@EntityField(name = "名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.name.name", type = ApiParamType.STRING)
 	private String name;
-	@EntityField(name = "超时日期（根据工作日历计算）", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.expiretime.name", type = ApiParamType.LONG)
 	private Date expireTime;
-	@EntityField(name = "超时日期（不考虑工作日历）", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.realexpiretime.name", type = ApiParamType.LONG)
 	private Date realExpireTime;
-	@EntityField(name = "总耗时，单位：毫秒", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.timesum.name", type = ApiParamType.LONG)
 	private Long timeSum;
-	@EntityField(name = "剩余时间（根据工作日历计算），单位：毫秒", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.timeleft.name", type = ApiParamType.LONG)
 	private Long timeLeft;
-	@EntityField(name = "剩余时间（不考虑工作日历），单位：毫秒", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.realtimeleft.name", type = ApiParamType.LONG)
 	private Long realTimeLeft;
-	@EntityField(name = "状态", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.status.name", type = ApiParamType.STRING)
 	private String status;
 	private Long expireTimeLong;
 	private Long realExpireTimeLong;
-	@EntityField(name = "上次耗时计算时间点", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.calculationtime.name", type = ApiParamType.LONG)
 	private Date calculationTime;
 	private Long calculationTimeLong;
-//	@EntityField(name = "工单时效超时后显示方式", type = ApiParamType.STRING)
+//	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.displaymodeaftertimeout.name", type = ApiParamType.STRING)
 //	private String displayModeAfterTimeout;
-	@EntityField(name = "工单时效显示方式", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.slatimedisplaymode.name", type = ApiParamType.STRING)
 	private String slaTimeDisplayMode;
-	@EntityField(name = "延迟列表", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "nfpd.processtaskslatimevo.entityfield.delaylist.name", type = ApiParamType.JSONARRAY)
 	private List<ProcessTaskStepSlaDelayVo> delayList;
 
 	public Long getProcessTaskId() {

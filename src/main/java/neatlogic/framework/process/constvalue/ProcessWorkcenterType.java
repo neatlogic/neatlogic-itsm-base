@@ -12,8 +12,10 @@
 
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.$;
+
 public enum ProcessWorkcenterType {
-    FACTORY("factory", "默认出厂"), SYSTEM("system", "系统分类"), CUSTOM("custom", "自定义");
+    FACTORY("factory", "nfpc.processworkcentertype.text.factory"), SYSTEM("system", "nfpc.processworkcentertype.text.system"), CUSTOM("custom", "nfpc.processworkcentertype.text.custom");
     private final String value;
     private final String name;
 
@@ -27,7 +29,7 @@ public enum ProcessWorkcenterType {
     }
 
     public String getName() {
-        return name;
+        return $.t(name);
     }
 
     public static String getValue(String _value) {

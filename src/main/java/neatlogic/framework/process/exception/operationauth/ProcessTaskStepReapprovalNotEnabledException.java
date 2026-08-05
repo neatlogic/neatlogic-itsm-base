@@ -20,6 +20,6 @@ public class ProcessTaskStepReapprovalNotEnabledException extends ProcessTaskPer
     private static final long serialVersionUID = 9216337410118158659L;
 
     public ProcessTaskStepReapprovalNotEnabledException() {
-        super("该步骤未启用重审功能");
+        super("nfpeo.processtaskstepreapprovalnotenabledexception.processtaskstepreapprovalnotenabledexception");
     }
 }

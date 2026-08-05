@@ -27,10 +27,10 @@ public class PrioritySqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("服务目录UUID"), "priorityUuid", true),
-        NAME("name", new I18n("服务目录名"), "priorityName"),
-        COLOR("color", new I18n("颜色"), "priorityColor"),
-        SORT("sort", new I18n("排序"));
+        UUID("uuid", new I18n("nfpwt.prioritysqltable.text.uuid"), "priorityUuid", true),
+        NAME("name", new I18n("nfpwt.prioritysqltable.text.name"), "priorityName"),
+        COLOR("color", new I18n("nfpwt.prioritysqltable.text.color"), "priorityColor"),
+        SORT("sort", new I18n("nfpwt.prioritysqltable.text.sort"));
         private final String name;
         private final I18n text;
         private final String proName;

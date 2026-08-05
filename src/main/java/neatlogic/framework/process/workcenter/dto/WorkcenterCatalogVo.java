@@ -12,9 +12,9 @@ import neatlogic.framework.util.SnowflakeUtil;
 public class WorkcenterCatalogVo extends BasePageVo {
     private static final long serialVersionUID = 1122061508451906324L;
 
-    @EntityField(name = "工单中心类型id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpwd.workcentercatalogvo.entityfield.id.name", type = ApiParamType.LONG)
     private Long id;
-    @EntityField(name = "工单中心类型名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentercatalogvo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
 
     public Long getId() {

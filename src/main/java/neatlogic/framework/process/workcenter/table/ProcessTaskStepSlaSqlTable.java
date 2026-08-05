@@ -25,8 +25,8 @@ public class ProcessTaskStepSlaSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("工单ID")),
-        SLA_ID("sla_id", new I18n("工单ID"));
+        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("nfpwt.processtaskstepslasqltable.text.processtask_step_id")),
+        SLA_ID("sla_id", new I18n("nfpwt.processtaskstepslasqltable.text.sla_id"));
         private final String name;
         private final I18n text;
 

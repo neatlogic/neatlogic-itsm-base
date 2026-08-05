@@ -25,8 +25,8 @@ public class ProcessTaskScoreSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", new I18n("工单ID")),
-        SCORE("serial_number", new I18n("评分")),
+        PROCESSTASK_ID("processtask_id", new I18n("nfpwt.processtaskscoresqltable.text.processtask_id")),
+        SCORE("serial_number", new I18n("nfpwt.processtaskscoresqltable.text.score")),
         ;
         private final String name;
         private final I18n text;

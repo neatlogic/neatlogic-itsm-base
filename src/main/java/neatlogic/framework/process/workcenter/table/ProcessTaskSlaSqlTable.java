@@ -25,10 +25,10 @@ public class ProcessTaskSlaSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", new I18n("工单ID")),
+        PROCESSTASK_ID("processtask_id", new I18n("nfpwt.processtaskslasqltable.text.processtask_id")),
         ID("id", new I18n("sla ID")),
-        NAME("name", new I18n("sla 名")),
-        CONFIG("config", new I18n("sla 配置"));
+        NAME("name", new I18n("nfpwt.processtaskslasqltable.text.name")),
+        CONFIG("config", new I18n("nfpwt.processtaskslasqltable.text.config"));
         private final String name;
         private final I18n text;
 

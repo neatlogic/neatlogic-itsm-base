@@ -21,13 +21,13 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 
 public class DashboardWidgetParamVo extends SqlDecoratorVo implements Serializable {
-    @EntityField(name = "数据源handler", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.dashboardwidgetparamvo.entityfield.datasourcehandler.name", type = ApiParamType.STRING)
     private String dataSourceHandler;
-    @EntityField(name = "chart配置", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.dashboardwidgetparamvo.entityfield.dashboardwidgetchartconfigvo.name", type = ApiParamType.STRING)
     private DashboardWidgetChartConfigVo dashboardWidgetChartConfigVo;
-    @EntityField(name = "上报时间条件", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.dashboardwidgetparamvo.entityfield.starttimecondition.name", type = ApiParamType.JSONOBJECT)
     private JSONObject startTimeCondition;
-    @EntityField(name = "一级分组搜索结果转换后的map，用于二级分组过滤 ", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.dashboardwidgetparamvo.entityfield.dbexchangegroupdatamap.name", type = ApiParamType.STRING)
     private LinkedHashMap<String, Object> dbExchangeGroupDataMap;
 
     private static final long serialVersionUID = 5224373347379360928L;

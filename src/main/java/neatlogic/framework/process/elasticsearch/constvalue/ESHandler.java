@@ -3,7 +3,7 @@ package neatlogic.framework.process.elasticsearch.constvalue;
 import neatlogic.framework.util.$;
 
 public enum ESHandler {
-	PROCESSTASK("processtask","工单");
+	PROCESSTASK("processtask","nfpec.eshandler.text.processtask");
 
 	private String value;
 	private String text;

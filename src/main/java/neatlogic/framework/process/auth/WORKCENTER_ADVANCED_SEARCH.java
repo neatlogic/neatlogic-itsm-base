@@ -9,12 +9,12 @@ public class WORKCENTER_ADVANCED_SEARCH extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "工单中心-高级搜索权限";
+		return "nfpa.workcenter_advanced_search.getauthdisplayname";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "工单中心开放高级搜索";
+		return "nfpa.workcenter_advanced_search.getauthintroduction";
 	}
 
 	@Override

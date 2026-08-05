@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import neatlogic.framework.util.$;
 @Component
 public class RegionSqlTable implements ISqlTable {
 
@@ -20,8 +21,8 @@ public class RegionSqlTable implements ISqlTable {
 
     public enum FieldEnum {
         ID("id", "id", "regionId"),
-        UPWARD_NAME_PATH("upward_name_path", "全路径", "regionUpwardNamePath"),
-        NAME("name", "服务名", "regionName");
+        UPWARD_NAME_PATH("upward_name_path", "nfpwt.regionsqltable.text.upward_name_path", "regionUpwardNamePath"),
+        NAME("name", "nfpwt.regionsqltable.text.name", "regionName");
         private final String name;
         private final String text;
         private final String proName;
@@ -64,7 +65,7 @@ public class RegionSqlTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return $.t(text);
         }
 
         public String getProValue() {

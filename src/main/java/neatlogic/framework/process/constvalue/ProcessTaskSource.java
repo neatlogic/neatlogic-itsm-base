@@ -1,12 +1,14 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.$;
+
 public enum ProcessTaskSource implements IProcessTaskSource {
 
-    PC("pc", "PC端"),
-    MOBILE("mobile", "移动端"),
-    IMPORT("import", "导入"),
-    SYSTEM("system", "系统"),
-    PROCESSTASK_TRANSFER_REPORT("processtasktransferreport", "转报"),
+    PC("pc", "nfpc.processtasksource.text.pc"),
+    MOBILE("mobile", "nfpc.processtasksource.text.mobile"),
+    IMPORT("import", "nfpc.processtasksource.text.import"),
+    SYSTEM("system", "nfpc.processtasksource.text.system"),
+    PROCESSTASK_TRANSFER_REPORT("processtasktransferreport", "nfpc.processtasksource.text.processtask_transfer_report"),
     ;
 
     private String value;
@@ -24,6 +26,6 @@ public enum ProcessTaskSource implements IProcessTaskSource {
 
     @Override
     public String getText() {
-        return text;
+        return $.t(text);
     }
 }

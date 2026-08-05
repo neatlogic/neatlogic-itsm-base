@@ -1,7 +1,9 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.$;
+
 public enum ProcessTaskStepTaskSource implements IProcessTaskSource {
-    PROCESSTASKSTEP("工单步骤", "processtaskstep");
+    PROCESSTASKSTEP("nfpc.processtasksteptasksource.text.processtaskstep", "processtaskstep");
     private final String text;
     private final String value;
 
@@ -18,6 +20,6 @@ public enum ProcessTaskStepTaskSource implements IProcessTaskSource {
 
     @Override
     public String getText() {
-        return text;
+        return $.t(text);
     }
 }

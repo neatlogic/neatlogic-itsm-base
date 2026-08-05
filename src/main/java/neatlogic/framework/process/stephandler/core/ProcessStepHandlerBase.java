@@ -12,6 +12,8 @@
 
 package neatlogic.framework.process.stephandler.core;
 
+import neatlogic.framework.util.$;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -510,7 +512,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         /* 触发通知 **/
 //        processStepHandlerUtilService.notify(currentProcessTaskStepVo, TaskStepNotifyTriggerType.ASSIGN);
         if (isAssignException) {
-            String reason = "当前步骤分派异常，已分派给异常处理人：" + defaultWorkerName;
+            String reason = $.t("nfpshc.processstephandlerbase.assignexceptionreason", defaultWorkerName);
             processStepHandlerCrossoverUtil.saveStepRemind(currentProcessTaskStepVo, currentProcessTaskStepVo.getId(), reason, ProcessTaskStepRemindType.ERROR);
             processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ASSIGNEXCEPTION);
             processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.ASSIGNEXCEPTION);

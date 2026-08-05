@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum KnowledgeSyncSource implements ISyncSource{
-    PROCESSTASK("processtask", "工单");
+    PROCESSTASK("processtask", "nfpc.knowledgesyncsource.text.processtask");
 
     private String value;
     private String name;

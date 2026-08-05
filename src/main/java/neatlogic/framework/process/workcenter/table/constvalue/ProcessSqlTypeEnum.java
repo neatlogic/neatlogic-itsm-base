@@ -10,11 +10,11 @@ import neatlogic.framework.util.$;
  * @Date: 2021/1/25 18:18
  **/
 public enum ProcessSqlTypeEnum {
-    DISTINCT_ID("distinctId", "去重工单ID"),
-    FIELD("field", "选择字段"),
-    TOTAL_COUNT("totalCount", "总个数"),
-    LIMIT_COUNT("limitCount", "部分个数"),
-    FULL_TEXT("fullText", "全文检索"),
+    DISTINCT_ID("distinctId", "nfpwtc.processsqltypeenum.text.distinct_id"),
+    FIELD("field", "nfpwtc.processsqltypeenum.text.field"),
+    TOTAL_COUNT("totalCount", "nfpwtc.processsqltypeenum.text.total_count"),
+    LIMIT_COUNT("limitCount", "nfpwtc.processsqltypeenum.text.limit_count"),
+    FULL_TEXT("fullText", "nfpwtc.processsqltypeenum.text.full_text"),
     ;//目前暂用于dashboard
     private final String name;
     private final String text;

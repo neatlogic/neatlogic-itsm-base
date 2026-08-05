@@ -3,8 +3,8 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.$;
 
 public enum ProcessFlowDirection {
-	FORWARD("forward", "流转至："),
-	BACKWARD("backward", "回退至：");
+	FORWARD("forward", "nfpc.processflowdirection.text.forward"),
+	BACKWARD("backward", "nfpc.processflowdirection.text.backward");
 	
 	private String value;
 	private String text;

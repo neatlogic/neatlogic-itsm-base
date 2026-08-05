@@ -9,12 +9,12 @@ public class WORKCENTER_NEW_TYPE extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "工单中心-另存为新分类权限";
+		return "nfpa.workcenter_new_type.getauthdisplayname";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "工单中心开放另存为新分类。注意：通过该方式保存的新分类将不受固化条件限制，收回权限则通过该方式保存的分类都将隐藏";
+		return "nfpa.workcenter_new_type.getauthintroduction";
 	}
 
 	@Override

@@ -7,6 +7,6 @@ public class ProcessTaskPriorityIsEmptyException extends ProcessTaskRuntimeExcep
 	private static final long serialVersionUID = 186122774455812447L;
 
 	public ProcessTaskPriorityIsEmptyException() {
-		super("工单优先级不能为空");
+		super("nfpep.processtaskpriorityisemptyexception.processtaskpriorityisemptyexception");
 	}
 }

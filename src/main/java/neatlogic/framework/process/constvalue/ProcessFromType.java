@@ -2,9 +2,10 @@ package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.dependency.core.IFromType;
 
+import neatlogic.framework.util.$;
 public enum ProcessFromType implements IFromType {
 
-    EOATEMPLATE("eoaTemplate", "EOA模板"),
+    EOATEMPLATE("eoaTemplate", "nfpc.processfromtype.text.eoatemplate"),
     ;
 
     private String value;
@@ -22,6 +23,6 @@ public enum ProcessFromType implements IFromType {
 
     @Override
     public String getText() {
-        return text;
+        return $.t(text);
     }
 }

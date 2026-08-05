@@ -7,6 +7,6 @@ public class ProcessTaskStepContentIsEmptyException extends ProcessTaskRuntimeEx
 	private static final long serialVersionUID = 186122673355812447L;
 
 	public ProcessTaskStepContentIsEmptyException() {
-		super("描述不能为空");
+		super("nfpep.processtaskstepcontentisemptyexception.processtaskstepcontentisemptyexception");
 	}
 }

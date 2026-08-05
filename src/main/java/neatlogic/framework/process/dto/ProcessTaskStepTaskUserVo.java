@@ -29,39 +29,39 @@ import java.util.List;
  * @since 2021/9/1 17:33
  **/
 public class ProcessTaskStepTaskUserVo implements Serializable {
-    @EntityField(name = "id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.id.name", type = ApiParamType.LONG)
     private Long id;
-    @EntityField(name = "任务id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.processtasksteptaskid.name", type = ApiParamType.LONG)
     private Long processTaskStepTaskId;
-    @EntityField(name = "任务id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.processtasksteptaskusercontentid.name", type = ApiParamType.LONG)
     private Long processTaskStepTaskUserContentId;
-    @EntityField(name = "用户uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.useruuid.name", type = ApiParamType.STRING)
     private String userUuid;
-    @EntityField(name = "用户", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.uservo.name", type = ApiParamType.JSONOBJECT)
     private UserVo userVo;
-    @EntityField(name = "结束时间", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.endtime.name", type = ApiParamType.LONG)
     private Date endTime;
-    @EntityField(name = "任务状态", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.status.name", type = ApiParamType.STRING)
     private String status;
     @JSONField(serialize=false)
     private String contentHash;
-    @EntityField(name = "内容", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.content.name", type = ApiParamType.STRING)
     private String content;
-    @EntityField(name = "内容VoList", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.steptaskusercontentvolist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepTaskUserContentVo> stepTaskUserContentVoList = new ArrayList<>();
-    @EntityField(name = "是否删除", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.isdelete.name", type = ApiParamType.INTEGER)
     private Integer isDelete;
-    @EntityField(name = "是否可以回复", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.isreplyable.name", type = ApiParamType.INTEGER)
     private Integer isReplyable;
-    @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.originaluseruuid.name", type = ApiParamType.STRING)
     private String originalUserUuid;
-    @EntityField(name = "用户", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.originaluservo.name", type = ApiParamType.JSONOBJECT)
     private UserVo originalUserVo;
-    @EntityField(name = "附件id列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.fileidlist.name", type = ApiParamType.JSONARRAY)
     private List<Long> fileIdList;
-    @EntityField(name = "附件信息列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.filelist.name", type = ApiParamType.JSONARRAY)
     private List<FileVo> fileList;
-    @EntityField(name = "完成时点击的操作按钮", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskuservo.entityfield.button.name", type = ApiParamType.STRING)
     private String button;
 
     public ProcessTaskStepTaskUserVo() {

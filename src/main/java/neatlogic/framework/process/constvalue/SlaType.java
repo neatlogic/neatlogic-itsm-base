@@ -21,8 +21,8 @@ import neatlogic.framework.util.I18n;
  * @since 2022/2/22 16:27
  **/
 public enum SlaType {
-    RESPONSE("response", new I18n("响应")),
-    HANDLE("handle", new I18n("处理"));
+    RESPONSE("response", new I18n("nfpc.slatype.text.response")),
+    HANDLE("handle", new I18n("nfpc.slatype.text.handle"));
     private final String value;
     private final I18n text;
 

@@ -13,41 +13,41 @@ import java.io.Serializable;
 public class ProcessStepHandlerVo implements Comparable<ProcessStepHandlerVo>,Serializable,Cloneable {
 
     private static final long serialVersionUID = -5961832237506853192L;
-    @EntityField(name = "类型", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processstephandlervo.entityfield.type.name", type = ApiParamType.STRING)
 	private String type;
-	@EntityField(name = "处理器", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.handler.name", type = ApiParamType.STRING)
 	private String handler;
-	@EntityField(name = "名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.name.name", type = ApiParamType.STRING)
 	private String name;
-	@EntityField(name = "模块id", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.moduleid.name", type = ApiParamType.STRING)
 	private String moduleId;
-	@EntityField(name = "是否激活", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.isactive.name", type = ApiParamType.STRING)
 	private Integer isActive;
-	@EntityField(name = "图标", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.isallowstart.name", type = ApiParamType.STRING)
 	private Integer isAllowStart;
-	@EntityField(name = "是否允许作为开始节点", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.icon.name", type = ApiParamType.STRING)
 	private String icon;
-	@EntityField(name = "排序", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.sort.name", type = ApiParamType.INTEGER)
 	private Integer sort;
-	@EntityField(name = "配置信息", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.config.name", type = ApiParamType.STRING)
 	private JSONObject config;
-	@EntityField(name = "前端配置信息", type = ApiParamType.JSONOBJECT)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.chartconfig.name", type = ApiParamType.JSONOBJECT)
 	private JSONObject chartConfig;
 	@JSONField(serialize=false)
 	private String configStr;
-	@EntityField(name = "正向输入数量", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.forwardinputquantity.name", type = ApiParamType.INTEGER)
 	private int forwardInputQuantity;
-	@EntityField(name = "正向输出数量", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.forwardoutputquantity.name", type = ApiParamType.INTEGER)
 	private int forwardOutputQuantity;
-	@EntityField(name = "回退输入数量", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.backwardinputquantity.name", type = ApiParamType.INTEGER)
 	private int backwardInputQuantity;
-	@EntityField(name = "回退输出数量", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.backwardoutputquantity.name", type = ApiParamType.INTEGER)
 	private int backwardOutputQuantity;
-	@EntityField(name = "是否隐藏", type = ApiParamType.BOOLEAN)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.ishidden.name", type = ApiParamType.BOOLEAN)
 	private Boolean isHidden;
-	@EntityField(name = "是否移动端支持处理", type = ApiParamType.BOOLEAN)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.isfitmobile.name", type = ApiParamType.BOOLEAN)
 	private Boolean isFitMobile;
-	@EntityField(name = "是否允许该类型步骤处理人指派后置步骤的处理人", type = ApiParamType.BOOLEAN)
+	@EntityField(name = "nfpd.processstephandlervo.entityfield.allowdispatchstepworker.name", type = ApiParamType.BOOLEAN)
 	private Boolean allowDispatchStepWorker;
 
 	public ProcessStepHandlerVo() {

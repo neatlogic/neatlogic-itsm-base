@@ -25,16 +25,16 @@ public class ProcessTaskStepSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        ID("id", new I18n("步骤ID"), "processTaskStepId"),
-        NAME("name", new I18n("步骤名称"), "processTaskStepName"),
-        PROCESSTASK_ID("processtask_id", new I18n("工单ID"), "processTaskId"),
-        TYPE("type", new I18n("节点类型"), "processTaskStepType"),
-        HANDLER("handler", new I18n("步骤处理器"), "processTaskStepHandler"),
-        STATUS("status", new I18n("步骤状态"), "processTaskStepStatus"),
-        CONFIG_HASH("config_hash", new I18n("配置hash"), "processTaskStepConfigHash"),
-        IS_ACTIVE("is_active", new I18n("步骤状态"), "processTaskStepIsActive"),
-        PROCESS_STEP_UUID("process_step_uuid", new I18n("步骤uuid"), "processStepUuid"),
-        ACTIVE_TIME("active_time", new I18n("激活时间"), "processTaskStepActiveTime");
+        ID("id", new I18n("nfpwt.processtaskstepsqltable.text.id"), "processTaskStepId"),
+        NAME("name", new I18n("nfpwt.processtaskstepsqltable.text.name"), "processTaskStepName"),
+        PROCESSTASK_ID("processtask_id", new I18n("nfpwt.processtaskstepsqltable.text.processtask_id"), "processTaskId"),
+        TYPE("type", new I18n("nfpwt.processtaskstepsqltable.text.type"), "processTaskStepType"),
+        HANDLER("handler", new I18n("nfpwt.processtaskstepsqltable.text.handler"), "processTaskStepHandler"),
+        STATUS("status", new I18n("nfpwt.processtaskstepsqltable.text.status"), "processTaskStepStatus"),
+        CONFIG_HASH("config_hash", new I18n("nfpwt.processtaskstepsqltable.text.config_hash"), "processTaskStepConfigHash"),
+        IS_ACTIVE("is_active", new I18n("nfpwt.processtaskstepsqltable.text.is_active"), "processTaskStepIsActive"),
+        PROCESS_STEP_UUID("process_step_uuid", new I18n("nfpwt.processtaskstepsqltable.text.process_step_uuid"), "processStepUuid"),
+        ACTIVE_TIME("active_time", new I18n("nfpwt.processtaskstepsqltable.text.active_time"), "processTaskStepActiveTime");
         private final String name;
         private final I18n text;
         private final String proName;

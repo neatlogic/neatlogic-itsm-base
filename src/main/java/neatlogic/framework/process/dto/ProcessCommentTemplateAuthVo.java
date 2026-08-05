@@ -5,11 +5,11 @@ import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessCommentTemplateAuthVo{
 
-	@EntityField(name = "回复模版ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processcommenttemplateauthvo.entityfield.commenttemplateid.name", type = ApiParamType.LONG)
 	private Long commentTemplateId;
-	@EntityField(name = "类型", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processcommenttemplateauthvo.entityfield.type.name", type = ApiParamType.STRING)
 	private String type;
-	@EntityField(name = "uuid", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processcommenttemplateauthvo.entityfield.uuid.name", type = ApiParamType.STRING)
 	private String uuid;
 
 	public ProcessCommentTemplateAuthVo() {}

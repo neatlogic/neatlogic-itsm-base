@@ -20,6 +20,6 @@ public class ProcessTaskStepSucceededException extends ProcessTaskPermissionDeni
     private static final long serialVersionUID = 9216337410118158649L;
 
     public ProcessTaskStepSucceededException() {
-        super("步骤已完成");
+        super("nfpeo.processtaskstepsucceededexception.processtaskstepsucceededexception");
     }
 }

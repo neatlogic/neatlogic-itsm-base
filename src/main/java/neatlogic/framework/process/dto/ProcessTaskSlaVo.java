@@ -11,14 +11,14 @@ import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessTaskSlaVo {
-	@EntityField(name = "id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslavo.entityfield.id.name", type = ApiParamType.LONG)
 	private Long id;
-	@EntityField(name = "流程任务id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskslavo.entityfield.processtaskid.name", type = ApiParamType.LONG)
 	private Long processTaskId;
-	@EntityField(name = "名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskslavo.entityfield.name.name", type = ApiParamType.STRING)
 	private String name;
 	private Integer isActive;
-	@EntityField(name = "配置", type = ApiParamType.JSONOBJECT)
+	@EntityField(name = "nfpd.processtaskslavo.entityfield.config.name", type = ApiParamType.JSONOBJECT)
 	private String config;
 	@JSONField(serialize=false)
 	private JSONObject configObj;

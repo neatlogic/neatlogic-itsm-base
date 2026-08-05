@@ -10,31 +10,31 @@ import com.alibaba.fastjson.annotation.JSONField;
 import java.util.Date;
 
 public class ProcessTaskImportAuditVo extends BasePageVo {
-	@EntityField(name = "导入记录id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.id.name", type = ApiParamType.LONG)
 	private Long id;
-	@EntityField(name = "工单ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.processtaskid.name", type = ApiParamType.LONG)
 	private Long processTaskId;
-	@EntityField(name = "工单号", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.serialnumber.name", type = ApiParamType.STRING)
 	private String serialNumber;
-	@EntityField(name = "标题", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.title.name", type = ApiParamType.STRING)
 	private String title;
 	@JSONField(serialize = false)
-	@EntityField(name = "服务uuid", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.channeluuid.name", type = ApiParamType.STRING)
 	private String channelUuid;
-	@EntityField(name = "状态", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.status.name", type = ApiParamType.INTEGER)
 	private Integer status;
-	@EntityField(name = "上报失败原因", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.errorreason.name", type = ApiParamType.STRING)
 	private String errorReason;
 	@JSONField(serialize = false)
-	@EntityField(name = "上报人UUID", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.owner.name", type = ApiParamType.STRING)
 	private String owner;
-	@EntityField(name = "导入时间", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.importtime.name", type = ApiParamType.LONG)
 	private Date importTime;
-	@EntityField(name = "上报人用户名", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.ownername.name", type = ApiParamType.STRING)
 	private String ownerName;
-	@EntityField(name = "上报人vo")
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.ownervo.name")
 	private UserVo ownerVo;
-	@EntityField(name = "服务名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskimportauditvo.entityfield.channelname.name", type = ApiParamType.STRING)
 	private String channelName;
 
 	public ProcessTaskImportAuditVo() {

@@ -12,25 +12,25 @@ import java.util.List;
 
 public class ScoreTemplateVo extends BaseEditorVo {
 
-	@EntityField(name = "主键ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpds.scoretemplatevo.entityfield.id.name", type = ApiParamType.LONG)
 	private Long id;
-	@EntityField(name = "评分模版名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpds.scoretemplatevo.entityfield.name.name", type = ApiParamType.STRING)
 	private String name;
-	@EntityField(name = "评分模版说明", type = ApiParamType.STRING)
+	@EntityField(name = "nfpds.scoretemplatevo.entityfield.description.name", type = ApiParamType.STRING)
 	private String description;
-	@EntityField(name = "是否启用", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpds.scoretemplatevo.entityfield.isactive.name", type = ApiParamType.INTEGER)
 	private Integer isActive;
-	@EntityField(name = "评分维度列表", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "nfpds.scoretemplatevo.entityfield.dimensionlist.name", type = ApiParamType.JSONARRAY)
 	private List<ScoreTemplateDimensionVo> dimensionList;
 
-	@EntityField(name = "评分维度名称列表", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "nfpds.scoretemplatevo.entityfield.dimensionnamelist.name", type = ApiParamType.JSONARRAY)
 	@JSONField(serialize = false)
 	private List<String> dimensionNameList;
 
 	/** 评分维度名称，利用dimensionNameList拼接而成的字符串，分隔符为"、"，用于管理页列表 */
 	private String dimensionNames;
 
-	@EntityField(name = "关联的流程数量", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpds.scoretemplatevo.entityfield.processcount.name", type = ApiParamType.INTEGER)
 	private Integer processCount;
 
 

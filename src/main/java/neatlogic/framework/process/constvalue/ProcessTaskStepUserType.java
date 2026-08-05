@@ -12,10 +12,12 @@
 
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.$;
+
 public enum ProcessTaskStepUserType {
-    MAJOR("major", "处理人"),
-    MINOR("minor", "协助处理人"),
-    HISTORY_MAJOR("history_major", "历史处理人"),
+    MAJOR("major", "nfpc.processtaskstepusertype.text.major"),
+    MINOR("minor", "nfpc.processtaskstepusertype.text.minor"),
+    HISTORY_MAJOR("history_major", "nfpc.processtaskstepusertype.text.history_major"),
     ;
 
     private final String value;
@@ -31,6 +33,6 @@ public enum ProcessTaskStepUserType {
     }
 
     public String getText() {
-        return text;
+        return $.t(text);
     }
 }

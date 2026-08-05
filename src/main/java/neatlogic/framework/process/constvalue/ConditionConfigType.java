@@ -3,8 +3,8 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.$;
 
 public enum ConditionConfigType {
-  WORKCENTER("workcenter", "工单中心"),
-  DEFAULT("default","默认");
+  WORKCENTER("workcenter", "nfpc.conditionconfigtype.text.workcenter"),
+  DEFAULT("default","nfpc.conditionconfigtype.text.default");
 
   private final String value;
   private final String name;

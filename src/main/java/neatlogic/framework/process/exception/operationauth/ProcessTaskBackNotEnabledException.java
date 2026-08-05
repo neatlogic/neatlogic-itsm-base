@@ -20,6 +20,6 @@ public class ProcessTaskBackNotEnabledException extends ProcessTaskPermissionDen
     private static final long serialVersionUID = 9216337410118158642L;
 
     public ProcessTaskBackNotEnabledException() {
-        super("工单未启用回退功能");
+        super("nfpeo.processtaskbacknotenabledexception.processtaskbacknotenabledexception");
     }
 }

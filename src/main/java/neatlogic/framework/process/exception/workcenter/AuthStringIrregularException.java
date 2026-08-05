@@ -16,6 +16,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
 
 public class AuthStringIrregularException extends ApiRuntimeException {
     public AuthStringIrregularException(String authString) {
-        super("权限数据“{0}”不符合规范", authString);
+        super("nfpew.authstringirregularexception.authstringirregularexception", authString);
     }
 }

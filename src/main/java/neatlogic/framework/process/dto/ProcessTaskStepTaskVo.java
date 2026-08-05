@@ -35,41 +35,41 @@ import java.util.List;
  **/
 public class ProcessTaskStepTaskVo implements Serializable {
     private static final long serialVersionUID = -6616612590947765111L;
-    @EntityField(name = "工单id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.processtaskid.name", type = ApiParamType.LONG)
     private Long processTaskId;
-    @EntityField(name = "步骤id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.processtaskstepid.name", type = ApiParamType.LONG)
     private Long processTaskStepId;
-    @EntityField(name = "任务id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.id.name", type = ApiParamType.LONG)
     private Long id;
-    @EntityField(name = "任务配置id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.taskconfigid.name", type = ApiParamType.LONG)
     private Long taskConfigId;
-    @EntityField(name = "任务配置", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.taskconfigname.name", type = ApiParamType.STRING)
     private String taskConfigName;
-    @EntityField(name = "任务策略", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.taskconfigpolicy.name", type = ApiParamType.STRING)
     private String taskConfigPolicy;
-    @EntityField(name = "任务策略名", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.taskconfigpolicyname.name", type = ApiParamType.STRING)
     private String taskConfigPolicyName;
-    @EntityField(name = "创建人uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.owner.name", type = ApiParamType.STRING)
     private String owner;
-    @EntityField(name = "创建人")
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.ownervo.name")
     private UserVo ownerVo;
-//    @EntityField(name = "状态", type = ApiParamType.STRING)
+//    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.status.name", type = ApiParamType.STRING)
 //    private String status;
-//    @EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+//    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.statusvo.name", type = ApiParamType.JSONOBJECT)
 //    private ProcessTaskStatusVo statusVo;
-    @EntityField(name = "创建时间", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.createtime.name", type = ApiParamType.LONG)
     private Date createTime;
-    @EntityField(name = "结束时间", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.endtime.name", type = ApiParamType.LONG)
     private Date endTime;
-    @EntityField(name = "描述", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.content.name", type = ApiParamType.STRING)
     private String content;
-    @EntityField(name = "描述hash值", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.contenthash.name", type = ApiParamType.STRING)
     private String contentHash;
-    @EntityField(name = "步骤主处理人", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.majoruser.name", type = ApiParamType.STRING)
     private String majorUser;
-    @EntityField(name = "处理人", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.userlist.name", type = ApiParamType.JSONARRAY)
     private List<String> userList;
-    @EntityField(name = "处理人VoList", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtasksteptaskvo.entityfield.steptaskuservolist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepTaskUserVo> stepTaskUserVoList = new ArrayList<>();
     @JSONField(serialize = false)
     private JSONObject paramObj;

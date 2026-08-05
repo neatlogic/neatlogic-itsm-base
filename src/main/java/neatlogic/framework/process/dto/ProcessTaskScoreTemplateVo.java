@@ -13,15 +13,15 @@ import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessTaskScoreTemplateVo extends BaseEditorVo {
 
-	@EntityField(name = "工单id", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processtaskscoretemplatevo.entityfield.processtaskid.name", type = ApiParamType.INTEGER)
 	private Long processTaskId;
-	@EntityField(name = "评分模版ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskscoretemplatevo.entityfield.scoretemplateid.name", type = ApiParamType.LONG)
 	private Long scoreTemplateId;
-	@EntityField(name = "评分配置", type = ApiParamType.JSONOBJECT)
+	@EntityField(name = "nfpd.processtaskscoretemplatevo.entityfield.config.name", type = ApiParamType.JSONOBJECT)
 	private JSONObject config;
-	@EntityField(name = "是否自动评分", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processtaskscoretemplatevo.entityfield.isauto.name", type = ApiParamType.INTEGER)
 	private Integer isAuto;
-    @EntityField(name = "评分配置hash", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskscoretemplatevo.entityfield.confighash.name", type = ApiParamType.STRING)
     private String configHash;
     @JSONField(serialize = false)
     private String configStr;

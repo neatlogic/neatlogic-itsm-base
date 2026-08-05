@@ -14,19 +14,19 @@ import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessDraftVo {
 	
-	@EntityField(name = "草稿uuid", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processdraftvo.entityfield.uuid.name", type = ApiParamType.STRING)
 	private String uuid;
 	
-	@EntityField(name = "流程uuid", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processdraftvo.entityfield.processuuid.name", type = ApiParamType.STRING)
 	private String processUuid;
 
-	@EntityField(name = "流程名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processdraftvo.entityfield.name.name", type = ApiParamType.STRING)
 	private String name;
 
-	@EntityField(name = "流程图配置", type = ApiParamType.JSONOBJECT)
+	@EntityField(name = "nfpd.processdraftvo.entityfield.config.name", type = ApiParamType.JSONOBJECT)
 	private JSONObject config;
 	
-	@EntityField(name = "保存时间", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processdraftvo.entityfield.fcd.name", type = ApiParamType.LONG)
 	private Date fcd;
 	@JSONField(serialize=false)
 	private String fcu;

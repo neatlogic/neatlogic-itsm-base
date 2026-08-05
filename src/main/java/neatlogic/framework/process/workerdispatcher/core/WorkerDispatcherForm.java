@@ -17,15 +17,16 @@ package neatlogic.framework.process.workerdispatcher.core;
 
 import java.util.Objects;
 
+import neatlogic.framework.util.$;
 /**
  * @author lvzk
  * @since 2021/8/19 11:30
  **/
 public enum WorkerDispatcherForm {
-    TEXT("text", "文本框组件"),
-    USER_SELECT("userselect", "选择用户组件"),
-    FORM_SELECT("formselect", "选择表单组件"),
-    SELECT("select", "下拉框组件");
+    TEXT("text", "nfpwc.workerdispatcherform.text.text"),
+    USER_SELECT("userselect", "nfpwc.workerdispatcherform.text.user_select"),
+    FORM_SELECT("formselect", "nfpwc.workerdispatcherform.text.form_select"),
+    SELECT("select", "nfpwc.workerdispatcherform.text.select");
     private final String value;
     private final String text;
 
@@ -39,7 +40,7 @@ public enum WorkerDispatcherForm {
     }
 
     public String getText() {
-        return text;
+        return $.t(text);
     }
 
     public static WorkerDispatcherForm getParamMode(String _value) {

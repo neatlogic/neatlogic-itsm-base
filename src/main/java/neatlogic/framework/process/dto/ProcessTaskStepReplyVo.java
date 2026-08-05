@@ -11,36 +11,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessTaskStepReplyVo extends BaseEditorVo {
-	@EntityField(name = "回复id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.id.name", type = ApiParamType.LONG)
 	private Long id;
-	@EntityField(name = "工单id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.processtaskid.name", type = ApiParamType.LONG)
 	private Long processTaskId;
-	@EntityField(name = "步骤id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.processtaskstepid.name", type = ApiParamType.LONG)
 	private Long processTaskStepId;
-	@EntityField(name = "步骤名", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.processtaskstepname.name", type = ApiParamType.STRING)
     private String processTaskStepName;
-	@EntityField(name = "描述内容", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.content.name", type = ApiParamType.STRING)
 	private String content;
-	@EntityField(name = "类型", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.type.name", type = ApiParamType.STRING)
     private String type;
-	@EntityField(name = "附件列表", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.filelist.name", type = ApiParamType.JSONARRAY)
 	private List<FileVo> fileList = new ArrayList<>();
-	@EntityField(name = "附件id列表", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.fileidlist.name", type = ApiParamType.JSONARRAY)
     private List<Long> fileIdList = new ArrayList<>();
 	
-	@EntityField(name = "是否可编辑", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.iseditable.name", type = ApiParamType.INTEGER)
 	private Integer isEditable;
-	@EntityField(name = "是否可删除", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.isdeletable.name", type = ApiParamType.INTEGER)
 	private Integer isDeletable;
 	@JSONField(serialize=false)
 	private String contentHash;
-	@EntityField(name = "来源", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.source.name", type = ApiParamType.STRING)
 	private String source;
-	@EntityField(name = "来源中文名", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.sourcename.name", type = ApiParamType.STRING)
 	private String sourceName;
-	@EntityField(name = "操作人角色", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.operatorrole.name", type = ApiParamType.STRING)
 	private String operatorRole;
-	@EntityField(name = "目标对象列表", type = ApiParamType.JSONARRAY)
+	@EntityField(name = "nfpd.processtaskstepreplyvo.entityfield.targetlist.name", type = ApiParamType.JSONARRAY)
 	List<WorkAssignmentUnitVo> targetList;
 
 	public ProcessTaskStepReplyVo() {}

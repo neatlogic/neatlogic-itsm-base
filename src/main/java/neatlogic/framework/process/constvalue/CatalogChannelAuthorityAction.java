@@ -12,9 +12,11 @@
 
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.$;
+
 public enum CatalogChannelAuthorityAction {
-    REPORT("report", "上报工单"),
-    VIEW("view", "查看工单"),
+    REPORT("report", "nfpc.catalogchannelauthorityaction.text.report"),
+    VIEW("view", "nfpc.catalogchannelauthorityaction.text.view"),
     ;
 
     private String value;
@@ -33,7 +35,7 @@ public enum CatalogChannelAuthorityAction {
     }
 
     public String getText() {
-        return text;
+        return $.t(text);
     }
 
     public void setText(String text) {

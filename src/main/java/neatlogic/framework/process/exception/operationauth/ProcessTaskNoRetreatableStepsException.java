@@ -20,6 +20,6 @@ public class ProcessTaskNoRetreatableStepsException extends ProcessTaskPermissio
     private static final long serialVersionUID = 9216337410118158645L;
 
     public ProcessTaskNoRetreatableStepsException() {
-        super("工单里没有您可以撤回的步骤");
+        super("nfpeo.processtasknoretreatablestepsexception.processtasknoretreatablestepsexception");
     }
 }

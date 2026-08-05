@@ -44,62 +44,62 @@ import java.util.UUID;
 public class WorkcenterVo extends SqlDecoratorVo implements Serializable {
     private static final long serialVersionUID = 1952066708451908924L;
 
-    @EntityField(name = "工单中心分类uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.uuid.name", type = ApiParamType.STRING)
     private String uuid;
-    @EntityField(name = "工单中心分类名", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "custom类型,工单中心分类所属人", type = ApiParamType.ENUM)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.owner.name", type = ApiParamType.ENUM)
     private String owner;
-    @EntityField(name = "判断当前工单分类是否属于当前用户", type = ApiParamType.BOOLEAN)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.ismine.name", type = ApiParamType.BOOLEAN)
     private boolean isMine;
-    @EntityField(name = "default:默认出厂  system：系统分类  custom：自定义分类", type = ApiParamType.ENUM)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.type.name", type = ApiParamType.ENUM)
     private String type = ProcessWorkcenterType.CUSTOM.getValue();
     @JSONField(serialize = false)
-    @EntityField(name = "排序", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.sort.name", type = ApiParamType.INTEGER)
     private Integer sort;
-    @EntityField(name = "数量", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.count.name", type = ApiParamType.INTEGER)
     private String count;
-    @EntityField(name = "过滤条件", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.conditionconfig.name", type = ApiParamType.JSONOBJECT)
     private JSONObject conditionConfig;
     @JSONField(serialize = false)
     private String conditionConfigStr;
-    @EntityField(name = "all:所有设备,mobile:手机端,pc:电脑端", type = ApiParamType.ENUM)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.support.name", type = ApiParamType.ENUM)
     private String support = DeviceType.ALL.getValue();
     @JSONField(serialize = false)
-    @EntityField(name = "显示的字段", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.headerlist.name", type = ApiParamType.JSONARRAY)
     private JSONArray headerList;
     @JSONField(serialize = false)
     private List<AuthorityVo> authorityList;
-    @EntityField(name = "角色列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.authlist.name", type = ApiParamType.JSONARRAY)
     private List<String> authList;
-    @EntityField(name = "是否拥有编辑权限", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.iscanedit.name", type = ApiParamType.INTEGER)
     private Integer isCanEdit;
-    @EntityField(name = "是否拥有授权权限", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.iscanrole.name", type = ApiParamType.INTEGER)
     private Integer isCanRole;
-    //@EntityField(name = "是否附加待我处理条件", type = ApiParamType.INTEGER)
+    //@EntityField(name = "nfpwd.workcentervo.entityfield.isprocessingofmine.name", type = ApiParamType.INTEGER)
     //private Integer isProcessingOfMine = 0;
-    @EntityField(name = "待我处理的数量", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.processingofminecount.name", type = ApiParamType.STRING)
     private String processingOfMineCount;
     @JSONField(serialize = false)
-    @EntityField(name = "设备类型", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.device.name", type = ApiParamType.STRING)
     private String device;
-    @EntityField(name = "排序的字段", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.sortconfig.name", type = ApiParamType.JSONOBJECT)
     private JSONObject sortConfig;
-    /*@EntityField(name = "上报时间条件", type = ApiParamType.JSONOBJECT)
+    /*@EntityField(name = "nfpwd.workcentervo.entityfield.starttimecondition.name", type = ApiParamType.JSONOBJECT)
     private JSONObject startTimeCondition;*/
-    @EntityField(name = "关键字搜索条件", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.keywordconditionlist.name", type = ApiParamType.JSONOBJECT)
     private JSONArray keywordConditionList;
-    @EntityField(name = "菜单类型id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.catalogid.name", type = ApiParamType.LONG)
     private Long catalogId;
-    @EntityField(name = "菜单类型名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.catalogname.name", type = ApiParamType.STRING)
     private String catalogName;
-    @EntityField(name = "simple：简单模式  custom：高级模式", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.handlertype.name", type = ApiParamType.STRING)
     private String handlerType;
-    @EntityField(name = "是否显示总数，默认0：显示待办数", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.isshowtotal.name", type = ApiParamType.INTEGER)
     private Integer isShowTotal = 0;
-    @EntityField(name = "默认表头配置", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.theadlist.name", type = ApiParamType.JSONOBJECT)
     private List<WorkcenterTheadVo> theadList = new ArrayList<>();
-    @EntityField(name = "默认表头配置Hash", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentervo.entityfield.theadconfighash.name", type = ApiParamType.STRING)
     private String theadConfigHash;
     @JSONField(serialize = false)
     private String theadConfigStr;

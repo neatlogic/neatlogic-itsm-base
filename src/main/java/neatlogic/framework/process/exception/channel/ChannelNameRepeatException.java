@@ -19,6 +19,6 @@ public class ChannelNameRepeatException extends ApiRuntimeException {
     private static final long serialVersionUID = -4617724920030245143L;
 
     public ChannelNameRepeatException(String msg) {
-        super("服务：“{0}”已存在", msg);
+        super("nfpec.channelnamerepeatexception.channelnamerepeatexception", msg);
     }
 }

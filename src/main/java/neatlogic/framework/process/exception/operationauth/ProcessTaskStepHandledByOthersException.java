@@ -15,6 +15,6 @@ package neatlogic.framework.process.exception.operationauth;
 public class ProcessTaskStepHandledByOthersException extends ProcessTaskPermissionDeniedException {
     private static final long serialVersionUID = 9216337410118158665L;
     public ProcessTaskStepHandledByOthersException(String userId, String userName) {
-        super("【{1}|{0}】用户已经处理了此步骤", userName, userId);
+        super("nfpeo.processtaskstephandledbyothersexception.processtaskstephandledbyothersexception", userName, userId);
     }
 }

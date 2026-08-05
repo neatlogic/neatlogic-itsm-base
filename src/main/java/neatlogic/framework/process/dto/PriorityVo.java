@@ -24,19 +24,19 @@ import java.util.UUID;
 public class PriorityVo extends BasePageVo implements Serializable {
 
     private static final long serialVersionUID = -4831712599845296278L;
-    @EntityField(name = "优先级uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.priorityvo.entityfield.uuid.name", type = ApiParamType.STRING)
     private String uuid;
-    @EntityField(name = "名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.priorityvo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "状态", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.priorityvo.entityfield.isactive.name", type = ApiParamType.INTEGER)
     private Integer isActive;
-    @EntityField(name = "图标", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.priorityvo.entityfield.icon.name", type = ApiParamType.STRING)
     private String icon;
-    @EntityField(name = "颜色", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.priorityvo.entityfield.color.name", type = ApiParamType.STRING)
     private String color;
-    @EntityField(name = "描述", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.priorityvo.entityfield.desc.name", type = ApiParamType.STRING)
     private String desc;
-    @EntityField(name = "排序", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.priorityvo.entityfield.sort.name", type = ApiParamType.INTEGER)
     private Integer sort;
     @JSONField(serialize = false)
     private String channelUuid;

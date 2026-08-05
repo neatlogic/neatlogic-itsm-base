@@ -5,11 +5,11 @@ import neatlogic.framework.restful.annotation.EntityField;
 
 public class WorkerPolicyVo {
 
-	@EntityField(name = "指派策略类型", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.workerpolicyvo.entityfield.type.name", type = ApiParamType.STRING)
 	private String type;
-	@EntityField(name = "指派策略名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.workerpolicyvo.entityfield.name.name", type = ApiParamType.STRING)
 	private String name;
-	@EntityField(name = "模块id", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.workerpolicyvo.entityfield.moduleid.name", type = ApiParamType.STRING)
 	private String moduleId;
 	
 	public String getType() {

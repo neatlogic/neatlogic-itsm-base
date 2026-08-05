@@ -20,6 +20,6 @@ public class ProcessTaskNoTransferableStepsException extends ProcessTaskPermissi
     private static final long serialVersionUID = 9216337410118158646L;
 
     public ProcessTaskNoTransferableStepsException() {
-        super("工单里没有您可以转交的步骤");
+        super("nfpeo.processtasknotransferablestepsexception.processtasknotransferablestepsexception");
     }
 }

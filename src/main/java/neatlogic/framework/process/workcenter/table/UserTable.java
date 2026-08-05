@@ -3,6 +3,7 @@ package neatlogic.framework.process.workcenter.table;
 import neatlogic.framework.process.workcenter.table.constvalue.ProcessSqlTypeEnum;
 import org.springframework.stereotype.Component;
 
+import neatlogic.framework.util.$;
 /**
  * @Title: ProcessTaskTable
  * @Package: neatlogic.module.process.workcenter.core.table
@@ -24,14 +25,14 @@ public class UserTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", "用户UUID"),
-        USER_ID("user_id","用户ID"),
-        USER_NAME("user_name","用户名"),
-        USER_INFO("user_info", "用户信息"),
-        VIP_LEVEL("vip_level","vip等级"),
-        IS_ACTIVE("is_active", "是否激活"),
-        IS_DELETE("is_delete","是否删除"),
-        PINYIN("pinyin", "拼音");
+        UUID("uuid", "nfpwt.usertable.text.uuid"),
+        USER_ID("user_id","nfpwt.usertable.text.user_id"),
+        USER_NAME("user_name","nfpwt.usertable.text.user_name"),
+        USER_INFO("user_info", "nfpwt.usertable.text.user_info"),
+        VIP_LEVEL("vip_level","nfpwt.usertable.text.vip_level"),
+        IS_ACTIVE("is_active", "nfpwt.usertable.text.is_active"),
+        IS_DELETE("is_delete","nfpwt.usertable.text.is_delete"),
+        PINYIN("pinyin", "nfpwt.usertable.text.pinyin");
         private final String name;
         private final String text;
         private final String proName;
@@ -56,7 +57,7 @@ public class UserTable implements ISqlTable {
         }
 
         public String getText() {
-            return text;
+            return $.t(text);
         }
 
         public String getProValue() {

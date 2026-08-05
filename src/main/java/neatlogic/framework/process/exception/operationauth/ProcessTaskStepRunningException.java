@@ -20,6 +20,6 @@ public class ProcessTaskStepRunningException extends ProcessTaskPermissionDenied
     private static final long serialVersionUID = 9216337410118158652L;
 
     public ProcessTaskStepRunningException() {
-        super("步骤处理中");
+        super("nfpeo.processtasksteprunningexception.processtasksteprunningexception");
     }
 }

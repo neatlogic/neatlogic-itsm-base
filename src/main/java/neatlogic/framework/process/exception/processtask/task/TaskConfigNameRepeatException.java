@@ -22,6 +22,6 @@ public class TaskConfigNameRepeatException extends ApiRuntimeException {
 	private static final long serialVersionUID = 4272882237404094408L;
 
 	public TaskConfigNameRepeatException(String name) {
-		super("任务名：“{0}”已存在", name);
+		super("nfpept.taskconfignamerepeatexception.taskconfignamerepeatexception", name);
 	}
 }

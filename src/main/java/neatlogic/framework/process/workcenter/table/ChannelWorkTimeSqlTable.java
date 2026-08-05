@@ -25,8 +25,8 @@ public class ChannelWorkTimeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        CHANNEL_UUID("channel_uuid", new I18n("服务UUID")),
-        WORKTIME_UUID("worktime_uuid", new I18n("时间窗口UUID"));
+        CHANNEL_UUID("channel_uuid", new I18n("nfpwt.channelworktimesqltable.text.channel_uuid")),
+        WORKTIME_UUID("worktime_uuid", new I18n("nfpwt.channelworktimesqltable.text.worktime_uuid"));
         private final String name;
         private final I18n text;
 

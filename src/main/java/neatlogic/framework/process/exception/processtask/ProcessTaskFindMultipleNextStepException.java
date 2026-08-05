@@ -16,6 +16,6 @@ public class ProcessTaskFindMultipleNextStepException extends ProcessTaskExcepti
     private static final long serialVersionUID = 4314481891500443154L;
 
     public ProcessTaskFindMultipleNextStepException() {
-        super("找到多个后续节点");
+        super("nfpep.processtaskfindmultiplenextstepexception.processtaskfindmultiplenextstepexception");
     }
 }

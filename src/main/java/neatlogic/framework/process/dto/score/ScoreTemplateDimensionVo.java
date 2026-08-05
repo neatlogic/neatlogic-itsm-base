@@ -7,15 +7,15 @@ import neatlogic.framework.util.SnowflakeUtil;
 
 public class ScoreTemplateDimensionVo extends BasePageVo {
 
-	@EntityField(name = "主键ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpds.scoretemplatedimensionvo.entityfield.id.name", type = ApiParamType.LONG)
 	private Long id;
-	@EntityField(name = "评分模版ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpds.scoretemplatedimensionvo.entityfield.scoretemplateid.name", type = ApiParamType.LONG)
 	private Long scoreTemplateId;
-	@EntityField(name = "评分维度名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpds.scoretemplatedimensionvo.entityfield.name.name", type = ApiParamType.STRING)
 	private String name;
-	@EntityField(name = "评分维度说明", type = ApiParamType.STRING)
+	@EntityField(name = "nfpds.scoretemplatedimensionvo.entityfield.description.name", type = ApiParamType.STRING)
 	private String description;
-	@EntityField(name = "评分值", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpds.scoretemplatedimensionvo.entityfield.score.name", type = ApiParamType.INTEGER)
 	private Integer score;
 
 	public ScoreTemplateDimensionVo() {}

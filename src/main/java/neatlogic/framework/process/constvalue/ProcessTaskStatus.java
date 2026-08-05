@@ -93,6 +93,6 @@ public enum ProcessTaskStatus implements IEnum {
 
     @Override
     public String getEnumName() {
-        return "工单状态";
+        return "nfpc.processtaskstatus.enumname";
     }
 }

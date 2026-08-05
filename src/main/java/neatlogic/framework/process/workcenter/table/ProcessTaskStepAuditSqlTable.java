@@ -29,10 +29,10 @@ public class ProcessTaskStepAuditSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        PROCESSTASK_ID("processtask_id", new I18n("工单ID")),
-        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("工单步骤ID")),
-        USER_UUID("user_uuid", new I18n("用户UUID")),
-        ACTION("action", new I18n("上报人"));
+        PROCESSTASK_ID("processtask_id", new I18n("nfpwt.processtaskstepauditsqltable.text.processtask_id")),
+        PROCESSTASK_STEP_ID("processtask_step_id", new I18n("nfpwt.processtaskstepauditsqltable.text.processtask_step_id")),
+        USER_UUID("user_uuid", new I18n("nfpwt.processtaskstepauditsqltable.text.user_uuid")),
+        ACTION("action", new I18n("nfpwt.processtaskstepauditsqltable.text.action"));
 
         private final String name;
         private final I18n text;

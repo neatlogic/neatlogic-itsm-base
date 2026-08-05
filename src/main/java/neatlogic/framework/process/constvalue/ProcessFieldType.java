@@ -3,10 +3,10 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.$;
 
 public enum ProcessFieldType {
-    COMMON("common", "工单固有属性"),
-    FORM("form", "表单属性"),
-    CUSTOM("custom", "自定义属性"),
-    CONSTANT("constant", "常量属性");
+    COMMON("common", "nfpc.processfieldtype.text.common"),
+    FORM("form", "nfpc.processfieldtype.text.form"),
+    CUSTOM("custom", "nfpc.processfieldtype.text.custom"),
+    CONSTANT("constant", "nfpc.processfieldtype.text.constant");
     private final String value;
     private final String name;
 

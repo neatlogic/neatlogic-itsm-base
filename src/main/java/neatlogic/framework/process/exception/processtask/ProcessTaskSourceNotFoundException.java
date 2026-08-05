@@ -20,7 +20,7 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
 public class ProcessTaskSourceNotFoundException extends ApiRuntimeException {
 
     public ProcessTaskSourceNotFoundException(String msg) {
-        super("工单来源{0}不存在", msg);
+        super("nfpep.processtasksourcenotfoundexception.processtasksourcenotfoundexception", msg);
     }
 
 }

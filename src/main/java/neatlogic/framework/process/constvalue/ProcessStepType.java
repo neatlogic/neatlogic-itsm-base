@@ -15,9 +15,9 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.$;
 
 public enum ProcessStepType {
-    START("start", "开始"),
-    PROCESS("process", "处理节点"),
-    END("end", "结束");
+    START("start", "nfpc.processsteptype.text.start"),
+    PROCESS("process", "nfpc.processsteptype.text.process"),
+    END("end", "nfpc.processsteptype.text.end");
 
     private final String type;
     private final String name;

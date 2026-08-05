@@ -27,32 +27,32 @@ import java.io.Serializable;
 public class WorkcenterTheadVo implements Serializable {
 
     @JSONField(serialize = false)
-    @EntityField(name = "工单中心分类唯一标识段", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.workcenteruuid.name", type = ApiParamType.STRING)
     private String workcenterUuid;
-    @EntityField(name = "字段名（表单属性则存属性uuid）", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "字段中文名", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.displayname.name", type = ApiParamType.STRING)
     private String displayName;
-    @EntityField(name = "字段排序", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.sort.name", type = ApiParamType.INTEGER)
     private Integer sort = 100;
-    @EntityField(name = "字段宽度", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.width.name", type = ApiParamType.INTEGER)
     private Integer width = 1;
-    @EntityField(name = "字段是否展示", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.isshow.name", type = ApiParamType.INTEGER)
     private Integer isShow = 1;
-    @EntityField(name = "是否可以控制该字段是否显示", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.disabled.name", type = ApiParamType.INTEGER)
     private Integer disabled;
     @JSONField(serialize = false)
-    @EntityField(name = "所属用户", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.useruuid.name", type = ApiParamType.STRING)
     private String userUuid;
-    @EntityField(name = "字段类型", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.type.name", type = ApiParamType.STRING)
     private String type;
-    @EntityField(name = "字段样式", type = ApiParamType.STRING)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.classname.name", type = ApiParamType.STRING)
     private String className;
-    @EntityField(name = "字段是否可导出", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.isexport.name", type = ApiParamType.INTEGER)
     private Integer isExport;
-    @EntityField(name = "是否支持排序", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.issortable.name", type = ApiParamType.INTEGER)
     private int isSortable;
-    @EntityField(name = "配置", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpwd.workcentertheadvo.entityfield.config.name", type = ApiParamType.JSONOBJECT)
     private JSONObject config;
 
     public WorkcenterTheadVo(String name) {

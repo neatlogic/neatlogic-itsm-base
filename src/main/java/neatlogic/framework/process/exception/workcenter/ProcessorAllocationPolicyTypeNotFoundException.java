@@ -20,6 +20,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
 
 public class ProcessorAllocationPolicyTypeNotFoundException extends ApiRuntimeException {
     public ProcessorAllocationPolicyTypeNotFoundException(String name) {
-        super("找不到类型为：{0}的处理人分配策略", name);
+        super("nfpew.processorallocationpolicytypenotfoundexception.processorallocationpolicytypenotfoundexception", name);
     }
 }

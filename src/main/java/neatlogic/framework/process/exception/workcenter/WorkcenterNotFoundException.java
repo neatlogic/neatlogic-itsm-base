@@ -19,7 +19,7 @@ public class WorkcenterNotFoundException extends ProcessTaskRuntimeException {
     private static final long serialVersionUID = -6039692333884409352L;
 
     public WorkcenterNotFoundException(String handler) {
-        super("工单中心分类“{0}”不存在", handler);
+        super("nfpew.workcenternotfoundexception.workcenternotfoundexception", handler);
     }
 
 

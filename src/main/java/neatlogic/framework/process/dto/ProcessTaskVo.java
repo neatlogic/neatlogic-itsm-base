@@ -39,7 +39,7 @@ public class ProcessTaskVo extends BasePageVo {
     private String channelPath;
     @EntityField(name = "common.priorityuuid", type = ApiParamType.STRING)
     private String priorityUuid;
-    //    @EntityField(name = "工单流程图信息", type = ApiParamType.STRING)
+    //    @EntityField(name = "nfpd.processtaskvo.entityfield.config.name", type = ApiParamType.STRING)
     @JSONField(serialize = false)
     private String config;
     //    private String configPath;
@@ -52,15 +52,15 @@ public class ProcessTaskVo extends BasePageVo {
     private String owner;
     @EntityField(name = "term.itsm.ownerinfo")
     private UserVo ownerVo;
-    //    @EntityField(name = "上报人", type = ApiParamType.STRING)
+    //    @EntityField(name = "nfpd.processtaskvo.entityfield.ownername.name", type = ApiParamType.STRING)
 //    private String ownerName;
-//    @EntityField(name = "上报人等级", type = ApiParamType.INTEGER)
+//    @EntityField(name = "nfpd.processtaskvo.entityfield.ownerviplevel.name", type = ApiParamType.INTEGER)
 //    private Integer ownerVipLevel;
     @EntityField(name = "term.itsm.submitteruuid", type = ApiParamType.STRING)
     private String reporter;
     @EntityField(name = "term.itsm.submitterinfo")
     private UserVo reporterVo;
-    //    @EntityField(name = "代报人", type = ApiParamType.STRING)
+    //    @EntityField(name = "nfpd.processtaskvo.entityfield.reportername.name", type = ApiParamType.STRING)
 //    private String reporterName;
     @EntityField(name = "common.starttime", type = ApiParamType.LONG)
     private Date startTime;
@@ -207,7 +207,7 @@ public class ProcessTaskVo extends BasePageVo {
     @EntityField(name = "nfpd.processtaskvo.entityfield.name.processdispatcherlist", type = ApiParamType.STRING)
     private List<String> processDispatcherList;
 
-    @EntityField(name = "地域", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskvo.entityfield.regionvo.name", type = ApiParamType.JSONOBJECT)
     private RegionVo regionVo;
 
     public ProcessTaskVo() {

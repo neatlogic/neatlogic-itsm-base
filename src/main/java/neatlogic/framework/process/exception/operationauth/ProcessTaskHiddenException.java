@@ -20,6 +20,6 @@ public class ProcessTaskHiddenException extends ProcessTaskPermissionDeniedExcep
     private static final long serialVersionUID = 9216337410118158625L;
 
     public ProcessTaskHiddenException() {
-        super("工单已隐藏");
+        super("nfpeo.processtaskhiddenexception.processtaskhiddenexception");
     }
 }

@@ -22,11 +22,11 @@ import neatlogic.framework.restful.annotation.EntityField;
  **/
 public class ProcessTaskStepTaskUserFileVo extends BaseEditorVo {
     private static final long serialVersionUID = -7440360822572699974L;
-    @EntityField(name = "任务id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskuserfilevo.entityfield.processtasksteptaskid.name", type = ApiParamType.LONG)
     private Long processTaskStepTaskId;
-    @EntityField(name = "任务用户id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskuserfilevo.entityfield.processtasksteptaskuserid.name", type = ApiParamType.LONG)
     private Long processTaskStepTaskUserId;
-    @EntityField(name = "附件id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtasksteptaskuserfilevo.entityfield.fileid.name", type = ApiParamType.LONG)
     private Long fileId;
 
     public ProcessTaskStepTaskUserFileVo() {

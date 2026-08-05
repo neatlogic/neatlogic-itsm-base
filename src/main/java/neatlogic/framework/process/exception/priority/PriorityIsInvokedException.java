@@ -15,6 +15,6 @@ public class PriorityIsInvokedException extends ApiRuntimeException {
     private static final long serialVersionUID = -5334268132696017059L;
 
     public PriorityIsInvokedException(String priorityUuid) {
-        super("优先级：“{0}”被引用了", priorityUuid);
+        super("nfpep.priorityisinvokedexception.priorityisinvokedexception", priorityUuid);
     }
 }

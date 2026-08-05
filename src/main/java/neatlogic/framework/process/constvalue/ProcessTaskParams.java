@@ -1,30 +1,32 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.$;
+
 public enum ProcessTaskParams {
-    TASKID("id", "工单ID"),
-    STEPID("stepid", "步骤ID"),
-    STEPNAME("stepname", "步骤名称"),
-    STEPUSER("stepuser", "步骤处理人"),
-    STEPUSERID("stepuserid", "步骤处理人用户ID"),
-    TITLE("title", "标题"),
-    CHANNELTYPE("channeltype", "服务类型"),
-    CONTENT("content", "上报内容"),
-    STARTTIME("starttime", "开始时间"),
-    OWNER("owner", "上报人"),
-    OWNERUSERID("owneruserid", "上报人用户ID"),
-    PRIORITY("priority", "优先级"),
-    OWNERGROUP("ownergroup", "上报人集团"),
-    OWNERCOMPANY("ownercompany", "上报人公司"),
-    OWNERCENTER("ownercenter", "上报人中心"),
-    OWNERDEPARTMENT("ownerdepartment", "上报人部门"),
-    OWNERDEPARTMENTPATH("ownerdepartmentpath", "上报人部门(完整)"),
-    OWNERTEAM("ownerteam", "上报人组"),
-    OWNERROLE("ownerrole", "上报人角色"),
-    OWNERLEVEL("ownerlevel", "上报人级别"),
-    STEPTASK("steptask", "子任务"),
-    ACTIONTRIGGERUSER("actiontriggeruser", "动作触发人"),
-    ACTIONTRIGGERUSERID("actiontriggeruserid", "动作触发人用户ID"),
-    STEPTASKID("steptaskid", "子任务ID");
+    TASKID("id", "nfpc.processtaskparams.text.taskid"),
+    STEPID("stepid", "nfpc.processtaskparams.text.stepid"),
+    STEPNAME("stepname", "nfpc.processtaskparams.text.stepname"),
+    STEPUSER("stepuser", "nfpc.processtaskparams.text.stepuser"),
+    STEPUSERID("stepuserid", "nfpc.processtaskparams.text.stepuserid"),
+    TITLE("title", "nfpc.processtaskparams.text.title"),
+    CHANNELTYPE("channeltype", "nfpc.processtaskparams.text.channeltype"),
+    CONTENT("content", "nfpc.processtaskparams.text.content"),
+    STARTTIME("starttime", "nfpc.processtaskparams.text.starttime"),
+    OWNER("owner", "nfpc.processtaskparams.text.owner"),
+    OWNERUSERID("owneruserid", "nfpc.processtaskparams.text.owneruserid"),
+    PRIORITY("priority", "nfpc.processtaskparams.text.priority"),
+    OWNERGROUP("ownergroup", "nfpc.processtaskparams.text.ownergroup"),
+    OWNERCOMPANY("ownercompany", "nfpc.processtaskparams.text.ownercompany"),
+    OWNERCENTER("ownercenter", "nfpc.processtaskparams.text.ownercenter"),
+    OWNERDEPARTMENT("ownerdepartment", "nfpc.processtaskparams.text.ownerdepartment"),
+    OWNERDEPARTMENTPATH("ownerdepartmentpath", "nfpc.processtaskparams.text.ownerdepartmentpath"),
+    OWNERTEAM("ownerteam", "nfpc.processtaskparams.text.ownerteam"),
+    OWNERROLE("ownerrole", "nfpc.processtaskparams.text.ownerrole"),
+    OWNERLEVEL("ownerlevel", "nfpc.processtaskparams.text.ownerlevel"),
+    STEPTASK("steptask", "nfpc.processtaskparams.text.steptask"),
+    ACTIONTRIGGERUSER("actiontriggeruser", "nfpc.processtaskparams.text.actiontriggeruser"),
+    ACTIONTRIGGERUSERID("actiontriggeruserid", "nfpc.processtaskparams.text.actiontriggeruserid"),
+    STEPTASKID("steptaskid", "nfpc.processtaskparams.text.steptaskid");
 
     private String value;
     private String text;
@@ -39,7 +41,7 @@ public enum ProcessTaskParams {
     }
 
     public String getText() {
-        return text;
+        return $.t(text);
     }
 
 }

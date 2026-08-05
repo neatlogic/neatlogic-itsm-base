@@ -4,9 +4,9 @@ import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.restful.annotation.EntityField;
 
 public class WorkcenterUserProfileVo {
-	@EntityField(name = "用户uuid", type = ApiParamType.STRING)
+	@EntityField(name = "nfpwd.workcenteruserprofilevo.entityfield.user_uuid.name", type = ApiParamType.STRING)
 	private String user_uuid;
-	@EntityField(name = "用户个性化配置，如排序等", type = ApiParamType.STRING)
+	@EntityField(name = "nfpwd.workcenteruserprofilevo.entityfield.config.name", type = ApiParamType.STRING)
 	private String config;
 	
 	public WorkcenterUserProfileVo() {

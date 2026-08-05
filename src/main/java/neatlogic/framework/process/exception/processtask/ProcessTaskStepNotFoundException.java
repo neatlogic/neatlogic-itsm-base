@@ -7,10 +7,10 @@ public class ProcessTaskStepNotFoundException extends ProcessTaskRuntimeExceptio
 	private static final long serialVersionUID = 186121675355812447L;
 
 	public ProcessTaskStepNotFoundException(String processTaskStep) {
-		super("流程步骤：“{0}”不存在", processTaskStep);
+		super("nfpep.processtaskstepnotfoundexception.processtaskstepnotfoundexception", processTaskStep);
 	}
 
 	public ProcessTaskStepNotFoundException(Long processTaskStep) {
-		super("流程步骤：“{0}”不存在", processTaskStep);
+		super("nfpep.processtaskstepnotfoundexception.processtaskstepnotfoundexception_a", processTaskStep);
 	}
 }

@@ -15,8 +15,8 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.I18n;
 
 public enum ProcessTaskStepDataType implements IProcessTaskStepDataType {
-    STEPDRAFTSAVE("stepdraftsave", new I18n("步骤草稿暂存")),
-    AUTOMATIC("automatic", new I18n("auto节点数据"));
+    STEPDRAFTSAVE("stepdraftsave", new I18n("nfpc.processtaskstepdatatype.text.stepdraftsave")),
+    AUTOMATIC("automatic", new I18n("nfpc.processtaskstepdatatype.text.automatic"));
     private final String value;
     private final I18n text;
 

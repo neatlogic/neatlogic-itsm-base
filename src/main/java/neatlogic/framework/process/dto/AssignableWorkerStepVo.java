@@ -21,17 +21,17 @@ import neatlogic.framework.restful.annotation.EntityField;
  * @since 2021/8/20 11:52
  **/
 public class AssignableWorkerStepVo {
-    @EntityField(name = "工单步骤id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.assignableworkerstepvo.entityfield.id.name", type = ApiParamType.LONG)
     private Long id;
-    @EntityField(name = "步骤名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.assignableworkerstepvo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "步骤uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.assignableworkerstepvo.entityfield.processstepuuid.name", type = ApiParamType.STRING)
     private String processStepUuid;
-    @EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.assignableworkerstepvo.entityfield.isrequired.name", type = ApiParamType.INTEGER)
     private Integer isRequired;
-    @EntityField(name = "范围列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.assignableworkerstepvo.entityfield.rangelist.name", type = ApiParamType.JSONARRAY)
     private JSONArray rangeList;
-    @EntityField(name = "目标列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.assignableworkerstepvo.entityfield.grouplist.name", type = ApiParamType.JSONARRAY)
     private JSONArray groupList;
 
     public Long getId() {

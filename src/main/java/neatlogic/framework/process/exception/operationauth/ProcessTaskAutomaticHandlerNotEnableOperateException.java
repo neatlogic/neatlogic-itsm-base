@@ -22,6 +22,6 @@ public class ProcessTaskAutomaticHandlerNotEnableOperateException extends Proces
     private static final long serialVersionUID = 9216337410118158664L;
 
     public ProcessTaskAutomaticHandlerNotEnableOperateException(IOperationType operationType) {
-        super("外部调用节点不支持“{0}”操作", operationType.getText());
+        super("nfpeo.processtaskautomatichandlernotenableoperateexception.processtaskautomatichandlernotenableoperateexception", operationType.getText());
     }
 }

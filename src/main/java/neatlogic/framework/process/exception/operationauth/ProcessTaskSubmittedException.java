@@ -20,6 +20,6 @@ public class ProcessTaskSubmittedException extends ProcessTaskPermissionDeniedEx
     private static final long serialVersionUID = 9216337410118158629L;
 
     public ProcessTaskSubmittedException() {
-        super("工单已提交");
+        super("nfpeo.processtasksubmittedexception.processtasksubmittedexception");
     }
 }

@@ -9,12 +9,12 @@ public class CHANNELTYPE_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "服务类型管理权限";
+		return "nfpa.channeltype_modify.getauthdisplayname";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "对服务类型添加、修改和删除";
+		return "nfpa.channeltype_modify.getauthintroduction";
 	}
 
 	@Override

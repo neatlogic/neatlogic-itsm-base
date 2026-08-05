@@ -23,6 +23,6 @@ public class ProcessTaskStepTaskUserNotFoundException extends ProcessTaskRuntime
     private static final long serialVersionUID = 4518210359421738220L;
 
     public ProcessTaskStepTaskUserNotFoundException(Long stepTaskUserId) {
-        super("任务用户id: {0} 不存在，请刷新后重试", stepTaskUserId);
+        super("nfpept.processtasksteptaskusernotfoundexception.processtasksteptaskusernotfoundexception", stepTaskUserId);
     }
 }

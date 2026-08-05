@@ -7,6 +7,6 @@ public class ProcessNameRepeatException extends ApiRuntimeException {
 	private static final long serialVersionUID = -4617724920030245149L;
 
 	public ProcessNameRepeatException(String msg) {
-		super("流程图：“{0}”已存在", msg);
+		super("nfpep.processnamerepeatexception.processnamerepeatexception", msg);
 	}
 }

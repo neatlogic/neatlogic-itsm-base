@@ -20,10 +20,10 @@ import java.util.List;
 
 public class ProcessTaskStepVo extends BasePageVo {
 
-    @EntityField(name = "工单步骤id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.id.name", type = ApiParamType.LONG)
     private Long id;
     //	@ESKey(type = ESKeyType.PKEY, name ="processTaskId")
-    @EntityField(name = "工单id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.processtaskid.name", type = ApiParamType.LONG)
     private Long processTaskId;
     /**
      * 前置步骤id
@@ -37,27 +37,27 @@ public class ProcessTaskStepVo extends BasePageVo {
     private Long startProcessTaskStepId;
     private String processUuid;
     private String processStepUuid;
-    @EntityField(name = "步骤名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "步骤别名", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.aliasname.name", type = ApiParamType.STRING)
     private String aliasName;
-    @EntityField(name = "状态", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.status.name", type = ApiParamType.STRING)
     private String status;
-    @EntityField(name = "状态信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.statusvo.name", type = ApiParamType.JSONOBJECT)
     private ProcessTaskStepStatusVo statusVo;
-    @EntityField(name = "步骤处理器", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.handler.name", type = ApiParamType.STRING)
     private String handler;
-    @EntityField(name = "步骤类型", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.type.name", type = ApiParamType.STRING)
     private String type;
 //    private String formUuid;
     private Integer isActive = 0;
-    @EntityField(name = "激活时间", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.activetime.name", type = ApiParamType.LONG)
     private Date activeTime;
-    @EntityField(name = "开始时间", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.starttime.name", type = ApiParamType.LONG)
     private Date startTime;
-    @EntityField(name = "结束时间", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.endtime.name", type = ApiParamType.LONG)
     private Date endTime;
-    @EntityField(name = "超时时间点", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.expiretime.name", type = ApiParamType.LONG)
     private Date expireTime;
     private Long expireTimeLong;
     private String error;
@@ -67,11 +67,11 @@ public class ProcessTaskStepVo extends BasePageVo {
     private Boolean isAllDone = false;
     private Boolean isCurrentUserDone = false;
     private Boolean isWorkerPolicyListSorted = false;
-    //@EntityField(name = "处理人列表", type = ApiParamType.JSONARRAY)
+    //@EntityField(name = "nfpd.processtaskstepvo.entityfield.userlist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepUserVo> userList = new ArrayList<>();
     @JSONField(serialize = false)
     private List<ProcessTaskStepRelVo> relList = new ArrayList<>();
-    @EntityField(name = "有权限处理人列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.workerlist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepWorkerVo> workerList = new ArrayList<>();
     private List<ProcessTaskStepWorkerPolicyVo> workerPolicyList = new ArrayList<>();
 //    private List<ProcessTaskStepFormAttributeVo> formAttributeList = new ArrayList<>();
@@ -79,72 +79,72 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     @JSONField(serialize = false)
     private final JSONObject paramObj = new JSONObject();
-    @EntityField(name = "处理人", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.majoruser.name", type = ApiParamType.JSONOBJECT)
     private ProcessTaskStepUserVo majorUser;
-    @EntityField(name = "子任务处理人列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.minoruserlist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepUserVo> minorUserList = new ArrayList<>();
-    @EntityField(name = "暂存评论附件或上报描述附件", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.comment.name", type = ApiParamType.JSONOBJECT)
     private ProcessTaskStepReplyVo comment;
-    @EntityField(name = "评论附件列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.commentlist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepReplyVo> commentList = new ArrayList<>();
-    @EntityField(name = "动作列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.actionlist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskActionVo> actionList = new ArrayList<>();
-    @EntityField(name = "是否需要上传文件", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.isneeduploadfile.name", type = ApiParamType.INTEGER)
     private Integer isNeedUploadFile;
-    @EntityField(name = "是否需要回复框", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.isneedcontent.name", type = ApiParamType.INTEGER)
     private Integer isNeedContent;
-    @EntityField(name = "回复框帮助", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.contenthelp.name", type = ApiParamType.STRING)
     private String contentHelp;
-    @EntityField(name = "回复是否必填", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.isrequired.name", type = ApiParamType.INTEGER)
     private Integer isRequired;
-    @EntityField(name = "是否允许在移动端处理", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.isallowprocessonmobile.name", type = ApiParamType.INTEGER)
     private Integer isAllowProcessOnMobile;
-    @EntityField(name = "启用重审", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.enablereapproval.name", type = ApiParamType.INTEGER)
     private Integer enableReapproval;
-    @EntityField(name = "表单场景", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.formsceneuuid.name", type = ApiParamType.STRING)
     private String formSceneUuid;
-    @EntityField(name = "可替换文本列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.replaceabletextlist.name", type = ApiParamType.JSONARRAY)
     private JSONArray replaceableTextList;
-    @EntityField(name = "自定义按钮文本列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.custombuttonlist.name", type = ApiParamType.JSONARRAY)
     private JSONArray customButtonList;
-    @EntityField(name = "自定义状态文本列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.customstatuslist.name", type = ApiParamType.JSONARRAY)
     private JSONArray customStatusList;
-    @EntityField(name = "流转方向", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.flowdirection.name", type = ApiParamType.STRING)
     private String flowDirection;
-    @EntityField(name = "任务json", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.processtasksteptask.name", type = ApiParamType.JSONOBJECT)
     @Deprecated
     private JSONObject processTaskStepTask = new JSONObject();
-    @EntityField(name = "任务策略列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.taskconfiglist.name", type = ApiParamType.JSONARRAY)
     private List<TaskConfigVo> taskConfigList;
-    @EntityField(name = "任务列表", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.processtasksteptaskvo.name", type = ApiParamType.JSONOBJECT)
     private ProcessTaskStepTaskVo processTaskStepTaskVo;
-    @EntityField(name = "当前用户是否有权限看到该步骤内容", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.isview.name", type = ApiParamType.INTEGER)
     private Integer isView;
-    @EntityField(name = "可分配处理人的步骤列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.assignableworkersteplist.name", type = ApiParamType.JSONARRAY)
     private List<AssignableWorkerStepVo> assignableWorkerStepList = new ArrayList<>();
-    @EntityField(name = "时效列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.slatimelist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskSlaTimeVo> slaTimeList = new ArrayList<>();
     @JSONField(serialize = false)
     private Boolean isAutoGenerateId = false;
 
-    @EntityField(name = "步骤数据", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.processtaskstepdata.name", type = ApiParamType.JSONOBJECT)
     private JSONObject processTaskStepData;
-    @EntityField(name = "处理器特有的步骤信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.handlerstepinfo.name", type = ApiParamType.JSONOBJECT)
     private Object handlerStepInfo;
-    @EntityField(name = "向前步骤列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.forwardnextsteplist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> forwardNextStepList = new ArrayList<>();
-    @EntityField(name = "向后步骤列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.backwardnextsteplist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> backwardNextStepList = new ArrayList<>();
 
-    @EntityField(name = "提醒列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.processtaskstepremindlist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTaskStepRemindVo> processTaskStepRemindList = new ArrayList<>();
-    @EntityField(name = "原始处理人uuid", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.originaluser.name", type = ApiParamType.STRING)
     private String originalUser;
-    @EntityField(name = "原始处理人")
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.originaluservo.name")
     private UserVo originalUserVo;
-    @EntityField(name = "代办信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.processtaskstepagentvo.name", type = ApiParamType.JSONOBJECT)
     private ProcessTaskStepAgentVo processTaskStepAgentVo;
-    @EntityField(name = "回复模版", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.commenttemplate.name", type = ApiParamType.JSONOBJECT)
     private ProcessCommentTemplateVo commentTemplate;
     @JSONField(serialize = false)
     private int updateActiveTime;
@@ -161,21 +161,21 @@ public class ProcessTaskStepVo extends BasePageVo {
      */
     @JSONField(serialize = false)
     private List<Long> parallelActivateStepIdList = new ArrayList<>();
-    @EntityField(name = "标签列表", type = ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.processtaglist.name", type = ApiParamType.JSONARRAY)
     private List<ProcessTagVo> processTagList;
 
     @JSONField(serialize = false)
     private Long subProcessTaskId; //子工单id
 
-    @EntityField(name = "处理时查看步骤UUID列表",type= ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.viewprevnodeuuidlist.name",type= ApiParamType.JSONARRAY)
     private List<String> viewPrevNodeUuidList;
 
-    @EntityField(name = "处理时查看步骤列表",type= ApiParamType.JSONARRAY)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.viewprevnodelist.name",type= ApiParamType.JSONARRAY)
     private List<ProcessTaskStepVo> viewPrevNodeList;
 
-    @EntityField(name = "是否在当前步骤标签中", type = ApiParamType.INTEGER)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.isinthecurrentsteptab.name", type = ApiParamType.INTEGER)
     private Integer isInTheCurrentStepTab;
-    @EntityField(name = "配置信息", type = ApiParamType.JSONOBJECT)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.config.name", type = ApiParamType.JSONOBJECT)
     private JSONObject config;
 
     public ProcessTaskStepVo() {

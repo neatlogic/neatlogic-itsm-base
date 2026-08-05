@@ -24,6 +24,6 @@ public class ProcessTaskStepTaskNotCompleteException extends ProcessTaskRuntimeE
     private static final long serialVersionUID = -7336000187226502999L;
 
     public ProcessTaskStepTaskNotCompleteException(ProcessTaskStepTaskVo stepTaskVo) {
-        super("“{0}” 不满足流转策略: “{1}”", stepTaskVo.getTaskConfigName(), stepTaskVo.getTaskConfigPolicyName());
+        super("nfpept.processtasksteptasknotcompleteexception.processtasksteptasknotcompleteexception", stepTaskVo.getTaskConfigName(), stepTaskVo.getTaskConfigPolicyName());
     }
 }

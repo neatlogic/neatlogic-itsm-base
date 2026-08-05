@@ -20,6 +20,6 @@ public class ProcessTaskNotProcessTaskModifyException extends ProcessTaskPermiss
     private static final long serialVersionUID = 9216337410118158627L;
 
     public ProcessTaskNotProcessTaskModifyException() {
-        super("没有工单管理权限");
+        super("nfpeo.processtasknotprocesstaskmodifyexception.processtasknotprocesstaskmodifyexception");
     }
 }

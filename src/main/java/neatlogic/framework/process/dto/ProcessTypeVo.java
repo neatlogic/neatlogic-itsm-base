@@ -5,9 +5,9 @@ import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessTypeVo {
 
-	@EntityField(name = "流程类型id", type = ApiParamType.LONG)
+	@EntityField(name = "nfpd.processtypevo.entityfield.id.name", type = ApiParamType.LONG)
 	private Long id;
-	@EntityField(name = "流程类型名称", type = ApiParamType.STRING)
+	@EntityField(name = "nfpd.processtypevo.entityfield.name.name", type = ApiParamType.STRING)
 	private String name;
 	
 	public Long getId() {

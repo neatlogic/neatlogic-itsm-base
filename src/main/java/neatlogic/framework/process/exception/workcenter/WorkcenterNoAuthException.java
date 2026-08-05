@@ -19,6 +19,6 @@ public class WorkcenterNoAuthException extends ApiRuntimeException {
 	private static final long serialVersionUID = 834889107197646727L;
 
 	public WorkcenterNoAuthException(String name) {
-		super("您没有工单中心“{0}”权限，请联系管理员", name);
+		super("nfpew.workcenternoauthexception.workcenternoauthexception", name);
 	}
 }

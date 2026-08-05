@@ -2,12 +2,13 @@ package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.importexport.core.ImportExportHandlerType;
 
+import neatlogic.framework.util.$;
 public enum ProcessImportExportHandlerType implements ImportExportHandlerType {
-    PROCESS("process", "流程图"),
-    SCORE_TEMPLATE("scoreTemplate", "评分模板"),
-    COMMENT_TEMPLATE("commentTemplate", "回复模板"),
-    SUBTASK_POLICY("subtaskPolicy", "子任务策略"),
-    EOA_TEMPLATE("eoaTemplate", "EOA模板"),
+    PROCESS("process", "nfpc.processimportexporthandlertype.text.process"),
+    SCORE_TEMPLATE("scoreTemplate", "nfpc.processimportexporthandlertype.text.score_template"),
+    COMMENT_TEMPLATE("commentTemplate", "nfpc.processimportexporthandlertype.text.comment_template"),
+    SUBTASK_POLICY("subtaskPolicy", "nfpc.processimportexporthandlertype.text.subtask_policy"),
+    EOA_TEMPLATE("eoaTemplate", "nfpc.processimportexporthandlertype.text.eoa_template"),
     ;
     private String value;
     private String text;
@@ -23,6 +24,6 @@ public enum ProcessImportExportHandlerType implements ImportExportHandlerType {
 
     @Override
     public String getText() {
-        return this.text;
+        return $.t(text);
     }
 }

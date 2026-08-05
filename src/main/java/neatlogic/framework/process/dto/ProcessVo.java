@@ -41,7 +41,7 @@ public class ProcessVo extends BaseEditorVo {
 
     @EntityField(name = "common.referencecount", type = ApiParamType.INTEGER)
     private int referenceCount;
-    // @EntityField(name = "流程表单uuid", type = ApiParamType.STRING)
+    // @EntityField(name = "nfpd.processvo.entityfield.formuuid.name", type = ApiParamType.STRING)
     private String formUuid;
     @JSONField(serialize = false)
     private List<ProcessStepVo> stepList;

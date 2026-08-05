@@ -2,13 +2,14 @@ package neatlogic.framework.process.constvalue;
 
 import neatlogic.framework.process.stepremind.core.IProcessTaskStepRemindType;
 
+import neatlogic.framework.util.$;
 public enum ProcessTaskStepRemindType implements IProcessTaskStepRemindType {
 
-    BACK("back", "回退提醒", "回退了【processTaskStepName】，原因"),
-    REDO("redo", "回退提醒", "回退了工单，原因"),
-    TRANSFER("transfer", "转交提醒", ""),
-    ERROR("error", "异常提醒", ""),
-    AUTOMATIC_ERROR("automaticerror", "外部调用异常提醒", "");
+    BACK("back", "nfpc.processtaskstepremindtype.text.back", "nfpc.processtaskstepremindtype.description.back"),
+    REDO("redo", "nfpc.processtaskstepremindtype.text.redo", "nfpc.processtaskstepremindtype.description.redo"),
+    TRANSFER("transfer", "nfpc.processtaskstepremindtype.text.transfer", ""),
+    ERROR("error", "nfpc.processtaskstepremindtype.text.error", ""),
+    AUTOMATIC_ERROR("automaticerror", "nfpc.processtaskstepremindtype.text.automatic_error", "");
     private String value;
     private String text;
     private String title;
@@ -26,7 +27,7 @@ public enum ProcessTaskStepRemindType implements IProcessTaskStepRemindType {
 
     @Override
     public String getText() {
-        return text;
+        return $.t(text);
     }
 
     @Override

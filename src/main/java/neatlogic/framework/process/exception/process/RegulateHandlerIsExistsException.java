@@ -18,6 +18,6 @@ public class RegulateHandlerIsExistsException extends ApiRuntimeException {
 
 
 	public RegulateHandlerIsExistsException(String name) {
-		super("参数处理器{0}已存在", name);
+		super("nfpep.regulatehandlerisexistsexception.regulatehandlerisexistsexception", name);
 	}
 }

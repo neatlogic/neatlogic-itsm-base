@@ -18,11 +18,11 @@ import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
 
 public class TagTypeVo extends BasePageVo {
-    @EntityField(name = "id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpdc.tagtypevo.entityfield.id.name", type = ApiParamType.LONG)
     private Long id;
-    @EntityField(name = "唯一标识", type = ApiParamType.STRING)
+    @EntityField(name = "nfpdc.tagtypevo.entityfield.name.name", type = ApiParamType.STRING)
     private String name;
-    @EntityField(name = "名称", type = ApiParamType.STRING)
+    @EntityField(name = "nfpdc.tagtypevo.entityfield.label.name", type = ApiParamType.STRING)
     private String label;
 
     public Long getId() {

@@ -4,6 +4,7 @@ import neatlogic.framework.notify.constvalue.CommonNotifyParam;
 import neatlogic.framework.process.notify.constvalue.ProcessTaskNotifyParam;
 import neatlogic.framework.process.notify.constvalue.ProcessTaskStepNotifyParam;
 import neatlogic.framework.process.notify.constvalue.ProcessTaskStepTaskNotifyParam;
+import neatlogic.framework.util.$;
 import org.springframework.util.ClassUtils;
 
 import neatlogic.framework.notify.core.NotifyHandlerType;
@@ -11,6 +12,10 @@ import neatlogic.framework.process.notify.constvalue.ProcessTaskStepNotifyTrigge
 
 public interface IDefaultTemplate {
 
+    /**
+     * @deprecated Use {@link #getType()} to obtain the localized template type.
+     */
+    @Deprecated
     String DEFAULT_TEMPLATE_TYPE = "默认";
 
     String DEFAULT_TEMPLATE_UUID_PREFIX = "default_";
@@ -28,6 +33,10 @@ public interface IDefaultTemplate {
 
     String PROCESSTASK_DETAILS_URL = "${homeUrl}/process.html#/task-detail?processTaskId=${DATA.id}";
     String PROCESSTASK_SERIALNUMBER_TITLE = "【" + ProcessTaskNotifyParam.SERIALNUMBER.getFreemarkerTemplate() + "-" + ProcessTaskNotifyParam.TITLE.getFreemarkerTemplate() + "】";
+    /**
+     * @deprecated Use {@link #getProcessTaskDetailsLink()} to obtain localized link text.
+     */
+    @Deprecated
     String PROCESSTASK_DETAILS_LINK = "查看详情：<a target=\"_blank\" href=" + PROCESSTASK_DETAILS_URL + ">【工单链接】</a>";
 
     public default Long getId() {
@@ -40,7 +49,14 @@ public interface IDefaultTemplate {
     }
 
     public default String getType() {
-        return DEFAULT_TEMPLATE_TYPE;
+        return $.t("nfpnc.idefaulttemplate.defaulttemplatetype");
+    }
+
+    /**
+     * Builds the localized task details link while preserving the Freemarker URL.
+     */
+    public default String getProcessTaskDetailsLink() {
+        return $.t("nfpnc.idefaulttemplate.processtaskdetailslink", PROCESSTASK_DETAILS_URL);
     }
 
     public default int getIsReadOnly() {

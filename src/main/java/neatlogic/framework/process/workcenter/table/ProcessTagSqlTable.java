@@ -21,7 +21,7 @@ public class ProcessTagSqlTable implements ISqlTable {
 
     public enum FieldEnum {
         ID("id", new I18n("ID"), "tagId"),
-        NAME("name", new I18n("标签名"), " tagName");
+        NAME("name", new I18n("nfpwt.processtagsqltable.text.name"), " tagName");
         private final String name;
         private final I18n text;
         private final String proName;

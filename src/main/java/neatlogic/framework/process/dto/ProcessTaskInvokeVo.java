@@ -6,13 +6,13 @@ import neatlogic.framework.restful.annotation.EntityField;
 import java.io.Serializable;
 
 public class ProcessTaskInvokeVo implements Serializable {
-    @EntityField(name = "工单id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtaskinvokevo.entityfield.processtaskid.name", type = ApiParamType.LONG)
     private Long processTaskId;
-    @EntityField(name = "来源", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskinvokevo.entityfield.source.name", type = ApiParamType.STRING)
     private String source;
-    @EntityField(name = "来源类型", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskinvokevo.entityfield.type.name", type = ApiParamType.STRING)
     private String type;
-    @EntityField(name = "来源id", type = ApiParamType.LONG)
+    @EntityField(name = "nfpd.processtaskinvokevo.entityfield.invokeid.name", type = ApiParamType.LONG)
     private Long invokeId;
 
     public Long getProcessTaskId() {

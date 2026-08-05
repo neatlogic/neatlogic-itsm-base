@@ -20,6 +20,6 @@ public class ProcessTaskStepNotMajorUserException extends ProcessTaskPermissionD
     private static final long serialVersionUID = 9216337410118158654L;
 
     public ProcessTaskStepNotMajorUserException() {
-        super("您不是步骤处理人");
+        super("nfpeo.processtaskstepnotmajoruserexception.processtaskstepnotmajoruserexception");
     }
 }

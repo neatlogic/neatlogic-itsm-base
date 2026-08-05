@@ -9,12 +9,12 @@ public class PRIORITY_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "优先级管理权限";
+		return "nfpa.priority_modify.getauthdisplayname";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "对优先级添加、修改和删除";
+		return "nfpa.priority_modify.getauthintroduction";
 	}
 
 	@Override

@@ -20,6 +20,6 @@ public class ProcessTaskNotProcessUserException extends ProcessTaskPermissionDen
     private static final long serialVersionUID = 9216337410118158643L;
 
     public ProcessTaskNotProcessUserException() {
-        super("您不是工单干系人");
+        super("nfpeo.processtasknotprocessuserexception.processtasknotprocessuserexception");
     }
 }

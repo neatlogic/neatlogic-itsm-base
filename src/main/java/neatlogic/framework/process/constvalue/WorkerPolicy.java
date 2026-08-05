@@ -3,14 +3,14 @@ package neatlogic.framework.process.constvalue;
 import neatlogic.framework.util.I18n;
 
 public enum WorkerPolicy {
-    ASSIGN("assign", new I18n("自定义")),
+    ASSIGN("assign", new I18n("nfpc.workerpolicy.text.assign")),
     //MANUAL("manual", "处理人抢单"),
-    AUTOMATIC("automatic", new I18n("分派器")),
+    AUTOMATIC("automatic", new I18n("nfpc.workerpolicy.text.automatic")),
     //FROMER("fromer", "前置步骤指定"),
-    COPY("copy", new I18n("复制前置步骤处理人")),
+    COPY("copy", new I18n("nfpc.workerpolicy.text.copy")),
     //ATTRIBUTE("attribute", "属性值"),
-    FORM("form", new I18n("表单值")),
-    PRESTEPASSIGN("prestepassign", new I18n("由前置步骤处理人指定"));
+    FORM("form", new I18n("nfpc.workerpolicy.text.form")),
+    PRESTEPASSIGN("prestepassign", new I18n("nfpc.workerpolicy.text.prestepassign"));
     private String policy;
     private I18n text;
 

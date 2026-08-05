@@ -27,9 +27,9 @@ public class ChannelTypeSqlTable implements ISqlTable {
     }
 
     public enum FieldEnum {
-        UUID("uuid", new I18n("服务类型UUID"),"channelTypeUuid"),
-        NAME("name",new I18n("服务类型名"),"channelTypeName"),
-        COLOR("color",new I18n("服务类型颜色"),"channelTypeColor")
+        UUID("uuid", new I18n("nfpwt.channeltypesqltable.text.uuid"),"channelTypeUuid"),
+        NAME("name",new I18n("nfpwt.channeltypesqltable.text.name"),"channelTypeName"),
+        COLOR("color",new I18n("nfpwt.channeltypesqltable.text.color"),"channelTypeColor")
         ;
         private final String name;
         private final I18n text;

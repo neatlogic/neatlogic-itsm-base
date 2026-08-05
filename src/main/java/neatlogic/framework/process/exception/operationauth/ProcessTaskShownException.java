@@ -20,6 +20,6 @@ public class ProcessTaskShownException extends ProcessTaskPermissionDeniedExcept
     private static final long serialVersionUID = 9216337410118158631L;
 
     public ProcessTaskShownException() {
-        super("工单已显示");
+        super("nfpeo.processtaskshownexception.processtaskshownexception");
     }
 }

@@ -9,12 +9,12 @@ public class PROCESSTASK_MODIFY extends AuthBase {
 
 	@Override
 	public String getAuthDisplayName() {
-		return "工单管理权限";
+		return "nfpa.processtask_modify.getauthdisplayname";
 	}
 
 	@Override
 	public String getAuthIntroduction() {
-		return "对工单隐藏/显示和删除";
+		return "nfpa.processtask_modify.getauthintroduction";
 	}
 
 	@Override

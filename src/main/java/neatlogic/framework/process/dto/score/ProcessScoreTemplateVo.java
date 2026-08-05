@@ -6,16 +6,16 @@ import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessScoreTemplateVo extends BaseEditorVo {
 
-	@EntityField(name = "流程UUID", type = ApiParamType.STRING)
+	@EntityField(name = "nfpds.processscoretemplatevo.entityfield.processuuid.name", type = ApiParamType.STRING)
 	private String processUuid;
-	@EntityField(name = "评分模版ID", type = ApiParamType.LONG)
+	@EntityField(name = "nfpds.processscoretemplatevo.entityfield.scoretemplateid.name", type = ApiParamType.LONG)
 	private Long scoreTemplateId;
-//	@EntityField(name = "是否启用评分（0：否，1：是）", type = ApiParamType.INTEGER)
+//	@EntityField(name = "nfpds.processscoretemplatevo.entityfield.isactive.name", type = ApiParamType.INTEGER)
 //	private Integer isActive;
-	@EntityField(name = "评分配置", type = ApiParamType.STRING)
+	@EntityField(name = "nfpds.processscoretemplatevo.entityfield.config.name", type = ApiParamType.STRING)
 	private String config;
 
-	@EntityField(name = "是否自动评分", type = ApiParamType.INTEGER)
+	@EntityField(name = "nfpds.processscoretemplatevo.entityfield.isauto.name", type = ApiParamType.INTEGER)
 	private Integer isAuto;
 	
 	public ProcessScoreTemplateVo() {}

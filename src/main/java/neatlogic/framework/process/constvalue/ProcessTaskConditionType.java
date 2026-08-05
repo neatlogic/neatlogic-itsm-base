@@ -1,9 +1,11 @@
 package neatlogic.framework.process.constvalue;
 
+import neatlogic.framework.util.$;
+
 public enum ProcessTaskConditionType {
 
-    WORKCENTER("workcenter", "工单中心"),
-    PROCESS("process", "流程");;
+    WORKCENTER("workcenter", "nfpc.processtaskconditiontype.text.workcenter"),
+    PROCESS("process", "nfpc.processtaskconditiontype.text.process");;
 
     private final String value;
     private final String text;
@@ -19,7 +21,7 @@ public enum ProcessTaskConditionType {
 
 
     public String getText() {
-        return text;
+        return $.t(text);
     }
 
 }

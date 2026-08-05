@@ -16,7 +16,7 @@ import neatlogic.framework.notify.core.INotifyPolicyHandlerGroup;
 import neatlogic.framework.util.$;
 @Deprecated
 public enum ProcessNotifyPolicyHandlerGroup implements INotifyPolicyHandlerGroup {
-    TASKSTEP("TaskStep", "工单步骤");
+    TASKSTEP("TaskStep", "nfpnc.processnotifypolicyhandlergroup.text.taskstep");
     private final String value;
     private final String text;
 

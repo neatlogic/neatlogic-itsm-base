@@ -20,6 +20,6 @@ public class ProcessTaskStepPendingException extends ProcessTaskPermissionDenied
     private static final long serialVersionUID = 9216337410118158651L;
 
     public ProcessTaskStepPendingException() {
-        super("步骤未开始");
+        super("nfpeo.processtasksteppendingexception.processtasksteppendingexception");
     }
 }

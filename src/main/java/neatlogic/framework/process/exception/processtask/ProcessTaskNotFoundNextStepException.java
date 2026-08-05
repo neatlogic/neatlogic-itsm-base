@@ -16,6 +16,6 @@ public class ProcessTaskNotFoundNextStepException extends ProcessTaskException {
     private static final long serialVersionUID = 4314481891500443154L;
 
     public ProcessTaskNotFoundNextStepException(Long processTaskId, String stepName, Long nextStepId) {
-        super("工单：{0}的步骤：{1} 找不到可流转路径，参数nextStepId为{2}", processTaskId, stepName, nextStepId != null ? nextStepId : "null");
+        super("nfpep.processtasknotfoundnextstepexception.processtasknotfoundnextstepexception", processTaskId, stepName, nextStepId != null ? nextStepId : "null");
     }
 }
