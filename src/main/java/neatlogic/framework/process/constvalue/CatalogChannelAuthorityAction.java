@@ -16,6 +16,8 @@ import neatlogic.framework.util.$;
 
 public enum CatalogChannelAuthorityAction {
     REPORT("report", "nfpc.catalogchannelauthorityaction.text.report"),
+    // 代报授权用于控制当前用户是否可以选择他人作为工单上报人。
+    DELEGATE("delegate", "nfpc.catalogchannelauthorityaction.text.delegate"),
     VIEW("view", "nfpc.catalogchannelauthorityaction.text.view"),
     ;
 
