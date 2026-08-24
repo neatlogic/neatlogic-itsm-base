@@ -15,6 +15,6 @@ import neatlogic.framework.exception.core.ApiRuntimeException;
 public class ProcessTaskNotDelegateReportPermissionException extends ApiRuntimeException {
 
     public ProcessTaskNotDelegateReportPermissionException(String name) {
-        super("你没有{0}服务的代报权限", name);
+        super("nfpep.processtasknotdelegatereportpermissionexception.processtasknotdelegatereportpermissionexception", name);
     }
 }
