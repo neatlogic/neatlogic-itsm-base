@@ -49,6 +49,10 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Seria
 	@EntityField(name = "common.reportauthoritylist", type = ApiParamType.JSONARRAY)
 	private List<String> reportAuthorityList = new ArrayList<>();
 
+	// 代报授权列表，保存时对应 catalog_authority.action = delegate。
+	@EntityField(name = "common.delegateauthoritylist", type = ApiParamType.JSONARRAY)
+	private List<String> delegateAuthorityList = new ArrayList<>();
+
 	@EntityField(name = "common.viewauthoritylist", type = ApiParamType.JSONARRAY)
 	private List<String> viewAuthorityList = new ArrayList<>();
 	
@@ -213,6 +217,14 @@ public class CatalogVo extends BasePageVo implements Comparable<CatalogVo>,Seria
 
 	public void setReportAuthorityList(List<String> reportAuthorityList) {
 		this.reportAuthorityList = reportAuthorityList;
+	}
+
+	public List<String> getDelegateAuthorityList() {
+		return delegateAuthorityList;
+	}
+
+	public void setDelegateAuthorityList(List<String> delegateAuthorityList) {
+		this.delegateAuthorityList = delegateAuthorityList;
 	}
 
 	public List<String> getViewAuthorityList() {

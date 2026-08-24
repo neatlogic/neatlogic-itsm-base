@@ -83,8 +83,16 @@ public class ChannelVo extends BasePageVo {
     @EntityField(name = "common.reportauthoritylist", type = ApiParamType.JSONARRAY)
     private List<String> reportAuthorityList = new ArrayList<>();
 
+    // 代报授权列表，保存时对应 channel_authority.action = delegate。
+    @EntityField(name = "common.delegateauthoritylist", type = ApiParamType.JSONARRAY)
+    private List<String> delegateAuthorityList = new ArrayList<>();
+
     @EntityField(name = "common.viewauthoritylist", type = ApiParamType.JSONARRAY)
     private List<String> viewAuthorityList = new ArrayList<>();
+
+    // 当前登录人是否具备此服务的代报权限，供工单上报页控制上报人控件。
+    @EntityField(name = "common.isdelegateauthority", type = ApiParamType.BOOLEAN)
+    private Boolean isDelegateAuthority;
 
     @EntityField(name = "term.itsm.channeltypeuuid", type = ApiParamType.STRING)
     private String channelTypeUuid;
@@ -138,6 +146,8 @@ public class ChannelVo extends BasePageVo {
         this.parentUuid = channelVo.parentUuid;
         this.contentHelp = channelVo.contentHelp;
         this.sla = channelVo.sla;
+        this.delegateAuthorityList = channelVo.delegateAuthorityList;
+        this.isDelegateAuthority = channelVo.isDelegateAuthority;
         this.channelTypeUuid = channelVo.channelTypeUuid;
         this.support = channelVo.support;
         this.sort = channelVo.sort;
@@ -320,12 +330,28 @@ public class ChannelVo extends BasePageVo {
         this.reportAuthorityList = reportAuthorityList;
     }
 
+    public List<String> getDelegateAuthorityList() {
+        return delegateAuthorityList;
+    }
+
+    public void setDelegateAuthorityList(List<String> delegateAuthorityList) {
+        this.delegateAuthorityList = delegateAuthorityList;
+    }
+
     public List<String> getViewAuthorityList() {
         return viewAuthorityList;
     }
 
     public void setViewAuthorityList(List<String> viewAuthorityList) {
         this.viewAuthorityList = viewAuthorityList;
+    }
+
+    public Boolean getIsDelegateAuthority() {
+        return isDelegateAuthority;
+    }
+
+    public void setIsDelegateAuthority(Boolean delegateAuthority) {
+        isDelegateAuthority = delegateAuthority;
     }
 
     public String getChannelTypeUuid() {
