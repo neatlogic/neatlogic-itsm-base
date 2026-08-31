@@ -32,7 +32,7 @@ public enum ProcessTaskStepRemindType implements IProcessTaskStepRemindType {
 
     @Override
     public String getTitle() {
-        return title;
+        return $.t(title);
     }
 
 
