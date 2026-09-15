@@ -27,7 +27,6 @@ import java.util.*;
 @RootComponent
 public class ProcessTaskSourceFactory extends ModuleInitializedListenerBase {
     Logger logger = LoggerFactory.getLogger(ProcessTaskSourceFactory.class);
-    private static final Map<String, String> sourcelValueTextMap = new HashMap<>();
     private static final Map<String, IProcessTaskSource> sourcelMap = new HashMap<>();
     private static final Map<String, IProcessTaskSource> handlerMap = new HashMap<>();
     private static final List<IProcessTaskSource> sourceList = new ArrayList<>();
@@ -46,7 +45,6 @@ public class ProcessTaskSourceFactory extends ModuleInitializedListenerBase {
                 }
                 Object[] objects = c.getEnumConstants();
                 for (Object o : objects) {
-                    sourcelValueTextMap.put(((IProcessTaskSource) o).getValue(), ((IProcessTaskSource) o).getText());
                     sourcelMap.put(((IProcessTaskSource) o).getValue(),(IProcessTaskSource)o);
                 }
             } catch (Exception e) {
@@ -55,8 +53,10 @@ public class ProcessTaskSourceFactory extends ModuleInitializedListenerBase {
         }
     }
 
+    /** 根据当前请求语言获取来源名称，避免启动时缓存的文案固定为单一语言。 */
     public static String getSourceName(String value) {
-        return sourcelValueTextMap.get(value);
+        IProcessTaskSource source = sourcelMap.get(value);
+        return source != null ? source.getText() : null;
     }
 
     public static IProcessTaskSource getSource(String value) {
