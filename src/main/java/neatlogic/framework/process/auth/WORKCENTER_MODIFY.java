@@ -1,7 +1,6 @@
 package neatlogic.framework.process.auth;
 
 import neatlogic.framework.auth.core.AuthBase;
-
 import java.util.Arrays;
 import java.util.List;
 
