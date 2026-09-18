@@ -71,6 +71,8 @@ public interface IProcessTaskCrossoverMapper extends ICrossoverService {
 
     List<ProcessTaskStepVo> getProcessTaskStepListByProcessTaskId(Long processTaskId);
 
+    List<ProcessTaskStepVo> getProcessTaskStepByProcessTaskIdAndStepName(ProcessTaskStepVo vo);
+
     ProcessTaskStepVo getProcessTaskStepBaseInfoById(Long processTaskStepId);
 
     ProcessTaskVo getProcessTaskById(Long id);
