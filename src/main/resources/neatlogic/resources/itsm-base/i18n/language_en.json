@@ -1,0 +1,2667 @@
+{
+  "nfpa": {
+    "batch_report_process_task": {
+      "getauthdisplayname": "Batch Task Submission Permission",
+      "getauthintroduction": "Submit tasks in batches for services the user is authorized to access."
+    },
+    "catalog_modify": {
+      "getauthdisplayname": "Service Catalog Management Permission",
+      "getauthintroduction": "Add, modify, and delete service catalogs."
+    },
+    "channeltype_modify": {
+      "getauthdisplayname": "Service Type Management Permission",
+      "getauthintroduction": "Add, modify, and delete service types."
+    },
+    "priority_modify": {
+      "getauthdisplayname": "Priority Management Permission",
+      "getauthintroduction": "Add, modify, and delete priorities."
+    },
+    "process": {
+      "getauthdisplayname": "IT Service API Access Permission",
+      "getauthintroduction": "Access IT service data query APIs."
+    },
+    "process_base": {
+      "getauthdisplayname": "IT Service Access Permission",
+      "getauthintroduction": "View basic IT service features."
+    },
+    "process_comment_template_modify": {
+      "getauthdisplayname": "System Reply Template Management Permission",
+      "getauthintroduction": "Add, modify, and delete system reply templates."
+    },
+    "process_modify": {
+      "getauthdisplayname": "Workflow Management Permission",
+      "getauthintroduction": "Add, modify, and delete workflows."
+    },
+    "process_step_handler_modify": {
+      "getauthdisplayname": "Workflow Step Management Permission",
+      "getauthintroduction": "Modify component configurations in workflow step management."
+    },
+    "processtask_modify": {
+      "getauthdisplayname": "Task Management Permission",
+      "getauthintroduction": "Hide, show, and delete tasks."
+    },
+    "score_template_modify": {
+      "getauthdisplayname": "Rating Template Management Permission",
+      "getauthintroduction": "Add, modify, and delete rating templates."
+    },
+    "workcenter_advanced_search": {
+      "getauthdisplayname": "Work Center Advanced Search Permission",
+      "getauthintroduction": "Use advanced search in the work center."
+    },
+    "workcenter_modify": {
+      "getauthdisplayname": "Work Center Management Permission",
+      "getauthintroduction": "Add, modify, authorize, and delete system categories in the work center, and authorize built-in categories."
+    },
+    "workcenter_new_type": {
+      "getauthdisplayname": "Work Center Save as New Category Permission",
+      "getauthintroduction": "Save searches as new categories in the work center. Categories saved this way are not constrained by fixed conditions and are hidden when this permission is revoked."
+    }
+  },
+  "nfpc": {
+    "autoexecjobprocesssource": {
+      "text": {
+        "itsm": "ITSM"
+      }
+    },
+    "autoexecprocessstephandlertype": {
+      "text": {
+        "autoexec": "Autoexec"
+      }
+    },
+    "catalogchannelauthorityaction": {
+      "text": {
+        "delegate": "Proxy work order",
+        "report": "Submit Task",
+        "view": "View Task"
+      }
+    },
+    "conditionconfigtype": {
+      "text": {
+        "default": "Default",
+        "workcenter": "Work Center"
+      }
+    },
+    "conditionprocesstaskoptions": {
+      "text": {
+        "channeltype": "Service Type",
+        "content": "Content",
+        "owner": "Requester",
+        "ownercenter": "Requester Center",
+        "ownercompany": "Requester Company",
+        "ownerdepartment": "Ownerdepartment",
+        "ownergroup": "Ownergroup",
+        "ownerlevel": "Ownerlevel",
+        "ownerrole": "Ownerrole",
+        "ownerteam": "Ownerteam",
+        "owneruserid": "Owneruserid",
+        "priority": "Priority",
+        "region": "Region",
+        "starttime": "Starttime",
+        "stepid": "Stepid",
+        "taskid": "Taskid",
+        "title": "Title"
+      }
+    },
+    "itsmtenantconfig": {
+      "description": {
+        "processtask_tab_layout": "\t\"description\": \"The position field pins a tab: above pins it to the top and below pins it to the bottom. In each layoutList item, key and top are required and description is optional. key uniquely identifies the tab. top controls whether the tab is pinned by default; true means pinned. The layoutList item order defines the pinned order from top to bottom and left to right. Tabs explicitly configured in layoutList appear first. Supported key values: report (Submission Content), collection (Task Collection), dataconversion (Data Conversion), eoa (Electronic Approval), subProcess (Subworkflow), autoexec (Automation), automatic (Automatic Processing), changecreate (Change Details), changehandle (Change Details), cmdbsync (Configuration Item Synchronization), createjob (Create Job), diagram (Architecture Design), taskConfigList (Step Task Policy), preNode (Previous-Step Node Information (EOA)), step (Step Log), activity (Timeline), relevance (Related Tasks), markrepeat (Duplicate Event), file (Attachment List), reportingHistory (Submission History).\"\n"
+      },
+      "displaymodeaftertimeout": "Display method after Task timeout, optional values naturalTime | workTime",
+      "processtaskstepautoapprovalshow": "Do you want to display the automatic approval function for Task steps",
+      "processtaskstepenablecomment": "Task step reply function",
+      "processtasktablayout": "Global default tab layout for Task details page",
+      "processtaskworkerpolicyisonlyonceexecute": "Is the Task step handler allocation strategy only assigned once, with a default of 0? When the step is reactivated, the handler will be reassigned. If set to 1, the old handler will be used when the step is reactivated",
+      "slatimedisplaymode": "Display method for Task timeliness, with optional values of naturalTime | workTime",
+      "steplist": {
+        "show": "Does the Task detail page display step logs by default"
+      },
+      "text": {
+        "processtask_step_in_operation_audit_enabled": "Enabled",
+        "processtask_tab_layout": "Layout"
+      },
+      "workcentercustomlimit": "The 'Personal Category' in the Work Center exceeds the limit and cannot add custom categories",
+      "workcenterprocesstasknewpage": "Click on the Task center to open a new page. The default value is 0, which means IT will not be opened by default",
+      "workcenterrefresh": "Does the Work Center automatically refresh"
+    },
+    "knowledgesyncsource": {
+      "text": {
+        "processtask": "Task"
+      }
+    },
+    "processfieldtype": {
+      "text": {
+        "common": "Common",
+        "constant": "Constant",
+        "custom": "Custom",
+        "form": "Form Attribute"
+      }
+    },
+    "processflowdirection": {
+      "text": {
+        "backward": "Backward",
+        "forward": "Forward"
+      }
+    },
+    "processfromtype": {
+      "text": {
+        "eoatemplate": "Eoatemplate"
+      }
+    },
+    "processimportexporthandlertype": {
+      "text": {
+        "comment_template": "Template",
+        "eoa_template": "Template",
+        "process": "Process",
+        "score_template": "Template",
+        "subtask_policy": "Policy"
+      }
+    },
+    "processsteptype": {
+      "text": {
+        "end": "End",
+        "process": "Process",
+        "start": "Start"
+      }
+    },
+    "processtaskauditdetailtype": {
+      "text": {
+        "assignworkerlist": "Assignworkerlist",
+        "automaticinfo": "Automaticinfo",
+        "cause": "Reason",
+        "channeltyperelation": "Channeltyperelation",
+        "content": "Content",
+        "description": "Description",
+        "file": "File",
+        "focususer": "Focususer",
+        "form": "Form",
+        "opinion": "Opinion",
+        "priority": "Priority",
+        "processtask": "Task",
+        "processtasklist": "Task",
+        "restfulaction": "Restfulaction",
+        "rule": "Rule",
+        "score": "Rate",
+        "taglist": "Tag",
+        "task": "Step Task",
+        "title": "Title",
+        "workerlist": "Assignee"
+      }
+    },
+    "processtaskaudittype": {
+      "description": {
+        "abortprocesstask": "Cancel Task",
+        "active": "Activate [${DATA.processTaskStepName}]",
+        "autocancelrepeat": "Automatically Cancel Duplicate Task ${DATA.repeatProcessTaskSerialNumber} ${DATA.repeatProcessTaskTitle}",
+        "back": "Roll Back Step ${DATA.processTaskStepName} ${DATA.nextStepName}",
+        "bindrepeat": "Mark as Duplicate Task ${DATA.repeatProcessTaskSerialNumber} ${DATA.repeatProcessTaskTitle}",
+        "boundrepeat": "Marked as Duplicate Event ${DATA.repeatProcessTaskSerialNumber} ${DATA.repeatProcessTaskTitle}",
+        "comment": "Reply [${DATA.processTaskStepName}]",
+        "complete": "Complete [${DATA.processTaskStepName}]",
+        "completetask": "Complete ${DATA.replaceable_task}[${DATA.processTaskStepName}]",
+        "condition": "Condition",
+        "createtask": "Create Task ${DATA.replaceable_task} ${DATA.processTaskStepName}",
+        "deletecomment": "Delete Reply [${DATA.processTaskStepName}]",
+        "deleterelation": "Unlink Task",
+        "deletetask": "Delete ${DATA.replaceable_task}[${DATA.processTaskStepName}]",
+        "deletetaskfile": "${DATA.replaceable_task}[${DATA.processTaskStepName}] Delete Attachment",
+        "editcomment": "Edit Reply [${DATA.processTaskStepName}]",
+        "edittask": "Edit ${DATA.replaceable_task}[${DATA.processTaskStepName}]",
+        "focustask": "Follow Task",
+        "pause": "Pause Step ${DATA.processTaskStepName}",
+        "reapproval": "Reapprove Step ${DATA.processTaskStepName}",
+        "recover": "Recover [${DATA.processTaskStepName}]",
+        "recoverprocesstask": "Restore Task",
+        "redo": "Roll Back Task ${DATA.processTaskStepName}",
+        "relation": "Link Task",
+        "reportrelation": "Submit and Link Task",
+        "retreat": "Withdraw [${DATA.processTaskStepName}]",
+        "savetaskfile": "Upload Task Attachment ${DATA.replaceable_task} ${DATA.processTaskStepName}",
+        "score": "Rate Task",
+        "start": "Start [${DATA.processTaskStepName}]",
+        "startprocess": "Submit Task",
+        "transfer": "Transfer [${DATA.processTaskStepName}]",
+        "transferknowledge": "Convert Task to Knowledge",
+        "transferreport": "Transfer and Link Task",
+        "unbindrepeat": "Remove Duplicate Mark ${DATA.repeatProcessTaskSerialNumber} ${DATA.repeatProcessTaskTitle}",
+        "unboundrepeat": "Removed from Duplicate Event ${DATA.repeatProcessTaskSerialNumber} ${DATA.repeatProcessTaskTitle}",
+        "undofocustask": "Unfollow Task",
+        "update": "Update Task",
+        "updatefocususer": "Update Task Followers",
+        "updateform": "Updateform",
+        "urge": "Send Reminder"
+      },
+      "text": {
+        "abortprocesstask": "Cancel",
+        "active": "Activate",
+        "autocancelrepeat": "Automatically Cancel Duplicate Task",
+        "back": "Roll Back",
+        "bindrepeat": "Mark as Duplicate Task",
+        "boundrepeat": "Marked as Duplicate Event",
+        "comment": "Comment",
+        "complete": "Complete",
+        "completetask": "Completetask",
+        "condition": "Condition",
+        "createtask": "Create Task",
+        "deletecomment": "Deletecomment",
+        "deleterelation": "Unlink Task",
+        "deletetask": "Deletetask",
+        "deletetaskfile": "Deletetaskfile",
+        "editcomment": "Editcomment",
+        "edittask": "Edittask",
+        "focustask": "Follow Task",
+        "pause": "Pause",
+        "reapproval": "Reapprove Step",
+        "recover": "Recover",
+        "recoverprocesstask": "Recover",
+        "redo": "Roll Back",
+        "relation": "Link Task",
+        "reportrelation": "Submit and Link Task",
+        "restfulaction": "Restfulaction",
+        "retreat": "Withdraw",
+        "savetaskfile": "Upload Task Attachment",
+        "score": "Rate",
+        "start": "Start",
+        "startprocess": "Submit Task",
+        "transfer": "Transfer",
+        "transferknowledge": "Convert Task to Knowledge",
+        "transferreport": "Transfer and Link Task",
+        "unbindrepeat": "Remove Duplicate Mark",
+        "unboundrepeat": "Removed from Duplicate Event",
+        "undofocustask": "Unfollow Task",
+        "update": "Update",
+        "updatefocususer": "Update Task Followers",
+        "updateform": "Updateform",
+        "urge": "Reminder"
+      }
+    },
+    "processtaskconditiontype": {
+      "text": {
+        "process": "Workflow",
+        "workcenter": "Work Center"
+      }
+    },
+    "processtaskevent": {
+      "text": {
+        "abort": "Abort",
+        "active": "Activate",
+        "failed": "Failed",
+        "handle": "Handle",
+        "redo": "Roll Back Task",
+        "succeed": "Succeeded",
+        "timeout": "Timeout"
+      }
+    },
+    "processtaskgroupsearch": {
+      "processusertype": "Task stakeholders"
+    },
+    "processtaskoperationtype": {
+      "text": {
+        "processtask_abort": "Cancel",
+        "processtask_copyprocesstask": "Copyprocesstask",
+        "processtask_delete": "Delete",
+        "processtask_focususer_update": "Update",
+        "processtask_hide": "Hide",
+        "processtask_markrepeat": "Markrepeat",
+        "processtask_reactivate": "Reactivate",
+        "processtask_recover": "Recover",
+        "processtask_redo": "Roll Back",
+        "processtask_retreat": "Withdraw",
+        "processtask_score": "Rate",
+        "processtask_show": "Show",
+        "processtask_start": "Start",
+        "processtask_transfer": "Transfer",
+        "processtask_transferreport": "Transferreport",
+        "processtask_update": "Update",
+        "processtask_urge": "Reminder",
+        "processtask_view": "View",
+        "processtask_work": "Work",
+        "transfer_eoa_step": "Step"
+      }
+    },
+    "processtaskparams": {
+      "text": {
+        "actiontriggeruser": "Actiontriggeruser",
+        "actiontriggeruserid": "Actiontriggeruserid",
+        "channeltype": "Service Type",
+        "content": "Content",
+        "owner": "Requester",
+        "ownercenter": "Requester Center",
+        "ownercompany": "Requester Company",
+        "ownerdepartment": "Ownerdepartment",
+        "ownerdepartmentpath": "Ownerdepartmentpath",
+        "ownergroup": "Ownergroup",
+        "ownerlevel": "Ownerlevel",
+        "ownerrole": "Ownerrole",
+        "ownerteam": "Ownerteam",
+        "owneruserid": "Owneruserid",
+        "priority": "Priority",
+        "starttime": "Starttime",
+        "stepid": "Stepid",
+        "stepname": "Stepname",
+        "steptask": "Steptask",
+        "steptaskid": "Steptaskid",
+        "stepuser": "Step Assignee",
+        "stepuserid": "Stepuserid",
+        "taskid": "Taskid",
+        "title": "Title"
+      }
+    },
+    "processtasksource": {
+      "text": {
+        "import": "Import",
+        "mobile": "Mobile",
+        "pc": "PC",
+        "processtask_transfer_report": "Report",
+        "system": "System"
+      }
+    },
+    "processtaskstatus": {
+      "enumname": "Task Status"
+    },
+    "processtaskstepdatatype": {
+      "text": {
+        "automatic": "Automatic",
+        "stepdraftsave": "Stepdraftsave"
+      }
+    },
+    "processtaskstepoperationtype": {
+      "text": {
+        "step_accept": "Accept",
+        "step_active": "Activate",
+        "step_back": "Roll Back",
+        "step_comment": "Comment",
+        "step_complete": "Complete",
+        "step_deletecomment": "Deletecomment",
+        "step_editcomment": "Editcomment",
+        "step_fail": "Failed",
+        "step_handle": "Handle",
+        "step_hang": "Suspend",
+        "step_pause": "Pause",
+        "step_reactivate": "Reactivate",
+        "step_reapproval": "Reapproval",
+        "step_recover": "Recover",
+        "step_redo": "Redo",
+        "step_restfulaction": "Restfulaction",
+        "step_retreat": "Withdraw",
+        "step_save": "Save",
+        "step_start": "Start",
+        "step_transfer": "Transfer",
+        "step_view": "View",
+        "step_work": "Work",
+        "task_complete": "Complete",
+        "task_create": "Create",
+        "task_delete": "Delete",
+        "task_edit": "Edit",
+        "transfer_eoa_step": "Step"
+      }
+    },
+    "processtaskstepremindtype": {
+      "description": {
+        "back": "Roll Back Step",
+        "redo": "Roll Back Task"
+      },
+      "text": {
+        "automatic_error": "Error",
+        "back": "Roll Back Step",
+        "error": "Error",
+        "redo": "Roll Back Task",
+        "transfer": "Transfer"
+      }
+    },
+    "processtaskstepstatus": {
+      "enumname": "Task Status",
+      "text": {
+        "draft": "Not Submitted",
+        "failed": "Error",
+        "hang": "Suspended",
+        "pending": "Pending",
+        "running": "Processing",
+        "succeed": "Completed"
+      }
+    },
+    "processtasksteptasksource": {
+      "text": {
+        "processtaskstep": "Task Step"
+      }
+    },
+    "processtasksteptaskuserstatus": {
+      "enumname": "Task Status",
+      "text": {
+        "pending": "Pending",
+        "succeed": "Completed"
+      }
+    },
+    "processtaskstepuserstatus": {
+      "text": {
+        "doing": "Processing",
+        "done": "Done",
+        "someone_transferred": "Transferred",
+        "transferred": "Transferred"
+      }
+    },
+    "processtaskstepusertype": {
+      "text": {
+        "history_major": "Major",
+        "major": "Assignee",
+        "minor": "Minor"
+      }
+    },
+    "processtasktitletemplatevariable": {
+      "text": {
+        "region_name": "Name",
+        "user_id": "ID",
+        "user_name": "Name",
+        "yyyymmdd": "Yyyymmdd"
+      }
+    },
+    "processuserexportfiletype": {
+      "process": "flowchart",
+      "workcenterdata": "Work Center Data"
+    },
+    "processusertype": {
+      "text": {
+        "default_worker": "Assignee",
+        "focus_user": "User",
+        "major": "Assignee",
+        "minor": "Minor",
+        "owner": "Requester",
+        "reporter": "Reporter",
+        "worker": "Assignee"
+      }
+    },
+    "processworkcenterfield": {
+      "text": {
+        "aboutme": "Aboutme",
+        "action": "Action",
+        "activetime": "Activetime",
+        "catalog": "Service Catalog",
+        "channeltype": "Service Type",
+        "confighash": "Confighash",
+        "content": "Content",
+        "content_include_html": "HTML",
+        "current_step": "Current Step",
+        "endtime": "Endtime",
+        "expired_time": "Remaining Time",
+        "focus_users": "Users",
+        "id": "ID",
+        "is_show": "Show",
+        "owner": "Requester",
+        "priority": "Priority",
+        "process": "Workflow",
+        "reporter": "Reporter",
+        "serial_number": "Task Number",
+        "starttime": "Starttime",
+        "status": "Task Status",
+        "step": "Step",
+        "step_name": "Step Name",
+        "step_only_team": "Team",
+        "step_only_user": "User",
+        "step_status": "Status",
+        "step_team": "Team",
+        "step_user": "Step Assignee",
+        "title": "Title",
+        "transfer_from_user": "User",
+        "wokrtime": "Work Time Window"
+      }
+    },
+    "processworkcenterinittype": {
+      "text": {
+        "all_processtask": "Task",
+        "done_of_mine_processtask": "Task",
+        "draft_processtask": "Task",
+        "processing_of_mine_processtask": "Task"
+      }
+    },
+    "processworkcentertype": {
+      "text": {
+        "custom": "Custom",
+        "factory": "Factory",
+        "system": "System Category"
+      }
+    },
+    "replaceabletext": {
+      "text": {
+        "content_details": "Details",
+        "relation_list": "List",
+        "step_list": "List",
+        "time_line": "Line"
+      }
+    },
+    "slatype": {
+      "text": {
+        "handle": "Handle",
+        "response": "Response"
+      }
+    },
+    "userprofile": {
+      "processtasksuccess": "Service reported successfully"
+    },
+    "userprofileoperate": {
+      "backcataloglist": "Return to the list of service directories",
+      "keeponcreatetask": "Continue reporting",
+      "viewprocesstaskdetail": "View job details"
+    },
+    "workerpolicy": {
+      "text": {
+        "assign": "Assign",
+        "automatic": "Automatic",
+        "copy": "Copy",
+        "form": "Form",
+        "prestepassign": "Prestepassign"
+      }
+    }
+  },
+  "nfpca": {
+    "callbacktype": {
+      "text": {
+        "interval": "Interval",
+        "none": "None",
+        "wait": "Wait"
+      }
+    },
+    "failpolicy": {
+      "text": {
+        "back": "Roll Back Step",
+        "cancel": "Cancel",
+        "hang": "Hang",
+        "keep_on": "On"
+      }
+    }
+  },
+  "nfpct": {
+    "taskconfigpolicy": {
+      "text": {
+        "any": "Any",
+        "any_2": "All Complete"
+      }
+    }
+  },
+  "nfpd": {
+    "assignableworkerstepvo": {
+      "entityfield": {
+        "grouplist": {
+          "name": "Group List"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "isrequired": {
+          "name": "Is Required"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "processstepuuid": {
+          "name": "Process Step UUID"
+        },
+        "rangelist": {
+          "name": "Range List"
+        }
+      }
+    },
+    "channeltypevo": {
+      "entityfield": {
+        "color": {
+          "name": "Color"
+        },
+        "description": {
+          "name": "Description"
+        },
+        "handler": {
+          "name": "Handler"
+        },
+        "handlername": {
+          "name": "Handler Name"
+        },
+        "icon": {
+          "name": "Icon"
+        },
+        "isactive": {
+          "name": "Status"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "prefix": {
+          "name": "Prefix"
+        },
+        "sort": {
+          "name": "Sort"
+        },
+        "uuid": {
+          "name": "UUID"
+        }
+      }
+    },
+    "channelvo": {
+      "effectiveauthority": "Do you have reporting authority",
+      "parentnames": "Service all parent directory names, separated by commas",
+      "parentuuids": "Service all parent directory uuids, separated by commas",
+      "typeanduuid": "Type # UUID"
+    },
+    "dashboardwidgetparamvo": {
+      "entityfield": {
+        "dashboardwidgetchartconfigvo": {
+          "name": "Dashboard Widget Chart Config Vo"
+        },
+        "datasourcehandler": {
+          "name": "Data Source Handler"
+        },
+        "dbexchangegroupdatamap": {
+          "name": "Db Exchange Group Data Map"
+        },
+        "starttimecondition": {
+          "name": "Start Time Condition"
+        }
+      }
+    },
+    "priorityvo": {
+      "entityfield": {
+        "color": {
+          "name": "Color"
+        },
+        "desc": {
+          "name": "Description"
+        },
+        "icon": {
+          "name": "Icon"
+        },
+        "isactive": {
+          "name": "Status"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "sort": {
+          "name": "Sort"
+        },
+        "uuid": {
+          "name": "UUID"
+        }
+      }
+    },
+    "processcommenttemplateauthvo": {
+      "entityfield": {
+        "commenttemplateid": {
+          "name": "Comment Template ID"
+        },
+        "type": {
+          "name": "Type"
+        },
+        "uuid": {
+          "name": "UUID"
+        }
+      }
+    },
+    "processcommenttemplateusecountvo": {
+      "entityfield": {
+        "commenttemplateid": {
+          "name": "Comment Template ID"
+        },
+        "count": {
+          "name": "Count"
+        },
+        "useruuid": {
+          "name": "User UUID"
+        }
+      }
+    },
+    "processcommenttemplatevo": {
+      "entityfield": {
+        "authlist": {
+          "name": "Auth List"
+        },
+        "content": {
+          "name": "Content"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "iseditable": {
+          "name": "Is Editable"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "type": {
+          "name": "Type"
+        }
+      },
+      "text": {
+        "custom": "Custom Template",
+        "system": "System"
+      }
+    },
+    "processdatacubevo": {
+      "text": {
+        "rest": "Rest",
+        "sql": "SQL",
+        "static": "Static"
+      }
+    },
+    "processdraftvo": {
+      "entityfield": {
+        "config": {
+          "name": "Config"
+        },
+        "fcd": {
+          "name": "Fcd"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "processuuid": {
+          "name": "Process UUID"
+        },
+        "uuid": {
+          "name": "UUID"
+        }
+      }
+    },
+    "processstephandlervo": {
+      "entityfield": {
+        "allowdispatchstepworker": {
+          "name": "Allow Dispatch Step Assignee"
+        },
+        "backwardinputquantity": {
+          "name": "Backward Input Quantity"
+        },
+        "backwardoutputquantity": {
+          "name": "Backward Output Quantity"
+        },
+        "chartconfig": {
+          "name": "Chart Config"
+        },
+        "config": {
+          "name": "Config"
+        },
+        "forwardinputquantity": {
+          "name": "Forward Input Quantity"
+        },
+        "forwardoutputquantity": {
+          "name": "Forward Output Quantity"
+        },
+        "handler": {
+          "name": "Handler"
+        },
+        "icon": {
+          "name": "Icon"
+        },
+        "isactive": {
+          "name": "Is Active"
+        },
+        "isallowstart": {
+          "name": "Is Allow Start"
+        },
+        "isfitmobile": {
+          "name": "Is Fit Mobile"
+        },
+        "ishidden": {
+          "name": "Is Hidden"
+        },
+        "moduleid": {
+          "name": "Module ID"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "sort": {
+          "name": "Sort"
+        },
+        "type": {
+          "name": "Type"
+        }
+      }
+    },
+    "processtaskimportauditvo": {
+      "entityfield": {
+        "channelname": {
+          "name": "Service Name"
+        },
+        "channeluuid": {
+          "name": "Service UUID"
+        },
+        "errorreason": {
+          "name": "Error Reason"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "importtime": {
+          "name": "Import Time"
+        },
+        "owner": {
+          "name": "Requester"
+        },
+        "ownername": {
+          "name": "Requester Name"
+        },
+        "ownervo": {
+          "name": "Requester Vo"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "serialnumber": {
+          "name": "Task Number"
+        },
+        "status": {
+          "name": "Status"
+        },
+        "title": {
+          "name": "Title"
+        }
+      }
+    },
+    "processtaskinvokevo": {
+      "entityfield": {
+        "invokeid": {
+          "name": "Invoke ID"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "source": {
+          "name": "Source"
+        },
+        "type": {
+          "name": "Type"
+        }
+      }
+    },
+    "processtaskscoretemplatevo": {
+      "entityfield": {
+        "config": {
+          "name": "Config"
+        },
+        "confighash": {
+          "name": "Config Hash"
+        },
+        "isauto": {
+          "name": "Is Auto"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "scoretemplateid": {
+          "name": "Score Template ID"
+        }
+      }
+    },
+    "processtaskslatimevo": {
+      "entityfield": {
+        "calculationtime": {
+          "name": "Calculation Time"
+        },
+        "delaylist": {
+          "name": "Delay List"
+        },
+        "displaymodeaftertimeout": {
+          "name": "Display Mode After Timeout"
+        },
+        "expiretime": {
+          "name": "Expire Time"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "processtaskstepid": {
+          "name": "Task Step ID"
+        },
+        "realexpiretime": {
+          "name": "Real Expire Time"
+        },
+        "realtimeleft": {
+          "name": "Real Time Left"
+        },
+        "slatimedisplaymode": {
+          "name": "SLA Time Display Mode"
+        },
+        "status": {
+          "name": "Status"
+        },
+        "timeleft": {
+          "name": "Time Left"
+        },
+        "timesum": {
+          "name": "Time Sum"
+        }
+      }
+    },
+    "processtaskslavo": {
+      "entityfield": {
+        "config": {
+          "name": "Configuration"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        }
+      }
+    },
+    "processtaskstepauditdetailvo": {
+      "entityfield": {
+        "auditid": {
+          "name": "Audit ID"
+        },
+        "newcontent": {
+          "name": "New Content"
+        },
+        "oldcontent": {
+          "name": "Old Content"
+        },
+        "type": {
+          "name": "Type"
+        },
+        "typename": {
+          "name": "Type Name"
+        }
+      }
+    },
+    "processtaskstepauditvo": {
+      "entityfield": {
+        "action": {
+          "name": "Action"
+        },
+        "actiontime": {
+          "name": "Action Time"
+        },
+        "auditdetaillist": {
+          "name": "Audit Detail List"
+        },
+        "description": {
+          "name": "Description"
+        },
+        "formsceneuuid": {
+          "name": "Form Scene UUID"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "originaluser": {
+          "name": "Original User"
+        },
+        "originaluservo": {
+          "name": "Original User Vo"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "processtaskstepid": {
+          "name": "Task Step ID"
+        },
+        "source": {
+          "name": "Source"
+        },
+        "sourcename": {
+          "name": "Source Name"
+        },
+        "stepstatus": {
+          "name": "Step Status"
+        },
+        "stepstatusvo": {
+          "name": "Step Status Vo"
+        },
+        "useruuid": {
+          "name": "User UUID"
+        },
+        "uservo": {
+          "name": "User"
+        }
+      }
+    },
+    "processtaskstepreplyvo": {
+      "entityfield": {
+        "content": {
+          "name": "Content"
+        },
+        "fileidlist": {
+          "name": "File ID List"
+        },
+        "filelist": {
+          "name": "File List"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "isdeletable": {
+          "name": "Is Deletable"
+        },
+        "iseditable": {
+          "name": "Is Editable"
+        },
+        "operatorrole": {
+          "name": "Operator Role"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "processtaskstepid": {
+          "name": "Task Step ID"
+        },
+        "processtaskstepname": {
+          "name": "Step Name"
+        },
+        "source": {
+          "name": "Source"
+        },
+        "sourcename": {
+          "name": "Source Name"
+        },
+        "targetlist": {
+          "name": "Target List"
+        },
+        "type": {
+          "name": "Type"
+        }
+      }
+    },
+    "processtasksteptaskusercontentvo": {
+      "entityfield": {
+        "button": {
+          "name": "Button"
+        },
+        "content": {
+          "name": "Content"
+        },
+        "endtime": {
+          "name": "End Time"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "processtasksteptaskid": {
+          "name": "Task Step Step Task ID"
+        },
+        "processtasksteptaskuserid": {
+          "name": "Task Step Step Task User ID"
+        },
+        "status": {
+          "name": "Status"
+        },
+        "useruuid": {
+          "name": "User UUID"
+        },
+        "uservo": {
+          "name": "User"
+        }
+      }
+    },
+    "processtasksteptaskuserfilevo": {
+      "entityfield": {
+        "fileid": {
+          "name": "File ID"
+        },
+        "processtasksteptaskid": {
+          "name": "Task Step Step Task ID"
+        },
+        "processtasksteptaskuserid": {
+          "name": "Task Step Step Task User ID"
+        }
+      }
+    },
+    "processtasksteptaskuservo": {
+      "entityfield": {
+        "button": {
+          "name": "Button"
+        },
+        "content": {
+          "name": "Content"
+        },
+        "endtime": {
+          "name": "End Time"
+        },
+        "fileidlist": {
+          "name": "File ID List"
+        },
+        "filelist": {
+          "name": "File List"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "isdelete": {
+          "name": "Is Delete"
+        },
+        "isreplyable": {
+          "name": "Is Replyable"
+        },
+        "originaluseruuid": {
+          "name": "Original User UUID"
+        },
+        "originaluservo": {
+          "name": "User"
+        },
+        "processtasksteptaskid": {
+          "name": "Task Step Step Task ID"
+        },
+        "processtasksteptaskusercontentid": {
+          "name": "Task Step Step Task User Content ID"
+        },
+        "status": {
+          "name": "Status"
+        },
+        "steptaskusercontentvolist": {
+          "name": "Step Task User Content Vo List"
+        },
+        "useruuid": {
+          "name": "User UUID"
+        },
+        "uservo": {
+          "name": "User"
+        }
+      }
+    },
+    "processtasksteptaskvo": {
+      "entityfield": {
+        "content": {
+          "name": "Description"
+        },
+        "contenthash": {
+          "name": "Content Hash"
+        },
+        "createtime": {
+          "name": "Create Time"
+        },
+        "endtime": {
+          "name": "End Time"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "majoruser": {
+          "name": "Major User"
+        },
+        "owner": {
+          "name": "Requester"
+        },
+        "ownervo": {
+          "name": "Requester Vo"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "processtaskstepid": {
+          "name": "Task Step ID"
+        },
+        "status": {
+          "name": "Status"
+        },
+        "statusvo": {
+          "name": "Status Vo"
+        },
+        "steptaskuservolist": {
+          "name": "Step Task User Vo List"
+        },
+        "taskconfigid": {
+          "name": "Task Config ID"
+        },
+        "taskconfigname": {
+          "name": "Task Config Name"
+        },
+        "taskconfigpolicy": {
+          "name": "Task Config Policy"
+        },
+        "taskconfigpolicyname": {
+          "name": "Task Config Policy Name"
+        },
+        "userlist": {
+          "name": "Assignee"
+        }
+      }
+    },
+    "processtaskstepvo": {
+      "entityfield": {
+        "actionlist": {
+          "name": "Action List"
+        },
+        "activetime": {
+          "name": "Active Time"
+        },
+        "aliasname": {
+          "name": "Alias Name"
+        },
+        "assignableworkersteplist": {
+          "name": "Assignable Assignee Step List"
+        },
+        "backwardnextsteplist": {
+          "name": "Backward Next Step List"
+        },
+        "comment": {
+          "name": "Comment"
+        },
+        "commentlist": {
+          "name": "Comment List"
+        },
+        "commenttemplate": {
+          "name": "Comment Template"
+        },
+        "config": {
+          "name": "Config"
+        },
+        "contenthelp": {
+          "name": "Content Help"
+        },
+        "custombuttonlist": {
+          "name": "Custom Button List"
+        },
+        "customstatuslist": {
+          "name": "Custom Status List"
+        },
+        "enablereapproval": {
+          "name": "Enable Reapproval"
+        },
+        "endtime": {
+          "name": "End Time"
+        },
+        "expiretime": {
+          "name": "Expire Time"
+        },
+        "flowdirection": {
+          "name": "Flow Direction"
+        },
+        "formsceneuuid": {
+          "name": "Form Scene UUID"
+        },
+        "forwardnextsteplist": {
+          "name": "Forward Next Step List"
+        },
+        "handler": {
+          "name": "Handler"
+        },
+        "handlerstepinfo": {
+          "name": "Handler Step Info"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "isallowprocessonmobile": {
+          "name": "Is Allow Process On Mobile"
+        },
+        "isinthecurrentsteptab": {
+          "name": "Is In The Current Step Tab"
+        },
+        "isneedcontent": {
+          "name": "Is Need Content"
+        },
+        "isneeduploadfile": {
+          "name": "Is Need Upload File"
+        },
+        "isrequired": {
+          "name": "Is Required"
+        },
+        "isview": {
+          "name": "Is View"
+        },
+        "majoruser": {
+          "name": "Assignee"
+        },
+        "minoruserlist": {
+          "name": "Minor User List"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "originaluser": {
+          "name": "Original User"
+        },
+        "originaluservo": {
+          "name": "Original User Vo"
+        },
+        "processtaglist": {
+          "name": "Process Tag List"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "processtaskstepagentvo": {
+          "name": "Task Step Agent Vo"
+        },
+        "processtaskstepdata": {
+          "name": "Task Step Data"
+        },
+        "processtaskstepremindlist": {
+          "name": "Task Step Remind List"
+        },
+        "processtasksteptask": {
+          "name": "Task Step Step Task"
+        },
+        "processtasksteptaskvo": {
+          "name": "Task Step Step Task Vo"
+        },
+        "replaceabletextlist": {
+          "name": "Replaceable Text List"
+        },
+        "slatimelist": {
+          "name": "SLA Time List"
+        },
+        "starttime": {
+          "name": "Start Time"
+        },
+        "status": {
+          "name": "Status"
+        },
+        "statusvo": {
+          "name": "Status Vo"
+        },
+        "taskconfiglist": {
+          "name": "Task Config List"
+        },
+        "type": {
+          "name": "Type"
+        },
+        "userlist": {
+          "name": "User List"
+        },
+        "viewprevnodelist": {
+          "name": "View Prev Node List"
+        },
+        "viewprevnodeuuidlist": {
+          "name": "View Prev Node UUID List"
+        },
+        "workerlist": {
+          "name": "Assignee List"
+        }
+      }
+    },
+    "processtaskvo": {
+      "entityfield": {
+        "config": {
+          "name": "Config"
+        },
+        "name": {
+          "processdispatcherlist": "Process Dispatcher List"
+        },
+        "ownername": {
+          "name": "Requester"
+        },
+        "ownerviplevel": {
+          "name": "Requester Vip Level"
+        },
+        "regionvo": {
+          "name": "Region Vo"
+        },
+        "reportername": {
+          "name": "Reporter"
+        }
+      }
+    },
+    "processtypevo": {
+      "entityfield": {
+        "id": {
+          "name": "ID"
+        },
+        "name": {
+          "name": "Name"
+        }
+      }
+    },
+    "processvo": {
+      "entityfield": {
+        "formuuid": {
+          "name": "Form UUID"
+        }
+      }
+    },
+    "taskconfigvo": {
+      "entityfield": {
+        "config": {
+          "name": "Config"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "isactive": {
+          "name": "Is Active"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "num": {
+          "name": "Num"
+        },
+        "policy": {
+          "name": "Policy"
+        },
+        "processtasksteptasklist": {
+          "name": "Task Step Step Task List"
+        },
+        "rangelist": {
+          "name": "Range List"
+        },
+        "referencecount": {
+          "name": "Reference Count"
+        }
+      }
+    },
+    "timeoutpolicyvo": {
+      "entityfield": {
+        "moduleid": {
+          "name": "Module ID"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "type": {
+          "name": "Type"
+        }
+      }
+    },
+    "workerdispatchervo": {
+      "entityfield": {
+        "config": {
+          "name": "Config"
+        },
+        "handler": {
+          "name": "Handler"
+        },
+        "help": {
+          "name": "Help"
+        },
+        "isactive": {
+          "name": "Is Active"
+        },
+        "ishasform": {
+          "name": "Is Has Form"
+        },
+        "moduleid": {
+          "name": "Module ID"
+        },
+        "name": {
+          "name": "Name"
+        }
+      }
+    },
+    "workerpolicyvo": {
+      "entityfield": {
+        "moduleid": {
+          "name": "Module ID"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "type": {
+          "name": "Type"
+        }
+      }
+    }
+  },
+  "nfpdc": {
+    "tagtypevo": {
+      "entityfield": {
+        "id": {
+          "name": "ID"
+        },
+        "label": {
+          "name": "Name"
+        },
+        "name": {
+          "name": "Name"
+        }
+      }
+    }
+  },
+  "nfpds": {
+    "processscoretemplatevo": {
+      "entityfield": {
+        "config": {
+          "name": "Config"
+        },
+        "isactive": {
+          "name": "Is Active"
+        },
+        "isauto": {
+          "name": "Is Auto"
+        },
+        "processuuid": {
+          "name": "Process UUID"
+        },
+        "scoretemplateid": {
+          "name": "Score Template ID"
+        }
+      }
+    },
+    "processtaskscorevo": {
+      "entityfield": {
+        "contenthash": {
+          "name": "Content Hash"
+        },
+        "isauto": {
+          "name": "Is Auto"
+        },
+        "processtaskid": {
+          "name": "Task ID"
+        },
+        "score": {
+          "name": "Score"
+        },
+        "scoredimensionid": {
+          "name": "Score Dimension ID"
+        },
+        "scoretemplateid": {
+          "name": "Score Template ID"
+        }
+      }
+    },
+    "scoretemplatedimensionvo": {
+      "entityfield": {
+        "description": {
+          "name": "Description"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "score": {
+          "name": "Score"
+        },
+        "scoretemplateid": {
+          "name": "Score Template ID"
+        }
+      }
+    },
+    "scoretemplatevo": {
+      "entityfield": {
+        "description": {
+          "name": "Description"
+        },
+        "dimensionlist": {
+          "name": "Dimension List"
+        },
+        "dimensionnamelist": {
+          "name": "Dimension Name List"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "isactive": {
+          "name": "Is Active"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "processcount": {
+          "name": "Process Count"
+        }
+      }
+    }
+  },
+  "nfpec": {
+    "catalogillegalparameterexception": {
+      "catalogillegalparameterexception": "The Catalog Invalid Parameter is invalid {0}"
+    },
+    "catalognamerepeatexception": {
+      "catalognamerepeatexception": "The Catalog name already exists {0}"
+    },
+    "catalognotfoundedittargetexception": {
+      "catalognotfoundedittargetexception": "Service Catalog: {0} does not exist"
+    },
+    "catalognotfoundexception": {
+      "catalognotfoundexception": "Service Catalog: “{0}” does not exist"
+    },
+    "channelisreferencedexception": {
+      "channelisreferencedexception": "Service Is Referenced {0}"
+    },
+    "channelnamerepeatexception": {
+      "channelnamerepeatexception": "The Service name already exists {0}"
+    },
+    "channelnotfoundedittargetexception": {
+      "channelnotfoundedittargetexception": "Service: {0} does not exist"
+    },
+    "channelnotfoundexception": {
+      "channelnotfoundexception": "Service: “{0}” does not exist"
+    },
+    "channelparentuuidcannotbezeroexception": {
+      "channelparentuuidcannotbezeroexception": "The Service parent UUID cannot be zero."
+    },
+    "channelrelationsettingexception": {
+      "channelrelationsettingexception": "Transfer settings are required when Service transfer is enabled."
+    },
+    "channeltypehasreferenceexception": {
+      "channeltypehasreferenceexception": "Service Type Has Reference {0} {1}"
+    },
+    "channeltypenamerepeatexception": {
+      "channeltypenamerepeatexception": "The Service Type name already exists {0}"
+    },
+    "channeltypenotfoundexception": {
+      "channeltypenotfoundexception": "Service Type: “{0}” does not exist"
+    },
+    "channeltyperelationhasreferenceexception": {
+      "channeltyperelationhasreferenceexception": "Service Type Relation Has Reference {0}"
+    },
+    "channeltyperelationnamerepeatexception": {
+      "channeltyperelationnamerepeatexception": "The Service Type Relation name already exists {0}"
+    },
+    "channeltyperelationnotfoundexception": {
+      "channeltyperelationnotfoundexception": "The Service Type Relation does not exist {0}"
+    },
+    "eshandler": {
+      "text": {
+        "processtask": "Task"
+      }
+    },
+    "processcommenttemplatenamerepeatexception": {
+      "processcommenttemplatenamerepeatexception": "Template '{0}' already exists"
+    },
+    "processcommenttemplatenotfoundexception": {
+      "processcommenttemplatenotfoundexception": "Reply template: {0} does not exist"
+    }
+  },
+  "nfpef": {
+    "processtaskfiledownloadexception": {
+      "processtaskfiledownloadexception": "Task File Download {0}"
+    }
+  },
+  "nfpeo": {
+    "operationauthhandlernotfoundexception": {
+      "operationauthhandlernotfoundexception": "The Operation Permission Handler does not exist {0}"
+    },
+    "operationprocessorisexistsexception": {
+      "operationprocessorisexistsexception": "The Operation Processor Is already exists {0}"
+    },
+    "processtaskabortedexception": {
+      "processtaskabortedexception": "Task Canceled."
+    },
+    "processtaskautomatichandlernotenableoperateexception": {
+      "processtaskautomatichandlernotenableoperateexception": "The requested operation is not enabled {0}"
+    },
+    "processtaskbacknotenabledexception": {
+      "processtaskbacknotenabledexception": "Task Roll Back Not Enabled."
+    },
+    "processtaskchanneltransferreportnotenabledexception": {
+      "processtaskchanneltransferreportnotenabledexception": "Task Service Transfer Submit Not Enabled {0}"
+    },
+    "processtaskfailedexception": {
+      "processtaskfailedexception": "Task Error"
+    },
+    "processtaskhangexception": {
+      "processtaskhangexception": "Task Suspended."
+    },
+    "processtaskhiddenexception": {
+      "processtaskhiddenexception": "Task Hidden."
+    },
+    "processtaskmarkrepeatnotenabledexception": {
+      "processtaskmarkrepeatnotenabledexception": "The Task Mark Duplicate Not Enabled already exists."
+    },
+    "processtasknoprocessablestepsexception": {
+      "processtasknoprocessablestepsexception": "No processable Task Steps are available."
+    },
+    "processtasknoretreatablestepsexception": {
+      "processtasknoretreatablestepsexception": "No withdrawable Task Steps are available."
+    },
+    "processtasknotchannelreportexception": {
+      "processtasknotchannelreportexception": "Task Not Service Submit {0}"
+    },
+    "processtasknotchannelviewexception": {
+      "processtasknotchannelviewexception": "You do not have permission to view Task for the [{0}] service"
+    },
+    "processtasknotownerexception": {
+      "processtasknotownerexception": "Task Not Requester."
+    },
+    "processtasknotprocesstaskmodifyexception": {
+      "processtasknotprocesstaskmodifyexception": "Task Not Task Manage."
+    },
+    "processtasknotprocessuserexception": {
+      "processtasknotprocessuserexception": "Task Not Workflow User."
+    },
+    "processtasknotransferablestepsexception": {
+      "processtasknotransferablestepsexception": "Task No Transferable Steps."
+    },
+    "processtaskoperationunauthorizedexception": {
+      "processtaskoperationunauthorizedexception": "Task Operation Unauthorized {0}"
+    },
+    "processtaskrunningexception": {
+      "processtaskrunningexception": "Task Running."
+    },
+    "processtaskscoredexception": {
+      "processtaskscoredexception": "The Task has already been rated."
+    },
+    "processtaskscorenotenabledexception": {
+      "processtaskscorenotenabledexception": "Task Rating Not Enabled."
+    },
+    "processtaskshownexception": {
+      "processtaskshownexception": "Task Shown."
+    },
+    "processtaskstepbacknotenabledexception": {
+      "processtaskstepbacknotenabledexception": "Task Step Roll Back Not Enabled."
+    },
+    "processtaskstepcannotretreatexception": {
+      "processtaskstepcannotretreatexception": "The Task Step Cannot Withdraw is not allowed."
+    },
+    "processtaskstepfailedexception": {
+      "processtaskstepfailedexception": "Step Error"
+    },
+    "processtaskstephandledbyothersexception": {
+      "processtaskstephandledbyothersexception": "Task Step Handled By Others {1} {0}"
+    },
+    "processtaskstephangexception": {
+      "processtaskstephangexception": "Task Step Suspended."
+    },
+    "processtaskstepmajoruserexception": {
+      "processtaskstepmajoruserexception": "Task Step Primary User."
+    },
+    "processtaskstepnoneedreapprovalstepexception": {
+      "processtaskstepnoneedreapprovalstepexception": "No Task Step requires reapproval."
+    },
+    "processtaskstepnotactiveexception": {
+      "processtaskstepnotactiveexception": "The Task Step is not active."
+    },
+    "processtaskstepnotmajoruserexception": {
+      "processtaskstepnotmajoruserexception": "The current user is not the primary Assignee."
+    },
+    "processtaskstepnotminoruserexception": {
+      "processtaskstepnotminoruserexception": "Task Step Not Assistant User."
+    },
+    "processtaskstepnotnextstepexception": {
+      "processtaskstepnotnextstepexception": "Task Step Not Next Step."
+    },
+    "processtaskstepnotworkerexception": {
+      "processtaskstepnotworkerexception": "Task Step Not Assignee."
+    },
+    "processtasksteppendingexception": {
+      "processtasksteppendingexception": "Task Step Pending."
+    },
+    "processtaskstepreapprovalnotenabledexception": {
+      "processtaskstepreapprovalnotenabledexception": "Task Step Reapproval Not Enabled."
+    },
+    "processtasksteprunningexception": {
+      "processtasksteprunningexception": "Task Step Running."
+    },
+    "processtaskstepsucceededexception": {
+      "processtaskstepsucceededexception": "The Task Step has already succeeded."
+    },
+    "processtaskstepundoneexception": {
+      "processtaskstepundoneexception": "Task Step Incomplete."
+    },
+    "processtaskstepunsubmittedexception": {
+      "processtaskstepunsubmittedexception": "The Task has not been submitted."
+    },
+    "processtasksubmittedexception": {
+      "processtasksubmittedexception": "Task Submitted."
+    },
+    "processtasksucceededexception": {
+      "processtasksucceededexception": "The Task has already succeeded."
+    },
+    "processtasktimerhandlernotenableoperateexception": {
+      "processtasktimerhandlernotenableoperateexception": "The requested operation is not enabled {0}"
+    },
+    "processtaskundoneexception": {
+      "processtaskundoneexception": "Task Incomplete."
+    },
+    "processtaskunsubmittedexception": {
+      "processtaskunsubmittedexception": "The Task has not been submitted."
+    }
+  },
+  "nfpep": {
+    "automaticconfigexception": {
+      "automaticconfigexception": "AutomaticConfig Error is null, jobName: {0}"
+    },
+    "priorityisinvokedexception": {
+      "priorityisinvokedexception": "Priority Is Referenced {0}"
+    },
+    "prioritynamerepeatexception": {
+      "prioritynamerepeatexception": "The Priority name already exists {0}"
+    },
+    "prioritynotfoundexception": {
+      "prioritynotfoundexception": "The Priority does not exist {0}"
+    },
+    "processconfigexception": {
+      "condition": "There is an invalid step in the conditional flow rule setting of step {0}",
+      "copy": "Allocation handler for step {0} - Copy pre step handler - Invalid step in pre step",
+      "prestepassign": "Allocation handler for step {0} - specified by pre step handler - invalid step in pre step",
+      "prestepassignconditionstep": "Allocation handler for step {0} - specified by pre step handler - pre step - invalid step in conditional path",
+      "sla": "There is an invalid step in the associated step of timeliness setting - {0}"
+    },
+    "processdraftnotfoundexception": {
+      "processdraftnotfoundexception": "The Workflow Draft does not exist {0}"
+    },
+    "processimportexception": {
+      "processimportexception": "No import file was provided.",
+      "processimportexception_a": "No import file was provided."
+    },
+    "processnamerepeatexception": {
+      "processnamerepeatexception": "The Workflow name already exists {0}"
+    },
+    "processnotfoundedittargetexception": {
+      "processnotfoundedittargetexception": "Process: {0} does not exist"
+    },
+    "processnotfoundexception": {
+      "processnotfoundexception": "Workflow: “{0}” does not exist"
+    },
+    "processreferencedcannotbedeleteexception": {
+      "processreferencedcannotbedeleteexception": "The Workflow Referenced Cannot Be Delete is not allowed {0}"
+    },
+    "processstephandlernotfoundexception": {
+      "processstephandlernotfoundexception": "The Workflow Step Handler does not exist {0}"
+    },
+    "processsteputilhandlernotfoundexception": {
+      "processsteputilhandlernotfoundexception": "Workflow utility component type {0} does not exist."
+    },
+    "processtaskautomaticnotallownextstepsexception": {
+      "processtaskautomaticnotallownextstepsexception": "The Task Automatic Not Allowed Next Steps is not allowed."
+    },
+    "processtaskfindmultiplenextstepexception": {
+      "processtaskfindmultiplenextstepexception": "Multiple next Workflow Steps were found."
+    },
+    "processtaskfocusrepeatexception": {
+      "processtaskfocusrepeatexception": "The Task Follow Duplicate already exists {0}"
+    },
+    "processtaskmustbeassignworkerexception": {
+      "processtaskmustbeassignworkerexception": "Task Must Be Assign Assignee {0}"
+    },
+    "processtasknextstepillegalexception": {
+      "processtasknextstepillegalexception": "{1} Not the next step of step: {0}",
+      "processtasknextstepillegalexception_a": "The starting step of Task: {0} does not have a next step"
+    },
+    "processtasknextstepnameoridunassignexception": {
+      "processtasknextstepnameoridunassignexception": "The Task Next Step Name Or ID Unassigned is required."
+    },
+    "processtasknextstepoveroneexception": {
+      "processtasknextstepoveroneexception": "Task Next Step Over One {0}"
+    },
+    "processtasknopermissionexception": {
+      "processtasknopermissionexception": "You do not have permission to perform the {0} operation."
+    },
+    "processtasknotdelegatereportpermissionexception": {
+      "processtasknotdelegatereportpermissionexception": "You do not have the reporting permission for {0} service"
+    },
+    "processtasknotfoundedittargetexception": {
+      "processtasknotfoundedittargetexception": "Task: {0} does not exist"
+    },
+    "processtasknotfoundexception": {
+      "processtasknotfoundexception": "Task “{0}” does not exist",
+      "processtasknotfoundexception_a": "Task “{0}” does not exist",
+      "processtasknotfoundexception_b": "Task does not exist"
+    },
+    "processtasknotfoundnextstepexception": {
+      "processtasknotfoundnextstepexception": "The Task Not Found Next Step does not exist {0} {1} {2}"
+    },
+    "processtasknotfoundspecifiedstepexception": {
+      "processtasknotfoundspecifiedstepexception": "The Task Not Found Specified Step does not exist {1} {0}"
+    },
+    "processtaskownerisemptyexception": {
+      "processtaskownerisemptyexception": "Task Requester cannot be empty"
+    },
+    "processtaskpriorityisemptyexception": {
+      "processtaskpriorityisemptyexception": "The Task Priority is required."
+    },
+    "processtaskprioritynotmatchexception": {
+      "processtaskprioritynotmatchexception": "Task Priority Not Match."
+    },
+    "processtaskserialnumberpolicyhandlernotfoundexception": {
+      "processtaskserialnumberpolicyhandlernotfoundexception": "The Task Serial Number Policy Handler does not exist {0}"
+    },
+    "processtaskserialnumberpolicynotfoundexception": {
+      "processtaskserialnumberpolicynotfoundexception": "Service type: {0} does not have a configured Task number generation strategy. Please contact the administrator and edit the Task prefix, Task rule, start position, and Task number digits for this service type in 'IT Service/Service Type Management'"
+    },
+    "processtaskserialnumberupdateinprocessexception": {
+      "processtaskserialnumberupdateinprocessexception": "Task Numbers are being updated in batches. Try again later."
+    },
+    "processtasksourcenotfoundexception": {
+      "processtasksourcenotfoundexception": "The Task Source does not exist {0}"
+    },
+    "processtaskstepcommentnotfoundexception": {
+      "processtaskstepcommentnotfoundexception": "Step Reply: “{0}” does not exist"
+    },
+    "processtaskstepcontentisemptyexception": {
+      "processtaskstepcontentisemptyexception": "Description cannot be empty"
+    },
+    "processtaskstepfoundmultipleexception": {
+      "processtaskstepfoundmultipleexception": "Task Step Found Multiple {0}"
+    },
+    "processtaskstepisnotmanualexception": {
+      "processtaskstepisnotmanualexception": "Task Step Is Not Manual {0} {1}"
+    },
+    "processtaskstepmustbeautomaticexception": {
+      "processtaskstepmustbeautomaticexception": "Task Step Must Be Automatic."
+    },
+    "processtaskstepmustbemanualexception": {
+      "processtaskstepmustbemanualexception": "Task Step Must Be Manual {0} {1}"
+    },
+    "processtaskstepnomatchedworkerexception": {
+      "processtaskstepnomatchedworkerexception": "Task Step No Matched Assignee."
+    },
+    "processtaskstepnotfoundexception": {
+      "processtaskstepnotfoundexception": "Workflow Step: “{0}” does not exist",
+      "processtaskstepnotfoundexception_a": "Workflow Step: “{0}” does not exist"
+    },
+    "processtaskstepunactivedexception": {
+      "processtaskstepunactivedexception": "The Task Step is not active."
+    },
+    "processtaskstepunrunningexception": {
+      "processtaskstepunrunningexception": "The Task Step is not running."
+    },
+    "processtaskstepuserisexistsexception": {
+      "processtaskstepuserisexistsexception": "The Task Step User Is Exists already exists {0}"
+    },
+    "processtaskstepuserunassignexception": {
+      "processtaskstepuserunassignexception": "The Task Step User Unassigned is required."
+    },
+    "processtaskstepworkerisrequiredexception": {
+      "processtaskstepworkerisrequiredexception": "The Task Step Assignee is required."
+    },
+    "processtasktitleisemptyexception": {
+      "processtasktitleisemptyexception": "Task Title cannot be empty"
+    },
+    "regulatehandlerisexistsexception": {
+      "regulatehandlerisexistsexception": "The Normalize Handler Is already exists {0}"
+    }
+  },
+  "nfpept": {
+    "processtasksteptaskconfigillegalexception": {
+      "processtasksteptaskconfigillegalexception": "Step Task configuration {0} is invalid."
+    },
+    "processtasksteptaskcontentisemptyexception": {
+      "processtasksteptaskcontentisemptyexception": "Step Task content is required."
+    },
+    "processtasksteptasknotcompleteexception": {
+      "processtasksteptasknotcompleteexception": "{0} does not satisfy the Transition policy: {1}."
+    },
+    "processtasksteptasknotfoundexception": {
+      "processtasksteptasknotfoundexception": "Step Task {0} does not exist.",
+      "processtasksteptasknotfoundexception_a": "Step Task {0} does not exist."
+    },
+    "processtasksteptaskusercontentnotfoundexception": {
+      "processtasksteptaskusercontentnotfoundexception": "Step Task user content does not exist."
+    },
+    "processtasksteptaskusercountillegalexception": {
+      "processtasksteptaskusercountillegalexception": "The number of Step Task users must be between {0} and {1}."
+    },
+    "processtasksteptaskuserexception": {
+      "processtasksteptaskuserexception": "The user identified by the replied stepUserId {0} must be the current user."
+    },
+    "processtasksteptaskusernotfoundexception": {
+      "processtasksteptaskusernotfoundexception": "Step Task user {0} does not exist."
+    },
+    "taskconfigbuttonnamerepeatexception": {
+      "taskconfigbuttonnamerepeatexception": "The Task Configuration Button already exists {0}"
+    },
+    "taskconfigexception": {
+      "taskconfigexception": "Taskconfig {0}"
+    },
+    "taskconfigisinvokedexception": {
+      "taskconfigisinvokedexception": "Task Configuration Is Referenced {0}"
+    },
+    "taskconfignamerepeatexception": {
+      "taskconfignamerepeatexception": "The Task Configuration already exists {0}"
+    },
+    "taskconfignotfoundexception": {
+      "taskconfignotfoundexception": "The Task Configuration does not exist {0}"
+    },
+    "taskuserillegalexception": {
+      "taskuserillegalexception": "The Task User is invalid {0}"
+    }
+  },
+  "nfpes": {
+    "scoretemplatehasrefprocessexception": {
+      "scoretemplatehasrefprocessexception": "Rating Template {0} is referenced by a Workflow and cannot be deleted or disabled."
+    },
+    "scoretemplatenamerepeatexception": {
+      "scoretemplatenamerepeatexception": "The Rating Template name already exists {0}"
+    },
+    "scoretemplatenotfoundexception": {
+      "scoretemplatenotfoundexception": "Rating template: {0} does not exist"
+    },
+    "slacalculatehandlernotfoundexception": {
+      "slacalculatehandlernotfoundexception": "The SLA Calculation Handler does not exist {0}"
+    }
+  },
+  "nfpew": {
+    "authstringirregularexception": {
+      "authstringirregularexception": "The Permission String is invalid {0}"
+    },
+    "handlerdispatchcomponenttypenotfoundexception": {
+      "handlerdispatchcomponenttypenotfoundexception": "Assignee dispatch component type {0} does not exist."
+    },
+    "processorallocationpolicytypenotfoundexception": {
+      "processorallocationpolicytypenotfoundexception": "The Processor Allocation Policy Type does not exist {0}"
+    },
+    "workcentercannoteditfactoryexception": {
+      "workcentercannoteditfactoryexception": "The Work Center Cannot Edit Built-in is not allowed."
+    },
+    "workcentercatalogidnotfoundexception": {
+      "workcentercatalogidnotfoundexception": "The Work Center Catalog ID does not exist {0}"
+    },
+    "workcentercatalogisusedexception": {
+      "workcentercatalogisusedexception": "Work Center Catalog Is Used {0}"
+    },
+    "workcentercatalognamerepeatsexception": {
+      "workcentercatalognamerepeatsexception": "The Work Center Catalog name already exists {0}"
+    },
+    "workcenterconditionexception": {
+      "workcenterconditionexception": "Work Center Condition {0}"
+    },
+    "workcentercustomcountlimitexception": {
+      "workcentercustomcountlimitexception": "The number of \"Personal Category\" categories in the Work Center cannot exceed \"{0}\""
+    },
+    "workcenterhandlernotfoundexception": {
+      "workcenterhandlernotfoundexception": "The Work Center Handler does not exist {0}"
+    },
+    "workcenternamerepeatexception": {
+      "workcenternamerepeatexception": "The Work Center name already exists {0}"
+    },
+    "workcenternoauthexception": {
+      "workcenternoauthexception": "You do not have permission to access Work Center {0}. Contact the administrator."
+    },
+    "workcenternocustomauthexception": {
+      "workcenternocustomauthexception": "Work Center No Custom Permission."
+    },
+    "workcenternomodifyauthexception": {
+      "workcenternomodifyauthexception": "Work Center No Manage Permission."
+    },
+    "workcenternotfoundexception": {
+      "workcenternotfoundexception": "The Work Center does not exist {0}"
+    },
+    "workcenterparamexception": {
+      "workcenterparamexception": "Work Center Parameter {0}"
+    }
+  },
+  "nfpnc": {
+    "idefaulttemplate": {
+      "defaulttemplatetype": "Default",
+      "processtaskdetailslink": "View Details: <a target=\"_blank\" href={0}>[Task Link]</a>"
+    },
+    "processnotifypolicyhandlergroup": {
+      "text": {
+        "taskstep": "Task Step"
+      }
+    },
+    "processtasknotifyparam": {
+      "description": {
+        "form_json": "Information item Data is {'attributeKey':'a','attributeLabel':'A','extendedData':' Form '}"
+      },
+      "text": {
+        "approvalcommentlist": "Approvalcommentlist",
+        "channelname": "Channelname",
+        "channelpath": "Channelpath",
+        "channeltypename": "Service Type",
+        "content": "Content",
+        "departmentandownername": "Departmentandownername",
+        "endtime": "Endtime",
+        "form_json": "JSON",
+        "form_table": "Form",
+        "id": "ID",
+        "ownercompanylist": "Requester Company List",
+        "ownername": "Requester",
+        "priorityname": "Priority",
+        "process_task_abort_content": "Content",
+        "process_task_recover_content": "Content",
+        "process_task_redo_content": "Content",
+        "process_task_score": "Score",
+        "process_task_score_content": "Content",
+        "process_task_urge_count": "Count",
+        "process_task_urge_user": "User",
+        "reportername": "Reporter",
+        "serialnumber": "Task Number",
+        "startdate": "Startdate",
+        "starttime": "Starttime",
+        "statustext": "Task Status",
+        "title": "Title"
+      }
+    },
+    "processtasknotifytriggertype": {
+      "description": {
+        "completeprocesstask": "Trigger notification when Task flow ends",
+        "recoverprocesstask": "Trigger notification when authorized users restore the Task before IT is completed",
+        "reopenprocesstask": "After the Task is completed and before the user scores, a notification is triggered when authorized users reopen the Task and revert back to a certain step to restart processing",
+        "startprocess": "Trigger notification when user reports and submits Task",
+        "waitingscoreprocesstask": "Trigger notification when scoring is required after completing the Task"
+      },
+      "text": {
+        "abortprocesstask": "Cancel Task",
+        "completeprocesstask": "Complete Task",
+        "deleteprocesstask": "Delete Task",
+        "markrepeatprocesstask": "Tag Duplicate Events",
+        "recoverprocesstask": "Restore Task",
+        "reopenprocesstask": "Reopen the Task",
+        "scoreprocesstask": "Rate",
+        "startprocess": "Report",
+        "waitingscoreprocesstask": "To Be Rated"
+      }
+    },
+    "processtaskstepautomaticnotifyparam": {
+      "text": {
+        "action_failed_content": "Action Failure Reason"
+      }
+    },
+    "processtaskstepautomaticnotifytriggertype": {
+      "description": {
+        "action_failed": "Trigger a notification when the action fails"
+      },
+      "text": {
+        "action_failed": "Action Failed",
+        "action_failed_2": "Trigger a Notification When the Action Fails"
+      }
+    },
+    "processtaskstepnotifyparam": {
+      "text": {
+        "process_task_current_step_back_content": "Content",
+        "process_task_current_step_complete_content": "Content",
+        "process_task_step_active_time": "Time",
+        "process_task_step_pause_content": "Content",
+        "process_task_step_recover_content": "Content",
+        "process_task_step_retreat_content": "Content",
+        "process_task_step_sla": "SLA",
+        "process_task_step_start_time": "Time",
+        "process_task_step_transfer_content": "Content",
+        "process_task_step_transfer_time": "Time",
+        "process_task_step_transfer_worker": "Assignee",
+        "reason": "Reason",
+        "step_comment": "Comment",
+        "step_comment_list": "List",
+        "step_comment_user": "User",
+        "stepid": "Stepid",
+        "stepname": "Step Name",
+        "stepstaytime": "Stepstaytime",
+        "stepworker": "Step Assignee"
+      }
+    },
+    "processtaskstepnotifytriggertype": {
+      "description": {
+        "active": "Flow to a certain step, trigger notification when the step is automatically activated",
+        "assignexception": "Assign a handler during step activation, and trigger a notification when the handler does not exist or the rule cannot match a valid handler",
+        "back": "Trigger notification when the handler manually retracts the Task to a previous step before IT is completed",
+        "comment": "Trigger notification when user responds to steps",
+        "failed": "Trigger notification when allocation exception, flow exception, or system exception occurs in the current step causing step failure",
+        "pause": "Trigger notification when authorized users pause the current step",
+        "reactivate": "Trigger notification when steps are reactivated after completion",
+        "recover": "Trigger notification when authorized users restore the current step",
+        "retreat": "After the current step is completed and before the next step is completed, a notification is triggered when a user with permission for the current step manually withdraws the step, and the current step is reprocessed",
+        "revoke": "Before the current step is completed, a notification will be triggered when a user with permission from the previous step manually withdraws the step, and the previous step will be reprocessed",
+        "start": "Trigger notification when steps start automatically or when the processor manually starts processing",
+        "succeed": "Trigger notification upon completion of steps",
+        "transfer": "Triggering notification when a user with step-by-step permission transfers the processing permission of the current step to another user",
+        "urge": "Trigger notification when the user urges the completion of a Task"
+      },
+      "text": {
+        "active": "Step Activation",
+        "assignexception": "Allocation Exception",
+        "back": "Step Rollback",
+        "comment": "Step Reply",
+        "failed": "Step Failed",
+        "pause": "Step Pause",
+        "reactivate": "Steps to Reactivate",
+        "recover": "Step Recovery",
+        "retreat": "Step Withdrawal",
+        "revoke": "Step Revoked",
+        "start": "Step Start",
+        "succeed": "Step Successful",
+        "transfer": "Step Transfer",
+        "urge": "Step Reminder"
+      }
+    },
+    "processtasksteptasknotifyparam": {
+      "text": {
+        "taskconfigname": "Step Task Name",
+        "taskcontent": "Step Task Content",
+        "taskusercontent": "Step Task User Content",
+        "taskworker": "Step Task Assignee"
+      }
+    },
+    "processtasksteptasknotifytriggertype": {
+      "description": {
+        "completealltask": "Trigger notification when all subtasks meet the flow conditions",
+        "completetask": "Trigger notification when task handler completes subtask",
+        "createtask": "Step handlers trigger notifications when creating subtasks for the current step",
+        "deletetask": "Trigger notification when the handler deletes subtasks",
+        "edittask": "Trigger notification when the process person edits subtask content"
+      },
+      "text": {
+        "completealltask": "Subtask Meets Step Flow Requirements",
+        "completetask": "Subtask Completed",
+        "createtask": "Subtask Creation",
+        "deletetask": "Subtask Deletion",
+        "edittask": "Subtask Editing"
+      }
+    }
+  },
+  "nfpoc": {
+    "operationauthhandlertype": {
+      "text": {
+        "step": "Step",
+        "task": "Task"
+      }
+    }
+  },
+  "nfpshc": {
+    "processstephandlerbase": {
+      "assignexceptionreason": "The current Step could not be assigned and was assigned to the exception Assignee: {0}"
+    }
+  },
+  "nfpwc": {
+    "workerdispatcherform": {
+      "text": {
+        "form_select": "Select",
+        "select": "Select",
+        "text": "Text",
+        "user_select": "Select"
+      }
+    }
+  },
+  "nfpwd": {
+    "workcenterauthorityvo": {
+      "entityfield": {
+        "type": {
+          "name": "Type"
+        },
+        "uuid": {
+          "name": "UUID"
+        },
+        "workcenteruuid": {
+          "name": "Work Center UUID"
+        }
+      }
+    },
+    "workcentercatalogvo": {
+      "entityfield": {
+        "id": {
+          "name": "ID"
+        },
+        "name": {
+          "name": "Name"
+        }
+      }
+    },
+    "workcentertheadvo": {
+      "entityfield": {
+        "classname": {
+          "name": "Class Name"
+        },
+        "config": {
+          "name": "Configuration"
+        },
+        "disabled": {
+          "name": "Disabled"
+        },
+        "displayname": {
+          "name": "Display Name"
+        },
+        "isexport": {
+          "name": "Is Export"
+        },
+        "isshow": {
+          "name": "Is Show"
+        },
+        "issortable": {
+          "name": "Is Sortable"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "sort": {
+          "name": "Sort"
+        },
+        "type": {
+          "name": "Type"
+        },
+        "useruuid": {
+          "name": "User UUID"
+        },
+        "width": {
+          "name": "Width"
+        },
+        "workcenteruuid": {
+          "name": "Work Center UUID"
+        }
+      }
+    },
+    "workcenteruserprofilevo": {
+      "entityfield": {
+        "config": {
+          "name": "Config"
+        },
+        "user_uuid": {
+          "name": "User UUID"
+        }
+      }
+    },
+    "workcentervo": {
+      "entityfield": {
+        "authlist": {
+          "name": "Auth List"
+        },
+        "catalogid": {
+          "name": "Catalog ID"
+        },
+        "catalogname": {
+          "name": "Catalog Name"
+        },
+        "conditionconfig": {
+          "name": "Condition Config"
+        },
+        "count": {
+          "name": "Count"
+        },
+        "device": {
+          "name": "Device"
+        },
+        "handlertype": {
+          "name": "Handler Type"
+        },
+        "headerlist": {
+          "name": "Header List"
+        },
+        "iscanedit": {
+          "name": "Is Can Edit"
+        },
+        "iscanrole": {
+          "name": "Is Can Role"
+        },
+        "ismine": {
+          "name": "Is Mine"
+        },
+        "isprocessingofmine": {
+          "name": "Is Processing Of Mine"
+        },
+        "isshowtotal": {
+          "name": "Is Show Total"
+        },
+        "keywordconditionlist": {
+          "name": "Keyword Condition List"
+        },
+        "name": {
+          "name": "Name"
+        },
+        "owner": {
+          "name": "Requester"
+        },
+        "processingofminecount": {
+          "name": "Processing Of Mine Count"
+        },
+        "sort": {
+          "name": "Sort"
+        },
+        "sortconfig": {
+          "name": "Sort Config"
+        },
+        "starttimecondition": {
+          "name": "Start Time Condition"
+        },
+        "support": {
+          "name": "Support"
+        },
+        "theadconfighash": {
+          "name": "Thead Config Hash"
+        },
+        "theadlist": {
+          "name": "Thead List"
+        },
+        "type": {
+          "name": "Type"
+        },
+        "uuid": {
+          "name": "UUID"
+        }
+      }
+    }
+  },
+  "nfpwt": {
+    "catalogsqltable": {
+      "text": {
+        "name": "Name",
+        "uuid": "UUID"
+      }
+    },
+    "channelsqltable": {
+      "text": {
+        "channel_type_uuid": "UUID",
+        "name": "Name",
+        "parent_uuid": "UUID",
+        "uuid": "UUID"
+      }
+    },
+    "channeltypesqltable": {
+      "text": {
+        "color": "Color",
+        "name": "Name",
+        "uuid": "UUID"
+      }
+    },
+    "channelworktimesqltable": {
+      "text": {
+        "channel_uuid": "UUID",
+        "worktime_uuid": "UUID"
+      }
+    },
+    "prioritysqltable": {
+      "text": {
+        "color": "Color",
+        "name": "Name",
+        "sort": "Sort",
+        "uuid": "UUID"
+      }
+    },
+    "processtagsqltable": {
+      "text": {
+        "name": "Name"
+      }
+    },
+    "processtaskfocussqltable": {
+      "text": {
+        "processtask_id": "ID",
+        "user_uuid": "UUID"
+      }
+    },
+    "processtaskscoresqltable": {
+      "text": {
+        "processtask_id": "ID",
+        "score": "Rate"
+      }
+    },
+    "processtaskslasqltable": {
+      "text": {
+        "config": "Config",
+        "name": "Name",
+        "processtask_id": "ID"
+      }
+    },
+    "processtaskslatimesqltable": {
+      "text": {
+        "calculation_time": "Time",
+        "expire_time": "Time",
+        "realexpire_time": "Time",
+        "realtime_left": "Left",
+        "status": "Status",
+        "time_left": "Remaining Time"
+      }
+    },
+    "processtasksqltable": {
+      "text": {
+        "channel_uuid": "Task Status",
+        "end_time": "Time",
+        "id": "ID",
+        "is_show": "Show",
+        "need_score": "Score",
+        "owner": "Requester",
+        "priority_uuid": "Task Status",
+        "region_id": "ID",
+        "reporter": "Requester",
+        "serial_number": "Task Number",
+        "start_time": "Time",
+        "status": "Task Status",
+        "title": "Title"
+      }
+    },
+    "processtaskstepauditsqltable": {
+      "text": {
+        "action": "Requester",
+        "processtask_id": "ID",
+        "processtask_step_id": "ID",
+        "user_uuid": "UUID"
+      }
+    },
+    "processtaskstepcostsqltable": {
+      "text": {
+        "processtask_id": "ID",
+        "processtask_step_id": "ID",
+        "start_operate": "Operate",
+        "start_user_uuid": "UUID"
+      }
+    },
+    "processtaskstepslasqltable": {
+      "text": {
+        "processtask_step_id": "ID",
+        "sla_id": "ID"
+      }
+    },
+    "processtaskstepslatimesqltable": {
+      "text": {
+        "is_timeout": "Timeout",
+        "processtask_id": "ID",
+        "processtask_step_id": "ID",
+        "time_cost": "Cost",
+        "type": "Type"
+      }
+    },
+    "processtaskstepsqltable": {
+      "text": {
+        "active_time": "Time",
+        "config_hash": "Hash",
+        "handler": "Handler",
+        "id": "ID",
+        "is_active": "Active",
+        "name": "Name",
+        "process_step_uuid": "UUID",
+        "processtask_id": "ID",
+        "status": "Status",
+        "type": "Type"
+      }
+    },
+    "processtaskstepusersqltable": {
+      "text": {
+        "owner": "Requester",
+        "processtask_id": "ID",
+        "processtask_step_id": "ID",
+        "status": "Status",
+        "user_type": "Type",
+        "user_uuid": "UUID"
+      }
+    },
+    "processtaskstepworkersqltable": {
+      "text": {
+        "processtask_id": "ID",
+        "processtask_step_id": "ID",
+        "type": "Type",
+        "user_type": "Type",
+        "uuid": "UUID"
+      }
+    },
+    "regionsqltable": {
+      "text": {
+        "name": "Name",
+        "upward_name_path": "Path"
+      }
+    },
+    "usertable": {
+      "text": {
+        "is_active": "Active",
+        "is_delete": "Delete",
+        "pinyin": "Pinyin",
+        "user_id": "ID",
+        "user_info": "Info",
+        "user_name": "Name",
+        "uuid": "UUID",
+        "vip_level": "Level"
+      }
+    },
+    "worktimesqltable": {
+      "text": {
+        "name": "Name",
+        "uuid": "UUID"
+      }
+    }
+  },
+  "nfpwtc": {
+    "processsqltypeenum": {
+      "text": {
+        "distinct_id": "ID",
+        "field": "Field",
+        "full_text": "Text",
+        "limit_count": "Count",
+        "total_count": "Count"
+      }
+    }
+  },
+  "nfpwtp": {
+    "fieldenum": {
+      "type": "Source type"
+    }
+  },
+  "term": {
+    "itsm": {
+      "automatic": "Automatic",
+      "caneditfocususer": "Caneditfocususer",
+      "catalogname": "Catalog Name",
+      "channelinfo": "Service Information",
+      "channelname": "Service Name",
+      "channelpath": "Channelpath",
+      "channeltype": "Service Type",
+      "channeltypeinfo": "Service Type Information",
+      "channeltypename": "Service Type Name",
+      "channeltyperelationname": "Service Type Relation Name",
+      "channeltypeuuid": "Service Type UUID",
+      "channeluuid": "Service UUID",
+      "commentlist": "Comment List",
+      "condition": "Condition",
+      "contenthelp": "Contenthelp",
+      "currentprocesstaskstep": "Current Task Step",
+      "distributary": "Distributary",
+      "end": "End",
+      "formattributedatalist": "Form Attribute Data List",
+      "formattributehidelist": "Form Attribute Hide List",
+      "formconfigauthoritylist": "Authorization List for Work Order Form Information",
+      "groupdesc": "One stop service reporting tracking processing platform",
+      "groupname": "IT Service",
+      "hidecomponentlist": "Hide Component List",
+      "ishasoldformprop": "Ishasoldformprop",
+      "isshowbaseinfo": "Isshowbaseinfo",
+      "isshowprocesstaskstepcommenteditortoolbar": "Isshowprocesstaskstepcommenteditortoolbar",
+      "mobileformuitype": "Mobileformuitype",
+      "omnipotent": "Omnipotent",
+      "ownercompanylist": "Task Requester Company List",
+      "ownerdepartmentlist": "Ownerdepartmentlist",
+      "ownerinfo": "Requester Information",
+      "ownername": "Requester Name",
+      "owneruuid": "Requester UUID",
+      "processtask": "Task",
+      "processtaskformattributedata": "Task Form Attribute Data",
+      "processtaskformconfig": "Task Form Configuration",
+      "processtaskid": "Task ID",
+      "processtaskslalist": "Task SLA List",
+      "processtaskstepid": "Task Step ID",
+      "processuuid": "Workflow UUID",
+      "redosteplist": "Redo Step List",
+      "scoretemplate": "Rating Template",
+      "serialnumber": "Task Number",
+      "start": "Start",
+      "startprocesstaskstep": "Start Task Step",
+      "submitterinfo": "Submitterinfo",
+      "submittername": "Submittername",
+      "submitteruuid": "Submitteruuid",
+      "timer": "Timer",
+      "tranferreportdirection": "Tranferreportdirection",
+      "tranferreportprocesstasklist": "Tranferreportprocesstasklist",
+      "workcenterprocesstasksortindex": "Work Center Task"
+    },
+    "process": {
+      "channelname": "Service Name",
+      "channeluuid": "Service UUID",
+      "collectionid": "Collection ID",
+      "isreturnallattr": "Isreturnallattr",
+      "phaseid": "Phase ID",
+      "phaselist": "Phase List",
+      "processtaskcollection": "Create Task Collection",
+      "tasklist": "Task List"
+    }
+  }
+}

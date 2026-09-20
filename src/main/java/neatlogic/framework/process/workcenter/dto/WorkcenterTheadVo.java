@@ -20,7 +20,6 @@ import neatlogic.framework.process.column.core.IProcessTaskColumn;
 import neatlogic.framework.process.column.core.ProcessTaskColumnFactory;
 import neatlogic.framework.process.constvalue.ProcessFieldType;
 import neatlogic.framework.restful.annotation.EntityField;
-import neatlogic.framework.util.$;
 
 import java.io.Serializable;
 
@@ -73,7 +72,7 @@ public class WorkcenterTheadVo implements Serializable {
     public WorkcenterTheadVo(IProcessTaskColumn column) {
         this.name = column.getName();
         this.userUuid = UserContext.get().getUserUuid();
-        this.displayName = $.t(column.getDisplayName());
+        this.displayName = column.getDisplayName();
         this.type = ProcessFieldType.COMMON.getValue();
         this.className = column.getClassName();
         this.sort = column.getSort();

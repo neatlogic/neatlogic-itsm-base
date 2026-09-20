@@ -1,0 +1,2667 @@
+{
+  "nfpa": {
+    "batch_report_process_task": {
+      "getauthdisplayname": "批量上报权限",
+      "getauthintroduction": "对有权限服务可以批量上报工单"
+    },
+    "catalog_modify": {
+      "getauthdisplayname": "服务目录管理权限",
+      "getauthintroduction": "对服务目录添加、修改和删除"
+    },
+    "channeltype_modify": {
+      "getauthdisplayname": "服务类型管理权限",
+      "getauthintroduction": "对服务类型添加、修改和删除"
+    },
+    "priority_modify": {
+      "getauthdisplayname": "优先级管理权限",
+      "getauthintroduction": "对优先级添加、修改和删除"
+    },
+    "process": {
+      "getauthdisplayname": "IT服务基础权限（接口）",
+      "getauthintroduction": "拥有此权限可以通过接口访问IT服务一些查询数据接口"
+    },
+    "process_base": {
+      "getauthdisplayname": "IT服务基础权限",
+      "getauthintroduction": "查看IT服务相关基础功能"
+    },
+    "process_comment_template_modify": {
+      "getauthdisplayname": "系统回复模版管理权限",
+      "getauthintroduction": "对系统回复模版添加、修改和删除"
+    },
+    "process_modify": {
+      "getauthdisplayname": "流程管理权限",
+      "getauthintroduction": "对流程进行添加、修改和删除"
+    },
+    "process_step_handler_modify": {
+      "getauthdisplayname": "节点管理权限",
+      "getauthintroduction": "对节点管理中的组件配置进行修改"
+    },
+    "processtask_modify": {
+      "getauthdisplayname": "工单管理权限",
+      "getauthintroduction": "对工单隐藏/显示和删除"
+    },
+    "score_template_modify": {
+      "getauthdisplayname": "评分模版管理权限",
+      "getauthintroduction": "对评分模版进行添加、修改和删除"
+    },
+    "workcenter_advanced_search": {
+      "getauthdisplayname": "工单中心-高级搜索权限",
+      "getauthintroduction": "工单中心开放高级搜索"
+    },
+    "workcenter_modify": {
+      "getauthdisplayname": "工单中心管理权限",
+      "getauthintroduction": "对工单中心系统类型添加、修改、授权和删除，对出厂类型授权"
+    },
+    "workcenter_new_type": {
+      "getauthdisplayname": "工单中心-另存为新分类权限",
+      "getauthintroduction": "工单中心开放另存为新分类。注意：通过该方式保存的新分类将不受固化条件限制，收回权限则通过该方式保存的分类都将隐藏"
+    }
+  },
+  "nfpc": {
+    "autoexecjobprocesssource": {
+      "text": {
+        "itsm": "IT服务"
+      }
+    },
+    "autoexecprocessstephandlertype": {
+      "text": {
+        "autoexec": "自动化"
+      }
+    },
+    "catalogchannelauthorityaction": {
+      "text": {
+        "delegate": "代报工单",
+        "report": "上报工单",
+        "view": "查看工单"
+      }
+    },
+    "conditionconfigtype": {
+      "text": {
+        "default": "默认",
+        "workcenter": "工单中心"
+      }
+    },
+    "conditionprocesstaskoptions": {
+      "text": {
+        "channeltype": "服务类型",
+        "content": "上报内容",
+        "owner": "上报人",
+        "ownercenter": "上报人中心",
+        "ownercompany": "上报人公司",
+        "ownerdepartment": "上报人部门",
+        "ownergroup": "上报人集团",
+        "ownerlevel": "上报人级别",
+        "ownerrole": "上报人角色",
+        "ownerteam": "上报人组",
+        "owneruserid": "上报人用户ID",
+        "priority": "优先级",
+        "region": "地域",
+        "starttime": "开始时间",
+        "stepid": "步骤ID",
+        "taskid": "工单ID",
+        "title": "标题"
+      }
+    },
+    "itsmtenantconfig": {
+      "description": {
+        "processtask_tab_layout": "\t\"description\": \"position字段用于设置固定位置，值为above时固定到上方，值为below时固定到下方；layoutList集合中元素的key和top是必填字段，description是选填字段；key是tab的唯一标识，top字段用于设置是否默认固定，值为true时默认固定；layoutList集合中元素的顺序就是固定位置顺序，从上到下，从左到右，在layoutList集合显式设置的tab会排在前面；key字段的取值：report(上报内容),collection(工单集合),dataconversion(数据转换),eoa(电子签批),subProcess(子流程),autoexec(自动化),automatic(自动处理),changecreate(变更详情),changehandle(变更详情),cmdbsync(配置项同步),createjob(创建作业),diagram(架构设计),taskConfigList(子任务策略),preNode(前置步骤节点信息(eoa)),step(步骤日志),activity(时间线),relevance(关联工单),markrepeat(重复事件),file(附件清单),reportingHistory(上报历史)\"\n"
+      },
+      "displaymodeaftertimeout": "工单时效超时后显示方式，可选值naturalTime|workTime",
+      "processtaskstepautoapprovalshow": "是否显示工单步骤自动审批功能",
+      "processtaskstepenablecomment": "是否工单步骤回复功能",
+      "processtasktablayout": "工单详情页全局默认tab布局",
+      "processtaskworkerpolicyisonlyonceexecute": "工单步骤处理人分配策略是否只分配一次处理人，默认为0，步骤重新激活时会重新分配处理人，如果设置为1，则步骤重新激活时会用旧处理人",
+      "slatimedisplaymode": "工单时效显示方式，可选值naturalTime|workTime",
+      "steplist": {
+        "show": "工单详情页是否默认展示步骤日志,1:展开，0:收起 默认是展开"
+      },
+      "text": {
+        "processtask_step_in_operation_audit_enabled": "是否启用processtask_step_in_operation日志",
+        "processtask_tab_layout": "\t\t\t\"description\": \"上报内容\"\n"
+      },
+      "workcentercustomlimit": "工单中心“个人分类”超过限制无法添加自定义分类（拥有“工单中心管理权限”的用户不受限制）",
+      "workcenterprocesstasknewpage": "工单中心点击工单是否打开新页面，默认值是 0，即默认不打开",
+      "workcenterrefresh": "工单中心是否自动刷新，默认值为1（自动刷新）"
+    },
+    "knowledgesyncsource": {
+      "text": {
+        "processtask": "工单"
+      }
+    },
+    "processfieldtype": {
+      "text": {
+        "common": "工单固有属性",
+        "constant": "常量属性",
+        "custom": "自定义属性",
+        "form": "表单属性"
+      }
+    },
+    "processflowdirection": {
+      "text": {
+        "backward": "回退至：",
+        "forward": "流转至："
+      }
+    },
+    "processfromtype": {
+      "text": {
+        "eoatemplate": "EOA模板"
+      }
+    },
+    "processimportexporthandlertype": {
+      "text": {
+        "comment_template": "回复模板",
+        "eoa_template": "EOA模板",
+        "process": "流程图",
+        "score_template": "评分模板",
+        "subtask_policy": "子任务策略"
+      }
+    },
+    "processsteptype": {
+      "text": {
+        "end": "结束",
+        "process": "处理节点",
+        "start": "开始"
+      }
+    },
+    "processtaskauditdetailtype": {
+      "text": {
+        "assignworkerlist": "指定处理人",
+        "automaticinfo": "外部调用",
+        "cause": "原因",
+        "channeltyperelation": "关系类型",
+        "content": "内容",
+        "description": "描述",
+        "file": "文件",
+        "focususer": "工单关注人",
+        "form": "表单",
+        "opinion": "意见",
+        "priority": "优先级",
+        "processtask": "原工单",
+        "processtasklist": "工单",
+        "restfulaction": "RESTFUL动作",
+        "rule": "流转规则",
+        "score": "评分",
+        "taglist": "标签",
+        "task": "任务",
+        "title": "标题",
+        "workerlist": "处理人"
+      }
+    },
+    "processtaskaudittype": {
+      "description": {
+        "abortprocesstask": "取消工单",
+        "active": "激活【${DATA.processTaskStepName}】",
+        "autocancelrepeat": "【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单已完成，当前工单标记为重复事件，工单将自动取消",
+        "back": "回退【${DATA.processTaskStepName}】至【${DATA.nextStepName}】",
+        "bindrepeat": "将【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单标记为重复工单",
+        "boundrepeat": "被【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单标记为重复事件",
+        "comment": "回复【${DATA.processTaskStepName}】",
+        "complete": "完成【${DATA.processTaskStepName}】",
+        "completetask": "完成${DATA.replaceable_task}【${DATA.processTaskStepName}】",
+        "condition": "条件",
+        "createtask": "创建${DATA.replaceable_task}【${DATA.processTaskStepName}】",
+        "deletecomment": "删除回复【${DATA.processTaskStepName}】",
+        "deleterelation": "解除关联工单",
+        "deletetask": "删除${DATA.replaceable_task}【${DATA.processTaskStepName}】",
+        "deletetaskfile": "${DATA.replaceable_task}【${DATA.processTaskStepName}】 删除附件",
+        "editcomment": "编辑回复【${DATA.processTaskStepName}】",
+        "edittask": "编辑${DATA.replaceable_task}【${DATA.processTaskStepName}】",
+        "focustask": "关注工单",
+        "pause": "暂停【${DATA.processTaskStepName}】",
+        "reapproval": "重审【${DATA.processTaskStepName}】",
+        "recover": "恢复【${DATA.processTaskStepName}】",
+        "recoverprocesstask": "恢复工单",
+        "redo": "回退至【${DATA.processTaskStepName}】",
+        "relation": "关联工单",
+        "reportrelation": "上报并关联工单",
+        "retreat": "撤回【${DATA.processTaskStepName}】",
+        "savetaskfile": "${DATA.replaceable_task}【${DATA.processTaskStepName}】 上传附件",
+        "score": "评价工单",
+        "start": "开始【${DATA.processTaskStepName}】",
+        "startprocess": "提交工单",
+        "transfer": "转交【${DATA.processTaskStepName}】",
+        "transferknowledge": "提交工单转知识",
+        "transferreport": "转报并关联工单",
+        "unbindrepeat": "将【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单移除重复工单",
+        "unboundrepeat": "已从【[${DATA.repeatProcessTaskSerialNumber}]${DATA.repeatProcessTaskTitle}】工单移除重复事件",
+        "undofocustask": "取消关注工单",
+        "update": "修改工单",
+        "updatefocususer": "修改工单关注人",
+        "updateform": "修改表单",
+        "urge": "发起催办"
+      },
+      "text": {
+        "abortprocesstask": "取消",
+        "active": "激活",
+        "autocancelrepeat": "自动取消重复工单",
+        "back": "回退",
+        "bindrepeat": "绑定重复工单",
+        "boundrepeat": "被绑定重复工单",
+        "comment": "回复",
+        "complete": "流转",
+        "completetask": "回复子任务",
+        "condition": "条件",
+        "createtask": "创建子任务",
+        "deletecomment": "删除回复",
+        "deleterelation": "解除关联",
+        "deletetask": "删除子任务",
+        "deletetaskfile": "删除子任务附件",
+        "editcomment": "编辑回复",
+        "edittask": "编辑子任务",
+        "focustask": "关注工单",
+        "pause": "暂停",
+        "reapproval": "重审",
+        "recover": "恢复",
+        "recoverprocesstask": "恢复",
+        "redo": "回退",
+        "relation": "关联",
+        "reportrelation": "上报关联",
+        "restfulaction": "RESTFUL动作",
+        "retreat": "撤回",
+        "savetaskfile": "上传子任务附件",
+        "score": "评分",
+        "start": "开始",
+        "startprocess": "上报",
+        "transfer": "转交",
+        "transferknowledge": "转知识",
+        "transferreport": "转报",
+        "unbindrepeat": "解绑重复工单",
+        "unboundrepeat": "被解绑重复工单",
+        "undofocustask": "取消关注工单",
+        "update": "上报内容",
+        "updatefocususer": "修改工单关注人",
+        "updateform": "修改表单",
+        "urge": "催办"
+      }
+    },
+    "processtaskconditiontype": {
+      "text": {
+        "process": "流程",
+        "workcenter": "工单中心"
+      }
+    },
+    "processtaskevent": {
+      "text": {
+        "abort": "终止",
+        "active": "激活",
+        "failed": "失败",
+        "handle": "处理",
+        "redo": "重做",
+        "succeed": "成功",
+        "timeout": "超时"
+      }
+    },
+    "processtaskgroupsearch": {
+      "processusertype": "工单干系人"
+    },
+    "processtaskoperationtype": {
+      "text": {
+        "processtask_abort": "取消",
+        "processtask_copyprocesstask": "复制上报",
+        "processtask_delete": "删除",
+        "processtask_focususer_update": "修改工单关注人",
+        "processtask_hide": "隐藏",
+        "processtask_markrepeat": "标记重复",
+        "processtask_reactivate": "重新激活",
+        "processtask_recover": "恢复",
+        "processtask_redo": "回退",
+        "processtask_retreat": "撤回",
+        "processtask_score": "评分",
+        "processtask_show": "取消隐藏",
+        "processtask_start": "上报",
+        "processtask_transfer": "转交",
+        "processtask_transferreport": "转报",
+        "processtask_update": "修改上报内容",
+        "processtask_urge": "催办",
+        "processtask_view": "工单查看",
+        "processtask_work": "处理",
+        "transfer_eoa_step": "转交审批步骤"
+      }
+    },
+    "processtaskparams": {
+      "text": {
+        "actiontriggeruser": "动作触发人",
+        "actiontriggeruserid": "动作触发人用户ID",
+        "channeltype": "服务类型",
+        "content": "上报内容",
+        "owner": "上报人",
+        "ownercenter": "上报人中心",
+        "ownercompany": "上报人公司",
+        "ownerdepartment": "上报人部门",
+        "ownerdepartmentpath": "上报人部门(完整)",
+        "ownergroup": "上报人集团",
+        "ownerlevel": "上报人级别",
+        "ownerrole": "上报人角色",
+        "ownerteam": "上报人组",
+        "owneruserid": "上报人用户ID",
+        "priority": "优先级",
+        "starttime": "开始时间",
+        "stepid": "步骤ID",
+        "stepname": "步骤名称",
+        "steptask": "子任务",
+        "steptaskid": "子任务ID",
+        "stepuser": "步骤处理人",
+        "stepuserid": "步骤处理人用户ID",
+        "taskid": "工单ID",
+        "title": "标题"
+      }
+    },
+    "processtasksource": {
+      "text": {
+        "import": "导入",
+        "mobile": "移动端",
+        "pc": "PC端",
+        "processtask_transfer_report": "转报",
+        "system": "系统"
+      }
+    },
+    "processtaskstatus": {
+      "enumname": "工单状态"
+    },
+    "processtaskstepdatatype": {
+      "text": {
+        "automatic": "auto节点数据",
+        "stepdraftsave": "步骤草稿暂存"
+      }
+    },
+    "processtaskstepoperationtype": {
+      "text": {
+        "step_accept": "开始",
+        "step_active": "激活",
+        "step_back": "回退",
+        "step_comment": "回复",
+        "step_complete": "流转",
+        "step_deletecomment": "删除回复",
+        "step_editcomment": "编辑回复",
+        "step_fail": "失败",
+        "step_handle": "自动处理",
+        "step_hang": "挂起",
+        "step_pause": "暂停",
+        "step_reactivate": "重新激活步骤",
+        "step_reapproval": "重审",
+        "step_recover": "恢复",
+        "step_redo": "重做",
+        "step_restfulaction": "RESTFUL动作",
+        "step_retreat": "撤回",
+        "step_save": "暂存",
+        "step_start": "开始",
+        "step_transfer": "转交",
+        "step_view": "查看节点信息",
+        "step_work": "处理当前步骤",
+        "task_complete": "完成任务",
+        "task_create": "创建任务",
+        "task_delete": "删除任务",
+        "task_edit": "编辑任务",
+        "transfer_eoa_step": "转交审批步骤"
+      }
+    },
+    "processtaskstepremindtype": {
+      "description": {
+        "back": "回退了【processTaskStepName】，原因",
+        "redo": "回退了工单，原因"
+      },
+      "text": {
+        "automatic_error": "外部调用异常提醒",
+        "back": "回退提醒",
+        "error": "异常提醒",
+        "redo": "回退提醒",
+        "transfer": "转交提醒"
+      }
+    },
+    "processtaskstepstatus": {
+      "enumname": "工单状态",
+      "text": {
+        "draft": "未提交",
+        "failed": "异常",
+        "hang": "已挂起",
+        "pending": "待处理",
+        "running": "处理中",
+        "succeed": "已完成"
+      }
+    },
+    "processtasksteptasksource": {
+      "text": {
+        "processtaskstep": "工单步骤"
+      }
+    },
+    "processtasksteptaskuserstatus": {
+      "enumname": "工单状态",
+      "text": {
+        "pending": "待处理",
+        "succeed": "已完成"
+      }
+    },
+    "processtaskstepuserstatus": {
+      "text": {
+        "doing": "处理中",
+        "done": "处理完毕",
+        "someone_transferred": "被转交",
+        "transferred": "已转交"
+      }
+    },
+    "processtaskstepusertype": {
+      "text": {
+        "history_major": "历史处理人",
+        "major": "处理人",
+        "minor": "协助处理人"
+      }
+    },
+    "processtasktitletemplatevariable": {
+      "text": {
+        "region_name": "地域",
+        "user_id": "当前用户ID",
+        "user_name": "当前用户名称",
+        "yyyymmdd": "当前日期"
+      }
+    },
+    "processuserexportfiletype": {
+      "process": "流程图",
+      "workcenterdata": "工单中心数据"
+    },
+    "processusertype": {
+      "text": {
+        "default_worker": "异常处理人",
+        "focus_user": "关注人",
+        "major": "处理人",
+        "minor": "协助处理人",
+        "owner": "上报人",
+        "reporter": "代报人",
+        "worker": "待处理人"
+      }
+    },
+    "processworkcenterfield": {
+      "text": {
+        "aboutme": "与我相关",
+        "action": "操作栏",
+        "activetime": "激活时间",
+        "catalog": "服务目录",
+        "channeltype": "服务类型",
+        "confighash": "工单配置hash",
+        "content": "上报内容",
+        "content_include_html": "上报内容",
+        "current_step": "当前步骤",
+        "endtime": "结束时间",
+        "expired_time": "剩余时间",
+        "focus_users": "关注此工单的用户",
+        "id": "工单ID",
+        "is_show": "是否显示，0隐藏，1显示",
+        "owner": "上报人",
+        "priority": "优先级",
+        "process": "流程",
+        "reporter": "代报人",
+        "serial_number": "工单号",
+        "starttime": "开始时间",
+        "status": "工单状态",
+        "step": "步骤",
+        "step_name": "步骤名",
+        "step_only_team": "步骤处理组",
+        "step_only_user": "步骤处理人(人)",
+        "step_status": "步骤状态",
+        "step_team": "步骤处理组",
+        "step_user": "步骤处理人",
+        "title": "标题",
+        "transfer_from_user": "转交人",
+        "wokrtime": "时间窗口"
+      }
+    },
+    "processworkcenterinittype": {
+      "text": {
+        "all_processtask": "所有工单",
+        "done_of_mine_processtask": "我的已办",
+        "draft_processtask": "我的草稿",
+        "processing_of_mine_processtask": "我的待办"
+      }
+    },
+    "processworkcentertype": {
+      "text": {
+        "custom": "自定义",
+        "factory": "默认出厂",
+        "system": "系统分类"
+      }
+    },
+    "replaceabletext": {
+      "text": {
+        "content_details": "内容详情",
+        "relation_list": "关联工单",
+        "step_list": "步骤日志",
+        "time_line": "时间线"
+      }
+    },
+    "slatype": {
+      "text": {
+        "handle": "处理",
+        "response": "响应"
+      }
+    },
+    "userprofile": {
+      "processtasksuccess": "服务上报成功"
+    },
+    "userprofileoperate": {
+      "backcataloglist": "返回服务目录列表",
+      "keeponcreatetask": "继续上报",
+      "viewprocesstaskdetail": "查看工单详情"
+    },
+    "workerpolicy": {
+      "text": {
+        "assign": "自定义",
+        "automatic": "分派器",
+        "copy": "复制前置步骤处理人",
+        "form": "表单值",
+        "prestepassign": "由前置步骤处理人指定"
+      }
+    }
+  },
+  "nfpca": {
+    "callbacktype": {
+      "text": {
+        "interval": "轮询",
+        "none": "无需回调",
+        "wait": "等待回调"
+      }
+    },
+    "failpolicy": {
+      "text": {
+        "back": "步骤回退",
+        "cancel": "取消工单",
+        "hang": "人工处理",
+        "keep_on": "向后流转"
+      }
+    }
+  },
+  "nfpct": {
+    "taskconfigpolicy": {
+      "text": {
+        "any": "任意一人完成",
+        "any_2": "所有人完成"
+      }
+    }
+  },
+  "nfpd": {
+    "assignableworkerstepvo": {
+      "entityfield": {
+        "grouplist": {
+          "name": "目标列表"
+        },
+        "id": {
+          "name": "工单步骤id"
+        },
+        "isrequired": {
+          "name": "回复是否必填"
+        },
+        "name": {
+          "name": "步骤名称"
+        },
+        "processstepuuid": {
+          "name": "步骤uuid"
+        },
+        "rangelist": {
+          "name": "范围列表"
+        }
+      }
+    },
+    "channeltypevo": {
+      "entityfield": {
+        "color": {
+          "name": "颜色"
+        },
+        "description": {
+          "name": "描述"
+        },
+        "handler": {
+          "name": "工单号策略"
+        },
+        "handlername": {
+          "name": "工单号策略名"
+        },
+        "icon": {
+          "name": "图标"
+        },
+        "isactive": {
+          "name": "状态"
+        },
+        "name": {
+          "name": "名称"
+        },
+        "prefix": {
+          "name": "工单号前缀"
+        },
+        "sort": {
+          "name": "排序"
+        },
+        "uuid": {
+          "name": "服务类型uuid"
+        }
+      }
+    },
+    "channelvo": {
+      "effectiveauthority": "是否有上报权限",
+      "parentnames": "服务所有父目录名，逗号隔开",
+      "parentuuids": "服务所有父目录uuid，逗号隔开",
+      "typeanduuid": "类型#uuid"
+    },
+    "dashboardwidgetparamvo": {
+      "entityfield": {
+        "dashboardwidgetchartconfigvo": {
+          "name": "chart配置"
+        },
+        "datasourcehandler": {
+          "name": "数据源handler"
+        },
+        "dbexchangegroupdatamap": {
+          "name": "一级分组搜索结果转换后的map，用于二级分组过滤 "
+        },
+        "starttimecondition": {
+          "name": "上报时间条件"
+        }
+      }
+    },
+    "priorityvo": {
+      "entityfield": {
+        "color": {
+          "name": "颜色"
+        },
+        "desc": {
+          "name": "描述"
+        },
+        "icon": {
+          "name": "图标"
+        },
+        "isactive": {
+          "name": "状态"
+        },
+        "name": {
+          "name": "名称"
+        },
+        "sort": {
+          "name": "排序"
+        },
+        "uuid": {
+          "name": "优先级uuid"
+        }
+      }
+    },
+    "processcommenttemplateauthvo": {
+      "entityfield": {
+        "commenttemplateid": {
+          "name": "回复模版ID"
+        },
+        "type": {
+          "name": "类型"
+        },
+        "uuid": {
+          "name": "UUID"
+        }
+      }
+    },
+    "processcommenttemplateusecountvo": {
+      "entityfield": {
+        "commenttemplateid": {
+          "name": "回复模版ID"
+        },
+        "count": {
+          "name": "使用次数"
+        },
+        "useruuid": {
+          "name": "用户uuid"
+        }
+      }
+    },
+    "processcommenttemplatevo": {
+      "entityfield": {
+        "authlist": {
+          "name": "授权对象"
+        },
+        "content": {
+          "name": "内容"
+        },
+        "id": {
+          "name": "主键ID"
+        },
+        "iseditable": {
+          "name": "当前用户是否可编辑"
+        },
+        "name": {
+          "name": "名称"
+        },
+        "type": {
+          "name": "类型(system:系统模版;custom:自定义模版)"
+        }
+      },
+      "text": {
+        "custom": "自定义模板",
+        "system": "系统模版"
+      }
+    },
+    "processdatacubevo": {
+      "text": {
+        "rest": "RESTFul接口",
+        "sql": "数据库",
+        "static": "静态"
+      }
+    },
+    "processdraftvo": {
+      "entityfield": {
+        "config": {
+          "name": "流程图配置"
+        },
+        "fcd": {
+          "name": "保存时间"
+        },
+        "name": {
+          "name": "流程名称"
+        },
+        "processuuid": {
+          "name": "流程uuid"
+        },
+        "uuid": {
+          "name": "草稿uuid"
+        }
+      }
+    },
+    "processstephandlervo": {
+      "entityfield": {
+        "allowdispatchstepworker": {
+          "name": "是否允许该类型步骤处理人指派后置步骤的处理人"
+        },
+        "backwardinputquantity": {
+          "name": "回退输入数量"
+        },
+        "backwardoutputquantity": {
+          "name": "回退输出数量"
+        },
+        "chartconfig": {
+          "name": "前端配置信息"
+        },
+        "config": {
+          "name": "配置信息"
+        },
+        "forwardinputquantity": {
+          "name": "正向输入数量"
+        },
+        "forwardoutputquantity": {
+          "name": "正向输出数量"
+        },
+        "handler": {
+          "name": "处理器"
+        },
+        "icon": {
+          "name": "是否允许作为开始节点"
+        },
+        "isactive": {
+          "name": "是否激活"
+        },
+        "isallowstart": {
+          "name": "图标"
+        },
+        "isfitmobile": {
+          "name": "是否移动端支持处理"
+        },
+        "ishidden": {
+          "name": "是否隐藏"
+        },
+        "moduleid": {
+          "name": "模块id"
+        },
+        "name": {
+          "name": "名称"
+        },
+        "sort": {
+          "name": "排序"
+        },
+        "type": {
+          "name": "类型"
+        }
+      }
+    },
+    "processtaskimportauditvo": {
+      "entityfield": {
+        "channelname": {
+          "name": "服务名称"
+        },
+        "channeluuid": {
+          "name": "服务uuid"
+        },
+        "errorreason": {
+          "name": "上报失败原因"
+        },
+        "id": {
+          "name": "导入记录id"
+        },
+        "importtime": {
+          "name": "导入时间"
+        },
+        "owner": {
+          "name": "上报人UUID"
+        },
+        "ownername": {
+          "name": "上报人用户名"
+        },
+        "ownervo": {
+          "name": "上报人vo"
+        },
+        "processtaskid": {
+          "name": "工单ID"
+        },
+        "serialnumber": {
+          "name": "工单号"
+        },
+        "status": {
+          "name": "状态"
+        },
+        "title": {
+          "name": "标题"
+        }
+      }
+    },
+    "processtaskinvokevo": {
+      "entityfield": {
+        "invokeid": {
+          "name": "来源id"
+        },
+        "processtaskid": {
+          "name": "工单id"
+        },
+        "source": {
+          "name": "来源"
+        },
+        "type": {
+          "name": "来源类型"
+        }
+      }
+    },
+    "processtaskscoretemplatevo": {
+      "entityfield": {
+        "config": {
+          "name": "评分配置"
+        },
+        "confighash": {
+          "name": "评分配置hash"
+        },
+        "isauto": {
+          "name": "是否自动评分"
+        },
+        "processtaskid": {
+          "name": "工单id"
+        },
+        "scoretemplateid": {
+          "name": "评分模版ID"
+        }
+      }
+    },
+    "processtaskslatimevo": {
+      "entityfield": {
+        "calculationtime": {
+          "name": "上次耗时计算时间点"
+        },
+        "delaylist": {
+          "name": "延迟列表"
+        },
+        "displaymodeaftertimeout": {
+          "name": "工单时效超时后显示方式"
+        },
+        "expiretime": {
+          "name": "超时日期（根据工作日历计算）"
+        },
+        "name": {
+          "name": "名称"
+        },
+        "processtaskid": {
+          "name": "工单id"
+        },
+        "processtaskstepid": {
+          "name": "步骤id"
+        },
+        "realexpiretime": {
+          "name": "超时日期（不考虑工作日历）"
+        },
+        "realtimeleft": {
+          "name": "剩余时间（不考虑工作日历），单位：毫秒"
+        },
+        "slatimedisplaymode": {
+          "name": "工单时效显示方式"
+        },
+        "status": {
+          "name": "状态"
+        },
+        "timeleft": {
+          "name": "剩余时间（根据工作日历计算），单位：毫秒"
+        },
+        "timesum": {
+          "name": "总耗时，单位：毫秒"
+        }
+      }
+    },
+    "processtaskslavo": {
+      "entityfield": {
+        "config": {
+          "name": "配置"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "name": {
+          "name": "名称"
+        },
+        "processtaskid": {
+          "name": "流程任务id"
+        }
+      }
+    },
+    "processtaskstepauditdetailvo": {
+      "entityfield": {
+        "auditid": {
+          "name": "活动id"
+        },
+        "newcontent": {
+          "name": "新内容"
+        },
+        "oldcontent": {
+          "name": "旧内容"
+        },
+        "type": {
+          "name": "详情类型，title(标题)、priority(优先级)、content(内容)、worker(处理人)、file(上传文件)"
+        },
+        "typename": {
+          "name": "详情类型名称"
+        }
+      }
+    },
+    "processtaskstepauditvo": {
+      "entityfield": {
+        "action": {
+          "name": "活动类型"
+        },
+        "actiontime": {
+          "name": "创建时间"
+        },
+        "auditdetaillist": {
+          "name": "活动详情列表"
+        },
+        "description": {
+          "name": "描述"
+        },
+        "formsceneuuid": {
+          "name": "表单场景"
+        },
+        "id": {
+          "name": "活动id"
+        },
+        "originaluser": {
+          "name": "原始处理人uuid"
+        },
+        "originaluservo": {
+          "name": "原始处理人Vo"
+        },
+        "processtaskid": {
+          "name": "工单id"
+        },
+        "processtaskstepid": {
+          "name": "步骤id"
+        },
+        "source": {
+          "name": "来源"
+        },
+        "sourcename": {
+          "name": "来源中文名"
+        },
+        "stepstatus": {
+          "name": "步骤状态"
+        },
+        "stepstatusvo": {
+          "name": "步骤状态信息"
+        },
+        "useruuid": {
+          "name": "用户userUuid"
+        },
+        "uservo": {
+          "name": "用户"
+        }
+      }
+    },
+    "processtaskstepreplyvo": {
+      "entityfield": {
+        "content": {
+          "name": "描述内容"
+        },
+        "fileidlist": {
+          "name": "附件id列表"
+        },
+        "filelist": {
+          "name": "附件列表"
+        },
+        "id": {
+          "name": "回复id"
+        },
+        "isdeletable": {
+          "name": "是否可删除"
+        },
+        "iseditable": {
+          "name": "是否可编辑"
+        },
+        "operatorrole": {
+          "name": "操作人角色"
+        },
+        "processtaskid": {
+          "name": "工单id"
+        },
+        "processtaskstepid": {
+          "name": "步骤id"
+        },
+        "processtaskstepname": {
+          "name": "步骤名"
+        },
+        "source": {
+          "name": "来源"
+        },
+        "sourcename": {
+          "name": "来源中文名"
+        },
+        "targetlist": {
+          "name": "目标对象列表"
+        },
+        "type": {
+          "name": "类型"
+        }
+      }
+    },
+    "processtasksteptaskusercontentvo": {
+      "entityfield": {
+        "button": {
+          "name": "完成时点击的操作按钮"
+        },
+        "content": {
+          "name": "内容"
+        },
+        "endtime": {
+          "name": "结束时间"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "processtasksteptaskid": {
+          "name": "任务id"
+        },
+        "processtasksteptaskuserid": {
+          "name": "任务用户id"
+        },
+        "status": {
+          "name": "任务状态"
+        },
+        "useruuid": {
+          "name": "用户uuid"
+        },
+        "uservo": {
+          "name": "用户"
+        }
+      }
+    },
+    "processtasksteptaskuserfilevo": {
+      "entityfield": {
+        "fileid": {
+          "name": "附件id"
+        },
+        "processtasksteptaskid": {
+          "name": "任务id"
+        },
+        "processtasksteptaskuserid": {
+          "name": "任务用户id"
+        }
+      }
+    },
+    "processtasksteptaskuservo": {
+      "entityfield": {
+        "button": {
+          "name": "完成时点击的操作按钮"
+        },
+        "content": {
+          "name": "内容"
+        },
+        "endtime": {
+          "name": "结束时间"
+        },
+        "fileidlist": {
+          "name": "附件id列表"
+        },
+        "filelist": {
+          "name": "附件信息列表"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "isdelete": {
+          "name": "是否删除"
+        },
+        "isreplyable": {
+          "name": "是否可以回复"
+        },
+        "originaluseruuid": {
+          "name": "原始处理人uuid"
+        },
+        "originaluservo": {
+          "name": "用户"
+        },
+        "processtasksteptaskid": {
+          "name": "任务id"
+        },
+        "processtasksteptaskusercontentid": {
+          "name": "任务id"
+        },
+        "status": {
+          "name": "任务状态"
+        },
+        "steptaskusercontentvolist": {
+          "name": "内容VoList"
+        },
+        "useruuid": {
+          "name": "用户uuid"
+        },
+        "uservo": {
+          "name": "用户"
+        }
+      }
+    },
+    "processtasksteptaskvo": {
+      "entityfield": {
+        "content": {
+          "name": "描述"
+        },
+        "contenthash": {
+          "name": "描述hash值"
+        },
+        "createtime": {
+          "name": "创建时间"
+        },
+        "endtime": {
+          "name": "结束时间"
+        },
+        "id": {
+          "name": "任务id"
+        },
+        "majoruser": {
+          "name": "步骤主处理人"
+        },
+        "owner": {
+          "name": "创建人uuid"
+        },
+        "ownervo": {
+          "name": "创建人"
+        },
+        "processtaskid": {
+          "name": "工单id"
+        },
+        "processtaskstepid": {
+          "name": "步骤id"
+        },
+        "status": {
+          "name": "状态"
+        },
+        "statusvo": {
+          "name": "状态信息"
+        },
+        "steptaskuservolist": {
+          "name": "处理人VoList"
+        },
+        "taskconfigid": {
+          "name": "任务配置id"
+        },
+        "taskconfigname": {
+          "name": "任务配置"
+        },
+        "taskconfigpolicy": {
+          "name": "任务策略"
+        },
+        "taskconfigpolicyname": {
+          "name": "任务策略名"
+        },
+        "userlist": {
+          "name": "处理人"
+        }
+      }
+    },
+    "processtaskstepvo": {
+      "entityfield": {
+        "actionlist": {
+          "name": "动作列表"
+        },
+        "activetime": {
+          "name": "激活时间"
+        },
+        "aliasname": {
+          "name": "步骤别名"
+        },
+        "assignableworkersteplist": {
+          "name": "可分配处理人的步骤列表"
+        },
+        "backwardnextsteplist": {
+          "name": "向后步骤列表"
+        },
+        "comment": {
+          "name": "暂存评论附件或上报描述附件"
+        },
+        "commentlist": {
+          "name": "评论附件列表"
+        },
+        "commenttemplate": {
+          "name": "回复模版"
+        },
+        "config": {
+          "name": "配置信息"
+        },
+        "contenthelp": {
+          "name": "回复框帮助"
+        },
+        "custombuttonlist": {
+          "name": "自定义按钮文本列表"
+        },
+        "customstatuslist": {
+          "name": "自定义状态文本列表"
+        },
+        "enablereapproval": {
+          "name": "启用重审"
+        },
+        "endtime": {
+          "name": "结束时间"
+        },
+        "expiretime": {
+          "name": "超时时间点"
+        },
+        "flowdirection": {
+          "name": "流转方向"
+        },
+        "formsceneuuid": {
+          "name": "表单场景"
+        },
+        "forwardnextsteplist": {
+          "name": "向前步骤列表"
+        },
+        "handler": {
+          "name": "步骤处理器"
+        },
+        "handlerstepinfo": {
+          "name": "处理器特有的步骤信息"
+        },
+        "id": {
+          "name": "工单步骤id"
+        },
+        "isallowprocessonmobile": {
+          "name": "是否允许在移动端处理"
+        },
+        "isinthecurrentsteptab": {
+          "name": "是否在当前步骤标签中"
+        },
+        "isneedcontent": {
+          "name": "是否需要回复框"
+        },
+        "isneeduploadfile": {
+          "name": "是否需要上传文件"
+        },
+        "isrequired": {
+          "name": "回复是否必填"
+        },
+        "isview": {
+          "name": "当前用户是否有权限看到该步骤内容"
+        },
+        "majoruser": {
+          "name": "处理人"
+        },
+        "minoruserlist": {
+          "name": "子任务处理人列表"
+        },
+        "name": {
+          "name": "步骤名称"
+        },
+        "originaluser": {
+          "name": "原始处理人uuid"
+        },
+        "originaluservo": {
+          "name": "原始处理人"
+        },
+        "processtaglist": {
+          "name": "标签列表"
+        },
+        "processtaskid": {
+          "name": "工单id"
+        },
+        "processtaskstepagentvo": {
+          "name": "代办信息"
+        },
+        "processtaskstepdata": {
+          "name": "步骤数据"
+        },
+        "processtaskstepremindlist": {
+          "name": "提醒列表"
+        },
+        "processtasksteptask": {
+          "name": "任务json"
+        },
+        "processtasksteptaskvo": {
+          "name": "任务列表"
+        },
+        "replaceabletextlist": {
+          "name": "可替换文本列表"
+        },
+        "slatimelist": {
+          "name": "时效列表"
+        },
+        "starttime": {
+          "name": "开始时间"
+        },
+        "status": {
+          "name": "状态"
+        },
+        "statusvo": {
+          "name": "状态信息"
+        },
+        "taskconfiglist": {
+          "name": "任务策略列表"
+        },
+        "type": {
+          "name": "步骤类型"
+        },
+        "userlist": {
+          "name": "处理人列表"
+        },
+        "viewprevnodelist": {
+          "name": "处理时查看步骤列表"
+        },
+        "viewprevnodeuuidlist": {
+          "name": "处理时查看步骤UUID列表"
+        },
+        "workerlist": {
+          "name": "有权限处理人列表"
+        }
+      }
+    },
+    "processtaskvo": {
+      "entityfield": {
+        "config": {
+          "name": "工单流程图信息"
+        },
+        "name": {
+          "processdispatcherlist": "流程分派器列表"
+        },
+        "ownername": {
+          "name": "上报人"
+        },
+        "ownerviplevel": {
+          "name": "上报人等级"
+        },
+        "regionvo": {
+          "name": "地域"
+        },
+        "reportername": {
+          "name": "代报人"
+        }
+      }
+    },
+    "processtypevo": {
+      "entityfield": {
+        "id": {
+          "name": "流程类型id"
+        },
+        "name": {
+          "name": "流程类型名称"
+        }
+      }
+    },
+    "processvo": {
+      "entityfield": {
+        "formuuid": {
+          "name": "流程表单uuid"
+        }
+      }
+    },
+    "taskconfigvo": {
+      "entityfield": {
+        "config": {
+          "name": "配置信息"
+        },
+        "id": {
+          "name": "ID"
+        },
+        "isactive": {
+          "name": "是否激活"
+        },
+        "name": {
+          "name": "任务名称"
+        },
+        "num": {
+          "name": "参与人数。-1：不做限制"
+        },
+        "policy": {
+          "name": "其中一个人完成即可：any,所有人完成：all"
+        },
+        "processtasksteptasklist": {
+          "name": "任务列表"
+        },
+        "rangelist": {
+          "name": "处理人过滤范围"
+        },
+        "referencecount": {
+          "name": "依赖数"
+        }
+      }
+    },
+    "timeoutpolicyvo": {
+      "entityfield": {
+        "moduleid": {
+          "name": "模块id"
+        },
+        "name": {
+          "name": "超时策略名称"
+        },
+        "type": {
+          "name": "超时策略类型"
+        }
+      }
+    },
+    "workerdispatchervo": {
+      "entityfield": {
+        "config": {
+          "name": "分派器扩展配置"
+        },
+        "handler": {
+          "name": "分派器处理类"
+        },
+        "help": {
+          "name": "输入帮助"
+        },
+        "isactive": {
+          "name": "是否激活"
+        },
+        "ishasform": {
+          "name": "是否包含选表单组件"
+        },
+        "moduleid": {
+          "name": "分派器所属模块"
+        },
+        "name": {
+          "name": "分派器名称"
+        }
+      }
+    },
+    "workerpolicyvo": {
+      "entityfield": {
+        "moduleid": {
+          "name": "模块id"
+        },
+        "name": {
+          "name": "指派策略名称"
+        },
+        "type": {
+          "name": "指派策略类型"
+        }
+      }
+    }
+  },
+  "nfpdc": {
+    "tagtypevo": {
+      "entityfield": {
+        "id": {
+          "name": "ID"
+        },
+        "label": {
+          "name": "名称"
+        },
+        "name": {
+          "name": "唯一标识"
+        }
+      }
+    }
+  },
+  "nfpds": {
+    "processscoretemplatevo": {
+      "entityfield": {
+        "config": {
+          "name": "评分配置"
+        },
+        "isactive": {
+          "name": "是否启用评分（0：否，1：是）"
+        },
+        "isauto": {
+          "name": "是否自动评分"
+        },
+        "processuuid": {
+          "name": "流程UUID"
+        },
+        "scoretemplateid": {
+          "name": "评分模版ID"
+        }
+      }
+    },
+    "processtaskscorevo": {
+      "entityfield": {
+        "contenthash": {
+          "name": "评价内容hash"
+        },
+        "isauto": {
+          "name": "是否自动评分（0：否，1：是）"
+        },
+        "processtaskid": {
+          "name": "工单ID"
+        },
+        "score": {
+          "name": "分数"
+        },
+        "scoredimensionid": {
+          "name": "评分模版维度ID"
+        },
+        "scoretemplateid": {
+          "name": "评分模版ID"
+        }
+      }
+    },
+    "scoretemplatedimensionvo": {
+      "entityfield": {
+        "description": {
+          "name": "评分维度说明"
+        },
+        "id": {
+          "name": "主键ID"
+        },
+        "name": {
+          "name": "评分维度名称"
+        },
+        "score": {
+          "name": "评分值"
+        },
+        "scoretemplateid": {
+          "name": "评分模版ID"
+        }
+      }
+    },
+    "scoretemplatevo": {
+      "entityfield": {
+        "description": {
+          "name": "评分模版说明"
+        },
+        "dimensionlist": {
+          "name": "评分维度列表"
+        },
+        "dimensionnamelist": {
+          "name": "评分维度名称列表"
+        },
+        "id": {
+          "name": "主键ID"
+        },
+        "isactive": {
+          "name": "是否启用"
+        },
+        "name": {
+          "name": "评分模版名称"
+        },
+        "processcount": {
+          "name": "关联的流程数量"
+        }
+      }
+    }
+  },
+  "nfpec": {
+    "catalogillegalparameterexception": {
+      "catalogillegalparameterexception": "服务目录：“{0}”还存在子服务"
+    },
+    "catalognamerepeatexception": {
+      "catalognamerepeatexception": "服务目录名称：“{0}”已存在"
+    },
+    "catalognotfoundedittargetexception": {
+      "catalognotfoundedittargetexception": "服务目录：{0}不存在"
+    },
+    "catalognotfoundexception": {
+      "catalognotfoundexception": "服务目录：“{0}”不存在"
+    },
+    "channelisreferencedexception": {
+      "channelisreferencedexception": "服务：“{0}”已被引用"
+    },
+    "channelnamerepeatexception": {
+      "channelnamerepeatexception": "服务：“{0}”已存在"
+    },
+    "channelnotfoundedittargetexception": {
+      "channelnotfoundedittargetexception": "服务：{0}不存在"
+    },
+    "channelnotfoundexception": {
+      "channelnotfoundexception": "服务：“{0}”不存在"
+    },
+    "channelparentuuidcannotbezeroexception": {
+      "channelparentuuidcannotbezeroexception": "服务的parentUuid不能为零"
+    },
+    "channelrelationsettingexception": {
+      "channelrelationsettingexception": "服务允许转报后，转报设置必填"
+    },
+    "channeltypehasreferenceexception": {
+      "channeltypehasreferenceexception": "服务类型：“{0}”已关联服务，不可{1}"
+    },
+    "channeltypenamerepeatexception": {
+      "channeltypenamerepeatexception": "服务类型：“{0}”已存在"
+    },
+    "channeltypenotfoundexception": {
+      "channeltypenotfoundexception": "服务类型：“{0}”不存在"
+    },
+    "channeltyperelationhasreferenceexception": {
+      "channeltyperelationhasreferenceexception": "服务类型关系“{0}”已被引用，不能修改"
+    },
+    "channeltyperelationnamerepeatexception": {
+      "channeltyperelationnamerepeatexception": "服务类型关系“{0}”已存在"
+    },
+    "channeltyperelationnotfoundexception": {
+      "channeltyperelationnotfoundexception": "服务类型关系“{0}”不存在"
+    },
+    "eshandler": {
+      "text": {
+        "processtask": "工单"
+      }
+    },
+    "processcommenttemplatenamerepeatexception": {
+      "processcommenttemplatenamerepeatexception": "模版“{0}”已存在"
+    },
+    "processcommenttemplatenotfoundexception": {
+      "processcommenttemplatenotfoundexception": "回复模版：{0} 不存在"
+    }
+  },
+  "nfpef": {
+    "processtaskfiledownloadexception": {
+      "processtaskfiledownloadexception": "文件（{0}）下载失败，您不是工单干系人或者没有服务的上报权限"
+    }
+  },
+  "nfpeo": {
+    "operationauthhandlernotfoundexception": {
+      "operationauthhandlernotfoundexception": "找不到类型为：{0}的操作权限组件"
+    },
+    "operationprocessorisexistsexception": {
+      "operationprocessorisexistsexception": "操作处理器：{0}已存在，请修改代码"
+    },
+    "processtaskabortedexception": {
+      "processtaskabortedexception": "工单已取消"
+    },
+    "processtaskautomatichandlernotenableoperateexception": {
+      "processtaskautomatichandlernotenableoperateexception": "外部调用节点不支持“{0}”操作"
+    },
+    "processtaskbacknotenabledexception": {
+      "processtaskbacknotenabledexception": "工单未启用回退功能"
+    },
+    "processtaskchanneltransferreportnotenabledexception": {
+      "processtaskchanneltransferreportnotenabledexception": "工单对应的服务【{0}】未启用转报功能"
+    },
+    "processtaskfailedexception": {
+      "processtaskfailedexception": "工单异常"
+    },
+    "processtaskhangexception": {
+      "processtaskhangexception": "工单已挂起"
+    },
+    "processtaskhiddenexception": {
+      "processtaskhiddenexception": "工单已隐藏"
+    },
+    "processtaskmarkrepeatnotenabledexception": {
+      "processtaskmarkrepeatnotenabledexception": "工单未启用标记重复事件功能"
+    },
+    "processtasknoprocessablestepsexception": {
+      "processtasknoprocessablestepsexception": "工单里没有您可以处理的步骤"
+    },
+    "processtasknoretreatablestepsexception": {
+      "processtasknoretreatablestepsexception": "工单里没有您可以撤回的步骤"
+    },
+    "processtasknotchannelreportexception": {
+      "processtasknotchannelreportexception": "您没有【{0}】服务的上报权限"
+    },
+    "processtasknotchannelviewexception": {
+      "processtasknotchannelviewexception": "您没有【{0}】服务的工单查看权限"
+    },
+    "processtasknotownerexception": {
+      "processtasknotownerexception": "您不是工单上报人或代报人"
+    },
+    "processtasknotprocesstaskmodifyexception": {
+      "processtasknotprocesstaskmodifyexception": "没有工单管理权限"
+    },
+    "processtasknotprocessuserexception": {
+      "processtasknotprocessuserexception": "您不是工单干系人"
+    },
+    "processtasknotransferablestepsexception": {
+      "processtasknotransferablestepsexception": "工单里没有您可以转交的步骤"
+    },
+    "processtaskoperationunauthorizedexception": {
+      "processtaskoperationunauthorizedexception": "您的“{0}”操作未获得授权"
+    },
+    "processtaskrunningexception": {
+      "processtaskrunningexception": "工单处理中"
+    },
+    "processtaskscoredexception": {
+      "processtaskscoredexception": "工单已评分"
+    },
+    "processtaskscorenotenabledexception": {
+      "processtaskscorenotenabledexception": "工单未启用评分功能"
+    },
+    "processtaskshownexception": {
+      "processtaskshownexception": "工单已显示"
+    },
+    "processtaskstepbacknotenabledexception": {
+      "processtaskstepbacknotenabledexception": "该步骤未启用回退功能"
+    },
+    "processtaskstepcannotretreatexception": {
+      "processtaskstepcannotretreatexception": "该步骤已经不能撤回"
+    },
+    "processtaskstepfailedexception": {
+      "processtaskstepfailedexception": "步骤异常"
+    },
+    "processtaskstephandledbyothersexception": {
+      "processtaskstephandledbyothersexception": "【{1}|{0}】用户已经处理了此步骤"
+    },
+    "processtaskstephangexception": {
+      "processtaskstephangexception": "步骤已挂起"
+    },
+    "processtaskstepmajoruserexception": {
+      "processtaskstepmajoruserexception": "您已经是步骤处理人"
+    },
+    "processtaskstepnoneedreapprovalstepexception": {
+      "processtaskstepnoneedreapprovalstepexception": "没有需要重审的步骤"
+    },
+    "processtaskstepnotactiveexception": {
+      "processtaskstepnotactiveexception": "步骤未激活"
+    },
+    "processtaskstepnotmajoruserexception": {
+      "processtaskstepnotmajoruserexception": "您不是步骤处理人"
+    },
+    "processtaskstepnotminoruserexception": {
+      "processtaskstepnotminoruserexception": "您不是步骤协助处理人"
+    },
+    "processtaskstepnotnextstepexception": {
+      "processtaskstepnotnextstepexception": "该步骤没有下一步骤"
+    },
+    "processtaskstepnotworkerexception": {
+      "processtaskstepnotworkerexception": "您不是步骤待处理人"
+    },
+    "processtasksteppendingexception": {
+      "processtasksteppendingexception": "步骤未开始"
+    },
+    "processtaskstepreapprovalnotenabledexception": {
+      "processtaskstepreapprovalnotenabledexception": "该步骤未启用重审功能"
+    },
+    "processtasksteprunningexception": {
+      "processtasksteprunningexception": "步骤处理中"
+    },
+    "processtaskstepsucceededexception": {
+      "processtaskstepsucceededexception": "步骤已完成"
+    },
+    "processtaskstepundoneexception": {
+      "processtaskstepundoneexception": "步骤未完成"
+    },
+    "processtaskstepunsubmittedexception": {
+      "processtaskstepunsubmittedexception": "步骤未提交"
+    },
+    "processtasksubmittedexception": {
+      "processtasksubmittedexception": "工单已提交"
+    },
+    "processtasksucceededexception": {
+      "processtasksucceededexception": "工单已完成"
+    },
+    "processtasktimerhandlernotenableoperateexception": {
+      "processtasktimerhandlernotenableoperateexception": "定时节点不支持“{0}”操作"
+    },
+    "processtaskundoneexception": {
+      "processtaskundoneexception": "工单未完成"
+    },
+    "processtaskunsubmittedexception": {
+      "processtaskunsubmittedexception": "工单未提交"
+    }
+  },
+  "nfpep": {
+    "automaticconfigexception": {
+      "automaticconfigexception": "automaticConfig异常为null，jobName: {0}"
+    },
+    "priorityisinvokedexception": {
+      "priorityisinvokedexception": "优先级：“{0}”被引用了"
+    },
+    "prioritynamerepeatexception": {
+      "prioritynamerepeatexception": "优先级：“{0}”已存在"
+    },
+    "prioritynotfoundexception": {
+      "prioritynotfoundexception": "优先级：“{0}”不存在"
+    },
+    "processconfigexception": {
+      "condition": "{0}步骤的条件流转规则设置中存在无效的步骤",
+      "copy": "{0}步骤的分配处理人-复制前置步骤处理人-前置步骤中存在无效的步骤",
+      "prestepassign": "{0}步骤的分配处理人-由前置步骤处理人指定-前置步骤中存在无效的步骤",
+      "prestepassignconditionstep": "{0}步骤的分配处理人-由前置步骤处理人指定-前置步骤-条件路径中存在无效的步骤",
+      "sla": "时效设置-{0}时效的关联步骤中存在无效的步骤"
+    },
+    "processdraftnotfoundexception": {
+      "processdraftnotfoundexception": "流程草稿：“{0}”不存在"
+    },
+    "processimportexception": {
+      "processimportexception": "没有导入文件",
+      "processimportexception_a": "没有导入文件"
+    },
+    "processnamerepeatexception": {
+      "processnamerepeatexception": "流程图：“{0}”已存在"
+    },
+    "processnotfoundedittargetexception": {
+      "processnotfoundedittargetexception": "流程：{0}不存在"
+    },
+    "processnotfoundexception": {
+      "processnotfoundexception": "流程：“{0}”不存在"
+    },
+    "processreferencedcannotbedeleteexception": {
+      "processreferencedcannotbedeleteexception": "流程：“{0}”有被引用，不能删除"
+    },
+    "processstephandlernotfoundexception": {
+      "processstephandlernotfoundexception": "找不到类型为：{0}的流程组件"
+    },
+    "processsteputilhandlernotfoundexception": {
+      "processsteputilhandlernotfoundexception": "找不到类型为：{0}的流程工具组件"
+    },
+    "processtaskautomaticnotallownextstepsexception": {
+      "processtaskautomaticnotallownextstepsexception": "自动化处理步骤只允许存在一个流转/回退步骤"
+    },
+    "processtaskfindmultiplenextstepexception": {
+      "processtaskfindmultiplenextstepexception": "找到多个后续节点"
+    },
+    "processtaskfocusrepeatexception": {
+      "processtaskfocusrepeatexception": "工单：“{0}”已关注"
+    },
+    "processtaskmustbeassignworkerexception": {
+      "processtaskmustbeassignworkerexception": "指派：{0}步骤处理人是必填"
+    },
+    "processtasknextstepillegalexception": {
+      "processtasknextstepillegalexception": "{1}不是步骤：{0}的下一步骤",
+      "processtasknextstepillegalexception_a": "工单：{0}的开始步骤没有下一步骤"
+    },
+    "processtasknextstepnameoridunassignexception": {
+      "processtasknextstepnameoridunassignexception": "缺少下一步骤的名称或id"
+    },
+    "processtasknextstepoveroneexception": {
+      "processtasknextstepoveroneexception": "工单：{0}的当前步骤的下一步骤存在多个"
+    },
+    "processtasknopermissionexception": {
+      "processtasknopermissionexception": "您没有执行“{0}”操作权限"
+    },
+    "processtasknotdelegatereportpermissionexception": {
+      "processtasknotdelegatereportpermissionexception": "你没有{0}服务的代报权限"
+    },
+    "processtasknotfoundedittargetexception": {
+      "processtasknotfoundedittargetexception": "工单：{0}不存在"
+    },
+    "processtasknotfoundexception": {
+      "processtasknotfoundexception": "工单“{0}”不存在",
+      "processtasknotfoundexception_a": "工单“{0}”不存在",
+      "processtasknotfoundexception_b": "工单不存在"
+    },
+    "processtasknotfoundnextstepexception": {
+      "processtasknotfoundnextstepexception": "工单：{0}的步骤：{1} 找不到可流转路径，参数nextStepId为{2}"
+    },
+    "processtasknotfoundspecifiedstepexception": {
+      "processtasknotfoundspecifiedstepexception": "步骤：“{1}”不是工单：“{0}”的步骤"
+    },
+    "processtaskownerisemptyexception": {
+      "processtaskownerisemptyexception": "工单请求人不能为空"
+    },
+    "processtaskpriorityisemptyexception": {
+      "processtaskpriorityisemptyexception": "工单优先级不能为空"
+    },
+    "processtaskprioritynotmatchexception": {
+      "processtaskprioritynotmatchexception": "工单优先级与当前服务优先级不匹配"
+    },
+    "processtaskserialnumberpolicyhandlernotfoundexception": {
+      "processtaskserialnumberpolicyhandlernotfoundexception": "工单号生成策略：“{0}”不存在"
+    },
+    "processtaskserialnumberpolicynotfoundexception": {
+      "processtaskserialnumberpolicynotfoundexception": "服务类型：”{0}“没有配置工单号生成策略，请联系管理员，在“IT服务/服务类型管理”中编辑该服务类型的工单号前缀、工单号规则、起始位、工单号位数"
+    },
+    "processtaskserialnumberupdateinprocessexception": {
+      "processtaskserialnumberupdateinprocessexception": "正在批量更新工单号，请稍后..."
+    },
+    "processtasksourcenotfoundexception": {
+      "processtasksourcenotfoundexception": "工单来源{0}不存在"
+    },
+    "processtaskstepcommentnotfoundexception": {
+      "processtaskstepcommentnotfoundexception": "步骤回复：“{0}”不存在"
+    },
+    "processtaskstepcontentisemptyexception": {
+      "processtaskstepcontentisemptyexception": "描述不能为空"
+    },
+    "processtaskstepfoundmultipleexception": {
+      "processtaskstepfoundmultipleexception": "存在多个名为：“{0}”的流程步骤"
+    },
+    "processtaskstepisnotmanualexception": {
+      "processtaskstepisnotmanualexception": "工单：{0}的{1}步骤无需人工处理"
+    },
+    "processtaskstepmustbeautomaticexception": {
+      "processtaskstepmustbeautomaticexception": "工单步骤 必须为automatic节点类型"
+    },
+    "processtaskstepmustbemanualexception": {
+      "processtaskstepmustbemanualexception": "工单：{0}的{1}步骤必须在页面处理"
+    },
+    "processtaskstepnomatchedworkerexception": {
+      "processtaskstepnomatchedworkerexception": "没有匹配到处理人"
+    },
+    "processtaskstepnotfoundexception": {
+      "processtaskstepnotfoundexception": "流程步骤：“{0}”不存在",
+      "processtaskstepnotfoundexception_a": "流程步骤：“{0}”不存在"
+    },
+    "processtaskstepunactivedexception": {
+      "processtaskstepunactivedexception": "当前步骤未激活"
+    },
+    "processtaskstepunrunningexception": {
+      "processtaskstepunrunningexception": "当前步骤不是‘处理中’状态"
+    },
+    "processtaskstepuserisexistsexception": {
+      "processtaskstepuserisexistsexception": "处理人{0}已存在"
+    },
+    "processtaskstepuserunassignexception": {
+      "processtaskstepuserunassignexception": "流程步骤缺少处理人，请指定处理人"
+    },
+    "processtaskstepworkerisrequiredexception": {
+      "processtaskstepworkerisrequiredexception": "请选择需要转交的处理人、处理组或角色"
+    },
+    "processtasktitleisemptyexception": {
+      "processtasktitleisemptyexception": "工单标题不能为空"
+    },
+    "regulatehandlerisexistsexception": {
+      "regulatehandlerisexistsexception": "参数处理器{0}已存在"
+    }
+  },
+  "nfpept": {
+    "processtasksteptaskconfigillegalexception": {
+      "processtasksteptaskconfigillegalexception": "流程步骤任务策略: “{0}” 非法"
+    },
+    "processtasksteptaskcontentisemptyexception": {
+      "processtasksteptaskcontentisemptyexception": "回复意见不能为空"
+    },
+    "processtasksteptasknotcompleteexception": {
+      "processtasksteptasknotcompleteexception": "“{0}” 不满足流转策略: “{1}”"
+    },
+    "processtasksteptasknotfoundexception": {
+      "processtasksteptasknotfoundexception": "流程步骤任务: “{0}” 不存在",
+      "processtasksteptasknotfoundexception_a": "流程步骤任务: “{0}” 不存在"
+    },
+    "processtasksteptaskusercontentnotfoundexception": {
+      "processtasksteptaskusercontentnotfoundexception": "用户回复不存在，请重试"
+    },
+    "processtasksteptaskusercountillegalexception": {
+      "processtasksteptaskusercountillegalexception": "当前 “{0}” 需选择{1}位处理人"
+    },
+    "processtasksteptaskuserexception": {
+      "processtasksteptaskuserexception": "回复的stepUserId: {0} 的用户得和 当前登录用户一致"
+    },
+    "processtasksteptaskusernotfoundexception": {
+      "processtasksteptaskusernotfoundexception": "任务用户id: {0} 不存在，请刷新后重试"
+    },
+    "taskconfigbuttonnamerepeatexception": {
+      "taskconfigbuttonnamerepeatexception": "任务操作按钮名称：“{0}”已存在"
+    },
+    "taskconfigexception": {
+      "taskconfigexception": "流程步骤: “{0}” 任务Config异常,请联系管理员"
+    },
+    "taskconfigisinvokedexception": {
+      "taskconfigisinvokedexception": "子任务: “{0}” 被引用，无法删除"
+    },
+    "taskconfignamerepeatexception": {
+      "taskconfignamerepeatexception": "任务名：“{0}”已存在"
+    },
+    "taskconfignotfoundexception": {
+      "taskconfignotfoundexception": "子任务：“{0}”不存在"
+    },
+    "taskuserillegalexception": {
+      "taskuserillegalexception": "用户uuid: “{0}” 不在配置范围内,请联系管理员"
+    }
+  },
+  "nfpes": {
+    "scoretemplatehasrefprocessexception": {
+      "scoretemplatehasrefprocessexception": "评分模版 :{0}已关联流程，不可删除或禁用"
+    },
+    "scoretemplatenamerepeatexception": {
+      "scoretemplatenamerepeatexception": "评分模版：“{0}”已存在"
+    },
+    "scoretemplatenotfoundexception": {
+      "scoretemplatenotfoundexception": "评分模版 :{0} 不存在"
+    },
+    "slacalculatehandlernotfoundexception": {
+      "slacalculatehandlernotfoundexception": "sla计算规则处理器：“{0}”不存在"
+    }
+  },
+  "nfpew": {
+    "authstringirregularexception": {
+      "authstringirregularexception": "权限数据“{0}”不符合规范"
+    },
+    "handlerdispatchcomponenttypenotfoundexception": {
+      "handlerdispatchcomponenttypenotfoundexception": "找不到类型为：{0}的处理人分派组件"
+    },
+    "processorallocationpolicytypenotfoundexception": {
+      "processorallocationpolicytypenotfoundexception": "找不到类型为：{0}的处理人分配策略"
+    },
+    "workcentercannoteditfactoryexception": {
+      "workcentercannoteditfactoryexception": "出厂工单类型，无法删除或修改"
+    },
+    "workcentercatalogidnotfoundexception": {
+      "workcentercatalogidnotfoundexception": "工单中心菜单类型id“{0}”不存在"
+    },
+    "workcentercatalogisusedexception": {
+      "workcentercatalogisusedexception": "菜单id为“{0}”的菜单类型已被引用，无法删除"
+    },
+    "workcentercatalognamerepeatsexception": {
+      "workcentercatalognamerepeatsexception": "工单中心菜单类型名称“{0}”重复"
+    },
+    "workcenterconditionexception": {
+      "workcenterconditionexception": "工单中心过滤条件 参数：“{0}”非法"
+    },
+    "workcentercustomcountlimitexception": {
+      "workcentercustomcountlimitexception": "工单中心“个人分类”分类数不能超过“{0}“个"
+    },
+    "workcenterhandlernotfoundexception": {
+      "workcenterhandlernotfoundexception": "找不到类型为：{0}的工单中心处理器"
+    },
+    "workcenternamerepeatexception": {
+      "workcenternamerepeatexception": "工单中心分类名称：“{0}”已存在"
+    },
+    "workcenternoauthexception": {
+      "workcenternoauthexception": "您没有工单中心“{0}”权限，请联系管理员"
+    },
+    "workcenternocustomauthexception": {
+      "workcenternocustomauthexception": "不是自定义工单分类的创建人，操作失败"
+    },
+    "workcenternomodifyauthexception": {
+      "workcenternomodifyauthexception": "没有'工单中心管理权限'，请联系管理员"
+    },
+    "workcenternotfoundexception": {
+      "workcenternotfoundexception": "工单中心分类“{0}”不存在"
+    },
+    "workcenterparamexception": {
+      "workcenterparamexception": "过滤条件参数 “{0}”非法"
+    }
+  },
+  "nfpnc": {
+    "idefaulttemplate": {
+      "defaulttemplatetype": "默认",
+      "processtaskdetailslink": "查看详情：<a target=\"_blank\" href={0}>【工单链接】</a>"
+    },
+    "processnotifypolicyhandlergroup": {
+      "text": {
+        "taskstep": "工单步骤"
+      }
+    },
+    "processtasknotifyparam": {
+      "description": {
+        "form_json": "这里根据需要进行自定义处理显示信息item数据结构为{'attributeKey':'a','attributeLabel':'A','extendedData':'有些表单组件值是数组需要进行处理'}\n"
+      },
+      "text": {
+        "approvalcommentlist": "审批意见",
+        "channelname": "服务名称",
+        "channelpath": "服务路径",
+        "channeltypename": "服务类型",
+        "content": "上报内容",
+        "departmentandownername": "部门/上报人",
+        "endtime": "结束时间",
+        "form_json": "表单数据",
+        "form_table": "表单",
+        "id": "工单ID",
+        "ownercompanylist": "上报人公司列表",
+        "ownername": "上报人",
+        "priorityname": "优先级",
+        "process_task_abort_content": "工单取消原因",
+        "process_task_recover_content": "工单恢复原因",
+        "process_task_redo_content": "工单重新打开原因",
+        "process_task_score": "工单评分",
+        "process_task_score_content": "工单评分内容",
+        "process_task_urge_count": "工单催办次数",
+        "process_task_urge_user": "工单催办用户",
+        "reportername": "代报人",
+        "serialnumber": "工单号",
+        "startdate": "开始日期",
+        "starttime": "开始时间",
+        "statustext": "工单状态",
+        "title": "标题"
+      }
+    },
+    "processtasknotifytriggertype": {
+      "description": {
+        "completeprocesstask": "工单流转至结束时触发通知",
+        "recoverprocesstask": "工单完成前，有权限用户恢复工单时触发通知",
+        "reopenprocesstask": "工单完成后，用户评分前，有权限的用户重新打开工单并回退至某一步骤重新开始处理时触发通知",
+        "startprocess": "用户上报提交工单时触发通知",
+        "waitingscoreprocesstask": "工单完成后需要评分时触发通知"
+      },
+      "text": {
+        "abortprocesstask": "取消工单",
+        "completeprocesstask": "完成工单",
+        "deleteprocesstask": "删除工单",
+        "markrepeatprocesstask": "标记重复事件",
+        "recoverprocesstask": "恢复工单",
+        "reopenprocesstask": "重新打开工单",
+        "scoreprocesstask": "评分",
+        "startprocess": "上报",
+        "waitingscoreprocesstask": "待评分"
+      }
+    },
+    "processtaskstepautomaticnotifyparam": {
+      "text": {
+        "action_failed_content": "动作执行失败原因"
+      }
+    },
+    "processtaskstepautomaticnotifytriggertype": {
+      "description": {
+        "action_failed": "动作执行失败时触发通知"
+      },
+      "text": {
+        "action_failed": "动作执行失败",
+        "action_failed_2": "动作执行失败时触发通知"
+      }
+    },
+    "processtaskstepnotifyparam": {
+      "text": {
+        "process_task_current_step_back_content": "步骤回退原因",
+        "process_task_current_step_complete_content": "当前步骤处理内容",
+        "process_task_step_active_time": "步骤激活时间",
+        "process_task_step_pause_content": "步骤暂停原因",
+        "process_task_step_recover_content": "步骤恢复原因",
+        "process_task_step_retreat_content": "步骤撤回原因",
+        "process_task_step_sla": "步骤时效",
+        "process_task_step_start_time": "步骤开始时间",
+        "process_task_step_transfer_content": "步骤转交原因",
+        "process_task_step_transfer_time": "步骤转交时间",
+        "process_task_step_transfer_worker": "步骤转交对象",
+        "reason": "原因",
+        "step_comment": "步骤回复",
+        "step_comment_list": "步骤回复列表",
+        "step_comment_user": "步骤回复用户",
+        "stepid": "步骤id",
+        "stepname": "步骤名",
+        "stepstaytime": "步骤停留时间",
+        "stepworker": "步骤处理人"
+      }
+    },
+    "processtaskstepnotifytriggertype": {
+      "description": {
+        "active": "流转到某个步骤，该步骤被自动激活时触发通知",
+        "assignexception": "步骤激活时分配处理人，处理人不存在或规则无法匹配到有效处理人时触发通知",
+        "back": "工单完成前，由处理人手动回退工单至前面的某个步骤时触发通知",
+        "comment": "用户对步骤进行回复时触发通知",
+        "failed": "当前步骤出现分配异常、流转异常、系统异常导致步骤失败时触发通知",
+        "pause": "有权限的用户暂停当前步骤时触发通知",
+        "reactivate": "步骤完成后又被重新激活时触发通知",
+        "recover": "有权限的用户恢复当前步骤时触发通知",
+        "retreat": "当前步骤完成后，在下一步骤完成前，由当前步骤有权限的用户手动撤回步骤时触发通知，重新处理当前步骤",
+        "revoke": "当前步骤完成前，由上一步骤有权限的用户手动撤回步骤时触发通知，重新处理上一步骤",
+        "start": "步骤自动开始或者处理人手动开始处理时触发通知",
+        "succeed": "步骤完成时触发通知",
+        "transfer": "有步骤转交权限的用户将当前步骤处理权限转交给其他用户时触发通知",
+        "urge": "工单完成前，用户对工单进行催办时触发通知"
+      },
+      "text": {
+        "active": "步骤激活",
+        "assignexception": "分配异常",
+        "back": "步骤回退",
+        "comment": "步骤回复",
+        "failed": "步骤失败",
+        "pause": "步骤暂停",
+        "reactivate": "步骤重新激活",
+        "recover": "步骤恢复",
+        "retreat": "步骤撤回",
+        "revoke": "步骤被撤回",
+        "start": "步骤开始",
+        "succeed": "步骤成功",
+        "transfer": "步骤转交",
+        "urge": "步骤催办"
+      }
+    },
+    "processtasksteptasknotifyparam": {
+      "text": {
+        "taskconfigname": "任务名",
+        "taskcontent": "任务内容",
+        "taskusercontent": "任务用户内容",
+        "taskworker": "任务处理人"
+      }
+    },
+    "processtasksteptasknotifytriggertype": {
+      "description": {
+        "completealltask": "所有子任务满足流转条件时触发通知",
+        "completetask": "任务处理人完成子任务时触发通知",
+        "createtask": "步骤处理人为当前步骤创建子任务时触发通知",
+        "deletetask": "步骤处理人删除子任务时触发通知",
+        "edittask": "步骤处理人编辑子任务内容时触发通知"
+      },
+      "text": {
+        "completealltask": "子任务满足步骤流转",
+        "completetask": "子任务完成",
+        "createtask": "子任务创建",
+        "deletetask": "子任务删除",
+        "edittask": "子任务编辑"
+      }
+    }
+  },
+  "nfpoc": {
+    "operationauthhandlertype": {
+      "text": {
+        "step": "步骤",
+        "task": "工单"
+      }
+    }
+  },
+  "nfpshc": {
+    "processstephandlerbase": {
+      "assignexceptionreason": "当前步骤分派异常，已分派给异常处理人：{0}"
+    }
+  },
+  "nfpwc": {
+    "workerdispatcherform": {
+      "text": {
+        "form_select": "选择表单组件",
+        "select": "下拉框组件",
+        "text": "文本框组件",
+        "user_select": "选择用户组件"
+      }
+    }
+  },
+  "nfpwd": {
+    "workcenterauthorityvo": {
+      "entityfield": {
+        "type": {
+          "name": "类型"
+        },
+        "uuid": {
+          "name": "UUID"
+        },
+        "workcenteruuid": {
+          "name": "工单中心分类uuid"
+        }
+      }
+    },
+    "workcentercatalogvo": {
+      "entityfield": {
+        "id": {
+          "name": "工单中心类型id"
+        },
+        "name": {
+          "name": "工单中心类型名称"
+        }
+      }
+    },
+    "workcentertheadvo": {
+      "entityfield": {
+        "classname": {
+          "name": "字段样式"
+        },
+        "config": {
+          "name": "配置"
+        },
+        "disabled": {
+          "name": "是否可以控制该字段是否显示"
+        },
+        "displayname": {
+          "name": "字段中文名"
+        },
+        "isexport": {
+          "name": "字段是否可导出"
+        },
+        "isshow": {
+          "name": "字段是否展示"
+        },
+        "issortable": {
+          "name": "是否支持排序"
+        },
+        "name": {
+          "name": "字段名（表单属性则存属性uuid）"
+        },
+        "sort": {
+          "name": "字段排序"
+        },
+        "type": {
+          "name": "字段类型"
+        },
+        "useruuid": {
+          "name": "所属用户"
+        },
+        "width": {
+          "name": "字段宽度"
+        },
+        "workcenteruuid": {
+          "name": "工单中心分类唯一标识段"
+        }
+      }
+    },
+    "workcenteruserprofilevo": {
+      "entityfield": {
+        "config": {
+          "name": "用户个性化配置，如排序等"
+        },
+        "user_uuid": {
+          "name": "用户uuid"
+        }
+      }
+    },
+    "workcentervo": {
+      "entityfield": {
+        "authlist": {
+          "name": "角色列表"
+        },
+        "catalogid": {
+          "name": "菜单类型id"
+        },
+        "catalogname": {
+          "name": "菜单类型名称"
+        },
+        "conditionconfig": {
+          "name": "过滤条件"
+        },
+        "count": {
+          "name": "数量"
+        },
+        "device": {
+          "name": "设备类型"
+        },
+        "handlertype": {
+          "name": "simple：简单模式  custom：高级模式"
+        },
+        "headerlist": {
+          "name": "显示的字段"
+        },
+        "iscanedit": {
+          "name": "是否拥有编辑权限"
+        },
+        "iscanrole": {
+          "name": "是否拥有授权权限"
+        },
+        "ismine": {
+          "name": "判断当前工单分类是否属于当前用户"
+        },
+        "isprocessingofmine": {
+          "name": "是否附加待我处理条件"
+        },
+        "isshowtotal": {
+          "name": "是否显示总数，默认0：显示待办数"
+        },
+        "keywordconditionlist": {
+          "name": "关键字搜索条件"
+        },
+        "name": {
+          "name": "工单中心分类名"
+        },
+        "owner": {
+          "name": "custom类型,工单中心分类所属人"
+        },
+        "processingofminecount": {
+          "name": "待我处理的数量"
+        },
+        "sort": {
+          "name": "排序"
+        },
+        "sortconfig": {
+          "name": "排序的字段"
+        },
+        "starttimecondition": {
+          "name": "上报时间条件"
+        },
+        "support": {
+          "name": "all:所有设备,mobile:手机端,pc:电脑端"
+        },
+        "theadconfighash": {
+          "name": "默认表头配置Hash"
+        },
+        "theadlist": {
+          "name": "默认表头配置"
+        },
+        "type": {
+          "name": "default:默认出厂  system：系统分类  custom：自定义分类"
+        },
+        "uuid": {
+          "name": "工单中心分类uuid"
+        }
+      }
+    }
+  },
+  "nfpwt": {
+    "catalogsqltable": {
+      "text": {
+        "name": "服务目录名",
+        "uuid": "服务目录UUID"
+      }
+    },
+    "channelsqltable": {
+      "text": {
+        "channel_type_uuid": "服务类型UUID",
+        "name": "服务名",
+        "parent_uuid": "服务目录UUID",
+        "uuid": "服务类型UUID"
+      }
+    },
+    "channeltypesqltable": {
+      "text": {
+        "color": "服务类型颜色",
+        "name": "服务类型名",
+        "uuid": "服务类型UUID"
+      }
+    },
+    "channelworktimesqltable": {
+      "text": {
+        "channel_uuid": "服务UUID",
+        "worktime_uuid": "时间窗口UUID"
+      }
+    },
+    "prioritysqltable": {
+      "text": {
+        "color": "颜色",
+        "name": "服务目录名",
+        "sort": "排序",
+        "uuid": "服务目录UUID"
+      }
+    },
+    "processtagsqltable": {
+      "text": {
+        "name": "标签名"
+      }
+    },
+    "processtaskfocussqltable": {
+      "text": {
+        "processtask_id": "工单ID",
+        "user_uuid": "用户UUID"
+      }
+    },
+    "processtaskscoresqltable": {
+      "text": {
+        "processtask_id": "工单ID",
+        "score": "评分"
+      }
+    },
+    "processtaskslasqltable": {
+      "text": {
+        "config": "sla 配置",
+        "name": "sla 名",
+        "processtask_id": "工单ID"
+      }
+    },
+    "processtaskslatimesqltable": {
+      "text": {
+        "calculation_time": "上次耗时计算时间点",
+        "expire_time": "超时时间点",
+        "realexpire_time": "自然超时时间点",
+        "realtime_left": "自然剩余时间",
+        "status": "状态",
+        "time_left": "剩余时间"
+      }
+    },
+    "processtasksqltable": {
+      "text": {
+        "channel_uuid": "工单状态",
+        "end_time": "结束时间",
+        "id": "工单ID",
+        "is_show": "工单是否隐藏",
+        "need_score": "工单是否需要评分",
+        "owner": "上报人",
+        "priority_uuid": "工单状态",
+        "region_id": "地域",
+        "reporter": "上报人",
+        "serial_number": "工单号",
+        "start_time": "创建时间",
+        "status": "工单状态",
+        "title": "标题"
+      }
+    },
+    "processtaskstepauditsqltable": {
+      "text": {
+        "action": "上报人",
+        "processtask_id": "工单ID",
+        "processtask_step_id": "工单步骤ID",
+        "user_uuid": "用户UUID"
+      }
+    },
+    "processtaskstepcostsqltable": {
+      "text": {
+        "processtask_id": "工单ID",
+        "processtask_step_id": "工单步骤ID",
+        "start_operate": "开始操作类型",
+        "start_user_uuid": "开始操作用户UUID"
+      }
+    },
+    "processtaskstepslasqltable": {
+      "text": {
+        "processtask_step_id": "工单ID",
+        "sla_id": "工单ID"
+      }
+    },
+    "processtaskstepslatimesqltable": {
+      "text": {
+        "is_timeout": "耗时",
+        "processtask_id": "工单ID",
+        "processtask_step_id": "步骤ID",
+        "time_cost": "耗时",
+        "type": "类型"
+      }
+    },
+    "processtaskstepsqltable": {
+      "text": {
+        "active_time": "激活时间",
+        "config_hash": "配置hash",
+        "handler": "步骤处理器",
+        "id": "步骤ID",
+        "is_active": "步骤状态",
+        "name": "步骤名称",
+        "process_step_uuid": "步骤uuid",
+        "processtask_id": "工单ID",
+        "status": "步骤状态",
+        "type": "节点类型"
+      }
+    },
+    "processtaskstepusersqltable": {
+      "text": {
+        "owner": "上报人",
+        "processtask_id": "工单ID",
+        "processtask_step_id": "工单步骤ID",
+        "status": "超时时间点",
+        "user_type": "用户类型",
+        "user_uuid": "用户UUID"
+      }
+    },
+    "processtaskstepworkersqltable": {
+      "text": {
+        "processtask_id": "工单ID",
+        "processtask_step_id": "工单步骤ID",
+        "type": "用户/组/角色 类型",
+        "user_type": "处理人类型",
+        "uuid": "用户/组/角色 uuid"
+      }
+    },
+    "regionsqltable": {
+      "text": {
+        "name": "服务名",
+        "upward_name_path": "全路径"
+      }
+    },
+    "usertable": {
+      "text": {
+        "is_active": "是否激活",
+        "is_delete": "是否删除",
+        "pinyin": "拼音",
+        "user_id": "用户ID",
+        "user_info": "用户信息",
+        "user_name": "用户名",
+        "uuid": "用户UUID",
+        "vip_level": "vip等级"
+      }
+    },
+    "worktimesqltable": {
+      "text": {
+        "name": "时间窗口名",
+        "uuid": "时间窗口UUID"
+      }
+    }
+  },
+  "nfpwtc": {
+    "processsqltypeenum": {
+      "text": {
+        "distinct_id": "去重工单ID",
+        "field": "选择字段",
+        "full_text": "全文检索",
+        "limit_count": "部分个数",
+        "total_count": "总个数"
+      }
+    }
+  },
+  "nfpwtp": {
+    "fieldenum": {
+      "type": "来源类型"
+    }
+  },
+  "term": {
+    "itsm": {
+      "automatic": "外部调用",
+      "caneditfocususer": "是否有权限修改工单关注人",
+      "catalogname": "服务所在目录名称",
+      "channelinfo": "服务信息",
+      "channelname": "服务名称",
+      "channelpath": "服务路径",
+      "channeltype": "服务类型",
+      "channeltypeinfo": "服务类型信息",
+      "channeltypename": "服务类型名称",
+      "channeltyperelationname": "转报/关联类型",
+      "channeltypeuuid": "服务类型uuid",
+      "channeluuid": "服务uuid",
+      "commentlist": "评论附件列表",
+      "condition": "条件",
+      "contenthelp": "工单上报页描述占位符",
+      "currentprocesstaskstep": "工单当前步骤信息",
+      "distributary": "分流",
+      "end": "结束",
+      "formattributedatalist": "表单属性数据列表",
+      "formattributehidelist": "表单配置授权隐藏属性uuid列表",
+      "formconfigauthoritylist": "工单表单信息授权列表",
+      "groupdesc": "一站式服务上报-跟踪-处理平台",
+      "groupname": "IT服务",
+      "hidecomponentlist": "隐藏表单属性列表",
+      "ishasoldformprop": "是否存在旧工单表单信息",
+      "isshowbaseinfo": "工单详情页是否默认展开基本信息",
+      "isshowprocesstaskstepcommenteditortoolbar": "是否显示工单步骤回复富文本编辑器工具栏",
+      "mobileformuitype": "移动端表单交互类型，1：下探页面；0：当前页",
+      "omnipotent": "通用节点",
+      "ownercompanylist": "工单所有人的公司列表",
+      "ownerdepartmentlist": "工单所有人的部门列表",
+      "ownerinfo": "工单所有人信息",
+      "ownername": "工单所有人名称",
+      "owneruuid": "工单所有人uuid",
+      "processtask": "工单",
+      "processtaskformattributedata": "工单表单属性值",
+      "processtaskformconfig": "工单表单信息",
+      "processtaskid": "工单id",
+      "processtaskslalist": "sla列表",
+      "processtaskstepid": "工单步骤id",
+      "processuuid": "流程uuid",
+      "redosteplist": "重做步骤列表",
+      "scoretemplate": "评分模板",
+      "serialnumber": "工单号",
+      "start": "开始",
+      "startprocesstaskstep": "工单开始步骤信息",
+      "submitterinfo": "工单提交人信息",
+      "submittername": "工单提交人名称",
+      "submitteruuid": "工单提交人Uuid",
+      "timer": "定时节点",
+      "tranferreportdirection": "转报/关联方向",
+      "tranferreportprocesstasklist": "转报工单信息列表",
+      "workcenterprocesstasksortindex": "工单中心工单排序下标"
+    },
+    "process": {
+      "channelname": "通道名称",
+      "channeluuid": "通道uuid",
+      "collectionid": "集合id",
+      "isreturnallattr": "是否返回所有属性",
+      "phaseid": "阶段id",
+      "phaselist": "阶段列表",
+      "processtaskcollection": "创建工单集合",
+      "tasklist": "工单列表"
+    }
+  }
+}

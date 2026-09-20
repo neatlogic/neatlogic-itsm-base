@@ -19,8 +19,9 @@ public interface IProcessTaskColumn {
     String getName();
 
     /**
-     * @Description: 字段显示名
-     * @Date: 2020/2/2
+     * 获取当前语言的字段显示名，调用方直接使用返回值，不应再次翻译。
+     *
+     * @return 当前语言的字段显示名
      */
     String getDisplayName();
 
