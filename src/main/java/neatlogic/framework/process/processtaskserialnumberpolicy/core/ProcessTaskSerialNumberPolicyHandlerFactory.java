@@ -26,7 +26,7 @@ import java.util.Map;
 public class ProcessTaskSerialNumberPolicyHandlerFactory extends ModuleInitializedListenerBase {
 
     private static final Map<String, IProcessTaskSerialNumberPolicyHandler> policyMap = new HashMap<>();
-    private static final List<ProcessTaskSerialNumberPolicyVo> policyList = new ArrayList<>();
+    private static final List<IProcessTaskSerialNumberPolicyHandler> policyHandlerList = new ArrayList<>();
 
     public static IProcessTaskSerialNumberPolicyHandler getHandler(String handler) {
         IProcessTaskSerialNumberPolicyHandler processTaskSerialNumberPolicyHandler = policyMap.get(handler);
@@ -38,11 +38,23 @@ public class ProcessTaskSerialNumberPolicyHandlerFactory extends ModuleInitializ
     }
 
     public static List<ProcessTaskSerialNumberPolicyVo> getPolicyHandlerList() {
+        List<ProcessTaskSerialNumberPolicyVo> policyList = new ArrayList<>();
+        // 名称和表单属性可能包含当前语言文案，不能在模块启动时缓存，必须按请求语言重新生成。
+        for (IProcessTaskSerialNumberPolicyHandler policyHandler : policyHandlerList) {
+            ProcessTaskSerialNumberPolicyVo policy = new ProcessTaskSerialNumberPolicyVo();
+            policy.setHandler(policyHandler.getHandler());
+            policy.setName(policyHandler.getName());
+            policy.setFormAttributeList(policyHandler.makeupFormAttributeList());
+            policyList.add(policy);
+        }
         return policyList;
     }
 
     @Override
     public void onInitialized(NeatLogicWebApplicationContext context) {
+        // 模块重新初始化时先清理旧注册项，避免策略重复返回或继续引用旧 Spring Bean。
+        policyMap.clear();
+        policyHandlerList.clear();
         Map<String, IProcessTaskSerialNumberPolicyHandler> map =
                 context.getBeansOfType(IProcessTaskSerialNumberPolicyHandler.class);
         for (Map.Entry<String, IProcessTaskSerialNumberPolicyHandler> entry : map.entrySet()) {
@@ -51,11 +63,7 @@ public class ProcessTaskSerialNumberPolicyHandlerFactory extends ModuleInitializ
             int index = handler.lastIndexOf(".");
             policyMap.put(handler, numberPolicy);
             policyMap.put(handler.substring(index + 1), numberPolicy);
-            ProcessTaskSerialNumberPolicyVo policy = new ProcessTaskSerialNumberPolicyVo();
-            policy.setHandler(handler);
-            policy.setName(numberPolicy.getName());
-            policy.setFormAttributeList(numberPolicy.makeupFormAttributeList());
-            policyList.add(policy);
+            policyHandlerList.add(numberPolicy);
         }
     }
 
