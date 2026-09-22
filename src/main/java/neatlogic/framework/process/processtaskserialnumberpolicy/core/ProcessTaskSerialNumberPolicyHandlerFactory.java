@@ -19,6 +19,7 @@ import neatlogic.framework.process.dto.ProcessTaskSerialNumberPolicyVo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ import java.util.Map;
 public class ProcessTaskSerialNumberPolicyHandlerFactory extends ModuleInitializedListenerBase {
 
     private static final Map<String, IProcessTaskSerialNumberPolicyHandler> policyMap = new HashMap<>();
-    private static final List<IProcessTaskSerialNumberPolicyHandler> policyHandlerList = new ArrayList<>();
+    private static final Map<String, IProcessTaskSerialNumberPolicyHandler> policyHandlerMap = new LinkedHashMap<>();
 
     public static IProcessTaskSerialNumberPolicyHandler getHandler(String handler) {
         IProcessTaskSerialNumberPolicyHandler processTaskSerialNumberPolicyHandler = policyMap.get(handler);
@@ -40,7 +41,7 @@ public class ProcessTaskSerialNumberPolicyHandlerFactory extends ModuleInitializ
     public static List<ProcessTaskSerialNumberPolicyVo> getPolicyHandlerList() {
         List<ProcessTaskSerialNumberPolicyVo> policyList = new ArrayList<>();
         // 名称和表单属性可能包含当前语言文案，不能在模块启动时缓存，必须按请求语言重新生成。
-        for (IProcessTaskSerialNumberPolicyHandler policyHandler : policyHandlerList) {
+        for (IProcessTaskSerialNumberPolicyHandler policyHandler : policyHandlerMap.values()) {
             ProcessTaskSerialNumberPolicyVo policy = new ProcessTaskSerialNumberPolicyVo();
             policy.setHandler(policyHandler.getHandler());
             policy.setName(policyHandler.getName());
@@ -52,9 +53,6 @@ public class ProcessTaskSerialNumberPolicyHandlerFactory extends ModuleInitializ
 
     @Override
     public void onInitialized(NeatLogicWebApplicationContext context) {
-        // 模块重新初始化时先清理旧注册项，避免策略重复返回或继续引用旧 Spring Bean。
-        policyMap.clear();
-        policyHandlerList.clear();
         Map<String, IProcessTaskSerialNumberPolicyHandler> map =
                 context.getBeansOfType(IProcessTaskSerialNumberPolicyHandler.class);
         for (Map.Entry<String, IProcessTaskSerialNumberPolicyHandler> entry : map.entrySet()) {
@@ -63,7 +61,8 @@ public class ProcessTaskSerialNumberPolicyHandlerFactory extends ModuleInitializ
             int index = handler.lastIndexOf(".");
             policyMap.put(handler, numberPolicy);
             policyMap.put(handler.substring(index + 1), numberPolicy);
-            policyHandlerList.add(numberPolicy);
+            // 初始化监听会被多个模块上下文调用，按完整类名累计并覆盖，避免清空已有策略或重复登记。
+            policyHandlerMap.put(handler, numberPolicy);
         }
     }
 
