@@ -1,4 +1,5 @@
 {
+  "auth": {},
   "nfpa": {
     "batch_report_process_task": {
       "getauthdisplayname": "批量上报权限",

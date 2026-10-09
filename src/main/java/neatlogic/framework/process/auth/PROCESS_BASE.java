@@ -13,6 +13,8 @@
 package neatlogic.framework.process.auth;
 
 import neatlogic.framework.auth.core.AuthBase;
+import neatlogic.framework.common.constvalue.systemuser.ISystemUser;
+import neatlogic.framework.common.constvalue.systemuser.SystemUser;
 import neatlogic.framework.knowledge.auth.label.KNOWLEDGE;
 
 import java.util.Arrays;
@@ -49,5 +51,10 @@ public class PROCESS_BASE extends AuthBase {
 	public List<Class<? extends AuthBase>> getIncludeAuths() {
 		return Arrays.asList(PROCESS.class, KNOWLEDGE.class);
 	}
+
+    @Override
+    public List<ISystemUser> getDefaultSystemUserList() {
+        return List.of(SystemUser.SYSTEM);
+    }
 
 }
