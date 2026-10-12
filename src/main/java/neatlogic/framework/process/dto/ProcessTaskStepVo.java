@@ -1,10 +1,13 @@
 package neatlogic.framework.process.dto;
 
+import com.alibaba.fastjson.JSONPath;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.dto.BasePageVo;
+import neatlogic.framework.crossover.CrossoverServiceFactory;
 import neatlogic.framework.dto.UserVo;
 import neatlogic.framework.form.dto.FormAttributeVo;
 import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
+import neatlogic.framework.process.crossover.ISelectContentByHashCrossoverMapper;
 import neatlogic.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
@@ -103,6 +106,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private Integer enableReapproval;
     @EntityField(name = "nfpd.processtaskstepvo.entityfield.formsceneuuid.name", type = ApiParamType.STRING)
     private String formSceneUuid;
+    @EntityField(name = "附件处理器", type = ApiParamType.STRING)
+    private String fileTypeHandler;
     @EntityField(name = "nfpd.processtaskstepvo.entityfield.replaceabletextlist.name", type = ApiParamType.JSONARRAY)
     private JSONArray replaceableTextList;
     @EntityField(name = "nfpd.processtaskstepvo.entityfield.custombuttonlist.name", type = ApiParamType.JSONARRAY)
@@ -407,6 +412,19 @@ public class ProcessTaskStepVo extends BasePageVo {
 
     public void setFormSceneUuid(String formSceneUuid) {
         this.formSceneUuid = formSceneUuid;
+    }
+
+    public String getFileTypeHandler() {
+        if (fileTypeHandler == null && StringUtils.isNotBlank(configHash)) {
+            ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
+            String stepConfig = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(configHash);
+            fileTypeHandler = (String) JSONPath.read(stepConfig, "fileTypeHandler");
+        }
+        return fileTypeHandler;
+    }
+
+    public void setFileTypeHandler(String fileTypeHandler) {
+        this.fileTypeHandler = fileTypeHandler;
     }
 
     public JSONArray getReplaceableTextList() {
