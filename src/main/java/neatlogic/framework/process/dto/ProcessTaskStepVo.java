@@ -1,10 +1,13 @@
 package neatlogic.framework.process.dto;
 
+import com.alibaba.fastjson.JSONPath;
 import neatlogic.framework.common.constvalue.ApiParamType;
 import neatlogic.framework.common.dto.BasePageVo;
+import neatlogic.framework.crossover.CrossoverServiceFactory;
 import neatlogic.framework.dto.UserVo;
 import neatlogic.framework.form.dto.FormAttributeVo;
 import neatlogic.framework.process.constvalue.ProcessTaskStepStatus;
+import neatlogic.framework.process.crossover.ISelectContentByHashCrossoverMapper;
 import neatlogic.framework.process.stephandler.core.ProcessStepInternalHandlerFactory;
 import neatlogic.framework.restful.annotation.EntityField;
 import neatlogic.framework.util.SnowflakeUtil;
@@ -103,6 +106,8 @@ public class ProcessTaskStepVo extends BasePageVo {
     private Integer enableReapproval;
     @EntityField(name = "nfpd.processtaskstepvo.entityfield.formsceneuuid.name", type = ApiParamType.STRING)
     private String formSceneUuid;
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.name.filetypehandler", type = ApiParamType.STRING)
+    private String fileTypeHandler;
     @EntityField(name = "nfpd.processtaskstepvo.entityfield.replaceabletextlist.name", type = ApiParamType.JSONARRAY)
     private JSONArray replaceableTextList;
     @EntityField(name = "nfpd.processtaskstepvo.entityfield.custombuttonlist.name", type = ApiParamType.JSONARRAY)
@@ -344,9 +349,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public Integer getIsRequired() {
-        if (isRequired == null && StringUtils.isNotBlank(configHash)) {
-            isRequired = ProcessStepInternalHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
-        }
         return isRequired;
     }
 
@@ -355,9 +357,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public Integer getIsAllowProcessOnMobile() {
-        if (isAllowProcessOnMobile == null && StringUtils.isNotBlank(configHash)) {
-            isAllowProcessOnMobile = ProcessStepInternalHandlerFactory.getHandler().getIsAllowProcessOnMobileByConfigHash(configHash);
-        }
         return isAllowProcessOnMobile;
     }
 
@@ -366,16 +365,10 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public Integer getIsNeedUploadFile() {
-        if (isNeedUploadFile == null && StringUtils.isNotBlank(configHash)) {
-            isNeedUploadFile = ProcessStepInternalHandlerFactory.getHandler().getIsNeedUploadFileByConfigHash(configHash);
-        }
         return isNeedUploadFile;
     }
 
     public Integer getIsNeedContent() {
-        if (isNeedContent == null && StringUtils.isNotBlank(configHash)) {
-            isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
-        }
         return isNeedContent;
     }
 
@@ -388,9 +381,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public Integer getEnableReapproval() {
-        if (enableReapproval == null && StringUtils.isNotBlank(configHash)) {
-            enableReapproval = ProcessStepInternalHandlerFactory.getHandler().getEnableReapprovalByConfigHash(configHash);
-        }
         return enableReapproval;
     }
 
@@ -399,14 +389,19 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public String getFormSceneUuid() {
-        if (formSceneUuid == null && StringUtils.isNotBlank(configHash)) {
-            formSceneUuid = ProcessStepInternalHandlerFactory.getHandler().getFormSceneUuidByConfigHash(configHash);
-        }
         return formSceneUuid;
     }
 
     public void setFormSceneUuid(String formSceneUuid) {
         this.formSceneUuid = formSceneUuid;
+    }
+
+    public String getFileTypeHandler() {
+        return fileTypeHandler;
+    }
+
+    public void setFileTypeHandler(String fileTypeHandler) {
+        this.fileTypeHandler = fileTypeHandler;
     }
 
     public JSONArray getReplaceableTextList() {

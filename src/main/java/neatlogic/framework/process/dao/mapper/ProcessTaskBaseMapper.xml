@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="neatlogic.framework.process.dao.mapper.ProcessTaskBaseMapper">
+
+    <select id="getProcessTaskStepConfigByHash" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT `config` FROM `processtask_step_config`
+        WHERE `hash` = #{value}
+    </select>
+</mapper>

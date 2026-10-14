@@ -1309,6 +1309,7 @@
           "name": "Minor User List"
         },
         "name": {
+          "filetypehandler": "Attachment Handler",
           "name": "Name"
         },
         "originaluser": {

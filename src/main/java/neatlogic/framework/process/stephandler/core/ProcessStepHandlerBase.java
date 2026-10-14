@@ -12,6 +12,7 @@
 
 package neatlogic.framework.process.stephandler.core;
 
+import neatlogic.framework.process.dao.mapper.ProcessTaskBaseMapper;
 import neatlogic.framework.util.$;
 
 import com.alibaba.fastjson.JSON;
@@ -80,6 +81,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static FormMapper formMapper;
     protected static NotifyMapper notifyMapper;
     protected static WorktimeMapper worktimeMapper;
+    protected static ProcessTaskBaseMapper processTaskBaseMapper;
 
     @Resource
     public void setFormMapper(FormMapper _formMapper) {
@@ -114,6 +116,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     @Resource
     public void setWorktimeMapper(WorktimeMapper _worktimeMapper) {
         worktimeMapper = _worktimeMapper;
+    }
+
+    @Resource
+    public void setProcessTaskBaseMapper(ProcessTaskBaseMapper _processTaskBaseMapper) {
+        processTaskBaseMapper = _processTaskBaseMapper;
     }
 
     private int updateProcessTaskStatus(Long processTaskId) {
@@ -630,7 +637,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
             if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
                 ProcessTaskStepVo toProcessTaskStepVo = processTaskCrossoverMapper.getProcessTaskStepBaseInfoById(processTaskStepRelVo.getToProcessTaskStepId());
-                if (Objects.equals(toProcessTaskStepVo.getEnableReapproval(), 1)) {
+                String config = processTaskBaseMapper.getProcessTaskStepConfigByHash(toProcessTaskStepVo.getConfigHash());
+                JSONObject stepConfig = StringUtils.isBlank(config) ? new JSONObject() : JSON.parseObject(config);
+                if (Objects.equals(stepConfig.getInteger("enableReapproval"), 1)) {
                     flag = true;
                     break;
                 }
