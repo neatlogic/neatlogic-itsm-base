@@ -12,6 +12,7 @@
 
 package neatlogic.framework.process.stephandler.core;
 
+import neatlogic.framework.process.dao.mapper.ProcessTaskBaseMapper;
 import neatlogic.framework.util.$;
 
 import com.alibaba.fastjson.JSON;
@@ -59,7 +60,6 @@ import neatlogic.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import neatlogic.framework.service.AuthenticationInfoService;
 import neatlogic.framework.transaction.core.AfterTransactionJob;
 import neatlogic.framework.util.SnowflakeUtil;
-import neatlogic.framework.util.SpringContextUtil;
 import neatlogic.framework.worktime.dao.mapper.WorktimeMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -81,6 +81,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     protected static FormMapper formMapper;
     protected static NotifyMapper notifyMapper;
     protected static WorktimeMapper worktimeMapper;
+    protected static ProcessTaskBaseMapper processTaskBaseMapper;
 
     @Resource
     public void setFormMapper(FormMapper _formMapper) {
@@ -115,6 +116,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
     @Resource
     public void setWorktimeMapper(WorktimeMapper _worktimeMapper) {
         worktimeMapper = _worktimeMapper;
+    }
+
+    @Resource
+    public void setProcessTaskBaseMapper(ProcessTaskBaseMapper _processTaskBaseMapper) {
+        processTaskBaseMapper = _processTaskBaseMapper;
     }
 
     private int updateProcessTaskStatus(Long processTaskId) {
@@ -627,12 +633,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         if (startProcessTaskStepId == null) {
             startProcessTaskStepId = currentProcessTaskStepVo.getId();
         }
-        ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
         List<ProcessTaskStepRelVo> relList = processTaskCrossoverMapper.getProcessTaskStepRelByFromId(startProcessTaskStepId);
         for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
             if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
                 ProcessTaskStepVo toProcessTaskStepVo = processTaskCrossoverMapper.getProcessTaskStepBaseInfoById(processTaskStepRelVo.getToProcessTaskStepId());
-                String config = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(toProcessTaskStepVo.getConfigHash());
+                String config = processTaskBaseMapper.getProcessTaskStepConfigByHash(toProcessTaskStepVo.getConfigHash());
                 JSONObject stepConfig = StringUtils.isBlank(config) ? new JSONObject() : JSON.parseObject(config);
                 if (Objects.equals(stepConfig.getInteger("enableReapproval"), 1)) {
                     flag = true;
