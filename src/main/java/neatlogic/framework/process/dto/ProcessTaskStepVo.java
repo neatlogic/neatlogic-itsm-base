@@ -349,9 +349,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public Integer getIsRequired() {
-        if (isRequired == null && StringUtils.isNotBlank(configHash)) {
-            isRequired = ProcessStepInternalHandlerFactory.getHandler().getIsRequiredByConfigHash(configHash);
-        }
         return isRequired;
     }
 
@@ -360,9 +357,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public Integer getIsAllowProcessOnMobile() {
-        if (isAllowProcessOnMobile == null && StringUtils.isNotBlank(configHash)) {
-            isAllowProcessOnMobile = ProcessStepInternalHandlerFactory.getHandler().getIsAllowProcessOnMobileByConfigHash(configHash);
-        }
         return isAllowProcessOnMobile;
     }
 
@@ -371,16 +365,10 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public Integer getIsNeedUploadFile() {
-        if (isNeedUploadFile == null && StringUtils.isNotBlank(configHash)) {
-            isNeedUploadFile = ProcessStepInternalHandlerFactory.getHandler().getIsNeedUploadFileByConfigHash(configHash);
-        }
         return isNeedUploadFile;
     }
 
     public Integer getIsNeedContent() {
-        if (isNeedContent == null && StringUtils.isNotBlank(configHash)) {
-            isNeedContent = ProcessStepInternalHandlerFactory.getHandler().getIsNeedContentByConfigHash(configHash);
-        }
         return isNeedContent;
     }
 
@@ -393,9 +381,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public Integer getEnableReapproval() {
-        if (enableReapproval == null && StringUtils.isNotBlank(configHash)) {
-            enableReapproval = ProcessStepInternalHandlerFactory.getHandler().getEnableReapprovalByConfigHash(configHash);
-        }
         return enableReapproval;
     }
 
@@ -404,9 +389,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public String getFormSceneUuid() {
-        if (formSceneUuid == null && StringUtils.isNotBlank(configHash)) {
-            formSceneUuid = ProcessStepInternalHandlerFactory.getHandler().getFormSceneUuidByConfigHash(configHash);
-        }
         return formSceneUuid;
     }
 
@@ -415,11 +397,6 @@ public class ProcessTaskStepVo extends BasePageVo {
     }
 
     public String getFileTypeHandler() {
-        if (fileTypeHandler == null && StringUtils.isNotBlank(configHash)) {
-            ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
-            String stepConfig = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(configHash);
-            fileTypeHandler = (String) JSONPath.read(stepConfig, "fileTypeHandler");
-        }
         return fileTypeHandler;
     }
 

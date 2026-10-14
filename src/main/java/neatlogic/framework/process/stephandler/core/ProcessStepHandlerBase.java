@@ -59,6 +59,7 @@ import neatlogic.framework.process.workerpolicy.core.WorkerPolicyHandlerFactory;
 import neatlogic.framework.service.AuthenticationInfoService;
 import neatlogic.framework.transaction.core.AfterTransactionJob;
 import neatlogic.framework.util.SnowflakeUtil;
+import neatlogic.framework.util.SpringContextUtil;
 import neatlogic.framework.worktime.dao.mapper.WorktimeMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -626,11 +627,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         if (startProcessTaskStepId == null) {
             startProcessTaskStepId = currentProcessTaskStepVo.getId();
         }
+        ISelectContentByHashCrossoverMapper selectContentByHashCrossoverMapper = CrossoverServiceFactory.getApi(ISelectContentByHashCrossoverMapper.class);
         List<ProcessTaskStepRelVo> relList = processTaskCrossoverMapper.getProcessTaskStepRelByFromId(startProcessTaskStepId);
         for (ProcessTaskStepRelVo processTaskStepRelVo : relList) {
             if (Objects.equals(processTaskStepRelVo.getIsHit(), 1) && Objects.equals(processTaskStepRelVo.getType(), ProcessFlowDirection.BACKWARD.getValue())) {
                 ProcessTaskStepVo toProcessTaskStepVo = processTaskCrossoverMapper.getProcessTaskStepBaseInfoById(processTaskStepRelVo.getToProcessTaskStepId());
-                if (Objects.equals(toProcessTaskStepVo.getEnableReapproval(), 1)) {
+                String config = selectContentByHashCrossoverMapper.getProcessTaskStepConfigByHash(toProcessTaskStepVo.getConfigHash());
+                JSONObject stepConfig = StringUtils.isBlank(config) ? new JSONObject() : JSON.parseObject(config);
+                if (Objects.equals(stepConfig.getInteger("enableReapproval"), 1)) {
                     flag = true;
                     break;
                 }
