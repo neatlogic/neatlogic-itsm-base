@@ -1309,6 +1309,7 @@
           "name": "子任务处理人列表"
         },
         "name": {
+          "filetypehandler": "附件处理器",
           "name": "步骤名称"
         },
         "originaluser": {

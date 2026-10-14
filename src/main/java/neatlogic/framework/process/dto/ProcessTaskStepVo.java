@@ -106,7 +106,7 @@ public class ProcessTaskStepVo extends BasePageVo {
     private Integer enableReapproval;
     @EntityField(name = "nfpd.processtaskstepvo.entityfield.formsceneuuid.name", type = ApiParamType.STRING)
     private String formSceneUuid;
-    @EntityField(name = "附件处理器", type = ApiParamType.STRING)
+    @EntityField(name = "nfpd.processtaskstepvo.entityfield.name.filetypehandler", type = ApiParamType.STRING)
     private String fileTypeHandler;
     @EntityField(name = "nfpd.processtaskstepvo.entityfield.replaceabletextlist.name", type = ApiParamType.JSONARRAY)
     private JSONArray replaceableTextList;
