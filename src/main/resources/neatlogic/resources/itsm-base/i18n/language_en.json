@@ -2117,6 +2117,7 @@
         "recoverprocesstask": "Trigger notification when authorized users restore the Task before IT is completed",
         "reopenprocesstask": "After the Task is completed and before the user scores, a notification is triggered when authorized users reopen the Task and revert back to a certain step to restart processing",
         "startprocess": "Trigger notification when user reports and submits Task",
+        "updateprocesstask": "Trigger notification when changes to the task form, title, description, attachments, priority or tags are saved successfully",
         "waitingscoreprocesstask": "Trigger notification when scoring is required after completing the Task"
       },
       "text": {
@@ -2128,6 +2129,7 @@
         "reopenprocesstask": "Reopen the Task",
         "scoreprocesstask": "Rate",
         "startprocess": "Report",
+        "updateprocesstask": "Update Reported Content",
         "waitingscoreprocesstask": "To Be Rated"
       }
     },

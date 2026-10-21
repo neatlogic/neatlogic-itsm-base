@@ -2117,6 +2117,7 @@
         "recoverprocesstask": "工单完成前，有权限用户恢复工单时触发通知",
         "reopenprocesstask": "工单完成后，用户评分前，有权限的用户重新打开工单并回退至某一步骤重新开始处理时触发通知",
         "startprocess": "用户上报提交工单时触发通知",
+        "updateprocesstask": "工单表单、标题、描述、附件、优先级或标签发生变化并保存成功时触发通知",
         "waitingscoreprocesstask": "工单完成后需要评分时触发通知"
       },
       "text": {
@@ -2128,6 +2129,7 @@
         "reopenprocesstask": "重新打开工单",
         "scoreprocesstask": "评分",
         "startprocess": "上报",
+        "updateprocesstask": "更新上报内容",
         "waitingscoreprocesstask": "待评分"
       }
     },

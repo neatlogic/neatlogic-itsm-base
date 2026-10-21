@@ -944,6 +944,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
         }
 
         if (canComplete) {
+            // 仅记录本次真实保存结果，完成全部成功处理后再触发工单更新通知。
+            boolean reportContentChanged = false;
+            boolean operationSucceeded = false;
             try {
                 if (this.getHandler().equals(ProcessStepHandlerType.END.getHandler())) {
                     myComplete(currentProcessTaskStepVo);
@@ -979,13 +982,13 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 if (this.getMode().equals(ProcessStepMode.MT)) {
                     myBeforeComplete(currentProcessTaskStepVo);
                     if (operationType == ProcessTaskStepOperationType.STEP_COMPLETE) {
-                        String priorityUuid = paramObj.getString("priorityUuid");
-                        if (StringUtils.isNotBlank(priorityUuid)) {
-                            processTaskCrossoverMapper.updateProcessTaskPriorityUuidById(currentProcessTaskStepVo.getProcessTaskId(), priorityUuid);
-                        }
+                        // 比较优先级实际落库前后的值，相同值提交不会产生更新通知。
+                        reportContentChanged = savePriorityForReportUpdate(currentProcessTaskStepVo, processTaskCrossoverMapper);
                         processStepHandlerCrossoverUtil.assignWorkerValid(currentProcessTaskStepVo);
                         /* 保存表单属性值 **/
                         processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
+                        // saveForm 会重置标记，只在本次调用后读取，防止请求携带标记误触发。
+                        reportContentChanged = Boolean.TRUE.equals(paramObj.get("formDataChanged")) || reportContentChanged;
                     }
                     String majorUserUuid = null;
                     List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskCrossoverMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
@@ -1124,6 +1127,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         processStepHandlerCrossoverUtil.saveStepRemind(currentProcessTaskStepVo, paramObj.getLong("nextStepId"), paramObj.getString("content"), ProcessTaskStepRemindType.BACK);
                     }
                 }
+                // 捕获的流程异常不可进入新增通知成功路径。
+                operationSucceeded = true;
             } catch (ProcessTaskException ex) {
                 logger.error(ex.getMessage(), ex);
                 currentProcessTaskStepVo.setError(ex.getMessage());
@@ -1159,9 +1164,31 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processStepHandlerCrossoverUtil.calculateSla(new ProcessTaskVo(currentProcessTaskStepVo.getProcessTaskId()));
                 }
             }
+            // 审计及后处理也成功后才注册通知，继续复用事务提交后的发送机制。
+            notifyAfterReportContentUpdate(currentProcessTaskStepVo, operationSucceeded, reportContentChanged);
         }
 
         return 1;
+    }
+
+    /** 保存节点提交的优先级，并依据实际持久化值判断上报内容是否改变。 */
+    private static boolean savePriorityForReportUpdate(ProcessTaskStepVo processTaskStepVo, IProcessTaskCrossoverMapper mapper) {
+        String priorityUuid = processTaskStepVo.getParamObj().getString("priorityUuid");
+        if (StringUtils.isBlank(priorityUuid)) {
+            return false;
+        }
+        String oldPriorityUuid = mapper.getProcessTaskById(processTaskStepVo.getProcessTaskId()).getPriorityUuid();
+        mapper.updateProcessTaskPriorityUuidById(processTaskStepVo.getProcessTaskId(), priorityUuid);
+        String savedPriorityUuid = mapper.getProcessTaskById(processTaskStepVo.getProcessTaskId()).getPriorityUuid();
+        return !Objects.equals(oldPriorityUuid, savedPriorityUuid);
+    }
+
+    /** 统一成功边界：一次操作的多项变化合并为一次工单更新触发事件。 */
+    private static void notifyAfterReportContentUpdate(ProcessTaskStepVo processTaskStepVo, boolean operationSucceeded, boolean reportContentChanged) {
+        if (operationSucceeded && reportContentChanged) {
+            IProcessStepHandlerCrossoverUtil util = CrossoverServiceFactory.getApi(IProcessStepHandlerCrossoverUtil.class);
+            util.notify(processTaskStepVo, ProcessTaskNotifyTriggerType.UPDATEPROCESSTASK);
+        }
     }
 
     /**
@@ -1294,16 +1321,19 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
 
             processTaskCrossoverMapper.deleteProcessTaskStepReapprovalRestoreBackupByBackupStepId(needActiveStepId);
+            // 与节点提交相同，只根据本次保存并成功执行的变化发送通知。
+            boolean reportContentChanged = false;
+            boolean operationSucceeded = false;
             try {
                 JSONObject paramObj = currentProcessTaskStepVo.getParamObj();
                 if (this.getMode().equals(ProcessStepMode.MT)) {
 //                    if (operationType == ProcessTaskOperationType.STEP_COMPLETE) {
-                    String priorityUuid = paramObj.getString("priorityUuid");
-                    if (StringUtils.isNotBlank(priorityUuid)) {
-                        processTaskCrossoverMapper.updateProcessTaskPriorityUuidById(currentProcessTaskStepVo.getProcessTaskId(), priorityUuid);
-                    }
+                    // 优先级独立变化也属于上报内容更新。
+                    reportContentChanged = savePriorityForReportUpdate(currentProcessTaskStepVo, processTaskCrossoverMapper);
                     /* 保存表单属性值 **/
                     processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
+                    // 立即保存本次表单比较结果，避免后续上下文修改影响判断。
+                    reportContentChanged = Boolean.TRUE.equals(paramObj.get("formDataChanged")) || reportContentChanged;
 //                    }
 
                     String majorUserUuid = null;
@@ -1374,6 +1404,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 //                        IProcessStepHandlerUtil.saveStepRemind(currentProcessTaskStepVo, paramObj.getLong("nextStepId"), paramObj.getString("content"), ProcessTaskStepRemindType.BACK);
 //                    }
 //                }
+                // 重新审批的全部业务操作已成功完成。
+                operationSucceeded = true;
             } catch (ProcessTaskException ex) {
                 logger.error(ex.getMessage(), ex);
                 currentProcessTaskStepVo.setError(ex.getMessage());
@@ -1409,6 +1441,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     processStepHandlerCrossoverUtil.calculateSla(new ProcessTaskVo(currentProcessTaskStepVo.getProcessTaskId()));
                 }
             }
+            // 审计、后处理及 SLA 均完成后按本次变化触发一次通知。
+            notifyAfterReportContentUpdate(currentProcessTaskStepVo, operationSucceeded, reportContentChanged);
         }
         return 1;
     }
@@ -1841,6 +1875,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             throw new ProcessTaskStepUnActivedException();
         }
 
+        // 转交只纳入本次保存的表单变化，不把处理说明当作上报描述变化。
+        boolean reportContentChanged = false;
+        boolean operationSucceeded = false;
         try {
             List<ProcessTaskStepUserVo> oldUserList = processTaskCrossoverMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
             if (CollectionUtils.isNotEmpty(oldUserList)) {
@@ -1879,6 +1916,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
             /* 保存表单属性值 **/
             processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
+            // 标记必须来自刚刚执行的 saveForm，不能采用请求传入的值。
+            reportContentChanged = Boolean.TRUE.equals(currentProcessTaskStepVo.getParamObj().get("formDataChanged"));
             /* 保存描述内容 **/
             JSONArray contentTargetList = new JSONArray();
             for (ProcessTaskStepWorkerVo workerVo : workerList) {
@@ -1953,6 +1992,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     currentProcessTaskStepVo.getParamObj().getString("content"),
                     ProcessTaskStepRemindType.TRANSFER
             );
+            // 转交成功后才允许注册工单更新通知。
+            operationSucceeded = true;
         } catch (ProcessTaskException e) {
             logger.error(e.getMessage(), e);
             processTaskStepVo.setError(e.getMessage());
@@ -1963,6 +2004,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             /* 处理历史记录 **/
             processStepHandlerCrossoverUtil.audit(currentProcessTaskStepVo, ProcessTaskAuditType.TRANSFER);
         }
+        // 避免转交失败或审计失败时发送更新通知。
+        notifyAfterReportContentUpdate(currentProcessTaskStepVo, operationSucceeded, reportContentChanged);
 
         return 0;
     }
