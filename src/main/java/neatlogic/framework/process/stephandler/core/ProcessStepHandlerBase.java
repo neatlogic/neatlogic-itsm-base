@@ -986,9 +986,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                         reportContentChanged = savePriorityForReportUpdate(currentProcessTaskStepVo, processTaskCrossoverMapper);
                         processStepHandlerCrossoverUtil.assignWorkerValid(currentProcessTaskStepVo);
                         /* 保存表单属性值 **/
-                        processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
-                        // saveForm 会重置标记，只在本次调用后读取，防止请求携带标记误触发。
-                        reportContentChanged = Boolean.TRUE.equals(paramObj.get("formDataChanged")) || reportContentChanged;
+                        boolean formChanged = processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
+                        // 先执行保存再合并返回结果，避免优先级已变化时短路跳过表单保存。
+                        reportContentChanged = formChanged || reportContentChanged;
                     }
                     String majorUserUuid = null;
                     List<ProcessTaskStepUserVo> processTaskStepUserList = processTaskCrossoverMapper.getProcessTaskStepUserByStepId(currentProcessTaskStepVo.getId(), ProcessUserType.MAJOR.getValue());
@@ -1331,9 +1331,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     // 优先级独立变化也属于上报内容更新。
                     reportContentChanged = savePriorityForReportUpdate(currentProcessTaskStepVo, processTaskCrossoverMapper);
                     /* 保存表单属性值 **/
-                    processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
-                    // 立即保存本次表单比较结果，避免后续上下文修改影响判断。
-                    reportContentChanged = Boolean.TRUE.equals(paramObj.get("formDataChanged")) || reportContentChanged;
+                    boolean formChanged = processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
+                    // 使用本次保存的返回结果，先保存后合并，避免上下文参数和短路影响判断。
+                    reportContentChanged = formChanged || reportContentChanged;
 //                    }
 
                     String majorUserUuid = null;
@@ -1915,9 +1915,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 processTaskCrossoverMapper.deleteProcessTaskStepUser(processTaskStepUserVo);
             }
             /* 保存表单属性值 **/
-            processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
-            // 标记必须来自刚刚执行的 saveForm，不能采用请求传入的值。
-            reportContentChanged = Boolean.TRUE.equals(currentProcessTaskStepVo.getParamObj().get("formDataChanged"));
+            // 直接接收实际保存结果，不通过请求上下文传递内部变化标志。
+            reportContentChanged = processStepHandlerCrossoverUtil.saveForm(currentProcessTaskStepVo);
             /* 保存描述内容 **/
             JSONArray contentTargetList = new JSONArray();
             for (ProcessTaskStepWorkerVo workerVo : workerList) {
