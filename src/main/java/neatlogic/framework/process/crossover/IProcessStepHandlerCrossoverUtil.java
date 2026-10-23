@@ -147,8 +147,9 @@ public interface IProcessStepHandlerCrossoverUtil extends ICrossoverService {
     /**
      * 保存表单属性值
      * @param currentProcessTaskStepVo 当前步骤信息
+     * @return 普通或扩展表单数据实际变化且保存正常完成时返回 true；无变化、无表单或未提交表单时返回 false，保存异常原样抛出
      */
-    void saveForm(ProcessTaskStepVo currentProcessTaskStepVo);
+    boolean saveForm(ProcessTaskStepVo currentProcessTaskStepVo);
 
     /**
      * 解析分配步骤处理人配置

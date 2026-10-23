@@ -15,6 +15,8 @@ public enum ProcessTaskNotifyTriggerType implements INotifyTriggerType {
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MAJOR.getValue(),
                     ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MINOR.getValue(),
                     ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.DEFAULT_WORKER.getValue())),
+    UPDATEPROCESSTASK("updateprocesstask", "nfpnc.processtasknotifytriggertype.text.updateprocesstask", "nfpnc.processtasknotifytriggertype.description.updateprocesstask",
+            Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.DEFAULT_WORKER.getValue())),
     ABORTPROCESSTASK("abortprocesstask", "nfpnc.processtasknotifytriggertype.text.abortprocesstask", "nfpnc.processtasknotifytriggertype.text.abortprocesstask",
             Arrays.asList(ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MAJOR.getValue(),
                     ProcessTaskGroupSearch.PROCESSUSERTYPE.getValue() + "#" + ProcessUserType.MINOR.getValue(),
