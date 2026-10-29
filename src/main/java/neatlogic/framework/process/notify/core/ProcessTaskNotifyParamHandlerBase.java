@@ -56,7 +56,7 @@ public abstract class ProcessTaskNotifyParamHandlerBase implements INotifyParamH
             content = content.replace("<p>", "");
             content = content.replace("</p>", "");
             content = content.replace("<br>", "");
-            List<UrlInfoVo> urlInfoVoList = HtmlUtil.getUrlInfoList(content, "<img src=\"", "\"");
+            List<UrlInfoVo> urlInfoVoList = HtmlUtil.getImgUrlInfoList(content);
             String homeUrl = "";
             String config = notifyConfigMapper.getConfigByType(NotifyHandlerType.EMAIL.getValue());
             if (StringUtils.isNotBlank(config)) {
