@@ -13,7 +13,9 @@
 package neatlogic.framework.process.auth;
 
 import neatlogic.framework.auth.core.AuthBase;
+import neatlogic.framework.auth.core.AuthModule;
 
+@AuthModule("process")
 public class BATCH_REPORT_PROCESS_TASK extends AuthBase {
 
     @Override

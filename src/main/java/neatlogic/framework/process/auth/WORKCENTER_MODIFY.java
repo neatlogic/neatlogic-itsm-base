@@ -1,9 +1,12 @@
 package neatlogic.framework.process.auth;
 
 import neatlogic.framework.auth.core.AuthBase;
+import neatlogic.framework.auth.core.AuthModule;
+
 import java.util.Arrays;
 import java.util.List;
 
+@AuthModule("process")
 public class WORKCENTER_MODIFY extends AuthBase {
 
     @Override
