@@ -31,6 +31,9 @@ public interface IProcessTaskCrossoverService extends ICrossoverService {
 
     ProcessTaskVo checkProcessTaskParamsIsLegal(Long processTaskId) throws Exception;
 
+    /** 读取指定步骤可展示的已保存表单字段；调用方须先校验工单访问权限。 */
+    List<JSONObject> getVisibleFormFields(ProcessTaskVo task, ProcessTaskStepVo step);
+
     void setProcessTaskFormInfo(ProcessTaskVo processTaskVo);
 
     ProcessTaskStepVo getStartProcessTaskStepByProcessTaskId(Long processTaskId);

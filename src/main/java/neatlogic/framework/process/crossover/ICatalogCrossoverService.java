@@ -2,12 +2,16 @@ package neatlogic.framework.process.crossover;
 
 import neatlogic.framework.crossover.ICrossoverService;
 import neatlogic.framework.process.constvalue.CatalogChannelAuthorityAction;
+import neatlogic.framework.process.dto.ChannelVo;
 
 /**
  * @author longrf
  * @date 2022/1/14 4:27 下午
  */
 public interface ICatalogCrossoverService extends ICrossoverService {
+    /** 按目录顺序取得上报服务的展示路径；父目录缺失时返回 null。 */
+    String getChannelPath(ChannelVo channel);
+
     /**
      * @param channelUuid
      * @param userUuid    用户uuid
