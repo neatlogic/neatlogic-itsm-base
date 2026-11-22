@@ -1370,14 +1370,6 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 currentProcessTaskStepVo.setUpdateEndTime(1);
                 currentProcessTaskStepVo.setError(null);
                 updateProcessTaskStepStatus(currentProcessTaskStepVo);
-                if (this.getMode().equals(ProcessStepMode.MT)) {
-                    currentProcessTaskStepVo.getParamObj().put("operateTime", new Date());
-                    ProcessTaskOperatePostProcessorFactory.invokePostProcessorsAfterProcessTaskStepOperate(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REAPPROVAL);
-                    /* 写入时间审计 **/
-                    processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_COMPLETE);
-                    /* 计算SLA **/
-                    processStepHandlerCrossoverUtil.calculateSla(new ProcessTaskVo(currentProcessTaskStepVo.getProcessTaskId()));
-                }
 
                 /* 流转到下一步 **/
                 ProcessTaskStepVo nextStep = processTaskCrossoverMapper.getProcessTaskStepBaseInfoById(needActiveStepId);
@@ -1445,6 +1437,14 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
 //                }
 
                 myReapprovalAudit(currentProcessTaskStepVo);
+                if (this.getMode().equals(ProcessStepMode.MT)) {
+                    currentProcessTaskStepVo.getParamObj().put("operateTime", new Date());
+                    ProcessTaskOperatePostProcessorFactory.invokePostProcessorsAfterProcessTaskStepOperate(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REAPPROVAL);
+                    /* 写入时间审计 **/
+                    processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_COMPLETE);
+                    /* 计算SLA **/
+                    processStepHandlerCrossoverUtil.calculateSla(new ProcessTaskVo(currentProcessTaskStepVo.getProcessTaskId()));
+                }
             }
             // 审计、后处理及 SLA 均完成后按本次变化触发一次通知。
             notifyAfterReportContentUpdate(currentProcessTaskStepVo, operationSucceeded, reportContentChanged);
