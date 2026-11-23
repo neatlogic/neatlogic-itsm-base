@@ -27,6 +27,8 @@ public enum ProcessTaskAuditDetailType implements IProcessTaskAuditDetailType {
 	ASSIGNWORKERLIST("assignworkerlist", "nfpc.processtaskauditdetailtype.text.assignworkerlist", "assignWorkerList", "oldAssignWorkerList", 23, false),
 	// 子任务完成时保存实际点击的按钮名称，按原文快照展示在内容明细之后。
 	BUTTON("button", "nfpc.processtaskauditdetailtype.text.button", "button", "oldButton", 24, false),
+	// 完成子任务时保存当次回复意见，沿用内容的压缩存储且不覆盖历史记录。
+	REPLYOPINION("replyopinion", "nfpc.processtaskauditdetailtype.text.replyopinion", "replyOpinion", "oldReplyOpinion", 4, true),
 	;
 	
 	private String value;

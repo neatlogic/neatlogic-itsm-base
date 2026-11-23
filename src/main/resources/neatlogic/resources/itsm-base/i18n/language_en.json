@@ -166,6 +166,7 @@
     },
     "processtaskauditdetailtype": {
       "text": {
+        "replyopinion": "Reply Opinion",
         "assignworkerlist": "Assignworkerlist",
         "automaticinfo": "Automaticinfo",
         "button": "Action",

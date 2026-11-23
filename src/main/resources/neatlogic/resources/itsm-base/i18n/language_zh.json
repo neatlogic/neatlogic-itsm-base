@@ -166,6 +166,7 @@
     },
     "processtaskauditdetailtype": {
       "text": {
+        "replyopinion": "回复意见",
         "assignworkerlist": "指定处理人",
         "automaticinfo": "外部调用",
         "button": "操作",
