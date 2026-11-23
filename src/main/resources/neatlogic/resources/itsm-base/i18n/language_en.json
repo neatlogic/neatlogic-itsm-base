@@ -59,6 +59,12 @@
     }
   },
   "nfpc": {
+    "taskreplydisplaymode": {
+      "text": {
+        "separate": "Show action and reply separately",
+        "combined": "Combine action and reply (separated by a full stop)"
+      }
+    },
     "autoexecjobprocesssource": {
       "text": {
         "itsm": "ITSM"

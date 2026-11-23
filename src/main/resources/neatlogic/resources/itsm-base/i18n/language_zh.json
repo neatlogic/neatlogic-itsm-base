@@ -59,6 +59,12 @@
     }
   },
   "nfpc": {
+    "taskreplydisplaymode": {
+      "text": {
+        "separate": "操作按钮与回复内容分开显示",
+        "combined": "操作按钮与回复内容拼接显示（以句号分隔）"
+      }
+    },
     "autoexecjobprocesssource": {
       "text": {
         "itsm": "IT服务"
