@@ -283,7 +283,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     /* 写入时间审计 **/
                     processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_ACTIVE);
                     if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStepStatus.RUNNING.getValue())) {
-                        processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
+//                        processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
                         processStepHandlerCrossoverUtil.notify(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.START);
                         processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.START);
                     }
@@ -717,6 +717,11 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             currentProcessTaskStepVo.setIsActive(0);
             currentProcessTaskStepVo.setStatus(ProcessTaskStepStatus.HANG.getValue());
             updateProcessTaskStepStatus(currentProcessTaskStepVo);
+            IProcessStepHandlerCrossoverUtil processStepHandlerCrossoverUtil = CrossoverServiceFactory.getApi(IProcessStepHandlerCrossoverUtil.class);
+            /* 写入时间审计 **/
+            processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_HANG);
+            /* 计算SLA **/
+            processStepHandlerCrossoverUtil.calculateSla(currentProcessTaskStepVo);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
 //            currentProcessTaskStepVo.setIsActive(2);
@@ -1436,7 +1441,7 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                     currentProcessTaskStepVo.getParamObj().put("operateTime", new Date());
                     ProcessTaskOperatePostProcessorFactory.invokePostProcessorsAfterProcessTaskStepOperate(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REAPPROVAL);
                     /* 写入时间审计 **/
-                    processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REAPPROVAL);
+                    processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_COMPLETE);
                     /* 计算SLA **/
                     processStepHandlerCrossoverUtil.calculateSla(new ProcessTaskVo(currentProcessTaskStepVo.getProcessTaskId()));
                 }
@@ -1486,9 +1491,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             ProcessTaskOperatePostProcessorFactory.invokePostProcessorsAfterProcessTaskStepOperate(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_RETREAT);
             /* 写入时间审计 **/
             processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_RETREAT);
-            if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStepStatus.RUNNING.getValue())) {
-                processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
-            }
+//            if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStepStatus.RUNNING.getValue())) {
+//                processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
+//            }
 
             /* 计算SLA并触发超时警告 **/
             processStepHandlerCrossoverUtil.calculateSla(currentProcessTaskStepVo);
@@ -1981,7 +1986,9 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             processStepHandlerCrossoverUtil.action(currentProcessTaskStepVo, ProcessTaskStepNotifyTriggerType.TRANSFER);
 
             /* 处理时间审计 **/
-            processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_TRANSFER);
+            processStepHandlerCrossoverUtil.timeAudit(processTaskStepVo, ProcessTaskStepOperationType.STEP_TRANSFER);
+            /* 计算SLA **/
+            processStepHandlerCrossoverUtil.calculateSla(currentProcessTaskStepVo);
             /* 转交提醒 **/
 
             processTaskCrossoverMapper.deleteProcessTaskStepRemind(new ProcessTaskStepRemindVo(currentProcessTaskStepVo.getId(), ProcessTaskStepRemindType.TRANSFER.getValue()));
@@ -2471,8 +2478,8 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
             }
             doNext(processTaskStepThreadList);
             /* 写入时间审计 **/
-            processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_ACTIVE);
-            processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
+//            processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_ACTIVE);
+//            processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
             processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_COMPLETE);
 
             /* 计算SLA并触发超时警告 **/
@@ -3008,10 +3015,10 @@ public abstract class ProcessStepHandlerBase implements IProcessStepHandler {
                 currentProcessTaskStepVo.getParamObj().put("operateTime", new Date());
                 ProcessTaskOperatePostProcessorFactory.invokePostProcessorsAfterProcessTaskStepOperate(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REDO);
                 /* 写入时间审计 **/
-                processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskOperationType.PROCESSTASK_REDO);
-                if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStepStatus.RUNNING.getValue())) {
-                    processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
-                }
+                processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_REDO);
+//                if (currentProcessTaskStepVo.getStatus().equals(ProcessTaskStepStatus.RUNNING.getValue())) {
+//                    processStepHandlerCrossoverUtil.timeAudit(currentProcessTaskStepVo, ProcessTaskStepOperationType.STEP_START);
+//                }
 
                 // 删除时效延时数据
                 IProcessTaskSlaCrossoverMapper processTaskSlaCrossoverMapper = CrossoverServiceFactory.getApi(IProcessTaskSlaCrossoverMapper.class);
