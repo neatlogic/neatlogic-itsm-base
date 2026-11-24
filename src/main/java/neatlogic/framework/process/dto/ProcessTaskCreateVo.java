@@ -14,6 +14,9 @@ package neatlogic.framework.process.dto;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import neatlogic.framework.common.constvalue.ApiParamType;
+import neatlogic.framework.restful.annotation.EntityField;
 
 public class ProcessTaskCreateVo {
     private String channel;
@@ -30,6 +33,13 @@ public class ProcessTaskCreateVo {
     private JSONArray fileIdList;
     private JSONObject handlerStepInfo;
     private String source;
+    // 调用来源由模块间建单调用传入，外部 JSON 无法设置。
+    @JSONField(serialize = false, deserialize = false)
+    @EntityField(name = "nfpd.processtaskinvokevo.entityfield.source.name", type = ApiParamType.STRING)
+    private String invoke;
+    @JSONField(serialize = false, deserialize = false)
+    @EntityField(name = "nfpd.processtaskinvokevo.entityfield.invokeid.name", type = ApiParamType.LONG)
+    private Long invokeId;
     private String region;
     private Long newProcessTaskId;
     private JSONArray assignWorkerList;
@@ -145,6 +155,22 @@ public class ProcessTaskCreateVo {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getInvoke() {
+        return invoke;
+    }
+
+    public void setInvoke(String invoke) {
+        this.invoke = invoke;
+    }
+
+    public Long getInvokeId() {
+        return invokeId;
+    }
+
+    public void setInvokeId(Long invokeId) {
+        this.invokeId = invokeId;
     }
 
     public String getRegion() {

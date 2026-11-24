@@ -23,6 +23,8 @@ public class ProcessTaskVo extends BasePageVo {
     private Long id;
     @EntityField(name = "common.parentid", type = ApiParamType.LONG)
     private Long parentId;
+    @EntityField(name = "nfpd.processtaskvo.entityfield.reportsource.name", type = ApiParamType.JSONOBJECT)
+    private ProcessTaskReportSourceVo reportSource;
     @EntityField(name = "term.itsm.serialnumber", type = ApiParamType.STRING)
     private String serialNumber;
     @EntityField(name = "common.title", type = ApiParamType.STRING)
@@ -221,6 +223,14 @@ public class ProcessTaskVo extends BasePageVo {
 
     public ProcessTaskVo(Long _id) {
         this.id = _id;
+    }
+
+    public ProcessTaskReportSourceVo getReportSource() {
+        return reportSource;
+    }
+
+    public void setReportSource(ProcessTaskReportSourceVo reportSource) {
+        this.reportSource = reportSource;
     }
 
     public synchronized Long getId() {

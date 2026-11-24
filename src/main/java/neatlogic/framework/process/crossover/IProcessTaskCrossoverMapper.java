@@ -42,6 +42,9 @@ public interface IProcessTaskCrossoverMapper extends ICrossoverService {
 
     Long getProcessTaskLockById(Long processTaskId);
 
+    /** 锁定工单并读取当前状态和删除标记，供事务内判断能否继续关联。 */
+    ProcessTaskVo getProcessTaskVoLockById(Long processTaskId);
+
     int checkProcessTaskConvergeIsExists(ProcessTaskConvergeVo processTaskStepConvergeVo);
 
     List<ProcessTaskConvergeVo> getProcessTaskConvergeListByStepId(Long processTaskStepId);

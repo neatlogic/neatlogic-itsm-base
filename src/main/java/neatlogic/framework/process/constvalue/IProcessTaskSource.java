@@ -13,6 +13,8 @@
 package neatlogic.framework.process.constvalue;
 
 import com.alibaba.fastjson.JSONObject;
+import neatlogic.framework.process.dto.ProcessTaskInvokeVo;
+import neatlogic.framework.process.dto.ProcessTaskReportSourceVo;
 import neatlogic.framework.process.dto.ProcessTaskStepVo;
 import neatlogic.framework.process.dto.ProcessTaskVo;
 
@@ -30,6 +32,11 @@ public interface IProcessTaskSource {
 
     default String getType(){
         return ProcessTaskSourceType.ITSM.getValue();
+    }
+
+    /** 解析当前用户可见的上报来源，默认只返回来源类型文案。 */
+    default ProcessTaskReportSourceVo getReportSource(ProcessTaskInvokeVo invoke) {
+        return new ProcessTaskReportSourceVo(getText(), null, null);
     }
 
     /**

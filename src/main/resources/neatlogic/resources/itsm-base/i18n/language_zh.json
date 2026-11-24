@@ -1394,6 +1394,9 @@
         },
         "reportername": {
           "name": "代报人"
+        },
+        "reportsource": {
+          "name": "上报来源"
         }
       }
     },
