@@ -59,6 +59,12 @@
     }
   },
   "nfpc": {
+    "taskreplydisplaymode": {
+      "text": {
+        "separate": "操作按钮与回复内容分开显示",
+        "combined": "操作按钮与回复内容拼接显示（以句号分隔）"
+      }
+    },
     "autoexecjobprocesssource": {
       "text": {
         "itsm": "IT服务"
@@ -166,9 +172,10 @@
     },
     "processtaskauditdetailtype": {
       "text": {
+        "replyopinion": "回复",
         "assignworkerlist": "指定处理人",
         "automaticinfo": "外部调用",
-        "button": "按钮",
+        "button": "操作",
         "cause": "原因",
         "channeltyperelation": "关系类型",
         "content": "内容",
